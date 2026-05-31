@@ -1,5 +1,7 @@
 # AGENTS.md
 
+Guidance for AI agents working in this repository.
+
 ## Cursor Cloud specific instructions
 
 ### Services
@@ -24,3 +26,8 @@ No database. Mass data is fetched at runtime from Evangelizo Reader API (proxied
 ### Design
 
 Bright Odin Project–style UI: white cards, `#2563eb` accent, Nunito font, `#f8fafc` background.
+
+### VM update script
+
+- `pnpm install` (idempotent dependency refresh on session start)
+- Do **not** add `npm run dev`, migrations, or Docker startup to the update script.
