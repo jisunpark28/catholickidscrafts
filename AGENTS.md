@@ -15,7 +15,7 @@ Mass readings are **not** in the DB; they come from Evangelizo at runtime (`/api
 
 ### Environment
 
-Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + direct `DIRECT_URL` for migrations. See `docs/SETUP_KO.md` for Vercel + `catholickidscrafts.com`.
+Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + direct `DIRECT_URL` for migrations. See `docs/DEPLOYMENT.md` for Vercel + `catholickidscrafts.com`.
 
 ### Lint / build
 

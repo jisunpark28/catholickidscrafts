@@ -59,7 +59,7 @@ npm run dev
 
 This project uses **PostgreSQL** (Neon). Set both `DATABASE_URL` (pooled) and `DIRECT_URL` (direct) on Vercel.
 
-**Step-by-step (Korean):** [docs/SETUP_KO.md](docs/SETUP_KO.md)
+**Full guide:** [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 
 1. Neon project → copy pooled + direct connection strings.
 2. Vercel env: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL=https://catholickidscrafts.com`, `BLOB_READ_WRITE_TOKEN`.
