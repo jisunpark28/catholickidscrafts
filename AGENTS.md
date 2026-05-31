@@ -4,29 +4,30 @@ Guidance for AI agents working in this repository.
 
 ## Cursor Cloud specific instructions
 
-### Repository state
-
-This checkout is a **minimal placeholder**: the only tracked file besides `.git` is `README.md` (title: `catholickidscrafts`). There is no `package.json`, `Makefile`, Docker setup, CI config, or application source yet. Lint, test, build, and dev-server commands **do not exist** until the project stack is added.
-
 ### Services
 
-| Service | Required | Notes |
-|---------|----------|--------|
-| *(none)* | — | No runtime services are defined in this repo |
+| Service | Required | Command | Port |
+|---------|----------|---------|------|
+| Next.js dev | Yes | `pnpm dev` or `npm run dev` | 3000 |
 
-When application code is added, update this table with how to start dependencies (database, API, frontend, etc.).
+No database. Mass data is fetched at runtime from Evangelizo Reader API (proxied via `/api/mass/*`).
 
-### What works today
+### Mass data source
 
-- **Git**: clone, fetch, pull, commit, and push against `origin` (`github.com/jisunpark28/catholickidscrafts`).
-- **VM update script**: no dependency install step is needed until manifests exist (see `SetupVmEnvironment` / `.cursor` update script).
+- **API:** `http://feed.evangelizo.org/v2/reader.php` with `lang=AM` (American English, Roman calendar)
+- **Window:** ~30 days from today (Evangelizo feed limit)
+- **Routes:** `/mass/YYYY-MM-DD`, `/api/mass/[date]`, `/api/mass/calendar/[year]/[month]`
 
-### After adding a stack
+### Lint / build
 
-Once manifests land (e.g. `package.json`, `pyproject.toml`, `docker-compose.yml`), document here:
+- `pnpm lint` / `pnpm build`
+- Homepage revalidates hourly (`revalidate` on Evangelizo fetches: 3600s)
 
-- Non-obvious startup order or ports
-- Env vars / secrets (names only; never commit values)
-- Lint and test commands (prefer pointing to `package.json` scripts or README rather than duplicating)
+### Design
 
-Do **not** put dependency installation or `npm run dev` / `docker compose up` in the VM update script—keep that script limited to idempotent dependency refresh (e.g. `npm ci`, `uv sync`).
+Bright Odin Project–style UI: white cards, `#2563eb` accent, Nunito font, `#f8fafc` background.
+
+### VM update script
+
+- `pnpm install` (idempotent dependency refresh on session start)
+- Do **not** add `npm run dev`, migrations, or Docker startup to the update script.
