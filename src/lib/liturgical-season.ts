@@ -47,7 +47,6 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeasonInfo {
   const advent = adventStart(year);
   const christmas = new Date(Date.UTC(year, 11, 25));
   const baptism = new Date(Date.UTC(year, 0, 6));
-  const ashPrevYear = addDays(easterSunday(year - 1), -46);
   const pentecostPrev = addDays(easterSunday(year - 1), 49);
 
   if (between(date, holyThursday, addDays(easter, -1))) {

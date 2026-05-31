@@ -65,8 +65,6 @@ export function MassCalendar({ initial, selectedDate }: Props) {
     void loadMonth(y, m);
   }
 
-  const dayMap = new Map(calendar.days.map((d) => [d.date, d]));
-
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
