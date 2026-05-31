@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts",
+    "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "vercel-build": "prisma generate && prisma migrate deploy && next build"
@@ -51,10 +51,14 @@
     "@types/react": "^19.1.4",
     "@types/react-dom": "^19.1.5",
     "@types/sanitize-html": "^2.16.1",
+    "dotenv": "^17.4.2",
     "eslint": "^9.27.0",
     "eslint-config-next": "^15.5.7",
     "tailwindcss": "^4.1.8",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

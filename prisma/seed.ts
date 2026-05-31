@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { AdminRole, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import fs from "fs";
@@ -60,7 +61,7 @@ function parsePeriod(value: unknown): string {
 }
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL;
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   const password = process.env.ADMIN_PASSWORD;
   if (!email || !password) {
     throw new Error("Set ADMIN_EMAIL and ADMIN_PASSWORD in .env before seeding.");
