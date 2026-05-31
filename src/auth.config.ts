@@ -23,7 +23,7 @@ export const authConfig = {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email;
+        token.email = user.email ?? undefined;
         token.role = user.role;
       }
       return token;
