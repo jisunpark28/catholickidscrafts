@@ -7,17 +7,16 @@ export function CurriculumCard({ track }: Props) {
   return (
     <Link
       href={`/curriculum/${track.slug}`}
-      className="group rounded-xl border border-gray-800 bg-[#1a1921] p-8 transition-all hover:border-[#dfb24f]"
+      className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#2563eb] hover:shadow-md"
     >
-      <span className="text-sm font-semibold uppercase tracking-wider text-[#7c6a85]">
+      <span className="text-xs font-bold uppercase tracking-wider text-[#2563eb]">
         {track.stage}
       </span>
-      <h3 className="mt-2 text-2xl font-bold group-hover:text-[#dfb24f]">
+      <h3 className="mt-2 text-xl font-extrabold text-slate-800 group-hover:text-[#2563eb]">
         {track.title}
       </h3>
-      <p className="mb-6 mt-4 text-gray-400">{track.description}</p>
-      <p className="text-sm text-gray-500">{track.lessonCount} lessons planned</p>
-      <span className="mt-4 inline-block text-sm font-bold text-[#dfb24f] group-hover:underline">
+      <p className="mt-3 text-sm text-slate-600">{track.description}</p>
+      <span className="mt-4 inline-block text-sm font-bold text-[#2563eb] group-hover:underline">
         View track →
       </span>
     </Link>

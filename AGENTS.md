@@ -4,30 +4,23 @@
 
 ### Services
 
-| Service | Required | Command | Notes |
-|---------|----------|---------|--------|
-| Next.js dev server | Yes (local dev) | `pnpm dev` | Default port **3000** |
-| Production preview | Optional | `pnpm build && pnpm start` | After build |
+| Service | Required | Command | Port |
+|---------|----------|---------|------|
+| Next.js dev | Yes | `pnpm dev` or `npm run dev` | 3000 |
 
-No database or Docker services.
+No database. Mass data is fetched at runtime from Evangelizo Reader API (proxied via `/api/mass/*`).
 
-### Lint / test / build
+### Mass data source
 
-- **Lint:** `pnpm lint`
-- **Build:** `pnpm build`
-- **Tests:** none configured yet
+- **API:** `http://feed.evangelizo.org/v2/reader.php` with `lang=AM` (American English, Roman calendar)
+- **Window:** ~30 days from today (Evangelizo feed limit)
+- **Routes:** `/mass/YYYY-MM-DD`, `/api/mass/[date]`, `/api/mass/calendar/[year]/[month]`
 
-### Content workflow
+### Lint / build
 
-- Lesson posts: `content/resources/*.md` (gray-matter frontmatter)
-- Curriculum tracks: `src/lib/content.ts`
-- Static downloads: `public/downloads/`
+- `pnpm lint` / `pnpm build`
+- Homepage revalidates hourly (`revalidate` on Evangelizo fetches: 3600s)
 
-### Vercel
+### Design
 
-`vercel.json` sets framework to `nextjs`. Connect the GitHub repo in Vercel; each push to `main` deploys. Add custom domain under project **Domains**.
-
-### Non-obvious notes
-
-- Tailwind v4 uses `@import "tailwindcss"` in `globals.css` (no separate `tailwind.config` required for basics).
-- Resource pages are statically generated from Markdown at build time; new `.md` files need a rebuild/redeploy to appear.
+Bright Odin Project–style UI: white cards, `#2563eb` accent, Nunito font, `#f8fafc` background.

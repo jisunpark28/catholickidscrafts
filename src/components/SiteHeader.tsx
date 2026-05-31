@@ -1,38 +1,38 @@
 import Link from "next/link";
 
 const navLinks = [
+  { href: "/", label: "Daily Mass" },
+  { href: "/resources", label: "Kids Resources" },
   { href: "/#curriculum", label: "Curriculum" },
-  { href: "/resources", label: "Resources" },
-  { href: "/#about", label: "About" },
 ];
 
 export function SiteHeader() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-gray-800 bg-[#1a1921]/95 px-6 py-4 backdrop-blur supports-[backdrop-filter]:bg-[#1a1921]/80">
-      <div className="mx-auto flex max-w-5xl items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="text-2xl" aria-hidden>
+    <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 md:px-6">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2563eb] text-lg text-white shadow-sm">
             ✝
           </span>
-          <span className="text-xl font-bold uppercase tracking-tight text-[#dfb24f]">
+          <span className="text-lg font-extrabold text-slate-800">
             Catholic Kids Crafts
           </span>
         </Link>
-        <div className="flex items-center gap-6 text-sm font-medium text-gray-400">
+        <div className="flex items-center gap-4 text-sm font-semibold text-slate-600">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="hidden transition hover:text-[#dfb24f] sm:inline"
+              className="hidden transition hover:text-[#2563eb] sm:inline"
             >
               {link.label}
             </Link>
           ))}
           <Link
             href="/resources"
-            className="rounded bg-[#dfb24f] px-4 py-2 font-semibold text-[#131217] transition hover:bg-[#ebd07f]"
+            className="rounded-lg bg-[#2563eb] px-3 py-2 text-white shadow-sm transition hover:bg-[#1d4ed8]"
           >
-            Free Resources
+            Resources
           </Link>
         </div>
       </div>

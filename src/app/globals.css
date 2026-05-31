@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-deep: #131217;
-  --color-bg-panel: #1a1921;
-  --color-gold: #dfb24f;
-  --color-gold-hover: #ebd07f;
-  --color-liturgical: #7c6a85;
-  --color-cream: #fcfaf2;
-  --color-muted: #9ca3af;
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --color-odin-bg: #f8fafc;
+  --color-odin-card: #ffffff;
+  --color-odin-accent: #2563eb;
+  --color-odin-accent-hover: #1d4ed8;
+  --color-odin-text: #1e293b;
+  --color-odin-muted: #64748b;
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -16,19 +15,14 @@ html {
 }
 
 body {
-  background-color: var(--color-bg-deep);
-  color: var(--color-cream);
-}
-
-.prose-catechism {
-  color: var(--color-cream);
-  line-height: 1.75;
+  background-color: var(--color-odin-bg);
+  color: var(--color-odin-text);
 }
 
 .prose-catechism h1,
 .prose-catechism h2,
 .prose-catechism h3 {
-  color: var(--color-gold);
+  color: var(--color-odin-accent);
   font-weight: 700;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
@@ -36,21 +30,23 @@ body {
 
 .prose-catechism p {
   margin-bottom: 1em;
-  color: #d1d5db;
+  color: #475569;
+  line-height: 1.75;
 }
 
 .prose-catechism ul {
   list-style: disc;
   padding-left: 1.5rem;
   margin-bottom: 1em;
-  color: #d1d5db;
+  color: #475569;
 }
 
 .prose-catechism a {
-  color: var(--color-gold);
+  color: var(--color-odin-accent);
   text-decoration: underline;
 }
 
-.prose-catechism strong {
-  color: var(--color-cream);
+.prose-mass {
+  line-height: 1.8;
+  font-size: 1.05rem;
 }

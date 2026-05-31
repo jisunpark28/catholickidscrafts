@@ -1,48 +1,31 @@
 import Link from "next/link";
+import { MASS_DATA_SOURCE } from "@/lib/evangelizo";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-gray-800 bg-[#1a1921] px-6 py-12">
+    <footer className="mt-16 border-t border-slate-200 bg-white px-4 py-10 md:px-6">
       <div className="mx-auto max-w-5xl">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2">
           <div>
-            <p className="font-bold text-[#dfb24f]">Catholic Kids Crafts</p>
-            <p className="mt-2 text-sm text-gray-400">
-              Free catechism materials for Sunday school teachers, homeschool
-              parents, and parishes worldwide.
+            <p className="font-bold text-slate-800">Catholic Kids Crafts</p>
+            <p className="mt-2 text-sm text-slate-600">
+              Daily Mass in English and catechism materials for families and
+              Sunday school teachers.
             </p>
           </div>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#7c6a85]">
-              Explore
-            </p>
-            <ul className="mt-3 space-y-2 text-sm text-gray-400">
-              <li>
-                <Link href="/#curriculum" className="hover:text-[#dfb24f]">
-                  Curriculum
-                </Link>
-              </li>
-              <li>
-                <Link href="/resources" className="hover:text-[#dfb24f]">
-                  All resources
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div id="about">
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#7c6a85]">
-              About
-            </p>
-            <p className="mt-3 text-sm text-gray-400">
-              Built for the global Catholic education community. Deploy on{" "}
-              <span className="text-[#fcfaf2]">Vercel</span> with content in{" "}
-              <span className="text-[#fcfaf2]">GitHub</span>—add Markdown files
-              to publish new lesson plans.
+            <p className="text-sm font-semibold text-slate-800">Mass readings</p>
+            <p className="mt-2 text-xs leading-relaxed text-slate-500">
+              {MASS_DATA_SOURCE}. Readings are for personal and educational use;
+              check your local parish for official liturgical books.
             </p>
           </div>
         </div>
-        <p className="mt-10 border-t border-gray-800 pt-6 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Catholic Kids Crafts. For educational use.
+        <p className="mt-8 text-center text-xs text-slate-400">
+          © {new Date().getFullYear()} Catholic Kids Crafts ·{" "}
+          <Link href="/resources" className="hover:text-[#2563eb]">
+            Lesson plans
+          </Link>
         </p>
       </div>
     </footer>

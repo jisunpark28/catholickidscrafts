@@ -15,10 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getResourceBySlug(slug);
   if (!post) return { title: "Not found" };
-  return {
-    title: post.title,
-    description: post.excerpt,
-  };
+  return { title: post.title, description: post.excerpt };
 }
 
 export default async function ResourcePage({ params }: Props) {
@@ -27,43 +24,17 @@ export default async function ResourcePage({ params }: Props) {
   if (!post) notFound();
 
   return (
-    <article className="min-h-screen bg-[#131217] px-6 py-16">
+    <article className="min-h-screen bg-[#f8fafc] px-4 py-12 md:px-6">
       <div className="mx-auto max-w-3xl">
         <Link
           href="/resources"
-          className="text-sm font-medium text-[#dfb24f] hover:underline"
+          className="text-sm font-semibold text-[#2563eb] hover:underline"
         >
           ← All resources
         </Link>
-        <div className="mt-6 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wider">
-          <span className="rounded bg-[#1a1921] px-2 py-1 text-[#7c6a85]">
-            {post.grade}
-          </span>
-          <span className="rounded bg-[#1a1921] px-2 py-1 text-[#dfb24f]">
-            {post.topic}
-          </span>
-          {post.date && (
-            <span className="rounded bg-[#1a1921] px-2 py-1 text-gray-500">
-              {post.date}
-            </span>
-          )}
-        </div>
-        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-[#fcfaf2]">
-          {post.title}
-        </h1>
-        <p className="mt-4 text-lg text-gray-400">{post.excerpt}</p>
-
-        {post.downloadUrl && (
-          <a
-            href={post.downloadUrl}
-            className="mt-8 inline-block rounded-md bg-[#dfb24f] px-6 py-3 font-bold text-[#131217] transition hover:bg-[#ebd07f]"
-            download
-          >
-            {post.downloadLabel ?? "Download printable"}
-          </a>
-        )}
-
-        <div className="prose-catechism mt-12">
+        <h1 className="mt-6 text-4xl font-extrabold text-slate-900">{post.title}</h1>
+        <p className="mt-4 text-lg text-slate-600">{post.excerpt}</p>
+        <div className="prose-catechism mt-10 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
       </div>
