@@ -5,6 +5,7 @@ import type { NextAuthConfig } from "next-auth";
  * Do not import Prisma, bcrypt, or Node-only modules here.
  */
 export const authConfig = {
+  secret: process.env.AUTH_SECRET?.trim(),
   trustHost: true,
   pages: {
     signIn: "/admin/login",
@@ -22,6 +23,7 @@ export const authConfig = {
     },
     jwt({ token, user }) {
       if (user) {
+        token.sub = user.id;
         token.id = user.id;
         token.email = user.email ?? undefined;
         token.role = user.role;

@@ -1,4 +1,6 @@
 import { loginAction } from "@/app/admin/login/actions";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 type PageProps = {
@@ -68,7 +70,12 @@ async function LoginPanel({ searchParams }: PageProps) {
   );
 }
 
-export default function AdminLoginPage({ searchParams }: PageProps) {
+export default async function AdminLoginPage({ searchParams }: PageProps) {
+  const session = await auth();
+  if (session?.user) {
+    redirect("/admin");
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--color-surface)] px-4">
       <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
