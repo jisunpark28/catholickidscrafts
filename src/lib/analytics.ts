@@ -33,7 +33,22 @@ export type TrafficSummary = {
   allTime: { pageViews: number; uniqueVisitors: number };
 };
 
+const emptySummary: TrafficSummary = {
+  today: { pageViews: 0, uniqueVisitors: 0 },
+  last7Days: { pageViews: 0, uniqueVisitors: 0 },
+  allTime: { pageViews: 0, uniqueVisitors: 0 },
+};
+
 export async function getTrafficSummary(): Promise<TrafficSummary> {
+  try {
+    return await loadTrafficSummary();
+  } catch (e) {
+    console.error("getTrafficSummary", e);
+    return emptySummary;
+  }
+}
+
+async function loadTrafficSummary(): Promise<TrafficSummary> {
   const today = utcDayKey();
   const sevenDaysAgo = utcDayKey(new Date(Date.now() - 6 * 24 * 60 * 60 * 1000));
 

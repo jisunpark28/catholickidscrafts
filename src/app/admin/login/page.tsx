@@ -8,6 +8,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
+  const configError = searchParams.get("error") === "Configuration";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +25,11 @@ function LoginForm() {
     });
     setLoading(false);
     if (result?.error) {
-      setError("Invalid email or password.");
+      setError(
+        result.code === "CredentialsSignin"
+          ? "Invalid email or password."
+          : "Sign-in failed. Check AUTH_SECRET on the server and try again.",
+      );
       return;
     }
     router.push(callbackUrl);
@@ -40,6 +45,11 @@ function LoginForm() {
       <p className="mt-2 text-sm text-[var(--color-muted)]">
         Manage Curriculum and Kids Resources. Daily Mass readings are loaded automatically.
       </p>
+      {configError && (
+        <p className="mt-4 border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          Server misconfiguration: set AUTH_SECRET in Vercel Environment Variables, then redeploy.
+        </p>
+      )}
       {error && (
         <p className="mt-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}

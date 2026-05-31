@@ -15,7 +15,17 @@ export async function POST() {
     await recordPublicVisit(visitorId);
   } catch (e) {
     console.error("analytics visit", e);
-    return NextResponse.json({ ok: false }, { status: 500 });
+    const res = NextResponse.json({ ok: false, skipped: true });
+    if (!hadCookie) {
+      res.cookies.set(VISITOR_COOKIE, visitorId, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        maxAge: ONE_YEAR,
+      });
+    }
+    return res;
   }
 
   const res = NextResponse.json({ ok: true });
