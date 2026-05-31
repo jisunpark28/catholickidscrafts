@@ -1,16 +1,19 @@
 import { auth } from "@/auth";
 import { isSuperAdmin } from "@/lib/admin-roles";
 import Link from "next/link";
+import { getTrafficSummary } from "@/lib/analytics";
 import { prisma } from "@/lib/prisma";
+import { TrafficStats } from "@/components/admin/TrafficStats";
 import { signOut } from "@/auth";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
   const superAdmin = isSuperAdmin(session);
-  const [resourceCount, curriculumCount, draftResources] = await Promise.all([
+  const [resourceCount, curriculumCount, draftResources, traffic] = await Promise.all([
     prisma.resource.count(),
     prisma.curriculumTrack.count(),
     prisma.resource.count({ where: { published: false } }),
+    getTrafficSummary(),
   ]);
 
   return (
@@ -69,6 +72,8 @@ export default async function AdminDashboardPage() {
           </div>
         )}
       </div>
+
+      <TrafficStats stats={traffic} />
 
       <section className="mt-12 border border-[var(--color-border)] bg-white p-6">
         <h2 className="font-bold text-[var(--color-ink)]">What you can manage</h2>

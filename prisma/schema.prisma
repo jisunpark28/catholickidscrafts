@@ -61,3 +61,19 @@ model UploadedFile {
   sizeBytes Int?
   createdAt DateTime @default(now())
 }
+
+/// Daily aggregates for the public site (operators view in /admin).
+model TrafficDay {
+  date           String @id
+  pageViews      Int    @default(0)
+  uniqueVisitors Int    @default(0)
+}
+
+/// One row per visitor per UTC day (for unique visitor counts).
+model TrafficVisitorDay {
+  visitorId String
+  date      String
+
+  @@id([visitorId, date])
+  @@index([date])
+}
