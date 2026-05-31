@@ -5,38 +5,38 @@ import { MASS_DATA_SOURCE } from "@/lib/evangelizo";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 border-t border-slate-200 bg-white px-4 py-10 md:px-6">
-      <div className="mx-auto max-w-5xl">
-        <div className="grid gap-8 md:grid-cols-2">
+    <footer className="mt-20 border-t border-[var(--color-border)] bg-[var(--color-surface)]">
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-12 sm:px-8 lg:px-12">
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex gap-4">
             <Image
               src={logo}
-              alt="Catholic Kids Crafts"
-              height={56}
-              width={67}
-              className="h-14 w-auto object-contain"
+              alt=""
+              className="h-20 w-auto object-contain"
+              style={{ height: "80px", width: "auto" }}
             />
             <div>
-              <p className="font-bold text-slate-800">Catholic Kids Crafts</p>
-              <p className="mt-2 text-sm text-slate-600">
-                Daily Mass in English and catechism materials for families and
-                Sunday school teachers.
+              <p className="font-bold text-[var(--color-ink)]">Catholic Kids Crafts</p>
+              <p className="mt-2 max-w-sm text-sm text-[var(--color-muted)]">
+                Daily Mass in English and seasonal resources for Catholic families
+                and Sunday school.
               </p>
             </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-800">Mass readings</p>
-            <p className="mt-2 text-xs leading-relaxed text-slate-500">
-              {MASS_DATA_SOURCE}. Readings are for personal and educational use;
-              check your local parish for official liturgical books.
-            </p>
+          <div className="flex gap-8 text-sm font-semibold">
+            <Link href="/mass" className="text-[var(--color-link)] hover:underline">
+              Daily Mass
+            </Link>
+            <Link href="/curriculum" className="text-[var(--color-link)] hover:underline">
+              Curriculum
+            </Link>
+            <Link href="/resources" className="text-[var(--color-link)] hover:underline">
+              Kids Resources
+            </Link>
           </div>
         </div>
-        <p className="mt-8 text-center text-xs text-slate-400">
-          © {new Date().getFullYear()} Catholic Kids Crafts ·{" "}
-          <Link href="/resources" className="hover:text-[#2563eb]">
-            Lesson plans
-          </Link>
+        <p className="mt-10 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)]">
+          {MASS_DATA_SOURCE} · © {new Date().getFullYear()} Catholic Kids Crafts
         </p>
       </div>
     </footer>

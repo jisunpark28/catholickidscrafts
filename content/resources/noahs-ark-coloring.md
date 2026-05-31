@@ -4,6 +4,7 @@ excerpt: "A simple line-art coloring sheet for Pre-K and kindergarten—perfect 
 date: "2026-05-01"
 grade: "Pre-K"
 topic: "Old Testament"
+liturgicalPeriod: ordinary
 downloadLabel: "Download PDF (sample)"
 downloadUrl: "/downloads/noahs-ark-coloring.pdf"
 ---

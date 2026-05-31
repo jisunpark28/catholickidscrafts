@@ -1,35 +1,41 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SiteLogo } from "@/components/SiteLogo";
 
-const navLinks = [
-  { href: "/", label: "Daily Mass" },
-  { href: "/resources", label: "Kids Resources" },
-  { href: "/#curriculum", label: "Curriculum" },
+const nav = [
+  { href: "/mass", label: "Daily Mass", match: (p: string) => p === "/mass" || p.startsWith("/mass/") },
+  { href: "/curriculum", label: "Curriculum", match: (p: string) => p.startsWith("/curriculum") },
+  { href: "/resources", label: "Kids Resources", match: (p: string) => p.startsWith("/resources") },
 ];
 
 export function SiteHeader() {
+  const pathname = usePathname() ?? "";
+
   return (
-    <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 md:px-6">
-        <SiteLogo size="md" />
-        <div className="flex items-center gap-4 text-sm font-semibold text-slate-600">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="hidden transition hover:text-[#2563eb] sm:inline"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="/resources"
-            className="rounded-lg bg-[#2563eb] px-3 py-2 text-white shadow-sm transition hover:bg-[#1d4ed8]"
-          >
-            Resources
-          </Link>
-        </div>
+    <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-white">
+      <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-8 px-4 py-3 sm:px-8 lg:px-12">
+        <SiteLogo size="header" showWordmark={false} />
+        <nav className="flex items-center gap-6 sm:gap-10">
+          {nav.map((item) => {
+            const active = item.match(pathname);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`border-b-2 pb-1 text-sm font-semibold transition sm:text-base ${
+                  active
+                    ? "border-[var(--color-accent)] text-[var(--color-ink)]"
+                    : "border-transparent text-[var(--color-muted)] hover:border-[var(--color-border)] hover:text-[var(--color-ink)]"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
-    </nav>
+    </header>
   );
 }

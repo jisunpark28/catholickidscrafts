@@ -1,32 +1,85 @@
+import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
+import { PageShell } from "@/components/PageShell";
 import { ResourceCard } from "@/components/ResourceCard";
-import { getAllResources } from "@/lib/content";
+import {
+  getAllResources,
+  getLiturgicalPeriod,
+  getResourcesByPeriod,
+  LITURGICAL_PERIODS,
+} from "@/lib/content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Kids Resources",
-  description: "Catholic kids catechism lesson plans and craft ideas.",
+  description: "Catholic kids crafts and lesson plans by liturgical season.",
 };
 
 export default function ResourcesPage() {
-  const posts = getAllResources();
+  const all = getAllResources();
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] px-4 py-12 md:px-6">
-      <div className="mx-auto max-w-5xl">
-        <h1 className="text-4xl font-extrabold text-slate-800">Kids resources</h1>
-        <p className="mt-4 max-w-2xl text-slate-600">
-          Lesson plans and activities in Markdown—add files under{" "}
-          <code className="rounded-lg bg-white px-2 py-0.5 text-sm text-[#2563eb]">
-            content/resources
-          </code>
-          .
-        </p>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {posts.map((post) => (
-            <ResourceCard key={post.slug} post={post} />
-          ))}
-        </div>
+    <PageShell wide>
+      <PageHeader
+        title="Kids Resources"
+        subtitle="Crafts, worksheets, and lesson plans grouped by liturgical season—so you can plan Advent, Lent, Easter, and Ordinary Time with your class."
+      />
+
+      <nav className="mb-12 flex flex-wrap gap-2 border-b border-[var(--color-border)] pb-6">
+        {LITURGICAL_PERIODS.map((period) => {
+          const count = getResourcesByPeriod(period.id).length;
+          return (
+            <a
+              key={period.id}
+              href={`#${period.id}`}
+              className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            >
+              {period.title}
+              {count > 0 && (
+                <span className="ml-2 text-[var(--color-muted)]">({count})</span>
+              )}
+            </a>
+          );
+        })}
+      </nav>
+
+      <div className="space-y-16">
+        {LITURGICAL_PERIODS.map((period) => {
+          const posts = getResourcesByPeriod(period.id);
+          const meta = getLiturgicalPeriod(period.id);
+
+          return (
+            <section key={period.id} id={period.id} className="scroll-mt-24">
+              <div className="border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 sm:px-8">
+                <h2 className="text-2xl font-bold text-[var(--color-ink)]">{meta.title}</h2>
+                <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{meta.description}</p>
+              </div>
+
+              {posts.length > 0 ? (
+                <div className="border border-t-0 border-[var(--color-border)]">
+                  {posts.map((post) => (
+                    <ResourceCard key={post.slug} post={post} />
+                  ))}
+                </div>
+              ) : (
+                <p className="border border-t-0 border-[var(--color-border)] bg-white px-6 py-8 text-sm text-[var(--color-muted)]">
+                  No resources in this season yet.{" "}
+                  <Link href="/curriculum" className="font-semibold text-[var(--color-link)]">
+                    Browse curriculum tracks
+                  </Link>{" "}
+                  or add a Markdown file under{" "}
+                  <code className="text-[var(--color-ink)]">content/resources</code> with{" "}
+                  <code className="text-[var(--color-ink)]">liturgicalPeriod: {period.id}</code>.
+                </p>
+              )}
+            </section>
+          );
+        })}
       </div>
-    </div>
+
+      {all.length === 0 && (
+        <p className="text-[var(--color-muted)]">No resources published yet.</p>
+      )}
+    </PageShell>
   );
 }

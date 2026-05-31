@@ -4,6 +4,59 @@ import matter from "gray-matter";
 
 const contentRoot = path.join(process.cwd(), "content");
 
+export type LiturgicalPeriodId =
+  | "advent"
+  | "christmas"
+  | "lent"
+  | "holy-week"
+  | "easter"
+  | "ordinary"
+  | "general";
+
+export type LiturgicalPeriod = {
+  id: LiturgicalPeriodId;
+  title: string;
+  description: string;
+};
+
+export const LITURGICAL_PERIODS: LiturgicalPeriod[] = [
+  {
+    id: "advent",
+    title: "Advent",
+    description: "Waiting in hope—wreaths, Jesse trees, and preparation for Christmas.",
+  },
+  {
+    id: "christmas",
+    title: "Christmas Season",
+    description: "Nativity crafts, Epiphany, and Christmastide celebrations.",
+  },
+  {
+    id: "lent",
+    title: "Lent",
+    description: "Prayer, fasting, almsgiving, and repentance for children.",
+  },
+  {
+    id: "holy-week",
+    title: "Holy Week & Triduum",
+    description: "Palm Sunday through Easter Vigil—solemn and sacred activities.",
+  },
+  {
+    id: "easter",
+    title: "Easter Season",
+    description: "Resurrection joy, Ascension, and Pentecost through Eastertide.",
+  },
+  {
+    id: "ordinary",
+    title: "Ordinary Time",
+    description: "Sunday Gospel themes, saints, and year-round catechesis.",
+  },
+  {
+    id: "general",
+    title: "All Year",
+    description: "Sacraments, prayers, and topics for any season.",
+  },
+];
+
 export type CurriculumTrack = {
   slug: string;
   stage: string;
@@ -19,6 +72,7 @@ export type ResourcePost = {
   date: string;
   grade: string;
   topic: string;
+  liturgicalPeriod: LiturgicalPeriodId;
   downloadLabel?: string;
   downloadUrl?: string;
   content: string;
@@ -51,11 +105,11 @@ const curriculumTracks: CurriculumTrack[] = [
   },
   {
     slug: "liturgical-year",
-    stage: "Seasonal",
-    title: "Liturgical Year",
+    stage: "Overview",
+    title: "Liturgical Year Overview",
     description:
-      "Advent, Lent, Easter, and ordinary time resources aligned with the Church calendar.",
-    lessonCount: 24,
+      "How Advent, Christmas, Lent, Easter, and Ordinary Time fit together in parish life.",
+    lessonCount: 8,
   },
 ];
 
@@ -67,8 +121,28 @@ export function getCurriculumTrack(slug: string): CurriculumTrack | undefined {
   return curriculumTracks.find((t) => t.slug === slug);
 }
 
+export function getLiturgicalPeriod(id: LiturgicalPeriodId): LiturgicalPeriod {
+  return LITURGICAL_PERIODS.find((p) => p.id === id) ?? LITURGICAL_PERIODS[6];
+}
+
 function resourcesDir(): string {
   return path.join(contentRoot, "resources");
+}
+
+function parsePeriod(value: unknown): LiturgicalPeriodId {
+  const valid: LiturgicalPeriodId[] = [
+    "advent",
+    "christmas",
+    "lent",
+    "holy-week",
+    "easter",
+    "ordinary",
+    "general",
+  ];
+  if (typeof value === "string" && valid.includes(value as LiturgicalPeriodId)) {
+    return value as LiturgicalPeriodId;
+  }
+  return "general";
 }
 
 export function getAllResourceSlugs(): string[] {
@@ -94,6 +168,7 @@ export function getResourceBySlug(slug: string): ResourcePost | null {
     date: (data.date as string) ?? "",
     grade: (data.grade as string) ?? "All",
     topic: (data.topic as string) ?? "General",
+    liturgicalPeriod: parsePeriod(data.liturgicalPeriod ?? data.season),
     downloadLabel: data.downloadLabel as string | undefined,
     downloadUrl: data.downloadUrl as string | undefined,
     content,
@@ -105,6 +180,12 @@ export function getAllResources(): ResourcePost[] {
     .map((slug) => getResourceBySlug(slug))
     .filter((p): p is ResourcePost => p !== null)
     .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+export function getResourcesByPeriod(
+  periodId: LiturgicalPeriodId,
+): ResourcePost[] {
+  return getAllResources().filter((r) => r.liturgicalPeriod === periodId);
 }
 
 export function getResourcesByGrade(grade: string): ResourcePost[] {

@@ -4,16 +4,14 @@ type Props = { reading: MassReading };
 
 export function MassReadingBlock({ reading }: Props) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-wider text-[#2563eb]">
+    <section className="border border-[var(--color-border)] bg-white px-6 py-8 sm:px-10">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
         {reading.label}
       </p>
       {reading.title && (
-        <h3 className="mt-2 text-lg font-bold text-slate-800">{reading.title}</h3>
+        <h3 className="mt-3 text-lg font-bold text-[var(--color-ink)]">{reading.title}</h3>
       )}
-      <div className="prose-mass mt-4 whitespace-pre-wrap text-slate-700">
-        {reading.text}
-      </div>
+      <div className="prose-mass mt-5 whitespace-pre-wrap">{reading.text}</div>
     </section>
   );
 }

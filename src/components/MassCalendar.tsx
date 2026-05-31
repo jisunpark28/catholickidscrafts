@@ -7,19 +7,20 @@ import type { MassDaySummary, MonthCalendar } from "@/types/mass";
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const rankStyles: Record<MassDaySummary["rank"], string> = {
-  solemnity: "ring-2 ring-amber-400 bg-amber-50 font-semibold",
-  feast: "bg-sky-50 font-semibold text-sky-900",
-  memorial: "bg-violet-50 text-violet-900",
-  sunday: "bg-emerald-50 font-semibold text-emerald-900",
-  ferial: "bg-white text-slate-700 hover:bg-slate-50",
+  solemnity: "border-l-4 border-l-amber-500 bg-amber-50/80",
+  feast: "border-l-4 border-l-sky-500 bg-sky-50/50",
+  memorial: "border-l-4 border-l-violet-400 bg-violet-50/40",
+  sunday: "border-l-4 border-l-emerald-600 bg-emerald-50/60 font-semibold",
+  ferial: "bg-white hover:bg-[var(--color-surface)]",
 };
 
 type Props = {
   initial: MonthCalendar;
   selectedDate: string;
+  todayDate: string;
 };
 
-export function MassCalendar({ initial, selectedDate }: Props) {
+export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
   const [calendar, setCalendar] = useState(initial);
   const [year, setYear] = useState(initial.year);
   const [month, setMonth] = useState(initial.month);
@@ -66,57 +67,68 @@ export function MassCalendar({ initial, selectedDate }: Props) {
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-bold text-slate-800">Daily Mass Calendar</h2>
+    <section className="w-full border border-[var(--color-border)] bg-white">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--color-border)] px-4 py-4 sm:px-6">
+        <h2 className="text-lg font-bold text-[var(--color-ink)]">{monthLabel}</h2>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => shiftMonth(-1)}
-            className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]"
             aria-label="Previous month"
           >
-            ←
+            Previous
           </button>
-          <span className="min-w-[10rem] text-center text-sm font-bold text-slate-800">
-            {monthLabel}
-            {loading && " …"}
-          </span>
           <button
             type="button"
             onClick={() => shiftMonth(1)}
-            className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]"
             aria-label="Next month"
           >
-            →
+            Next
           </button>
+          {loading && (
+            <span className="text-sm text-[var(--color-muted)]">Loading…</span>
+          )}
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-slate-500">
+      <div className="grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
         {WEEKDAYS.map((d) => (
-          <div key={d} className="py-2">
+          <div key={d} className="border-r border-[var(--color-border)] py-3 last:border-r-0">
             {d}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7">
         {Array.from({ length: firstDow }).map((_, i) => (
-          <div key={`pad-${i}`} className="min-h-[4.5rem]" />
+          <div
+            key={`pad-${i}`}
+            className="min-h-[7rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[8.5rem] lg:min-h-[9.5rem]"
+          />
         ))}
         {calendar.days.map((day) => {
           const dayNum = Number(day.date.slice(8, 10));
           const isSelected = day.date === selectedDate;
+          const isToday = day.date === todayDate;
           return (
             <Link
               key={day.date}
               href={`/mass/${day.date}`}
-              className={`flex min-h-[4.5rem] flex-col rounded-lg border border-slate-100 p-1.5 text-left transition ${rankStyles[day.rank]} ${isSelected ? "ring-2 ring-[#2563eb]" : ""}`}
+              className={`flex min-h-[7rem] flex-col border-b border-r border-[var(--color-border)] p-2 transition sm:min-h-[8.5rem] sm:p-3 lg:min-h-[9.5rem] ${rankStyles[day.rank]} ${
+                isSelected ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
+              }`}
               title={day.liturgicalTitle}
             >
-              <span className="text-sm font-bold">{dayNum}</span>
-              <span className="mt-0.5 line-clamp-3 text-[10px] leading-tight opacity-90">
+              <span
+                className={`text-sm font-bold sm:text-base ${
+                  isToday ? "text-[var(--color-accent)]" : "text-[var(--color-ink)]"
+                }`}
+              >
+                {dayNum}
+              </span>
+              <span className="mt-1 line-clamp-4 flex-1 text-[11px] leading-snug text-[var(--color-muted)] sm:text-xs sm:leading-tight">
                 {day.liturgicalTitle}
               </span>
             </Link>
@@ -124,8 +136,8 @@ export function MassCalendar({ initial, selectedDate }: Props) {
         })}
       </div>
 
-      <p className="mt-4 text-xs text-slate-500">
-        Tap a date for full readings. Data: {calendar.source}
+      <p className="px-4 py-3 text-xs text-[var(--color-muted)] sm:px-6">
+        Select a date for full Mass readings. Source: {calendar.source}
       </p>
     </section>
   );

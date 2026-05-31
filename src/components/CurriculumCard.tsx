@@ -7,18 +7,18 @@ export function CurriculumCard({ track }: Props) {
   return (
     <Link
       href={`/curriculum/${track.slug}`}
-      className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-[#2563eb] hover:shadow-md"
+      className="group block h-full bg-white p-8 transition hover:bg-[var(--color-surface)]"
     >
-      <span className="text-xs font-bold uppercase tracking-wider text-[#2563eb]">
+      <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--color-muted)]">
         {track.stage}
-      </span>
-      <h3 className="mt-2 text-xl font-extrabold text-slate-800 group-hover:text-[#2563eb]">
+      </p>
+      <h3 className="mt-3 text-xl font-bold text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
         {track.title}
       </h3>
-      <p className="mt-3 text-sm text-slate-600">{track.description}</p>
-      <span className="mt-4 inline-block text-sm font-bold text-[#2563eb] group-hover:underline">
-        View track →
-      </span>
+      <p className="mt-3 text-[var(--color-muted)] leading-relaxed">{track.description}</p>
+      <p className="mt-6 text-sm font-semibold text-[var(--color-link)] group-hover:underline">
+        View {track.lessonCount} lessons →
+      </p>
     </Link>
   );
 }

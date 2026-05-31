@@ -3,15 +3,15 @@ import Link from "next/link";
 import logo from "@/Logo.png";
 
 type Props = {
-  size?: "sm" | "md" | "lg";
+  size?: "header" | "hero";
   showWordmark?: boolean;
   className?: string;
 };
 
-const heights = { sm: 36, md: 44, lg: 80 } as const;
+const heights = { header: 72, hero: 140 } as const;
 
 export function SiteLogo({
-  size = "md",
+  size = "header",
   showWordmark = true,
   className = "",
 }: Props) {
@@ -19,23 +19,19 @@ export function SiteLogo({
 
   return (
     <Link
-      href="/"
-      className={`flex items-center gap-2.5 ${className}`}
+      href="/mass"
+      className={`inline-flex items-center gap-3 bg-transparent ${className}`}
       aria-label="Catholic Kids Crafts home"
     >
       <Image
         src={logo}
         alt="Catholic Kids Crafts logo"
-        className="w-auto object-contain"
+        className="block w-auto max-w-none object-contain drop-shadow-sm"
         style={{ height: `${height}px`, width: "auto" }}
-        priority={size !== "sm"}
+        priority
       />
       {showWordmark && (
-        <span
-          className={`font-extrabold text-slate-800 ${
-            size === "lg" ? "text-2xl" : size === "md" ? "text-lg" : "text-base"
-          }`}
-        >
+        <span className="hidden text-lg font-bold tracking-tight text-[var(--color-ink)] sm:inline lg:text-xl">
           Catholic Kids Crafts
         </span>
       )}

@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Inter } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -30,9 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nunito.variable} min-h-screen font-sans antialiased`}>
+      <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
         <SiteHeader />
-        {children}
+        <main>{children}</main>
         <SiteFooter />
       </body>
     </html>

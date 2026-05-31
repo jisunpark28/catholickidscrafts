@@ -5,26 +5,23 @@ type Props = { post: ResourcePost };
 
 export function ResourceCard({ post }: Props) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-slate-300 hover:shadow-md">
-      <div className="mb-3 flex flex-wrap gap-2 text-xs font-bold uppercase tracking-wider">
-        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-600">
-          {post.grade}
-        </span>
-        <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[#2563eb]">
-          {post.topic}
-        </span>
+    <article className="border-b border-[var(--color-border)] bg-white p-6 last:border-b-0 sm:p-8">
+      <div className="mb-2 flex flex-wrap gap-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
+        <span>{post.grade}</span>
+        <span>·</span>
+        <span>{post.topic}</span>
       </div>
-      <h3 className="text-xl font-extrabold text-slate-800">
-        <Link href={`/resources/${post.slug}`} className="hover:text-[#2563eb]">
+      <h3 className="text-lg font-bold text-[var(--color-ink)]">
+        <Link href={`/resources/${post.slug}`} className="hover:text-[var(--color-accent)]">
           {post.title}
         </Link>
       </h3>
-      <p className="mt-2 text-sm text-slate-600">{post.excerpt}</p>
+      <p className="mt-2 text-[var(--color-muted)]">{post.excerpt}</p>
       <Link
         href={`/resources/${post.slug}`}
-        className="mt-4 inline-block text-sm font-bold text-[#2563eb] hover:underline"
+        className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)] hover:underline"
       >
-        Read lesson →
+        Open resource
       </Link>
     </article>
   );

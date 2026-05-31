@@ -4,6 +4,7 @@ excerpt: "Liturgical Year activity: build a simple paper wreath with four candle
 date: "2026-03-20"
 grade: "Grade 3-5"
 topic: "Liturgical Year"
+liturgicalPeriod: advent
 downloadLabel: "Download craft template (sample)"
 downloadUrl: "/downloads/advent-wreath-template.pdf"
 ---

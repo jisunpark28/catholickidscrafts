@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PageShell } from "@/components/PageShell";
 import { ResourceCard } from "@/components/ResourceCard";
 import {
   getAllResources,
@@ -42,46 +43,48 @@ export default async function CurriculumTrackPage({ params }: Props) {
   );
 
   return (
-    <div className="min-h-screen bg-[#131217] px-6 py-16">
-      <div className="mx-auto max-w-5xl">
-        <Link
-          href="/#curriculum"
-          className="text-sm font-medium text-[#dfb24f] hover:underline"
-        >
-          ← Curriculum
-        </Link>
-        <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-[#7c6a85]">
+    <PageShell wide>
+      <Link
+        href="/curriculum"
+        className="text-sm font-semibold text-[var(--color-link)] hover:underline"
+      >
+        ← Curriculum
+      </Link>
+      <header className="mt-6 border-b border-[var(--color-border)] pb-8">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
           {track.stage}
         </p>
-        <h1 className="mt-2 text-4xl font-extrabold tracking-tight">
+        <h1 className="mt-2 text-3xl font-bold text-[var(--color-ink)] sm:text-4xl">
           {track.title}
         </h1>
-        <p className="mt-4 max-w-2xl text-lg text-gray-400">{track.description}</p>
-        <p className="mt-2 text-sm text-gray-500">
-          {track.lessonCount} lessons in this track (more coming soon)
+        <p className="mt-4 max-w-3xl text-lg text-[var(--color-muted)]">
+          {track.description}
         </p>
+        <p className="mt-2 text-sm text-[var(--color-muted)]">
+          {track.lessonCount} lessons planned in this track
+        </p>
+      </header>
 
-        <section className="mt-16">
-          <h2 className="mb-6 border-b border-gray-800 pb-2 text-xl font-bold text-gray-400">
-            Resources in this track
-          </h2>
-          {related.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2">
-              {related.map((post) => (
-                <ResourceCard key={post.slug} post={post} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500">
-              Seasonal and general resources are listed under{" "}
-              <Link href="/resources" className="text-[#dfb24f] hover:underline">
-                all resources
-              </Link>
-              .
-            </p>
-          )}
-        </section>
-      </div>
-    </div>
+      <section className="mt-12">
+        <h2 className="mb-6 text-xl font-bold text-[var(--color-ink)]">
+          Related kids resources
+        </h2>
+        {related.length > 0 ? (
+          <div className="border border-[var(--color-border)]">
+            {related.map((post) => (
+              <ResourceCard key={post.slug} post={post} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-[var(--color-muted)]">
+            Browse by liturgical season on{" "}
+            <Link href="/resources" className="font-semibold text-[var(--color-link)]">
+              Kids Resources
+            </Link>
+            .
+          </p>
+        )}
+      </section>
+    </PageShell>
   );
 }

@@ -4,6 +4,7 @@ excerpt: "A gentle, child-friendly guide for Grade 1–2 students preparing for 
 date: "2026-04-15"
 grade: "Grade 1-2"
 topic: "Sacraments"
+liturgicalPeriod: general
 downloadLabel: "Download worksheet (sample)"
 downloadUrl: "/downloads/examination-of-conscience.pdf"
 ---
