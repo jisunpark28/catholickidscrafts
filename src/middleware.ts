@@ -17,7 +17,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const secret = process.env.AUTH_SECRET;
+  const secret = process.env.AUTH_SECRET?.trim();
   if (!secret) {
     console.error("AUTH_SECRET is not set");
     const login = new URL("/admin/login", req.nextUrl.origin);

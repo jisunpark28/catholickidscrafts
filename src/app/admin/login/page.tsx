@@ -1,67 +1,50 @@
-"use client";
+import { loginAction } from "@/app/admin/login/actions";
+import { Suspense } from "react";
 
-import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+type PageProps = {
+  searchParams: Promise<{ error?: string; callbackUrl?: string }>;
+};
 
-function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
-  const configError = searchParams.get("error") === "Configuration";
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-    setLoading(false);
-    if (result?.error) {
-      setError(
-        result.code === "CredentialsSignin"
-          ? "Invalid email or password."
-          : "Sign-in failed. Check AUTH_SECRET on the server and try again.",
-      );
-      return;
-    }
-    router.push(callbackUrl);
-    router.refresh();
+function errorMessage(code: string | undefined): string | null {
+  if (code === "CredentialsSignin") {
+    return "Invalid email or password. Use the same ADMIN_EMAIL and ADMIN_PASSWORD from your .env when you ran npm run db:seed.";
   }
+  if (code === "Configuration") {
+    return "Server misconfiguration: set AUTH_SECRET (and AUTH_URL=https://www.catholickidscrafts.com) in Vercel, then redeploy.";
+  }
+  return null;
+}
+
+async function LoginPanel({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const message = errorMessage(params.error);
+  const callbackUrl = params.callbackUrl ?? "/admin";
 
   return (
     <form
-      onSubmit={onSubmit}
+      action={loginAction}
       className="w-full max-w-md border border-[var(--color-border)] bg-white p-8"
     >
       <h1 className="text-2xl font-bold text-[var(--color-ink)]">Operator login</h1>
       <p className="mt-2 text-sm text-[var(--color-muted)]">
         Manage Curriculum and Kids Resources. Daily Mass readings are loaded automatically.
       </p>
-      {configError && (
-        <p className="mt-4 border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-          Server misconfiguration: set AUTH_SECRET in Vercel Environment Variables, then redeploy.
-        </p>
-      )}
-      {error && (
+
+      {message && (
         <p className="mt-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-          {error}
+          {message}
         </p>
       )}
+
+      <input type="hidden" name="callbackUrl" value={callbackUrl} />
+
       <label className="mt-6 block text-sm font-semibold">
         Email
         <input
           type="email"
+          name="email"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
           className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
         />
       </label>
@@ -69,28 +52,27 @@ function LoginForm() {
         Password
         <input
           type="password"
+          name="password"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
           className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
         />
       </label>
       <button
         type="submit"
-        disabled={loading}
-        className="mt-6 w-full bg-[var(--color-accent)] py-3 text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60"
+        className="mt-6 w-full bg-[var(--color-accent)] py-3 text-sm font-bold text-white hover:bg-[var(--color-accent-hover)]"
       >
-        {loading ? "Signing in…" : "Sign in"}
+        Sign in
       </button>
     </form>
   );
 }
 
-export default function AdminLoginPage() {
+export default function AdminLoginPage({ searchParams }: PageProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--color-surface)] px-4">
       <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
-        <LoginForm />
+        <LoginPanel searchParams={searchParams} />
       </Suspense>
     </div>
   );
