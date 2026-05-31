@@ -23,6 +23,7 @@ Only signed-in operators can create, edit, delete, and upload files.
 | `/admin` | Dashboard |
 | `/admin/resources` | Kids resources CRUD + PDF upload |
 | `/admin/curriculum` | Curriculum tracks CRUD |
+| `/admin/operators` | Add/remove operator accounts (super admin) |
 
 ### First-time setup (local)
 
@@ -36,7 +37,7 @@ cp .env.example .env
 
 - `AUTH_SECRET` — random string (`openssl rand -base64 32`)
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — your operator login (used once for seeding)
-- `DATABASE_URL` — default `file:./prisma/dev.db` (SQLite)
+- `DATABASE_URL` / `DIRECT_URL` — Neon Postgres connection strings
 
 3. Install and initialize database:
 
@@ -54,18 +55,24 @@ npm run dev
 
 5. Open **http://localhost:3000/admin/login** and sign in with `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 
-### Production (Vercel + Postgres)
+### Production (Vercel + Neon — free tier)
 
-SQLite does **not** persist on Vercel. Use a hosted Postgres database (recommended: [Neon](https://neon.tech) free tier):
+This project uses **PostgreSQL** (Neon). Set both `DATABASE_URL` (pooled) and `DIRECT_URL` (direct) on Vercel.
 
-1. Create a Postgres database and set `DATABASE_URL` in Vercel (e.g. `postgresql://...`).
-2. Change `provider` in `prisma/schema.prisma` to `postgresql` **or** use a separate production schema (same models).
-3. Set env vars on Vercel:
-   - `DATABASE_URL`
-   - `AUTH_SECRET`
-   - `ADMIN_EMAIL` / `ADMIN_PASSWORD` (run seed once locally against prod URL, or add admin in DB)
-   - `BLOB_READ_WRITE_TOKEN` (Vercel Blob — for PDF uploads in production)
-4. Deploy; run `npx prisma migrate deploy` against production (Vercel build command or one-off).
+**Step-by-step (Korean):** [docs/SETUP_KO.md](docs/SETUP_KO.md)
+
+1. Neon project → copy pooled + direct connection strings.
+2. Vercel env: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL=https://catholickidscrafts.com`, `BLOB_READ_WRITE_TOKEN`.
+3. Run `npm run db:seed` once locally with Neon URLs in `.env` to create the super-admin and sample content.
+4. Deploy; `vercel-build` runs `prisma migrate deploy` automatically.
+
+### Multiple operators & rich text
+
+| Feature | Where |
+|---------|--------|
+| Super admin adds operators | `/admin/operators` (nav visible to super admins only) |
+| Rich text (HTML) | Resource & curriculum editors |
+| Roles | `SUPER_ADMIN` (operators + content), `OPERATOR` (content only) |
 
 ### File uploads
 
@@ -95,4 +102,4 @@ Legacy Markdown under `content/resources/` is imported by `npm run db:seed` only
 
 ## Tech stack
 
-Next.js 15 · Prisma · SQLite (local) / Postgres (prod) · NextAuth · Tailwind CSS v4
+Next.js 15 · Prisma · Neon Postgres · NextAuth · TipTap · Tailwind CSS v4

@@ -1,5 +1,7 @@
 "use client";
 
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { isHtmlContent } from "@/lib/content-html";
 import { LITURGICAL_PERIODS } from "@/lib/content-types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,6 +12,7 @@ export type ResourceFormData = {
   slug: string;
   excerpt: string;
   content: string;
+  contentFormat?: string;
   grade: string;
   topic: string;
   liturgicalPeriod: string;
@@ -71,6 +74,7 @@ export function ResourceEditor({ initial }: Props) {
     setError("");
     const payload = {
       ...form,
+      contentFormat: "html",
       downloadLabel: form.downloadLabel || null,
       downloadUrl: form.downloadUrl || null,
     };
@@ -175,15 +179,26 @@ export function ResourceEditor({ initial }: Props) {
         </label>
       </div>
 
-      <label className="block text-sm font-semibold">
-        Content (Markdown)
-        <textarea
-          value={form.content}
-          onChange={(e) => update("content", e.target.value)}
-          rows={14}
-          className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm"
-        />
-      </label>
+      <div>
+        <p className="text-sm font-semibold">Content</p>
+        {form.content && !isHtmlContent(form.content, form.contentFormat) && (
+          <p className="mt-1 text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-2">
+            Legacy Markdown detected. Saving will store as rich text (HTML).
+          </p>
+        )}
+        <div className="mt-2">
+          <RichTextEditor
+            value={
+              isHtmlContent(form.content, form.contentFormat)
+                ? form.content
+                : form.content
+                  ? `<p>${form.content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\n/g, "<br/>")}</p>`
+                  : "<p></p>"
+            }
+            onChange={(html) => update("content", html)}
+          />
+        </div>
+      </div>
 
       <fieldset className="border border-[var(--color-border)] p-4">
         <legend className="px-2 text-sm font-semibold">Download file (optional)</legend>

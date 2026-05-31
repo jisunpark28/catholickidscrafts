@@ -1,5 +1,7 @@
 "use client";
 
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { isHtmlContent } from "@/lib/content-html";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -10,6 +12,7 @@ export type CurriculumFormData = {
   stage: string;
   description: string;
   body: string;
+  bodyFormat?: string;
   lessonCount: number;
   sortOrder: number;
   published: boolean;
@@ -111,15 +114,15 @@ export function CurriculumEditor({ initial }: Props) {
           className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
         />
       </label>
-      <label className="block text-sm font-semibold">
-        Overview (Markdown, optional)
-        <textarea
-          value={form.body}
-          onChange={(e) => update("body", e.target.value)}
-          rows={8}
-          className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm"
-        />
-      </label>
+      <div>
+        <p className="text-sm font-semibold">Track overview (optional)</p>
+        <div className="mt-2">
+          <RichTextEditor
+            value={isHtmlContent(form.body, form.bodyFormat) ? form.body : form.body ? `<p>${form.body}</p>` : "<p></p>"}
+            onChange={(html) => update("body", html)}
+          />
+        </div>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm font-semibold">
           Lesson count

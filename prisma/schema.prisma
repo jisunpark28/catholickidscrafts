@@ -3,15 +3,23 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  OPERATOR
 }
 
 model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String?
   passwordHash String
-  createdAt    DateTime @default(now())
+  role         AdminRole @default(OPERATOR)
+  createdAt    DateTime  @default(now())
 }
 
 model CurriculumTrack {
@@ -34,6 +42,7 @@ model Resource {
   title             String
   excerpt           String
   content           String
+  contentFormat     String   @default("html")
   grade             String
   topic             String
   liturgicalPeriod  String

@@ -9,25 +9,24 @@ Guidance for AI agents working in this repository.
 | Service | Required | Command | Port |
 |---------|----------|---------|------|
 | Next.js dev | Yes | `pnpm dev` or `npm run dev` | 3000 |
+| Neon Postgres | Yes (content + admin) | Connection via `DATABASE_URL` / `DIRECT_URL` in `.env` | — |
 
-No database. Mass data is fetched at runtime from Evangelizo Reader API (proxied via `/api/mass/*`).
+Mass readings are **not** in the DB; they come from Evangelizo at runtime (`/api/mass/*`).
 
-### Mass data source
+### Environment
 
-- **API:** `http://feed.evangelizo.org/v2/reader.php` with `lang=AM` (American English, Roman calendar)
-- **Window:** ~30 days from today (Evangelizo feed limit)
-- **Routes:** `/mass/YYYY-MM-DD`, `/api/mass/[date]`, `/api/mass/calendar/[year]/[month]`
+Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + direct `DIRECT_URL` for migrations. See `docs/SETUP_KO.md` for Vercel + `catholickidscrafts.com`.
 
 ### Lint / build
 
-- `pnpm lint` / `pnpm build`
-- Homepage revalidates hourly (`revalidate` on Evangelizo fetches: 3600s)
+- `pnpm lint` / `pnpm build` (build needs valid Postgres URLs if prerender touches DB; most CMS routes use `force-dynamic`)
+- Vercel: `pnpm run vercel-build` runs `prisma migrate deploy` then `next build`
 
-### Design
+### Admin
 
-Bright Odin Project–style UI: white cards, `#2563eb` accent, Nunito font, `#f8fafc` background.
+- `/admin/login` — operators; super admins also get `/admin/operators`
+- Rich text saves HTML; legacy markdown seeds use `contentFormat: markdown`
 
 ### VM update script
 
-- `pnpm install` (idempotent dependency refresh on session start)
-- Do **not** add `npm run dev`, migrations, or Docker startup to the update script.
+- `pnpm install` only — no migrations, dev server, or seed in the update script.

@@ -9,6 +9,7 @@ const updateSchema = z.object({
   slug: z.string().optional(),
   excerpt: z.string().optional(),
   content: z.string().optional(),
+  contentFormat: z.string().optional(),
   grade: z.string().optional(),
   topic: z.string().optional(),
   liturgicalPeriod: z.string().optional(),

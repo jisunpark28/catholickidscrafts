@@ -24,6 +24,7 @@ export default async function EditResourcePage({ params }: Props) {
             slug: item.slug,
             excerpt: item.excerpt,
             content: item.content,
+            contentFormat: item.contentFormat,
             grade: item.grade,
             topic: item.topic,
             liturgicalPeriod: item.liturgicalPeriod,

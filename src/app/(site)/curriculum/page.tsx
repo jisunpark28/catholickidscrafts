@@ -2,6 +2,8 @@ import { CurriculumCard } from "@/components/CurriculumCard";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { getCurriculumTracks } from "@/lib/content";
+export const dynamic = "force-dynamic";
+
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

@@ -1,19 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { ContentBody } from "@/components/ContentBody";
 import { PageShell } from "@/components/PageShell";
-import { getAllResourceSlugs, getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
+import { getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  const slugs = await getAllResourceSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -57,9 +52,11 @@ export default async function ResourcePage({ params }: Props) {
         </a>
       )}
 
-      <div className="prose-catechism mt-10 border border-[var(--color-border)] bg-white px-6 py-8 sm:px-10">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
-      </div>
+      <ContentBody
+        content={post.content}
+        contentFormat={post.contentFormat}
+        className="mt-10 border border-[var(--color-border)] bg-white px-6 py-8 sm:px-10"
+      />
     </PageShell>
   );
 }

@@ -7,7 +7,12 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://catholickidscrafts.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Catholic Kids Crafts | Daily Mass & Catechism",
     template: "%s | Catholic Kids Crafts",

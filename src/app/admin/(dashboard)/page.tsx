@@ -1,10 +1,12 @@
 import { auth } from "@/auth";
+import { isSuperAdmin } from "@/lib/admin-roles";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { signOut } from "@/auth";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
+  const superAdmin = isSuperAdmin(session);
   const [resourceCount, curriculumCount, draftResources] = await Promise.all([
     prisma.resource.count(),
     prisma.curriculumTrack.count(),
@@ -52,6 +54,20 @@ export default async function AdminDashboardPage() {
           <p className="text-3xl font-bold">{draftResources}</p>
           <p className="mt-1 text-sm text-[var(--color-muted)]">Unpublished resources</p>
         </div>
+        {superAdmin && (
+          <div className="border border-[var(--color-border)] bg-white p-6 sm:col-span-3">
+            <h2 className="font-bold text-[var(--color-ink)]">Operator accounts</h2>
+            <p className="mt-1 text-sm text-[var(--color-muted)]">
+              Invite co-teachers or editors (free on Neon + Vercel).
+            </p>
+            <Link
+              href="/admin/operators"
+              className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]"
+            >
+              Manage operators →
+            </Link>
+          </div>
+        )}
       </div>
 
       <section className="mt-12 border border-[var(--color-border)] bg-white p-6">

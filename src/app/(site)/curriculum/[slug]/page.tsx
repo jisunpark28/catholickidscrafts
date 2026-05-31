@@ -20,10 +20,6 @@ const gradeByTrack: Record<string, string[]> = {
   "liturgical-year": [],
 };
 
-export async function generateStaticParams() {
-  const tracks = await getCurriculumTracks();
-  return tracks.map((t) => ({ slug: t.slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

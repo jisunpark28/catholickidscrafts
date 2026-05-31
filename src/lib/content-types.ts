@@ -74,4 +74,5 @@ export type ResourcePost = {
   downloadLabel?: string;
   downloadUrl?: string;
   content: string;
+  contentFormat?: string;
 };

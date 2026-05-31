@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { AdminRole, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
@@ -67,10 +67,11 @@ async function main() {
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
+  const adminName = process.env.ADMIN_NAME ?? "Site Owner";
   await prisma.adminUser.upsert({
     where: { email },
-    update: { passwordHash },
-    create: { email, passwordHash },
+    update: { passwordHash, role: AdminRole.SUPER_ADMIN, name: adminName },
+    create: { email, passwordHash, role: AdminRole.SUPER_ADMIN, name: adminName },
   });
   console.log(`Admin user: ${email}`);
 
@@ -102,6 +103,7 @@ async function main() {
           downloadLabel: (data.downloadLabel as string) ?? null,
           downloadUrl: (data.downloadUrl as string) ?? null,
           published: true,
+          contentFormat: "markdown",
         },
         create: {
           slug,
@@ -114,6 +116,7 @@ async function main() {
           downloadLabel: (data.downloadLabel as string) ?? null,
           downloadUrl: (data.downloadUrl as string) ?? null,
           published: true,
+          contentFormat: "markdown",
         },
       });
     }

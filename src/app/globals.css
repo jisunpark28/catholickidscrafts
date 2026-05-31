@@ -48,6 +48,55 @@ body {
   text-decoration: underline;
 }
 
+
+.rich-content h2,
+.rich-content h3 {
+  color: var(--color-ink);
+  font-weight: 700;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
+
+.rich-content h2 {
+  font-size: 1.35rem;
+}
+
+.rich-content h3 {
+  font-size: 1.15rem;
+}
+
+.rich-content p {
+  margin-bottom: 0.85em;
+  line-height: 1.75;
+}
+
+.rich-content ul,
+.rich-content ol {
+  margin: 0.75em 0 1em;
+  padding-left: 1.5rem;
+}
+
+.rich-content ul {
+  list-style: disc;
+}
+
+.rich-content ol {
+  list-style: decimal;
+}
+
+.rich-content blockquote {
+  margin: 1em 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.rich-content a {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
 .prose-mass {
   line-height: 1.85;
   font-size: 1.0625rem;

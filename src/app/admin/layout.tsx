@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { isSuperAdmin } from "@/lib/admin-roles";
 import Link from "next/link";
 
 export default async function AdminLayout({
@@ -7,6 +8,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const superAdmin = isSuperAdmin(session);
 
   return (
     <div className="min-h-screen bg-[var(--color-surface)]">
@@ -23,6 +25,11 @@ export default async function AdminLayout({
               <Link href="/admin/curriculum" className="hover:text-[var(--color-accent)]">
                 Curriculum
               </Link>
+              {superAdmin && (
+                <Link href="/admin/operators" className="hover:text-[var(--color-accent)]">
+                  Operators
+                </Link>
+              )}
               <Link href="/" className="text-[var(--color-muted)] hover:text-[var(--color-ink)]">
                 View site
               </Link>

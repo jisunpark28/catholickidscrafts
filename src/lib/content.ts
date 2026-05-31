@@ -25,6 +25,7 @@ function mapResource(r: {
   liturgicalPeriod: string;
   downloadLabel: string | null;
   downloadUrl: string | null;
+  contentFormat: string;
   updatedAt: Date;
 }): ResourcePost {
   return {
@@ -38,6 +39,7 @@ function mapResource(r: {
     downloadLabel: r.downloadLabel ?? undefined,
     downloadUrl: r.downloadUrl ?? undefined,
     content: r.content,
+    contentFormat: r.contentFormat,
   };
 }
 
