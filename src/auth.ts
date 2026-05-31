@@ -1,3 +1,4 @@
+import { authConfig } from "@/auth.config";
 import { prisma } from "@/lib/prisma";
 import { AdminRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -5,7 +6,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  trustHost: true,
+  ...authConfig,
   providers: [
     Credentials({
       name: "Admin",
@@ -33,19 +34,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  pages: {
-    signIn: "/admin/login",
-  },
-  session: { strategy: "jwt" },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.role = user.role;
-      }
-      return token;
-    },
+    ...authConfig.callbacks,
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;

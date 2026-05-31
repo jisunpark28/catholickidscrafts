@@ -1,27 +1,12 @@
-import { auth } from "@/auth";
-import { NextResponse } from "next/server";
+import { authConfig } from "@/auth.config";
+import NextAuth from "next-auth";
 
-export default auth((req) => {
-  const { pathname } = req.nextUrl;
-  const isAdminRoute = pathname.startsWith("/admin");
-  const isLogin = pathname === "/admin/login";
-  const isAdminApi =
-    pathname.startsWith("/api/admin") && !pathname.startsWith("/api/admin/auth");
-
-  if ((isAdminRoute && !isLogin) || isAdminApi) {
-    if (!req.auth) {
-      if (isAdminApi) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
-      const login = new URL("/admin/login", req.nextUrl.origin);
-      login.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(login);
-    }
-  }
-
-  return NextResponse.next();
-});
+/**
+ * Edge middleware must not import @/auth (Prisma/bcrypt live there).
+ * Admin API routes use requireAdminSession() on the Node.js runtime instead.
+ */
+export default NextAuth(authConfig).auth;
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*"],
 };
