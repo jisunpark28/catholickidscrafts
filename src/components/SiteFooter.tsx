@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import logo from "@/Logo.png";
 import { MASS_DATA_SOURCE } from "@/lib/evangelizo";
 
 export function SiteFooter() {
@@ -6,12 +8,21 @@ export function SiteFooter() {
     <footer className="mt-16 border-t border-slate-200 bg-white px-4 py-10 md:px-6">
       <div className="mx-auto max-w-5xl">
         <div className="grid gap-8 md:grid-cols-2">
-          <div>
-            <p className="font-bold text-slate-800">Catholic Kids Crafts</p>
-            <p className="mt-2 text-sm text-slate-600">
-              Daily Mass in English and catechism materials for families and
-              Sunday school teachers.
-            </p>
+          <div className="flex gap-4">
+            <Image
+              src={logo}
+              alt="Catholic Kids Crafts"
+              height={56}
+              width={67}
+              className="h-14 w-auto object-contain"
+            />
+            <div>
+              <p className="font-bold text-slate-800">Catholic Kids Crafts</p>
+              <p className="mt-2 text-sm text-slate-600">
+                Daily Mass in English and catechism materials for families and
+                Sunday school teachers.
+              </p>
+            </div>
           </div>
           <div>
             <p className="text-sm font-semibold text-slate-800">Mass readings</p>

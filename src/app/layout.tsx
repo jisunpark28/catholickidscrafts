@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   },
   description:
     "Daily Catholic Mass readings in English, liturgical calendar, and kids catechism resources.",
+  icons: {
+    icon: "/logo-icon.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

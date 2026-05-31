@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SiteLogo } from "@/components/SiteLogo";
 import { CurriculumCard } from "@/components/CurriculumCard";
 import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
 import { MassCalendar } from "@/components/MassCalendar";
@@ -22,6 +23,10 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <div className="mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-12">
+        <div className="mb-6 flex justify-center md:mb-8 md:justify-start">
+          <SiteLogo size="lg" showWordmark={false} />
+        </div>
+
         <LiturgicalSeasonBanner
           season={calendar.season}
           todayTitle={todaySummary?.liturgicalTitle}
