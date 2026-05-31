@@ -74,6 +74,14 @@ This project uses **PostgreSQL** (Neon). Set both `DATABASE_URL` (pooled) and `D
 | Rich text (HTML) | Resource & curriculum editors |
 | Roles | `SUPER_ADMIN` (operators + content), `OPERATOR` (content only) |
 
+
+### Curriculum or Kids Resources crash (`DATABASE_URL` not found)
+
+1. Ensure a file named `.env` exists next to `package.json` (not `.env.txt`).
+2. Set `DATABASE_URL` and `DIRECT_URL` from [Neon](https://neon.tech) (see `.env.example`).
+3. Run `npx prisma migrate deploy` and `npm run db:seed`.
+4. Stop the dev server (Ctrl+C) and run `npm run dev` again.
+
 ### File uploads
 
 | Environment | Storage |
