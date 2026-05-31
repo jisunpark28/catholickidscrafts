@@ -9,8 +9,8 @@ export const metadata: Metadata = {
   description: "Structured catechism tracks for Sunday school and homeschool.",
 };
 
-export default function CurriculumPage() {
-  const tracks = getCurriculumTracks();
+export default async function CurriculumPage() {
+  const tracks = await getCurriculumTracks();
 
   return (
     <PageShell wide>

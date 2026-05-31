@@ -1,57 +1,98 @@
 # Catholic Kids Crafts
 
-A Catholic kids catechism resource site with an [Odin Project](https://www.theodinproject.com/)-inspired layout: clean grids, bold typography, and a dark theme with liturgical gold accents.
+Daily Mass (English) + Catholic kids catechism resources.
 
-## Stack
+## Public site
 
-- **Next.js 15** (App Router) + **TypeScript** + **Tailwind CSS v4**
-- Content in **Markdown** (`content/resources/*.md`)
-- Deploy on **[Vercel](https://vercel.com)** from **GitHub**
+| Page | URL |
+|------|-----|
+| Daily Mass calendar | `/mass` |
+| Mass readings by date | `/mass/YYYY-MM-DD` |
+| Curriculum | `/curriculum` |
+| Kids Resources (by liturgical season) | `/resources` |
 
-## Development
+Mass readings come from the [Evangelizo Reader API](http://feed.evangelizo.org/) (`lang=AM`, Roman calendar, American English).
+
+## Operator admin (Curriculum & Resources)
+
+Only signed-in operators can create, edit, delete, and upload files.
+
+| URL | Purpose |
+|-----|---------|
+| `/admin/login` | Sign in |
+| `/admin` | Dashboard |
+| `/admin/resources` | Kids resources CRUD + PDF upload |
+| `/admin/curriculum` | Curriculum tracks CRUD |
+
+### First-time setup (local)
+
+1. Copy environment file:
 
 ```bash
-pnpm install
-pnpm dev
+cp .env.example .env
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+2. Edit `.env`:
 
-| Command        | Description              |
-|----------------|--------------------------|
-| `pnpm dev`     | Development server       |
-| `pnpm build`   | Production build         |
-| `pnpm start`   | Run production build     |
-| `pnpm lint`    | ESLint                   |
+- `AUTH_SECRET` — random string (`openssl rand -base64 32`)
+- `ADMIN_EMAIL` / `ADMIN_PASSWORD` — your operator login (used once for seeding)
+- `DATABASE_URL` — default `file:./prisma/dev.db` (SQLite)
 
-## Adding a resource
+3. Install and initialize database:
 
-1. Create `content/resources/your-slug.md` with frontmatter:
-
-```yaml
----
-title: "Your lesson title"
-excerpt: "Short description"
-date: "2026-05-31"
-grade: "Pre-K"
-topic: "Saints"
-downloadLabel: "Optional button label"
-downloadUrl: "/downloads/your-file.pdf"
----
+```bash
+npm install
+npm run db:migrate
+npm run db:seed
 ```
 
-2. Push to GitHub—Vercel redeploys automatically.
+4. Run dev server:
 
-## Custom domain (Vercel)
+```bash
+npm run dev
+```
 
-1. Import this repo in Vercel.
-2. **Settings → Domains** → add your domain.
-3. At your registrar, set the DNS records Vercel shows (usually `CNAME` to `cname.vercel-dns.com`).
+5. Open **http://localhost:3000/admin/login** and sign in with `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 
-## Curriculum tracks
+### Production (Vercel + Postgres)
 
-Tracks are defined in `src/lib/content.ts`. Markdown posts are matched to tracks by the `grade` field in frontmatter.
+SQLite does **not** persist on Vercel. Use a hosted Postgres database (recommended: [Neon](https://neon.tech) free tier):
 
-## License
+1. Create a Postgres database and set `DATABASE_URL` in Vercel (e.g. `postgresql://...`).
+2. Change `provider` in `prisma/schema.prisma` to `postgresql` **or** use a separate production schema (same models).
+3. Set env vars on Vercel:
+   - `DATABASE_URL`
+   - `AUTH_SECRET`
+   - `ADMIN_EMAIL` / `ADMIN_PASSWORD` (run seed once locally against prod URL, or add admin in DB)
+   - `BLOB_READ_WRITE_TOKEN` (Vercel Blob — for PDF uploads in production)
+4. Deploy; run `npx prisma migrate deploy` against production (Vercel build command or one-off).
 
-Educational use. Add your own license as needed for PDFs and paid products.
+### File uploads
+
+| Environment | Storage |
+|-------------|---------|
+| Local dev | `public/uploads/` |
+| Vercel | [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) when `BLOB_READ_WRITE_TOKEN` is set |
+
+### Data model
+
+- **Resource** — kids crafts / lesson posts (`liturgicalPeriod`: advent, christmas, lent, holy-week, easter, ordinary, general)
+- **CurriculumTrack** — grade / stage paths
+- **AdminUser** — operator accounts (passwords hashed with bcrypt)
+- **UploadedFile** — audit log of uploads
+
+Legacy Markdown under `content/resources/` is imported by `npm run db:seed` only; the live site reads from the database.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run db:migrate` | Apply migrations (dev) |
+| `npm run db:seed` | Create admin + import markdown |
+| `npm run db:studio` | Prisma Studio (browse DB) |
+
+## Tech stack
+
+Next.js 15 · Prisma · SQLite (local) / Postgres (prod) · NextAuth · Tailwind CSS v4

@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model CurriculumTrack {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  stage       String
+  title       String
+  description String
+  body        String   @default("")
+  lessonCount Int      @default(0)
+  sortOrder   Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Resource {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  title             String
+  excerpt           String
+  content           String
+  grade             String
+  topic             String
+  liturgicalPeriod  String
+  downloadLabel     String?
+  downloadUrl       String?
+  published         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model UploadedFile {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  mimeType  String?
+  sizeBytes Int?
+  createdAt DateTime @default(now())
+}

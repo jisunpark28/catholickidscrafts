@@ -6,22 +6,25 @@ import { PageShell } from "@/components/PageShell";
 import { getAllResourceSlugs, getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return getAllResourceSlugs().map((slug) => ({ slug }));
+  const slugs = await getAllResourceSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getResourceBySlug(slug);
+  const post = await getResourceBySlug(slug);
   if (!post) return { title: "Not found" };
   return { title: post.title, description: post.excerpt };
 }
 
 export default async function ResourcePage({ params }: Props) {
   const { slug } = await params;
-  const post = getResourceBySlug(slug);
+  const post = await getResourceBySlug(slug);
   if (!post) notFound();
 
   const period = getLiturgicalPeriod(post.liturgicalPeriod);

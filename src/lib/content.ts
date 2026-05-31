@@ -1,193 +1,118 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import type { LiturgicalPeriodId } from "@/lib/content-types";
+import { prisma } from "@/lib/prisma";
 
-const contentRoot = path.join(process.cwd(), "content");
+export type {
+  CurriculumTrack,
+  LiturgicalPeriod,
+  LiturgicalPeriodId,
+  ResourcePost,
+} from "@/lib/content-types";
 
-export type LiturgicalPeriodId =
-  | "advent"
-  | "christmas"
-  | "lent"
-  | "holy-week"
-  | "easter"
-  | "ordinary"
-  | "general";
+export {
+  LITURGICAL_PERIODS,
+  getLiturgicalPeriod,
+} from "@/lib/content-types";
 
-export type LiturgicalPeriod = {
-  id: LiturgicalPeriodId;
+import type { CurriculumTrack, ResourcePost } from "@/lib/content-types";
+
+function mapResource(r: {
+  slug: string;
   title: string;
-  description: string;
-};
+  excerpt: string;
+  content: string;
+  grade: string;
+  topic: string;
+  liturgicalPeriod: string;
+  downloadLabel: string | null;
+  downloadUrl: string | null;
+  updatedAt: Date;
+}): ResourcePost {
+  return {
+    slug: r.slug,
+    title: r.title,
+    excerpt: r.excerpt,
+    date: r.updatedAt.toISOString().slice(0, 10),
+    grade: r.grade,
+    topic: r.topic,
+    liturgicalPeriod: r.liturgicalPeriod as ResourcePost["liturgicalPeriod"],
+    downloadLabel: r.downloadLabel ?? undefined,
+    downloadUrl: r.downloadUrl ?? undefined,
+    content: r.content,
+  };
+}
 
-export const LITURGICAL_PERIODS: LiturgicalPeriod[] = [
-  {
-    id: "advent",
-    title: "Advent",
-    description: "Waiting in hope—wreaths, Jesse trees, and preparation for Christmas.",
-  },
-  {
-    id: "christmas",
-    title: "Christmas Season",
-    description: "Nativity crafts, Epiphany, and Christmastide celebrations.",
-  },
-  {
-    id: "lent",
-    title: "Lent",
-    description: "Prayer, fasting, almsgiving, and repentance for children.",
-  },
-  {
-    id: "holy-week",
-    title: "Holy Week & Triduum",
-    description: "Palm Sunday through Easter Vigil—solemn and sacred activities.",
-  },
-  {
-    id: "easter",
-    title: "Easter Season",
-    description: "Resurrection joy, Ascension, and Pentecost through Eastertide.",
-  },
-  {
-    id: "ordinary",
-    title: "Ordinary Time",
-    description: "Sunday Gospel themes, saints, and year-round catechesis.",
-  },
-  {
-    id: "general",
-    title: "All Year",
-    description: "Sacraments, prayers, and topics for any season.",
-  },
-];
-
-export type CurriculumTrack = {
+function mapTrack(t: {
   slug: string;
   stage: string;
   title: string;
   description: string;
   lessonCount: number;
-};
-
-export type ResourcePost = {
-  slug: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  grade: string;
-  topic: string;
-  liturgicalPeriod: LiturgicalPeriodId;
-  downloadLabel?: string;
-  downloadUrl?: string;
-  content: string;
-};
-
-const curriculumTracks: CurriculumTrack[] = [
-  {
-    slug: "pre-k-kindergarten",
-    stage: "Stage 1",
-    title: "Pre-K & Kindergarten",
-    description:
-      "Sensory crafts, saint stories, and simple coloring pages for little ones beginning their faith journey.",
-    lessonCount: 12,
-  },
-  {
-    slug: "first-holy-communion",
-    stage: "Stage 2",
-    title: "First Holy Communion",
-    description:
-      "Reconciliation and Eucharist prep for early elementary—worksheets, games, and lesson plans teachers love.",
-    lessonCount: 18,
-  },
-  {
-    slug: "grades-3-5",
-    stage: "Stage 3",
-    title: "Grades 3–5",
-    description:
-      "Deeper catechism topics, Gospel-based quizzes, and liturgical year activities for upper elementary.",
-    lessonCount: 15,
-  },
-  {
-    slug: "liturgical-year",
-    stage: "Overview",
-    title: "Liturgical Year Overview",
-    description:
-      "How Advent, Christmas, Lent, Easter, and Ordinary Time fit together in parish life.",
-    lessonCount: 8,
-  },
-];
-
-export function getCurriculumTracks(): CurriculumTrack[] {
-  return curriculumTracks;
-}
-
-export function getCurriculumTrack(slug: string): CurriculumTrack | undefined {
-  return curriculumTracks.find((t) => t.slug === slug);
-}
-
-export function getLiturgicalPeriod(id: LiturgicalPeriodId): LiturgicalPeriod {
-  return LITURGICAL_PERIODS.find((p) => p.id === id) ?? LITURGICAL_PERIODS[6];
-}
-
-function resourcesDir(): string {
-  return path.join(contentRoot, "resources");
-}
-
-function parsePeriod(value: unknown): LiturgicalPeriodId {
-  const valid: LiturgicalPeriodId[] = [
-    "advent",
-    "christmas",
-    "lent",
-    "holy-week",
-    "easter",
-    "ordinary",
-    "general",
-  ];
-  if (typeof value === "string" && valid.includes(value as LiturgicalPeriodId)) {
-    return value as LiturgicalPeriodId;
-  }
-  return "general";
-}
-
-export function getAllResourceSlugs(): string[] {
-  const dir = resourcesDir();
-  if (!fs.existsSync(dir)) return [];
-  return fs
-    .readdirSync(dir)
-    .filter((f) => f.endsWith(".md"))
-    .map((f) => f.replace(/\.md$/, ""));
-}
-
-export function getResourceBySlug(slug: string): ResourcePost | null {
-  const filePath = path.join(resourcesDir(), `${slug}.md`);
-  if (!fs.existsSync(filePath)) return null;
-
-  const raw = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(raw);
-
+}): CurriculumTrack {
   return {
-    slug,
-    title: (data.title as string) ?? slug,
-    excerpt: (data.excerpt as string) ?? "",
-    date: (data.date as string) ?? "",
-    grade: (data.grade as string) ?? "All",
-    topic: (data.topic as string) ?? "General",
-    liturgicalPeriod: parsePeriod(data.liturgicalPeriod ?? data.season),
-    downloadLabel: data.downloadLabel as string | undefined,
-    downloadUrl: data.downloadUrl as string | undefined,
-    content,
+    slug: t.slug,
+    stage: t.stage,
+    title: t.title,
+    description: t.description,
+    lessonCount: t.lessonCount,
   };
 }
 
-export function getAllResources(): ResourcePost[] {
-  return getAllResourceSlugs()
-    .map((slug) => getResourceBySlug(slug))
-    .filter((p): p is ResourcePost => p !== null)
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+export async function getCurriculumTracks(): Promise<CurriculumTrack[]> {
+  const rows = await prisma.curriculumTrack.findMany({
+    where: { published: true },
+    orderBy: { sortOrder: "asc" },
+  });
+  return rows.map(mapTrack);
 }
 
-export function getResourcesByPeriod(
+export async function getCurriculumTrack(
+  slug: string,
+): Promise<CurriculumTrack | undefined> {
+  const row = await prisma.curriculumTrack.findFirst({
+    where: { slug, published: true },
+  });
+  return row ? mapTrack(row) : undefined;
+}
+
+export async function getAllResources(): Promise<ResourcePost[]> {
+  const rows = await prisma.resource.findMany({
+    where: { published: true },
+    orderBy: { updatedAt: "desc" },
+  });
+  return rows.map(mapResource);
+}
+
+export async function getResourceBySlug(
+  slug: string,
+): Promise<ResourcePost | null> {
+  const row = await prisma.resource.findFirst({
+    where: { slug, published: true },
+  });
+  return row ? mapResource(row) : null;
+}
+
+export async function getAllResourceSlugs(): Promise<string[]> {
+  const rows = await prisma.resource.findMany({
+    where: { published: true },
+    select: { slug: true },
+  });
+  return rows.map((r) => r.slug);
+}
+
+export async function getResourcesByPeriod(
   periodId: LiturgicalPeriodId,
-): ResourcePost[] {
-  return getAllResources().filter((r) => r.liturgicalPeriod === periodId);
+): Promise<ResourcePost[]> {
+  const rows = await prisma.resource.findMany({
+    where: { published: true, liturgicalPeriod: periodId },
+    orderBy: { updatedAt: "desc" },
+  });
+  return rows.map(mapResource);
 }
 
-export function getResourcesByGrade(grade: string): ResourcePost[] {
-  return getAllResources().filter((r) => r.grade === grade);
+export async function getResourcesByGrade(grade: string): Promise<ResourcePost[]> {
+  const rows = await prisma.resource.findMany({
+    where: { published: true, grade },
+    orderBy: { updatedAt: "desc" },
+  });
+  return rows.map(mapResource);
 }

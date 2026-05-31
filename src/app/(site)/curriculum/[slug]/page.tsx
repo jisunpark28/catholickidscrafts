@@ -9,6 +9,8 @@ import {
 } from "@/lib/content";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ slug: string }> };
 
 const gradeByTrack: Record<string, string[]> = {
@@ -19,12 +21,13 @@ const gradeByTrack: Record<string, string[]> = {
 };
 
 export async function generateStaticParams() {
-  return getCurriculumTracks().map((t) => ({ slug: t.slug }));
+  const tracks = await getCurriculumTracks();
+  return tracks.map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const track = getCurriculumTrack(slug);
+  const track = await getCurriculumTrack(slug);
   if (!track) return { title: "Not found" };
   return {
     title: track.title,
@@ -34,11 +37,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CurriculumTrackPage({ params }: Props) {
   const { slug } = await params;
-  const track = getCurriculumTrack(slug);
+  const track = await getCurriculumTrack(slug);
   if (!track) notFound();
 
   const grades = gradeByTrack[slug] ?? [];
-  const related = getAllResources().filter(
+  const all = await getAllResources();
+  const related = all.filter(
     (r) => grades.length === 0 || grades.includes(r.grade),
   );
 

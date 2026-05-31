@@ -10,13 +10,29 @@ import {
 } from "@/lib/content";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Kids Resources",
   description: "Catholic kids crafts and lesson plans by liturgical season.",
 };
 
-export default function ResourcesPage() {
-  const all = getAllResources();
+export default async function ResourcesPage() {
+  const all = await getAllResources();
+
+  const periodCounts = await Promise.all(
+    LITURGICAL_PERIODS.map(async (period) => ({
+      period,
+      count: (await getResourcesByPeriod(period.id)).length,
+    })),
+  );
+
+  const periodPosts = await Promise.all(
+    LITURGICAL_PERIODS.map(async (period) => ({
+      period,
+      posts: await getResourcesByPeriod(period.id),
+    })),
+  );
 
   return (
     <PageShell wide>
@@ -26,26 +42,22 @@ export default function ResourcesPage() {
       />
 
       <nav className="mb-12 flex flex-wrap gap-2 border-b border-[var(--color-border)] pb-6">
-        {LITURGICAL_PERIODS.map((period) => {
-          const count = getResourcesByPeriod(period.id).length;
-          return (
-            <a
-              key={period.id}
-              href={`#${period.id}`}
-              className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              {period.title}
-              {count > 0 && (
-                <span className="ml-2 text-[var(--color-muted)]">({count})</span>
-              )}
-            </a>
-          );
-        })}
+        {periodCounts.map(({ period, count }) => (
+          <a
+            key={period.id}
+            href={`#${period.id}`}
+            className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          >
+            {period.title}
+            {count > 0 && (
+              <span className="ml-2 text-[var(--color-muted)]">({count})</span>
+            )}
+          </a>
+        ))}
       </nav>
 
       <div className="space-y-16">
-        {LITURGICAL_PERIODS.map((period) => {
-          const posts = getResourcesByPeriod(period.id);
+        {periodPosts.map(({ period, posts }) => {
           const meta = getLiturgicalPeriod(period.id);
 
           return (
@@ -63,13 +75,7 @@ export default function ResourcesPage() {
                 </div>
               ) : (
                 <p className="border border-t-0 border-[var(--color-border)] bg-white px-6 py-8 text-sm text-[var(--color-muted)]">
-                  No resources in this season yet.{" "}
-                  <Link href="/curriculum" className="font-semibold text-[var(--color-link)]">
-                    Browse curriculum tracks
-                  </Link>{" "}
-                  or add a Markdown file under{" "}
-                  <code className="text-[var(--color-ink)]">content/resources</code> with{" "}
-                  <code className="text-[var(--color-ink)]">liturgicalPeriod: {period.id}</code>.
+                  No resources in this season yet. Check back soon.
                 </p>
               )}
             </section>
