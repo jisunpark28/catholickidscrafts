@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PlayGamePage({ params }: Props) {
   const { slug } = await params;
   const game = getPlayGame(slug);
-  if (!game || game.massLink) notFound();
+  if (!game) notFound();
 
   const churchOverride = process.env.NEXT_PUBLIC_CHURCH_GAME_URL?.trim();
   const src =

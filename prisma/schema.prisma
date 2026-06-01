@@ -139,3 +139,16 @@ model ChurchDecoration {
 
   @@index([published])
 }
+
+/// Words for the falling-word typing game (/play/typing).
+model TypingWord {
+  id        String   @id @default(cuid())
+  word      String
+  hint      String   @default("")
+  sortOrder Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published])
+}

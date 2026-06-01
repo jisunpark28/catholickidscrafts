@@ -24,3 +24,9 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 - Admin: `/admin/church-decorations`
 - Public API: `GET /api/church-decorations`
 - Click uploaded images inside the 3D church to show title + description.
+
+## Typing games (`/play/typing`)
+
+- **Word mode**: falling words from `GET /api/typing-words` (admin: `/admin/typing-words`).
+- **Today's Bible**: pick date + First / Second Reading / Gospel via `GET /api/mass/[date]`.
+- Typing is **not** on Daily Mass pages—only under Play.

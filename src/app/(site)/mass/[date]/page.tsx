@@ -2,9 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MassReadingBlock } from "@/components/MassReadingBlock";
 import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
-import { GospelTypingGame } from "@/components/GospelTypingGame";
 import { PageShell } from "@/components/PageShell";
-import { gospelTypingSnippet } from "@/lib/play-games";
 import { formatDisplayDate, parseDateParam } from "@/lib/dates";
 import { fetchMassDay, MASS_DATA_SOURCE } from "@/lib/evangelizo";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
@@ -42,8 +40,6 @@ export default async function MassDayPage({ params }: Props) {
 
   const season = getLiturgicalSeason(date);
   const displayDate = formatDisplayDate(date);
-  const gospel = mass.readings.find((r) => r.kind === "gospel");
-
   return (
     <PageShell wide>
       <Link
@@ -82,14 +78,16 @@ export default async function MassDayPage({ params }: Props) {
         ))}
       </div>
 
-      {gospel && (
-        <GospelTypingGame
-          text={gospelTypingSnippet(gospel.text)}
-          title="Practice typing today’s Gospel"
-        />
-      )}
+      <p className="mt-8 text-sm text-[var(--color-muted)]">
+        Practice typing in{" "}
+        <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
+          Play → Typing games
+        </Link>
+        {" "}
+        (Word mode or Today’s Bible with these readings).
+      </p>
 
-      <p className="mt-6 text-sm text-[var(--color-muted)]">
+      <p className="mt-4 text-sm text-[var(--color-muted)]">
         More games:{" "}
         <Link href="/play" className="font-semibold text-[var(--color-link)]">
           Play &amp; learn

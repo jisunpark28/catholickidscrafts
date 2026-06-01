@@ -28,6 +28,9 @@ export default async function AdminLayout({
               <Link href="/admin/church-decorations" className="hover:text-[var(--color-accent)]">
                 Church game
               </Link>
+              <Link href="/admin/typing-words" className="hover:text-[var(--color-accent)]">
+                Typing words
+              </Link>
               <Link href="/admin/recommendations" className="hover:text-[var(--color-accent)]">
                 Recommendations
               </Link>

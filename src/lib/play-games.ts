@@ -5,7 +5,6 @@ export type PlayGame = {
   /** Path under /games/ or external URL */
   embedPath: string;
   external?: boolean;
-  massLink?: boolean;
 };
 
 export const PLAY_GAMES: PlayGame[] = [
@@ -18,11 +17,10 @@ export const PLAY_GAMES: PlayGame[] = [
   },
   {
     slug: "typing",
-    title: "Gospel typing practice",
+    title: "Catholic typing games",
     description:
-      "Practice typing today’s Gospel reading. Best started from Daily Mass for the correct date.",
-    embedPath: "/mass",
-    massLink: true,
+      "Word mode: type falling vocabulary. Today’s Bible: choose First Reading, Second Reading, or Gospel from Daily Mass.",
+    embedPath: "/play/typing",
   },
   {
     slug: "hangman",
@@ -44,11 +42,3 @@ export function getPlayGame(slug: string): PlayGame | undefined {
   return PLAY_GAMES.find((g) => g.slug === slug);
 }
 
-/** Short snippet for typing practice (keeps sessions kid-friendly). */
-export function gospelTypingSnippet(gospelText: string, maxLen = 180): string {
-  const flat = gospelText.replace(/\s+/g, " ").trim();
-  if (flat.length <= maxLen) return flat;
-  const cut = flat.slice(0, maxLen);
-  const lastSpace = cut.lastIndexOf(" ");
-  return (lastSpace > 60 ? cut.slice(0, lastSpace) : cut) + "…";
-}

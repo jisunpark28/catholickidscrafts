@@ -27,21 +27,21 @@ export default function PlayHubPage() {
             <h2 className="text-lg font-bold text-[var(--color-ink)]">{game.title}</h2>
             <p className="mt-2 text-sm text-[var(--color-muted)]">{game.description}</p>
             <Link
-              href={game.massLink ? "/mass" : `/play/${game.slug}`}
+              href={`/play/${game.slug}`}
               className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]"
             >
-              {game.massLink ? "Open Daily Mass →" : "Play →"}
+              Play →
             </Link>
           </article>
         ))}
       </div>
 
       <p className="mt-10 text-sm text-[var(--color-muted)]">
-        Gospel typing appears on each{" "}
-        <Link href="/mass" className="font-semibold text-[var(--color-link)]">
-          Daily Mass
-        </Link>{" "}
-        date page, below the readings.
+        Typing games (Word mode + Today’s Bible) live at{" "}
+        <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
+          /play/typing
+        </Link>
+        .
       </p>
     </PageShell>
   );
