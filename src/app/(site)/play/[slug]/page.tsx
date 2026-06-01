@@ -20,6 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PlayGamePage({ params }: Props) {
   const { slug } = await params;
+  if (slug === "emoji") {
+    const { redirect } = await import("next/navigation");
+    redirect("/play/photo-booth");
+  }
   const game = getPlayGame(slug);
   if (!game) notFound();
 

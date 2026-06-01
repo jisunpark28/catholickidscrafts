@@ -27,7 +27,7 @@ export default function PlayHubPage() {
             <h2 className="text-lg font-bold text-[var(--color-ink)]">{game.title}</h2>
             <p className="mt-2 text-sm text-[var(--color-muted)]">{game.description}</p>
             <Link
-              href={`/play/${game.slug}`}
+              href={game.slug === "emoji" ? "/play/photo-booth" : `/play/${game.slug}`}
               className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]"
             >
               Play →

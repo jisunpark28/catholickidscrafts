@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         destination: "/images/holy-trinity/:file*",
         permanent: true,
       },
+      {
+        source: "/play/emoji",
+        destination: "/play/photo-booth",
+        permanent: false,
+      },
     ];
   },
 };
