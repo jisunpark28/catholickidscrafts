@@ -47,6 +47,19 @@ const curriculumTracks = [
   },
 ];
 
+
+function optionalBool(value: unknown): boolean | undefined {
+  if (value === true || value === "true") return true;
+  if (value === false || value === "false") return false;
+  return undefined;
+}
+
+function optionalString(value: unknown): string | null | undefined {
+  if (value === undefined || value === null) return undefined;
+  const s = String(value).trim();
+  return s.length > 0 ? s : null;
+}
+
 function parsePeriod(value: unknown): string {
   const valid = [
     "advent",
@@ -102,8 +115,11 @@ async function main() {
           grade: (data.grade as string) ?? "All",
           topic: (data.topic as string) ?? "General",
           liturgicalPeriod: parsePeriod(data.liturgicalPeriod ?? data.season),
-          downloadLabel: (data.downloadLabel as string) ?? null,
-          downloadUrl: (data.downloadUrl as string) ?? null,
+          downloadLabel: optionalString(data.downloadLabel) ?? null,
+          downloadUrl: optionalString(data.downloadUrl) ?? null,
+          previewImageUrl: optionalString(data.previewImageUrl) ?? null,
+          tptUrl: optionalString(data.tptUrl) ?? null,
+          isFreeSample: optionalBool(data.isFreeSample) ?? true,
           published: true,
           contentFormat: "markdown",
         },
@@ -115,8 +131,11 @@ async function main() {
           grade: (data.grade as string) ?? "All",
           topic: (data.topic as string) ?? "General",
           liturgicalPeriod: parsePeriod(data.liturgicalPeriod ?? data.season),
-          downloadLabel: (data.downloadLabel as string) ?? null,
-          downloadUrl: (data.downloadUrl as string) ?? null,
+          downloadLabel: optionalString(data.downloadLabel) ?? null,
+          downloadUrl: optionalString(data.downloadUrl) ?? null,
+          previewImageUrl: optionalString(data.previewImageUrl) ?? null,
+          tptUrl: optionalString(data.tptUrl) ?? null,
+          isFreeSample: optionalBool(data.isFreeSample) ?? true,
           published: true,
           contentFormat: "markdown",
         },
