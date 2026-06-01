@@ -8,6 +8,7 @@ const nav = [
   { href: "/mass", label: "Daily Mass", match: (p: string) => p === "/mass" || p.startsWith("/mass/") },
   { href: "/curriculum", label: "Curriculum", match: (p: string) => p.startsWith("/curriculum") },
   { href: "/resources", label: "Kids Resources", match: (p: string) => p.startsWith("/resources") },
+  { href: "/recommendations", label: "Recommendations", match: (p: string) => p.startsWith("/recommendations") },
 ];
 
 export function SiteHeader() {

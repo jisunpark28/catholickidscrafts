@@ -77,3 +77,32 @@ model TrafficVisitorDay {
   @@id([visitorId, date])
   @@index([date])
 }
+
+enum RecommendationKind {
+  VIDEO
+  BOOK
+  TEMPLATE
+  AUDIO
+  WEBSITE
+  OTHER
+}
+
+model Recommendation {
+  id          String             @id @default(cuid())
+  slug        String             @unique
+  title       String
+  excerpt     String             @default("")
+  description String             @default("")
+  kind        RecommendationKind @default(OTHER)
+  externalUrl String
+  author      String?
+  imageUrl    String?
+  tags        String             @default("")
+  sortOrder   Int                @default(0)
+  published   Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([kind])
+  @@index([published])
+}
