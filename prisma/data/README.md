@@ -14,8 +14,24 @@ File: `typing-words.ts` — source of truth for **Word mode** (`/play/typing`).
 
 ```bash
 # .env must have DATABASE_URL and DIRECT_URL (Neon)
+npx prisma generate
+npx prisma migrate deploy
 npm run db:seed-typing
 ```
+
+### Windows / Neon troubleshooting
+
+**`P1002` advisory lock timeout on `migrate deploy`**
+
+- Another migration may be running (e.g. Vercel deploy). Wait 2–3 minutes and retry.
+- In `.env`, `DIRECT_URL` must be Neon **direct** (host **without** `-pooler`). `DATABASE_URL` is the pooled URL.
+- Check status: `npx prisma migrate status` — if all migrations are already applied, skip to `npm run db:seed-typing` only.
+
+**`Cannot read properties of undefined (reading 'upsert')`**
+
+- Run `npx prisma generate` after `git pull` (Prisma client was generated before `TypingWord` existed).
+- Then `npm run db:seed-typing` again.
+
 
 Or full seed (also needs `ADMIN_EMAIL` / `ADMIN_PASSWORD`):
 

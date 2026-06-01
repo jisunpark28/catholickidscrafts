@@ -12,7 +12,23 @@ import { TYPING_WORDS } from "./data/typing-words";
 
 const prisma = new PrismaClient();
 
+function assertTypingWordModel(client: PrismaClient) {
+  if (!("typingWord" in client) || !client.typingWord) {
+    throw new Error(
+      [
+        "Prisma client is missing model `TypingWord`.",
+        "Fix: git pull origin main, then run:",
+        "  npm install",
+        "  npx prisma generate",
+        "  npx prisma migrate deploy",
+        "  npm run db:seed-typing",
+      ].join("\n"),
+    );
+  }
+}
+
 export async function seedTypingWords(client: PrismaClient = prisma) {
+  assertTypingWordModel(client);
   let upserted = 0;
 
   for (const item of TYPING_WORDS) {
