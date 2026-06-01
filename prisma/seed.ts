@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { seedTypingWords } from "./seed-typing-words";
 
 const prisma = new PrismaClient();
 
@@ -123,6 +124,9 @@ async function main() {
     }
     console.log(`Resources from markdown: ${files.length}`);
   }
+
+  const typingCount = await seedTypingWords(prisma);
+  console.log(`Typing words seeded: ${typingCount}`);
 }
 
 main()

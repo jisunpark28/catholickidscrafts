@@ -143,7 +143,7 @@ model ChurchDecoration {
 /// Words for the falling-word typing game (/play/typing).
 model TypingWord {
   id        String   @id @default(cuid())
-  word      String
+  word      String   @unique
   hint      String   @default("")
   sortOrder Int      @default(0)
   published Boolean  @default(true)
@@ -152,3 +152,4 @@ model TypingWord {
 
   @@index([published])
 }
+
