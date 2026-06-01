@@ -118,3 +118,24 @@ model Recommendation {
   @@index([kind])
   @@index([published])
 }
+
+/// Interactive images inside the Tiny Priest 3D church (/play/church).
+model ChurchDecoration {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String   @default("")
+  imageUrl    String
+  posX        Float    @default(0)
+  posY        Float    @default(2.2)
+  posZ        Float    @default(-6)
+  width       Float    @default(1.4)
+  height      Float    @default(1.4)
+  rotationY   Float    @default(0)
+  sortOrder   Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published])
+}

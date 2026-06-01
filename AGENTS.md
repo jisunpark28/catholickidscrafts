@@ -37,3 +37,5 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - After pull: `npx prisma migrate deploy` (adds Resource `tptUrl` / `isFreeSample` / `previewImageUrl`, Recommendation `linkType`).
 - Amazon links: set **Amazon Associate** in admin Recommendations, or use amazon.com URLs (auto disclosure + `rel=sponsored`).
 - Legal pages: `/about`, `/privacy`, `/affiliate-disclosure`. Operator notes: `docs/AFFILIATE_LINKS.md`.
+
+- Church game hotspots: `/admin/church-decorations`, API `/api/church-decorations`.
