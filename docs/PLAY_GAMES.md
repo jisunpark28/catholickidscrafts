@@ -18,3 +18,9 @@ Public hub: `/play`
 ## Deploy note
 
 Large static assets in `public/games/tiny-priest/` increase repo and Vercel bundle size. Consider Git LFS or external hosting if pushes fail.
+
+## Church decorations (operator)
+
+- Admin: `/admin/church-decorations`
+- Public API: `GET /api/church-decorations`
+- Click uploaded images inside the 3D church to show title + description.

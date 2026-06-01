@@ -11,6 +11,48 @@
     },
 };
 
+
+function showHotspotModal(title, description) {
+    const modal = document.getElementById("hotspot-modal");
+    const titleEl = document.getElementById("hotspot-modal-title");
+    const bodyEl = document.getElementById("hotspot-modal-body");
+    if (!modal || !titleEl || !bodyEl) return;
+    titleEl.textContent = title || "";
+    bodyEl.textContent = description || "";
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
+}
+
+function hideHotspotModal() {
+    const modal = document.getElementById("hotspot-modal");
+    if (!modal) return;
+    modal.hidden = true;
+    modal.setAttribute("aria-hidden", "true");
+}
+
+function bindHotspotModal() {
+    const close = document.getElementById("hotspot-modal-close");
+    const modal = document.getElementById("hotspot-modal");
+    if (close && !close.dataset.bound) {
+        close.dataset.bound = "true";
+        close.addEventListener("click", hideHotspotModal);
+    }
+    if (modal && !modal.dataset.bound) {
+        modal.dataset.bound = "true";
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) hideHotspotModal();
+        });
+    }
+}
+
+function updateMassToggleButton() {
+    const btn = document.getElementById("mass-toggle-btn");
+    if (!btn || !APP_STATE.threeWorld) return;
+    const active = APP_STATE.threeWorld.isMassActive();
+    btn.classList.toggle("is-active", active);
+    btn.textContent = active ? "Stop Mass" : "Start Mass";
+}
+
 const APP_STATE = {
     isTransitioning: false,
     selectedCharacter: null,
@@ -373,69 +415,24 @@ function setLiturgyHudVisible(isVisible) {
     hud.setAttribute("aria-hidden", isVisible ? "false" : "true");
 }
 
-function setHudButtonsState(currentGesture, massActive) {
-    const hud = document.getElementById("liturgy-hud");
-    if (!hud) {
-        return;
-    }
-
-    hud.querySelectorAll(".control-btn[data-gesture]").forEach((button) => {
-        button.classList.toggle("is-active", button.dataset.gesture === currentGesture);
-    });
-
-    const massButton = hud.querySelector(".control-btn[data-command='mass-toggle']");
-    if (massButton) {
-        massButton.classList.toggle("is-active", Boolean(massActive));
-        const label = massButton.querySelector(".control-label");
-        if (label) {
-            label.textContent = massActive ? "Stop Mass" : "Start Mass";
-        }
-    }
+function setHudButtonsState(_currentGesture, _massActive) {
+    updateMassToggleButton();
 }
 
 function bindHudControls() {
     if (APP_STATE.hudBound) {
         return;
     }
-    const hud = document.getElementById("liturgy-hud");
-    if (!hud) {
-        return;
+    const massBtn = document.getElementById("mass-toggle-btn");
+    if (massBtn) {
+        massBtn.addEventListener("click", () => {
+            if (APP_STATE.threeWorld) {
+                APP_STATE.threeWorld.toggleMassSequence();
+                updateMassToggleButton();
+            }
+        });
     }
-
-    hud.addEventListener("click", (event) => {
-        const button = event.target.closest(".control-btn[data-command]");
-        if (!button || !APP_STATE.threeWorld) {
-            return;
-        }
-        const command = button.dataset.command;
-        const world = APP_STATE.threeWorld;
-
-        if (command === "gesture-idle") world.triggerGesture("idle");
-        else if (command === "gesture-point") world.triggerGesture("point");
-        else if (command === "gesture-hold") world.triggerGesture("hold");
-        else if (command === "gesture-lift") world.triggerGesture("lift");
-        else if (command === "gesture-pray") world.triggerGesture("pray");
-        else if (command === "gesture-ourfather") world.triggerGesture("ourFather");
-        else if (command === "gesture-signcross") world.triggerGesture("signCross");
-        else if (command === "mass-toggle") world.toggleMassSequence();
-        else if (command === "move-left") {
-            world.nudgeMove(-1, 0);
-            setLiturgySubtitle("↩️ Turned left.");
-        } else if (command === "move-right") {
-            world.nudgeMove(1, 0);
-            setLiturgySubtitle("↪️ Turned right.");
-        } else if (command === "move-forward") {
-            world.nudgeMove(0, -1);
-            setLiturgySubtitle("⬆️ Moved forward.");
-        } else if (command === "move-back") {
-            world.nudgeMove(0, 1);
-            setLiturgySubtitle("⬇️ Moved backward.");
-        } else if (command === "jump") {
-            world.triggerJump();
-            setLiturgySubtitle("⤴️ Small jump.");
-        }
-    });
-
+    bindHotspotModal();
     APP_STATE.hudBound = true;
 }
 
@@ -886,10 +883,10 @@ function createVoxelChurch(container) {
         side: THREE.DoubleSide,
         depthWrite: false,
     });
-    const playerSprite = new THREE.Mesh(new THREE.PlaneGeometry(2.85, 3.35), playerSpriteMaterial);
-    const playerSpriteBaseScale = { x: 2.85, y: 3.35 };
+    const playerSprite = new THREE.Mesh(new THREE.PlaneGeometry(2.35, 5.15), playerSpriteMaterial);
+    const playerSpriteBaseScale = { x: 2.35, y: 5.15 };
     playerSprite.scale.set(playerSpriteBaseScale.x, playerSpriteBaseScale.y, 1);
-    playerSprite.position.set(0, 1.62, 0.14);
+    playerSprite.position.set(0, 2.55, 0.12);
     playerSprite.renderOrder = 3;
     playerRig.add(playerSprite);
 
@@ -898,273 +895,8 @@ function createVoxelChurch(container) {
     liturgyItem.visible = false;
     playerRig.add(liturgyItem);
 
-    // Palette values were sampled from the actual PNG sprites to keep visual consistency.
-    const spritePalette = isPriest
-        ? {
-            robePrimary: 0x3f3d37,
-            robeSecondary: 0x2f2d29,
-            trim: 0xefe1d0,
-            skin: 0xd8ad90,
-        }
-        : {
-            robePrimary: 0x272722,
-            robeSecondary: 0x1d1d18,
-            trim: 0xf6f2eb,
-            skin: 0xe8c4a7,
-        };
-
-    const armStyle = isPriest
-        ? {
-            shoulderX: 0.74,
-            shoulderY: 2.02,
-            shoulderZ: 0.22,
-            upperWidth: 0.28,
-            upperLength: 0.78,
-            lowerWidth: 0.24,
-            lowerLength: 0.72,
-            elbowDrop: 0.73,
-            handRadius: 0.1,
-            cuffWidth: 0.22,
-            cuffLength: 0.1,
-            chestCoverRadius: 0.28,
-            chestCoverY: 1.95,
-            handDepthFront: 0.026,
-        }
-        : {
-            shoulderX: 0.7,
-            shoulderY: 2.0,
-            shoulderZ: 0.22,
-            upperWidth: 0.26,
-            upperLength: 0.74,
-            lowerWidth: 0.22,
-            lowerLength: 0.68,
-            elbowDrop: 0.7,
-            handRadius: 0.095,
-            cuffWidth: 0.2,
-            cuffLength: 0.09,
-            chestCoverRadius: 0.3,
-            chestCoverY: 1.9,
-            handDepthFront: 0.024,
-        };
-
-    const sleeveMaterial = new THREE.MeshLambertMaterial({
-        color: spritePalette.robePrimary,
-        transparent: true,
-        opacity: 0.8,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-    });
-    const sleeveShadeMaterial = new THREE.MeshLambertMaterial({
-        color: spritePalette.robeSecondary,
-        transparent: true,
-        opacity: 0.58,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-    });
-    const cuffMaterial = new THREE.MeshLambertMaterial({
-        color: spritePalette.trim,
-        transparent: true,
-        opacity: 0.96,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-    });
-    const handOverlayMaterial = new THREE.MeshLambertMaterial({
-        color: spritePalette.skin,
-        transparent: true,
-        opacity: 0.98,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-    });
-
-    function createArm(side) {
-        const shoulder = new THREE.Object3D();
-        shoulder.position.set(side * armStyle.shoulderX, armStyle.shoulderY, armStyle.shoulderZ - 0.19);
-
-        const upper = new THREE.Mesh(new THREE.PlaneGeometry(armStyle.upperWidth, armStyle.upperLength), sleeveMaterial);
-        upper.position.set(0, -armStyle.upperLength * 0.5, -0.02);
-        shoulder.add(upper);
-        const upperShade = new THREE.Mesh(
-            new THREE.PlaneGeometry(armStyle.upperWidth * 0.65, armStyle.upperLength * 0.9),
-            sleeveShadeMaterial,
-        );
-        upperShade.position.set(side * 0.015, -armStyle.upperLength * 0.52, -0.01);
-        shoulder.add(upperShade);
-        const upperCap = new THREE.Mesh(new THREE.CircleGeometry(armStyle.upperWidth * 0.44, 14), sleeveMaterial);
-        upperCap.position.set(0, -armStyle.upperLength * 0.03, -0.014);
-        shoulder.add(upperCap);
-
-        const elbow = new THREE.Object3D();
-        elbow.position.y = -armStyle.elbowDrop;
-        shoulder.add(elbow);
-        const elbowCap = new THREE.Mesh(new THREE.CircleGeometry(armStyle.lowerWidth * 0.5, 14), sleeveMaterial);
-        elbowCap.position.set(0, -0.03, -0.014);
-        elbow.add(elbowCap);
-
-        const lower = new THREE.Mesh(new THREE.PlaneGeometry(armStyle.lowerWidth, armStyle.lowerLength), sleeveMaterial);
-        lower.position.set(0, -armStyle.lowerLength * 0.48, -0.02);
-        elbow.add(lower);
-        const lowerShade = new THREE.Mesh(
-            new THREE.PlaneGeometry(armStyle.lowerWidth * 0.62, armStyle.lowerLength * 0.9),
-            sleeveShadeMaterial,
-        );
-        lowerShade.position.set(side * 0.012, -armStyle.lowerLength * 0.5, -0.01);
-        elbow.add(lowerShade);
-
-        const cuff = new THREE.Mesh(new THREE.PlaneGeometry(armStyle.cuffWidth, armStyle.cuffLength), cuffMaterial);
-        cuff.position.set(0, -armStyle.lowerLength * 0.92, -0.012);
-        elbow.add(cuff);
-
-        const hand = new THREE.Mesh(new THREE.CircleGeometry(armStyle.handRadius, 16), handOverlayMaterial);
-        hand.position.set(0, -armStyle.lowerLength * 1.08, armStyle.handDepthFront);
-        elbow.add(hand);
-
-        [upper, upperShade, upperCap, elbowCap, lower, lowerShade, cuff].forEach((mesh) => {
-            mesh.renderOrder = 1.5;
-            mesh.castShadow = false;
-            mesh.receiveShadow = false;
-        });
-        hand.renderOrder = 2.5;
-        hand.castShadow = false;
-        hand.receiveShadow = false;
-
-        playerRig.add(shoulder);
-        return {
-            shoulder,
-            elbow,
-            hand,
-            segments: [upper, upperShade, upperCap, elbowCap, lower, lowerShade, cuff],
-        };
-    }
-
-    const leftArm = createArm(-1);
-    const rightArm = createArm(1);
-    const chestCover = new THREE.Mesh(
-        new THREE.CircleGeometry(armStyle.chestCoverRadius, 20),
-        new THREE.MeshLambertMaterial({
-            color: spritePalette.robePrimary,
-            transparent: true,
-            opacity: 0.96,
-            side: THREE.DoubleSide,
-            depthWrite: false,
-        }),
-    );
-    chestCover.position.set(0, armStyle.chestCoverY, armStyle.shoulderZ + 0.01);
-    chestCover.renderOrder = 2.2;
-    playerRig.add(chestCover);
-    chestCover.visible = false;
-    [...leftArm.segments, ...rightArm.segments].forEach((segment) => {
-        segment.visible = false;
-    });
-
-    const armPoseCurrent = {
-        left: { ux: 0, uy: 0, uz: 0, lx: 0, ly: 0, lz: 0 },
-        right: { ux: 0, uy: 0, uz: 0, lx: 0, ly: 0, lz: 0 },
-    };
-    const armPoseTarget = {
-        left: { ux: 0, uy: 0, uz: 0, lx: 0, ly: 0, lz: 0 },
-        right: { ux: 0, uy: 0, uz: 0, lx: 0, ly: 0, lz: 0 },
-    };
-
-    function setArmTargets(left, right) {
-        Object.assign(armPoseTarget.left, left);
-        Object.assign(armPoseTarget.right, right);
-    }
-
-    const gesturePoses = isPriest
-        ? {
-            idle: {
-                left: { ux: -0.42, uy: 0.24, uz: 0.46, lx: -0.3, ly: 0, lz: 0 },
-                right: { ux: -0.42, uy: -0.24, uz: -0.46, lx: -0.3, ly: 0, lz: 0 },
-            },
-            point: {
-                left: { ux: -0.68, uy: 0.22, uz: 0.58, lx: -0.4, ly: 0, lz: 0 },
-                right: { ux: -1.08, uy: -0.3, uz: -0.74, lx: -0.16, ly: 0, lz: 0 },
-            },
-            hold: {
-                left: { ux: -1.12, uy: 0.08, uz: 0.62, lx: -0.82, ly: 0, lz: 0 },
-                right: { ux: -1.12, uy: -0.08, uz: -0.62, lx: -0.82, ly: 0, lz: 0 },
-            },
-            lift: {
-                left: { ux: -1.9, uy: 0.14, uz: 0.34, lx: -0.08, ly: 0, lz: 0 },
-                right: { ux: -1.9, uy: -0.14, uz: -0.34, lx: -0.08, ly: 0, lz: 0 },
-            },
-            pray: {
-                left: { ux: -1.04, uy: 0.04, uz: 0.84, lx: -0.78, ly: 0, lz: 0 },
-                right: { ux: -1.04, uy: -0.04, uz: -0.84, lx: -0.78, ly: 0, lz: 0 },
-            },
-            ourFather: {
-                left: { ux: -0.82, uy: 0.28, uz: 1.22, lx: -0.64, ly: 0, lz: 0 },
-                right: { ux: -0.82, uy: -0.28, uz: -1.22, lx: -0.64, ly: 0, lz: 0 },
-            },
-        }
-        : {
-            idle: {
-                left: { ux: -0.48, uy: 0.24, uz: 0.48, lx: -0.3, ly: 0, lz: 0 },
-                right: { ux: -0.48, uy: -0.24, uz: -0.48, lx: -0.3, ly: 0, lz: 0 },
-            },
-            point: {
-                left: { ux: -0.76, uy: 0.24, uz: 0.62, lx: -0.42, ly: 0, lz: 0 },
-                right: { ux: -1.16, uy: -0.28, uz: -0.8, lx: -0.12, ly: 0, lz: 0 },
-            },
-            hold: {
-                left: { ux: -1.16, uy: 0.1, uz: 0.7, lx: -0.84, ly: 0, lz: 0 },
-                right: { ux: -1.16, uy: -0.1, uz: -0.7, lx: -0.84, ly: 0, lz: 0 },
-            },
-            lift: {
-                left: { ux: -1.84, uy: 0.17, uz: 0.3, lx: -0.06, ly: 0, lz: 0 },
-                right: { ux: -1.84, uy: -0.17, uz: -0.3, lx: -0.06, ly: 0, lz: 0 },
-            },
-            pray: {
-                left: { ux: -1.0, uy: 0.06, uz: 0.9, lx: -0.78, ly: 0, lz: 0 },
-                right: { ux: -1.0, uy: -0.06, uz: -0.9, lx: -0.78, ly: 0, lz: 0 },
-            },
-            ourFather: {
-                left: { ux: -0.76, uy: 0.3, uz: 1.28, lx: -0.62, ly: 0, lz: 0 },
-                right: { ux: -0.76, uy: -0.3, uz: -1.28, lx: -0.62, ly: 0, lz: 0 },
-            },
-        };
-
-    const signCrossPoses = isPriest
-        ? [
-            {
-                left: { ux: -0.92, uy: 0.08, uz: 0.66, lx: -0.56, ly: 0, lz: 0 },
-                right: { ux: -1.78, uy: -0.14, uz: -0.08, lx: -0.52, ly: 0, lz: 0 },
-            },
-            {
-                left: { ux: -0.92, uy: 0.08, uz: 0.66, lx: -0.56, ly: 0, lz: 0 },
-                right: { ux: -1.16, uy: 0.04, uz: 0.2, lx: -0.18, ly: 0, lz: 0 },
-            },
-            {
-                left: { ux: -0.92, uy: 0.08, uz: 0.66, lx: -0.56, ly: 0, lz: 0 },
-                right: { ux: -0.94, uy: 0.6, uz: 0.38, lx: -0.06, ly: 0, lz: 0 },
-            },
-            {
-                left: { ux: -0.92, uy: 0.08, uz: 0.66, lx: -0.56, ly: 0, lz: 0 },
-                right: { ux: -0.94, uy: -0.6, uz: -0.38, lx: -0.06, ly: 0, lz: 0 },
-            },
-        ]
-        : [
-            {
-                left: { ux: -0.9, uy: 0.1, uz: 0.72, lx: -0.58, ly: 0, lz: 0 },
-                right: { ux: -1.72, uy: -0.15, uz: -0.08, lx: -0.46, ly: 0, lz: 0 },
-            },
-            {
-                left: { ux: -0.9, uy: 0.1, uz: 0.72, lx: -0.58, ly: 0, lz: 0 },
-                right: { ux: -1.08, uy: 0.06, uz: 0.24, lx: -0.16, ly: 0, lz: 0 },
-            },
-            {
-                left: { ux: -0.9, uy: 0.1, uz: 0.72, lx: -0.58, ly: 0, lz: 0 },
-                right: { ux: -0.9, uy: 0.64, uz: 0.42, lx: -0.04, ly: 0, lz: 0 },
-            },
-            {
-                left: { ux: -0.9, uy: 0.1, uz: 0.72, lx: -0.58, ly: 0, lz: 0 },
-                right: { ux: -0.9, uy: -0.64, uz: -0.42, lx: -0.04, ly: 0, lz: 0 },
-            },
-        ];
-
-    function setGesturePose(gesture) {
-        const pose = gesturePoses[gesture] || gesturePoses.idle;
-        setArmTargets(pose.left, pose.right);
+    function setGesturePose(_gesture) {
+        // Full-body character sprites; gestures update narration and liturgy prop only.
     }
 
     const actionState = {
@@ -1182,17 +914,7 @@ function createVoxelChurch(container) {
         const message = GESTURE_NARRATION[name] || GESTURE_NARRATION.idle;
         const merged = prefix ? `${prefix} ${message}` : message;
         setLiturgySubtitle(merged);
-        setHudButtonsState(name, actionState.massActive);
-    }
-
-    function shouldShowOverlayHands(gesture) {
-        // Keep sprite's own hands for calm poses to avoid doubled-hand look.
-        return ["point", "hold", "lift", "ourFather", "signCross"].includes(gesture);
-    }
-
-    function setOverlayHandsVisible(isVisible) {
-        leftArm.hand.visible = isVisible;
-        rightArm.hand.visible = isVisible;
+        updateMassToggleButton();
     }
 
     function triggerGesture(name, prefix = "", massStepIndex = -1) {
@@ -1206,15 +928,11 @@ function createVoxelChurch(container) {
         if (name === "signCross") {
             actionState.signCrossActive = true;
             actionState.signCrossTime = 0;
-            setGesturePose("pray");
-            setOverlayHandsVisible(true);
             narrateGesture("signCross", prefix);
             setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
             return;
         }
         actionState.signCrossActive = false;
-        setGesturePose(name);
-        setOverlayHandsVisible(shouldShowOverlayHands(name));
         narrateGesture(name, prefix);
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
@@ -1253,13 +971,15 @@ function createVoxelChurch(container) {
             actionState.massIndex = actionState.currentMassStepIndex >= 0 ? actionState.currentMassStepIndex : 0;
             advanceMassStep();
             setDialogue("Mass sequence started. Press M again to stop.");
-            setMassFlowStatus("▶️ Auto Mass progression running...");
+            setMassFlowStatus("Auto Mass progression running...");
+            updateMassToggleButton();
             return;
         }
         triggerGesture("idle", "", -1);
         setLiturgySubtitle("⏸️ Mass sequence paused. Select any gesture manually.");
         setDialogue("Mass sequence paused.");
-        setMassFlowStatus("⏸️ Paused. Click a step to jump there.");
+        setMassFlowStatus("Paused. Click a step to jump there.");
+        updateMassToggleButton();
     }
 
     triggerGesture("idle", "", -1);
@@ -1423,33 +1143,17 @@ function createVoxelChurch(container) {
     window.addEventListener("keydown", onKeyDown, { passive: false });
     window.addEventListener("keyup", onKeyUp);
 
-    function applyPoseToArm(arm, pose) {
-        arm.shoulder.rotation.set(pose.ux, pose.uy, pose.uz);
-        arm.elbow.rotation.set(pose.lx, pose.ly, pose.lz);
-    }
 
     function updateSignOfCross(dt) {
         if (!actionState.signCrossActive) {
             return;
         }
-
         actionState.signCrossTime += dt;
-        const normalized = Math.min(actionState.signCrossTime / 2.2, 1);
-        const phase = normalized * 4;
-
-        const signPose =
-            phase < 1 ? signCrossPoses[0]
-            : phase < 2 ? signCrossPoses[1]
-            : phase < 3 ? signCrossPoses[2]
-            : signCrossPoses[3];
-        setArmTargets(signPose.left, signPose.right);
-
-        if (normalized >= 1) {
+        if (actionState.signCrossTime >= 2.2) {
             actionState.signCrossActive = false;
             if (actionState.currentGesture === "signCross") {
                 actionState.currentGesture = "pray";
-                setGesturePose("pray");
-                narrateGesture("pray", "✝️ After completing the Sign of the Cross,");
+                narrateGesture("pray", "After the Sign of the Cross,");
             }
         }
     }
@@ -1479,17 +1183,7 @@ function createVoxelChurch(container) {
         }
     }
 
-    function updateArmPoseSmoothing(dt) {
-        const smoothing = Math.min(dt * 9, 1);
-        for (const side of ["left", "right"]) {
-            for (const key of ["ux", "uy", "uz", "lx", "ly", "lz"]) {
-                armPoseCurrent[side][key] += (armPoseTarget[side][key] - armPoseCurrent[side][key]) * smoothing;
-            }
-        }
-        applyPoseToArm(leftArm, armPoseCurrent.left);
-        applyPoseToArm(rightArm, armPoseCurrent.right);
-    }
-
+    const decorationMeshes = [];
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const interactiveMeshes = [altarBase, altarCloth, crossStand, crossBeam, candleL, candleR];
@@ -1530,14 +1224,65 @@ function createVoxelChurch(container) {
         }
     }
 
+    async function loadChurchDecorations() {
+        try {
+            const response = await fetch("/api/church-decorations");
+            const items = await response.json();
+            if (!Array.isArray(items)) return;
+
+            items.forEach((item) => {
+                const tex = textureLoader.load(item.imageUrl);
+                if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
+                tex.magFilter = THREE.LinearFilter;
+                tex.minFilter = THREE.LinearMipmapLinearFilter;
+
+                const mat = new THREE.MeshBasicMaterial({
+                    map: tex,
+                    transparent: true,
+                    alphaTest: 0.05,
+                    side: THREE.DoubleSide,
+                    depthWrite: false,
+                });
+                const mesh = new THREE.Mesh(
+                    new THREE.PlaneGeometry(item.width || 1.4, item.height || 1.4),
+                    mat,
+                );
+                mesh.position.set(item.posX || 0, item.posY || 2.2, item.posZ || -6);
+                mesh.rotation.y = item.rotationY || 0;
+                mesh.renderOrder = 2;
+                mesh.userData.hotspot = {
+                    title: item.title,
+                    description: item.description,
+                };
+                root.add(mesh);
+                decorationMeshes.push(mesh);
+                interactiveMeshes.push(mesh);
+            });
+        } catch (error) {
+            console.warn("Church decorations could not load:", error);
+        }
+    }
+
+    void loadChurchDecorations();
+
     renderer.domElement.addEventListener("pointerdown", (event) => {
         const bounds = renderer.domElement.getBoundingClientRect();
         pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
         pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
         raycaster.setFromCamera(pointer, camera);
 
-        const hit = raycaster.intersectObjects(interactiveMeshes, false)[0];
-        if (!hit) return;
+        const allTargets = interactiveMeshes.concat(decorationMeshes);
+        const hit = raycaster.intersectObjects(allTargets, false)[0];
+        if (!hit) {
+            hideHotspotModal();
+            return;
+        }
+
+        if (hit.object.userData.hotspot) {
+            const spot = hit.object.userData.hotspot;
+            showHotspotModal(spot.title, spot.description);
+            return;
+        }
 
         triggerJump(hit.object);
         spawnSparkles(hit.point, hit.object === altarCloth ? altarCloth.material.color.getHex() : 0xffe596);
@@ -1600,7 +1345,7 @@ function createVoxelChurch(container) {
 
         playerSprite.scale.x = playerSpriteBaseScale.x * spriteFacingState.xDir * stretchX;
         playerSprite.scale.y = playerSpriteBaseScale.y * squash;
-        playerSprite.position.y = 1.62 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
+        playerSprite.position.y = 2.55 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
         playerSpriteMaterial.rotation = THREE.MathUtils.lerp(
             playerSpriteMaterial.rotation,
             tiltTarget,
@@ -1608,18 +1353,8 @@ function createVoxelChurch(container) {
         );
     }
 
-    function applyArmSecondaryMotion(speed) {
-        if (speed < 0.1 || !playerMotion.onGround) {
-            return;
-        }
         const energy = Math.min(speed / playerMotion.speed, 1);
         const sway = Math.sin(spriteFacingState.walkPhase * 1.1) * 0.08 * energy;
-        leftArm.shoulder.rotation.z += sway * 0.55;
-        rightArm.shoulder.rotation.z -= sway * 0.55;
-        leftArm.elbow.rotation.x += Math.abs(sway) * 0.18;
-        rightArm.elbow.rotation.x += Math.abs(sway) * 0.18;
-    }
-
     function animate() {
         const dt = Math.min(clock.getDelta(), 0.05);
 
@@ -1672,8 +1407,6 @@ function createVoxelChurch(container) {
             }
         }
 
-        updateArmPoseSmoothing(dt);
-        applyArmSecondaryMotion(horizontalSpeed);
         updateLiturgyItem();
         updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, dt);
 
@@ -1840,7 +1573,7 @@ async function activateThreeScene(role) {
 
         applyRoleCamera(role, APP_STATE.threeWorld.camera, APP_STATE.threeWorld.playerRig);
         setHudButtonsState(APP_STATE.threeWorld.getCurrentGesture(), APP_STATE.threeWorld.isMassActive());
-        setDialogue(`Today is ${liturgical.season}. Move: arrows/WASD, jump: Space, gestures: 1-7, Mass sequence: M.`);
+        setDialogue(`Today is ${liturgical.season}. Walk with WASD, jump with Space. Use Mass Order (right) or press M for the full sequence. Click images in the church to learn more.`);
     } catch (error) {
         console.error("Failed to initialize 3D church scene:", error);
         resetEntryAfterFailure("The church interior could not load. Please refresh and try again.");
