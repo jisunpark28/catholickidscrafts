@@ -1,0 +1,34 @@
+{
+    "name": "tiny-priest",
+    "version": "1.0.0",
+    "description": "Tiny-Priest project",
+    "main": "script.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "test": "vitest run",
+        "lint": "eslint .",
+        "test:watch": "vitest",
+        "format": "prettier --check ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jisunpark28/tiny-priest.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/jisunpark28/tiny-priest/issues"
+    },
+    "homepage": "https://github.com/jisunpark28/tiny-priest#readme",
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.4.0",
+        "globals": "^17.6.0",
+        "prettier": "^3.8.3",
+        "vitest": "^4.1.7"
+    },
+    "type": "module"
+}

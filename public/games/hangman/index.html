@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saint & Church Hangman | Catholic Kids Crafts</title>
+    <link rel="stylesheet" href="hangman.css">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Saint &amp; Church Hangman</h1>
+            <p style="color:#555;font-size:0.95rem;">Guess the word before the flower loses all its petals.</p>
+        </header>
+
+        <section id="hangman-visual">
+            <img src="img/background.png" alt="Flower Background" id="flower-bg">
+            <div id="petals-container">
+                <img src="img/petal.png" alt="Petal" class="petal petal-1">
+                <img src="img/petal.png" alt="Petal" class="petal petal-2">
+                <img src="img/petal.png" alt="Petal" class="petal petal-3">
+                <img src="img/petal.png" alt="Petal" class="petal petal-4">
+                <img src="img/petal.png" alt="Petal" class="petal petal-5">
+                <img src="img/petal.png" alt="Petal" class="petal petal-6">
+            </div>
+        </section>
+
+        <p id="hint-display" style="font-weight: bold; color: #555; margin-bottom: 10px;"></p>
+        <div id="word-display">_ _ _ _ _</div>
+
+        <section class="info">
+            <p>Attempts Left: <span id="attempts">6</span></p>
+            <p>Guessed: <span id="guessed-letters">-</span></p>
+        </section>
+
+        <section id="input-section">
+            <input type="text" id="letter-input" maxlength="1" placeholder="A" autofocus>
+            <button id="guess-btn">Guess</button>
+        </section>
+
+        <button id="reset-btn">New Game</button>
+    </main>
+
+    <script src="catholic-words.js"></script>
+    <script src="hangman.js"></script>
+</body>
+</html>

@@ -25,6 +25,11 @@ const sections = [
     title: "Recommendations",
     description: "Books, videos, and supplies we trust for Catholic kids.",
   },
+  {
+    href: "/play",
+    title: "Play & Learn",
+    description: "Church explorer, gospel typing, hangman, and emoji photo fun.",
+  },
 ];
 
 export function HomeLanding() {

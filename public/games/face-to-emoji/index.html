@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Face to Emoji – Free Online Converter | GetFaceToEmoji</title>
+    <meta
+      name="description"
+      content="Upload a photo and convert every face to emoji automatically. Free, private, in-browser face to emoji tool at GetFaceToEmoji (getfacetoemoji.com)—no install."
+    />
+    <meta
+      name="keywords"
+      content="face to emoji, get face to emoji, getfacetoemoji, face to emoji converter, emoji maker, face detection, privacy friendly emoji tool"
+    />
+    <meta property="og:site_name" content="GetFaceToEmoji" />
+    <meta property="og:title" content="Face to Emoji – Free Online Converter | GetFaceToEmoji" />
+    <meta
+      property="og:description"
+      content="GetFaceToEmoji detects faces in your photos and replaces them with emojis in your browser. Free face to emoji tool—private, no upload to servers."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.getfacetoemoji.com/" />
+    <meta property="og:image" content="https://www.getfacetoemoji.com/og-image.webp" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Face to Emoji – Free Online Converter | GetFaceToEmoji" />
+    <meta
+      name="twitter:description"
+      content="Convert faces to emoji in seconds. Private in-browser face to emoji editing at getfacetoemoji.com."
+    />
+    <meta name="twitter:image" content="https://www.getfacetoemoji.com/og-image.webp" />
+    <link rel="canonical" href="https://www.getfacetoemoji.com/" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://justadudewhohacks.github.io" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "name": "GetFaceToEmoji",
+            "alternateName": ["FaceToEmoji", "Face to Emoji", "getfacetoemoji"],
+            "url": "https://www.getfacetoemoji.com/",
+            "description": "Free online face to emoji converter. Detect faces in photos and replace them with emojis in your browser—private, no server upload.",
+            "applicationCategory": "MultimediaApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is face to emoji?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Face to emoji means replacing faces in a photo with emoji stickers. GetFaceToEmoji detects each face automatically and places a matching emoji, with options to edit size and position."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is GetFaceToEmoji free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. GetFaceToEmoji at getfacetoemoji.com is a free online face to emoji tool. No account or app install is required."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are my photos uploaded to a server?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. All face to emoji processing runs locally in your browser. Your images stay on your device."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I convert a face to emoji?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Open getfacetoemoji.com, upload or drop your image, tap Auto for automatic face detection, then download your face to emoji result. Use Edit to adjust stickers manually."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <h1>
+          <button id="titleResetBtn" class="title-reset-btn" type="button" aria-label="Reset screen">
+            Face to Emoji
+          </button>
+        </h1>
+      </header>
+
+      <main class="workspace">
+        <section class="card editor">
+          <h2>Live Preview</h2>
+          <div id="canvasContainer" class="canvas-container" role="button" tabindex="0" aria-label="Quick upload area">
+            <input id="imageInput" type="file" accept="image/*" />
+            <div id="previewActions" class="preview-actions">
+              <button id="replaceImageBtn" type="button" aria-label="Replace image">+</button>
+              <button id="removeImageBtn" type="button" aria-label="Remove image">×</button>
+            </div>
+            <div id="quickUploadHint" class="quick-upload-hint">
+              <strong>Quick Upload</strong>
+              <span>Drop image here, or click to upload</span>
+            </div>
+            <div id="canvasStage" class="canvas-stage">
+              <canvas id="previewCanvas"></canvas>
+              <canvas id="overlayCanvas"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <aside class="card controls">
+          <h2>Quick Controls</h2>
+          <p id="statusText" class="status">Quick upload in Live Preview — tap Auto when you're ready.</p>
+
+          <div class="button-row">
+            <button id="detectBtn" type="button">Auto</button>
+            <button id="clearBtn" type="button">Reset</button>
+          </div>
+          <button id="editBtn" type="button" class="edit-toggle">Edit</button>
+
+          <div class="control-group">
+            <label for="emojiSelect">Emoji</label>
+            <select id="emojiSelect">
+              <option value="🙂">🙂 Soft Smile</option>
+              <option value="__blur_circle__">⚪ Blur Circle</option>
+              <option value="😄">😄 Big Smile</option>
+              <option value="😎">😎 Cool</option>
+              <option value="😍">😍 Heart Eyes</option>
+              <option value="😲">😲 Surprise</option>
+              <option value="😢">😢 Sad</option>
+              <option value="😡">😡 Angry</option>
+            </select>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label for="opacityRange">Opacity</label>
+                <span id="opacityValue" class="slider-value">100%</span>
+              </div>
+              <input id="opacityRange" type="range" min="0" max="100" value="100" step="1" />
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label for="sizeRange">Size</label>
+                <span id="sizeValue" class="slider-value">100%</span>
+              </div>
+              <input id="sizeRange" type="range" min="40" max="220" value="100" step="1" />
+            </div>
+
+            <button id="deleteSelectedBtn" type="button" class="danger">Delete Selected Sticker</button>
+          </div>
+
+          <p id="selectedFaceMeta" class="muted">Turn on Edit, drag on empty area to add, or click a sticker to move/resize.</p>
+
+          <button id="downloadBtn" type="button" class="primary">Download Edited Image</button>
+        </aside>
+      </main>
+
+      <section class="card why-like" aria-labelledby="why-face-to-emoji">
+        <h2 id="why-face-to-emoji">Why use our face to emoji converter?</h2>
+        <ul class="why-like-list">
+          <li>
+            <h3>💛 Private face-to-emoji editing</h3>
+            <p>
+              Your photos never leave your device. Every face to emoji conversion runs locally in your
+              browser—ideal when you want a privacy-friendly emoji overlay tool.
+            </p>
+          </li>
+          <li>
+            <h3>💛 Automatic face detection for emoji overlays</h3>
+            <p>
+              GetFaceToEmoji finds faces in your photo in seconds so you can convert face to emoji without
+              placing each sticker by hand.
+            </p>
+          </li>
+          <li>
+            <h3>💛 Adjust size, position, and opacity</h3>
+            <p>
+              Emojis snap to faces automatically. Fine-tune each face to emoji sticker for the look you want
+              before you download.
+            </p>
+          </li>
+          <li>
+            <h3>💛 No app—use getfacetoemoji.com anywhere</h3>
+            <p>
+              Open this free face to emoji tool on your phone, tablet, or desktop. No install or account
+              required.
+            </p>
+          </li>
+        </ul>
+      </section>
+
+      <footer class="site-footer">
+        <nav aria-label="Footer">
+          <a href="/how-it-works/">How it works</a>
+          <a href="/faq/">FAQ</a>
+        </nav>
+        <p class="site-footer-meta">GetFaceToEmoji — free private face to emoji in your browser.</p>
+      </footer>
+    </div>
+
+    <script defer src="./analytics.js"></script>
+    <script defer src="./app.js"></script>
+  </body>
+</html>

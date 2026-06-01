@@ -6,6 +6,7 @@ import { getTptStoreUrl } from "@/lib/tpt";
 
 const explore = [
   { href: "/mass", label: "Daily Mass" },
+  { href: "/play", label: "Play & Learn" },
   { href: "/resources", label: "Kids Resources" },
   { href: "/curriculum", label: "Curriculum" },
   { href: "/recommendations", label: "Recommendations" },

@@ -2,7 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MassReadingBlock } from "@/components/MassReadingBlock";
 import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
+import { GospelTypingGame } from "@/components/GospelTypingGame";
 import { PageShell } from "@/components/PageShell";
+import { gospelTypingSnippet } from "@/lib/play-games";
 import { formatDisplayDate, parseDateParam } from "@/lib/dates";
 import { fetchMassDay, MASS_DATA_SOURCE } from "@/lib/evangelizo";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
@@ -40,6 +42,7 @@ export default async function MassDayPage({ params }: Props) {
 
   const season = getLiturgicalSeason(date);
   const displayDate = formatDisplayDate(date);
+  const gospel = mass.readings.find((r) => r.kind === "gospel");
 
   return (
     <PageShell wide>
@@ -78,6 +81,22 @@ export default async function MassDayPage({ params }: Props) {
           <MassReadingBlock key={reading.kind} reading={reading} />
         ))}
       </div>
+
+      {gospel && (
+        <GospelTypingGame
+          text={gospelTypingSnippet(gospel.text)}
+          title="Practice typing today’s Gospel"
+        />
+      )}
+
+      <p className="mt-6 text-sm text-[var(--color-muted)]">
+        More games:{" "}
+        <Link href="/play" className="font-semibold text-[var(--color-link)]">
+          Play &amp; learn
+        </Link>
+        {" "}
+        (church tour, hangman, emoji photos).
+      </p>
 
       <p className="mt-10 text-xs leading-relaxed text-[var(--color-muted)]">
         Source: {MASS_DATA_SOURCE}. Texts via{" "}
