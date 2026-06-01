@@ -18,6 +18,9 @@ export type ResourceFormData = {
   liturgicalPeriod: string;
   downloadLabel: string;
   downloadUrl: string;
+  tptUrl: string;
+  isFreeSample: boolean;
+  previewImageUrl: string;
   published: boolean;
 };
 
@@ -39,6 +42,9 @@ export function ResourceEditor({ initial }: Props) {
       liturgicalPeriod: "general",
       downloadLabel: "",
       downloadUrl: "",
+      tptUrl: "",
+      isFreeSample: true,
+      previewImageUrl: "",
       published: true,
     },
   );
@@ -50,7 +56,7 @@ export function ResourceEditor({ initial }: Props) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  async function uploadFile(file: File) {
+  async function uploadFile(file: File, target: "downloadUrl" | "previewImageUrl") {
     setUploading(true);
     setError("");
     try {
@@ -59,8 +65,10 @@ export function ResourceEditor({ initial }: Props) {
       const res = await fetch("/api/admin/upload", { method: "POST", body });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Upload failed");
-      update("downloadUrl", data.url);
-      if (!form.downloadLabel) update("downloadLabel", "Download file");
+      update(target, data.url);
+      if (target === "downloadUrl" && !form.downloadLabel) {
+        update("downloadLabel", "Download free sample");
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed");
     } finally {
@@ -77,6 +85,8 @@ export function ResourceEditor({ initial }: Props) {
       contentFormat: "html",
       downloadLabel: form.downloadLabel || null,
       downloadUrl: form.downloadUrl || null,
+      tptUrl: form.tptUrl || null,
+      previewImageUrl: form.previewImageUrl || null,
     };
     try {
       const url = isEdit
@@ -201,7 +211,54 @@ export function ResourceEditor({ initial }: Props) {
       </div>
 
       <fieldset className="border border-[var(--color-border)] p-4">
-        <legend className="px-2 text-sm font-semibold">Download file (optional)</legend>
+        <legend className="px-2 text-sm font-semibold">Teachers Pay Teachers</legend>
+        <p className="text-xs text-[var(--color-muted)]">
+          Link to the paid pack on TPT. Use the site for a free preview; full download on TPT.
+        </p>
+        <label className="mt-3 block text-sm font-semibold">
+          TPT product URL
+          <input
+            type="url"
+            value={form.tptUrl}
+            onChange={(e) => update("tptUrl", e.target.value)}
+            placeholder="https://www.teacherspayteachers.com/Product/..."
+            className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
+          />
+        </label>
+        <label className="mt-4 flex items-center gap-2 text-sm font-semibold">
+          <input
+            type="checkbox"
+            checked={form.isFreeSample}
+            onChange={(e) => update("isFreeSample", e.target.checked)}
+          />
+          On-site content is a free sample (full pack on TPT)
+        </label>
+        <label className="mt-4 block text-sm font-semibold">
+          Preview image URL (Pinterest / social)
+          <input
+            type="url"
+            value={form.previewImageUrl}
+            onChange={(e) => update("previewImageUrl", e.target.value)}
+            className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
+          />
+        </label>
+        <label className="mt-2 text-sm">
+          Or upload preview image
+          <input
+            type="file"
+            accept="image/*"
+            className="mt-1 block text-sm"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void uploadFile(f, "previewImageUrl");
+            }}
+            disabled={uploading}
+          />
+        </label>
+      </fieldset>
+
+      <fieldset className="border border-[var(--color-border)] p-4">
+        <legend className="px-2 text-sm font-semibold">Free sample download (optional)</legend>
         <div className="mt-2 flex flex-wrap items-end gap-4">
           <label className="text-sm">
             Upload PDF / image
@@ -210,7 +267,7 @@ export function ResourceEditor({ initial }: Props) {
               className="mt-1 block text-sm"
               onChange={(e) => {
                 const f = e.target.files?.[0];
-                if (f) void uploadFile(f);
+                if (f) void uploadFile(f, "downloadUrl");
               }}
               disabled={uploading}
             />

@@ -1,8 +1,10 @@
 "use client";
 
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
-import { RECOMMENDATION_KINDS } from "@/lib/recommendation-types";
-import type { RecommendationKind } from "@prisma/client";
+import { isAmazonUrl } from "@/lib/external-links";
+import { EXTERNAL_LINK_TYPES, RECOMMENDATION_KINDS } from "@/lib/recommendation-types";
+import type { ExternalLinkType, RecommendationKind } from "@prisma/client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,6 +15,7 @@ export type RecommendationFormData = {
   excerpt: string;
   description: string;
   kind: RecommendationKind;
+  linkType: ExternalLinkType;
   externalUrl: string;
   author: string;
   imageUrl: string;
@@ -38,6 +41,7 @@ export function RecommendationEditor({ initial }: Props) {
       excerpt: "",
       description: "",
       kind: "VIDEO",
+      linkType: "STANDARD",
       externalUrl: "",
       author: "",
       imageUrl: "",
@@ -48,6 +52,9 @@ export function RecommendationEditor({ initial }: Props) {
   );
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+
+  const amazonDetected =
+    form.externalUrl.trim() !== "" && isAmazonUrl(form.externalUrl);
 
   function update<K extends keyof RecommendationFormData>(
     key: K,
@@ -159,6 +166,39 @@ export function RecommendationEditor({ initial }: Props) {
           className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
         />
       </label>
+
+      <fieldset className="border border-[var(--color-border)] p-4">
+        <legend className="px-2 text-sm font-semibold">Link policy</legend>
+        <p className="text-xs text-[var(--color-muted)]">
+          Amazon Associate links show an automatic disclosure on the site.{" "}
+          <Link href="/affiliate-disclosure" className="text-[var(--color-link)]" target="_blank">
+            Public disclosure page
+          </Link>
+          .
+        </p>
+        <div className="mt-3 space-y-2">
+          {EXTERNAL_LINK_TYPES.map((opt) => (
+            <label key={opt.id} className="flex cursor-pointer gap-2 text-sm">
+              <input
+                type="radio"
+                name="linkType"
+                checked={form.linkType === opt.id}
+                onChange={() => update("linkType", opt.id)}
+              />
+              <span>
+                <span className="font-semibold">{opt.label}</span>
+                <span className="block text-xs text-[var(--color-muted)]">{opt.hint}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+        {amazonDetected && form.linkType === "STANDARD" && (
+          <p className="mt-3 border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+            This URL looks like Amazon. Consider choosing &quot;Amazon Associate&quot; so the
+            correct disclosure and <code>rel=&quot;sponsored&quot;</code> are applied.
+          </p>
+        )}
+      </fieldset>
 
       <label className="block text-sm font-semibold">
         Short excerpt

@@ -48,6 +48,11 @@ model Resource {
   liturgicalPeriod  String
   downloadLabel     String?
   downloadUrl       String?
+  /// Teachers Pay Teachers product or store URL for the full paid pack.
+  tptUrl            String?
+  /// When true, on-site content/PDF is a free sample; full pack is on TPT.
+  isFreeSample      Boolean  @default(true)
+  previewImageUrl   String?
   published         Boolean  @default(true)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -87,6 +92,12 @@ enum RecommendationKind {
   OTHER
 }
 
+/// How outbound links should be labeled (Amazon Associates vs general).
+enum ExternalLinkType {
+  STANDARD
+  AMAZON_AFFILIATE
+}
+
 model Recommendation {
   id          String             @id @default(cuid())
   slug        String             @unique
@@ -94,6 +105,7 @@ model Recommendation {
   excerpt     String             @default("")
   description String             @default("")
   kind        RecommendationKind @default(OTHER)
+  linkType    ExternalLinkType   @default(STANDARD)
   externalUrl String
   author      String?
   imageUrl    String?

@@ -15,8 +15,17 @@ const updateSchema = z.object({
   liturgicalPeriod: z.string().optional(),
   downloadLabel: z.string().optional().nullable(),
   downloadUrl: z.string().optional().nullable(),
+  tptUrl: z.string().url().optional().nullable().or(z.literal("")),
+  isFreeSample: z.boolean().optional(),
+  previewImageUrl: z.string().url().optional().nullable().or(z.literal("")),
   published: z.boolean().optional(),
 });
+
+function normalizeOptionalUrl(value: string | null | undefined): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === "") return null;
+  return value;
+}
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -44,7 +53,19 @@ export async function PATCH(request: Request, { params }: Params) {
   const item = await prisma.resource.update({
     where: { id },
     data: {
-      ...data,
+      title: data.title,
+      excerpt: data.excerpt,
+      content: data.content,
+      contentFormat: data.contentFormat,
+      grade: data.grade,
+      topic: data.topic,
+      liturgicalPeriod: data.liturgicalPeriod,
+      downloadLabel: data.downloadLabel,
+      downloadUrl: data.downloadUrl,
+      tptUrl: normalizeOptionalUrl(data.tptUrl),
+      isFreeSample: data.isFreeSample,
+      previewImageUrl: normalizeOptionalUrl(data.previewImageUrl),
+      published: data.published,
       slug: data.slug ?? (data.title ? slugify(data.title) : undefined),
     },
   });

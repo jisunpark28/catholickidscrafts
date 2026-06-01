@@ -30,6 +30,9 @@ export default async function EditResourcePage({ params }: Props) {
             liturgicalPeriod: item.liturgicalPeriod,
             downloadLabel: item.downloadLabel ?? "",
             downloadUrl: item.downloadUrl ?? "",
+            tptUrl: item.tptUrl ?? "",
+            isFreeSample: item.isFreeSample,
+            previewImageUrl: item.previewImageUrl ?? "",
             published: item.published,
           }}
         />

@@ -1,7 +1,8 @@
 import { requireAdminSession } from "@/lib/admin-auth";
+import { isAmazonUrl } from "@/lib/external-links";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/slug";
-import { RecommendationKind } from "@prisma/client";
+import { ExternalLinkType, RecommendationKind } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -11,6 +12,7 @@ const updateSchema = z.object({
   excerpt: z.string().optional(),
   description: z.string().optional(),
   kind: z.nativeEnum(RecommendationKind).optional(),
+  linkType: z.nativeEnum(ExternalLinkType).optional(),
   externalUrl: z.string().url().optional(),
   author: z.string().optional().nullable(),
   imageUrl: z.string().optional().nullable(),
@@ -42,10 +44,31 @@ export async function PATCH(request: Request, { params }: Params) {
     }
   }
 
+  const existing = await prisma.recommendation.findUnique({ where: { id } });
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const externalUrl = data.externalUrl ?? existing.externalUrl;
+  let linkType = data.linkType ?? existing.linkType;
+  if (data.linkType === undefined && data.externalUrl && isAmazonUrl(data.externalUrl)) {
+    linkType = ExternalLinkType.AMAZON_AFFILIATE;
+  }
+
   const item = await prisma.recommendation.update({
     where: { id },
     data: {
-      ...data,
+      title: data.title,
+      excerpt: data.excerpt,
+      description: data.description,
+      kind: data.kind,
+      linkType,
+      externalUrl: data.externalUrl,
+      author: data.author,
+      imageUrl: data.imageUrl,
+      tags: data.tags,
+      sortOrder: data.sortOrder,
+      published: data.published,
       slug: data.slug ?? (data.title ? slugify(data.title) : undefined),
     },
   });

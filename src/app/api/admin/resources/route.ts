@@ -15,8 +15,16 @@ const resourceSchema = z.object({
   liturgicalPeriod: z.string(),
   downloadLabel: z.string().optional().nullable(),
   downloadUrl: z.string().optional().nullable(),
+  tptUrl: z.string().url().optional().nullable().or(z.literal("")),
+  isFreeSample: z.boolean().optional(),
+  previewImageUrl: z.string().url().optional().nullable().or(z.literal("")),
   published: z.boolean().optional(),
 });
+
+function normalizeOptionalUrl(value: string | null | undefined): string | null {
+  if (value == null || value === "") return null;
+  return value;
+}
 
 export async function GET() {
   const { error } = await requireAdminSession();
@@ -55,6 +63,9 @@ export async function POST(request: Request) {
       liturgicalPeriod: data.liturgicalPeriod,
       downloadLabel: data.downloadLabel ?? null,
       downloadUrl: data.downloadUrl ?? null,
+      tptUrl: normalizeOptionalUrl(data.tptUrl),
+      isFreeSample: data.isFreeSample ?? true,
+      previewImageUrl: normalizeOptionalUrl(data.previewImageUrl),
       published: data.published ?? true,
     },
   });

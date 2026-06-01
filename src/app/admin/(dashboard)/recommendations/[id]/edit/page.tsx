@@ -25,6 +25,7 @@ export default async function EditRecommendationPage({ params }: Props) {
             excerpt: item.excerpt,
             description: item.description,
             kind: item.kind,
+            linkType: item.linkType,
             externalUrl: item.externalUrl,
             author: item.author ?? "",
             imageUrl: item.imageUrl ?? "",

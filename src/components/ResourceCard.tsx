@@ -6,10 +6,16 @@ type Props = { post: ResourcePost };
 export function ResourceCard({ post }: Props) {
   return (
     <article className="border-b border-[var(--color-border)] bg-white p-6 last:border-b-0 sm:p-8">
-      <div className="mb-2 flex flex-wrap gap-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
+      <div className="mb-2 flex flex-wrap items-center gap-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
         <span>{post.grade}</span>
         <span>·</span>
         <span>{post.topic}</span>
+        {post.tptUrl && post.isFreeSample && (
+          <>
+            <span>·</span>
+            <span className="text-[var(--color-accent)]">Free preview · Full pack on TPT</span>
+          </>
+        )}
       </div>
       <h3 className="text-lg font-bold text-[var(--color-ink)]">
         <Link href={`/resources/${post.slug}`} className="hover:text-[var(--color-accent)]">

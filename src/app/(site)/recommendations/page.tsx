@@ -1,3 +1,4 @@
+import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { RecommendationCard } from "@/components/RecommendationCard";
 import { RecommendationsToolbar } from "@/components/RecommendationsToolbar";
 import { PageHeader } from "@/components/PageHeader";
@@ -52,6 +53,7 @@ export default async function RecommendationsPage({ searchParams }: Props) {
           No recommendations found. Try another search or category.
         </p>
       )}
+      <AffiliateDisclosure variant="block" className="mt-12" />
     </PageShell>
   );
 }

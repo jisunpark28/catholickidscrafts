@@ -1,5 +1,8 @@
+import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { ContentBody } from "@/components/ContentBody";
+import { ExternalLink } from "@/components/ExternalLink";
 import { PageShell } from "@/components/PageShell";
+import { isAmazonAffiliateLink } from "@/lib/external-links";
 import { kindLabel } from "@/lib/recommendation-types";
 import { getRecommendationBySlug } from "@/lib/recommendations";
 import { youtubeVideoId } from "@/lib/youtube";
@@ -15,7 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const item = await getRecommendationBySlug(slug);
   if (!item) return { title: "Not found" };
-  return { title: item.title, description: item.excerpt || item.title };
+  return {
+    title: item.title,
+    description: item.excerpt || item.title,
+    openGraph: item.imageUrl ? { images: [{ url: item.imageUrl }] } : undefined,
+  };
 }
 
 export default async function RecommendationDetailPage({ params }: Props) {
@@ -24,6 +31,7 @@ export default async function RecommendationDetailPage({ params }: Props) {
   if (!item) notFound();
 
   const videoId = item.kind === "VIDEO" ? youtubeVideoId(item.externalUrl) : null;
+  const affiliate = isAmazonAffiliateLink(item.linkType, item.externalUrl);
 
   return (
     <PageShell>
@@ -40,6 +48,8 @@ export default async function RecommendationDetailPage({ params }: Props) {
       <h1 className="mt-2 text-3xl font-bold text-[var(--color-ink)]">{item.title}</h1>
       {item.author && <p className="mt-2 text-lg text-[var(--color-muted)]">by {item.author}</p>}
       {item.excerpt && <p className="mt-4 text-lg text-[var(--color-muted)]">{item.excerpt}</p>}
+
+      {affiliate && <AffiliateDisclosure variant="block" className="mt-6" />}
 
       {videoId && (
         <div className="mt-8 aspect-video w-full max-w-3xl border border-[var(--color-border)] bg-black">
@@ -62,14 +72,14 @@ export default async function RecommendationDetailPage({ params }: Props) {
         />
       )}
 
-      <a
+      <ExternalLink
         href={item.externalUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+        linkType={item.linkType}
+        showAffiliateNote={affiliate}
         className="mt-8 inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white hover:bg-[var(--color-accent-hover)]"
       >
         Open original link ↗
-      </a>
+      </ExternalLink>
 
       {item.description && (
         <ContentBody

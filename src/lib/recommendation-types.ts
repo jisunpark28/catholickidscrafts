@@ -1,4 +1,4 @@
-import type { RecommendationKind } from "@prisma/client";
+import type { ExternalLinkType, RecommendationKind } from "@prisma/client";
 
 export type RecommendationItem = {
   slug: string;
@@ -6,6 +6,7 @@ export type RecommendationItem = {
   excerpt: string;
   description: string;
   kind: RecommendationKind;
+  linkType: ExternalLinkType;
   externalUrl: string;
   author?: string;
   imageUrl?: string;
@@ -25,6 +26,20 @@ export const RECOMMENDATION_KINDS: {
   { id: "WEBSITE", label: "Website" },
   { id: "OTHER", label: "Other" },
 ];
+
+export const EXTERNAL_LINK_TYPES: { id: ExternalLinkType; label: string; hint: string }[] =
+  [
+    {
+      id: "STANDARD",
+      label: "Standard link",
+      hint: "YouTube, publisher sites, TPT, parish pages, etc.",
+    },
+    {
+      id: "AMAZON_AFFILIATE",
+      label: "Amazon Associate",
+      hint: "Amazon product links with your affiliate tag (disclosure shown automatically).",
+    },
+  ];
 
 export function kindLabel(kind: RecommendationKind): string {
   return RECOMMENDATION_KINDS.find((k) => k.id === kind)?.label ?? kind;

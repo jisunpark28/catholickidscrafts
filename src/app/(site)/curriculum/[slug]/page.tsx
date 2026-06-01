@@ -5,7 +5,6 @@ import { ResourceCard } from "@/components/ResourceCard";
 import {
   getAllResources,
   getCurriculumTrack,
-  getCurriculumTracks,
 } from "@/lib/content";
 import type { Metadata } from "next";
 

@@ -44,11 +44,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    entry("/", { changeFrequency: "daily", priority: 1 }),
+    entry("/", { changeFrequency: "weekly", priority: 1 }),
     entry("/mass", { changeFrequency: "daily", priority: 0.95 }),
     entry("/curriculum", { changeFrequency: "weekly", priority: 0.85 }),
     entry("/resources", { changeFrequency: "weekly", priority: 0.85 }),
     entry("/recommendations", { changeFrequency: "weekly", priority: 0.8 }),
+    entry("/about", { changeFrequency: "monthly", priority: 0.5 }),
+    entry("/privacy", { changeFrequency: "yearly", priority: 0.3 }),
+    entry("/affiliate-disclosure", { changeFrequency: "yearly", priority: 0.3 }),
   ];
 
   let curriculumUrls: MetadataRoute.Sitemap = [];

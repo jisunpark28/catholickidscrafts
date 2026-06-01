@@ -26,6 +26,9 @@ function mapResource(r: {
   liturgicalPeriod: string;
   downloadLabel: string | null;
   downloadUrl: string | null;
+  tptUrl: string | null;
+  isFreeSample: boolean;
+  previewImageUrl: string | null;
   contentFormat: string;
   updatedAt: Date;
 }): ResourcePost {
@@ -39,6 +42,9 @@ function mapResource(r: {
     liturgicalPeriod: r.liturgicalPeriod as ResourcePost["liturgicalPeriod"],
     downloadLabel: r.downloadLabel ?? undefined,
     downloadUrl: r.downloadUrl ?? undefined,
+    tptUrl: r.tptUrl ?? undefined,
+    isFreeSample: r.isFreeSample,
+    previewImageUrl: r.previewImageUrl ?? undefined,
     content: r.content,
     contentFormat: r.contentFormat,
   };
@@ -84,7 +90,6 @@ export async function getAllResources(): Promise<ResourcePost[]> {
   });
   return rows.map(mapResource);
 }
-
 
 export async function searchPublishedResources(options: {
   q?: string;

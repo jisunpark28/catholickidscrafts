@@ -8,6 +8,7 @@ function mapRow(r: {
   excerpt: string;
   description: string;
   kind: RecommendationKind;
+  linkType: RecommendationItem["linkType"];
   externalUrl: string;
   author: string | null;
   imageUrl: string | null;
@@ -20,6 +21,7 @@ function mapRow(r: {
     excerpt: r.excerpt,
     description: r.description,
     kind: r.kind,
+    linkType: r.linkType,
     externalUrl: r.externalUrl,
     author: r.author ?? undefined,
     imageUrl: r.imageUrl ?? undefined,

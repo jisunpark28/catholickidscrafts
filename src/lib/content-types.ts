@@ -73,6 +73,9 @@ export type ResourcePost = {
   liturgicalPeriod: LiturgicalPeriodId;
   downloadLabel?: string;
   downloadUrl?: string;
+  tptUrl?: string;
+  isFreeSample: boolean;
+  previewImageUrl?: string;
   content: string;
   contentFormat?: string;
 };
