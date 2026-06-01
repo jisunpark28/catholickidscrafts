@@ -10,6 +10,9 @@ type Props = {
 
 const heights = { header: 72, hero: 140 } as const;
 
+/** Canonical site home (header logo links here). */
+const SITE_HOME_URL = "https://www.catholickidscrafts.com/";
+
 export function SiteLogo({
   size = "header",
   showWordmark = true,
@@ -19,9 +22,9 @@ export function SiteLogo({
 
   return (
     <Link
-      href="/mass"
+      href={SITE_HOME_URL}
       className={`inline-flex items-center gap-3 bg-transparent ${className}`}
-      aria-label="Catholic Kids Crafts home"
+      aria-label="Catholic Kids Crafts — go to home page"
     >
       <Image
         src={logo}
