@@ -6,8 +6,8 @@ grade: "Grade 2-4"
 topic: "Doctrine"
 liturgicalPeriod: general
 previewImageUrl: "/images/holy-trinity/trinity-clover-hero.svg"
-downloadLabel: "Download coloring page (SVG)"
-downloadUrl: "/images/holy-trinity/trinity-coloring.svg"
+downloadLabel_legacy: "Coloring page (view on site)"
+downloadUrl_legacy: "/images/holy-trinity/trinity-coloring.svg"
 isFreeSample: true
 ---
 
@@ -63,7 +63,7 @@ Tell children clearly:
 3. Color the stem and write **ONE GOD** in bold.  
 4. Practice saying together: *“Three Persons, one God.”*
 
-[Download coloring page](/images/holy-trinity/trinity-coloring.svg)
+[View coloring page](/images/holy-trinity/trinity-coloring.svg)
 
 ## Activity 2 — Paper shamrock craft (15 minutes)
 

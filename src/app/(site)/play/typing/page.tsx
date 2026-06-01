@@ -5,7 +5,7 @@ import { TypingGameHub } from "@/components/TypingGameHub";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Catholic Typing Games",
+  title: "Typing Game",
   description:
     "Word mode with falling vocabulary, or Today’s Bible mode with Daily Mass readings to type.",
 };
@@ -22,8 +22,8 @@ export default function PlayTypingPage() {
 
       <div className="mt-6">
         <PageHeader
-          title="Catholic typing games"
-          subtitle="Choose Word mode or Today’s Bible mode. Operators can add words in Admin → Typing words."
+          title="Typing Game"
+          subtitle="Word mode or Today's Bible mode."
         />
       </div>
 

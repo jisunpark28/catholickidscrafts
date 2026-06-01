@@ -81,7 +81,7 @@ export default async function MassDayPage({ params }: Props) {
       <p className="mt-8 text-sm text-[var(--color-muted)]">
         Practice typing in{" "}
         <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
-          Play → Typing games
+          Play → Typing Game
         </Link>
         {" "}
         (Word mode or Today’s Bible with these readings).

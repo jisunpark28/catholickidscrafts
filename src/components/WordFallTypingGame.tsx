@@ -14,26 +14,10 @@ type FallingWord = {
 
 export type WordFallDifficulty = "easy" | "medium" | "hard";
 
-const DIFFICULTY_OPTIONS: {
-  id: WordFallDifficulty;
-  label: string;
-  description: string;
-}[] = [
-  {
-    id: "easy",
-    label: "Easy",
-    description: "Short prayer & virtue words · slower · 5 lives",
-  },
-  {
-    id: "medium",
-    label: "Medium",
-    description: "Through Mass terms · normal speed · 3 lives",
-  },
-  {
-    id: "hard",
-    label: "Hard",
-    description: "All words incl. saints & Bible · faster · 3 lives",
-  },
+const DIFFICULTY_OPTIONS: { id: WordFallDifficulty; label: string }[] = [
+  { id: "easy", label: "Easy" },
+  { id: "medium", label: "Medium" },
+  { id: "hard", label: "Hard" },
 ];
 
 const DIFFICULTY_CONFIG: Record<
@@ -252,14 +236,13 @@ export function WordFallTypingGame() {
               key={opt.id}
               type="button"
               onClick={() => changeDifficulty(opt.id)}
-              className={`min-w-[88px] border px-3 py-2 text-left text-xs transition ${
+              className={`border px-4 py-2 text-sm font-bold transition ${
                 difficulty === opt.id
-                  ? "border-[var(--color-accent)] bg-white shadow-sm"
+                  ? "border-[var(--color-accent)] bg-white text-[var(--color-ink)]"
                   : "border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)]"
               }`}
             >
-              <span className="block font-bold text-[var(--color-ink)]">{opt.label}</span>
-              <span className="mt-0.5 block leading-snug">{opt.description}</span>
+              {opt.label}
             </button>
           ))}
         </div>

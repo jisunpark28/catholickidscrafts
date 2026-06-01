@@ -66,19 +66,10 @@ export default async function ResourcePage({ params }: Props) {
 
       {post.tptUrl && <TptCta tptUrl={post.tptUrl} isFreeSample={post.isFreeSample} />}
 
-      {post.downloadUrl && (
-        <a
-          href={post.downloadUrl}
-          className="mt-8 inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white hover:bg-[var(--color-accent-hover)]"
-          download
-        >
-          {post.downloadLabel ?? "Download free sample"}
-        </a>
-      )}
-
       <ContentBody
         content={post.content}
         contentFormat={post.contentFormat}
+        noDownloadLinks
         className="mt-10 border border-[var(--color-border)] bg-white px-6 py-8 sm:px-10"
       />
     </PageShell>

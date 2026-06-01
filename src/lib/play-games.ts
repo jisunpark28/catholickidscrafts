@@ -17,7 +17,7 @@ export const PLAY_GAMES: PlayGame[] = [
   },
   {
     slug: "typing",
-    title: "Catholic typing games",
+    title: "Typing Game",
     description:
       "Word mode: type falling vocabulary. Today’s Bible: choose First Reading, Second Reading, or Gospel from Daily Mass.",
     embedPath: "/play/typing",
