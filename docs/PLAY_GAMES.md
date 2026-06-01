@@ -30,3 +30,7 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 - **Word mode**: falling words from `GET /api/typing-words` (admin: `/admin/typing-words`).
 - **Today's Bible**: pick date + First / Second Reading / Gospel via `GET /api/mass/[date]`.
 - Typing is **not** on Daily Mass pages—only under Play.
+
+## Liturgical vestments (`/play/liturgical-vestments`)
+
+Dress Tiny Priest’s priest in the correct liturgical color per season.
