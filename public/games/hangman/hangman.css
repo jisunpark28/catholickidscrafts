@@ -64,24 +64,30 @@
     margin: 20px 0;
 }
 
-#letter-input {
-    width: 80px;
+#letter-input,
+#guess-btn {
+    box-sizing: border-box;
     height: 50px;
-    margin: 0 !important; /* Override MVP.css margin */
-    border-radius: 8px 0 0 8px; /* Round only left corners */
-    text-align: center;
-    font-size: 1.5rem;
+    margin: 0 !important;
+    line-height: 1;
     border: 2px solid #118bee;
 }
 
+#letter-input {
+    width: 80px;
+    border-radius: 8px 0 0 8px;
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 0;
+}
+
 #guess-btn {
-    height: 67px;
-    margin: 0 !important; /* Override MVP.css margin */
-    border-radius: 0 8px 8px 0; /* Round only right corners */
-    padding: 0 33px;
+    border-radius: 0 8px 8px 0;
+    padding: 0 28px;
+    font-size: 1rem;
+    font-weight: 700;
     background-color: #118bee;
     color: white;
-    border: 2px solid #118bee;
     cursor: pointer;
 }
 
