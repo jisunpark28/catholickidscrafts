@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ContentBody } from "@/components/ContentBody";
 import { PageShell } from "@/components/PageShell";
 import { TptCta } from "@/components/TptCta";
+import { resolveAssetUrl } from "@/lib/asset-url";
 import { getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
 import type { Metadata } from "next";
 
@@ -57,7 +58,7 @@ export default async function ResourcePage({ params }: Props) {
       {post.previewImageUrl && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={post.previewImageUrl}
+          src={resolveAssetUrl(post.previewImageUrl)}
           alt=""
           className="mt-8 max-h-96 w-full max-w-2xl border border-[var(--color-border)] object-cover"
         />

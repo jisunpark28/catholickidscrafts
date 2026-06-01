@@ -48,6 +48,13 @@ body {
   text-decoration: underline;
 }
 
+.prose-catechism img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 2rem auto;
+}
+
 
 .rich-content h2,
 .rich-content h3 {

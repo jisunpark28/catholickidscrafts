@@ -1,8 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" role="img" aria-labelledby="title">
+<svg width="560" height="300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 300" role="img" aria-labelledby="title">
   <title id="title">We say one clover, not three leaves</title>
   <rect width="560" height="300" fill="#fffaf5" rx="12" stroke="#e8dcc8" stroke-width="2"/>
 
-  <!-- Wrong idea (crossed) -->
   <g opacity="0.55">
     <text x="140" y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#888">We do NOT say:</text>
     <circle cx="70" cy="95" r="28" fill="#a8d5a8" stroke="#5a9a5a"/>
@@ -16,10 +15,8 @@
     <line x1="40" y1="60" x2="240" y2="160" stroke="#c44" stroke-width="4"/>
   </g>
 
-  <!-- Arrow -->
-  <text x="280" y="110" text-anchor="middle" font-size="28" fill="#5d4037">’</text>
+  <text x="280" y="110" text-anchor="middle" font-size="28" fill="#5d4037">&#8594;</text>
 
-  <!-- Right: one shamrock -->
   <g transform="translate(320 50)">
     <text x="100" y="-14" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#3d6b3d">We DO say:</text>
     <path d="M100 130 Q98 90 100 55 Q102 40 100 28" fill="none" stroke="#2d6b34" stroke-width="6" stroke-linecap="round"/>
@@ -32,5 +29,5 @@
 
   <rect x="40" y="218" width="480" height="64" rx="8" fill="#f0f7ff" stroke="#b8d4f0"/>
   <text x="280" y="246" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#2c5282">So too: Father, Son, and Holy Spirit</text>
-  <text x="280" y="268" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#2c5282">are three Persons  but only <tspan font-weight="700">one God</tspan>.</text>
+  <text x="280" y="268" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#2c5282">are three Persons - but only one God.</text>
 </svg>

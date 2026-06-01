@@ -5,9 +5,9 @@ date: "2026-06-05"
 grade: "Grade 2-4"
 topic: "Doctrine"
 liturgicalPeriod: general
-previewImageUrl: "/resources/holy-trinity/trinity-clover-hero.svg"
+previewImageUrl: "/images/holy-trinity/trinity-clover-hero.svg"
 downloadLabel: "Download coloring page (SVG)"
-downloadUrl: "/resources/holy-trinity/trinity-coloring.svg"
+downloadUrl: "/images/holy-trinity/trinity-coloring.svg"
 isFreeSample: true
 ---
 
@@ -19,7 +19,7 @@ isFreeSample: true
 
 Saint Patrick is said to have used a **three-leaf clover** (shamrock) to teach people in Ireland about the Trinity. The clover does not *explain everything* about God—no picture can—but it helps children **begin** to wonder at a great truth of our faith.
 
-![Diagram: three leaves on one stem labeled Father, Son, Holy Spirit, and One God on the stem](/resources/holy-trinity/trinity-clover-hero.svg)
+![Diagram: three leaves on one stem labeled Father, Son, Holy Spirit, and One God on the stem](/images/holy-trinity/trinity-clover-hero.svg)
 
 ## Learning goals
 
@@ -39,7 +39,7 @@ Hold up a real clover, a paper shamrock, or point to the picture.
 > In the same way, God is **Father**, **Son**, and **Holy Spirit**.  
 > We do **not** worship three gods. We worship **one God**—three Persons, perfectly united in love.
 
-![We say one shamrock, not three separate leaves](/resources/holy-trinity/clover-analogy.svg)
+![We say one shamrock, not three separate leaves](/images/holy-trinity/clover-analogy.svg)
 
 ### Important note for catechists
 
@@ -63,7 +63,7 @@ Tell children clearly:
 3. Color the stem and write **ONE GOD** in bold.  
 4. Practice saying together: *“Three Persons, one God.”*
 
-[Download coloring page](/resources/holy-trinity/trinity-coloring.svg)
+[Download coloring page](/images/holy-trinity/trinity-coloring.svg)
 
 ## Activity 2 — Paper shamrock craft (15 minutes)
 
@@ -99,6 +99,6 @@ Teach us to love you with all our heart. Amen.*
 
 | File | Use |
 |------|-----|
-| [trinity-clover-hero.svg](/resources/holy-trinity/trinity-clover-hero.svg) | Classroom poster / slide |
-| [clover-analogy.svg](/resources/holy-trinity/clover-analogy.svg) | Teaching comparison |
-| [trinity-coloring.svg](/resources/holy-trinity/trinity-coloring.svg) | Printable coloring sheet |
+| [trinity-clover-hero.svg](/images/holy-trinity/trinity-clover-hero.svg) | Classroom poster / slide |
+| [clover-analogy.svg](/images/holy-trinity/clover-analogy.svg) | Teaching comparison |
+| [trinity-coloring.svg](/images/holy-trinity/trinity-coloring.svg) | Printable coloring sheet |

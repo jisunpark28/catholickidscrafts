@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 420" role="img" aria-labelledby="title desc">
+<svg width="520" height="420" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 420" role="img" aria-labelledby="title desc">
   <title id="title">Holy Trinity clover symbol</title>
   <desc id="desc">Three leaves on one stem labeled Father, Son, and Holy Spirit, with One God on the stem.</desc>
   <defs>
@@ -12,7 +12,7 @@
     </linearGradient>
   </defs>
   <rect width="520" height="420" fill="url(#sky)" rx="16"/>
-  <text x="260" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="700" fill="#4a3728">One God · Three Divine Persons</text>
+  <text x="260" y="42" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="700" fill="#4a3728">One God ï¿½ Three Divine Persons</text>
 
   <!-- stem -->
   <path d="M260 310 Q255 250 260 200 Q265 170 260 155" fill="none" stroke="#2d6b34" stroke-width="10" stroke-linecap="round"/>
@@ -37,5 +37,5 @@
   <rect x="210" y="328" width="100" height="32" rx="8" fill="#fff" stroke="#c9a66b"/>
   <text x="260" y="350" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="800" fill="#5d4037">ONE GOD</text>
 
-  <text x="260" y="395" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#6b5b4f">Three leaves · one clover · one name</text>
+  <text x="260" y="395" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#6b5b4f">Three leaves ï¿½ one clover ï¿½ one name</text>
 </svg>
