@@ -41,9 +41,6 @@ const CANVAS_H = 480;
 const STRIP_GAP = 10;
 
 function fillBackground(ctx: CanvasRenderingContext2D, bgId: BgId, w: number, h: number) {
-  const canvas = ctx.canvas;
-  const prev = `${canvas.width}x${canvas.height}`;
-  void prev;
   const g = ctx.createLinearGradient(0, 0, w, h);
   if (bgId === "stained") {
     g.addColorStop(0, "#5c6bc0");
@@ -92,6 +89,7 @@ function drawCoverImage(
 export function PhotoBoothGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const imagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
 
@@ -102,20 +100,52 @@ export function PhotoBoothGame() {
   const [stickers, setStickers] = useState<PlacedSticker[]>([]);
   const [mode, setMode] = useState<"single" | "strip">("single");
   const [cameraOn, setCameraOn] = useState(false);
+  const [cameraError, setCameraError] = useState("");
   const [dragId, setDragId] = useState<number | null>(null);
   const [paintTick, setPaintTick] = useState(0);
   const stickerIdRef = useRef(0);
 
   const stopCamera = useCallback(() => {
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
     const v = videoRef.current;
-    if (v?.srcObject) {
-      (v.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
+    if (v) {
       v.srcObject = null;
     }
     setCameraOn(false);
+    setCameraError("");
   }, []);
 
   useEffect(() => () => stopCamera(), [stopCamera]);
+
+  /** Attach stream after <video> is mounted (cameraOn === true). */
+  useEffect(() => {
+    if (!cameraOn) return;
+
+    const video = videoRef.current;
+    const stream = streamRef.current;
+    if (!video || !stream) return;
+
+    video.srcObject = stream;
+    video.muted = true;
+    video.playsInline = true;
+
+    const startPlayback = () => {
+      void video.play().catch(() => {
+        setCameraError("Could not start camera preview. Tap Capture to try anyway.");
+      });
+    };
+
+    if (video.readyState >= 2) {
+      startPlayback();
+    } else {
+      video.onloadedmetadata = () => startPlayback();
+    }
+
+    return () => {
+      video.onloadedmetadata = null;
+    };
+  }, [cameraOn]);
 
   const loadImage = useCallback((src: string): Promise<HTMLImageElement> => {
     const cached = imagesRef.current.get(src);
@@ -179,7 +209,7 @@ export function PhotoBoothGame() {
   }, [bg, photo, stripPhotos, stickers, mode, loadImage]);
 
   useEffect(() => {
-    void paint().then(() => {});
+    void paint();
   }, [paint, paintTick]);
 
   const bumpPaint = () => setPaintTick((t) => t + 1);
@@ -210,28 +240,40 @@ export function PhotoBoothGame() {
 
   async function startCamera() {
     stopCamera();
+    setCameraError("");
+    if (!navigator.mediaDevices?.getUserMedia) {
+      alert("Camera is not supported in this browser. Try uploading a photo instead.");
+      return;
+    }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: { ideal: 720 }, height: { ideal: 960 } },
+        video: {
+          facingMode: "user",
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        },
         audio: false,
       });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
+      streamRef.current = stream;
       setCameraOn(true);
     } catch {
-      alert("Could not open the camera. Try uploading a photo instead.");
+      setCameraError("");
+      alert("Could not open the camera. Check permissions or try uploading a photo.");
     }
   }
 
   function captureFromCamera() {
     const video = videoRef.current;
-    if (!video?.videoWidth) return;
+    if (!video?.videoWidth) {
+      alert("Camera is not ready yet. Wait for the preview to appear.");
+      return;
+    }
     const c = document.createElement("canvas");
     c.width = video.videoWidth;
     c.height = video.videoHeight;
     const ctx = c.getContext("2d")!;
+    ctx.translate(c.width, 0);
+    ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0);
     loadPhoto(c.toDataURL("image/jpeg", 0.92));
   }
@@ -350,11 +392,19 @@ export function PhotoBoothGame() {
               {cameraOn ? "Capture" : "Use camera"}
             </button>
             {cameraOn && (
-              <button type="button" onClick={stopCamera} className="text-sm font-semibold text-[var(--color-muted)]">
+              <button
+                type="button"
+                onClick={stopCamera}
+                className="text-sm font-semibold text-[var(--color-muted)]"
+              >
                 Stop camera
               </button>
             )}
-            <button type="button" onClick={download} className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold">
+            <button
+              type="button"
+              onClick={download}
+              className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold"
+            >
               Save image
             </button>
             <button type="button" onClick={resetAll} className="text-sm text-[var(--color-muted)]">
@@ -370,26 +420,39 @@ export function PhotoBoothGame() {
           )}
 
           {cameraOn && (
-            <video
-              ref={videoRef}
-              playsInline
-              muted
-              className="mt-3 max-h-48 w-full max-w-sm rounded border border-[var(--color-border)] bg-black object-cover"
-            />
+            <div className="mx-auto mt-4 w-full max-w-[360px]">
+              <p className="mb-2 text-center text-sm font-semibold text-[var(--color-ink)]">
+                Camera preview
+              </p>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="mx-auto block aspect-[3/4] w-full rounded-lg border-2 border-[var(--color-accent)] bg-black object-cover [transform:scaleX(-1)]"
+              />
+              {cameraError && (
+                <p className="mt-2 text-center text-xs text-red-600">{cameraError}</p>
+              )}
+            </div>
           )}
 
           <canvas
             ref={canvasRef}
             width={CANVAS_W}
             height={CANVAS_H}
-            className="mx-auto mt-4 block w-full max-w-[360px] cursor-grab touch-none border border-[var(--color-border)] shadow-md active:cursor-grabbing"
+            className={`mx-auto block w-full max-w-[360px] cursor-grab touch-none border border-[var(--color-border)] shadow-md active:cursor-grabbing ${
+              cameraOn ? "mt-4" : "mt-4"
+            }`}
             onPointerDown={onCanvasDown}
             onPointerMove={onCanvasMove}
             onPointerUp={onCanvasUp}
             onPointerLeave={onCanvasUp}
           />
           <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-            Tap a sticker, then drag it on your photo. Processing stays in your browser.
+            {cameraOn
+              ? "When you see yourself above, tap Capture. Then add stickers on the canvas below."
+              : "Tap a sticker, then drag it on your photo. Processing stays in your browser."}
           </p>
         </div>
 
