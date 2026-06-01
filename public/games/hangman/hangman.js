@@ -53,7 +53,8 @@ function createHangman(secretWord) {
         isFinished: () => word.split('').every(c => guessedLetters.includes(c) || c === ' ') || attemptsLeft <= 0,
         getAttempts: () => attemptsLeft,
         getGuessedLetters: () => guessedLetters,
-        isWin: () => word.split('').every(c => guessedLetters.includes(c) || c === ' ')
+        isWin: () => word.split('').every(c => guessedLetters.includes(c) || c === ' '),
+        getAnswer: () => secretWord,
     };
 }
 
@@ -115,7 +116,11 @@ btn.addEventListener("click", () => {
         // Show result message after the final guess
         if (game.isFinished()) {
             setTimeout(() => {
-                alert(game.isWin() ? "Congratulations! You saved the flower! ✨" : "Game Over! The flower has lost its petals. 🥀");
+                alert(
+                    game.isWin()
+                        ? "Congratulations! You saved the flower! ✨"
+                        : "Game Over! The flower has lost its petals. 🥀\n\nThe answer was: " + game.getAnswer()
+                );
             }, 100);
         }
     }
