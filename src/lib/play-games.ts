@@ -16,6 +16,13 @@ export const PLAY_GAMES: PlayGame[] = [
     embedPath: "/games/tiny-priest/index.html",
   },
   {
+    slug: "liturgical-vestments",
+    title: "Liturgical vestments",
+    description:
+      "Dress the priest in the right color for Advent, Lent, Easter, and more—Tiny Priest style.",
+    embedPath: "/play/liturgical-vestments",
+  },
+  {
     slug: "typing",
     title: "Typing Game",
     description:
