@@ -1,5 +1,6 @@
 import type { LiturgicalPeriodId } from "@/lib/content-types";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 
 export type {
   CurriculumTrack,
@@ -79,6 +80,35 @@ export async function getCurriculumTrack(
 export async function getAllResources(): Promise<ResourcePost[]> {
   const rows = await prisma.resource.findMany({
     where: { published: true },
+    orderBy: { updatedAt: "desc" },
+  });
+  return rows.map(mapResource);
+}
+
+
+export async function searchPublishedResources(options: {
+  q?: string;
+  period?: LiturgicalPeriodId;
+}): Promise<ResourcePost[]> {
+  const where: Prisma.ResourceWhereInput = { published: true };
+
+  if (options.period) {
+    where.liturgicalPeriod = options.period;
+  }
+
+  const query = options.q?.trim();
+  if (query) {
+    where.OR = [
+      { title: { contains: query, mode: "insensitive" } },
+      { excerpt: { contains: query, mode: "insensitive" } },
+      { content: { contains: query, mode: "insensitive" } },
+      { grade: { contains: query, mode: "insensitive" } },
+      { topic: { contains: query, mode: "insensitive" } },
+    ];
+  }
+
+  const rows = await prisma.resource.findMany({
+    where,
     orderBy: { updatedAt: "desc" },
   });
   return rows.map(mapResource);

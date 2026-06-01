@@ -76,3 +76,21 @@ export type ResourcePost = {
   content: string;
   contentFormat?: string;
 };
+
+export function parseLiturgicalPeriodParam(
+  value: string | undefined,
+): LiturgicalPeriodId | undefined {
+  if (!value || value === "all") return undefined;
+  const valid: LiturgicalPeriodId[] = [
+    "advent",
+    "christmas",
+    "lent",
+    "holy-week",
+    "easter",
+    "ordinary",
+    "general",
+  ];
+  return valid.includes(value as LiturgicalPeriodId)
+    ? (value as LiturgicalPeriodId)
+    : undefined;
+}

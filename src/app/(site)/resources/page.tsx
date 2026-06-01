@@ -1,13 +1,17 @@
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { ResourceCard } from "@/components/ResourceCard";
+import { ResourcesToolbar } from "@/components/ResourcesToolbar";
 import {
   getAllResources,
   getLiturgicalPeriod,
   getResourcesByPeriod,
   LITURGICAL_PERIODS,
+  searchPublishedResources,
 } from "@/lib/content";
+import { parseLiturgicalPeriodParam } from "@/lib/content-types";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -16,20 +20,65 @@ export const metadata: Metadata = {
   description: "Catholic kids crafts and lesson plans by liturgical season.",
 };
 
-export default async function ResourcesPage() {
+type Props = {
+  searchParams: Promise<{ q?: string; period?: string }>;
+};
+
+export default async function ResourcesPage({ searchParams }: Props) {
+  const params = await searchParams;
+  const q = params.q;
+  const period = parseLiturgicalPeriodParam(params.period);
+  const hasFilter = Boolean(q?.trim() || period);
+
+  if (hasFilter) {
+    const results = await searchPublishedResources({ q, period });
+    const periodLabel = period ? getLiturgicalPeriod(period).title : null;
+
+    return (
+      <PageShell wide>
+        <PageHeader
+          title="Kids Resources"
+          subtitle="Crafts, worksheets, and lesson plans grouped by liturgical season—so you can plan Advent, Lent, Easter, and Ordinary Time with your class."
+        />
+
+        <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>
+          <ResourcesToolbar />
+        </Suspense>
+
+        <p className="text-sm text-[var(--color-muted)]">
+          {results.length} {results.length === 1 ? "resource" : "resources"}
+          {q ? ` matching “${q}”` : ""}
+          {periodLabel ? ` in ${periodLabel}` : ""}
+        </p>
+
+        {results.length > 0 ? (
+          <div className="mt-6 border border-[var(--color-border)]">
+            {results.map((post) => (
+              <ResourceCard key={post.slug} post={post} />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-10 border border-[var(--color-border)] bg-white p-8 text-center text-[var(--color-muted)]">
+            No resources found. Try another word or season.
+          </p>
+        )}
+      </PageShell>
+    );
+  }
+
   const all = await getAllResources();
 
   const periodCounts = await Promise.all(
-    LITURGICAL_PERIODS.map(async (period) => ({
-      period,
-      count: (await getResourcesByPeriod(period.id)).length,
+    LITURGICAL_PERIODS.map(async (p) => ({
+      period: p,
+      count: (await getResourcesByPeriod(p.id)).length,
     })),
   );
 
   const periodPosts = await Promise.all(
-    LITURGICAL_PERIODS.map(async (period) => ({
-      period,
-      posts: await getResourcesByPeriod(period.id),
+    LITURGICAL_PERIODS.map(async (p) => ({
+      period: p,
+      posts: await getResourcesByPeriod(p.id),
     })),
   );
 
@@ -40,14 +89,18 @@ export default async function ResourcesPage() {
         subtitle="Crafts, worksheets, and lesson plans grouped by liturgical season—so you can plan Advent, Lent, Easter, and Ordinary Time with your class."
       />
 
+      <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>
+        <ResourcesToolbar />
+      </Suspense>
+
       <nav className="mb-12 flex flex-wrap gap-2 border-b border-[var(--color-border)] pb-6">
-        {periodCounts.map(({ period, count }) => (
+        {periodCounts.map(({ period: p, count }) => (
           <a
-            key={period.id}
-            href={`#${period.id}`}
+            key={p.id}
+            href={`#${p.id}`}
             className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           >
-            {period.title}
+            {p.title}
             {count > 0 && (
               <span className="ml-2 text-[var(--color-muted)]">({count})</span>
             )}
@@ -56,11 +109,11 @@ export default async function ResourcesPage() {
       </nav>
 
       <div className="space-y-16">
-        {periodPosts.map(({ period, posts }) => {
-          const meta = getLiturgicalPeriod(period.id);
+        {periodPosts.map(({ period: p, posts }) => {
+          const meta = getLiturgicalPeriod(p.id);
 
           return (
-            <section key={period.id} id={period.id} className="scroll-mt-24">
+            <section key={p.id} id={p.id} className="scroll-mt-24">
               <div className="border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 sm:px-8">
                 <h2 className="text-2xl font-bold text-[var(--color-ink)]">{meta.title}</h2>
                 <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{meta.description}</p>
