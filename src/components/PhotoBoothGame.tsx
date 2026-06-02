@@ -39,7 +39,19 @@ type PlacedSticker = {
 const CANVAS_W = 360;
 const CANVAS_H = 480;
 const STRIP_GAP = 10;
-const STRIP_CELL_H = (CANVAS_H - STRIP_GAP * 3) / 4;
+const STRIP_CELL_W = (CANVAS_W - STRIP_GAP) / 2;
+const STRIP_CELL_H = (CANVAS_H - STRIP_GAP) / 2;
+
+function stripCellRect(index: number) {
+  const col = index % 2;
+  const row = Math.floor(index / 2);
+  return {
+    x: col * (STRIP_CELL_W + STRIP_GAP),
+    y: row * (STRIP_CELL_H + STRIP_GAP),
+    w: STRIP_CELL_W,
+    h: STRIP_CELL_H,
+  };
+}
 
 function fillBackground(ctx: CanvasRenderingContext2D, bgId: BgId, w: number, h: number) {
   const g = ctx.createLinearGradient(0, 0, w, h);
@@ -179,17 +191,16 @@ export function PhotoBoothGame() {
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
     if (mode === "strip") {
-      const cellH = STRIP_CELL_H;
       for (let i = 0; i < 4; i++) {
-        const y = i * (cellH + STRIP_GAP);
-        fillBackground(ctx, bg, CANVAS_W, cellH);
+        const { x, y, w, h } = stripCellRect(i);
+        fillBackground(ctx, bg, w, h);
         ctx.save();
-        ctx.translate(0, y);
+        ctx.translate(x, y);
         const src = stripPhotos[i];
         if (src) {
           try {
             const img = await loadImage(src);
-            drawCoverImage(ctx, img, 0, 0, CANVAS_W, cellH);
+            drawCoverImage(ctx, img, 0, 0, w, h);
           } catch {
             /* skip */
           }
@@ -468,17 +479,25 @@ export function PhotoBoothGame() {
               className="mx-auto mt-4 w-full max-w-[360px] overflow-hidden border border-[var(--color-border)] shadow-md"
               style={{ height: CANVAS_H }}
             >
-              <div className="flex h-full flex-col" style={{ gap: STRIP_GAP }}>
+              <div
+                className="grid h-full w-full"
+                style={{
+                  gridTemplateColumns: `repeat(2, ${STRIP_CELL_W}px)`,
+                  gridTemplateRows: `repeat(2, ${STRIP_CELL_H}px)`,
+                  gap: STRIP_GAP,
+                }}
+              >
                 {[0, 1, 2, 3].map((i) => {
                   const isActive = i === activeSlot && !stripPhotos[i];
                   const showLive = cameraOn && isActive;
                   return (
                     <div
                       key={i}
-                      className={`relative shrink-0 overflow-hidden ${
+                      className={`relative overflow-hidden ${
                         isActive ? "ring-2 ring-[var(--color-accent)] ring-offset-1" : ""
                       }`}
                       style={{
+                        width: STRIP_CELL_W,
                         height: STRIP_CELL_H,
                         background: stripPhotos[i]
                           ? "#000"
