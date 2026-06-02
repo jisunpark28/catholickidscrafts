@@ -45,7 +45,7 @@ body {
 .church-scene {
     --door-x: 50%;
     --door-y: 73%;
-    --character-size: clamp(150px, 24vw, 300px); /* full-body priest / sister sprites */
+    --character-size: clamp(175px, 30vw, 360px); /* full-body priest / sister sprites */
     --mary-size: clamp(110px, 18vw, 250px);
     position: relative;
     width: min(95vw, 1120px);
@@ -314,6 +314,22 @@ body {
     margin-bottom: 7px;
 }
 
+
+.mass-nav-step-btn:hover {
+    border-color: rgba(149, 109, 73, 0.55);
+    transform: translateY(-1px);
+}
+
+.mass-nav-step-btn.is-active {
+    border-color: rgba(97, 149, 91, 0.88);
+    background: rgba(228, 248, 220, 0.96);
+}
+
+.mass-nav-step-btn.is-complete {
+    border-color: rgba(120, 167, 121, 0.45);
+    background: rgba(242, 252, 237, 0.82);
+}
+
 .mass-nav-part-btn {
     width: 100%;
     border: 1.4px solid rgba(156, 116, 76, 0.32);
@@ -336,56 +352,56 @@ body {
     color: rgba(93, 64, 55, 0.78);
 }
 
+.mass-nav-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
 .mass-nav-step-list {
     margin: 0;
-    padding: 6px 0 0;
+    padding: 4px 0 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    align-content: flex-start;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .mass-nav-step-btn {
-    width: auto;
-    min-width: 0;
-    min-height: 4.6rem;
-    text-align: center;
-    padding: 5px 3px;
-    display: inline-flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 2px;
-}
-
-.mass-nav-part-words,
-.mass-nav-step-words {
-    display: inline-flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 2px;
-}
-
-.mass-nav-vertical-word {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    font-size: 0.7rem;
+    width: 100%;
+    min-height: 0;
+    text-align: left;
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1.4px solid rgba(160, 121, 86, 0.28);
+    background: rgba(255, 255, 255, 0.88);
+    color: #5d4037;
+    border-radius: 8px;
+    font-size: 0.74rem;
     font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
+    line-height: 1.25;
+    cursor: pointer;
+    transition:
+        border-color 0.14s ease,
+        background 0.14s ease,
+        transform 0.14s ease;
+}
+
+.mass-nav-label {
+    display: block;
+    width: 100%;
+    white-space: normal;
+    word-break: keep-all;
+    text-align: left;
 }
 
 .mass-nav-part-btn {
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 3.4rem;
-}
-
-.mass-nav-part-btn small {
-    display: none;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 0;
+    text-align: left;
 }
 
 
@@ -593,7 +609,7 @@ body {
 @media (max-width: 640px) {
     .church-scene {
         --door-y: 75%;
-        --character-size: clamp(120px, 28vw, 220px);
+        --character-size: clamp(140px, 34vw, 280px);
         --mary-size: clamp(90px, 22vw, 160px);
     }
 
@@ -680,7 +696,7 @@ body {
     display: block;
     width: 100%;
     height: auto;
-    max-height: min(62vh, 520px);
+    max-height: min(70vh, 580px);
     object-fit: contain;
     object-position: center bottom;
 }

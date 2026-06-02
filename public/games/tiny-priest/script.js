@@ -258,11 +258,8 @@ function stripLeadingPartNumber(label) {
     return String(label || "").replace(/^\d+\.\s*/, "").trim();
 }
 
-function buildVerticalWordsHtml(text) {
-    const words = stripLeadingPartNumber(text).split(/\s+/).filter(Boolean);
-    return words
-        .map((word) => `<span class="mass-nav-vertical-word">${word}</span>`)
-        .join("");
+function buildMassNavLabel(text) {
+    return stripLeadingPartNumber(text);
 }
 
 function setChurchExitVisible(isVisible) {
@@ -280,7 +277,6 @@ function showEntryScreenFromInterior() {
     const threeContainer = document.getElementById("three-container");
 
     hideHotspotModal();
-    setChurchExitVisible(false);
     setChurchExitVisible(false);
     setLiturgyHudVisible(false);
     setMassNavigatorVisible(false);
@@ -365,7 +361,7 @@ function buildMassFlowNavigation() {
         headerButton.className = "mass-nav-part-btn";
         headerButton.dataset.stepIndex = String(firstIndex);
         headerButton.setAttribute("aria-label", group.partEn);
-        headerButton.innerHTML = `<span class="mass-nav-part-words">${buildVerticalWordsHtml(group.partEn)}</span>`;
+        headerButton.innerHTML = `<span class="mass-nav-label">${buildMassNavLabel(group.partEn)}</span>`;
         section.appendChild(headerButton);
 
         const list = document.createElement("div");
@@ -377,7 +373,7 @@ function buildMassFlowNavigation() {
             button.className = "mass-nav-step-btn";
             button.dataset.stepIndex = String(stepIndex);
             button.setAttribute("aria-label", step.title);
-            button.innerHTML = `<span class="mass-nav-step-words">${buildVerticalWordsHtml(step.title)}</span>`;
+            button.innerHTML = `<span class="mass-nav-label">${buildMassNavLabel(step.title)}</span>`;
             list.appendChild(button);
         });
         section.appendChild(list);
@@ -1050,7 +1046,7 @@ function createVoxelChurch(container) {
         side: THREE.DoubleSide,
         depthWrite: false,
     });
-    const playerSpriteHeight = 3.95;
+    const playerSpriteHeight = 4.35;
     const playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSprite = new THREE.Mesh(
         new THREE.PlaneGeometry(playerSpriteWidth, playerSpriteHeight),
@@ -1849,7 +1845,7 @@ function createVoxelChurch(container) {
 
         playerSprite.scale.x = playerSpriteBaseScale.x * spriteFacingState.xDir * stretchX;
         playerSprite.scale.y = playerSpriteBaseScale.y * squash;
-        playerSprite.position.y = 1.62 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
+        playerSprite.position.y = playerSpriteHeight * 0.5 + 0.08 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
         playerSpriteMaterial.rotation = THREE.MathUtils.lerp(
             playerSpriteMaterial.rotation,
             tiltTarget,
