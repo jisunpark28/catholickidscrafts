@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node -e \"JSON.parse(require(fs).readFileSync(package.json,utf8))\"",
+    "prebuild": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8'))\"",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
