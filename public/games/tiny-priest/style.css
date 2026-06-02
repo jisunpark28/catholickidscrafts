@@ -45,7 +45,7 @@ body {
 .church-scene {
     --door-x: 50%;
     --door-y: 73%;
-    --character-size: clamp(175px, 30vw, 360px); /* full-body priest / sister sprites */
+    --character-size: clamp(88px, 15vw, 180px); /* ~half size — smaller than church */
     --mary-size: clamp(110px, 18vw, 250px);
     position: relative;
     width: min(95vw, 1120px);
@@ -127,12 +127,12 @@ body {
 
 .character-priest {
     --x-shift: -4%;
-    margin-right: clamp(-28px, -4vw, -12px);
+    margin-right: clamp(-14px, -2vw, -6px);
 }
 
 .character-nun {
     --x-shift: 4%;
-    margin-left: clamp(-28px, -4vw, -12px);
+    margin-left: clamp(-14px, -2vw, -6px);
 }
 
 .character:hover {
@@ -615,7 +615,7 @@ body {
 @media (max-width: 640px) {
     .church-scene {
         --door-y: 75%;
-        --character-size: clamp(140px, 34vw, 280px);
+        --character-size: clamp(72px, 17vw, 140px);
         --mary-size: clamp(90px, 22vw, 160px);
     }
 
@@ -702,7 +702,7 @@ body {
     display: block;
     width: 100%;
     height: auto;
-    max-height: min(70vh, 580px);
+    max-height: min(32vh, 260px);
     object-fit: contain;
     object-position: center bottom;
 }

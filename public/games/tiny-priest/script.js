@@ -1,4 +1,4 @@
-const TINY_PRIEST_BUILD = "20260607";
+const TINY_PRIEST_BUILD = "20260608";
 
 const CHARACTER_CONFIG = {
     priest: {
