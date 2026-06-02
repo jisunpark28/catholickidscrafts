@@ -26,8 +26,7 @@
                         id="character-priest"
                         class="asset character character-button character-priest"
                         data-character="priest"
-                        onclick="handleInteract('priest')"
-                        aria-label="Select Father Priest"
+                        aria-label="인사하기: 신부님"
                     >
                         <img src="assets/priest_front.png" alt="Father Priest" />
                     </button>
@@ -36,15 +35,22 @@
                         id="character-nun"
                         class="asset character character-button character-nun"
                         data-character="nun"
-                        onclick="handleInteract('nun')"
-                        aria-label="Select Sister Nun"
+                        aria-label="인사하기: 수녀님"
                     >
                         <img src="assets/nun_front.png" alt="Sister Nun" />
                     </button>
                 </div>
             </div>
 
-            <div id="dialogue-box" class="dialogue-box">Click the characters to say hello!</div>
+            <div id="dialogue-box" class="dialogue-box">신부님이나 수녀님을 눌러 인사해 보세요.</div>
+            <div id="entry-actions" class="entry-actions" hidden>
+                <button type="button" id="entry-confirm-btn" class="entry-action-btn entry-action-btn--yes">
+                    네, 들어갈게요
+                </button>
+                <button type="button" id="entry-decline-btn" class="entry-action-btn entry-action-btn--no">
+                    아니요
+                </button>
+            </div>
         </div>
 
         <div id="entry-flash" class="entry-flash" aria-hidden="true"></div>

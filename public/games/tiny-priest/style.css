@@ -588,3 +588,51 @@ body {
     object-fit: contain;
     object-position: center bottom;
 }
+
+
+.entry-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.entry-actions[hidden] {
+    display: none !important;
+}
+
+.entry-action-btn {
+    border: 2px solid #c45c26;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: #fffef8;
+    color: #5d4037;
+    box-shadow: 0 8px 18px rgba(93, 64, 55, 0.12);
+}
+
+.entry-action-btn--yes {
+    background: #4d9c5a;
+    border-color: #3d7c48;
+    color: #fffef8;
+}
+
+.entry-action-btn--yes:hover {
+    filter: brightness(1.05);
+}
+
+.entry-action-btn--no:hover {
+    background: #fff8f0;
+}
+
+.character.is-greeted {
+    filter: saturate(1.08) drop-shadow(0 0 10px rgba(77, 156, 90, 0.45));
+}
+
+#entry-screen.is-entering-zoom .entry-actions {
+    opacity: 0;
+    pointer-events: none;
+}
