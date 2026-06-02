@@ -1040,35 +1040,66 @@ function createVoxelChurch(container) {
 
     const textureLoader = new THREE.TextureLoader();
     const playerTextures = {
-        front: textureLoader.load(selected.frontImage),
-        back: textureLoader.load(selected.backImage || selected.frontImage),
+        front: null,
+        back: null,
     };
-    Object.values(playerTextures).forEach((texture) => {
-        if ("colorSpace" in texture) {
-            texture.colorSpace = THREE.SRGBColorSpace;
-        }
-        texture.magFilter = THREE.NearestFilter;
-        texture.minFilter = THREE.NearestFilter;
-    });
-
     const playerSpriteMaterial = new THREE.MeshBasicMaterial({
-        map: playerTextures.front,
+        map: null,
         transparent: true,
         alphaTest: 0.02,
         side: THREE.DoubleSide,
         depthWrite: false,
     });
-    const playerSpriteHeight = 5.1;
-    const playerSpriteWidth = playerSpriteHeight * 0.773;
+
+    const PLAYER_SPRITE_WORLD_HEIGHT = 5.65;
+    let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
+    let playerSpriteWidth = playerSpriteHeight * 0.773;
+    const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
+
+    function fitPlayerSpriteToTexture(texture) {
+        const image = texture?.image;
+        if (!image || !image.width || !image.height) {
+            return;
+        }
+        const aspect = image.width / image.height;
+        playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
+        playerSpriteWidth = playerSpriteHeight * aspect;
+        playerSpriteBaseScale.x = playerSpriteWidth;
+        playerSpriteBaseScale.y = playerSpriteHeight;
+        playerSprite.geometry.dispose();
+        playerSprite.geometry = new THREE.PlaneGeometry(playerSpriteWidth, playerSpriteHeight);
+        playerSprite.scale.set(playerSpriteWidth, playerSpriteHeight, 1);
+        playerSprite.position.set(0, playerSpriteHeight * 0.5, 0.12);
+    }
+
     const playerSprite = new THREE.Mesh(
         new THREE.PlaneGeometry(playerSpriteWidth, playerSpriteHeight),
         playerSpriteMaterial,
     );
-    const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
     playerSprite.scale.set(playerSpriteBaseScale.x, playerSpriteBaseScale.y, 1);
-    playerSprite.position.set(0, playerSpriteHeight * 0.5 + 0.08, 0.14);
+    playerSprite.position.set(0, playerSpriteHeight * 0.5, 0.12);
     playerSprite.renderOrder = 3;
     playerRig.add(playerSprite);
+
+    const syncPlayerSpriteFromTexture = (texture) => {
+        if ("colorSpace" in texture) {
+            texture.colorSpace = THREE.SRGBColorSpace;
+        }
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearMipmapLinearFilter;
+        fitPlayerSpriteToTexture(texture);
+    };
+
+    textureLoader.load(selected.frontImage, (frontTexture) => {
+        playerTextures.front = frontTexture;
+        playerSpriteMaterial.map = frontTexture;
+        playerSpriteMaterial.needsUpdate = true;
+        syncPlayerSpriteFromTexture(frontTexture);
+    });
+    textureLoader.load(selected.backImage || selected.frontImage, (backTexture) => {
+        playerTextures.back = backTexture;
+        syncPlayerSpriteFromTexture(backTexture);
+    });
 
     const itemMaterial = new THREE.MeshLambertMaterial({ color: 0xc6a278 });
     const liturgyItem = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.64, 0.26), itemMaterial);
@@ -1799,8 +1830,8 @@ function createVoxelChurch(container) {
         container.innerHTML = "";
     }
 
-    const cameraOffset = new THREE.Vector3(0, 4.6, 9.2);
-    const cameraLookOffset = new THREE.Vector3(0, 1.4, -4.1);
+    const cameraOffset = new THREE.Vector3(0, 3.95, 12.4);
+    const cameraLookOffset = new THREE.Vector3(0, 2.75, -3.8);
     const cameraTarget = new THREE.Vector3();
     const cameraLookTarget = new THREE.Vector3();
     const moveDirection = new THREE.Vector3(0, 0, -1);
@@ -1856,7 +1887,7 @@ function createVoxelChurch(container) {
 
         playerSprite.scale.x = playerSpriteBaseScale.x * spriteFacingState.xDir * stretchX;
         playerSprite.scale.y = playerSpriteBaseScale.y * squash;
-        playerSprite.position.y = playerSpriteHeight * 0.5 + 0.08 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
+        playerSprite.position.y = playerSpriteHeight * 0.5 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
         playerSpriteMaterial.rotation = THREE.MathUtils.lerp(
             playerSpriteMaterial.rotation,
             tiltTarget,
@@ -2025,8 +2056,8 @@ function applyRoleCamera(role, camera, playerRig = null) {
     const anchorX = playerRig ? playerRig.position.x : 0;
     const anchorY = playerRig ? playerRig.position.y : 0;
     const anchorZ = playerRig ? playerRig.position.z : 10.8;
-    camera.position.set(anchorX, anchorY + 4.6, anchorZ + 9.2);
-    camera.lookAt(anchorX, anchorY + 1.4, anchorZ - 4.1);
+    camera.position.set(anchorX, anchorY + 3.95, anchorZ + 12.4);
+    camera.lookAt(anchorX, anchorY + 2.75, anchorZ - 3.8);
 }
 
 function resetEntryAfterFailure(message) {
