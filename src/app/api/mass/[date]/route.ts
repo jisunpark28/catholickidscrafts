@@ -1,5 +1,5 @@
 import { parseDateParam } from "@/lib/dates";
-import { fetchMassDay } from "@/lib/evangelizo";
+import { fetchMassDay } from "@/lib/mass-source";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ date: string }> };

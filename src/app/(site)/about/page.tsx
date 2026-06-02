@@ -23,7 +23,7 @@ export default function AboutPage() {
         <Link href="/mass" className="font-semibold text-[var(--color-link)]">
           Daily Mass readings
         </Link>{" "}
-        in English (Roman calendar, U.S. lectionary via Evangelizo), organize{" "}
+        in English (U.S. lectionary via USCCB where permitted; calendar data via Evangelizo), organize{" "}
         <Link href="/resources" className="font-semibold text-[var(--color-link)]">
           kids crafts and lesson ideas
         </Link>{" "}

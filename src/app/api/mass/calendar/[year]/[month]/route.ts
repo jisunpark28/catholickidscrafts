@@ -1,4 +1,4 @@
-import { fetchMonthCalendar } from "@/lib/evangelizo";
+import { fetchMonthCalendar } from "@/lib/mass-source";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ year: string; month: string }> };
