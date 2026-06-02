@@ -1,5 +1,5 @@
 /**
- * Transparent BG, trim margins, generous headroom on green / purple / lavender.
+ * Transparent BG, trim margins, generous transparent top pad on green / purple / lavender.
  */
 import sharp from "sharp";
 import { readdir } from "node:fs/promises";
@@ -33,6 +33,44 @@ function flattenAlpha(input) {
     });
 }
 
+/** Trim left/right/bottom only — keep full height so hair at the top is not clipped. */
+async function trimSidesAndBottom(pipeline) {
+  const { data, info } = await pipeline
+    .clone()
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const { width, height, channels } = info;
+  let minX = width;
+  let maxX = 0;
+  let maxY = 0;
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if (data[(y * width + x) * channels + (channels - 1)] > 30) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+
+  if (maxX < minX) return pipeline;
+
+  const pad = 8;
+  const extractW = Math.min(width, maxX - minX + 1 + pad * 2);
+  const extractH = Math.min(height, maxY + 1 + pad);
+  const left = Math.max(0, minX - pad);
+
+  return sharp(data, { raw: { width, height, channels } }).extract({
+    left,
+    top: 0,
+    width: Math.min(extractW, width - left),
+    height: extractH,
+  });
+}
+
 async function processFile(file) {
   if (!file.startsWith("character-") || !file.endsWith(".png")) return;
   if (file === "character-base.png") return;
@@ -44,12 +82,12 @@ async function processFile(file) {
   let pipeline = await flattenAlpha(filePath);
 
   if (needsHeadroom) {
-    // Do not trim — fuzzy hair at the top can be lost. Pad generously instead.
+    pipeline = await trimSidesAndBottom(pipeline);
     pipeline = pipeline.extend({
-      top: 140,
-      bottom: 20,
-      left: 20,
-      right: 20,
+      top: 120,
+      bottom: 24,
+      left: 16,
+      right: 16,
       background: { r: 0, g: 0, b: 0, alpha: 0 },
     });
   } else {
