@@ -46,6 +46,66 @@ const CANVAS_H = 480;
 const STRIP_GAP = 10;
 const STRIP_CELL_W = (CANVAS_W - STRIP_GAP) / 2;
 const STRIP_CELL_H = (CANVAS_H - STRIP_GAP) / 2;
+const STRIP_CELL_ASPECT = STRIP_CELL_W / STRIP_CELL_H;
+const STRIP_PHOTO_W = STRIP_CELL_W * 2;
+const STRIP_PHOTO_H = STRIP_CELL_H * 2;
+
+function computeCoverCrop(
+  sourceW: number,
+  sourceH: number,
+  aspect: number,
+): { sx: number; sy: number; sw: number; sh: number } {
+  const srcAspect = sourceW / sourceH;
+  if (srcAspect > aspect) {
+    const sh = sourceH;
+    const sw = sourceH * aspect;
+    return { sx: (sourceW - sw) / 2, sy: 0, sw, sh };
+  }
+  const sw = sourceW;
+  const sh = sourceW / aspect;
+  return { sx: 0, sy: (sourceH - sh) / 2, sw, sh };
+}
+
+function canvasToStripCellDataUrl(
+  draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void,
+): string {
+  const c = document.createElement("canvas");
+  c.width = STRIP_PHOTO_W;
+  c.height = STRIP_PHOTO_H;
+  const ctx = c.getContext("2d");
+  if (!ctx) return "";
+  draw(ctx, STRIP_PHOTO_W, STRIP_PHOTO_H);
+  return c.toDataURL("image/jpeg", 0.92);
+}
+
+function captureVideoToStripCell(video: HTMLVideoElement): string {
+  const { sx, sy, sw, sh } = computeCoverCrop(
+    video.videoWidth,
+    video.videoHeight,
+    STRIP_CELL_ASPECT,
+  );
+  return canvasToStripCellDataUrl((ctx, w, h) => {
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, w, h);
+  });
+}
+
+function cropImageToStripCell(src: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const { sx, sy, sw, sh } = computeCoverCrop(img.width, img.height, STRIP_CELL_ASPECT);
+      resolve(
+        canvasToStripCellDataUrl((ctx, w, h) => {
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
+        }),
+      );
+    };
+    img.onerror = () => reject(new Error("Could not load image"));
+    img.src = src;
+  });
+}
 
 function createDefaultStripEdits(): StripSlotEdit[] {
   return Array.from({ length: 4 }, () => ({ bg: "cream", stickers: [] }));
@@ -241,7 +301,7 @@ export function PhotoBoothGame() {
           try {
             const img = await loadImage(src);
             if (paintGen !== paintGenRef.current) return;
-            drawCoverImage(ctx, img, 0, 0, w, h);
+            ctx.drawImage(img, 0, 0, w, h);
           } catch {
             /* skip */
           }
@@ -287,13 +347,19 @@ export function PhotoBoothGame() {
 
   const bumpPaint = () => setPaintTick((t) => t + 1);
 
-  function loadPhoto(dataUrl: string) {
+  async function loadPhoto(dataUrl: string) {
+    let finalUrl = dataUrl;
     if (mode === "strip") {
+      try {
+        finalUrl = await cropImageToStripCell(dataUrl);
+      } catch {
+        finalUrl = dataUrl;
+      }
       const slot = stripPhotos.findIndex((p) => p === null);
       if (slot === -1) return;
       setStripPhotos((prev) => {
         const next = [...prev];
-        next[slot] = dataUrl;
+        next[slot] = finalUrl;
         return next;
       });
       setStripIndex(Math.min(slot + 1, 3));
@@ -301,7 +367,7 @@ export function PhotoBoothGame() {
         stopCamera();
       }
     } else {
-      setPhoto(dataUrl);
+      setPhoto(finalUrl);
       stopCamera();
     }
     bumpPaint();
@@ -311,7 +377,7 @@ export function PhotoBoothGame() {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => loadPhoto(reader.result as string);
+    reader.onload = () => void loadPhoto(reader.result as string);
     reader.readAsDataURL(file);
     e.target.value = "";
   }
@@ -346,6 +412,10 @@ export function PhotoBoothGame() {
       alert("Camera is not ready yet. Wait for the preview to appear.");
       return;
     }
+    if (mode === "strip") {
+      void loadPhoto(captureVideoToStripCell(video));
+      return;
+    }
     const c = document.createElement("canvas");
     c.width = video.videoWidth;
     c.height = video.videoHeight;
@@ -353,7 +423,7 @@ export function PhotoBoothGame() {
     ctx.translate(c.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0);
-    loadPhoto(c.toDataURL("image/jpeg", 0.92));
+    void loadPhoto(c.toDataURL("image/jpeg", 0.92));
   }
 
   function addSticker(char: string) {
@@ -605,17 +675,10 @@ export function PhotoBoothGame() {
           )}
 
           {stripCapturing && (
-            <div
-              className="mx-auto mt-4 w-full max-w-[360px] overflow-hidden border border-[var(--color-border)] shadow-md"
-              style={{ height: CANVAS_H }}
-            >
+            <div className="mx-auto mt-4 aspect-[3/4] w-full max-w-[360px] overflow-hidden border border-[var(--color-border)] shadow-md">
               <div
-                className="grid h-full w-full"
-                style={{
-                  gridTemplateColumns: `repeat(2, ${STRIP_CELL_W}px)`,
-                  gridTemplateRows: `repeat(2, ${STRIP_CELL_H}px)`,
-                  gap: STRIP_GAP,
-                }}
+                className="grid h-full w-full grid-cols-2 grid-rows-2"
+                style={{ gap: STRIP_GAP }}
               >
                 {[0, 1, 2, 3].map((i) => {
                   const isActive = i === activeSlot && !stripPhotos[i];
@@ -623,12 +686,10 @@ export function PhotoBoothGame() {
                   return (
                     <div
                       key={i}
-                      className={`relative overflow-hidden ${
+                      className={`relative min-h-0 overflow-hidden ${
                         isActive ? "ring-2 ring-[var(--color-accent)] ring-offset-1" : ""
                       }`}
                       style={{
-                        width: STRIP_CELL_W,
-                        height: STRIP_CELL_H,
                         background: stripPhotos[i]
                           ? "#000"
                           : "linear-gradient(160deg,#f4f4f5,#e4e4e7)",
@@ -684,7 +745,7 @@ export function PhotoBoothGame() {
                 ref={canvasRef}
                 width={CANVAS_W}
                 height={CANVAS_H}
-                className="mx-auto mt-4 block w-full max-w-[360px] cursor-grab touch-none border border-[var(--color-border)] shadow-md active:cursor-grabbing"
+                className="mx-auto mt-4 block aspect-[3/4] h-auto w-full max-w-[360px] cursor-grab touch-none border border-[var(--color-border)] shadow-md active:cursor-grabbing"
                 onPointerDown={onCanvasDown}
                 onPointerMove={onCanvasMove}
                 onPointerUp={onCanvasUp}
