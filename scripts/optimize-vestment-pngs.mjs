@@ -7,12 +7,18 @@ import path from "node:path";
 
 const outDir = path.join("public", "games", "liturgical-vestments");
 
-/** Shared output size (all colors identical). */
 const CANVAS_W = 960;
 const CANVAS_H = 1040;
-/** Priest figure height after trim (same visual scale for every color). */
-const FIGURE_H = 920;
-const PAD_BOTTOM = 28;
+const FIGURE_W = 880;
+const FIGURE_H = 900;
+const PAD_BOTTOM = 32;
+
+function isBackground(r, g, b) {
+  if (r < 32 && g < 32 && b < 32) return true;
+  if (r > 248 && g > 245 && b > 235 && Math.max(r, g, b) - Math.min(r, g, b) < 20)
+    return true;
+  return false;
+}
 
 function flattenAlpha(input) {
   return sharp(input)
@@ -25,9 +31,7 @@ function flattenAlpha(input) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        const isBg =
-          r > 248 && g > 245 && b > 235 && Math.max(r, g, b) - Math.min(r, g, b) < 18;
-        if (isBg) data[i + 3] = 0;
+        if (isBackground(r, g, b)) data[i + 3] = 0;
       }
       return sharp(data, { raw: { width, height, channels } }).png();
     });
@@ -42,20 +46,18 @@ async function processFile(file) {
   const figure = await (
     await flattenAlpha(filePath)
   )
-    .trim({ threshold: 10 })
+    .trim({ threshold: 8 })
     .resize({
+      width: FIGURE_W,
       height: FIGURE_H,
-      fit: "inside",
-      withoutEnlargement: false,
+      fit: "cover",
+      position: "bottom",
     })
     .png()
     .toBuffer();
 
-  const meta = await sharp(figure).metadata();
-  const fw = meta.width ?? 1;
-  const fh = meta.height ?? 1;
-  const left = Math.max(0, Math.floor((CANVAS_W - fw) / 2));
-  const top = Math.max(0, CANVAS_H - PAD_BOTTOM - fh);
+  const left = Math.floor((CANVAS_W - FIGURE_W) / 2);
+  const top = CANVAS_H - PAD_BOTTOM - FIGURE_H;
 
   await sharp({
     create: {
@@ -71,7 +73,7 @@ async function processFile(file) {
 
   const fs = await import("node:fs/promises");
   await fs.rename(filePath + ".tmp", filePath);
-  console.log("normalized", file, `${CANVAS_W}x${CANVAS_H}`, `figure ${fw}x${fh} @ top=${top}`);
+  console.log("normalized", file, `box ${FIGURE_W}x${FIGURE_H} @ ${left},${top}`);
 }
 
 async function main() {

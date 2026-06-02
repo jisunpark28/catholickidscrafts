@@ -1,8 +1,5 @@
 /**
  * Split 2×3 vestment reference grid into per-color PNGs.
- * Usage: node scripts/split-vestment-spritesheet.mjs [input.png]
- *
- * Do NOT extend the crop into the row above — that pulls in other cells' labels.
  */
 import sharp from "sharp";
 import { mkdir } from "node:fs/promises";
@@ -14,10 +11,9 @@ const input =
 
 const outDir = path.join("public", "games", "liturgical-vestments");
 
-const OUT_W = 960;
-const OUT_H = 1920;
+/** Bottom strip often has color name labels (RED, PURPLE, …). */
+const BOTTOM_LABEL_RATIO = 0.14;
 
-/** [color, col, row] — 3 columns × 2 rows (matches reference sheet). */
 const CELLS = [
   ["white", 0, 0],
   ["rose", 1, 0],
@@ -37,6 +33,7 @@ async function main() {
   const rows = 2;
   const cellW = Math.floor(width / cols);
   const cellH = Math.floor(height / rows);
+  const extractH = Math.floor(cellH * (1 - BOTTOM_LABEL_RATIO));
 
   for (const [color, col, row] of CELLS) {
     const left = col * cellW;
@@ -44,11 +41,7 @@ async function main() {
     const outPath = path.join(outDir, `character-${color}.png`);
     await img
       .clone()
-      .extract({ left, top, width: cellW, height: cellH })
-      .resize(OUT_W, OUT_H, {
-        fit: "contain",
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-      })
+      .extract({ left, top, width: cellW, height: extractH })
       .png()
       .toFile(outPath);
     console.log("wrote", outPath);
