@@ -200,6 +200,40 @@ body {
         opacity 0.35s ease;
 }
 
+
+.church-exit-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 142;
+    border: 1px solid rgba(150, 116, 86, 0.45);
+    border-radius: 8px;
+    background: rgba(255, 252, 248, 0.95);
+    color: #5d4037;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 8px 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(82, 58, 44, 0.12);
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition:
+        opacity 0.24s ease,
+        transform 0.24s ease;
+}
+
+.church-exit-btn.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.church-exit-btn:hover {
+    background: #fff8f0;
+    border-color: rgba(149, 109, 73, 0.55);
+}
+
 .mass-navigator {
     position: fixed;
     top: 10px;
@@ -301,6 +335,59 @@ body {
     font-weight: 700;
     color: rgba(93, 64, 55, 0.78);
 }
+
+.mass-nav-step-list {
+    margin: 0;
+    padding: 6px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-content: flex-start;
+}
+
+.mass-nav-step-btn {
+    width: auto;
+    min-width: 0;
+    min-height: 4.6rem;
+    text-align: center;
+    padding: 5px 3px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2px;
+}
+
+.mass-nav-part-words,
+.mass-nav-step-words {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2px;
+}
+
+.mass-nav-vertical-word {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 0.7rem;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.mass-nav-part-btn {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 3.4rem;
+}
+
+.mass-nav-part-btn small {
+    display: none;
+}
+
 
 .mass-step-list {
     margin: 0;

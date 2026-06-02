@@ -253,6 +253,88 @@ const MASS_FLOW_STEPS = [
     },
 ];
 
+
+function stripLeadingPartNumber(label) {
+    return String(label || "").replace(/^\d+\.\s*/, "").trim();
+}
+
+function buildVerticalWordsHtml(text) {
+    const words = stripLeadingPartNumber(text).split(/\s+/).filter(Boolean);
+    return words
+        .map((word) => `<span class="mass-nav-vertical-word">${word}</span>`)
+        .join("");
+}
+
+function setChurchExitVisible(isVisible) {
+    const btn = document.getElementById("church-exit-btn");
+    if (!btn) {
+        return;
+    }
+    btn.hidden = !isVisible;
+    btn.classList.toggle("is-active", isVisible);
+}
+
+function showEntryScreenFromInterior() {
+    const entryScreen = document.getElementById("entry-screen");
+    const flash = document.getElementById("entry-flash");
+    const threeContainer = document.getElementById("three-container");
+
+    hideHotspotModal();
+    setChurchExitVisible(false);
+    setChurchExitVisible(false);
+    setLiturgyHudVisible(false);
+    setMassNavigatorVisible(false);
+
+    if (APP_STATE.threeWorld && typeof APP_STATE.threeWorld.dispose === "function") {
+        APP_STATE.threeWorld.dispose();
+    }
+    APP_STATE.threeWorld = null;
+
+    if (threeContainer) {
+        threeContainer.classList.remove("is-active");
+        threeContainer.setAttribute("aria-hidden", "true");
+    }
+
+    document.querySelectorAll(".character").forEach((el) => {
+        el.style.pointerEvents = "";
+        el.classList.remove("is-entering");
+        el.style.opacity = "1";
+        const image = el.querySelector("img");
+        const role = el.dataset.character;
+        if (image && role && CHARACTER_CONFIG[role]) {
+            image.src = CHARACTER_CONFIG[role].frontImage;
+        }
+    });
+
+    if (flash) {
+        flash.classList.remove("is-active");
+        flash.removeAttribute("style");
+    }
+
+    if (entryScreen) {
+        entryScreen.classList.remove("is-hidden", "is-entering-zoom");
+        entryScreen.style.display = "flex";
+    }
+
+    APP_STATE.isTransitioning = false;
+    APP_STATE.selectedCharacter = null;
+    APP_STATE.greetedCharacter = null;
+    showEntryActions(false);
+    highlightGreetedCharacter(null);
+    setDialogue(DEFAULT_ENTRY_DIALOGUE);
+    setLiturgySubtitle("Mass guidance will appear here.");
+    setMassFlowStepState(-1, false);
+    setMassFlowStatus("");
+}
+
+function exitChurchInterior() {
+    if (APP_STATE.isTransitioning) {
+        return;
+    }
+    showEntryScreenFromInterior();
+}
+
+
 function buildMassFlowNavigation() {
     const groupsContainer = document.getElementById("mass-nav-groups");
     if (!groupsContainer || groupsContainer.dataset.built === "true") {
@@ -282,7 +364,8 @@ function buildMassFlowNavigation() {
         headerButton.type = "button";
         headerButton.className = "mass-nav-part-btn";
         headerButton.dataset.stepIndex = String(firstIndex);
-        headerButton.innerHTML = `<span>${group.part}</span><small>${group.partEn}</small>`;
+        headerButton.setAttribute("aria-label", group.partEn);
+        headerButton.innerHTML = `<span class="mass-nav-part-words">${buildVerticalWordsHtml(group.partEn)}</span>`;
         section.appendChild(headerButton);
 
         const list = document.createElement("div");
@@ -293,7 +376,8 @@ function buildMassFlowNavigation() {
             button.type = "button";
             button.className = "mass-nav-step-btn";
             button.dataset.stepIndex = String(stepIndex);
-            button.innerHTML = `<span class="mass-nav-step-order">${stepIndex + 1}</span><span class="mass-nav-step-title">${step.title}</span>`;
+            button.setAttribute("aria-label", step.title);
+            button.innerHTML = `<span class="mass-nav-step-words">${buildVerticalWordsHtml(step.title)}</span>`;
             list.appendChild(button);
         });
         section.appendChild(list);
@@ -435,6 +519,11 @@ function bindHudControls() {
                 updateMassToggleButton();
             }
         });
+    }
+    const exitBtn = document.getElementById("church-exit-btn");
+    if (exitBtn && exitBtn.dataset.bound !== "true") {
+        exitBtn.dataset.bound = "true";
+        exitBtn.addEventListener("click", exitChurchInterior);
     }
     bindHotspotModal();
     APP_STATE.hudBound = true;
@@ -1659,7 +1748,7 @@ function createVoxelChurch(container) {
 
     void loadChurchDecorations();
 
-    renderer.domElement.addEventListener("pointerdown", (event) => {
+    function onPointerDown(event) {
         const bounds = renderer.domElement.getBoundingClientRect();
         pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
         pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
@@ -1680,7 +1769,28 @@ function createVoxelChurch(container) {
 
         triggerJump(hit.object);
         spawnSparkles(hit.point, hit.object === altarCloth ? altarCloth.material.color.getHex() : 0xffe596);
-    });
+    }
+
+    renderer.domElement.addEventListener("pointerdown", onPointerDown);
+
+    let animationFrameId = 0;
+    let disposed = false;
+
+    function disposeThreeWorld() {
+        if (disposed) {
+            return;
+        }
+        disposed = true;
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+        }
+        window.removeEventListener("keydown", onKeyDown);
+        window.removeEventListener("keyup", onKeyUp);
+        window.removeEventListener("resize", onResize);
+        renderer.domElement.removeEventListener("pointerdown", onPointerDown);
+        renderer.dispose();
+        container.innerHTML = "";
+    }
 
     const cameraOffset = new THREE.Vector3(0, 4.6, 9.2);
     const cameraLookOffset = new THREE.Vector3(0, 1.4, -4.1);
@@ -1760,6 +1870,9 @@ function createVoxelChurch(container) {
     }
 
     function animate() {
+        if (disposed) {
+            return;
+        }
         const dt = Math.min(clock.getDelta(), 0.05);
 
         updateMassSequence(dt);
@@ -1864,7 +1977,7 @@ function createVoxelChurch(container) {
         camera.lookAt(cameraLookTarget);
 
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
     }
 
     animate();
@@ -1897,6 +2010,7 @@ function createVoxelChurch(container) {
         getCurrentGesture: () => actionState.currentGesture,
         isMassActive: () => actionState.massActive,
         jumpToMassStep,
+        dispose: disposeThreeWorld,
     };
 }
 
@@ -1969,6 +2083,7 @@ async function activateThreeScene(role) {
     bindHudControls();
     buildMassFlowNavigation();
     bindMassNavigator();
+    setChurchExitVisible(true);
     setLiturgyHudVisible(true);
     setMassNavigatorVisible(true);
 
