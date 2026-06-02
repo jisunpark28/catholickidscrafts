@@ -741,23 +741,23 @@ function createVoxelChurch(container) {
     ceiling.position.set(0, 12.1, 0);
     root.add(backWall, leftWall, rightWall, ceiling);
 
-    const interiorTextureLoader = new THREE.TextureLoader();
-    const churchInsideTexture = interiorTextureLoader.load("assets/church_inside.png");
-    if ("colorSpace" in churchInsideTexture) {
-        churchInsideTexture.colorSpace = THREE.SRGBColorSpace;
-    }
-    churchInsideTexture.minFilter = THREE.LinearMipmapLinearFilter;
-    churchInsideTexture.magFilter = THREE.LinearFilter;
-    const churchInsidePlane = new THREE.Mesh(
-        new THREE.PlaneGeometry(33.6, 10.6),
-        new THREE.MeshBasicMaterial({
-            map: churchInsideTexture,
-            toneMapped: false,
-        }),
-    );
-    churchInsidePlane.position.set(0, 6.05, -17.02);
-    root.add(churchInsidePlane);
-    backWall.visible = false;
+    // Sanctuary back wall: plain wall with crucifix only (no flat paintings).
+    backWall.visible = true;
+
+    const sanctuaryCrossGroup = new THREE.Group();
+    sanctuaryCrossGroup.position.set(0, 6.35, -17.08);
+    const sanctuaryCrossPost = new THREE.Mesh(new THREE.BoxGeometry(0.5, 4.8, 0.42), materials.darkWood);
+    sanctuaryCrossPost.castShadow = true;
+    sanctuaryCrossGroup.add(sanctuaryCrossPost);
+    const sanctuaryCrossBeam = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.65, 0.42), materials.darkWood);
+    sanctuaryCrossBeam.position.set(0, 1.95, 0);
+    sanctuaryCrossBeam.castShadow = true;
+    sanctuaryCrossGroup.add(sanctuaryCrossBeam);
+    const sanctuaryCorpus = new THREE.Mesh(new THREE.BoxGeometry(0.55, 1.85, 0.28), materials.corpusSkin);
+    sanctuaryCorpus.position.set(0, 1.35, 0.22);
+    sanctuaryCorpus.castShadow = true;
+    sanctuaryCrossGroup.add(sanctuaryCorpus);
+    root.add(sanctuaryCrossGroup);
 
     const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(12, 0.8, 7), materials.wood);
     sanctuaryStep.position.set(0, 0.4, -12.4);
@@ -853,25 +853,52 @@ function createVoxelChurch(container) {
     flameR.position.set(2.8, 4.0, 0.7);
     altarGroup.add(flameR);
 
-    function addWindowSet(x, y, z, rotationY) {
-        const frame = new THREE.Mesh(new THREE.BoxGeometry(0.9, 2.8, 2.2), materials.darkWood);
-        frame.position.set(x, y, z);
-        frame.rotation.y = rotationY;
-        const glassTop = new THREE.Mesh(new THREE.BoxGeometry(0.25, 2.3, 1.7), materials.stainedGlassBlue);
-        glassTop.position.set(x, y + 0.15, z);
-        glassTop.rotation.y = rotationY;
-        const glassAccent = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.4, 1.7), materials.stainedGlassGold);
-        glassAccent.position.set(x, y - 0.8, z);
-        glassAccent.rotation.y = rotationY;
-        root.add(frame, glassTop, glassAccent);
+    const WALL_FRAME_Z = [-12.4, -9.0, -5.6, -2.2, 1.2, 4.6, 8.0];
+    const WALL_FRAME_Y = 4.85;
+    const WALL_FRAME_OUTER_W = 1.42;
+    const WALL_FRAME_OUTER_H = 1.88;
+    const WALL_FRAME_INNER_W = 1.12;
+    const WALL_FRAME_INNER_H = 1.48;
+    const wallPictureSlots = [];
+
+    function addWallPictureFrame(side, rowIndex) {
+        const z = WALL_FRAME_Z[rowIndex];
+        const x = side === "left" ? -15.9 : 15.9;
+        const rotationY = side === "left" ? Math.PI / 2 : -Math.PI / 2;
+        const insetX = side === "left" ? 0.34 : -0.34;
+
+        const outer = new THREE.Mesh(
+            new THREE.BoxGeometry(WALL_FRAME_OUTER_W, WALL_FRAME_OUTER_H, 0.16),
+            materials.darkWood,
+        );
+        outer.position.set(x, WALL_FRAME_Y, z);
+        outer.rotation.y = rotationY;
+        outer.castShadow = true;
+        root.add(outer);
+
+        const mat = new THREE.MeshLambertMaterial({ color: 0xf7f0df });
+        const matte = new THREE.Mesh(
+            new THREE.PlaneGeometry(WALL_FRAME_INNER_W, WALL_FRAME_INNER_H),
+            mat,
+        );
+        matte.position.set(x + insetX, WALL_FRAME_Y, z);
+        matte.rotation.y = rotationY;
+        root.add(matte);
+
+        wallPictureSlots.push({
+            x: x + insetX,
+            y: WALL_FRAME_Y,
+            z,
+            rotationY,
+            width: WALL_FRAME_INNER_W,
+            height: WALL_FRAME_INNER_H,
+        });
     }
 
-    addWindowSet(-16.0, 5.1, -9.8, 0);
-    addWindowSet(-16.0, 5.1, -2.2, 0);
-    addWindowSet(-16.0, 5.1, 5.4, 0);
-    addWindowSet(16.0, 5.1, -9.8, 0);
-    addWindowSet(16.0, 5.1, -2.2, 0);
-    addWindowSet(16.0, 5.1, 5.4, 0);
+    for (let row = 0; row < 7; row += 1) {
+        addWallPictureFrame("left", row);
+        addWallPictureFrame("right", row);
+    }
 
     const collisionObstacles = [];
     const playerCollisionRadius = 0.56;
@@ -934,10 +961,15 @@ function createVoxelChurch(container) {
         side: THREE.DoubleSide,
         depthWrite: false,
     });
-    const playerSprite = new THREE.Mesh(new THREE.PlaneGeometry(2.85, 3.35), playerSpriteMaterial);
-    const playerSpriteBaseScale = { x: 2.85, y: 3.35 };
+    const playerSpriteHeight = 3.95;
+    const playerSpriteWidth = playerSpriteHeight * 0.773;
+    const playerSprite = new THREE.Mesh(
+        new THREE.PlaneGeometry(playerSpriteWidth, playerSpriteHeight),
+        playerSpriteMaterial,
+    );
+    const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
     playerSprite.scale.set(playerSpriteBaseScale.x, playerSpriteBaseScale.y, 1);
-    playerSprite.position.set(0, 1.62, 0.14);
+    playerSprite.position.set(0, playerSpriteHeight * 0.5 + 0.08, 0.14);
     playerSprite.renderOrder = 3;
     playerRig.add(playerSprite);
 
@@ -1585,7 +1617,12 @@ function createVoxelChurch(container) {
             const items = await response.json();
             if (!Array.isArray(items)) return;
 
-            items.forEach((item) => {
+            items.forEach((item, listIndex) => {
+                const slotIndex = Number.isInteger(item.sortOrder) ? item.sortOrder : listIndex;
+                const slot = wallPictureSlots[slotIndex];
+                const width = slot?.width ?? item.width ?? 1.12;
+                const height = slot?.height ?? item.height ?? 1.48;
+
                 const tex = textureLoader.load(item.imageUrl);
                 if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
                 tex.magFilter = THREE.LinearFilter;
@@ -1598,12 +1635,14 @@ function createVoxelChurch(container) {
                     side: THREE.DoubleSide,
                     depthWrite: false,
                 });
-                const mesh = new THREE.Mesh(
-                    new THREE.PlaneGeometry(item.width || 1.4, item.height || 1.4),
-                    mat,
-                );
-                mesh.position.set(item.posX || 0, item.posY || 2.2, item.posZ || -6);
-                mesh.rotation.y = item.rotationY || 0;
+                const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
+                if (slot) {
+                    mesh.position.set(slot.x, slot.y, slot.z);
+                    mesh.rotation.y = slot.rotationY;
+                } else {
+                    mesh.position.set(item.posX || 0, item.posY || 2.2, item.posZ || -6);
+                    mesh.rotation.y = item.rotationY || 0;
+                }
                 mesh.renderOrder = 2;
                 mesh.userData.hotspot = {
                     title: item.title,

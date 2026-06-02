@@ -110,11 +110,14 @@ export function ChurchDecorationEditor({ initial }: Props) {
       )}
 
       <p className="text-sm text-[var(--color-muted)]">
-        Place images inside the 3D church. Use{" "}
+        Images snap to wall frames in Tiny Priest (7 left, 7 right). Set{" "}
+        <strong className="font-medium text-[var(--color-ink)]">sort order</strong> 0–6 for the left
+        wall (front to back) and 7–13 for the right. The sanctuary back wall stays plain with only the
+        crucifix. Test in{" "}
         <a href="/play/church" target="_blank" rel="noopener noreferrer" className="text-[var(--color-link)]">
           Play → Church
-        </a>{" "}
-        to test positions. Negative Z is toward the altar; Y is height.
+        </a>
+        . Custom X/Y/Z is only used when sort order is outside 0–13.
       </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
