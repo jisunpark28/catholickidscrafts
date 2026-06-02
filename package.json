@@ -14,6 +14,7 @@
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "db:seed-typing": "tsx prisma/seed-typing-words.ts",
     "db:seed-trinity-resource": "tsx prisma/seed-holy-trinity-resource.ts"
+    "vestments:split": "node scripts/split-vestment-spritesheet.mjs",
   },
   "pnpm": {
     "onlyBuiltDependencies": [
