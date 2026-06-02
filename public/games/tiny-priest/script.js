@@ -267,8 +267,8 @@ function setChurchExitVisible(isVisible) {
     if (!btn) {
         return;
     }
-    btn.hidden = !isVisible;
     btn.classList.toggle("is-active", isVisible);
+    btn.setAttribute("aria-hidden", isVisible ? "false" : "true");
 }
 
 function showEntryScreenFromInterior() {
@@ -503,6 +503,22 @@ function setHudButtonsState(_currentGesture, _massActive) {
     updateMassToggleButton();
 }
 
+
+function bindChurchExitButton() {
+    const exitBtn = document.getElementById("church-exit-btn");
+    if (!exitBtn) {
+        return;
+    }
+    if (exitBtn.dataset.bound !== "true") {
+        exitBtn.dataset.bound = "true";
+        exitBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            exitChurchInterior();
+        });
+    }
+}
+
 function bindHudControls() {
     if (APP_STATE.hudBound) {
         return;
@@ -516,11 +532,7 @@ function bindHudControls() {
             }
         });
     }
-    const exitBtn = document.getElementById("church-exit-btn");
-    if (exitBtn && exitBtn.dataset.bound !== "true") {
-        exitBtn.dataset.bound = "true";
-        exitBtn.addEventListener("click", exitChurchInterior);
-    }
+    bindChurchExitButton();
     bindHotspotModal();
     APP_STATE.hudBound = true;
 }
@@ -1046,7 +1058,7 @@ function createVoxelChurch(container) {
         side: THREE.DoubleSide,
         depthWrite: false,
     });
-    const playerSpriteHeight = 4.35;
+    const playerSpriteHeight = 5.1;
     const playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSprite = new THREE.Mesh(
         new THREE.PlaneGeometry(playerSpriteWidth, playerSpriteHeight),
@@ -1350,9 +1362,8 @@ function createVoxelChurch(container) {
         setHudButtonsState(name, actionState.massActive);
     }
 
-    function shouldShowOverlayHands(gesture) {
-        // Keep sprite's own hands for calm poses to avoid doubled-hand look.
-        return ["point", "hold", "lift", "ourFather", "signCross"].includes(gesture);
+    function shouldShowOverlayHands() {
+        return false;
     }
 
     function setOverlayHandsVisible(isVisible) {
@@ -1372,14 +1383,14 @@ function createVoxelChurch(container) {
             actionState.signCrossActive = true;
             actionState.signCrossTime = 0;
             setGesturePose("pray");
-            setOverlayHandsVisible(true);
+            setOverlayHandsVisible(false);
             narrateGesture("signCross", prefix);
             setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
             return;
         }
         actionState.signCrossActive = false;
         setGesturePose(name);
-        setOverlayHandsVisible(shouldShowOverlayHands(name));
+        setOverlayHandsVisible(false);
         narrateGesture(name, prefix);
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
@@ -2077,6 +2088,7 @@ async function activateThreeScene(role) {
     threeContainer.classList.add("is-active");
     threeContainer.setAttribute("aria-hidden", "false");
     bindHudControls();
+    bindChurchExitButton();
     buildMassFlowNavigation();
     bindMassNavigator();
     setChurchExitVisible(true);
@@ -2097,6 +2109,8 @@ async function activateThreeScene(role) {
     } catch (error) {
         console.error("Failed to initialize 3D church scene:", error);
         resetEntryAfterFailure("The church interior could not load. Please refresh and try again.");
+    } finally {
+        APP_STATE.isTransitioning = false;
     }
 }
 

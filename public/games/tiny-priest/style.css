@@ -98,7 +98,7 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    gap: clamp(8px, 1.6vw, 16px);
+    gap: clamp(4px, 0.8vw, 8px);
 }
 
 .character {
@@ -126,11 +126,11 @@ body {
 }
 
 .character-priest {
-    --x-shift: -30%;
+    --x-shift: -15%;
 }
 
 .character-nun {
-    --x-shift: 0%;
+    --x-shift: 15%;
 }
 
 .character:hover {
@@ -205,7 +205,7 @@ body {
     position: fixed;
     top: 10px;
     left: 10px;
-    z-index: 142;
+    z-index: 250;
     border: 1px solid rgba(150, 116, 86, 0.45);
     border-radius: 8px;
     background: rgba(255, 252, 248, 0.95);
@@ -227,6 +227,10 @@ body {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+}
+
+.church-exit-btn:not(.is-active) {
+    visibility: hidden;
 }
 
 .church-exit-btn:hover {
