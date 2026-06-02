@@ -2,14 +2,18 @@
     priest: {
         frontImage: "assets/priest_front.png",
         backImage: "assets/priest_back.png",
-        welcomeText: "Father: Peace be with you! Let's walk through the center door.",
+        greetingText: "안녕하세요. 평화가 함께 하시길 바랍니다. 저는 이 성당의 신부입니다.",
+        enterPromptText: "성당 안으로 들어가 볼까요?",
     },
     nun: {
         frontImage: "assets/nun_front.png",
         backImage: "assets/nun_back.png",
-        welcomeText: "Sister: Let us pray together. We'll enter through the center door now.",
+        greetingText: "안녕하세요. 함께 기도해요. 저는 이 성당의 수녀입니다.",
+        enterPromptText: "성당 안으로 들어가 볼까요?",
     },
 };
+
+const DEFAULT_ENTRY_DIALOGUE = "신부님이나 수녀님을 눌러 인사해 보세요.";
 
 
 function showHotspotModal(title, description) {
@@ -56,6 +60,7 @@ function updateMassToggleButton() {
 const APP_STATE = {
     isTransitioning: false,
     selectedCharacter: null,
+    greetedCharacter: null,
     threeWorld: null,
     threeLoadPromise: null,
     hudBound: false,
@@ -495,6 +500,36 @@ function lockCharacterSelection() {
     document.querySelectorAll(".character").forEach((el) => {
         el.style.pointerEvents = "none";
     });
+}
+
+function unlockCharacterSelection() {
+    document.querySelectorAll(".character").forEach((el) => {
+        el.style.pointerEvents = "";
+    });
+}
+
+function showEntryActions(visible) {
+    const actions = document.getElementById("entry-actions");
+    if (!actions) {
+        return;
+    }
+    actions.hidden = !visible;
+}
+
+function highlightGreetedCharacter(character) {
+    document.querySelectorAll(".character").forEach((el) => {
+        const isMatch = Boolean(character) && el.dataset.character === character;
+        el.classList.toggle("is-greeted", isMatch);
+        el.setAttribute("aria-pressed", isMatch ? "true" : "false");
+    });
+}
+
+function resetEntryPromptUi() {
+    APP_STATE.greetedCharacter = null;
+    showEntryActions(false);
+    highlightGreetedCharacter(null);
+    unlockCharacterSelection();
+    setDialogue(DEFAULT_ENTRY_DIALOGUE);
 }
 
 function switchToBackSprite(character, characterEl) {
@@ -1535,6 +1570,9 @@ function resetEntryAfterFailure(message) {
     entryScreen.classList.remove("is-hidden", "is-entering-zoom");
     entryScreen.style.display = "flex";
     APP_STATE.isTransitioning = false;
+    APP_STATE.greetedCharacter = null;
+    showEntryActions(false);
+    highlightGreetedCharacter(null);
     setDialogue(message);
     setLiturgySubtitle("🎵 Mass guidance subtitles will appear here.");
 }
@@ -1581,31 +1619,85 @@ async function activateThreeScene(role) {
 }
 
 /**
- * Handles character interaction and transitions to the 3D church scene.
+ * First tap: priest or nun greets the visitor and asks to enter.
  * @param {string} character
  */
-async function handleInteract(character) {
+function handleCharacterGreeting(character) {
     if (APP_STATE.isTransitioning || !CHARACTER_CONFIG[character]) {
+        return;
+    }
+
+    const config = CHARACTER_CONFIG[character];
+    APP_STATE.greetedCharacter = character;
+    highlightGreetedCharacter(character);
+    setDialogue(`${config.greetingText}\n\n${config.enterPromptText}`);
+    showEntryActions(true);
+}
+
+function declineEntry() {
+    if (APP_STATE.isTransitioning) {
+        return;
+    }
+    resetEntryPromptUi();
+}
+
+/**
+ * After the visitor agrees, walk in and open the 3D church interior.
+ */
+async function confirmEntryToChurch() {
+    const character = APP_STATE.greetedCharacter;
+    if (APP_STATE.isTransitioning || !character || !CHARACTER_CONFIG[character]) {
         return;
     }
 
     APP_STATE.isTransitioning = true;
     APP_STATE.selectedCharacter = character;
+    showEntryActions(false);
 
     const characterEl = getCharacterElement(character);
     if (!characterEl) {
         APP_STATE.isTransitioning = false;
+        resetEntryPromptUi();
         return;
     }
 
     lockCharacterSelection();
     switchToBackSprite(character, characterEl);
-    setDialogue(CHARACTER_CONFIG[character].welcomeText);
+    setDialogue("성당 안으로 들어갑니다…");
 
     await animateCharacterEntry(characterEl);
     await animateDoorZoomTransition();
     await activateThreeScene(character);
 }
 
-window.handleInteract = handleInteract;
+function bindEntryFlow() {
+    document.querySelectorAll("[data-character]").forEach((button) => {
+        if (button.dataset.entryBound === "true") {
+            return;
+        }
+        button.dataset.entryBound = "true";
+        button.addEventListener("click", () => {
+            handleCharacterGreeting(button.dataset.character);
+        });
+    });
+
+    const confirmBtn = document.getElementById("entry-confirm-btn");
+    const declineBtn = document.getElementById("entry-decline-btn");
+    if (confirmBtn && confirmBtn.dataset.entryBound !== "true") {
+        confirmBtn.dataset.entryBound = "true";
+        confirmBtn.addEventListener("click", () => {
+            void confirmEntryToChurch();
+        });
+    }
+    if (declineBtn && declineBtn.dataset.entryBound !== "true") {
+        declineBtn.dataset.entryBound = "true";
+        declineBtn.addEventListener("click", declineEntry);
+    }
+}
+
+bindEntryFlow();
+
+window.handleCharacterGreeting = handleCharacterGreeting;
+window.confirmEntryToChurch = confirmEntryToChurch;
+window.declineEntry = declineEntry;
 window.getLiturgicalSeason = getLiturgicalSeason;
