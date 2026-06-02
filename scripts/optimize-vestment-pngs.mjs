@@ -1,15 +1,14 @@
 /**
- * Ensure vestment PNGs have transparent backgrounds and 2× display resolution (960×1920).
+ * Transparent BG, trim empty margins, keep headroom, scale for web.
+ * Skips character-base.png (unused — default is white vestments).
  */
 import sharp from "sharp";
-import { readdir } from "node:fs/promises";
+import { readdir, unlink } from "node:fs/promises";
 import path from "node:path";
 
 const outDir = path.join("public", "games", "liturgical-vestments");
-const OUT_W = 960;
-const OUT_H = 1920;
+const MAX_HEIGHT = 920;
 
-/** Treat near-white / cream pixels as transparent. */
 function flattenAlpha(input) {
   return sharp(input)
     .ensureAlpha()
@@ -31,21 +30,43 @@ function flattenAlpha(input) {
 
 async function processFile(file) {
   if (!file.startsWith("character-") || !file.endsWith(".png")) return;
+  if (file === "character-base.png") return;
+
   const filePath = path.join(outDir, file);
   const pipeline = await flattenAlpha(filePath);
+
   await pipeline
-    .resize(OUT_W, OUT_H, {
-      fit: "contain",
+    .trim({ threshold: 12 })
+    .extend({
+      top: 28,
+      bottom: 12,
+      left: 12,
+      right: 12,
       background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .resize({
+      height: MAX_HEIGHT,
+      fit: "inside",
+      withoutEnlargement: false,
     })
     .png({ compressionLevel: 9 })
     .toFile(filePath + ".tmp");
+
   const fs = await import("node:fs/promises");
   await fs.rename(filePath + ".tmp", filePath);
-  console.log("optimized", file);
+  const meta = await sharp(filePath).metadata();
+  console.log("optimized", file, `${meta.width}x${meta.height}`);
 }
 
 async function main() {
+  const basePath = path.join(outDir, "character-base.png");
+  try {
+    await unlink(basePath);
+    console.log("removed character-base.png");
+  } catch {
+    /* already gone */
+  }
+
   const files = await readdir(outDir);
   for (const f of files) await processFile(f);
 }

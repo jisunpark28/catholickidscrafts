@@ -101,17 +101,12 @@ export function LiturgicalVestmentsGame() {
           )}
 
           <p className="mt-4 text-sm font-semibold text-[var(--color-ink)]">
-            Father starts in his white alb. Pick the liturgical color and dress him in the chasuble:
+            Pick the liturgical color for this Sunday and dress Father in the chasuble:
           </p>
 
-          <div className="mx-auto mt-4 w-full max-w-[600px] bg-transparent p-2">
+          <div className="mt-2 flex justify-center">
             <PriestVestmentFigure chasubleColor={selected} />
           </div>
-          {!selected && (
-            <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-              Tap a color to put on the chasuble.
-            </p>
-          )}
         </div>
 
         <aside className="space-y-4">

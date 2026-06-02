@@ -2,37 +2,35 @@
 
 import {
   VESTMENT_CHARACTER_IMAGES,
-  VESTMENT_FIGURE_HEIGHT,
+  VESTMENT_DEFAULT_COLOR,
 } from "@/lib/liturgical-vestments-assets";
 import type { VestmentColor } from "@/lib/liturgical-vestments-game";
 import Image from "next/image";
 
 type Props = {
-  /** Liturgical chasuble color; null = white alb only (no chasuble yet). */
+  /** Chasuble color; null shows the default white figure. */
   chasubleColor: VestmentColor | null;
 };
 
 export function PriestVestmentFigure({ chasubleColor }: Props) {
-  const src = chasubleColor
-    ? VESTMENT_CHARACTER_IMAGES.dressed(chasubleColor)
-    : VESTMENT_CHARACTER_IMAGES.baseAlb;
+  const displayColor = chasubleColor ?? VESTMENT_DEFAULT_COLOR;
+  const src = VESTMENT_CHARACTER_IMAGES.dressed(displayColor);
 
-  const alt = chasubleColor
-    ? `Priest wearing ${chasubleColor} liturgical vestments`
-    : "Priest in white alb";
+  const alt =
+    displayColor === VESTMENT_DEFAULT_COLOR && !chasubleColor
+      ? "Priest in white alb"
+      : `Priest wearing ${displayColor} liturgical vestments`;
 
   return (
-    <div
-      className="relative mx-auto w-full max-w-[600px]"
-      style={{ aspectRatio: "1 / 2", maxHeight: VESTMENT_FIGURE_HEIGHT }}
-    >
+    <div className="flex justify-center overflow-visible">
       <Image
         src={src}
         alt={alt}
-        fill
+        width={480}
+        height={920}
         unoptimized
-        className="object-contain object-bottom"
-        sizes="600px"
+        className="h-auto max-h-[min(72vh,580px)] w-auto max-w-full object-contain object-top"
+        sizes="(max-width: 640px) 90vw, 420px"
         priority
         draggable={false}
       />
