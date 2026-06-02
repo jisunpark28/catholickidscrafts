@@ -1,13 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { PriestVestmentFigure } from "@/components/liturgical-vestments/PriestVestmentFigure";
 import {
   shuffleRounds,
   VESTMENT_COLORS,
   type VestmentColor,
 } from "@/lib/liturgical-vestments-game";
-
-const PRIEST_IMG = "/games/tiny-priest/assets/priest_front.png";
 
 type Feedback = "idle" | "correct" | "wrong";
 
@@ -20,8 +19,6 @@ export function LiturgicalVestmentsGame() {
   const [done, setDone] = useState(false);
 
   const round = rounds[index];
-  const colorHex = selected ? VESTMENT_COLORS[selected].hex : "transparent";
-  const colorStroke = selected ? VESTMENT_COLORS[selected].stroke : "#333";
 
   const progress = useMemo(
     () => ({ current: Math.min(index + 1, rounds.length), total: rounds.length }),
@@ -95,39 +92,18 @@ export function LiturgicalVestmentsGame() {
           )}
 
           <p className="mt-4 text-sm font-semibold text-[var(--color-ink)]">
-            Tap a liturgical color, then dress Father:
+            Father starts in his black cassock. Pick the liturgical color and dress him in alb
+            and chasuble:
           </p>
 
-          <div className="relative mx-auto mt-4 w-full max-w-[300px]">
-            <img
-              src={PRIEST_IMG}
-              alt="Priest ready for vestments"
-              className="block w-full select-none"
-              draggable={false}
-            />
-            <svg
-              viewBox="0 0 100 200"
-              className="pointer-events-none absolute inset-0 h-full w-full"
-              aria-hidden
-            >
-              {/* Stole */}
-              <path
-                d="M46 38 L54 38 L58 52 L52 58 L50 95 L48 58 L42 52 Z"
-                fill={selected ? colorHex : "none"}
-                fillOpacity={selected ? 0.92 : 0}
-                stroke={colorStroke}
-                strokeWidth={selected ? 0.6 : 0}
-              />
-              {/* Chasuble */}
-              <path
-                d="M22 72 C35 62 65 62 78 72 L86 138 C65 152 35 152 14 138 Z"
-                fill={selected ? colorHex : "none"}
-                fillOpacity={selected ? 0.88 : 0}
-                stroke={colorStroke}
-                strokeWidth={selected ? 0.8 : 0}
-              />
-            </svg>
+          <div className="mx-auto mt-4 w-full max-w-[280px] rounded border border-[var(--color-border)] bg-[#f7f4ef] p-3">
+            <PriestVestmentFigure chasubleColor={selected} />
           </div>
+          {!selected && (
+            <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
+              Tap a color to put on the alb and chasuble.
+            </p>
+          )}
         </div>
 
         <aside className="space-y-4">
@@ -146,7 +122,9 @@ export function LiturgicalVestmentsGame() {
                       setFeedback("idle");
                     }}
                     className={`flex items-center gap-2 border px-3 py-2 text-left text-sm font-semibold transition ${
-                      active ? "border-[var(--color-accent)] ring-1 ring-[var(--color-accent)]" : "border-[var(--color-border)]"
+                      active
+                        ? "border-[var(--color-accent)] ring-1 ring-[var(--color-accent)]"
+                        : "border-[var(--color-border)]"
                     }`}
                   >
                     <span
