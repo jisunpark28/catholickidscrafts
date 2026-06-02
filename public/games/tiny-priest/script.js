@@ -1,4 +1,4 @@
-const TINY_PRIEST_BUILD = "20260610";
+const TINY_PRIEST_BUILD = "20260611";
 
 const CHARACTER_CONFIG = {
     priest: {
@@ -919,12 +919,6 @@ function createVoxelChurch(container) {
     corpusRightLeg.castShadow = true;
     corpusRightLeg.name = "corpus-right-leg";
     corpusGroup.add(corpusRightLeg);
-
-    const corpusCloth = new THREE.Mesh(new THREE.BoxGeometry(0.94, 0.5, 0.32), materials.corpusCloth);
-    corpusCloth.position.set(0, 5.52, 0.26);
-    corpusCloth.castShadow = true;
-    corpusCloth.name = "corpus-cloth";
-    corpusGroup.add(corpusCloth);
 
     const corpusLight = new THREE.PointLight(0xffe3bf, 0.62, 11, 2);
     corpusLight.position.set(0, 6.8, 1.35);
