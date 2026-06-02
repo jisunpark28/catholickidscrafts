@@ -1,4 +1,4 @@
-const TINY_PRIEST_BUILD = "20260609";
+const TINY_PRIEST_BUILD = "20260610";
 
 const CHARACTER_CONFIG = {
     priest: {
@@ -852,10 +852,6 @@ function createVoxelChurch(container) {
     sanctuaryCrossBeam.position.set(0, 1.95, 0);
     sanctuaryCrossBeam.castShadow = true;
     sanctuaryCrossGroup.add(sanctuaryCrossBeam);
-    const sanctuaryCorpus = new THREE.Mesh(new THREE.BoxGeometry(0.55, 1.85, 0.28), materials.corpusSkin);
-    sanctuaryCorpus.position.set(0, 1.35, 0.22);
-    sanctuaryCorpus.castShadow = true;
-    sanctuaryCrossGroup.add(sanctuaryCorpus);
     root.add(sanctuaryCrossGroup);
 
     const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(12, 0.8, 7), materials.wood);
