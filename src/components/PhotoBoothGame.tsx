@@ -36,11 +36,20 @@ type PlacedSticker = {
   size: number;
 };
 
+type StripSlotEdit = {
+  bg: BgId;
+  stickers: PlacedSticker[];
+};
+
 const CANVAS_W = 360;
 const CANVAS_H = 480;
 const STRIP_GAP = 10;
 const STRIP_CELL_W = (CANVAS_W - STRIP_GAP) / 2;
 const STRIP_CELL_H = (CANVAS_H - STRIP_GAP) / 2;
+
+function createDefaultStripEdits(): StripSlotEdit[] {
+  return Array.from({ length: 4 }, () => ({ bg: "cream", stickers: [] }));
+}
 
 function stripCellRect(index: number) {
   const col = index % 2;
@@ -51,6 +60,14 @@ function stripCellRect(index: number) {
     w: STRIP_CELL_W,
     h: STRIP_CELL_H,
   };
+}
+
+function stripCellIndexAt(x: number, y: number): number | null {
+  for (let i = 0; i < 4; i++) {
+    const { x: cx, y: cy, w, h } = stripCellRect(i);
+    if (x >= cx && x < cx + w && y >= cy && y < cy + h) return i;
+  }
+  return null;
 }
 
 function fillBackground(ctx: CanvasRenderingContext2D, bgId: BgId, w: number, h: number) {
@@ -99,6 +116,15 @@ function drawCoverImage(
   ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
 }
 
+function drawStickers(ctx: CanvasRenderingContext2D, stickers: PlacedSticker[]) {
+  for (const s of stickers) {
+    ctx.font = `${s.size}px system-ui, emoji`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(s.char, s.x, s.y);
+  }
+}
+
 export function PhotoBoothGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -109,12 +135,15 @@ export function PhotoBoothGame() {
   const [bg, setBg] = useState<BgId>("cream");
   const [photo, setPhoto] = useState<string | null>(null);
   const [stripPhotos, setStripPhotos] = useState<(string | null)[]>([null, null, null, null]);
+  const [stripEdits, setStripEdits] = useState<StripSlotEdit[]>(createDefaultStripEdits);
+  const [selectedStripSlot, setSelectedStripSlot] = useState(0);
   const [stripIndex, setStripIndex] = useState(0);
   const [stickers, setStickers] = useState<PlacedSticker[]>([]);
   const [mode, setMode] = useState<"single" | "strip">("single");
   const [cameraOn, setCameraOn] = useState(false);
   const [cameraError, setCameraError] = useState("");
   const [dragId, setDragId] = useState<number | null>(null);
+  const [dragSlot, setDragSlot] = useState<number | null>(null);
   const [paintTick, setPaintTick] = useState(0);
   const stickerIdRef = useRef(0);
 
@@ -123,6 +152,7 @@ export function PhotoBoothGame() {
   const canDecorate =
     !cameraOn && ((mode === "single" && photo !== null) || (mode === "strip" && stripComplete));
   const singleCameraOnly = mode === "single" && cameraOn;
+  const stripDecorating = mode === "strip" && canDecorate;
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -165,6 +195,10 @@ export function PhotoBoothGame() {
     };
   }, [cameraOn, stripIndex, mode]);
 
+  useEffect(() => {
+    if (stripComplete) setSelectedStripSlot(0);
+  }, [stripComplete]);
+
   const loadImage = useCallback((src: string): Promise<HTMLImageElement> => {
     const cached = imagesRef.current.get(src);
     if (cached?.complete) return Promise.resolve(cached);
@@ -193,7 +227,8 @@ export function PhotoBoothGame() {
     if (mode === "strip") {
       for (let i = 0; i < 4; i++) {
         const { x, y, w, h } = stripCellRect(i);
-        fillBackground(ctx, bg, w, h);
+        const edit = stripEdits[i];
+        fillBackground(ctx, edit.bg, w, h);
         ctx.save();
         ctx.translate(x, y);
         const src = stripPhotos[i];
@@ -205,8 +240,14 @@ export function PhotoBoothGame() {
             /* skip */
           }
         }
+        drawStickers(ctx, edit.stickers);
         ctx.restore();
       }
+
+      const { x, y, w, h } = stripCellRect(selectedStripSlot);
+      ctx.strokeStyle = "#c45c26";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
     } else {
       fillBackground(ctx, bg, CANVAS_W, CANVAS_H);
       if (photo) {
@@ -217,15 +258,19 @@ export function PhotoBoothGame() {
           /* skip */
         }
       }
+      drawStickers(ctx, stickers);
     }
-
-    for (const s of stickers) {
-      ctx.font = `${s.size}px system-ui, emoji`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(s.char, s.x, s.y);
-    }
-  }, [bg, photo, stripPhotos, stickers, mode, loadImage, canDecorate]);
+  }, [
+    bg,
+    photo,
+    stripPhotos,
+    stripEdits,
+    stickers,
+    mode,
+    loadImage,
+    canDecorate,
+    selectedStripSlot,
+  ]);
 
   useEffect(() => {
     void paint();
@@ -304,16 +349,49 @@ export function PhotoBoothGame() {
 
   function addSticker(char: string) {
     stickerIdRef.current += 1;
-    setStickers((prev) => [
-      ...prev,
-      {
-        id: stickerIdRef.current,
-        char,
-        x: CANVAS_W / 2 + (Math.random() - 0.5) * 80,
-        y: CANVAS_H / 2 + (Math.random() - 0.5) * 80,
-        size: 36 + Math.floor(Math.random() * 12),
-      },
-    ]);
+    const sticker: PlacedSticker = {
+      id: stickerIdRef.current,
+      char,
+      x: 0,
+      y: 0,
+      size: 36 + Math.floor(Math.random() * 12),
+    };
+
+    if (mode === "strip") {
+      sticker.x = STRIP_CELL_W / 2 + (Math.random() - 0.5) * 60;
+      sticker.y = STRIP_CELL_H / 2 + (Math.random() - 0.5) * 60;
+      setStripEdits((prev) =>
+        prev.map((slot, i) =>
+          i === selectedStripSlot ? { ...slot, stickers: [...slot.stickers, sticker] } : slot,
+        ),
+      );
+    } else {
+      sticker.x = CANVAS_W / 2 + (Math.random() - 0.5) * 80;
+      sticker.y = CANVAS_H / 2 + (Math.random() - 0.5) * 80;
+      setStickers((prev) => [...prev, sticker]);
+    }
+    bumpPaint();
+  }
+
+  function setActiveBackground(nextBg: BgId) {
+    if (mode === "strip") {
+      setStripEdits((prev) =>
+        prev.map((slot, i) => (i === selectedStripSlot ? { ...slot, bg: nextBg } : slot)),
+      );
+    } else {
+      setBg(nextBg);
+    }
+    bumpPaint();
+  }
+
+  function clearActiveStickers() {
+    if (mode === "strip") {
+      setStripEdits((prev) =>
+        prev.map((slot, i) => (i === selectedStripSlot ? { ...slot, stickers: [] } : slot)),
+      );
+    } else {
+      setStickers([]);
+    }
     bumpPaint();
   }
 
@@ -329,6 +407,28 @@ export function PhotoBoothGame() {
 
   function onCanvasDown(e: React.PointerEvent<HTMLCanvasElement>) {
     const { x, y } = canvasPoint(e);
+
+    if (mode === "strip") {
+      const cell = stripCellIndexAt(x, y);
+      if (cell === null) return;
+      setSelectedStripSlot(cell);
+      const { x: cx, y: cy } = stripCellRect(cell);
+      const lx = x - cx;
+      const ly = y - cy;
+      const hit = [...stripEdits[cell].stickers].reverse().find((s) => {
+        const dx = lx - s.x;
+        const dy = ly - s.y;
+        return Math.hypot(dx, dy) < s.size * 0.6;
+      });
+      if (hit) {
+        setDragId(hit.id);
+        setDragSlot(cell);
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }
+      bumpPaint();
+      return;
+    }
+
     const hit = [...stickers].reverse().find((s) => {
       const dx = x - s.x;
       const dy = y - s.y;
@@ -343,11 +443,30 @@ export function PhotoBoothGame() {
   function onCanvasMove(e: React.PointerEvent<HTMLCanvasElement>) {
     if (dragId === null) return;
     const { x, y } = canvasPoint(e);
+
+    if (mode === "strip" && dragSlot !== null) {
+      const { x: cx, y: cy, w, h } = stripCellRect(dragSlot);
+      const lx = Math.min(Math.max(x - cx, 0), w);
+      const ly = Math.min(Math.max(y - cy, 0), h);
+      setStripEdits((prev) =>
+        prev.map((slot, i) =>
+          i === dragSlot
+            ? {
+                ...slot,
+                stickers: slot.stickers.map((s) => (s.id === dragId ? { ...s, x: lx, y: ly } : s)),
+              }
+            : slot,
+        ),
+      );
+      return;
+    }
+
     setStickers((prev) => prev.map((s) => (s.id === dragId ? { ...s, x, y } : s)));
   }
 
   function onCanvasUp() {
     setDragId(null);
+    setDragSlot(null);
     bumpPaint();
   }
 
@@ -363,14 +482,18 @@ export function PhotoBoothGame() {
   function resetAll() {
     setPhoto(null);
     setStripPhotos([null, null, null, null]);
+    setStripEdits(createDefaultStripEdits());
+    setSelectedStripSlot(0);
     setStripIndex(0);
     setStickers([]);
+    setBg("cream");
     stopCamera();
     bumpPaint();
   }
 
   const firstEmptySlot = stripPhotos.findIndex((p) => p === null);
   const activeSlot = firstEmptySlot === -1 ? 3 : firstEmptySlot;
+  const activeStripBg = stripEdits[selectedStripSlot]?.bg ?? "cream";
 
   return (
     <div className="border border-[var(--color-border)] bg-white">
@@ -430,15 +553,13 @@ export function PhotoBoothGame() {
               </button>
             )}
             {canDecorate && (
-              <>
-                <button
-                  type="button"
-                  onClick={download}
-                  className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold"
-                >
-                  Save image
-                </button>
-              </>
+              <button
+                type="button"
+                onClick={download}
+                className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold"
+              >
+                Save image
+              </button>
             )}
             <button type="button" onClick={resetAll} className="text-sm text-[var(--color-muted)]">
               Reset
@@ -561,7 +682,9 @@ export function PhotoBoothGame() {
                 onPointerLeave={onCanvasUp}
               />
               <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-                Choose a background and stickers, then drag stickers on your photo.
+                {stripDecorating
+                  ? `Tap photo ${selectedStripSlot + 1} on the grid to edit it. Backgrounds and stickers apply to the selected photo only.`
+                  : "Choose a background and stickers, then drag stickers on your photo."}
               </p>
             </>
           )}
@@ -569,22 +692,27 @@ export function PhotoBoothGame() {
 
         {canDecorate && (
           <aside className="space-y-4">
+            {stripDecorating && (
+              <p className="rounded-md bg-[var(--color-surface)] px-3 py-2 text-sm font-bold text-[var(--color-ink)]">
+                Editing photo {selectedStripSlot + 1}
+              </p>
+            )}
             <div>
               <p className="text-sm font-bold text-[var(--color-ink)]">Background</p>
               <div className="mt-2 grid grid-cols-4 gap-2">
-                {BACKGROUNDS.map((b) => (
-                  <button
-                    key={b.id}
-                    type="button"
-                    title={b.label}
-                    onClick={() => {
-                      setBg(b.id);
-                      bumpPaint();
-                    }}
-                    className={`h-10 rounded border-2 ${bg === b.id ? "border-[var(--color-accent)]" : "border-transparent"}`}
-                    style={{ background: BG_CSS[b.id] }}
-                  />
-                ))}
+                {BACKGROUNDS.map((b) => {
+                  const selected = stripDecorating ? activeStripBg === b.id : bg === b.id;
+                  return (
+                    <button
+                      key={b.id}
+                      type="button"
+                      title={b.label}
+                      onClick={() => setActiveBackground(b.id)}
+                      className={`h-10 rounded border-2 ${selected ? "border-[var(--color-accent)]" : "border-transparent"}`}
+                      style={{ background: BG_CSS[b.id] }}
+                    />
+                  );
+                })}
               </div>
             </div>
             <div>
@@ -603,10 +731,7 @@ export function PhotoBoothGame() {
               </div>
               <button
                 type="button"
-                onClick={() => {
-                  setStickers([]);
-                  bumpPaint();
-                }}
+                onClick={clearActiveStickers}
                 className="mt-2 text-xs font-semibold text-[var(--color-link)]"
               >
                 Clear stickers
