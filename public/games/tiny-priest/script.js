@@ -1541,60 +1541,7 @@ function createVoxelChurch(container) {
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const interactiveMeshes = [altarBase, altarCloth, crossStand, crossBeam, candleL, candleR];
-    const jumpTweens = [];
-    const sparkleParticles = [];
-
-    function triggerJump(mesh) {
-        jumpTweens.push({
-            mesh,
-            baseY: mesh.position.y,
-            elapsed: 0,
-            duration: 0.45,
-            amplitude: 0.28,
-        });
-    }
-
-    function spawnSparkles(worldPoint, colorHex) {
-        for (let i = 0; i < 12; i += 1) {
-            const spark = new THREE.Mesh(
-                new THREE.BoxGeometry(0.12, 0.12, 0.12),
-                new THREE.MeshBasicMaterial({
-                    color: colorHex,
-                    transparent: true,
-                    opacity: 0.92,
-                }),
-            );
-
-            spark.position.copy(worldPoint);
-            spark.position.y += 0.3;
-            spark.userData.velocity = new THREE.Vector3(
-                (Math.random() - 0.5) * 1.2,
-                0.5 + Math.random() * 0.9,
-                (Math.random() - 0.5) * 1.2,
-            );
-            spark.userData.life = 0.65 + Math.random() * 0.35;
-            sparkleParticles.push(spark);
-            scene.add(spark);
-        }
-    }
-
-    renderer.domElement.addEventListener("pointerdown", (event) => {
-        const bounds = renderer.domElement.getBoundingClientRect();
-        pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
-        pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
-        raycaster.setFromCamera(pointer, camera);
-
-        const hit = raycaster.intersectObjects(interactiveMeshes, false)[0];
-        if (!hit) return;
-
-        triggerJump(hit.object);
-        spawnSparkles(hit.point, hit.object === altarCloth ? altarCloth.material.color.getHex() : 0xffe596);
-    });
-
     const decorationMeshes = [];
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
-    const interactiveMeshes = [altarBase, altarCloth, crossStand, crossBeam, candleL, candleR];
     const jumpTweens = [];
     const sparkleParticles = [];
 
