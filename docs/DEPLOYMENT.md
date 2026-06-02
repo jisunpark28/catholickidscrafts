@@ -38,7 +38,7 @@ Edit `.env`:
 | `DIRECT_URL` | Neon **direct** connection string |
 | `AUTH_SECRET` | Generate with `openssl rand -base64 32` |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` / `ADMIN_NAME` | First **super admin** (used by seed only) |
-| `NEXT_PUBLIC_SITE_URL` | `https://catholickidscrafts.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.catholickidscrafts.com` |
 
 ```bash
 npm install
@@ -61,7 +61,7 @@ Open **http://localhost:3000/admin/login** and sign in with the seeded email and
 | `DATABASE_URL` | Neon pooled URL |
 | `DIRECT_URL` | Neon direct URL |
 | `AUTH_SECRET` | Same as local or a new random string |
-| `NEXT_PUBLIC_SITE_URL` | `https://catholickidscrafts.com` |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.catholickidscrafts.com` |
 | `BLOB_READ_WRITE_TOKEN` | After Blob setup (step 4) |
 
 You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Run `npm run db:seed` once locally with Neon URLs in `.env` to seed production data.

@@ -62,7 +62,7 @@ This project uses **PostgreSQL** (Neon). Set both `DATABASE_URL` (pooled) and `D
 **Full guide:** [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 
 1. Neon project → copy pooled + direct connection strings.
-2. Vercel env: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL=https://catholickidscrafts.com`, `BLOB_READ_WRITE_TOKEN`.
+2. Vercel env: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL=https://www.catholickidscrafts.com`, `BLOB_READ_WRITE_TOKEN`.
 3. Run `npm run db:seed` once locally with Neon URLs in `.env` to create the super-admin and sample content.
 4. Deploy; `vercel-build` runs `prisma migrate deploy` automatically.
 
