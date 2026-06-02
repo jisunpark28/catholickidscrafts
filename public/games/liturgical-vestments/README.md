@@ -10,7 +10,7 @@
 | | Col 1 | Col 2 | Col 3 |
 |---|--------|--------|--------|
 | **Row 1** | White | Pink (`rose`) | Red |
-| **Row 2** | Green | Purple | Lavender |
+| **Row 2** | Green | Purple | Light purple |
 
 Then run **`pnpm run vestments:optimize`** to trim transparent margins (fixes head crop & extra padding).
 
