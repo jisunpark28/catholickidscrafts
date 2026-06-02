@@ -146,6 +146,7 @@ export function PhotoBoothGame() {
   const [dragSlot, setDragSlot] = useState<number | null>(null);
   const [paintTick, setPaintTick] = useState(0);
   const stickerIdRef = useRef(0);
+  const paintGenRef = useRef(0);
 
   const stripComplete = mode === "strip" && stripPhotos.every((p) => p !== null);
   const stripCapturing = mode === "strip" && !stripComplete;
@@ -225,24 +226,32 @@ export function PhotoBoothGame() {
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
     if (mode === "strip") {
+      const editsSnapshot = stripEdits;
+      const photosSnapshot = stripPhotos;
+      const paintGen = ++paintGenRef.current;
+
       for (let i = 0; i < 4; i++) {
         const { x, y, w, h } = stripCellRect(i);
-        const edit = stripEdits[i];
-        fillBackground(ctx, edit.bg, w, h);
+        const edit = editsSnapshot[i];
         ctx.save();
         ctx.translate(x, y);
-        const src = stripPhotos[i];
+        fillBackground(ctx, edit.bg, w, h);
+        const src = photosSnapshot[i];
         if (src) {
           try {
             const img = await loadImage(src);
+            if (paintGen !== paintGenRef.current) return;
             drawCoverImage(ctx, img, 0, 0, w, h);
           } catch {
             /* skip */
           }
         }
+        if (paintGen !== paintGenRef.current) return;
         drawStickers(ctx, edit.stickers);
         ctx.restore();
       }
+
+      if (paintGen !== paintGenRef.current) return;
 
       const { x, y, w, h } = stripCellRect(selectedStripSlot);
       ctx.strokeStyle = "#c45c26";
@@ -681,11 +690,11 @@ export function PhotoBoothGame() {
                 onPointerUp={onCanvasUp}
                 onPointerLeave={onCanvasUp}
               />
-              <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-                {stripDecorating
-                  ? `Tap photo ${selectedStripSlot + 1} on the grid to edit it. Backgrounds and stickers apply to the selected photo only.`
-                  : "Choose a background and stickers, then drag stickers on your photo."}
-              </p>
+              {!stripDecorating && (
+                <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
+                  Choose a background and stickers, then drag stickers on your photo.
+                </p>
+              )}
             </>
           )}
         </div>
