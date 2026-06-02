@@ -95,16 +95,8 @@ export function LiturgicalVestmentsGame() {
       <div className="grid gap-6 p-4 lg:grid-cols-[1fr_320px]">
         <div>
           <h2 className="text-xl font-bold text-[var(--color-ink)]">{round.title}</h2>
-          <p className="mt-2 text-[var(--color-muted)]">{round.description}</p>
-          {round.hint && (
-            <p className="mt-1 text-sm text-[var(--color-muted)]">💡 {round.hint}</p>
-          )}
 
-          <p className="mt-4 text-sm font-semibold text-[var(--color-ink)]">
-            Pick the liturgical color for this Sunday and dress Father in the chasuble:
-          </p>
-
-          <div className="mt-2 flex justify-center">
+          <div className="mt-4 flex justify-center overflow-visible pt-1">
             <PriestVestmentFigure chasubleColor={selected} />
           </div>
         </div>
@@ -183,10 +175,6 @@ export function LiturgicalVestmentsGame() {
             </div>
           )}
 
-          <p className="text-xs text-[var(--color-muted)]">
-            Each game shuffles every question. In Advent and Lent the vestment color can change by
-            Sunday—purple, lavender, or pink (Gaudete &amp; Laetare).
-          </p>
         </aside>
       </div>
     </div>

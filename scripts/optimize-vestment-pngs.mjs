@@ -1,13 +1,27 @@
 /**
  * Transparent BG, trim empty margins, keep headroom, scale for web.
- * Skips character-base.png (unused — default is white vestments).
  */
 import sharp from "sharp";
-import { readdir, unlink } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 const outDir = path.join("public", "games", "liturgical-vestments");
 const MAX_HEIGHT = 920;
+const BASE_TOP = 32;
+
+/** Extra top padding after trim (these sprites sit higher in the source cell). */
+const EXTRA_TOP = {
+  green: 28,
+  purple: 32,
+  lavender: 32,
+};
+
+function extraTopFor(file) {
+  if (file.includes("character-green")) return EXTRA_TOP.green;
+  if (file.includes("character-lavender")) return EXTRA_TOP.lavender;
+  if (file.includes("character-purple")) return EXTRA_TOP.purple;
+  return 0;
+}
 
 function flattenAlpha(input) {
   return sharp(input)
@@ -33,12 +47,13 @@ async function processFile(file) {
   if (file === "character-base.png") return;
 
   const filePath = path.join(outDir, file);
+  const topPad = BASE_TOP + extraTopFor(file);
   const pipeline = await flattenAlpha(filePath);
 
   await pipeline
     .trim({ threshold: 12 })
     .extend({
-      top: 28,
+      top: topPad,
       bottom: 12,
       left: 12,
       right: 12,
@@ -55,18 +70,10 @@ async function processFile(file) {
   const fs = await import("node:fs/promises");
   await fs.rename(filePath + ".tmp", filePath);
   const meta = await sharp(filePath).metadata();
-  console.log("optimized", file, `${meta.width}x${meta.height}`);
+  console.log("optimized", file, `${meta.width}x${meta.height}`, `top=${topPad}`);
 }
 
 async function main() {
-  const basePath = path.join(outDir, "character-base.png");
-  try {
-    await unlink(basePath);
-    console.log("removed character-base.png");
-  } catch {
-    /* already gone */
-  }
-
   const files = await readdir(outDir);
   for (const f of files) await processFile(f);
 }
