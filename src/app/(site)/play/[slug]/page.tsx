@@ -1,6 +1,7 @@
 import { GameEmbed } from "@/components/GameEmbed";
 import { PageShell } from "@/components/PageShell";
 import { getPlayGame } from "@/lib/play-games";
+import { getTinyPriestEmbedPath } from "@/lib/tiny-priest";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -29,7 +30,9 @@ export default async function PlayGamePage({ params }: Props) {
 
   const churchOverride = process.env.NEXT_PUBLIC_CHURCH_GAME_URL?.trim();
   const src =
-    slug === "church" && churchOverride ? churchOverride : game.embedPath;
+    slug === "church"
+      ? churchOverride || getTinyPriestEmbedPath()
+      : game.embedPath;
 
   return (
     <PageShell wide>

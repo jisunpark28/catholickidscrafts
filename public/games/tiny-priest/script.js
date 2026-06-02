@@ -1,3 +1,5 @@
+const TINY_PRIEST_BUILD = "20260607";
+
 const CHARACTER_CONFIG = {
     priest: {
         frontImage: "assets/priest_front.png",
@@ -1046,15 +1048,61 @@ function createVoxelChurch(container) {
     const playerSpriteMaterial = new THREE.MeshBasicMaterial({
         map: null,
         transparent: true,
-        alphaTest: 0.02,
+        alphaTest: 0.001,
         side: THREE.DoubleSide,
         depthWrite: false,
     });
 
-    const PLAYER_SPRITE_WORLD_HEIGHT = 5.65;
+    const PLAYER_SPRITE_WORLD_HEIGHT = 6.25;
     let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
     let playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
+
+
+    function cropTextureToVisibleBounds(texture) {
+        const image = texture?.image;
+        if (!image || !image.width || !image.height) {
+            return;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        if (!ctx) {
+            return;
+        }
+        ctx.drawImage(image, 0, 0);
+        const { width, height } = canvas;
+        const data = ctx.getImageData(0, 0, width, height).data;
+        let minX = width;
+        let minY = height;
+        let maxX = 0;
+        let maxY = 0;
+        for (let y = 0; y < height; y += 1) {
+            for (let x = 0; x < width; x += 1) {
+                const alpha = data[(y * width + x) * 4 + 3];
+                if (alpha > 12) {
+                    if (x < minX) minX = x;
+                    if (y < minY) minY = y;
+                    if (x > maxX) maxX = x;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+        if (maxX <= minX || maxY <= minY) {
+            return;
+        }
+        const pad = 4;
+        minX = Math.max(0, minX - pad);
+        minY = Math.max(0, minY - pad);
+        maxX = Math.min(width - 1, maxX + pad);
+        maxY = Math.min(height - 1, maxY + pad);
+        const cropW = maxX - minX + 1;
+        const cropH = maxY - minY + 1;
+        texture.offset.set(minX / width, (height - maxY - 1) / height);
+        texture.repeat.set(cropW / width, cropH / height);
+        texture.needsUpdate = true;
+    }
 
     function fitPlayerSpriteToTexture(texture) {
         const image = texture?.image;
@@ -1087,6 +1135,7 @@ function createVoxelChurch(container) {
         }
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearMipmapLinearFilter;
+        cropTextureToVisibleBounds(texture);
         fitPlayerSpriteToTexture(texture);
     };
 
@@ -1830,8 +1879,8 @@ function createVoxelChurch(container) {
         container.innerHTML = "";
     }
 
-    const cameraOffset = new THREE.Vector3(0, 3.95, 12.4);
-    const cameraLookOffset = new THREE.Vector3(0, 2.75, -3.8);
+    const cameraOffset = new THREE.Vector3(0, 4.25, 14.2);
+    const cameraLookOffset = new THREE.Vector3(0, 3.05, -3.6);
     const cameraTarget = new THREE.Vector3();
     const cameraLookTarget = new THREE.Vector3();
     const moveDirection = new THREE.Vector3(0, 0, -1);
@@ -2056,8 +2105,8 @@ function applyRoleCamera(role, camera, playerRig = null) {
     const anchorX = playerRig ? playerRig.position.x : 0;
     const anchorY = playerRig ? playerRig.position.y : 0;
     const anchorZ = playerRig ? playerRig.position.z : 10.8;
-    camera.position.set(anchorX, anchorY + 3.95, anchorZ + 12.4);
-    camera.lookAt(anchorX, anchorY + 2.75, anchorZ - 3.8);
+    camera.position.set(anchorX, anchorY + 4.25, anchorZ + 14.2);
+    camera.lookAt(anchorX, anchorY + 3.05, anchorZ - 3.6);
 }
 
 function resetEntryAfterFailure(message) {
@@ -2221,6 +2270,8 @@ function bindEntryFlow() {
         declineBtn.addEventListener("click", declineEntry);
     }
 }
+
+console.info(`Tiny Priest build ${TINY_PRIEST_BUILD}`);
 
 bindEntryFlow();
 

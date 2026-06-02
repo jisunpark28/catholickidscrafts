@@ -1,4 +1,15 @@
 {
   "framework": "nextjs",
-  "buildCommand": "pnpm run vercel-build"
+  "buildCommand": "pnpm run vercel-build",
+  "headers": [
+    {
+      "source": "/games/tiny-priest/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ]
 }

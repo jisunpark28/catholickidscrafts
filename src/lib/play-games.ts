@@ -1,3 +1,5 @@
+import { getTinyPriestEmbedPath } from "@/lib/tiny-priest";
+
 export type PlayGame = {
   slug: string;
   title: string;
@@ -13,7 +15,7 @@ export const PLAY_GAMES: PlayGame[] = [
     title: "Tiny Priest",
     description:
       "Walk through a voxel church: tabernacle path, altar, holy water, and a guided Mass sequence. Arrow keys or WASD to move.",
-    embedPath: "/games/tiny-priest/index.html",
+    embedPath: getTinyPriestEmbedPath(),
   },
   {
     slug: "liturgical-vestments",
