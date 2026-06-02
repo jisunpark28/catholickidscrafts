@@ -92,7 +92,7 @@ export function LiturgicalVestmentsGame() {
           )}
 
           <p className="mt-4 text-sm font-semibold text-[var(--color-ink)]">
-            Father starts in his black cassock. Pick the liturgical color and dress him in alb
+            Father starts in his white alb. Pick the liturgical color and dress him in the chasuble
             and chasuble:
           </p>
 
