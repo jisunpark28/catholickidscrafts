@@ -1,18 +1,18 @@
 /**
- * Transparent BG, trim margins, generous transparent top pad on green / purple / lavender.
+ * Normalize every character PNG to the same canvas, scale, and padding.
  */
 import sharp from "sharp";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 const outDir = path.join("public", "games", "liturgical-vestments");
-const MAX_HEIGHT = 1000;
 
-const HEADROOM_COLORS = new Set(["green", "purple", "lavender"]);
-
-function colorFromFile(file) {
-  return file.replace("character-", "").replace(".png", "");
-}
+/** Shared output size (all colors identical). */
+const CANVAS_W = 960;
+const CANVAS_H = 1040;
+/** Priest figure height after trim (same visual scale for every color). */
+const FIGURE_H = 920;
+const PAD_BOTTOM = 28;
 
 function flattenAlpha(input) {
   return sharp(input)
@@ -33,88 +33,45 @@ function flattenAlpha(input) {
     });
 }
 
-/** Trim left/right/bottom only — keep full height so hair at the top is not clipped. */
-async function trimSidesAndBottom(pipeline) {
-  const { data, info } = await pipeline
-    .clone()
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-
-  const { width, height, channels } = info;
-  let minX = width;
-  let maxX = 0;
-  let maxY = 0;
-
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      if (data[(y * width + x) * channels + (channels - 1)] > 30) {
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y > maxY) maxY = y;
-      }
-    }
-  }
-
-  if (maxX < minX) return pipeline;
-
-  const pad = 8;
-  const extractW = Math.min(width, maxX - minX + 1 + pad * 2);
-  const extractH = Math.min(height, maxY + 1 + pad);
-  const left = Math.max(0, minX - pad);
-
-  return sharp(data, { raw: { width, height, channels } }).extract({
-    left,
-    top: 0,
-    width: Math.min(extractW, width - left),
-    height: extractH,
-  });
-}
-
 async function processFile(file) {
   if (!file.startsWith("character-") || !file.endsWith(".png")) return;
   if (file === "character-base.png") return;
 
-  const color = colorFromFile(file);
-  const needsHeadroom = HEADROOM_COLORS.has(color);
   const filePath = path.join(outDir, file);
 
-  let pipeline = await flattenAlpha(filePath);
-
-  if (needsHeadroom) {
-    pipeline = await trimSidesAndBottom(pipeline);
-    pipeline = pipeline.extend({
-      top: 120,
-      bottom: 24,
-      left: 16,
-      right: 16,
-      background: { r: 0, g: 0, b: 0, alpha: 0 },
-    });
-  } else {
-    pipeline = pipeline
-      .trim({ threshold: 10 })
-      .extend({
-        top: 40,
-        bottom: 16,
-        left: 16,
-        right: 16,
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-      });
-  }
-
-  await pipeline
+  const figure = await (
+    await flattenAlpha(filePath)
+  )
+    .trim({ threshold: 10 })
     .resize({
-      height: MAX_HEIGHT,
+      height: FIGURE_H,
       fit: "inside",
       withoutEnlargement: false,
     })
+    .png()
+    .toBuffer();
+
+  const meta = await sharp(figure).metadata();
+  const fw = meta.width ?? 1;
+  const fh = meta.height ?? 1;
+  const left = Math.max(0, Math.floor((CANVAS_W - fw) / 2));
+  const top = Math.max(0, CANVAS_H - PAD_BOTTOM - fh);
+
+  await sharp({
+    create: {
+      width: CANVAS_W,
+      height: CANVAS_H,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    },
+  })
+    .composite([{ input: figure, left, top }])
     .png({ compressionLevel: 9 })
     .toFile(filePath + ".tmp");
 
   const fs = await import("node:fs/promises");
   await fs.rename(filePath + ".tmp", filePath);
-  const meta = await sharp(filePath).metadata();
-  console.log("optimized", file, `${meta.width}x${meta.height}`, needsHeadroom ? "headroom" : "trim");
+  console.log("normalized", file, `${CANVAS_W}x${CANVAS_H}`, `figure ${fw}x${fh} @ top=${top}`);
 }
 
 async function main() {
