@@ -26,28 +26,17 @@ export const VESTMENT_COLORS: Record<
   rose: { label: "Pink", hex: "#f06292", stroke: "#c2185b" },
 };
 
-/** One round per liturgical color — all six are played each game, in random order. */
+/**
+ * Dressing-game prompts. Advent & Lent include Sunday-by-Sunday vestment colors
+ * (purple, lavender, and pink/rose vary by week).
+ */
 export const LITURGICAL_DRESS_ROUNDS: LiturgicalDressRound[] = [
   {
     id: "ordinary",
     title: "Ordinary Time",
     description: "Most Sundays of the year—we listen to Jesus and grow as his friends.",
     correctColor: "green",
-    hint: "The Church wears green when it is not a special feast season.",
-  },
-  {
-    id: "advent",
-    title: "Advent",
-    description: "We wait and prepare with hope for the birth of Jesus at Christmas.",
-    correctColor: "purple",
-    hint: "A quiet, prayerful season before Christmas.",
-  },
-  {
-    id: "lent",
-    title: "Lent",
-    description: "Forty days of prayer, fasting, and giving alms before Easter.",
-    correctColor: "lavender",
-    hint: "A penitential season—vestments are often a lighter violet or lavender.",
+    hint: "Green is the usual color outside special seasons.",
   },
   {
     id: "christmas",
@@ -61,18 +50,74 @@ export const LITURGICAL_DRESS_ROUNDS: LiturgicalDressRound[] = [
     title: "Pentecost",
     description: "The Holy Spirit comes upon the Apostles and the whole Church.",
     correctColor: "red",
-    hint: "Red reminds us of fire and the love of God poured out.",
+    hint: "Red reminds us of fire and the Holy Spirit.",
   },
   {
-    id: "gaudete",
-    title: "Gaudete Sunday (Advent)",
-    description: "A joyful Sunday in Advent—the Church rejoices because Christmas is near.",
+    id: "advent-1",
+    title: "Advent — 1st Sunday",
+    description: "A new year of grace begins as we start waiting for Christmas.",
+    correctColor: "purple",
+    hint: "Most Advent days use purple (violet) vestments.",
+  },
+  {
+    id: "advent-2",
+    title: "Advent — 2nd Sunday",
+    description: "We keep preparing our hearts while the light of Christ draws nearer.",
+    correctColor: "lavender",
+    hint: "Some parishes use a lighter violet or lavender on early Advent Sundays.",
+  },
+  {
+    id: "advent-gaudete",
+    title: "Advent — 3rd Sunday (Gaudete)",
+    description: "“Rejoice!” The Church is joyful because the Lord is very near.",
     correctColor: "rose",
-    hint: "On this day priests may wear rose or pink vestments.",
+    hint: "Gaudete Sunday — priests may wear rose or pink vestments.",
+  },
+  {
+    id: "advent-4",
+    title: "Advent — 4th Sunday",
+    description: "Only a few days remain before we celebrate the birth of Jesus.",
+    correctColor: "purple",
+    hint: "After Gaudete, Advent returns to purple until Christmas.",
+  },
+  {
+    id: "lent-1",
+    title: "Lent — 1st Sunday",
+    description: "Lent begins: prayer, fasting, and helping those in need.",
+    correctColor: "purple",
+    hint: "Lent is a penitential season—usually purple vestments.",
+  },
+  {
+    id: "lent-2",
+    title: "Lent — 2nd Sunday",
+    description: "We walk with Jesus in the desert and turn back to God.",
+    correctColor: "lavender",
+    hint: "A lighter violet or lavender is sometimes used in early Lent.",
+  },
+  {
+    id: "lent-3",
+    title: "Lent — 3rd Sunday",
+    description: "We continue fasting and listening to God’s word.",
+    correctColor: "purple",
+    hint: "Most Lenten Sundays are purple before Laetare.",
+  },
+  {
+    id: "lent-laetare",
+    title: "Lent — 4th Sunday (Laetare)",
+    description: "“Rejoice!” The Church takes heart—Easter is coming soon.",
+    correctColor: "rose",
+    hint: "Laetare Sunday — rose or pink vestments are allowed.",
+  },
+  {
+    id: "lent-5",
+    title: "Lent — 5th Sunday",
+    description: "Holy Week is almost here; we prepare for the Passion of the Lord.",
+    correctColor: "purple",
+    hint: "When Lent has a fifth Sunday, vestments are purple again.",
   },
 ];
 
-/** Fisher–Yates shuffle; returns every color round once per game. */
+/** Fisher–Yates shuffle; every round appears once per game (order is random). */
 export function shuffleRounds(): LiturgicalDressRound[] {
   const pool = [...LITURGICAL_DRESS_ROUNDS];
   for (let i = pool.length - 1; i > 0; i--) {

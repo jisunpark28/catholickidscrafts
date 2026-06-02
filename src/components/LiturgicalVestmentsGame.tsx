@@ -189,8 +189,8 @@ export function LiturgicalVestmentsGame() {
           )}
 
           <p className="text-xs text-[var(--color-muted)]">
-            Each game shuffles all six seasons. White · Red · Purple · Lavender · Green · Pink
-            (rose).
+            Each game shuffles every question. In Advent and Lent the vestment color can change by
+            Sunday—purple, lavender, or pink (Gaudete &amp; Laetare).
           </p>
         </aside>
       </div>
