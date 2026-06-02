@@ -1,4 +1,4 @@
-const TINY_PRIEST_BUILD = "20260608";
+const TINY_PRIEST_BUILD = "20260609";
 
 const CHARACTER_CONFIG = {
     priest: {
@@ -1053,7 +1053,7 @@ function createVoxelChurch(container) {
         depthWrite: false,
     });
 
-    const PLAYER_SPRITE_WORLD_HEIGHT = 6.25;
+    const PLAYER_SPRITE_WORLD_HEIGHT = 2.9;
     let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
     let playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
@@ -1112,11 +1112,11 @@ function createVoxelChurch(container) {
         const aspect = image.width / image.height;
         playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
         playerSpriteWidth = playerSpriteHeight * aspect;
-        playerSpriteBaseScale.x = playerSpriteWidth;
-        playerSpriteBaseScale.y = playerSpriteHeight;
+        playerSpriteBaseScale.x = 1;
+        playerSpriteBaseScale.y = 1;
         playerSprite.geometry.dispose();
         playerSprite.geometry = new THREE.PlaneGeometry(playerSpriteWidth, playerSpriteHeight);
-        playerSprite.scale.set(playerSpriteWidth, playerSpriteHeight, 1);
+        playerSprite.scale.set(1, 1, 1);
         playerSprite.position.set(0, playerSpriteHeight * 0.5, 0.12);
     }
 
@@ -1124,7 +1124,7 @@ function createVoxelChurch(container) {
         new THREE.PlaneGeometry(playerSpriteWidth, playerSpriteHeight),
         playerSpriteMaterial,
     );
-    playerSprite.scale.set(playerSpriteBaseScale.x, playerSpriteBaseScale.y, 1);
+    playerSprite.scale.set(1, 1, 1);
     playerSprite.position.set(0, playerSpriteHeight * 0.5, 0.12);
     playerSprite.renderOrder = 3;
     playerRig.add(playerSprite);
@@ -1879,8 +1879,8 @@ function createVoxelChurch(container) {
         container.innerHTML = "";
     }
 
-    const cameraOffset = new THREE.Vector3(0, 4.25, 14.2);
-    const cameraLookOffset = new THREE.Vector3(0, 3.05, -3.6);
+    const cameraOffset = new THREE.Vector3(0, 2.85, 8.6);
+    const cameraLookOffset = new THREE.Vector3(0, 1.45, -3.2);
     const cameraTarget = new THREE.Vector3();
     const cameraLookTarget = new THREE.Vector3();
     const moveDirection = new THREE.Vector3(0, 0, -1);
@@ -1934,8 +1934,8 @@ function createVoxelChurch(container) {
         const stretchX = 1 + spriteFacingState.motionBlend * 0.03;
         const tiltTarget = THREE.MathUtils.clamp((-velocityX * 0.012) + turnInput * -0.06, -0.16, 0.16);
 
-        playerSprite.scale.x = playerSpriteBaseScale.x * spriteFacingState.xDir * stretchX;
-        playerSprite.scale.y = playerSpriteBaseScale.y * squash;
+        playerSprite.scale.x = spriteFacingState.xDir * stretchX;
+        playerSprite.scale.y = squash;
         playerSprite.position.y = playerSpriteHeight * 0.5 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
         playerSpriteMaterial.rotation = THREE.MathUtils.lerp(
             playerSpriteMaterial.rotation,
@@ -2105,8 +2105,8 @@ function applyRoleCamera(role, camera, playerRig = null) {
     const anchorX = playerRig ? playerRig.position.x : 0;
     const anchorY = playerRig ? playerRig.position.y : 0;
     const anchorZ = playerRig ? playerRig.position.z : 10.8;
-    camera.position.set(anchorX, anchorY + 4.25, anchorZ + 14.2);
-    camera.lookAt(anchorX, anchorY + 3.05, anchorZ - 3.6);
+    camera.position.set(anchorX, anchorY + 2.85, anchorZ + 8.6);
+    camera.lookAt(anchorX, anchorY + 1.45, anchorZ - 3.2);
 }
 
 function resetEntryAfterFailure(message) {
