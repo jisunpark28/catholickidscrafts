@@ -8,10 +8,19 @@ import {
   type VestmentColor,
 } from "@/lib/liturgical-vestments-game";
 
+const COLOR_ORDER: VestmentColor[] = [
+  "white",
+  "red",
+  "purple",
+  "lavender",
+  "green",
+  "rose",
+];
+
 type Feedback = "idle" | "correct" | "wrong";
 
 export function LiturgicalVestmentsGame() {
-  const [rounds, setRounds] = useState(() => shuffleRounds(6));
+  const [rounds, setRounds] = useState(() => shuffleRounds());
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState<VestmentColor | null>(null);
@@ -46,7 +55,7 @@ export function LiturgicalVestmentsGame() {
   }
 
   function restart() {
-    setRounds(shuffleRounds(6));
+    setRounds(shuffleRounds());
     setIndex(0);
     setScore(0);
     setSelected(null);
@@ -83,7 +92,7 @@ export function LiturgicalVestmentsGame() {
         <span className="font-semibold">Score: {score}</span>
       </div>
 
-      <div className="grid gap-6 p-4 lg:grid-cols-[1fr_300px]">
+      <div className="grid gap-6 p-4 lg:grid-cols-[1fr_320px]">
         <div>
           <h2 className="text-xl font-bold text-[var(--color-ink)]">{round.title}</h2>
           <p className="mt-2 text-[var(--color-muted)]">{round.description}</p>
@@ -92,16 +101,15 @@ export function LiturgicalVestmentsGame() {
           )}
 
           <p className="mt-4 text-sm font-semibold text-[var(--color-ink)]">
-            Father starts in his white alb. Pick the liturgical color and dress him in the chasuble
-            and chasuble:
+            Father starts in his white alb. Pick the liturgical color and dress him in the chasuble:
           </p>
 
-          <div className="mx-auto mt-4 w-full max-w-[280px] rounded border border-[var(--color-border)] bg-[#f7f4ef] p-3">
+          <div className="mx-auto mt-4 w-full max-w-[600px] bg-transparent p-2">
             <PriestVestmentFigure chasubleColor={selected} />
           </div>
           {!selected && (
             <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-              Tap a color to put on the alb and chasuble.
+              Tap a color to put on the chasuble.
             </p>
           )}
         </div>
@@ -109,8 +117,8 @@ export function LiturgicalVestmentsGame() {
         <aside className="space-y-4">
           <div>
             <p className="text-sm font-bold text-[var(--color-ink)]">Liturgical colors</p>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {(Object.keys(VESTMENT_COLORS) as VestmentColor[]).map((key) => {
+            <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {COLOR_ORDER.map((key) => {
                 const c = VESTMENT_COLORS[key];
                 const active = selected === key;
                 return (
@@ -181,8 +189,8 @@ export function LiturgicalVestmentsGame() {
           )}
 
           <p className="text-xs text-[var(--color-muted)]">
-            Green = Ordinary Time · Purple = Advent & Lent · White = Christmas & Easter · Red =
-            Pentecost & martyrs · Rose = special joyful Sundays
+            Each game shuffles all six seasons. White · Red · Purple · Lavender · Green · Pink
+            (rose).
           </p>
         </aside>
       </div>

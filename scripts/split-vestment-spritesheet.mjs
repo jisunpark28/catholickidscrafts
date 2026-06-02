@@ -12,14 +12,18 @@ const input =
 
 const outDir = path.join("public", "games", "liturgical-vestments");
 
-/** [color, col, row] — 3 columns × 2 rows */
+const OUT_W = 960;
+const OUT_H = 1920;
+
+/** [color, col, row] — 3 columns × 2 rows (matches reference sheet). */
 const CELLS = [
   ["white", 0, 0],
   ["rose", 1, 0],
   ["red", 2, 0],
   ["green", 0, 1],
   ["purple", 1, 1],
-] ;
+  ["lavender", 2, 1],
+];
 
 async function main() {
   await mkdir(outDir, { recursive: true });
@@ -39,7 +43,10 @@ async function main() {
     await img
       .clone()
       .extract({ left, top, width: cellW, height: cellH })
-      .resize(480, 960, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .resize(OUT_W, OUT_H, {
+        fit: "contain",
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      })
       .png()
       .toFile(outPath);
     console.log("wrote", outPath);

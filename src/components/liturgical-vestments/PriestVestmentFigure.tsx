@@ -23,15 +23,16 @@ export function PriestVestmentFigure({ chasubleColor }: Props) {
 
   return (
     <div
-      className="relative mx-auto w-full max-w-[300px]"
+      className="relative mx-auto w-full max-w-[600px]"
       style={{ aspectRatio: "1 / 2", maxHeight: VESTMENT_FIGURE_HEIGHT }}
     >
       <Image
         src={src}
         alt={alt}
         fill
+        unoptimized
         className="object-contain object-bottom"
-        sizes="300px"
+        sizes="600px"
         priority
         draggable={false}
       />
