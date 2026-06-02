@@ -7,21 +7,26 @@ body {
     min-height: 100vh;
     background-color: #f5f5dc;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     color: #5d4037;
 }
 
 .main-container {
     min-height: 100vh;
     width: 100%;
-    padding: clamp(16px, 2vw, 28px);
+    padding: clamp(12px, 2vw, 24px);
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: clamp(16px, 2.2vh, 26px);
+    justify-content: flex-start;
+    gap: clamp(12px, 1.8vh, 22px);
     text-align: center;
     transition: opacity 0.55s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .main-container.is-hidden {
@@ -146,14 +151,17 @@ body {
 }
 
 .dialogue-box {
-    margin-top: 4px;
+    margin-top: 0;
+    width: 100%;
     background-color: #fffef8;
     border: 3px solid #d2b48c;
-    border-radius: 999px;
+    border-radius: 20px;
     padding: 14px clamp(18px, 2.5vw, 34px);
-    max-width: min(92vw, 800px);
+    max-width: none;
     font-weight: 600;
     box-shadow: 0 12px 26px rgba(93, 64, 55, 0.12);
+    white-space: pre-line;
+    line-height: 1.45;
 }
 
 .three-container {
@@ -467,6 +475,7 @@ body {
 }
 
 #entry-screen.is-entering-zoom .main-title,
+#entry-screen.is-entering-zoom .entry-footer,
 #entry-screen.is-entering-zoom .dialogue-box,
 #entry-screen.is-entering-zoom .statue-mary {
     transition: opacity 0.34s ease;
@@ -633,6 +642,43 @@ body {
 }
 
 #entry-screen.is-entering-zoom .entry-actions {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+.entry-footer {
+    width: min(92vw, 820px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.main-container {
+    justify-content: flex-start;
+    padding-top: clamp(12px, 2vh, 24px);
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.dialogue-box {
+    border-radius: 20px;
+    white-space: pre-line;
+    line-height: 1.45;
+}
+
+#entry-screen.is-entering-zoom .entry-footer {
     opacity: 0;
     pointer-events: none;
 }
