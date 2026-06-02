@@ -39,6 +39,7 @@ type PlacedSticker = {
 const CANVAS_W = 360;
 const CANVAS_H = 480;
 const STRIP_GAP = 10;
+const STRIP_CELL_H = (CANVAS_H - STRIP_GAP * 3) / 4;
 
 function fillBackground(ctx: CanvasRenderingContext2D, bgId: BgId, w: number, h: number) {
   const g = ctx.createLinearGradient(0, 0, w, h);
@@ -105,6 +106,12 @@ export function PhotoBoothGame() {
   const [paintTick, setPaintTick] = useState(0);
   const stickerIdRef = useRef(0);
 
+  const stripComplete = mode === "strip" && stripPhotos.every((p) => p !== null);
+  const stripCapturing = mode === "strip" && !stripComplete;
+  const canDecorate =
+    !cameraOn && ((mode === "single" && photo !== null) || (mode === "strip" && stripComplete));
+  const singleCameraOnly = mode === "single" && cameraOn;
+
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
@@ -118,7 +125,6 @@ export function PhotoBoothGame() {
 
   useEffect(() => () => stopCamera(), [stopCamera]);
 
-  /** Attach stream after <video> is mounted (cameraOn === true). */
   useEffect(() => {
     if (!cameraOn) return;
 
@@ -145,7 +151,7 @@ export function PhotoBoothGame() {
     return () => {
       video.onloadedmetadata = null;
     };
-  }, [cameraOn]);
+  }, [cameraOn, stripIndex, mode]);
 
   const loadImage = useCallback((src: string): Promise<HTMLImageElement> => {
     const cached = imagesRef.current.get(src);
@@ -162,6 +168,8 @@ export function PhotoBoothGame() {
   }, []);
 
   const paint = useCallback(async () => {
+    if (!canDecorate) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -171,7 +179,7 @@ export function PhotoBoothGame() {
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
     if (mode === "strip") {
-      const cellH = (CANVAS_H - STRIP_GAP * 3) / 4;
+      const cellH = STRIP_CELL_H;
       for (let i = 0; i < 4; i++) {
         const y = i * (cellH + STRIP_GAP);
         fillBackground(ctx, bg, CANVAS_W, cellH);
@@ -206,7 +214,7 @@ export function PhotoBoothGame() {
       ctx.textBaseline = "middle";
       ctx.fillText(s.char, s.x, s.y);
     }
-  }, [bg, photo, stripPhotos, stickers, mode, loadImage]);
+  }, [bg, photo, stripPhotos, stickers, mode, loadImage, canDecorate]);
 
   useEffect(() => {
     void paint();
@@ -216,16 +224,21 @@ export function PhotoBoothGame() {
 
   function loadPhoto(dataUrl: string) {
     if (mode === "strip") {
+      const slot = stripPhotos.findIndex((p) => p === null);
+      if (slot === -1) return;
       setStripPhotos((prev) => {
         const next = [...prev];
-        next[stripIndex] = dataUrl;
+        next[slot] = dataUrl;
         return next;
       });
-      setStripIndex((i) => Math.min(i + 1, 3));
+      setStripIndex(Math.min(slot + 1, 3));
+      if (slot >= 3) {
+        stopCamera();
+      }
     } else {
       setPhoto(dataUrl);
+      stopCamera();
     }
-    stopCamera();
     bumpPaint();
   }
 
@@ -345,6 +358,9 @@ export function PhotoBoothGame() {
     bumpPaint();
   }
 
+  const firstEmptySlot = stripPhotos.findIndex((p) => p === null);
+  const activeSlot = firstEmptySlot === -1 ? 3 : firstEmptySlot;
+
   return (
     <div className="border border-[var(--color-border)] bg-white">
       <div className="flex flex-wrap gap-2 border-b border-[var(--color-border)] bg-[var(--color-surface)] p-3">
@@ -374,13 +390,14 @@ export function PhotoBoothGame() {
         </button>
       </div>
 
-      <div className="grid gap-6 p-4 lg:grid-cols-[1fr_280px]">
+      <div className={`grid gap-6 p-4 ${canDecorate ? "lg:grid-cols-[1fr_280px]" : ""}`}>
         <div>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
               className="bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-white"
+              disabled={stripComplete}
             >
               Upload photo
             </button>
@@ -388,6 +405,7 @@ export function PhotoBoothGame() {
               type="button"
               onClick={cameraOn ? captureFromCamera : startCamera}
               className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold"
+              disabled={stripComplete && !cameraOn}
             >
               {cameraOn ? "Capture" : "Use camera"}
             </button>
@@ -400,26 +418,31 @@ export function PhotoBoothGame() {
                 Stop camera
               </button>
             )}
-            <button
-              type="button"
-              onClick={download}
-              className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold"
-            >
-              Save image
-            </button>
+            {canDecorate && (
+              <>
+                <button
+                  type="button"
+                  onClick={download}
+                  className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold"
+                >
+                  Save image
+                </button>
+              </>
+            )}
             <button type="button" onClick={resetAll} className="text-sm text-[var(--color-muted)]">
               Reset
             </button>
           </div>
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onFile} />
 
-          {mode === "strip" && (
+          {stripCapturing && (
             <p className="mt-2 text-sm text-[var(--color-muted)]">
-              Photo {Math.min(stripIndex + 1, 4)} of 4 — capture or upload each slot for your strip.
+              Photo {activeSlot + 1} of 4 — capture or upload each frame. Decorate after all four are
+              done.
             </p>
           )}
 
-          {cameraOn && (
+          {singleCameraOnly && (
             <div className="mx-auto mt-4 w-full max-w-[360px]">
               <p className="mb-2 text-center text-sm font-semibold text-[var(--color-ink)]">
                 Camera preview
@@ -434,73 +457,144 @@ export function PhotoBoothGame() {
               {cameraError && (
                 <p className="mt-2 text-center text-xs text-red-600">{cameraError}</p>
               )}
+              <p className="mt-3 text-center text-xs text-[var(--color-muted)]">
+                Tap Capture when you are ready.
+              </p>
             </div>
           )}
 
-          <canvas
-            ref={canvasRef}
-            width={CANVAS_W}
-            height={CANVAS_H}
-            className={`mx-auto block w-full max-w-[360px] cursor-grab touch-none border border-[var(--color-border)] shadow-md active:cursor-grabbing ${
-              cameraOn ? "mt-4" : "mt-4"
-            }`}
-            onPointerDown={onCanvasDown}
-            onPointerMove={onCanvasMove}
-            onPointerUp={onCanvasUp}
-            onPointerLeave={onCanvasUp}
-          />
-          <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-            {cameraOn
-              ? "When you see yourself above, tap Capture. Then add stickers on the canvas below."
-              : "Tap a sticker, then drag it on your photo. Processing stays in your browser."}
-          </p>
+          {stripCapturing && (
+            <div
+              className="mx-auto mt-4 w-full max-w-[360px] overflow-hidden border border-[var(--color-border)] shadow-md"
+              style={{ height: CANVAS_H }}
+            >
+              <div className="flex h-full flex-col" style={{ gap: STRIP_GAP }}>
+                {[0, 1, 2, 3].map((i) => {
+                  const isActive = i === activeSlot && !stripPhotos[i];
+                  const showLive = cameraOn && isActive;
+                  return (
+                    <div
+                      key={i}
+                      className={`relative shrink-0 overflow-hidden ${
+                        isActive ? "ring-2 ring-[var(--color-accent)] ring-offset-1" : ""
+                      }`}
+                      style={{
+                        height: STRIP_CELL_H,
+                        background: stripPhotos[i]
+                          ? "#000"
+                          : "linear-gradient(160deg,#f4f4f5,#e4e4e7)",
+                      }}
+                    >
+                      {showLive ? (
+                        <video
+                          ref={i === activeSlot ? videoRef : undefined}
+                          autoPlay
+                          playsInline
+                          muted
+                          className="h-full w-full object-cover [transform:scaleX(-1)]"
+                        />
+                      ) : stripPhotos[i] ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={stripPhotos[i]!}
+                          alt={`Photo ${i + 1}`}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center text-center text-xs font-semibold text-[var(--color-muted)]">
+                          <span>Photo {i + 1}</span>
+                          {isActive && !cameraOn && (
+                            <span className="mt-1 font-normal">Use camera or upload</span>
+                          )}
+                        </div>
+                      )}
+                      {stripPhotos[i] && (
+                        <span className="absolute right-1 top-1 rounded bg-black/50 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          ✓
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {cameraOn && (
+                <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
+                  Live preview in frame {activeSlot + 1}. Tap Capture, then the next frame is
+                  highlighted.
+                </p>
+              )}
+              {cameraError && (
+                <p className="mt-2 text-center text-xs text-red-600">{cameraError}</p>
+              )}
+            </div>
+          )}
+
+          {canDecorate && (
+            <>
+              <canvas
+                ref={canvasRef}
+                width={CANVAS_W}
+                height={CANVAS_H}
+                className="mx-auto mt-4 block w-full max-w-[360px] cursor-grab touch-none border border-[var(--color-border)] shadow-md active:cursor-grabbing"
+                onPointerDown={onCanvasDown}
+                onPointerMove={onCanvasMove}
+                onPointerUp={onCanvasUp}
+                onPointerLeave={onCanvasUp}
+              />
+              <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
+                Choose a background and stickers, then drag stickers on your photo.
+              </p>
+            </>
+          )}
         </div>
 
-        <aside className="space-y-4">
-          <div>
-            <p className="text-sm font-bold text-[var(--color-ink)]">Background</p>
-            <div className="mt-2 grid grid-cols-4 gap-2">
-              {BACKGROUNDS.map((b) => (
-                <button
-                  key={b.id}
-                  type="button"
-                  title={b.label}
-                  onClick={() => {
-                    setBg(b.id);
-                    bumpPaint();
-                  }}
-                  className={`h-10 rounded border-2 ${bg === b.id ? "border-[var(--color-accent)]" : "border-transparent"}`}
-                  style={{ background: BG_CSS[b.id] }}
-                />
-              ))}
+        {canDecorate && (
+          <aside className="space-y-4">
+            <div>
+              <p className="text-sm font-bold text-[var(--color-ink)]">Background</p>
+              <div className="mt-2 grid grid-cols-4 gap-2">
+                {BACKGROUNDS.map((b) => (
+                  <button
+                    key={b.id}
+                    type="button"
+                    title={b.label}
+                    onClick={() => {
+                      setBg(b.id);
+                      bumpPaint();
+                    }}
+                    className={`h-10 rounded border-2 ${bg === b.id ? "border-[var(--color-accent)]" : "border-transparent"}`}
+                    style={{ background: BG_CSS[b.id] }}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-          <div>
-            <p className="text-sm font-bold text-[var(--color-ink)]">Stickers</p>
-            <div className="mt-2 flex flex-wrap gap-1">
-              {STICKERS.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => addSticker(s)}
-                  className="flex h-10 w-10 items-center justify-center rounded border border-[var(--color-border)] text-xl hover:bg-[var(--color-surface)]"
-                >
-                  {s}
-                </button>
-              ))}
+            <div>
+              <p className="text-sm font-bold text-[var(--color-ink)]">Stickers</p>
+              <div className="mt-2 flex flex-wrap gap-1">
+                {STICKERS.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => addSticker(s)}
+                    className="flex h-10 w-10 items-center justify-center rounded border border-[var(--color-border)] text-xl hover:bg-[var(--color-surface)]"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setStickers([]);
+                  bumpPaint();
+                }}
+                className="mt-2 text-xs font-semibold text-[var(--color-link)]"
+              >
+                Clear stickers
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setStickers([]);
-                bumpPaint();
-              }}
-              className="mt-2 text-xs font-semibold text-[var(--color-link)]"
-            >
-              Clear stickers
-            </button>
-          </div>
-        </aside>
+          </aside>
+        )}
       </div>
     </div>
   );
