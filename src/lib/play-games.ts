@@ -32,8 +32,7 @@ export const PLAY_GAMES: PlayGame[] = [
   {
     slug: "hangman",
     title: "Hangman game",
-    description:
-      "Guess Catholic words and names before the flower loses its petals. Hints included.",
+    description: "",
     embedPath: "/games/hangman/index.html",
   },
   {

@@ -25,7 +25,9 @@ export default function PlayHubPage() {
             className="border border-[var(--color-border)] bg-white p-6 transition hover:border-[var(--color-accent)]"
           >
             <h2 className="text-lg font-bold text-[var(--color-ink)]">{game.title}</h2>
-            <p className="mt-2 text-sm text-[var(--color-muted)]">{game.description}</p>
+            {game.description ? (
+              <p className="mt-2 text-sm text-[var(--color-muted)]">{game.description}</p>
+            ) : null}
             <Link
               href={game.slug === "emoji" ? "/play/photo-booth" : `/play/${game.slug}`}
               className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]"

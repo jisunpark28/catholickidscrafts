@@ -33,7 +33,12 @@ export default async function PlayGamePage({ params }: Props) {
 
   return (
     <PageShell wide>
-      <GameEmbed title={game.title} description={game.description} src={src} />
+      <GameEmbed
+        title={game.title}
+        description={game.description || undefined}
+        src={src}
+        showTip={slug !== "hangman"}
+      />
       {slug === "emoji" && (
         <p className="mt-6 text-xs text-[var(--color-muted)]">
           Photos are processed in your browser only. See our{" "}

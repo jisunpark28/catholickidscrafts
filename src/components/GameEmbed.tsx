@@ -4,9 +4,11 @@ type Props = {
   title: string;
   src: string;
   description?: string;
+  /** Show mobile/desktop tip under the title (off for hangman, etc.). */
+  showTip?: boolean;
 };
 
-export function GameEmbed({ title, src, description }: Props) {
+export function GameEmbed({ title, src, description, showTip = true }: Props) {
   return (
     <div>
       <Link
@@ -17,13 +19,15 @@ export function GameEmbed({ title, src, description }: Props) {
       </Link>
       <header className="mt-6 border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5">
         <h1 className="text-2xl font-bold text-[var(--color-ink)]">{title}</h1>
-        {description && (
+        {description ? (
           <p className="mt-2 text-sm text-[var(--color-muted)]">{description}</p>
-        )}
-        <p className="mt-3 text-xs text-[var(--color-muted)]">
-          Tip: use fullscreen on mobile for the best experience. Keyboard games work best on a
-          desktop.
-        </p>
+        ) : null}
+        {showTip ? (
+          <p className="mt-3 text-xs text-[var(--color-muted)]">
+            Tip: use fullscreen on mobile for the best experience. Keyboard games work best on a
+            desktop.
+          </p>
+        ) : null}
       </header>
       <div className="mt-4 border border-[var(--color-border)] bg-black">
         <iframe
