@@ -1,26 +1,17 @@
 /**
- * Transparent BG, trim empty margins, keep headroom, scale for web.
+ * Transparent BG, trim margins, generous headroom on green / purple / lavender.
  */
 import sharp from "sharp";
 import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 const outDir = path.join("public", "games", "liturgical-vestments");
-const MAX_HEIGHT = 920;
-const BASE_TOP = 32;
+const MAX_HEIGHT = 1000;
 
-/** Extra top padding after trim (these sprites sit higher in the source cell). */
-const EXTRA_TOP = {
-  green: 28,
-  purple: 32,
-  lavender: 32,
-};
+const HEADROOM_COLORS = new Set(["green", "purple", "lavender"]);
 
-function extraTopFor(file) {
-  if (file.includes("character-green")) return EXTRA_TOP.green;
-  if (file.includes("character-lavender")) return EXTRA_TOP.lavender;
-  if (file.includes("character-purple")) return EXTRA_TOP.purple;
-  return 0;
+function colorFromFile(file) {
+  return file.replace("character-", "").replace(".png", "");
 }
 
 function flattenAlpha(input) {
@@ -46,19 +37,34 @@ async function processFile(file) {
   if (!file.startsWith("character-") || !file.endsWith(".png")) return;
   if (file === "character-base.png") return;
 
+  const color = colorFromFile(file);
+  const needsHeadroom = HEADROOM_COLORS.has(color);
   const filePath = path.join(outDir, file);
-  const topPad = BASE_TOP + extraTopFor(file);
-  const pipeline = await flattenAlpha(filePath);
+
+  let pipeline = await flattenAlpha(filePath);
+
+  if (needsHeadroom) {
+    // Do not trim — fuzzy hair at the top can be lost. Pad generously instead.
+    pipeline = pipeline.extend({
+      top: 140,
+      bottom: 20,
+      left: 20,
+      right: 20,
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    });
+  } else {
+    pipeline = pipeline
+      .trim({ threshold: 10 })
+      .extend({
+        top: 40,
+        bottom: 16,
+        left: 16,
+        right: 16,
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      });
+  }
 
   await pipeline
-    .trim({ threshold: 12 })
-    .extend({
-      top: topPad,
-      bottom: 12,
-      left: 12,
-      right: 12,
-      background: { r: 0, g: 0, b: 0, alpha: 0 },
-    })
     .resize({
       height: MAX_HEIGHT,
       fit: "inside",
@@ -70,7 +76,7 @@ async function processFile(file) {
   const fs = await import("node:fs/promises");
   await fs.rename(filePath + ".tmp", filePath);
   const meta = await sharp(filePath).metadata();
-  console.log("optimized", file, `${meta.width}x${meta.height}`, `top=${topPad}`);
+  console.log("optimized", file, `${meta.width}x${meta.height}`, needsHeadroom ? "headroom" : "trim");
 }
 
 async function main() {
