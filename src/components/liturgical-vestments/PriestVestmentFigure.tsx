@@ -3,6 +3,7 @@
 import {
   VESTMENT_CHARACTER_IMAGES,
   VESTMENT_DEFAULT_COLOR,
+  VESTMENT_CANVAS,
 } from "@/lib/liturgical-vestments-assets";
 import type { VestmentColor } from "@/lib/liturgical-vestments-game";
 import Image from "next/image";
@@ -21,15 +22,15 @@ export function PriestVestmentFigure({ chasubleColor }: Props) {
       : `Priest wearing ${displayColor} liturgical vestments`;
 
   return (
-    <div className="flex justify-center overflow-visible pt-1">
+    <div className="flex justify-center overflow-visible py-1">
       <Image
         src={src}
         alt={alt}
-        width={960}
-        height={1040}
+        width={VESTMENT_CANVAS.width}
+        height={VESTMENT_CANVAS.height}
         unoptimized
-        className="h-auto max-h-[min(72vh,580px)] w-auto max-w-full object-contain object-bottom"
-        sizes="(max-width: 640px) 90vw, 420px"
+        className="h-auto w-auto max-h-[min(75vh,620px)] max-w-full object-contain"
+        sizes="(max-width: 640px) 92vw, 440px"
         priority
         draggable={false}
       />

@@ -1,5 +1,5 @@
 /**
- * Normalize every character PNG to the same canvas, scale, and padding.
+ * Normalize vestment PNGs: same scale for every color, full body (no crop), shared canvas.
  */
 import sharp from "sharp";
 import { readdir } from "node:fs/promises";
@@ -9,9 +9,10 @@ const outDir = path.join("public", "games", "liturgical-vestments");
 
 const CANVAS_W = 960;
 const CANVAS_H = 1040;
-const FIGURE_W = 880;
-const FIGURE_H = 900;
-const PAD_BOTTOM = 32;
+/** Max painted figure height on the canvas (head to feet). */
+const FIGURE_MAX_H = 860;
+const PAD_TOP = 56;
+const PAD_BOTTOM = 36;
 
 function isBackground(r, g, b) {
   if (r < 32 && g < 32 && b < 32) return true;
@@ -37,48 +38,49 @@ function flattenAlpha(input) {
     });
 }
 
-async function processFile(file) {
-  if (!file.startsWith("character-") || !file.endsWith(".png")) return;
-  if (file === "character-base.png") return;
-
+async function loadTrimmed(file) {
   const filePath = path.join(outDir, file);
-
-  const figure = await (
-    await flattenAlpha(filePath)
-  )
-    .trim({ threshold: 8 })
-    .resize({
-      width: FIGURE_W,
-      height: FIGURE_H,
-      fit: "cover",
-      position: "bottom",
-    })
-    .png()
-    .toBuffer();
-
-  const left = Math.floor((CANVAS_W - FIGURE_W) / 2);
-  const top = CANVAS_H - PAD_BOTTOM - FIGURE_H;
-
-  await sharp({
-    create: {
-      width: CANVAS_W,
-      height: CANVAS_H,
-      channels: 4,
-      background: { r: 0, g: 0, b: 0, alpha: 0 },
-    },
-  })
-    .composite([{ input: figure, left, top }])
-    .png({ compressionLevel: 9 })
-    .toFile(filePath + ".tmp");
-
-  const fs = await import("node:fs/promises");
-  await fs.rename(filePath + ".tmp", filePath);
-  console.log("normalized", file, `box ${FIGURE_W}x${FIGURE_H} @ ${left},${top}`);
+  const buf = await (await flattenAlpha(filePath)).trim({ threshold: 8 }).png().toBuffer();
+  const meta = await sharp(buf).metadata();
+  return { file, buf, width: meta.width ?? 1, height: meta.height ?? 1 };
 }
 
 async function main() {
-  const files = await readdir(outDir);
-  for (const f of files) await processFile(f);
+  const files = (await readdir(outDir)).filter(
+    (f) => f.startsWith("character-") && f.endsWith(".png") && f !== "character-base.png",
+  );
+
+  const trimmed = [];
+  for (const f of files) trimmed.push(await loadTrimmed(f));
+
+  const maxH = Math.max(...trimmed.map((t) => t.height));
+  const scale = FIGURE_MAX_H / maxH;
+
+  for (const t of trimmed) {
+    const fw = Math.round(t.width * scale);
+    const fh = Math.round(t.height * scale);
+    const left = Math.floor((CANVAS_W - fw) / 2);
+    const top = CANVAS_H - PAD_BOTTOM - fh;
+
+    const figure = await sharp(t.buf)
+      .resize(fw, fh, { fit: "fill" })
+      .png()
+      .toBuffer();
+
+    await sharp({
+      create: {
+        width: CANVAS_W,
+        height: CANVAS_H,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      },
+    })
+      .composite([{ input: figure, left, top }])
+      .png({ compressionLevel: 9 })
+      .toFile(path.join(outDir, t.file));
+
+    console.log(t.file, `scaled ${t.width}x${t.height} → ${fw}x${fh}`, `@ ${left},${top}`);
+  }
 }
 
 main().catch((e) => {
