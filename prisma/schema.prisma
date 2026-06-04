@@ -140,6 +140,27 @@ model ChurchDecoration {
   @@index([published])
 }
 
+/// PNG overlay frames for 4-Cut Photo Booth (/play/photo-booth).
+model PhotoBoothFrame {
+  id        String             @id @default(cuid())
+  slug      String             @unique
+  title     String
+  imageUrl  String
+  layout    PhotoBoothLayout   @default(BOTH)
+  sortOrder Int                @default(0)
+  published Boolean            @default(true)
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([published])
+}
+
+enum PhotoBoothLayout {
+  SINGLE
+  STRIP
+  BOTH
+}
+
 /// Words for the falling-word typing game (/play/typing).
 model TypingWord {
   id        String   @id @default(cuid())
