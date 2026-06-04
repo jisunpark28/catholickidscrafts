@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { MassReadingBlock } from "@/components/MassReadingBlock";
 import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
 import { PageShell } from "@/components/PageShell";
+import { RecommendedScriptureSites } from "@/components/RecommendedScriptureSites";
+import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { formatDisplayDate, parseDateParam } from "@/lib/dates";
 import {
   fetchMassDay,
@@ -45,6 +47,7 @@ export default async function MassDayPage({ params }: Props) {
   const season = getLiturgicalSeason(date);
   const displayDate = formatDisplayDate(date);
   const usccbUrl = mass.usccbPageUrl ?? "https://bible.usccb.org/bible/readings/";
+  const lwcUrl = livingWithChristReadingUrl(dateParam);
 
   return (
     <PageShell wide>
@@ -59,23 +62,37 @@ export default async function MassDayPage({ params }: Props) {
         <LiturgicalSeasonBanner season={season} />
       </div>
 
+      <div className="mt-8">
+        <RecommendedScriptureSites dateKey={dateParam} compact />
+      </div>
+
       <header className="mt-10 border-b border-[var(--color-border)] pb-8">
         <p className="text-sm font-semibold text-[var(--color-muted)]">{displayDate}</p>
         <h1 className="mt-2 text-3xl font-bold leading-tight text-[var(--color-ink)] sm:text-4xl">
           {mass.liturgicalTitle}
         </h1>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <a
+            href={lwcUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-white hover:bg-[var(--color-accent-hover)]"
+          >
+            Readings on Living with Christ (Canada) ↗
+          </a>
+          <a
+            href={usccbUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block border border-[var(--color-border)] bg-white px-4 py-2 text-sm font-bold text-[var(--color-ink)] hover:bg-[var(--color-surface)]"
+          >
+            USCCB Daily Readings (USA) ↗
+          </a>
+        </div>
         {!mass.readingsOnSite && (
           <p className="mt-4 rounded border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-            Full reading text for this date is on the{" "}
-            <a
-              href={usccbUrl}
-              className="font-semibold underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              official USCCB Daily Readings
-            </a>{" "}
-            page (copyright). Citations below help you find the right passage.
+            Full reading text for this date is on the official sites above (copyright). Citations
+            below help you find the right passage on CKC.
           </p>
         )}
         {mass.feast && (
@@ -111,7 +128,7 @@ export default async function MassDayPage({ params }: Props) {
         <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
           Play → Typing Game
         </Link>{" "}
-        (Word mode or Today&apos;s Bible when on-site text is available for that date).
+        (Word mode, Paste passage, or Today&apos;s Bible when on-site text is available).
       </p>
 
       <p className="mt-4 text-sm text-[var(--color-muted)]">
