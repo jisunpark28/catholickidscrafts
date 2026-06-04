@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
-import { livingWithChristReadingUrl } from "@/lib/scripture-links";
-import type { LwcMassDay } from "@/lib/living-with-christ";
+import type { UniversalisMassDay } from "@/lib/universalis";
+
+const DEFAULT_UNIVERSALIS_MASS_URL =
+  "https://universalis.com/Europe.England/mass.htm";
 import { toDateKey } from "@/lib/dates";
 import type { ReadingKind } from "@/types/mass";
 
@@ -17,7 +19,8 @@ const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
 export function BibleTypingMode() {
   const today = useMemo(() => toDateKey(new Date()), []);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
-  const [day, setDay] = useState<LwcMassDay | null>(null);
+  const [day, setDay] = useState<UniversalisMassDay | null>(null);
+  const massPageUrl = day?.pageUrl ?? DEFAULT_UNIVERSALIS_MASS_URL;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -25,10 +28,10 @@ export function BibleTypingMode() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`/api/lwc-readings/${today}`);
+      const res = await fetch(`/api/universalis-readings/${today}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Could not load readings");
-      setDay(data as LwcMassDay);
+      setDay(data as UniversalisMassDay);
     } catch (e) {
       setDay(null);
       setError(e instanceof Error ? e.message : "Could not load readings");
@@ -57,21 +60,31 @@ export function BibleTypingMode() {
   }, [availableKinds, readingKind]);
 
   const displayDate = day?.liturgicalTitle ?? today;
+  const copyrightNotice = day?.copyrightNotice ?? "";
 
   return (
     <div className="space-y-6">
       <p className="text-sm text-[var(--color-muted)]">
         <strong className="text-[var(--color-ink)]">Today&apos;s Bible</strong> loads today&apos;s
-        text from{" "}
+        Mass texts from{" "}
         <a
-          href={livingWithChristReadingUrl(today)}
+          href={massPageUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-[var(--color-link)]"
         >
-          Living with Christ
+          Universalis
+        </a>{" "}
+        (free JSONP for websites—see{" "}
+        <a
+          href="https://universalis.com/n-web.htm"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-[var(--color-link)]"
+        >
+          Universalis for webmasters
         </a>
-        . Pick First Reading, Psalm, or Gospel—kids type along with today&apos;s Mass texts.
+        ). Pick a reading; kids type along with today&apos;s liturgy.
       </p>
 
       <div className="flex flex-wrap items-end gap-4 border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
@@ -109,18 +122,18 @@ export function BibleTypingMode() {
         </fieldset>
 
         <a
-          href={reading?.externalUrl ?? livingWithChristReadingUrl(today)}
+          href={reading?.externalUrl ?? massPageUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="border border-[var(--color-accent)] bg-white px-3 py-2 text-xs font-bold text-[var(--color-accent)] hover:bg-[var(--color-surface)]"
         >
-          Open on Living with Christ ↗
+          Open on Universalis ↗
         </a>
       </div>
 
       {loading && (
         <p className="text-sm text-[var(--color-muted)]">
-          Loading today&apos;s readings from Living with Christ…
+          Loading today&apos;s readings from Universalis…
         </p>
       )}
       {error && (
@@ -130,11 +143,18 @@ export function BibleTypingMode() {
       )}
 
       {reading && readingText.length > 0 && (
-        <PassageTypingGame
-          key={`${today}-${reading.kind}`}
-          title={reading.label}
-          text={readingText}
-        />
+        <>
+          <PassageTypingGame
+            key={`${today}-${reading.kind}`}
+            title={reading.label}
+            text={readingText}
+          />
+          {copyrightNotice.length > 0 && (
+            <p className="text-xs leading-relaxed text-[var(--color-muted)]">
+              {copyrightNotice}
+            </p>
+          )}
+        </>
       )}
 
       {reading && !readingText.length && !loading && !error && (
@@ -142,12 +162,12 @@ export function BibleTypingMode() {
           <p>
             Could not load text for this reading. Open{" "}
             <a
-              href={reading.externalUrl ?? livingWithChristReadingUrl(today)}
+              href={reading.externalUrl ?? massPageUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-[var(--color-link)]"
             >
-              Living with Christ
+              Universalis
             </a>{" "}
             for today.
           </p>

@@ -33,6 +33,25 @@ Operator reference for **catholickidscrafts.com** `/mass` pages.
 5. **Third-party scrapers (e.g. GitHub `catholic-mass-readings`)**  
    - Still republish USCCB material; same licensing constraints apply.
 
+## Typing game — Universalis JSONP (Today's Bible)
+
+The **Play → Typing → Today's Bible** mode loads **today only** via Universalis’s free [JSONP service for webmasters](https://universalis.com/n-web.htm) ([technical notes](https://universalis.com/n-jsonp.htm)).
+
+| Requirement (Universalis) | How this site complies |
+|---------------------------|-------------------------|
+| Do not scrape/copy-paste pages | Server fetches official `jsonpmass.js` only |
+| Link to Universalis | UI links to `https://universalis.com/…/mass.htm` |
+| Keep copyright notice visible | API returns `copyrightNotice`; typing UI shows it under the passage |
+
+Default calendar: `Europe.England` (ICEL / ESV-CE texts on Universalis). Override with `UNIVERSALIS_CALENDAR_PATH` (same path segment as in the JSONP URL).
+
+**Not the same as USCCB:** Universalis texts follow the calendar/translation configured on Universalis (e.g. England), not the U.S. Lectionary on bible.usccb.org. Mass hub (`/mass`) still uses USCCB + Living with Christ links.
+
+| File | Role |
+|------|------|
+| `src/lib/universalis.ts` | Fetch & parse JSONP → typing `MassReading[]` |
+| `src/app/api/universalis-readings/[date]/route.ts` | Today-only API for typing |
+
 ## Implementation in this repo
 
 | File | Role |
@@ -40,6 +59,7 @@ Operator reference for **catholickidscrafts.com** `/mass` pages.
 | `src/lib/usccb-rss.ts` | Parse USCCB RSS → `MassReading[]` |
 | `src/lib/mass-source.ts` | `fetchMassDay`: USCCB first, link-only fallback |
 | `src/lib/evangelizo.ts` | Calendar titles, citations, optional republish flag |
+| `src/lib/living-with-christ.ts` | Optional LWC helpers (Mass calendar links; not used for typing) |
 
 ### Environment
 
