@@ -2,7 +2,6 @@ import { parseDateParam, todayUtc, toDateKey } from "@/lib/dates";
 import { fetchUniversalisMassDay } from "@/lib/universalis";
 import { NextResponse } from "next/server";
 
-/** @deprecated Prefer `/api/universalis-readings/[date]`. Same Universalis JSONP source. */
 type Params = { params: Promise<{ date: string }> };
 
 export async function GET(_request: Request, { params }: Params) {
@@ -34,7 +33,7 @@ export async function GET(_request: Request, { params }: Params) {
     const message =
       error instanceof Error
         ? error.message
-        : "Unable to load readings.";
+        : "Unable to load Universalis readings.";
     return NextResponse.json({ error: message }, { status: 502 });
   }
 }

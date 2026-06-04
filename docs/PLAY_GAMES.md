@@ -28,7 +28,7 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 ## Typing games (`/play/typing`)
 
 - **Word mode**: falling words from `GET /api/typing-words` (admin: `/admin/typing-words`).
-- **Today's Bible**: today's reading type; text from `GET /api/lwc-readings/[date]` (Living with Christ).
+- **Today's Bible**: today's reading type; text from `GET /api/universalis-readings/[date]` (Universalis JSONP, calendar `Europe.England` by default). Show the returned `copyrightNotice` on the page (Universalis webmaster terms).
 - Typing is **not** on Daily Mass pages—only under Play.
 
 ## Liturgical vestments (`/play/liturgical-vestments`)
