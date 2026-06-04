@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { SiteLogo } from "@/components/SiteLogo";
 
 const nav = [
-  { href: "/mass", label: "Daily Mass", match: (p: string) => p === "/mass" || p.startsWith("/mass/") },
+  { href: "/mass", label: "Daily Mass", match: (p: string) => p === "/mass" },
   { href: "/play", label: "Play", match: (p: string) => p.startsWith("/play") },
   { href: "/curriculum", label: "Curriculum", match: (p: string) => p.startsWith("/curriculum") },
   { href: "/resources", label: "Kids Resources", match: (p: string) => p.startsWith("/resources") },

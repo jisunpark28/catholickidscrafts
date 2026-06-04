@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
 import { MassCalendar } from "@/components/MassCalendar";
 import { PageHeader } from "@/components/PageHeader";
@@ -6,6 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { todayUtc, toDateKey } from "@/lib/dates";
 import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { fetchMassDaySummary, fetchMonthCalendar } from "@/lib/mass-source";
+import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -25,12 +25,13 @@ export default async function DailyMassPage() {
   ]);
 
   const lwcToday = livingWithChristReadingUrl(dateKey);
+  const usccbToday = usccbReadingsPageUrl(today);
 
   return (
     <PageShell wide>
       <PageHeader
         title="Daily Mass"
-        subtitle="Roman calendar in English. Click a date for Canadian readings on Living with Christ, or open liturgy notes on this site."
+        subtitle="Roman calendar in English. Click a date for Canadian readings, or use the buttons below for today."
       >
         <div className="flex flex-wrap gap-3">
           <a
@@ -45,9 +46,9 @@ export default async function DailyMassPage() {
             href={usccbToday}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block border border-[var(--color-border)] bg-white px-6 py-3 text-sm font-bold text-[var(--color-ink)] transition hover:bg-[var(--color-surface)]"
+            className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
           >
-            USCCB Daily Readings (USA) ↗
+            Today&apos;s readings (USA) ↗
           </a>
         </div>
       </PageHeader>

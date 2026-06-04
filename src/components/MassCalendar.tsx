@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { livingWithChristReadingUrl } from "@/lib/scripture-links";
+import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
+import { parseDateParam } from "@/lib/dates";
 import type { MassDaySummary, MonthCalendar } from "@/types/mass";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -114,6 +115,8 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
           const isSelected = day.date === selectedDate;
           const isToday = day.date === todayDate;
           const lwcUrl = livingWithChristReadingUrl(day.date);
+          const dayDate = parseDateParam(day.date);
+          const usccbUrl = dayDate ? usccbReadingsPageUrl(dayDate) : null;
           return (
             <div
               key={day.date}
@@ -121,46 +124,48 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
                 isSelected ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
               }`}
             >
-              <a
-                href={lwcUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-1 flex-col transition hover:opacity-90"
-                title={`${day.liturgicalTitle} — Living with Christ readings`}
-              >
+              <div className="flex flex-1 flex-col">
                 <span
                   className={`text-sm font-bold sm:text-base ${
                     isToday ? "text-[var(--color-accent)]" : "text-[var(--color-ink)]"
                   }`}
                 >
                   {dayNum}
-                  <span className="ml-1 text-[10px] font-normal text-[var(--color-muted)]">
-                    ↗
-                  </span>
                 </span>
                 <span className="mt-1 line-clamp-3 flex-1 text-[11px] leading-snug text-[var(--color-muted)] sm:line-clamp-4 sm:text-xs sm:leading-tight">
                   {day.liturgicalTitle}
                 </span>
-                <span className="mt-1 text-[10px] font-semibold text-[var(--color-link)]">
-                  Canada readings
-                </span>
-              </a>
-              <Link
-                href={`/mass/${day.date}`}
-                className="mt-1 text-[10px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-link)] hover:underline"
-              >
-                Liturgy on CKC
-              </Link>
+              </div>
+              <div className="mt-2 flex flex-col gap-1">
+                <a
+                  href={lwcUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] font-semibold text-[var(--color-link)] hover:underline"
+                  title={`${day.liturgicalTitle} — Canada`}
+                >
+                  Canada ↗
+                </a>
+                {usccbUrl && (
+                  <a
+                    href={usccbUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] font-semibold text-[var(--color-link)] hover:underline"
+                    title={`${day.liturgicalTitle} — USA`}
+                  >
+                    USA ↗
+                  </a>
+                )}
+              </div>
             </div>
           );
         })}
       </div>
 
       <p className="px-4 py-3 text-xs text-[var(--color-muted)] sm:px-6">
-        Click a date to open that day on{" "}
-        <span className="font-semibold">readings.livingwithchrist.ca</span> (Canada). Use{" "}
-        <span className="font-semibold">Liturgy on CKC</span> for calendar notes and U.S. RSS when
-        available. Calendar titles: {calendar.source}
+        Use <span className="font-semibold">Canada ↗</span> or <span className="font-semibold">USA ↗</span>{" "}
+        for official readings on that date. Calendar titles: {calendar.source}
       </p>
     </section>
   );

@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
         destination: "/play/photo-booth",
         permanent: false,
       },
+      {
+        source: "/mass/:date",
+        destination: "/mass",
+        permanent: true,
+      },
     ];
   },
 };

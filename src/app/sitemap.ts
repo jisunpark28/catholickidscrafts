@@ -1,7 +1,6 @@
 import { getAllResourceSlugs, getCurriculumTracks } from "@/lib/content";
 import { getAllRecommendationSlugs } from "@/lib/recommendations";
 import { getSiteUrl } from "@/lib/site-url";
-import { todayUtc, toDateKey } from "@/lib/dates";
 import type { MetadataRoute } from "next";
 
 export const dynamic = "force-dynamic";
@@ -22,22 +21,6 @@ function entry(
     changeFrequency: options?.changeFrequency ?? "weekly",
     priority: options?.priority ?? 0.5,
   };
-}
-
-function massDateUrls(): MetadataRoute.Sitemap {
-  const items: MetadataRoute.Sitemap = [];
-  const start = todayUtc();
-  for (let offset = -30; offset <= 30; offset++) {
-    const d = new Date(start);
-    d.setUTCDate(d.getUTCDate() + offset);
-    items.push(
-      entry(`/mass/${toDateKey(d)}`, {
-        changeFrequency: "daily",
-        priority: 0.75,
-      }),
-    );
-  }
-  return items;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -86,7 +69,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes.map((e) => ({ ...e, lastModified: now })),
-    ...massDateUrls(),
     ...curriculumUrls,
     ...resourceUrls,
     ...recommendationUrls,
