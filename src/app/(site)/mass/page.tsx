@@ -41,12 +41,14 @@ export default async function DailyMassPage() {
           >
             Today&apos;s readings (Canada) ↗
           </a>
-          <Link
-            href={`/mass/${dateKey}`}
+          <a
+            href={usccbToday}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block border border-[var(--color-border)] bg-white px-6 py-3 text-sm font-bold text-[var(--color-ink)] transition hover:bg-[var(--color-surface)]"
           >
-            Today on CKC
-          </Link>
+            USCCB Daily Readings (USA) ↗
+          </a>
         </div>
       </PageHeader>
 
