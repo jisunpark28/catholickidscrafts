@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
+import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { toDateKey } from "@/lib/dates";
 import type { MassDay, ReadingKind } from "@/types/mass";
 
@@ -11,7 +12,11 @@ const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
   { kind: "gospel", label: "Gospel" },
 ];
 
-export function BibleTypingMode() {
+type Props = {
+  onSwitchToPaste?: () => void;
+};
+
+export function BibleTypingMode({ onSwitchToPaste }: Props) {
   const today = useMemo(() => toDateKey(new Date()), []);
   const [date, setDate] = useState(today);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
@@ -91,6 +96,15 @@ export function BibleTypingMode() {
             })}
           </div>
         </fieldset>
+
+        <a
+          href={livingWithChristReadingUrl(date)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border border-[var(--color-accent)] bg-white px-3 py-2 text-xs font-bold text-[var(--color-accent)] hover:bg-[var(--color-surface)]"
+        >
+          Open Canada readings ↗
+        </a>
       </div>
 
       {loading && <p className="text-sm text-[var(--color-muted)]">Loading readings…</p>}
@@ -107,6 +121,44 @@ export function BibleTypingMode() {
           title={reading.label}
           text={readingText}
         />
+      )}
+
+      {reading && !readingText.length && !loading && (
+        <div className="border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-sm text-[var(--color-muted)]">
+          <p>
+            Full text is not stored on this site for this date. Open{" "}
+            <a
+              href={livingWithChristReadingUrl(date)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[var(--color-link)]"
+            >
+              Living with Christ
+            </a>{" "}
+            or{" "}
+            <a
+              href={mass?.usccbPageUrl ?? "https://bible.usccb.org/bible/readings/"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[var(--color-link)]"
+            >
+              USCCB Daily Readings
+            </a>
+            , copy the passage, then use{" "}
+            {onSwitchToPaste ? (
+              <button
+                type="button"
+                onClick={onSwitchToPaste}
+                className="font-semibold text-[var(--color-link)] underline"
+              >
+                Paste passage
+              </button>
+            ) : (
+              <span className="font-semibold">Paste passage</span>
+            )}{" "}
+            mode.
+          </p>
+        </div>
       )}
     </div>
   );
