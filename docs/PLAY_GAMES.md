@@ -25,6 +25,12 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 - Public API: `GET /api/church-decorations`
 - Click uploaded images inside the 3D church to show title + description.
 
+## 4-Cut Photo Booth frames (operator)
+
+- Admin: `/admin/photo-booth-frames` — upload transparent PNG overlays (360×480 px recommended).
+- Public API: `GET /api/photo-booth-frames`
+- Frames render **on top of photos**, under stickers, in single and 4-cut modes.
+
 ## Typing games (`/play/typing`)
 
 - **Word mode**: falling words from `GET /api/typing-words` (admin: `/admin/typing-words`).

@@ -1,6 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  frameAppliesToMode,
+  type PhotoBoothFrameItem,
+} from "@/lib/photo-booth-frames";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type BgId = "cream" | "sky" | "rose" | "lavender" | "gold" | "stained" | "mint" | "cloud";
 
@@ -185,6 +189,25 @@ function drawStickers(ctx: CanvasRenderingContext2D, stickers: PlacedSticker[]) 
   }
 }
 
+async function drawFrameOverlay(
+  ctx: CanvasRenderingContext2D,
+  imageUrl: string,
+  w: number,
+  h: number,
+  loadImage: (src: string) => Promise<HTMLImageElement>,
+  paintGen: number,
+  paintGenRef: React.MutableRefObject<number>,
+): Promise<boolean> {
+  try {
+    const frameImg = await loadImage(imageUrl);
+    if (paintGen !== paintGenRef.current) return false;
+    ctx.drawImage(frameImg, 0, 0, w, h);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function PhotoBoothGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -205,8 +228,22 @@ export function PhotoBoothGame() {
   const [dragId, setDragId] = useState<number | null>(null);
   const [dragSlot, setDragSlot] = useState<number | null>(null);
   const [paintTick, setPaintTick] = useState(0);
+  const [frames, setFrames] = useState<PhotoBoothFrameItem[]>([]);
+  const [selectedFrameId, setSelectedFrameId] = useState<string | null>(null);
   const stickerIdRef = useRef(0);
   const paintGenRef = useRef(0);
+
+  const availableFrames = useMemo(
+    () => frames.filter((f) => frameAppliesToMode(f.layout, mode)),
+    [frames, mode],
+  );
+
+  const selectedFrame = useMemo(
+    () => availableFrames.find((f) => f.id === selectedFrameId) ?? null,
+    [availableFrames, selectedFrameId],
+  );
+
+  const frameImageUrl = selectedFrame?.imageUrl ?? null;
 
   const stripComplete = mode === "strip" && stripPhotos.every((p) => p !== null);
   const stripCapturing = mode === "strip" && !stripComplete;
@@ -227,6 +264,29 @@ export function PhotoBoothGame() {
   }, []);
 
   useEffect(() => () => stopCamera(), [stopCamera]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch("/api/photo-booth-frames");
+        if (!res.ok) return;
+        const data = (await res.json()) as PhotoBoothFrameItem[];
+        if (!cancelled) setFrames(data);
+      } catch {
+        /* optional */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedFrameId && !availableFrames.some((f) => f.id === selectedFrameId)) {
+      setSelectedFrameId(null);
+    }
+  }, [availableFrames, selectedFrameId]);
 
   useEffect(() => {
     if (!cameraOn) return;
@@ -284,11 +344,11 @@ export function PhotoBoothGame() {
 
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+    const paintGen = ++paintGenRef.current;
 
     if (mode === "strip") {
       const editsSnapshot = stripEdits;
       const photosSnapshot = stripPhotos;
-      const paintGen = ++paintGenRef.current;
 
       for (let i = 0; i < 4; i++) {
         const { x, y, w, h } = stripCellRect(i);
@@ -313,6 +373,19 @@ export function PhotoBoothGame() {
 
       if (paintGen !== paintGenRef.current) return;
 
+      if (frameImageUrl) {
+        await drawFrameOverlay(
+          ctx,
+          frameImageUrl,
+          CANVAS_W,
+          CANVAS_H,
+          loadImage,
+          paintGen,
+          paintGenRef,
+        );
+        if (paintGen !== paintGenRef.current) return;
+      }
+
       const { x, y, w, h } = stripCellRect(selectedStripSlot);
       ctx.strokeStyle = "#c45c26";
       ctx.lineWidth = 3;
@@ -327,6 +400,17 @@ export function PhotoBoothGame() {
           /* skip */
         }
       }
+      if (frameImageUrl) {
+        await drawFrameOverlay(
+          ctx,
+          frameImageUrl,
+          CANVAS_W,
+          CANVAS_H,
+          loadImage,
+          paintGen,
+          paintGenRef,
+        );
+      }
       drawStickers(ctx, stickers);
     }
   }, [
@@ -339,6 +423,7 @@ export function PhotoBoothGame() {
     loadImage,
     canDecorate,
     selectedStripSlot,
+    frameImageUrl,
   ]);
 
   useEffect(() => {
@@ -766,6 +851,50 @@ export function PhotoBoothGame() {
               <p className="rounded-md bg-[var(--color-surface)] px-3 py-2 text-sm font-bold text-[var(--color-ink)]">
                 Editing photo {selectedStripSlot + 1}
               </p>
+            )}
+            {availableFrames.length > 0 && (
+              <div>
+                <p className="text-sm font-bold text-[var(--color-ink)]">Frame</p>
+                <p className="mt-1 text-xs text-[var(--color-muted)]">
+                  Parish frames sit on top of your photo (under stickers).
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedFrameId(null);
+                      bumpPaint();
+                    }}
+                    className={`h-16 w-12 border-2 text-[10px] font-bold uppercase ${
+                      selectedFrameId === null
+                        ? "border-[var(--color-accent)]"
+                        : "border-[var(--color-border)] text-[var(--color-muted)]"
+                    }`}
+                  >
+                    None
+                  </button>
+                  {availableFrames.map((f) => {
+                    const active = selectedFrameId === f.id;
+                    return (
+                      <button
+                        key={f.id}
+                        type="button"
+                        title={f.title}
+                        onClick={() => {
+                          setSelectedFrameId(f.id);
+                          bumpPaint();
+                        }}
+                        className={`h-16 w-12 overflow-hidden border-2 bg-[var(--color-surface)] ${
+                          active ? "border-[var(--color-accent)]" : "border-[var(--color-border)]"
+                        }`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={f.imageUrl} alt="" className="h-full w-full object-contain" />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             )}
             <div>
               <p className="text-sm font-bold text-[var(--color-ink)]">Background</p>
