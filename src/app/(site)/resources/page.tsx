@@ -38,7 +38,8 @@ export default async function ResourcesPage({ searchParams }: Props) {
       <PageShell wide>
         <PageHeader
           title="Kids Resources"
-          subtitle="Crafts, worksheets, and lesson plans grouped by liturgical season—so you can plan Advent, Lent, Easter, and Ordinary Time with your class."
+          subtitle="Pick a season, pick an idea—most posts you can preview here before you buy or print."
+          programNote="Filter by Advent, Lent, and so on when your DRE asks for ‘something for purple time.’ Save the TPT link when you need the full classroom pack."
         />
 
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>
@@ -86,7 +87,8 @@ export default async function ResourcesPage({ searchParams }: Props) {
     <PageShell wide>
       <PageHeader
         title="Kids Resources"
-        subtitle="Crafts, worksheets, and lesson plans grouped by liturgical season—so you can plan Advent, Lent, Easter, and Ordinary Time with your class."
+        subtitle="Pick a season, pick an idea—most posts you can preview here before you buy or print."
+        programNote="Filter by Advent, Lent, and so on when your DRE asks for ‘something for purple time.’ Save the TPT link when you need the full classroom pack."
       />
 
       <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>

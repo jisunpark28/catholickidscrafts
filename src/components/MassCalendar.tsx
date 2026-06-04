@@ -164,8 +164,9 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
       </div>
 
       <p className="px-4 py-3 text-xs text-[var(--color-muted)] sm:px-6">
-        Use <span className="font-semibold">Canada ↗</span> or <span className="font-semibold">USA ↗</span>{" "}
-        for official readings on that date. Calendar titles: {calendar.source}
+        Each day: <span className="font-semibold">Canada ↗</span> or{" "}
+        <span className="font-semibold">USA ↗</span> opens that Sunday or weekday on the official
+        readings site—good for volunteers who are not sure which book to open.
       </p>
     </section>
   );

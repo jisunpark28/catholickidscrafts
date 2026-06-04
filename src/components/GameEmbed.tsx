@@ -24,8 +24,8 @@ export function GameEmbed({ title, src, description, showTip = true }: Props) {
         ) : null}
         {showTip ? (
           <p className="mt-3 text-xs text-[var(--color-muted)]">
-            Tip: use fullscreen on mobile for the best experience. Keyboard games work best on a
-            desktop.
+            In class: one laptop on the projector, or rotate one child at a time. Fullscreen helps
+            on phones; keyboard games work best on a computer.
           </p>
         ) : null}
       </header>

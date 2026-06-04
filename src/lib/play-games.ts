@@ -14,34 +14,35 @@ export const PLAY_GAMES: PlayGame[] = [
     slug: "church",
     title: "Tiny Priest",
     description:
-      "Walk through a voxel church: tabernacle path, altar, holy water, and a guided Mass sequence. Arrow keys or WASD to move.",
+      "A short church walk-through for new helpers and kids—altar, tabernacle, holy water. Good for a first visit or review week.",
     embedPath: getTinyPriestEmbedPath(),
   },
   {
     slug: "liturgical-vestments",
     title: "Liturgical vestments",
     description:
-      "Dress the priest in the right color for Advent, Lent, Easter, and more—Tiny Priest style.",
+      "Practice Church colors (Advent purple, Easter white, and more). Works well right before you decorate the classroom.",
     embedPath: "/play/liturgical-vestments",
   },
   {
     slug: "typing",
     title: "Typing Game",
     description:
-      "Word mode: type falling vocabulary. Today’s Bible: choose First Reading, Second Reading, or Gospel from Daily Mass.",
+      "Word mode for church vocabulary, or type along with today’s Canadian readings—quiet focus time or early arrivers.",
     embedPath: "/play/typing",
   },
   {
     slug: "hangman",
-    title: "Hangman game",
-    description: "",
+    title: "Hangman",
+    description:
+      "Classic hangman with Catholic words—easy filler when you finish early or wait for parents.",
     embedPath: "/games/hangman/index.html",
   },
   {
     slug: "emoji",
     title: "4-Cut Photo Booth",
     description:
-      "Upload or use your camera, then decorate with backgrounds and stickers—make a four-photo strip.",
+      "Four-photo strip with stickers—fun for feast days, First Communion prep, or end-of-year parties.",
     embedPath: "/play/photo-booth",
   },
 ];
@@ -49,4 +50,3 @@ export const PLAY_GAMES: PlayGame[] = [
 export function getPlayGame(slug: string): PlayGame | undefined {
   return PLAY_GAMES.find((g) => g.slug === slug);
 }
-

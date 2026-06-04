@@ -15,7 +15,8 @@ export default function PlayHubPage() {
     <PageShell wide>
       <PageHeader
         title="Play & Learn"
-        subtitle="Short games that reinforce Mass readings, church vocabulary, and creativity—no account needed."
+        subtitle="Plug-and-play activities when you need something that works in the room."
+        programNote="No student accounts. Open on one screen or let kids take turns. Pair with Daily Mass or a resource from the same season."
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -39,9 +40,9 @@ export default function PlayHubPage() {
       </div>
 
       <p className="mt-10 text-sm text-[var(--color-muted)]">
-        Typing games (Word mode + Today’s Bible) live at{" "}
+        For typing practice (church words or today’s readings), go to{" "}
         <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
-          /play/typing
+          Typing Game
         </Link>
         .
       </p>

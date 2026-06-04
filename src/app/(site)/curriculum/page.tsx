@@ -18,7 +18,8 @@ export default async function CurriculumPage() {
     <PageShell wide>
       <PageHeader
         title="Curriculum"
-        subtitle="Grade-based lesson paths for catechists and parents. Separate from the daily Mass calendar—pick a track and build your year."
+        subtitle="When you are mapping a whole year—not just one Sunday at a time."
+        programNote="Choose the age band closest to your group. Use alongside Daily Mass and Kids Resources; you do not have to follow every week in order."
       />
 
       <div className="grid gap-0 border border-[var(--color-border)] sm:grid-cols-2">

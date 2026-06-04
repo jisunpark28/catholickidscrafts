@@ -23,7 +23,8 @@ export default function PhotoBoothPage() {
       <div className="mt-6">
         <PageHeader
           title="4-Cut Photo Booth"
-          subtitle="Like a life-four-cut booth: take or upload photos, pick a background, add stickers."
+          subtitle="A light celebration activity—great after a rehearsal or saint-day party."
+          programNote="Photos stay on the device (not uploaded here). Print or share from the family’s phone if your parish allows."
         />
       </div>
 

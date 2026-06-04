@@ -31,7 +31,8 @@ export default async function DailyMassPage() {
     <PageShell wide>
       <PageHeader
         title="Daily Mass"
-        subtitle="Roman calendar in English. Click a date for Canadian readings, or use the buttons below for today."
+        subtitle="What is the Church celebrating? Start here before you plan your lesson or activity."
+        programNote="In class: show today on the calendar, then open Canada or U.S. readings on the official site. Readings stay on their site—we link you there."
       >
         <div className="flex flex-wrap gap-3">
           <a
@@ -51,6 +52,9 @@ export default async function DailyMassPage() {
             Today&apos;s readings (USA) ↗
           </a>
         </div>
+        <p className="mt-3 text-sm text-[var(--color-muted)]">
+          Pick the button that matches where your parish gets its Mass texts.
+        </p>
       </PageHeader>
 
       <div className="space-y-8">

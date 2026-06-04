@@ -228,6 +228,11 @@ export function WordFallTypingGame() {
 
   return (
     <div className="border border-[var(--color-border)] bg-white">
+      <p className="border-b border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[var(--color-muted)]">
+        <strong className="text-[var(--color-ink)]">Word mode:</strong> church words fall from the
+        top—good for spelling saints, seasons, and Mass vocabulary. Start on Easy for younger
+        grades.
+      </p>
       <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
         <p className="text-sm font-semibold text-[var(--color-ink)]">Difficulty</p>
         <div className="mt-2 flex flex-wrap gap-2">

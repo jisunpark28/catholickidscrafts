@@ -30,7 +30,8 @@ export default async function RecommendationsPage({ searchParams }: Props) {
     <PageShell wide>
       <PageHeader
         title="Recommendations"
-        subtitle="Videos, books, printables, and trusted links curated for Catholic families and catechists."
+        subtitle="Stuff we actually use or would suggest to a friend on the parish team."
+        programNote="Handy when a parent asks “What Bible story video is okay?” or you need one more book for the shelf. Some Amazon links help support the site—see disclosure."
       />
 
       <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading filters…</p>}>

@@ -23,7 +23,8 @@ export default function PlayTypingPage() {
       <div className="mt-6">
         <PageHeader
           title="Typing Game"
-          subtitle="Word mode or Today's Bible (today's readings only)."
+          subtitle="Quiet practice that still connects to the faith you are teaching this week."
+          programNote="Word mode: good for grades 2–6 and review. Today's Bible: uses today's Canadian readings only—let readers finish early while others join."
         />
       </div>
 

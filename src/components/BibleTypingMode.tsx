@@ -61,16 +61,17 @@ export function BibleTypingMode() {
   return (
     <div className="space-y-6">
       <p className="text-sm text-[var(--color-muted)]">
-        Today&apos;s readings (Canada) from{" "}
+        <strong className="text-[var(--color-ink)]">Today&apos;s Bible</strong> loads today&apos;s
+        text from{" "}
         <a
           href={livingWithChristReadingUrl(today)}
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-[var(--color-link)]"
         >
-          readings.livingwithchrist.ca
+          Living with Christ (Canada)
         </a>
-        . Only the current calendar day is loaded for typing practice.
+        . Pick First Reading, Psalm, or Gospel—kids type what you heard at Mass this morning.
       </p>
 
       <div className="flex flex-wrap items-end gap-4 border border-[var(--color-border)] bg-[var(--color-surface)] p-4">

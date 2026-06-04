@@ -23,7 +23,8 @@ export default function LiturgicalVestmentsPage() {
       <div className="mt-6">
         <PageHeader
           title="Liturgical vestments"
-          subtitle="Each season of the Church year has a color. Choose the right vestments for Father."
+          subtitle="Match Father’s vestments to the season—then point to the real altar cloth in church."
+          programNote="Try this the week you teach Advent, Lent, or a feast. Ask: “What color should we see at Mass this Sunday?”"
         />
       </div>
 

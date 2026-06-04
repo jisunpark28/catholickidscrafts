@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Home",
   description:
-    "Daily Catholic Mass in English, liturgical-season kids crafts, curriculum paths, and curated recommendations.",
+    "Free planning help for parish and family children's programs—Mass calendar, seasonal activities, games, and curriculum ideas.",
 };
 
 export default function HomePage() {
