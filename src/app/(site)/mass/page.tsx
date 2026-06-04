@@ -3,7 +3,6 @@ import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
 import { MassCalendar } from "@/components/MassCalendar";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
-import { RecommendedScriptureSites } from "@/components/RecommendedScriptureSites";
 import { todayUtc, toDateKey } from "@/lib/dates";
 import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { fetchMassDaySummary, fetchMonthCalendar } from "@/lib/mass-source";
@@ -52,7 +51,6 @@ export default async function DailyMassPage() {
       </PageHeader>
 
       <div className="space-y-8">
-        <RecommendedScriptureSites dateKey={dateKey} />
         <LiturgicalSeasonBanner
           season={calendar.season}
           todayTitle={todaySummary?.liturgicalTitle}

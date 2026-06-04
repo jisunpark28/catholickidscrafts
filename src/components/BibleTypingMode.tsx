@@ -12,11 +12,7 @@ const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
   { kind: "gospel", label: "Gospel" },
 ];
 
-type Props = {
-  onSwitchToPaste?: () => void;
-};
-
-export function BibleTypingMode({ onSwitchToPaste }: Props) {
+export function BibleTypingMode() {
   const today = useMemo(() => toDateKey(new Date()), []);
   const [date, setDate] = useState(today);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
@@ -144,19 +140,8 @@ export function BibleTypingMode({ onSwitchToPaste }: Props) {
             >
               USCCB Daily Readings
             </a>
-            , copy the passage, then use{" "}
-            {onSwitchToPaste ? (
-              <button
-                type="button"
-                onClick={onSwitchToPaste}
-                className="font-semibold text-[var(--color-link)] underline"
-              >
-                Paste passage
-              </button>
-            ) : (
-              <span className="font-semibold">Paste passage</span>
-            )}{" "}
-            mode.
+            {" "}
+            to read the full passage.
           </p>
         </div>
       )}

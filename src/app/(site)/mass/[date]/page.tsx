@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { MassReadingBlock } from "@/components/MassReadingBlock";
 import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
 import { PageShell } from "@/components/PageShell";
-import { RecommendedScriptureSites } from "@/components/RecommendedScriptureSites";
 import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { formatDisplayDate, parseDateParam } from "@/lib/dates";
 import {
@@ -60,10 +59,6 @@ export default async function MassDayPage({ params }: Props) {
 
       <div className="mt-8">
         <LiturgicalSeasonBanner season={season} />
-      </div>
-
-      <div className="mt-8">
-        <RecommendedScriptureSites dateKey={dateParam} compact />
       </div>
 
       <header className="mt-10 border-b border-[var(--color-border)] pb-8">
@@ -128,7 +123,7 @@ export default async function MassDayPage({ params }: Props) {
         <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
           Play → Typing Game
         </Link>{" "}
-        (Word mode, Paste passage, or Today&apos;s Bible when on-site text is available).
+        (Word mode or Today&apos;s Bible when on-site text is available).
       </p>
 
       <p className="mt-4 text-sm text-[var(--color-muted)]">
