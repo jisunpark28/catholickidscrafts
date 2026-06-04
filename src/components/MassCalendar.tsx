@@ -142,9 +142,9 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[10px] font-semibold text-[var(--color-link)] hover:underline"
-                  title={`${day.liturgicalTitle} — Canada`}
+                  title={`${day.liturgicalTitle} — Living with Christ`}
                 >
-                  Canada ↗
+                  Living with Christ ↗
                 </a>
                 {usccbUrl && (
                   <a
@@ -152,9 +152,9 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[10px] font-semibold text-[var(--color-link)] hover:underline"
-                    title={`${day.liturgicalTitle} — USA`}
+                    title={`${day.liturgicalTitle} — USCCB`}
                   >
-                    USA ↗
+                    USCCB ↗
                   </a>
                 )}
               </div>
@@ -164,9 +164,9 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
       </div>
 
       <p className="px-4 py-3 text-xs text-[var(--color-muted)] sm:px-6">
-        Each day: <span className="font-semibold">Canada ↗</span> or{" "}
-        <span className="font-semibold">USA ↗</span> opens that Sunday or weekday on the official
-        readings site—good for volunteers who are not sure which book to open.
+        Each day: open <span className="font-semibold">Living with Christ ↗</span> or{" "}
+        <span className="font-semibold">USCCB ↗</span> for that Sunday or weekday—use the link your
+        parish already trusts.
       </p>
     </section>
   );

@@ -35,8 +35,8 @@ export function SiteFooter() {
             <div>
               <p className="font-bold text-[var(--color-ink)]">Catholic Kids Crafts</p>
               <p className="mt-2 max-w-sm text-sm text-[var(--color-muted)]">
-                Free tools for children&apos;s ministry in Canada and the U.S.—so volunteers can
-                plan with the Church calendar and teach with less stress.
+                Free tools for children&apos;s ministry—so volunteers can plan with the Church
+                calendar and teach with less stress.
               </p>
             </div>
           </div>

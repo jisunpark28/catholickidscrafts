@@ -32,7 +32,7 @@ export default async function DailyMassPage() {
       <PageHeader
         title="Daily Mass"
         subtitle="What is the Church celebrating? Start here before you plan your lesson or activity."
-        programNote="In class: show today on the calendar, then open Canada or U.S. readings on the official site. Readings stay on their site—we link you there."
+        programNote="In class: show today on the calendar, then open the official readings site your community uses. Text stays on their site—we link you there."
       >
         <div className="flex flex-wrap gap-3">
           <a
@@ -41,7 +41,7 @@ export default async function DailyMassPage() {
             rel="noopener noreferrer"
             className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
           >
-            Today&apos;s readings (Canada) ↗
+            Today&apos;s readings (Living with Christ) ↗
           </a>
           <a
             href={usccbToday}
@@ -49,11 +49,11 @@ export default async function DailyMassPage() {
             rel="noopener noreferrer"
             className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
           >
-            Today&apos;s readings (USA) ↗
+            Today&apos;s readings (USCCB) ↗
           </a>
         </div>
         <p className="mt-3 text-sm text-[var(--color-muted)]">
-          Pick the button that matches where your parish gets its Mass texts.
+          Pick the link your parish or diocese normally uses for daily Mass texts.
         </p>
       </PageHeader>
 

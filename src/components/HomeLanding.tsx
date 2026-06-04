@@ -7,7 +7,7 @@ const sections = [
     href: "/mass",
     title: "Daily Mass",
     description:
-      "See what the Church is celebrating today—then open official readings for Canada or the U.S.",
+      "See what the Church is celebrating today—then open official readings on the site your parish uses.",
   },
   {
     href: "/resources",
@@ -48,9 +48,9 @@ export function HomeLanding() {
           Help for children&apos;s ministry—without starting from scratch every week
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--color-muted)]">
-          Catholic Kids Crafts is here for catechists, volunteers, and parents in Canada and the
-          United States. Plan with the Church calendar, grab a ready activity, and open a game when
-          you need something that works in the room.
+          Catholic Kids Crafts is here for catechists, volunteers, and parents in parishes and
+          homes. Plan with the Church calendar, grab a ready activity, and open a game when you
+          need something that works in the room.
         </p>
         <p className="mt-3 max-w-2xl text-sm text-[var(--color-muted)]">
           Free planning tools on this site; fuller printable packs on Teachers Pay Teachers when

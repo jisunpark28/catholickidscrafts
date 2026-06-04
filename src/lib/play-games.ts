@@ -28,7 +28,7 @@ export const PLAY_GAMES: PlayGame[] = [
     slug: "typing",
     title: "Typing Game",
     description:
-      "Word mode for church vocabulary, or type along with today’s Canadian readings—quiet focus time or early arrivers.",
+      "Word mode for church vocabulary, or type along with today’s readings—quiet focus time or early arrivers.",
     embedPath: "/play/typing",
   },
   {

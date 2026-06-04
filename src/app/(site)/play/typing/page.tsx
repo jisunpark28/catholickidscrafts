@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Typing Game",
   description:
-    "Word mode or Today’s Bible with today's Living with Christ readings (Canada).",
+    "Word mode or Today’s Bible with today's readings from Living with Christ.",
 };
 
 export default function PlayTypingPage() {
@@ -24,7 +24,7 @@ export default function PlayTypingPage() {
         <PageHeader
           title="Typing Game"
           subtitle="Quiet practice that still connects to the faith you are teaching this week."
-          programNote="Word mode: good for grades 2–6 and review. Today's Bible: uses today's Canadian readings only—let readers finish early while others join."
+          programNote="Word mode: good for grades 2–6 and review. Today's Bible: loads today's readings from Living with Christ—let readers finish early while others join."
         />
       </div>
 

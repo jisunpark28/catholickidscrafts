@@ -69,9 +69,9 @@ export function BibleTypingMode() {
           rel="noopener noreferrer"
           className="font-semibold text-[var(--color-link)]"
         >
-          Living with Christ (Canada)
+          Living with Christ
         </a>
-        . Pick First Reading, Psalm, or Gospel—kids type what you heard at Mass this morning.
+        . Pick First Reading, Psalm, or Gospel—kids type along with today&apos;s Mass texts.
       </p>
 
       <div className="flex flex-wrap items-end gap-4 border border-[var(--color-border)] bg-[var(--color-surface)] p-4">

@@ -2,7 +2,7 @@ import { toDateKey } from "@/lib/dates";
 
 const LWC_READINGS_BASE = "https://readings.livingwithchrist.ca";
 
-/** Canadian daily Mass readings (Living with Christ / Bayard). */
+/** Daily Mass readings (Living with Christ / Bayard). */
 export function livingWithChristReadingUrl(date: Date | string): string {
   const key = typeof date === "string" ? date : toDateKey(date);
   return `${LWC_READINGS_BASE}/daily-texts/reading/${key}`;

@@ -6,7 +6,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Why Catholic Kids Crafts exists—to support children's ministry in parishes and homes across Canada and the United States.",
+    "Why Catholic Kids Crafts exists—to support children's ministry in parishes and homes.",
 };
 
 export default function AboutPage() {
@@ -24,9 +24,8 @@ export default function AboutPage() {
         then wondered what to do next.
       </p>
       <p>
-        We hope Catholic Kids Crafts lowers that stress for programs in{" "}
-        <strong>Canada and the United States</strong>: something you can open on Saturday night or
-        ten minutes before class, and actually use.
+        We hope Catholic Kids Crafts lowers that stress wherever you serve: something you can open
+        on Saturday night or ten minutes before class, and actually use.
       </p>
 
       <h2 className="pt-4 text-xl font-bold">What you will find here</h2>
@@ -35,7 +34,7 @@ export default function AboutPage() {
           <Link href="/mass" className="font-semibold text-[var(--color-link)]">
             Daily Mass
           </Link>{" "}
-          — see the liturgical day and jump to official readings (Canada or U.S.).
+          — see the liturgical day and jump to official readings (publisher links below).
         </li>
         <li>
           <Link href="/resources" className="font-semibold text-[var(--color-link)]">
