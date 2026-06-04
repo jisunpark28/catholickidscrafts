@@ -85,7 +85,7 @@ export async function fetchLiturgicalTitle(date: Date): Promise<string> {
   return stripHtml(raw);
 }
 
-async function fetchOptionalField(
+export async function fetchOptionalField(
   date: Date,
   type: "saint" | "feast",
 ): Promise<string | undefined> {
@@ -102,7 +102,7 @@ async function fetchOptionalField(
   }
 }
 
-async function fetchReading(
+export async function fetchReading(
   date: Date,
   content: ContentCode,
 ): Promise<MassReading | null> {

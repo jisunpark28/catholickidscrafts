@@ -40,6 +40,7 @@ export function BibleTypingMode() {
   }, [date, loadMass]);
 
   const reading = mass?.readings.find((r) => r.kind === readingKind);
+  const readingText = reading?.text?.trim() ?? "";
   const availableKinds = useMemo(() => {
     if (!mass) return READING_OPTIONS.map((o) => o.kind);
     return READING_OPTIONS.filter((o) => mass.readings.some((r) => r.kind === o.kind)).map(
@@ -100,11 +101,11 @@ export function BibleTypingMode() {
         <p className="text-sm text-[var(--color-muted)]">{mass.liturgicalTitle}</p>
       )}
 
-      {reading && (
+      {reading && readingText.length > 0 && (
         <PassageTypingGame
           key={`${date}-${reading.kind}`}
           title={reading.label}
-          text={reading.text}
+          text={readingText}
         />
       )}
     </div>

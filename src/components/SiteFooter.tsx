@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/Logo.png";
-import { MASS_DATA_SOURCE } from "@/lib/evangelizo";
+import { MASS_DATA_SOURCE } from "@/lib/mass-source";
 import { getTptStoreUrl } from "@/lib/tpt";
 
 const explore = [

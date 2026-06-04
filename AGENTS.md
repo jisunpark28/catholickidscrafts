@@ -11,7 +11,7 @@ Guidance for AI agents working in this repository.
 | Next.js dev | Yes | `pnpm dev` or `npm run dev` | 3000 |
 | Neon Postgres | Yes (content + admin) | Connection via `DATABASE_URL` / `DIRECT_URL` in `.env` | — |
 
-Mass readings are **not** in the DB; they come from Evangelizo at runtime (`/api/mass/*`).
+Mass readings are **not** in the DB; `/api/mass/*` uses USCCB RSS for on-site text when available (see `docs/MASS_READINGS.md`). Calendar/citations use Evangelizo.
 
 ### Environment
 

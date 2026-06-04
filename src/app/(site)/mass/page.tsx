@@ -4,7 +4,7 @@ import { MassCalendar } from "@/components/MassCalendar";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { todayUtc, toDateKey } from "@/lib/dates";
-import { fetchMassDaySummary, fetchMonthCalendar } from "@/lib/evangelizo";
+import { fetchMassDaySummary, fetchMonthCalendar } from "@/lib/mass-source";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export default async function DailyMassPage() {
     <PageShell wide>
       <PageHeader
         title="Daily Mass"
-        subtitle="Roman calendar readings in English. Open a date below for the full Mass of the day—first reading, psalm, second reading, and Gospel."
+        subtitle="Roman calendar in English (U.S. lectionary). Open a date for readings—full text when provided by the official USCCB RSS feed, otherwise citations with a link to bible.usccb.org."
       >
         <Link
           href={`/mass/${dateKey}`}

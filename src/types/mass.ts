@@ -4,7 +4,10 @@ export type MassReading = {
   kind: ReadingKind;
   label: string;
   title: string;
-  text: string;
+  /** Full text when USCCB RSS (or licensed republish) provides it. */
+  text?: string;
+  /** Official USCCB daily readings page for this date. */
+  externalUrl?: string;
 };
 
 export type MassDaySummary = {
@@ -18,6 +21,9 @@ export type MassDay = MassDaySummary & {
   feast?: string;
   readings: MassReading[];
   source: string;
+  usccbPageUrl?: string;
+  /** True when full reading text is shown on this site. */
+  readingsOnSite?: boolean;
 };
 
 export type LiturgicalSeasonInfo = {

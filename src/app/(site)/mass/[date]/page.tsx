@@ -4,7 +4,11 @@ import { MassReadingBlock } from "@/components/MassReadingBlock";
 import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
 import { PageShell } from "@/components/PageShell";
 import { formatDisplayDate, parseDateParam } from "@/lib/dates";
-import { fetchMassDay, MASS_DATA_SOURCE } from "@/lib/evangelizo";
+import {
+  fetchMassDay,
+  MASS_DATA_SOURCE,
+  USCCB_COPYRIGHT_NOTICE,
+} from "@/lib/mass-source";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
 import type { Metadata } from "next";
 
@@ -40,6 +44,8 @@ export default async function MassDayPage({ params }: Props) {
 
   const season = getLiturgicalSeason(date);
   const displayDate = formatDisplayDate(date);
+  const usccbUrl = mass.usccbPageUrl ?? "https://bible.usccb.org/bible/readings/";
+
   return (
     <PageShell wide>
       <Link
@@ -58,6 +64,20 @@ export default async function MassDayPage({ params }: Props) {
         <h1 className="mt-2 text-3xl font-bold leading-tight text-[var(--color-ink)] sm:text-4xl">
           {mass.liturgicalTitle}
         </h1>
+        {!mass.readingsOnSite && (
+          <p className="mt-4 rounded border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+            Full reading text for this date is on the{" "}
+            <a
+              href={usccbUrl}
+              className="font-semibold underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              official USCCB Daily Readings
+            </a>{" "}
+            page (copyright). Citations below help you find the right passage.
+          </p>
+        )}
         {mass.feast && (
           <p className="mt-4 text-[var(--color-muted)]">
             <span className="font-semibold text-[var(--color-ink)]">Feast: </span>
@@ -74,30 +94,36 @@ export default async function MassDayPage({ params }: Props) {
 
       <div className="mt-8 space-y-0 divide-y divide-[var(--color-border)] border border-[var(--color-border)]">
         {mass.readings.map((reading) => (
-          <MassReadingBlock key={reading.kind} reading={reading} />
+          <MassReadingBlock
+            key={reading.kind}
+            reading={reading}
+            usccbPageUrl={mass.usccbPageUrl}
+          />
         ))}
       </div>
+
+      {mass.readingsOnSite && (
+        <p className="mt-8 text-xs leading-relaxed text-[var(--color-muted)]">{USCCB_COPYRIGHT_NOTICE}</p>
+      )}
 
       <p className="mt-8 text-sm text-[var(--color-muted)]">
         Practice typing in{" "}
         <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
           Play → Typing Game
-        </Link>
-        {" "}
-        (Word mode or Today’s Bible with these readings).
+        </Link>{" "}
+        (Word mode or Today&apos;s Bible when on-site text is available for that date).
       </p>
 
       <p className="mt-4 text-sm text-[var(--color-muted)]">
         More games:{" "}
         <Link href="/play" className="font-semibold text-[var(--color-link)]">
           Play &amp; learn
-        </Link>
-        {" "}
+        </Link>{" "}
         (church tour, hangman, emoji photos).
       </p>
 
       <p className="mt-10 text-xs leading-relaxed text-[var(--color-muted)]">
-        Source: {MASS_DATA_SOURCE}. Texts via{" "}
+        {MASS_DATA_SOURCE}. Calendar titles may use{" "}
         <a
           href="https://www.evangelizo.org/"
           className="font-semibold text-[var(--color-link)]"
@@ -106,7 +132,16 @@ export default async function MassDayPage({ params }: Props) {
         >
           Evangelizo.org
         </a>
-        .
+        . Reading text, when shown here, comes from the{" "}
+        <a
+          href="https://bible.usccb.org/bible/readings/"
+          className="font-semibold text-[var(--color-link)]"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          USCCB Daily Readings
+        </a>{" "}
+        RSS where available. This site is not affiliated with the USCCB or your local parish.
       </p>
     </PageShell>
   );
