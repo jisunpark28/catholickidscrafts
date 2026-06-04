@@ -16,17 +16,16 @@ const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
 
 export function BibleTypingMode() {
   const today = useMemo(() => toDateKey(new Date()), []);
-  const [date, setDate] = useState(today);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
   const [day, setDay] = useState<LwcMassDay | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const loadReadings = useCallback(async (dateKey: string) => {
+  const loadToday = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`/api/lwc-readings/${dateKey}`);
+      const res = await fetch(`/api/lwc-readings/${today}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Could not load readings");
       setDay(data as LwcMassDay);
@@ -36,11 +35,11 @@ export function BibleTypingMode() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [today]);
 
   useEffect(() => {
-    void loadReadings(date);
-  }, [date, loadReadings]);
+    void loadToday();
+  }, [loadToday]);
 
   const reading = day?.readings.find((r) => r.kind === readingKind);
   const readingText = reading?.text?.trim() ?? "";
@@ -57,31 +56,30 @@ export function BibleTypingMode() {
     }
   }, [availableKinds, readingKind]);
 
+  const displayDate = day?.liturgicalTitle ?? today;
+
   return (
     <div className="space-y-6">
       <p className="text-sm text-[var(--color-muted)]">
-        Readings load from{" "}
+        Today&apos;s readings (Canada) from{" "}
         <a
-          href={livingWithChristReadingUrl(date)}
+          href={livingWithChristReadingUrl(today)}
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-[var(--color-link)]"
         >
           readings.livingwithchrist.ca
-        </a>{" "}
-        for the date you pick (Canada).
+        </a>
+        . Only the current calendar day is loaded for typing practice.
       </p>
 
       <div className="flex flex-wrap items-end gap-4 border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-        <label className="text-sm font-semibold">
-          Mass date
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="mt-1 block border border-[var(--color-border)] bg-white px-3 py-2"
-          />
-        </label>
+        <p className="text-sm font-semibold text-[var(--color-ink)]">
+          <span className="block text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
+            Today
+          </span>
+          {displayDate}
+        </p>
 
         <fieldset className="text-sm font-semibold">
           <legend className="mb-1">Reading</legend>
@@ -110,7 +108,7 @@ export function BibleTypingMode() {
         </fieldset>
 
         <a
-          href={reading?.externalUrl ?? livingWithChristReadingUrl(date)}
+          href={reading?.externalUrl ?? livingWithChristReadingUrl(today)}
           target="_blank"
           rel="noopener noreferrer"
           className="border border-[var(--color-accent)] bg-white px-3 py-2 text-xs font-bold text-[var(--color-accent)] hover:bg-[var(--color-surface)]"
@@ -121,7 +119,7 @@ export function BibleTypingMode() {
 
       {loading && (
         <p className="text-sm text-[var(--color-muted)]">
-          Loading readings from Living with Christ…
+          Loading today&apos;s readings from Living with Christ…
         </p>
       )}
       {error && (
@@ -129,13 +127,10 @@ export function BibleTypingMode() {
           {error}
         </p>
       )}
-      {day && !loading && !error && (
-        <p className="text-sm text-[var(--color-muted)]">{day.liturgicalTitle}</p>
-      )}
 
       {reading && readingText.length > 0 && (
         <PassageTypingGame
-          key={`${date}-${reading.kind}`}
+          key={`${today}-${reading.kind}`}
           title={reading.label}
           text={readingText}
         />
@@ -146,14 +141,14 @@ export function BibleTypingMode() {
           <p>
             Could not load text for this reading. Open{" "}
             <a
-              href={reading.externalUrl ?? livingWithChristReadingUrl(date)}
+              href={reading.externalUrl ?? livingWithChristReadingUrl(today)}
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-[var(--color-link)]"
             >
               Living with Christ
             </a>{" "}
-            for this date.
+            for today.
           </p>
         </div>
       )}

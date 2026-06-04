@@ -1,4 +1,4 @@
-import { parseDateParam } from "@/lib/dates";
+import { parseDateParam, todayUtc, toDateKey } from "@/lib/dates";
 import { fetchLivingWithChristDay } from "@/lib/living-with-christ";
 import { NextResponse } from "next/server";
 
@@ -12,6 +12,15 @@ export async function GET(_request: Request, { params }: Params) {
     return NextResponse.json(
       { error: "Invalid date. Use YYYY-MM-DD." },
       { status: 400 },
+    );
+  }
+
+  const todayKey = toDateKey(todayUtc());
+  const requestedKey = toDateKey(date);
+  if (requestedKey !== todayKey) {
+    return NextResponse.json(
+      { error: "Only today's readings are available for typing practice." },
+      { status: 403 },
     );
   }
 

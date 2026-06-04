@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Typing Game",
   description:
-    "Word mode with falling vocabulary, or Today’s Bible with Daily Mass readings when available.",
+    "Word mode or Today’s Bible with today's Living with Christ readings (Canada).",
 };
 
 export default function PlayTypingPage() {
@@ -23,7 +23,7 @@ export default function PlayTypingPage() {
       <div className="mt-6">
         <PageHeader
           title="Typing Game"
-          subtitle="Word mode or Today's Bible."
+          subtitle="Word mode or Today's Bible (today's readings only)."
         />
       </div>
 
