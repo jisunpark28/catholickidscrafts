@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/components/AuthProvider";
 import { SiteJsonLd } from "@/components/SiteJsonLd";
 import { getGoogleSiteVerification } from "@/lib/google-site-verification";
