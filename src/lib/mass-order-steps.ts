@@ -9,19 +9,7 @@ export type MassOrderStepItem = {
   gesture: string;
 };
 
-export const MASS_ORDER_GESTURES = [
-  "idle",
-  "signCross",
-  "pray",
-  "ourFather",
-  "point",
-  "hold",
-  "lift",
-] as const;
-
-export function isValidMassGesture(gesture: string): boolean {
-  return (MASS_ORDER_GESTURES as readonly string[]).includes(gesture);
-}
+export { MASS_ORDER_GESTURES, isValidMassGesture } from "@/lib/mass-order-gestures";
 
 function mapRow(r: {
   stepIndex: number;
