@@ -405,25 +405,21 @@ export function PhotoBoothGame() {
             /* skip */
           }
         }
+        if (frameImageUrl) {
+          try {
+            const frameImg = await loadImage(frameImageUrl);
+            if (paintGen !== paintGenRef.current) return;
+            ctx.drawImage(frameImg, 0, 0, w, h);
+          } catch {
+            /* skip */
+          }
+        }
         if (paintGen !== paintGenRef.current) return;
         drawStickers(ctx, edit.stickers);
         ctx.restore();
       }
 
       if (paintGen !== paintGenRef.current) return;
-
-      if (frameImageUrl) {
-        await drawFrameOverlay(
-          ctx,
-          frameImageUrl,
-          CANVAS_W,
-          CANVAS_H,
-          loadImage,
-          paintGen,
-          paintGenRef,
-        );
-        if (paintGen !== paintGenRef.current) return;
-      }
 
       const { x, y, w, h } = stripCellRect(selectedStripSlot);
       ctx.strokeStyle = "#c45c26";
@@ -812,10 +808,7 @@ export function PhotoBoothGame() {
           )}
 
           {stripCapturing && (
-            <LiveFrameOverlay
-              frameUrl={frameImageUrl}
-              className="mx-auto mt-4 aspect-[3/4] w-full max-w-[360px] border border-[var(--color-border)] shadow-md"
-            >
+            <div className="mx-auto mt-4 aspect-[3/4] w-full max-w-[360px] border border-[var(--color-border)] shadow-md">
               <div
                 className="grid h-full w-full grid-cols-2 grid-rows-2"
                 style={{ gap: STRIP_GAP }}
@@ -824,59 +817,64 @@ export function PhotoBoothGame() {
                   const isActive = i === activeSlot && !stripPhotos[i];
                   const showLive = cameraOn && isActive;
                   return (
-                    <div
+                    <LiveFrameOverlay
                       key={i}
-                      className={`relative min-h-0 overflow-hidden ${
+                      frameUrl={frameImageUrl}
+                      className={`min-h-0 ${
                         isActive ? "ring-2 ring-[var(--color-accent)] ring-offset-1" : ""
                       }`}
-                      style={{
-                        background: stripPhotos[i]
-                          ? "#000"
-                          : "linear-gradient(160deg,#f4f4f5,#e4e4e7)",
-                      }}
                     >
-                      {showLive ? (
-                        <video
-                          ref={i === activeSlot ? videoRef : undefined}
-                          autoPlay
-                          playsInline
-                          muted
-                          className="h-full w-full object-cover [transform:scaleX(-1)]"
-                        />
-                      ) : stripPhotos[i] ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={stripPhotos[i]!}
-                          alt={`Photo ${i + 1}`}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full flex-col items-center justify-center text-center text-xs font-semibold text-[var(--color-muted)]">
-                          <span>Photo {i + 1}</span>
-                          {isActive && !cameraOn && (
-                            <span className="mt-1 font-normal">Use camera or upload</span>
-                          )}
-                        </div>
-                      )}
-                      {stripPhotos[i] && (
-                        <span className="absolute right-1 top-1 rounded bg-black/50 px-1.5 py-0.5 text-[10px] font-bold text-white">
-                          ✓
-                        </span>
-                      )}
-                    </div>
+                      <div
+                        className="relative h-full w-full overflow-hidden"
+                        style={{
+                          background: stripPhotos[i]
+                            ? "#000"
+                            : "linear-gradient(160deg,#f4f4f5,#e4e4e7)",
+                        }}
+                      >
+                        {showLive ? (
+                          <video
+                            ref={i === activeSlot ? videoRef : undefined}
+                            autoPlay
+                            playsInline
+                            muted
+                            className="h-full w-full object-cover [transform:scaleX(-1)]"
+                          />
+                        ) : stripPhotos[i] ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={stripPhotos[i]!}
+                            alt={`Photo ${i + 1}`}
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full flex-col items-center justify-center text-center text-xs font-semibold text-[var(--color-muted)]">
+                            <span>Photo {i + 1}</span>
+                            {isActive && !cameraOn && (
+                              <span className="mt-1 font-normal">Use camera or upload</span>
+                            )}
+                          </div>
+                        )}
+                        {stripPhotos[i] && (
+                          <span className="absolute right-1 top-1 z-20 rounded bg-black/50 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                            ✓
+                          </span>
+                        )}
+                      </div>
+                    </LiveFrameOverlay>
                   );
                 })}
               </div>
               {cameraOn && (
                 <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-                  Live preview in frame {activeSlot + 1}. Tap Capture, then the next frame is
-                  highlighted.
+                  Live preview in photo {activeSlot + 1}. Line up in the frame, tap Capture, then the
+                  next slot is highlighted.
                 </p>
               )}
               {cameraError && (
                 <p className="mt-2 text-center text-xs text-red-600">{cameraError}</p>
               )}
-            </LiveFrameOverlay>
+            </div>
           )}
 
           {canDecorate && (
@@ -917,8 +915,12 @@ export function PhotoBoothGame() {
                 <p className="text-sm font-bold text-[var(--color-ink)]">Frame</p>
                 <p className="mt-1 text-xs text-[var(--color-muted)]">
                   {awaitingCapture
-                    ? "Choose before you capture so you can fit your face in the opening."
-                    : "Parish frames sit on top of your photo (under stickers)."}
+                    ? mode === "strip"
+                      ? "One frame per photo slot — choose before capture and line up in the opening."
+                      : "Choose before you capture so you can fit your face in the opening."
+                    : mode === "strip"
+                      ? "Each photo has its own frame (under stickers)."
+                      : "Parish frames sit on top of your photo (under stickers)."}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <button

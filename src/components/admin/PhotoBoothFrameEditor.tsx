@@ -106,9 +106,9 @@ export function PhotoBoothFrameEditor({ initial }: Props) {
 
       <p className="text-sm text-[var(--color-muted)]">
         Upload a <strong className="font-medium text-[var(--color-ink)]">PNG with transparency</strong>{" "}
-        sized for the booth canvas (360×480 px). The frame is drawn{" "}
-        <strong className="font-medium text-[var(--color-ink)]">on top of the photo</strong> and under
-        stickers. Test in{" "}
+        sized for one photo slot (360×480 px for single; same ratio for each 4-cut cell). The frame is
+        drawn <strong className="font-medium text-[var(--color-ink)]">on top of each photo</strong> and
+        under stickers. Test in{" "}
         <a
           href="/play/photo-booth"
           target="_blank"
