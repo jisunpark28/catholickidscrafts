@@ -1,6 +1,6 @@
 "use client";
 
-import { useCopy } from "@/components/SiteCopyProvider";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/Logo.png";
@@ -8,21 +8,22 @@ import { MASS_DATA_SOURCE } from "@/lib/mass-source";
 import { getTptStoreUrl } from "@/lib/tpt";
 
 export function SiteFooter() {
-  const c = useCopy;
+  const copy = useSiteCopy();
+  const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const tptStore = getTptStoreUrl();
 
   const explore = [
-    { href: "/mass", label: c("global.footer.link.mass", "Daily Mass") },
-    { href: "/play", label: c("global.footer.link.play", "Play & Learn") },
-    { href: "/resources", label: c("global.footer.link.resources", "Kids Resources") },
-    { href: "/curriculum", label: c("global.footer.link.curriculum", "Curriculum") },
-    { href: "/recommendations", label: c("global.footer.link.recommendations", "Recommendations") },
+    { href: "/mass", label: t("global.footer.link.mass", "Daily Mass") },
+    { href: "/play", label: t("global.footer.link.play", "Play & Learn") },
+    { href: "/resources", label: t("global.footer.link.resources", "Kids Resources") },
+    { href: "/curriculum", label: t("global.footer.link.curriculum", "Curriculum") },
+    { href: "/recommendations", label: t("global.footer.link.recommendations", "Recommendations") },
   ];
 
   const legal = [
-    { href: "/about", label: c("global.footer.link.about", "About") },
-    { href: "/privacy", label: c("global.footer.link.privacy", "Privacy") },
-    { href: "/affiliate-disclosure", label: c("global.footer.link.affiliate", "Affiliate disclosure") },
+    { href: "/about", label: t("global.footer.link.about", "About") },
+    { href: "/privacy", label: t("global.footer.link.privacy", "Privacy") },
+    { href: "/affiliate-disclosure", label: t("global.footer.link.affiliate", "Affiliate disclosure") },
   ];
 
   return (
@@ -38,10 +39,10 @@ export function SiteFooter() {
             />
             <div>
               <p className="font-bold text-[var(--color-ink)]">
-                {c("global.site.name", "Catholic Kids Crafts")}
+                {t("global.site.name", "Catholic Kids Crafts")}
               </p>
               <p className="mt-2 max-w-sm text-sm text-[var(--color-muted)]">
-                {c("global.footer.tagline", "")}
+                {t("global.footer.tagline", "")}
               </p>
             </div>
           </div>
@@ -49,7 +50,7 @@ export function SiteFooter() {
           <div className="flex flex-wrap gap-10 text-sm font-semibold">
             <div>
               <p className="mb-3 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
-                {c("global.footer.explore_heading", "Explore")}
+                {t("global.footer.explore_heading", "Explore")}
               </p>
               <ul className="space-y-2">
                 {explore.map((item) => (
@@ -63,7 +64,7 @@ export function SiteFooter() {
             </div>
             <div>
               <p className="mb-3 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
-                {c("global.footer.legal_heading", "Shop & legal")}
+                {t("global.footer.legal_heading", "Shop & legal")}
               </p>
               <ul className="space-y-2">
                 {tptStore && (
@@ -74,7 +75,7 @@ export function SiteFooter() {
                       rel="noopener noreferrer"
                       className="text-[var(--color-link)] hover:underline"
                     >
-                      {c("global.footer.tpt_link", "Teachers Pay Teachers ↗")}
+                      {t("global.footer.tpt_link", "Teachers Pay Teachers ↗")}
                     </a>
                   </li>
                 )}
@@ -91,10 +92,11 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-10 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)]">
-          {MASS_DATA_SOURCE} · © {new Date().getFullYear()} {c("global.site.name", "Catholic Kids Crafts")} ·{" "}
-          {c("global.footer.disclosure", "Some links may earn a commission (see")}{" "}
+          {MASS_DATA_SOURCE} · © {new Date().getFullYear()}{" "}
+          {t("global.site.name", "Catholic Kids Crafts")} ·{" "}
+          {t("global.footer.disclosure", "Some links may earn a commission (see")}{" "}
           <Link href="/affiliate-disclosure" className="underline">
-            {c("global.footer.disclosure_link", "disclosure")}
+            {t("global.footer.disclosure_link", "disclosure")}
           </Link>
           ).
         </p>

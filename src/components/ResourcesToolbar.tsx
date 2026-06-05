@@ -1,12 +1,13 @@
 "use client";
 
-import { useCopy } from "@/components/SiteCopyProvider";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { LITURGICAL_PERIODS } from "@/lib/content-types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
 
 export function ResourcesToolbar() {
-  const c = useCopy;
+  const copy = useSiteCopy();
+  const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
@@ -85,7 +86,7 @@ export function ResourcesToolbar() {
             All
           </button>
           {LITURGICAL_PERIODS.map((period) => {
-            const title = c(`taxonomy.liturgical.${period.id}.title`, period.title);
+            const title = t(`taxonomy.liturgical.${period.id}.title`, period.title);
             return (
               <button
                 key={period.id}

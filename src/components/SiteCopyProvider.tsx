@@ -19,8 +19,7 @@ export function useSiteCopy(): SiteCopyMap {
   return useContext(SiteCopyContext);
 }
 
-/** Read operator-editable copy with optional fallback. */
-export function useCopy(key: string, fallback = ""): string {
-  const map = useSiteCopy();
+/** Non-hook helper — use with a single `useSiteCopy()` call per component. */
+export function textFromCopy(map: SiteCopyMap, key: string, fallback = ""): string {
   return map[key] ?? fallback;
 }

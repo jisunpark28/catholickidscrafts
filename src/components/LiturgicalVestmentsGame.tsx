@@ -1,6 +1,6 @@
 "use client";
 
-import { useCopy } from "@/components/SiteCopyProvider";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { PriestVestmentFigure } from "@/components/liturgical-vestments/PriestVestmentFigure";
 import {
   shuffleRounds,
@@ -22,7 +22,8 @@ const COLOR_ORDER: VestmentColor[] = [
 type Feedback = "idle" | "correct" | "wrong";
 
 export function LiturgicalVestmentsGame() {
-  const t = useCopy;
+  const copy = useSiteCopy();
+  const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const [rounds, setRounds] = useState(() => shuffleRounds());
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);

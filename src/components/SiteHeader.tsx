@@ -1,30 +1,31 @@
 "use client";
 
-import { useCopy } from "@/components/SiteCopyProvider";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SiteLogo } from "@/components/SiteLogo";
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "";
-  const c = useCopy;
+  const copy = useSiteCopy();
+  const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
 
   const nav = [
-    { href: "/mass", label: c("global.nav.mass", "Daily Mass"), match: (p: string) => p === "/mass" },
-    { href: "/play", label: c("global.nav.play", "Play"), match: (p: string) => p.startsWith("/play") },
+    { href: "/mass", label: t("global.nav.mass", "Daily Mass"), match: (p: string) => p === "/mass" },
+    { href: "/play", label: t("global.nav.play", "Play"), match: (p: string) => p.startsWith("/play") },
     {
       href: "/curriculum",
-      label: c("global.nav.curriculum", "Curriculum"),
+      label: t("global.nav.curriculum", "Curriculum"),
       match: (p: string) => p.startsWith("/curriculum"),
     },
     {
       href: "/resources",
-      label: c("global.nav.resources", "Kids Resources"),
+      label: t("global.nav.resources", "Kids Resources"),
       match: (p: string) => p.startsWith("/resources"),
     },
     {
       href: "/recommendations",
-      label: c("global.nav.recommendations", "Recommendations"),
+      label: t("global.nav.recommendations", "Recommendations"),
       match: (p: string) => p.startsWith("/recommendations"),
     },
   ];

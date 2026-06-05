@@ -1,6 +1,6 @@
 "use client";
 
-import { useCopy } from "@/components/SiteCopyProvider";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { BibleTypingMode } from "@/components/BibleTypingMode";
 import { WordFallTypingGame } from "@/components/WordFallTypingGame";
 import { useState } from "react";
@@ -15,7 +15,8 @@ const modeBtnClass = (active: boolean) =>
   }`;
 
 export function TypingGameHub() {
-  const c = useCopy;
+  const copy = useSiteCopy();
+  const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const [mode, setMode] = useState<Mode>("words");
 
   const modes: { id: Mode; labelKey: string; fallback: string }[] = [
@@ -33,7 +34,7 @@ export function TypingGameHub() {
             onClick={() => setMode(m.id)}
             className={modeBtnClass(mode === m.id)}
           >
-            {c(m.labelKey, m.fallback)}
+            {t(m.labelKey, m.fallback)}
           </button>
         ))}
       </div>
