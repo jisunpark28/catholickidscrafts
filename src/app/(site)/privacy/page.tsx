@@ -92,26 +92,42 @@ export default async function PrivacyPage() {
           users.
         </li>
         <li>
-          <strong>USCCB / bible.usccb.org</strong> — Daily Mass reading text when displayed from the
-          official USCCB RSS feed (see{" "}
+          <strong>Evangelizo.org</strong> — Liturgical day titles on the{" "}
           <Link href="/mass" className="text-[var(--color-link)]">
             Daily Mass
-          </Link>
-          ). USCCB copyright notices apply to those texts.
+          </Link>{" "}
+          calendar. Our servers call their Reader API when you view that calendar. We do not
+          republish full lectionary text from Evangelizo on public pages by default.
         </li>
         <li>
-          <strong>Evangelizo.org</strong> — Liturgical calendar titles and reading citations (not
-          full-text republication by default). Their API is called from our servers when you open
-          Mass pages.
+          <strong>USCCB / bible.usccb.org</strong> — The Daily Mass page links out to the official
+          USCCB Daily Readings site for full texts. We do not display USCCB reading bodies on
+          public HTML pages. USCCB and CCD copyrights apply on their site.
+        </li>
+        <li>
+          <strong>Living with Christ (Bayard)</strong> — Optional outbound links from Daily Mass to{" "}
+          <code>readings.livingwithchrist.ca</code>. We do not host or scrape their reading text.
+        </li>
+        <li>
+          <strong>Universalis (universalis.com)</strong> — The Play → Typing → &quot;Today&apos;s
+          Bible&quot; mode loads <strong>today&apos;s</strong> Mass readings via Universalis&apos;s
+          JSONP service for webmasters. Reading text appears on that game page with
+          Universalis&apos;s copyright notice and links back to Universalis. This uses a different
+          calendar/translation than the U.S. USCCB lectionary.
         </li>
         <li>
           <strong>YouTube</strong> — Embedded players on some resource pages when operators link a
           video URL.
         </li>
         <li>
+          <strong>Operator-uploaded content</strong> — PDFs, images, and lesson text posted by
+          site operators (Kids Resources, Curriculum, etc.) are the responsibility of the publisher
+          who uploaded them. Do not reuse those materials without permission from the rights holder.
+        </li>
+        <li>
           <strong>Amazon, Teachers Pay Teachers, and other outbound links</strong> — When you click
-          recommendations or store links, those sites&apos; policies apply. Amazon Associate links
-          are disclosed on{" "}
+          recommendations or store links, those sites&apos; policies apply. Amazon links may be
+          marked as Associate links when configured; see{" "}
           <Link href="/affiliate-disclosure" className="text-[var(--color-link)]">
             Affiliate disclosure
           </Link>

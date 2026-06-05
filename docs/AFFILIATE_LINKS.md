@@ -24,3 +24,4 @@ Resource posts use the **TPT URL** field on Kids Resources, not Recommendations.
 - Site-wide disclosure: `/affiliate-disclosure`
 - Footer links to disclosure on every public page
 - Do not hide affiliate relationships in recommendation notes
+- Only claim **Amazon Associate** earnings if you are enrolled in the program **and** the outbound URL includes your affiliate tracking tag. Untagged Amazon URLs are still disclosed as outbound links when marked Associate in admin, but they will not earn commission until the tag is present.

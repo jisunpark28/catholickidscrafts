@@ -1,16 +1,26 @@
 # Daily Mass readings — sources and compliance
 
-Operator reference for **catholickidscrafts.com** `/mass` pages.
+Operator reference for **catholickidscrafts.com** `/mass` and related APIs.
 
 ## Summary (한국어)
 
-| 방식 | 저작권·합법성 | 사이트 동작 |
-|------|----------------|-------------|
-| **USCCB RSS** (`bible.usccb.org/readings.rss`) | USCCB: 무료·비유료 사이트에서 RSS로 제공되는 일일 복음서전문 표시 허용 ([RSS 구독 안내](https://www.usccb.org/subscribe/rss)) | **기본**: RSS에 포함된 날짜(약 10일)는 본문 전문 표시 + CCD 저작권 문구 |
-| **USCCB 공식 페이지 링크** | 본문 재게시 없음 | RSS 밖 날짜: 제목·인용만(Evangelizo) + “Read on USCCB” 버튼 |
-| **Evangelizo API 전문 재게시** | USCCB/CCD 저작권 — **서면 허가 없이는 위험** | `MASS_REPUBLISH_EVANGELIZO=true` 일 때만 (운영자 책임) |
+| 방식 | 저작권·합법성 | **공개 사이트 동작 (현재)** |
+|------|----------------|---------------------------|
+| **Evangelizo Reader API** | 메타데이터·인용; 전문 재게시는 USCCB/CCD 허가 필요 | **`/mass` 달력**: 전례일 **제목**만 표시. API는 서버에서 호출. |
+| **USCCB / Living with Christ** | 본문은 각 공식 사이트 저작권 | **`/mass`**: 외부 링크만 (본문 HTML에 표시 안 함). |
+| **USCCB RSS** | 비유료 사이트 RSS 표시 허용 ([RSS 안내](https://www.usccb.org/subscribe/rss)) | 공개 HTML에는 미표시. `GET /api/mass/[date]`가 RSS 본문을 JSON으로 줄 수 있음(프론트 미사용). |
+| **Evangelizo 전문 재게시** | 운영자 책임 | `MASS_REPUBLISH_EVANGELIZO=true` 일 때만 (`fetchMassDay`). 기본 **off**. |
+| **Universalis JSONP** | [Webmasters terms](https://universalis.com/n-web.htm) | **Typing → Today’s Bible**만: **오늘** 본문 on-site + 저작권 문구 + Universalis 링크. USCCB와 다른 역본/역. |
 
-이 저장소는 기본적으로 Evangelizo로 **전문을 다시 올리지 않습니다.** 달력 제목·성인 기념 등 메타데이터와 인용에 Evangelizo를 쓰고, 본문은 USCCB RSS 또는 USCCB 링크로 처리합니다.
+`/mass/YYYY-MM-DD` 는 **`/mass`로 리다이렉트**됩니다. 날짜별 미사 전문 페이지는 없습니다.
+
+## Public `/mass` page
+
+1. Month calendar with **liturgical titles** (Evangelizo, ~30-day window around today).
+2. Buttons to **Living with Christ** and **USCCB** for full reading texts (new tabs).
+3. No lectionary body copy in the public HTML.
+
+Site copy (editable in admin **Site text**): *“Text stays on their site—we link you there.”*
 
 ## Official / open options reviewed
 
@@ -45,7 +55,7 @@ The **Play → Typing → Today's Bible** mode loads **today only** via Universa
 
 Default calendar: `Europe.England` (ICEL / ESV-CE texts on Universalis). Override with `UNIVERSALIS_CALENDAR_PATH` (same path segment as in the JSONP URL).
 
-**Not the same as USCCB:** Universalis texts follow the calendar/translation configured on Universalis (e.g. England), not the U.S. Lectionary on bible.usccb.org. Mass hub (`/mass`) still uses USCCB + Living with Christ links.
+**Not the same as USCCB:** Universalis texts follow the calendar/translation configured on Universalis (e.g. England), not the U.S. Lectionary on bible.usccb.org. Mass hub (`/mass`) uses USCCB + Living with Christ **links only**.
 
 | File | Role |
 |------|------|
@@ -56,10 +66,11 @@ Default calendar: `Europe.England` (ICEL / ESV-CE texts on Universalis). Overrid
 
 | File | Role |
 |------|------|
-| `src/lib/usccb-rss.ts` | Parse USCCB RSS → `MassReading[]` |
-| `src/lib/mass-source.ts` | `fetchMassDay`: USCCB first, link-only fallback |
-| `src/lib/evangelizo.ts` | Calendar titles, citations, optional republish flag |
-| `src/lib/living-with-christ.ts` | Optional LWC helpers (Mass calendar links; not used for typing) |
+| `src/lib/usccb-rss.ts` | Parse USCCB RSS (used by `fetchMassDay` / API, not public `/mass` HTML) |
+| `src/lib/mass-source.ts` | `fetchMassDay`, calendar summaries, footer attribution |
+| `src/lib/evangelizo.ts` | Calendar titles; optional republish when env flag set |
+| `src/lib/scripture-links.ts` | Living with Christ outbound URLs |
+| `src/lib/living-with-christ.ts` | Legacy fetch helpers (not used on live `/mass` UI) |
 
 ### Environment
 
@@ -72,11 +83,11 @@ Set to `true` only if you have obtained appropriate USCCB/CCD (and Evangelizo, i
 
 ### Site disclaimer
 
-Mass pages are **not** an official USCCB or parish missal. Typing games need on-site text; dates outside the RSS window show citations + USCCB link until RSS includes that day.
+Mass pages are **not** an official USCCB or parish missal. Typing **Today’s Bible** shows on-site text for practice; `/mass` sends users to publisher sites for official U.S. texts.
 
 ## Next steps for operators
 
-1. Keep `MASS_REPUBLISH_EVANGELIZO` **off** in production.  
-2. For dates beyond the RSS window, users use the USCCB button (expected).  
-3. For full-month on-site text, request a **USCCB digital license** (CCD Permissions, 202-541-3098).  
-4. Display USCCB copyright notice whenever RSS text is shown (handled on `/mass/[date]`).
+1. Keep `MASS_REPUBLISH_EVANGELIZO` **off** in production unless licensed.  
+2. Point catechists to **USCCB** or **Living with Christ** from `/mass` for official reading texts.  
+3. Do not promise USCCB-identical texts in Typing mode (Universalis calendar).  
+4. For full-month on-site U.S. lectionary text, request a **USCCB digital license** (CCD Permissions, 202-541-3098).
