@@ -3,7 +3,7 @@
 import {
   frameAppliesToMode,
   type PhotoBoothFrameItem,
-} from "@/lib/photo-booth-frames";
+} from "@/lib/photo-booth-frame-utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type BgId = "cream" | "sky" | "rose" | "lavender" | "gold" | "stained" | "mint" | "cloud";

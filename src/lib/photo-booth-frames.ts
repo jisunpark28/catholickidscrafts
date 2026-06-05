@@ -1,23 +1,12 @@
+import {
+  type PhotoBoothFrameItem,
+  type PhotoBoothFrameLayout,
+} from "@/lib/photo-booth-frame-utils";
 import { prisma } from "@/lib/prisma";
 import type { PhotoBoothLayout } from "@prisma/client";
 
-export type PhotoBoothFrameItem = {
-  id: string;
-  slug: string;
-  title: string;
-  imageUrl: string;
-  layout: PhotoBoothLayout;
-  sortOrder: number;
-};
-
-export function frameAppliesToMode(
-  layout: PhotoBoothLayout,
-  mode: "single" | "strip",
-): boolean {
-  if (layout === "BOTH") return true;
-  if (mode === "single") return layout === "SINGLE";
-  return layout === "STRIP";
-}
+export type { PhotoBoothFrameItem, PhotoBoothFrameLayout } from "@/lib/photo-booth-frame-utils";
+export { frameAppliesToMode } from "@/lib/photo-booth-frame-utils";
 
 function toItem(row: {
   id: string;
@@ -32,7 +21,7 @@ function toItem(row: {
     slug: row.slug,
     title: row.title,
     imageUrl: row.imageUrl,
-    layout: row.layout,
+    layout: row.layout as PhotoBoothFrameLayout,
     sortOrder: row.sortOrder,
   };
 }
