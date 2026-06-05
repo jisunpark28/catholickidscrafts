@@ -70,13 +70,15 @@ You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Run `npm run db:seed
 
 ---
 
-## 4. Vercel Blob (PDF uploads, free)
+## 4. Vercel Blob (admin uploads — required in production)
+
+All **Admin → Upload** flows (resources PDFs, church decorations, **photo booth frames**, preview images) use [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) when deployed. Vercel’s filesystem is read-only; without Blob you may see `ENOENT: mkdir '/var/task/public'`.
 
 1. Vercel project → **Storage** → **Create Database** → **Blob**
-2. **Connect** — `BLOB_READ_WRITE_TOKEN` is added to env vars
+2. **Connect** to this project — `BLOB_READ_WRITE_TOKEN` is added to env vars (Production + Preview)
 3. **Redeploy** once
 
-Locally, uploads go to `public/uploads/` when the token is not set.
+Locally, uploads go to `public/uploads/` when the token is not set (`pnpm dev` only).
 
 ---
 
@@ -120,7 +122,7 @@ The `/mass` calendar uses Evangelizo for titles; reading **text** uses the [USCC
 |-------|--------|
 | Vercel build fails on `DIRECT_URL` | Neon direct URL is set |
 | Cannot log in | Ran `npm run db:seed`; `AUTH_SECRET` matches on Vercel |
-| PDF upload fails in production | `BLOB_READ_WRITE_TOKEN` set; redeployed |
+| PDF / frame upload fails (`ENOENT … /var/task/public`) | Create **Blob** store, connect project, set `BLOB_READ_WRITE_TOKEN`, redeploy |
 | Operators menu missing | Signed in as super admin (seed account) |
 
 ---
