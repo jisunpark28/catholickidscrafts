@@ -15,12 +15,14 @@ export default async function AdminChurchDecorationsPage() {
             소품(이미지)을 성당 안에 배치합니다. 이미지, 설명, 3D 위치(X/Y/Z), 크기(너비·높이), 회전을 설정할 수 있습니다.
           </p>
         </div>
-        <Link
-          href="/admin/church-decorations/new"
-          className="bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-white"
-        >
-          + 소품 추가
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/admin/church-decorations/new"
+            className="bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-white"
+          >
+            Set up all 14 walls
+          </Link>
+        </div>
       </div>
 
       <table className="mt-8 w-full border-collapse border border-[var(--color-border)] bg-white text-sm">

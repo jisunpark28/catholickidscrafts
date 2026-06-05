@@ -1,10 +1,11 @@
-import { ChurchDecorationEditor } from "@/components/admin/ChurchDecorationEditor";
+import { ChurchWallBulkSetup } from "@/components/admin/ChurchWallBulkSetup";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
 export default async function NewChurchDecorationPage() {
-  const occupied = await prisma.churchDecoration.findMany({
-    select: { id: true, title: true, sortOrder: true },
+  const items = await prisma.churchDecoration.findMany({
+    where: { sortOrder: { gte: 0, lte: 13 } },
+    orderBy: { sortOrder: "asc" },
   });
 
   return (
@@ -15,9 +16,12 @@ export default async function NewChurchDecorationPage() {
       >
         ← Church decorations
       </Link>
-      <h1 className="mt-4 text-2xl font-bold">New church decoration</h1>
+      <h1 className="mt-4 text-2xl font-bold">Set up church wall pictures (14 slots)</h1>
+      <p className="mt-2 text-sm text-[var(--color-muted)]">
+        Upload all wall images at once instead of adding them one by one.
+      </p>
       <div className="mt-6">
-        <ChurchDecorationEditor occupied={occupied} />
+        <ChurchWallBulkSetup initialItems={items} />
       </div>
     </div>
   );
