@@ -14,6 +14,7 @@
     "postinstall": "prisma generate",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "db:seed-typing": "tsx prisma/seed-typing-words.ts",
+    "db:seed-hangman": "tsx prisma/seed-hangman-words.ts",
     "db:seed-trinity-resource": "tsx prisma/seed-holy-trinity-resource.ts",
     "vestments:split": "node scripts/split-vestment-spritesheet.mjs",
     "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs"
