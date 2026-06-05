@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { seedHangmanWords } from "./seed-hangman-words";
+import { seedMassOrderSteps } from "./seed-mass-order-steps";
 import { seedTypingWords } from "./seed-typing-words";
 
 const prisma = new PrismaClient();
@@ -150,6 +151,9 @@ async function main() {
 
   const hangmanCount = await seedHangmanWords(prisma);
   console.log(`Hangman words seeded: ${hangmanCount}`);
+
+  const massOrderCount = await seedMassOrderSteps(prisma);
+  console.log(`Mass order steps seeded: ${massOrderCount}`);
 }
 
 main()

@@ -25,6 +25,12 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 - Public API: `GET /api/church-decorations`
 - Click uploaded images inside the 3D church to show title + description.
 
+## Mass Order (operator)
+
+- Admin: `/admin/mass-order-steps` — edit subtitle text, button labels, and gestures for each step under **Mass Order** in the sanctuary
+- Public API: `GET /api/mass-order-steps`
+- Seed defaults: `npm run db:seed-mass-order`
+
 ## 4-Cut Photo Booth frames (operator)
 
 - Admin: `/admin/photo-booth-frames` — upload transparent PNG overlays (360×480 px recommended).
