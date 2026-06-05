@@ -26,18 +26,27 @@ export type ResourceFormData = {
 
 type Props = {
   initial?: ResourceFormData;
+  /** Curriculum track `stage` values for the Grade dropdown. */
+  stageOptions: string[];
 };
 
-export function ResourceEditor({ initial }: Props) {
+function gradeOptions(stageOptions: string[], currentGrade: string): string[] {
+  const trimmed = currentGrade.trim();
+  if (!trimmed || stageOptions.includes(trimmed)) return stageOptions;
+  return [trimmed, ...stageOptions];
+}
+
+export function ResourceEditor({ initial, stageOptions }: Props) {
   const router = useRouter();
   const isEdit = Boolean(initial?.id);
+  const defaultGrade = stageOptions[0] ?? "";
   const [form, setForm] = useState<ResourceFormData>(
     initial ?? {
       title: "",
       slug: "",
       excerpt: "",
       content: "",
-      grade: "Pre-K",
+      grade: defaultGrade,
       topic: "General",
       liturgicalPeriod: "general",
       downloadLabel: "",
@@ -173,11 +182,26 @@ export function ResourceEditor({ initial }: Props) {
         </label>
         <label className="block text-sm font-semibold">
           Grade
-          <input
+          <select
+            required
             value={form.grade}
             onChange={(e) => update("grade", e.target.value)}
             className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
-          />
+            disabled={gradeOptions(stageOptions, form.grade).length === 0}
+          >
+            {gradeOptions(stageOptions, form.grade).length === 0 ? (
+              <option value="">Add a curriculum track first</option>
+            ) : (
+              gradeOptions(stageOptions, form.grade).map((stage) => (
+                <option key={stage} value={stage}>
+                  {stage}
+                </option>
+              ))
+            )}
+          </select>
+          <span className="mt-1 block text-xs font-normal text-[var(--color-muted)]">
+            Matches Curriculum stage labels
+          </span>
         </label>
         <label className="block text-sm font-semibold">
           Topic
