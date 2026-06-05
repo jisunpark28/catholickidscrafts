@@ -21,7 +21,7 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 
 ## Church decorations (operator)
 
-- Admin: `/admin/church-decorations`
+- Admin: `/admin/church-decorations` — **Set up all 14 walls** at `/admin/church-decorations/new` (bulk upload per frame)
 - Public API: `GET /api/church-decorations`
 - Click uploaded images inside the 3D church to show title + description.
 
