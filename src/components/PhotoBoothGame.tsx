@@ -50,7 +50,16 @@ type PlacedSticker = {
 type StripSlotEdit = {
   bg: BgId;
   stickers: PlacedSticker[];
+  frameId: string | null;
 };
+
+function resolveFrameImageUrl(
+  frames: PhotoBoothFrameItem[],
+  frameId: string | null,
+): string | null {
+  if (!frameId) return null;
+  return frames.find((f) => f.id === frameId)?.imageUrl ?? null;
+}
 
 const CANVAS_W = 360;
 const CANVAS_H = 480;
@@ -119,7 +128,7 @@ function cropImageToStripCell(src: string): Promise<string> {
 }
 
 function createDefaultStripEdits(): StripSlotEdit[] {
-  return Array.from({ length: 4 }, () => ({ bg: "cream", stickers: [] }));
+  return Array.from({ length: 4 }, () => ({ bg: "cream", stickers: [], frameId: null }));
 }
 
 function stripCellRect(index: number) {
@@ -270,12 +279,8 @@ export function PhotoBoothGame() {
     [frames, mode],
   );
 
-  const selectedFrame = useMemo(
-    () => availableFrames.find((f) => f.id === selectedFrameId) ?? null,
-    [availableFrames, selectedFrameId],
-  );
-
-  const frameImageUrl = selectedFrame?.imageUrl ?? null;
+  const frameImageUrl =
+    mode === "single" ? resolveFrameImageUrl(frames, selectedFrameId) : null;
 
   const stripComplete = mode === "strip" && stripPhotos.every((p) => p !== null);
   const stripCapturing = mode === "strip" && !stripComplete;
@@ -286,6 +291,11 @@ export function PhotoBoothGame() {
   const showStickerTools = canDecorate;
   const singleCameraOnly = mode === "single" && cameraOn;
   const stripDecorating = mode === "strip" && canDecorate;
+
+  const firstEmptySlot = stripPhotos.findIndex((p) => p === null);
+  const activeSlot = firstEmptySlot === -1 ? 3 : firstEmptySlot;
+  const activeStripBg = stripEdits[selectedStripSlot]?.bg ?? "cream";
+  const stripSlotFrameId = stripEdits[selectedStripSlot]?.frameId ?? null;
 
   const stopCamera = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -321,6 +331,13 @@ export function PhotoBoothGame() {
     if (selectedFrameId && !availableFrames.some((f) => f.id === selectedFrameId)) {
       setSelectedFrameId(null);
     }
+    setStripEdits((prev) =>
+      prev.map((slot) =>
+        slot.frameId && !availableFrames.some((f) => f.id === slot.frameId)
+          ? { ...slot, frameId: null }
+          : slot,
+      ),
+    );
   }, [availableFrames, selectedFrameId]);
 
   useEffect(() => {
@@ -370,8 +387,18 @@ export function PhotoBoothGame() {
   }, []);
 
   useEffect(() => {
-    if (frameImageUrl) void loadImage(frameImageUrl).catch(() => {});
-  }, [frameImageUrl, loadImage]);
+    if (stripCapturing) setSelectedStripSlot(activeSlot);
+  }, [activeSlot, stripCapturing]);
+
+  useEffect(() => {
+    const urls = new Set<string>();
+    if (frameImageUrl) urls.add(frameImageUrl);
+    for (const slot of stripEdits) {
+      const url = resolveFrameImageUrl(frames, slot.frameId);
+      if (url) urls.add(url);
+    }
+    for (const url of urls) void loadImage(url).catch(() => {});
+  }, [frameImageUrl, stripEdits, frames, loadImage]);
 
   const paint = useCallback(async () => {
     if (!canDecorate) return;
@@ -405,9 +432,10 @@ export function PhotoBoothGame() {
             /* skip */
           }
         }
-        if (frameImageUrl) {
+        const slotFrameUrl = resolveFrameImageUrl(frames, edit.frameId);
+        if (slotFrameUrl) {
           try {
-            const frameImg = await loadImage(frameImageUrl);
+            const frameImg = await loadImage(slotFrameUrl);
             if (paintGen !== paintGenRef.current) return;
             ctx.drawImage(frameImg, 0, 0, w, h);
           } catch {
@@ -459,6 +487,7 @@ export function PhotoBoothGame() {
     canDecorate,
     selectedStripSlot,
     frameImageUrl,
+    frames,
   ]);
 
   useEffect(() => {
@@ -569,6 +598,14 @@ export function PhotoBoothGame() {
       sticker.y = CANVAS_H / 2 + (Math.random() - 0.5) * 80;
       setStickers((prev) => [...prev, sticker]);
     }
+    bumpPaint();
+  }
+
+  function setStripSlotFrame(frameId: string | null) {
+    if (mode !== "strip") return;
+    setStripEdits((prev) =>
+      prev.map((slot, i) => (i === selectedStripSlot ? { ...slot, frameId } : slot)),
+    );
     bumpPaint();
   }
 
@@ -690,10 +727,6 @@ export function PhotoBoothGame() {
     bumpPaint();
   }
 
-  const firstEmptySlot = stripPhotos.findIndex((p) => p === null);
-  const activeSlot = firstEmptySlot === -1 ? 3 : firstEmptySlot;
-  const activeStripBg = stripEdits[selectedStripSlot]?.bg ?? "cream";
-
   return (
     <div className="border border-[var(--color-border)] bg-white">
       <div className="flex flex-wrap gap-2 border-b border-[var(--color-border)] bg-[var(--color-surface)] p-3">
@@ -768,8 +801,8 @@ export function PhotoBoothGame() {
 
           {stripCapturing && (
             <p className="mt-2 text-sm text-[var(--color-muted)]">
-              Photo {activeSlot + 1} of 4 — pick a parish frame on the right, line up your face, then
-              capture or upload. Add stickers after all four photos are done.
+              Photo {activeSlot + 1} of 4 — tap a slot to pick its frame, line up your face, then
+              capture or upload. Each photo can use a different frame.
             </p>
           )}
 
@@ -815,16 +848,24 @@ export function PhotoBoothGame() {
               >
                 {[0, 1, 2, 3].map((i) => {
                   const isActive = i === activeSlot && !stripPhotos[i];
+                  const isSelected = i === selectedStripSlot;
                   const showLive = cameraOn && isActive;
+                  const cellFrameUrl = resolveFrameImageUrl(frames, stripEdits[i]?.frameId ?? null);
                   return (
                     <LiveFrameOverlay
                       key={i}
-                      frameUrl={frameImageUrl}
-                      className={`min-h-0 ${
+                      frameUrl={cellFrameUrl}
+                      className={`min-h-0 cursor-pointer ${
                         isActive ? "ring-2 ring-[var(--color-accent)] ring-offset-1" : ""
-                      }`}
+                      } ${isSelected && !isActive ? "ring-2 ring-[var(--color-ink)]/30 ring-offset-1" : ""}`}
                     >
                       <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => setSelectedStripSlot(i)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") setSelectedStripSlot(i);
+                        }}
                         className="relative h-full w-full overflow-hidden"
                         style={{
                           background: stripPhotos[i]
@@ -900,37 +941,45 @@ export function PhotoBoothGame() {
 
         {showStyleSidebar && (
           <aside className="space-y-4">
-            {stripDecorating && (
+            {(stripDecorating || stripCapturing) && (
               <p className="rounded-md bg-[var(--color-surface)] px-3 py-2 text-sm font-bold text-[var(--color-ink)]">
-                Editing photo {selectedStripSlot + 1}
+                {stripCapturing
+                  ? `Photo ${selectedStripSlot + 1} — choose a frame for this slot`
+                  : `Editing photo ${selectedStripSlot + 1}`}
               </p>
             )}
-            {awaitingCapture && !canDecorate && (
+            {awaitingCapture && !canDecorate && mode === "single" && (
               <p className="rounded-md bg-[var(--color-surface)] px-3 py-2 text-sm font-semibold text-[var(--color-ink)]">
                 Step 1 — pick a frame and line up in the camera preview.
+              </p>
+            )}
+            {awaitingCapture && !canDecorate && mode === "strip" && (
+              <p className="rounded-md bg-[var(--color-surface)] px-3 py-2 text-sm font-semibold text-[var(--color-ink)]">
+                Step 1 — tap each slot and pick a frame before you capture.
               </p>
             )}
             {availableFrames.length > 0 && (
               <div>
                 <p className="text-sm font-bold text-[var(--color-ink)]">Frame</p>
                 <p className="mt-1 text-xs text-[var(--color-muted)]">
-                  {awaitingCapture
-                    ? mode === "strip"
-                      ? "One frame per photo slot — choose before capture and line up in the opening."
-                      : "Choose before you capture so you can fit your face in the opening."
-                    : mode === "strip"
-                      ? "Each photo has its own frame (under stickers)."
+                  {mode === "strip"
+                    ? "Each of the four photos can have its own frame. Tap a slot on the left, then pick below."
+                    : awaitingCapture
+                      ? "Choose before you capture so you can fit your face in the opening."
                       : "Parish frames sit on top of your photo (under stickers)."}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <button
                     type="button"
                     onClick={() => {
-                      setSelectedFrameId(null);
-                      bumpPaint();
+                      if (mode === "strip") setStripSlotFrame(null);
+                      else {
+                        setSelectedFrameId(null);
+                        bumpPaint();
+                      }
                     }}
                     className={`h-16 w-12 border-2 text-[10px] font-bold uppercase ${
-                      selectedFrameId === null
+                      (mode === "strip" ? stripSlotFrameId : selectedFrameId) === null
                         ? "border-[var(--color-accent)]"
                         : "border-[var(--color-border)] text-[var(--color-muted)]"
                     }`}
@@ -938,15 +987,19 @@ export function PhotoBoothGame() {
                     None
                   </button>
                   {availableFrames.map((f) => {
-                    const active = selectedFrameId === f.id;
+                    const active =
+                      mode === "strip" ? stripSlotFrameId === f.id : selectedFrameId === f.id;
                     return (
                       <button
                         key={f.id}
                         type="button"
                         title={f.title}
                         onClick={() => {
-                          setSelectedFrameId(f.id);
-                          bumpPaint();
+                          if (mode === "strip") setStripSlotFrame(f.id);
+                          else {
+                            setSelectedFrameId(f.id);
+                            bumpPaint();
+                          }
                         }}
                         className={`h-16 w-12 overflow-hidden border-2 bg-[var(--color-surface)] ${
                           active ? "border-[var(--color-accent)]" : "border-[var(--color-border)]"
@@ -969,7 +1022,8 @@ export function PhotoBoothGame() {
               )}
               <div className="mt-2 grid grid-cols-4 gap-2">
                 {BACKGROUNDS.map((b) => {
-                  const selected = stripDecorating ? activeStripBg === b.id : bg === b.id;
+                  const selected =
+                    mode === "strip" ? activeStripBg === b.id : bg === b.id;
                   return (
                     <button
                       key={b.id}
