@@ -1,6 +1,6 @@
 "use client";
 
-import { MASS_ORDER_GESTURES } from "@/lib/mass-order-steps";
+import { MASS_ORDER_GESTURES } from "@/lib/mass-order-gestures";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";

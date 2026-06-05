@@ -4,9 +4,14 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
 export default async function AdminMassOrderStepsPage() {
-  const dbRows = await prisma.massOrderStep.findMany({
-    orderBy: { stepIndex: "asc" },
-  });
+  let dbRows: Awaited<ReturnType<typeof prisma.massOrderStep.findMany>> = [];
+  try {
+    dbRows = await prisma.massOrderStep.findMany({
+      orderBy: { stepIndex: "asc" },
+    });
+  } catch (e) {
+    console.error("mass-order-steps admin:", e);
+  }
   const steps = mergeMassOrderStepsForAdmin(dbRows);
 
   return (

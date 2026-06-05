@@ -274,20 +274,25 @@ async function loadMassOrderSteps() {
         if (!Array.isArray(items) || items.length === 0) {
             return;
         }
-        const byIndex = new Map(
-            items.map((item) => [Number(item.stepIndex), item]),
-        );
+        const byIndex = new Map();
+        for (const item of items) {
+            const index = Number(item.stepIndex);
+            if (!Number.isInteger(index) || index < 0 || index >= DEFAULT_MASS_FLOW_STEPS.length) {
+                continue;
+            }
+            byIndex.set(index, item);
+        }
         massFlowSteps = DEFAULT_MASS_FLOW_STEPS.map((def, index) => {
             const row = byIndex.get(index);
             if (!row) {
                 return { ...def };
             }
             return {
-                part: row.part || def.part,
-                partEn: row.partEn || def.partEn,
-                title: row.title || def.title,
-                text: row.text || def.text,
-                gesture: row.gesture || def.gesture,
+                part: String(row.part || def.part),
+                partEn: String(row.partEn || def.partEn),
+                title: String(row.title || def.title),
+                text: String(row.text || def.text),
+                gesture: String(row.gesture || def.gesture),
             };
         });
     } catch (error) {
@@ -1515,8 +1520,14 @@ function createVoxelChurch(container) {
 
     function advanceMassStep() {
         const steps = getMassFlowSteps();
+        if (!steps.length) {
+            return;
+        }
         const stepIndex = actionState.massIndex % steps.length;
         const step = steps[stepIndex];
+        if (!step) {
+            return;
+        }
         const next = step.gesture;
         const stepNumber = stepIndex + 1;
         const prefix = `🎼 ${step.part} · ${step.title} (${stepNumber}/${steps.length})`;
@@ -1534,6 +1545,9 @@ function createVoxelChurch(container) {
             actionState.massActive = false;
         }
         const step = steps[stepIndex];
+        if (!step) {
+            return;
+        }
         actionState.massIndex = stepIndex;
         triggerGesture(step.gesture, `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
         setDialogue(`Jumped to ${step.part} (${step.partEn}) - ${step.title}.`);
