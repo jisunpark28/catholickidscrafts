@@ -33,14 +33,21 @@ export async function POST(request: Request) {
   const data = parsed.data;
   const word = data.word.trim();
 
-  const item = await prisma.typingWord.create({
-    data: {
-      word,
-      hint: data.hint?.trim() ?? "",
-      sortOrder: data.sortOrder ?? 0,
-      published: data.published ?? true,
-    },
-  });
-
-  return NextResponse.json(item, { status: 201 });
+  try {
+    const item = await prisma.typingWord.create({
+      data: {
+        word,
+        hint: data.hint?.trim() ?? "",
+        sortOrder: data.sortOrder ?? 0,
+        published: data.published ?? true,
+      },
+    });
+    return NextResponse.json(item, { status: 201 });
+  } catch (e) {
+    const code = (e as { code?: string }).code;
+    if (code === "P2002") {
+      return NextResponse.json({ error: `“${word}” is already in the list.` }, { status: 409 });
+    }
+    throw e;
+  }
 }
