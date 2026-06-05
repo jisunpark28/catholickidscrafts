@@ -1,7 +1,12 @@
 import { ChurchDecorationEditor } from "@/components/admin/ChurchDecorationEditor";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
-export default function NewChurchDecorationPage() {
+export default async function NewChurchDecorationPage() {
+  const occupied = await prisma.churchDecoration.findMany({
+    select: { id: true, title: true, sortOrder: true },
+  });
+
   return (
     <div>
       <Link
@@ -12,7 +17,7 @@ export default function NewChurchDecorationPage() {
       </Link>
       <h1 className="mt-4 text-2xl font-bold">New church decoration</h1>
       <div className="mt-6">
-        <ChurchDecorationEditor />
+        <ChurchDecorationEditor occupied={occupied} />
       </div>
     </div>
   );

@@ -1,7 +1,16 @@
 "use client";
 
+import {
+  ChurchWallPlacementEditor,
+  type SlotOccupancy,
+} from "@/components/admin/ChurchWallPlacementEditor";
+import {
+  firstEmptyWallSlot,
+  getChurchWallSlot,
+  isStandardWallSlot,
+} from "@/lib/church-wall-slots";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type ChurchDecorationFormData = {
   id?: string;
@@ -19,13 +28,33 @@ export type ChurchDecorationFormData = {
   published: boolean;
 };
 
-type Props = { initial?: ChurchDecorationFormData };
+type Props = {
+  initial?: ChurchDecorationFormData;
+  occupied?: SlotOccupancy[];
+};
 
-export function ChurchDecorationEditor({ initial }: Props) {
+function defaultsFromSlot(sortOrder: number): Partial<ChurchDecorationFormData> {
+  const slot = getChurchWallSlot(sortOrder);
+  if (!slot) return { sortOrder };
+  return {
+    sortOrder: slot.sortOrder,
+    posX: slot.x,
+    posY: slot.y,
+    posZ: slot.z,
+    width: slot.width,
+    height: slot.height,
+    rotationY: slot.rotationY,
+  };
+}
+
+export function ChurchDecorationEditor({ initial, occupied = [] }: Props) {
   const router = useRouter();
   const isEdit = Boolean(initial?.id);
-  const [form, setForm] = useState<ChurchDecorationFormData>(
-    initial ?? {
+
+  const [form, setForm] = useState<ChurchDecorationFormData>(() => {
+    if (initial) return initial;
+    const empty = firstEmptyWallSlot(occupied.map((o) => o.sortOrder));
+    const base = {
       title: "",
       slug: "",
       description: "",
@@ -33,22 +62,44 @@ export function ChurchDecorationEditor({ initial }: Props) {
       posX: 0,
       posY: 2.2,
       posZ: -6,
-      width: 1.4,
-      height: 1.4,
+      width: 1.12,
+      height: 1.48,
       rotationY: 0,
       sortOrder: 0,
       published: true,
-    },
-  );
+    };
+    if (empty) return { ...base, ...defaultsFromSlot(empty.sortOrder) };
+    return base;
+  });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(
+    () => initial !== undefined && !isStandardWallSlot(initial.sortOrder),
+  );
+
+  useEffect(() => {
+    if (initial || isStandardWallSlot(form.sortOrder)) return;
+    setShowAdvanced(true);
+  }, [form.sortOrder, initial]);
 
   function update<K extends keyof ChurchDecorationFormData>(
     key: K,
     value: ChurchDecorationFormData[K],
   ) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  function applyPlacement(patch: {
+    sortOrder: number;
+    posX: number;
+    posY: number;
+    posZ: number;
+    width: number;
+    height: number;
+    rotationY: number;
+  }) {
+    setForm((f) => ({ ...f, ...patch }));
   }
 
   async function uploadFile(file: File) {
@@ -109,17 +160,6 @@ export function ChurchDecorationEditor({ initial }: Props) {
         <p className="border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
       )}
 
-      <p className="text-sm text-[var(--color-muted)]">
-        Images snap to wall frames in Tiny Priest (7 left, 7 right). Set{" "}
-        <strong className="font-medium text-[var(--color-ink)]">sort order</strong> 0–6 for the left
-        wall (front to back) and 7–13 for the right. The sanctuary back wall stays plain with only the
-        crucifix. Test in{" "}
-        <a href="/play/church" target="_blank" rel="noopener noreferrer" className="text-[var(--color-link)]">
-          Play → Church
-        </a>
-        . Custom X/Y/Z is only used when sort order is outside 0–13.
-      </p>
-
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm font-semibold">
           Title *
@@ -177,39 +217,69 @@ export function ChurchDecorationEditor({ initial }: Props) {
             className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
           />
         </label>
-        {form.imageUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={form.imageUrl} alt="" className="mt-3 max-h-40 border border-[var(--color-border)]" />
-        )}
       </fieldset>
 
       <fieldset className="border border-[var(--color-border)] p-4">
-        <legend className="px-2 text-sm font-semibold">Position in church (3D)</legend>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {(
-            [
-              ["posX", "X (left/right)"],
-              ["posY", "Y (height)"],
-              ["posZ", "Z (toward altar)"],
-              ["width", "Width"],
-              ["height", "Height"],
-              ["rotationY", "Rotation Y"],
-              ["sortOrder", "Sort order"],
-            ] as const
-          ).map(([key, label]) => (
-            <label key={key} className="block text-sm font-semibold">
-              {label}
-              <input
-                type="number"
-                step={key.startsWith("pos") || key === "rotationY" ? "0.1" : "1"}
-                value={form[key]}
-                onChange={(e) => update(key, Number(e.target.value))}
-                className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
-              />
-            </label>
-          ))}
+        <legend className="px-2 text-sm font-semibold">Place on church wall</legend>
+        <div className="mt-2">
+          <ChurchWallPlacementEditor
+            imageUrl={form.imageUrl}
+            value={{
+              sortOrder: form.sortOrder,
+              posX: form.posX,
+              posY: form.posY,
+              posZ: form.posZ,
+              width: form.width,
+              height: form.height,
+              rotationY: form.rotationY,
+            }}
+            onChange={applyPlacement}
+            occupied={occupied}
+            currentId={initial?.id}
+          />
         </div>
       </fieldset>
+
+      <div className="border border-[var(--color-border)]">
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((v) => !v)}
+          className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-bold"
+        >
+          Advanced (manual 3D coordinates)
+          <span className="text-[var(--color-muted)]">{showAdvanced ? "▼" : "▶"}</span>
+        </button>
+        {showAdvanced && (
+          <div className="grid gap-3 border-t border-[var(--color-border)] p-4 sm:grid-cols-3">
+            <p className="sm:col-span-3 text-xs text-[var(--color-muted)]">
+              Only needed for custom positions outside the 14 wall frames. Most operators should use
+              the visual wall picker above.
+            </p>
+            {(
+              [
+                ["posX", "X (left/right)"],
+                ["posY", "Y (height)"],
+                ["posZ", "Z (toward altar)"],
+                ["width", "Width"],
+                ["height", "Height"],
+                ["rotationY", "Rotation Y"],
+                ["sortOrder", "Sort order"],
+              ] as const
+            ).map(([key, label]) => (
+              <label key={key} className="block text-sm font-semibold">
+                {label}
+                <input
+                  type="number"
+                  step={key.startsWith("pos") || key === "rotationY" ? "0.1" : "1"}
+                  value={form[key]}
+                  onChange={(e) => update(key, Number(e.target.value))}
+                  className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
+                />
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
 
       <label className="flex items-center gap-2 text-sm font-semibold">
         <input

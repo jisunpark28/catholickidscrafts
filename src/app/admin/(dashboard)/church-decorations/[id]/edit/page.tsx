@@ -7,7 +7,13 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function EditChurchDecorationPage({ params }: Props) {
   const { id } = await params;
-  const item = await prisma.churchDecoration.findUnique({ where: { id } });
+  const [item, occupied] = await Promise.all([
+    prisma.churchDecoration.findUnique({ where: { id } }),
+    prisma.churchDecoration.findMany({
+      where: { NOT: { id } },
+      select: { id: true, title: true, sortOrder: true },
+    }),
+  ]);
   if (!item) notFound();
 
   return (
@@ -21,6 +27,7 @@ export default async function EditChurchDecorationPage({ params }: Props) {
       <h1 className="mt-4 text-2xl font-bold">Edit decoration</h1>
       <div className="mt-6">
         <ChurchDecorationEditor
+          occupied={occupied}
           initial={{
             id: item.id,
             title: item.title,
