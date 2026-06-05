@@ -34,6 +34,7 @@ export default async function RootLayout({
       <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
         <SiteJsonLd />
         <AuthProvider>{children}</AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
