@@ -74,11 +74,24 @@ You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Run `npm run db:seed
 
 All **Admin → Upload** flows (resources PDFs, church decorations, **photo booth frames**, preview images) use [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) when deployed. Vercel’s filesystem is read-only; without Blob you may see `ENOENT: mkdir '/var/task/public'`.
 
-1. Vercel project → **Storage** → **Create Database** → **Blob**
-2. **Connect** to this project — `BLOB_READ_WRITE_TOKEN` is added to env vars (Production + Preview)
-3. **Redeploy** once
+### Link Blob to the project (pick one path)
 
-Locally, uploads go to `public/uploads/` when the token is not set (`pnpm dev` only).
+**A — From the project (easiest)**  
+1. Open project **catholickidscrafts** (not only the team Storage page).  
+2. Tab **Storage** → **Create Database** → **Blob** → **Public** access.  
+3. If asked, pick this project — env vars (`BLOB_STORE_ID`, OIDC, and/or `BLOB_READ_WRITE_TOKEN`) are added automatically.
+
+**B — Store already created (e.g. `catholickidscrafts28-blob`)**  
+1. Team **Storage** → click the Blob store name.  
+2. Tab **Projects** → **Connect to Project** → choose **catholickidscrafts** → Production (+ Preview).  
+   (If you only see the store overview, use path A from the project’s **Storage** tab instead.)
+
+**C — Check it worked**  
+Project **Settings** → **Environment Variables**: `BLOB_STORE_ID` and/or `BLOB_READ_WRITE_TOKEN` for Production.
+
+A new deployment starts when you connect a store or push to `main`. You do not need a separate **Redeploy** if Deployments already shows a recent **Ready** build after connecting.
+
+Locally, uploads go to `public/uploads/` when no Blob env vars are set (`pnpm dev` only).
 
 ---
 

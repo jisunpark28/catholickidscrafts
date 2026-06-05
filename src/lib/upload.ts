@@ -14,16 +14,35 @@ export function isVercelServerless(): boolean {
   return Boolean(process.env.VERCEL);
 }
 
-function blobToken(): string | undefined {
+function blobReadWriteToken(): string | undefined {
   return process.env.BLOB_READ_WRITE_TOKEN?.trim() || undefined;
 }
 
+/** Blob store linked to the Vercel project (OIDC or legacy token). */
+export function isVercelBlobLinked(): boolean {
+  return Boolean(blobReadWriteToken() || process.env.BLOB_STORE_ID?.trim());
+}
+
 export function assertUploadConfigured(): void {
-  if (isVercelServerless() && !blobToken()) {
+  if (isVercelServerless() && !isVercelBlobLinked()) {
     throw new UploadConfigurationError(
-      "Admin uploads on Vercel require Vercel Blob. In the Vercel project: Storage → Create Blob → Connect to this project (sets BLOB_READ_WRITE_TOKEN), then redeploy.",
+      "Admin uploads on Vercel require a linked Blob store. Open your project → Storage → connect or create a Blob store for catholickidscrafts, then deploy again.",
     );
   }
+}
+
+async function uploadToVercelBlob(
+  key: string,
+  buffer: Buffer,
+  contentType: string,
+): Promise<string> {
+  const token = blobReadWriteToken();
+  const blob = await put(key, buffer, {
+    access: "public",
+    contentType: contentType || "application/octet-stream",
+    ...(token ? { token } : {}),
+  });
+  return blob.url;
 }
 
 export async function saveUploadedFile(
@@ -33,28 +52,24 @@ export async function saveUploadedFile(
   const buffer = Buffer.from(bytes);
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const unique = `${Date.now()}-${safeName}`;
+  const key = `uploads/${unique}`;
 
-  const token = blobToken();
-  if (token) {
+  if (isVercelBlobLinked() || isVercelServerless()) {
+    if (isVercelServerless() && !isVercelBlobLinked()) {
+      throw new UploadConfigurationError(
+        "Admin uploads on Vercel require a linked Blob store. In the catholickidscrafts project, open the Storage tab and connect your Blob store (or create one there), then deploy again.",
+      );
+    }
+
     try {
-      const blob = await put(`uploads/${unique}`, buffer, {
-        access: "public",
-        contentType: file.type || "application/octet-stream",
-        token,
-      });
-      return { url: blob.url, filename: safeName, sizeBytes: buffer.length };
+      const url = await uploadToVercelBlob(key, buffer, file.type || "application/octet-stream");
+      return { url, filename: safeName, sizeBytes: buffer.length };
     } catch (e) {
       const detail = e instanceof Error ? e.message : "Blob upload failed";
       throw new UploadConfigurationError(
-        `Could not save file to Vercel Blob. Check BLOB_READ_WRITE_TOKEN and that a Blob store is connected. (${detail})`,
+        `Could not save file to Vercel Blob. Link a Blob store under Project → Storage and redeploy. (${detail})`,
       );
     }
-  }
-
-  if (isVercelServerless()) {
-    throw new UploadConfigurationError(
-      "Admin uploads on Vercel require Vercel Blob. Add BLOB_READ_WRITE_TOKEN via Storage → Blob → Connect, then redeploy.",
-    );
   }
 
   const uploadDir = path.join(process.cwd(), "public", "uploads");
