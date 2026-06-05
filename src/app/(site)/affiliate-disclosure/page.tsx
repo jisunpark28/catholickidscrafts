@@ -18,12 +18,17 @@ export default function AffiliateDisclosurePage() {
       <AffiliateDisclosure variant="block" className="mb-6" />
 
       <p>{AMAZON_ASSOCIATE_DISCLOSURE}</p>
+      <p className="text-sm text-[var(--color-muted)]">
+        Commission applies only when we are enrolled in the Amazon Associates program and the
+        specific product URL includes our affiliate tracking tag. Links to Amazon without a tag are
+        still labeled for transparency but do not earn commission.
+      </p>
 
       <h2 className="pt-6 text-xl font-bold">Recommendations</h2>
       <p>
         Some items on our Recommendations pages link to Amazon or other stores. When a link is
-        marked as an Amazon Associate link (or points to Amazon), we may earn a small commission if
-        you make a qualifying purchase, at no extra cost to you.
+        marked as an Amazon Associate link and includes a valid affiliate tag, we may earn a small
+        commission if you make a qualifying purchase, at no extra cost to you.
       </p>
 
       <h2 className="pt-4 text-xl font-bold">YouTube and other sites</h2>

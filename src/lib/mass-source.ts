@@ -29,6 +29,10 @@ export const MASS_DATA_SOURCE = EVANGELIZO_REPUBLISH
 export const MASS_CALENDAR_SOURCE =
   "Evangelizo.org Reader API (liturgical titles) + USCCB (readings when in RSS)";
 
+/** Public-site footer: how Daily Mass and related pages source liturgical data. */
+export const SITE_LITURGY_FOOTER =
+  "Liturgical calendar: Evangelizo.org · Mass readings: USCCB & Living with Christ (external links only)";
+
 async function readingsWithUsccbFirst(date: Date): Promise<{
   readings: MassReading[];
   liturgicalTitleOverride?: string;

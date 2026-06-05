@@ -7,11 +7,11 @@ Daily Mass (English) + Catholic kids catechism resources.
 | Page | URL |
 |------|-----|
 | Daily Mass calendar | `/mass` |
-| Mass readings by date | `/mass/YYYY-MM-DD` |
 | Curriculum | `/curriculum` |
 | Kids Resources (by liturgical season) | `/resources` |
+| Play (games, typing) | `/play` |
 
-Mass readings come from the [Evangelizo Reader API](http://feed.evangelizo.org/) (`lang=AM`, Roman calendar, American English).
+**Daily Mass** (`/mass`): liturgical calendar titles via [Evangelizo](http://feed.evangelizo.org/) (`lang=AM`); full reading texts open on **USCCB** and **Living with Christ** (external links, not republished on this site). **Typing → Today’s Bible** uses [Universalis](https://universalis.com/) JSONP for today only (see `docs/MASS_READINGS.md`). Legacy `/mass/YYYY-MM-DD` URLs redirect to `/mass`.
 
 ## Operator admin (Curriculum & Resources)
 

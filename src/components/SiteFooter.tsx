@@ -4,7 +4,7 @@ import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/Logo.png";
-import { MASS_DATA_SOURCE } from "@/lib/mass-source";
+import { SITE_LITURGY_FOOTER } from "@/lib/mass-source";
 import { getTptStoreUrl } from "@/lib/tpt";
 
 export function SiteFooter() {
@@ -92,7 +92,7 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-10 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)]">
-          {MASS_DATA_SOURCE} · © {new Date().getFullYear()}{" "}
+          {SITE_LITURGY_FOOTER} · © {new Date().getFullYear()}{" "}
           {t("global.site.name", "Catholic Kids Crafts")} ·{" "}
           {t("global.footer.disclosure", "Some links may earn a commission (see")}{" "}
           <Link href="/affiliate-disclosure" className="underline">
