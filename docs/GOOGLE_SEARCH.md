@@ -33,10 +33,33 @@ Also add the **domain** property `catholickidscrafts.com` if you want coverage f
 - Try `site:www.catholickidscrafts.com` (with `www`) after Search Console shows pages as indexed.
 - Share the site on social or link from another site to help discovery.
 
-## 4. Quick checks
+## 4. Search result favicon (small icon next to URL)
+
+Google uses a **favicon**, not the large header logo or `og:image`.
+
+After deploy, confirm:
+
+- https://www.catholickidscrafts.com/favicon.ico → **200**
+- https://www.catholickidscrafts.com/logo-icon.png → square **48×48** PNG
+- Homepage source includes `rel="icon"` and `rel="apple-touch-icon"`
+
+Icons are generated from `src/Logo.png` (same as the top-left header). Regenerate after a logo change:
+
+```bash
+python3 scripts/generate-favicons.py
+```
+
+Google may keep the default globe for **days or weeks** after indexing, then refresh the favicon automatically. Use **URL inspection** on the home page occasionally if you want a recrawl (do not spam requests).
+
+### Search Console branding (optional)
+
+If your account shows **Settings → Branding** (or organization / identity options), you can upload logo assets there. Availability varies by property type and region. Favicon in search results still primarily comes from `/favicon.ico` and `rel="icon"` on the site.
+
+## 5. Quick checks
 
 | Check | Expected |
 |-------|----------|
 | `robots.txt` | `Allow: /` |
 | Homepage HTML | no `noindex` |
 | Canonical | `https://www.catholickidscrafts.com/...` |
+| `/favicon.ico` | HTTP 200 |
