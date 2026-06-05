@@ -84,7 +84,7 @@ const GESTURE_NARRATION = {
     signCross: "✝️ In the name of the Father, and of the Son, and of the Holy Spirit.",
 };
 
-const MASS_FLOW_STEPS = [
+const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
@@ -255,6 +255,54 @@ const MASS_FLOW_STEPS = [
     },
 ];
 
+let massFlowSteps = null;
+
+function getMassFlowSteps() {
+    if (!massFlowSteps) {
+        massFlowSteps = DEFAULT_MASS_FLOW_STEPS.map((step) => ({ ...step }));
+    }
+    return massFlowSteps;
+}
+
+async function loadMassOrderSteps() {
+    try {
+        const response = await fetch("/api/mass-order-steps");
+        if (!response.ok) {
+            return;
+        }
+        const items = await response.json();
+        if (!Array.isArray(items) || items.length === 0) {
+            return;
+        }
+        const byIndex = new Map(
+            items.map((item) => [Number(item.stepIndex), item]),
+        );
+        massFlowSteps = DEFAULT_MASS_FLOW_STEPS.map((def, index) => {
+            const row = byIndex.get(index);
+            if (!row) {
+                return { ...def };
+            }
+            return {
+                part: row.part || def.part,
+                partEn: row.partEn || def.partEn,
+                title: row.title || def.title,
+                text: row.text || def.text,
+                gesture: row.gesture || def.gesture,
+            };
+        });
+    } catch (error) {
+        console.warn("Mass order steps could not load:", error);
+    }
+}
+
+function resetMassFlowNavigation() {
+    const groupsContainer = document.getElementById("mass-nav-groups");
+    if (groupsContainer) {
+        delete groupsContainer.dataset.built;
+        groupsContainer.innerHTML = "";
+    }
+    buildMassFlowNavigation();
+}
 
 function stripLeadingPartNumber(label) {
     return String(label || "").replace(/^\d+\.\s*/, "").trim();
@@ -340,7 +388,7 @@ function buildMassFlowNavigation() {
     }
 
     const groups = new Map();
-    MASS_FLOW_STEPS.forEach((step, index) => {
+    getMassFlowSteps().forEach((step, index) => {
         const key = `${step.part}|${step.partEn}`;
         if (!groups.has(key)) {
             groups.set(key, {
@@ -369,7 +417,7 @@ function buildMassFlowNavigation() {
         const list = document.createElement("div");
         list.className = "mass-nav-step-list";
         group.indices.forEach((stepIndex) => {
-            const step = MASS_FLOW_STEPS[stepIndex];
+            const step = getMassFlowSteps()[stepIndex];
             const button = document.createElement("button");
             button.type = "button";
             button.className = "mass-nav-step-btn";
@@ -1466,24 +1514,26 @@ function createVoxelChurch(container) {
     }
 
     function advanceMassStep() {
-        const stepIndex = actionState.massIndex % MASS_FLOW_STEPS.length;
-        const step = MASS_FLOW_STEPS[stepIndex];
+        const steps = getMassFlowSteps();
+        const stepIndex = actionState.massIndex % steps.length;
+        const step = steps[stepIndex];
         const next = step.gesture;
         const stepNumber = stepIndex + 1;
-        const prefix = `🎼 ${step.part} · ${step.title} (${stepNumber}/${MASS_FLOW_STEPS.length})`;
+        const prefix = `🎼 ${step.part} · ${step.title} (${stepNumber}/${steps.length})`;
         actionState.massIndex += 1;
         triggerGesture(next, `${prefix} ${step.text}`, stepIndex);
         setMassFlowStatus(`▶️ Auto: ${step.part} (${step.partEn}) > ${step.title}`);
     }
 
     function jumpToMassStep(stepIndex) {
-        if (!Number.isInteger(stepIndex) || stepIndex < 0 || stepIndex >= MASS_FLOW_STEPS.length) {
+        const steps = getMassFlowSteps();
+        if (!Number.isInteger(stepIndex) || stepIndex < 0 || stepIndex >= steps.length) {
             return;
         }
         if (actionState.massActive) {
             actionState.massActive = false;
         }
-        const step = MASS_FLOW_STEPS[stepIndex];
+        const step = steps[stepIndex];
         actionState.massIndex = stepIndex;
         triggerGesture(step.gesture, `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
         setDialogue(`Jumped to ${step.part} (${step.partEn}) - ${step.title}.`);
@@ -2159,7 +2209,8 @@ async function activateThreeScene(role) {
     threeContainer.setAttribute("aria-hidden", "false");
     bindHudControls();
     bindChurchExitButton();
-    buildMassFlowNavigation();
+    await loadMassOrderSteps();
+    resetMassFlowNavigation();
     bindMassNavigator();
     setChurchExitVisible(true);
     setLiturgyHudVisible(true);
