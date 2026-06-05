@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { parseKindParam } from "@/lib/recommendation-types";
 import { getPublishedRecommendations } from "@/lib/recommendations";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -25,13 +26,14 @@ export default async function RecommendationsPage({ searchParams }: Props) {
   const q = params.q;
   const kind = parseKindParam(params.kind);
   const items = await getPublishedRecommendations({ q, kind });
+  const copy = await getSiteCopyMap();
 
   return (
     <PageShell wide>
       <PageHeader
-        title="Recommendations"
-        subtitle="Stuff we actually use or would suggest to a friend on the parish team."
-        programNote="Handy when a parent asks “What Bible story video is okay?” or you need one more book for the shelf. Some Amazon links help support the site—see disclosure."
+        title={copyText(copy, "recommendations.page.title", "Recommendations")}
+        subtitle={copyText(copy, "recommendations.page.subtitle", "")}
+        programNote={copyText(copy, "recommendations.page.program_note", "")}
       />
 
       <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading filters…</p>}>

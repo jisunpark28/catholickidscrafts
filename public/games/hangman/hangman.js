@@ -81,7 +81,9 @@ function initGame() {
     const randomData = list[randomIndex];
     game = createHangman(randomData.word);
     if (hintDisplay) {
-        hintDisplay.innerText = "💡 Hint: " + randomData.hint;
+        const prefix =
+            typeof hmCopy === "function" ? hmCopy("hint_prefix", "💡 Hint: ") : "💡 Hint: ";
+        hintDisplay.innerText = prefix + randomData.hint;
     }
     updateUI();
     resetBtnPosition();
@@ -116,11 +118,15 @@ btn.addEventListener("click", () => {
         // Show result message after the final guess
         if (game.isFinished()) {
             setTimeout(() => {
-                alert(
-                    game.isWin()
-                        ? "Congratulations! You saved the flower! ✨"
-                        : "Game Over! The flower has lost its petals. 🥀\n\nThe answer was: " + game.getAnswer()
-                );
+                const winMsg =
+                    typeof hmCopy === "function"
+                        ? hmCopy("win", "Congratulations! You saved the flower! ✨")
+                        : "Congratulations! You saved the flower! ✨";
+                const loseMsg =
+                    typeof hmCopy === "function"
+                        ? hmCopy("lose", "Game Over! The flower has lost its petals. 🥀\n\nThe answer was:")
+                        : "Game Over! The flower has lost its petals. 🥀\n\nThe answer was:";
+                alert(game.isWin() ? winMsg : `${loseMsg} ${game.getAnswer()}`);
             }, 100);
         }
     }

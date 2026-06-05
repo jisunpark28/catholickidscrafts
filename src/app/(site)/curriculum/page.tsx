@@ -2,6 +2,7 @@ import { CurriculumCard } from "@/components/CurriculumCard";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { getCurriculumTracks } from "@/lib/content";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
@@ -13,13 +14,14 @@ export const metadata: Metadata = {
 
 export default async function CurriculumPage() {
   const tracks = await getCurriculumTracks();
+  const copy = await getSiteCopyMap();
 
   return (
     <PageShell wide>
       <PageHeader
-        title="Curriculum"
-        subtitle="When you are mapping a whole year—not just one Sunday at a time."
-        programNote="Choose the age band closest to your group. Use alongside Daily Mass and Kids Resources; you do not have to follow every week in order."
+        title={copyText(copy, "curriculum.page.title", "Curriculum")}
+        subtitle={copyText(copy, "curriculum.page.subtitle", "")}
+        programNote={copyText(copy, "curriculum.page.program_note", "")}
       />
 
       <div className="grid gap-0 border border-[var(--color-border)] sm:grid-cols-2">

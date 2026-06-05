@@ -42,8 +42,13 @@
     </main>
 
     <script src="catholic-words.js"></script>
+    <script src="site-copy.js"></script>
     <script>
       (async function () {
+        if (typeof loadHangmanSiteCopy === "function") {
+          await loadHangmanSiteCopy();
+          if (typeof applyHangmanDomCopy === "function") applyHangmanDomCopy();
+        }
         try {
           const res = await fetch("/api/hangman-words");
           if (res.ok) {

@@ -3,6 +3,7 @@ import { MassCalendar } from "@/components/MassCalendar";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { todayUtc, toDateKey } from "@/lib/dates";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { fetchMassDaySummary, fetchMonthCalendar } from "@/lib/mass-source";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
@@ -26,13 +27,14 @@ export default async function DailyMassPage() {
 
   const lwcToday = livingWithChristReadingUrl(dateKey);
   const usccbToday = usccbReadingsPageUrl(today);
+  const copy = await getSiteCopyMap();
 
   return (
     <PageShell wide>
       <PageHeader
-        title="Daily Mass"
-        subtitle="What is the Church celebrating? Start here before you plan your lesson or activity."
-        programNote="In class: show today on the calendar, then open the official readings site your community uses. Text stays on their site—we link you there."
+        title={copyText(copy, "mass.page.title", "Daily Mass")}
+        subtitle={copyText(copy, "mass.page.subtitle", "")}
+        programNote={copyText(copy, "mass.page.program_note", "")}
       >
         <div className="flex flex-wrap gap-3">
           <a
@@ -41,7 +43,7 @@ export default async function DailyMassPage() {
             rel="noopener noreferrer"
             className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
           >
-            Today&apos;s readings (Living with Christ) ↗
+            {copyText(copy, "mass.page.cta.lwc", "Today's readings (Living with Christ) ↗")}
           </a>
           <a
             href={usccbToday}
@@ -49,11 +51,11 @@ export default async function DailyMassPage() {
             rel="noopener noreferrer"
             className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
           >
-            Today&apos;s readings (USCCB) ↗
+            {copyText(copy, "mass.page.cta.usccb", "Today's readings (USCCB) ↗")}
           </a>
         </div>
         <p className="mt-3 text-sm text-[var(--color-muted)]">
-          Pick the link your parish or diocese normally uses for daily Mass texts.
+          {copyText(copy, "mass.page.link_hint", "")}
         </p>
       </PageHeader>
 

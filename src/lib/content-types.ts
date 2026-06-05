@@ -1,3 +1,5 @@
+import type { SiteCopyMap } from "@/lib/site-copy-types";
+
 export type LiturgicalPeriodId =
   | "advent"
   | "christmas"
@@ -53,6 +55,21 @@ export const LITURGICAL_PERIODS: LiturgicalPeriod[] = [
 
 export function getLiturgicalPeriod(id: LiturgicalPeriodId): LiturgicalPeriod {
   return LITURGICAL_PERIODS.find((p) => p.id === id) ?? LITURGICAL_PERIODS[6];
+}
+
+export function getLiturgicalPeriodsWithCopy(copy: SiteCopyMap): LiturgicalPeriod[] {
+  return LITURGICAL_PERIODS.map((p) => ({
+    ...p,
+    title: copy[`taxonomy.liturgical.${p.id}.title`] ?? p.title,
+    description: copy[`taxonomy.liturgical.${p.id}.description`] ?? p.description,
+  }));
+}
+
+export function getLiturgicalPeriodWithCopy(
+  id: LiturgicalPeriodId,
+  copy: SiteCopyMap,
+): LiturgicalPeriod {
+  return getLiturgicalPeriodsWithCopy(copy).find((p) => p.id === id) ?? getLiturgicalPeriod(id);
 }
 
 export type CurriculumTrack = {

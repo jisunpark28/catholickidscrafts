@@ -40,6 +40,21 @@ export const LITURGICAL_DRESS_ROUNDS: LiturgicalDressRound[] = [
   { id: "lent-5", title: "Lent — 5th Sunday", correctColor: "purple" },
 ];
 
+export const VESTMENT_ROUND_COPY_KEY: Record<string, string> = {
+  ordinary: "play.vestments.round.ordinary",
+  christmas: "play.vestments.round.christmas",
+  pentecost: "play.vestments.round.pentecost",
+  "advent-1": "play.vestments.round.advent_1",
+  "advent-2": "play.vestments.round.advent_2",
+  "advent-gaudete": "play.vestments.round.advent_gaudete",
+  "advent-4": "play.vestments.round.advent_4",
+  "lent-1": "play.vestments.round.lent_1",
+  "lent-2": "play.vestments.round.lent_2",
+  "lent-3": "play.vestments.round.lent_3",
+  "lent-laetare": "play.vestments.round.lent_laetare",
+  "lent-5": "play.vestments.round.lent_5",
+};
+
 export function shuffleRounds(): LiturgicalDressRound[] {
   const pool = [...LITURGICAL_DRESS_ROUNDS];
   for (let i = pool.length - 1; i > 0; i--) {
