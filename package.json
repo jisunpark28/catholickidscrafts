@@ -19,7 +19,8 @@
     "db:seed-site-copy": "tsx prisma/seed-site-copy.ts",
     "db:seed-trinity-resource": "tsx prisma/seed-holy-trinity-resource.ts",
     "vestments:split": "node scripts/split-vestment-spritesheet.mjs",
-    "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs"
+    "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs",
+    "generate:favicons": "python3 scripts/generate-favicons.py"
   },
   "dependencies": {
     "@prisma/client": "5.22.0",
