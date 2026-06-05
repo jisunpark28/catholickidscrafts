@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { seedHangmanWords } from "./seed-hangman-words";
 import { seedTypingWords } from "./seed-typing-words";
 
 const prisma = new PrismaClient();

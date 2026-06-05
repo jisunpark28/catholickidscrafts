@@ -31,6 +31,9 @@ export default async function AdminLayout({
               <Link href="/admin/typing-words" className="hover:text-[var(--color-accent)]">
                 Typing words
               </Link>
+              <Link href="/admin/hangman-words" className="hover:text-[var(--color-accent)]">
+                Hangman words
+              </Link>
               <Link href="/admin/photo-booth-frames" className="hover:text-[var(--color-accent)]">
                 Photo booth
               </Link>
