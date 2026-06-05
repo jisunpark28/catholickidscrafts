@@ -62,6 +62,7 @@ Open **http://localhost:3000/admin/login** and sign in with the seeded email and
 | `DIRECT_URL` | Neon direct URL |
 | `AUTH_SECRET` | Same as local or a new random string |
 | `NEXT_PUBLIC_SITE_URL` | `https://www.catholickidscrafts.com` |
+| `GOOGLE_SITE_VERIFICATION` | Search Console HTML tag `content=` value (see `docs/GOOGLE_SEARCH.md`) |
 | `BLOB_READ_WRITE_TOKEN` | After Blob setup (step 4) |
 
 You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Run `npm run db:seed` once locally with Neon URLs in `.env` to seed production data.

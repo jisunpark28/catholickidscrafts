@@ -20,8 +20,10 @@ After deploy, check:
 1. Open [Google Search Console](https://search.google.com/search-console).
 2. Add property **URL prefix**: `https://www.catholickidscrafts.com`
 3. Verify ownership (HTML tag recommended):
-   - In Vercel, set `GOOGLE_SITE_VERIFICATION` to the `content=` value Google gives you (not the full meta tag).
-   - Redeploy, then click **Verify** in Search Console.
+   - In Vercel → **Settings** → **Environment Variables**, add **`GOOGLE_SITE_VERIFICATION`** (Production) with the `content=` value from Google — **not** the full `<meta>` tag.
+   - **Redeploy** Production (or wait for the next deploy). The root layout emits `<meta name="google-site-verification" content="…" />` when this variable is set.
+   - Confirm: open `https://www.catholickidscrafts.com/` → **View page source** → search `google-site-verification`.
+   - In Search Console, click **Verify**.
 4. **Sitemaps** → submit: `https://www.catholickidscrafts.com/sitemap.xml`
 5. **URL inspection** → enter `https://www.catholickidscrafts.com/` → **Request indexing**
 

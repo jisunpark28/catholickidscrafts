@@ -1,7 +1,9 @@
 import { AuthProvider } from "@/components/AuthProvider";
 import { SiteJsonLd } from "@/components/SiteJsonLd";
-import { getSiteUrl } from "@/lib/site-url";
+import { getGoogleSiteVerification } from "@/lib/google-site-verification";
+import { siteMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -10,66 +12,24 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const siteUrl = getSiteUrl();
+export const metadata: Metadata = siteMetadata;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: "Catholic Kids Crafts | Daily Mass & Catechism",
-    template: "%s | Catholic Kids Crafts",
-  },
-  description:
-    "Daily Catholic Mass readings in English, liturgical calendar, and kids catechism resources.",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteUrl,
-    siteName: "Catholic Kids Crafts",
-    title: "Catholic Kids Crafts | Daily Mass & Catechism",
-    description:
-      "Daily Catholic Mass readings in English, liturgical calendar, and kids catechism resources.",
-    images: [{ url: "/logo.png", width: 512, height: 512, alt: "Catholic Kids Crafts" }],
-  },
-  twitter: {
-    card: "summary",
-    title: "Catholic Kids Crafts",
-    description:
-      "Daily Catholic Mass readings in English, liturgical calendar, and kids catechism resources.",
-    images: ["/logo.png"],
-  },
-  ...(process.env.GOOGLE_SITE_VERIFICATION
-    ? {
-        verification: {
-          google: process.env.GOOGLE_SITE_VERIFICATION,
-        },
-      }
-    : {}),
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/logo-icon.png", type: "image/png", sizes: "48x48" },
-      { url: "/icon.png", type: "image/png", sizes: "96x96" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
-  },
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Read Vercel env at request time so GOOGLE_SITE_VERIFICATION works without a stale static build.
+  await connection();
+  const googleSiteVerification = getGoogleSiteVerification();
+
   return (
     <html lang="en">
+      <head>
+        {googleSiteVerification ? (
+          <meta name="google-site-verification" content={googleSiteVerification} />
+        ) : null}
+      </head>
       <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
         <SiteJsonLd />
         <AuthProvider>{children}</AuthProvider>
