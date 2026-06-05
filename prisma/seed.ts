@@ -147,6 +147,9 @@ async function main() {
 
   const typingCount = await seedTypingWords(prisma);
   console.log(`Typing words seeded: ${typingCount}`);
+
+  const hangmanCount = await seedHangmanWords(prisma);
+  console.log(`Hangman words seeded: ${hangmanCount}`);
 }
 
 main()
