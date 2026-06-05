@@ -1,10 +1,13 @@
 "use client";
 
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { LITURGICAL_PERIODS } from "@/lib/content-types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
 
 export function ResourcesToolbar() {
+  const copy = useSiteCopy();
+  const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
@@ -30,78 +33,77 @@ export function ResourcesToolbar() {
   );
 
   return (
-    <div className="mb-10 space-y-4 border border-[var(--color-border)] bg-white p-4 sm:p-6">
-      <form
-        className="flex flex-col gap-3 sm:flex-row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          apply({ q });
-        }}
-      >
-        <label className="sr-only" htmlFor="resources-search">
-          Search kids resources
-        </label>
+    <form
+      className="mb-8 flex flex-col gap-4 border border-[var(--color-border)] bg-white p-4 sm:flex-row sm:flex-wrap sm:items-end"
+      onSubmit={(e) => {
+        e.preventDefault();
+        apply({ q });
+      }}
+    >
+      <label className="flex-1 text-sm font-semibold">
+        Search
         <input
-          id="resources-search"
-          type="search"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search title, topic, grade, description…"
-          className="min-w-0 flex-1 border border-[var(--color-border)] px-3 py-2 text-sm"
+          placeholder="e.g. Advent wreath"
+          className="mt-1 w-full border border-[var(--color-border)] px-3 py-2"
         />
-        <button
-          type="submit"
-          disabled={pending}
-          className="bg-[var(--color-accent)] px-5 py-2 text-sm font-bold text-white disabled:opacity-60"
-        >
-          {pending ? "Searching…" : "Search"}
-        </button>
-        {hasFilter && (
-          <button
-            type="button"
-            onClick={() => {
-              setQ("");
-              apply({ q: "", period: "all" });
-            }}
-            className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold"
-          >
-            Clear
-          </button>
-        )}
-      </form>
-
-      <div className="flex flex-wrap gap-2">
+      </label>
+      <button
+        type="submit"
+        disabled={pending}
+        className="bg-[var(--color-accent)] px-5 py-2 text-sm font-bold text-white disabled:opacity-60"
+      >
+        {pending ? "Searching…" : "Search"}
+      </button>
+      {hasFilter && (
         <button
           type="button"
-          disabled={pending}
-          onClick={() => apply({ period: "all" })}
-          className={`px-3 py-1.5 text-sm font-semibold ${
-            activePeriod === "all"
-              ? "bg-[var(--color-accent)] text-white"
-              : "border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-accent)]"
-          }`}
+          onClick={() => {
+            setQ("");
+            apply({ q: "", period: "all" });
+          }}
+          className="text-sm font-semibold text-[var(--color-link)]"
         >
-          All seasons
+          Clear filters
         </button>
-        {LITURGICAL_PERIODS.map((period) => {
-          const active = activePeriod === period.id;
-          return (
-            <button
-              key={period.id}
-              type="button"
-              disabled={pending}
-              onClick={() => apply({ period: period.id })}
-              className={`px-3 py-1.5 text-sm font-semibold ${
-                active
-                  ? "bg-[var(--color-accent)] text-white"
-                  : "border border-[var(--color-border)] bg-[var(--color-surface)] hover:border-[var(--color-accent)]"
-              }`}
-            >
-              {period.title}
-            </button>
-          );
-        })}
+      )}
+
+      <div className="w-full border-t border-[var(--color-border)] pt-4">
+        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
+          Liturgical season
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => apply({ period: "all" })}
+            className={`border px-3 py-1.5 text-xs font-bold ${
+              activePeriod === "all"
+                ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white"
+                : "border-[var(--color-border)] bg-[var(--color-surface)]"
+            }`}
+          >
+            All
+          </button>
+          {LITURGICAL_PERIODS.map((period) => {
+            const title = t(`taxonomy.liturgical.${period.id}.title`, period.title);
+            return (
+              <button
+                key={period.id}
+                type="button"
+                onClick={() => apply({ period: period.id })}
+                className={`border px-3 py-1.5 text-xs font-bold ${
+                  activePeriod === period.id
+                    ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white"
+                    : "border-[var(--color-border)] bg-[var(--color-surface)]"
+                }`}
+              >
+                {title}
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </form>
   );
 }

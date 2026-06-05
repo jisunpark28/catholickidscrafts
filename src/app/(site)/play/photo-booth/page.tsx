@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { PhotoBoothGame } from "@/components/PhotoBoothGame";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
     "Upload or take photos, then decorate with backgrounds and stickers—make a fun photo strip in your browser.",
 };
 
-export default function PhotoBoothPage() {
+export default async function PhotoBoothPage() {
+  const copy = await getSiteCopyMap();
+
   return (
     <PageShell wide>
       <Link
@@ -22,9 +25,9 @@ export default function PhotoBoothPage() {
 
       <div className="mt-6">
         <PageHeader
-          title="4-Cut Photo Booth"
-          subtitle="A light celebration activity—great after a rehearsal or saint-day party."
-          programNote="Photos stay on the device (not uploaded here). Print or share from the family’s phone if your parish allows."
+          title={copyText(copy, "play.photobooth.page.title", "4-Cut Photo Booth")}
+          subtitle={copyText(copy, "play.photobooth.page.subtitle", "")}
+          programNote={copyText(copy, "play.photobooth.page.program_note", "")}
         />
       </div>
 

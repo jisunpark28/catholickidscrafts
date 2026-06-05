@@ -31,6 +31,9 @@ export default async function AdminLayout({
               <Link href="/admin/mass-order-steps" className="hover:text-[var(--color-accent)]">
                 Mass Order
               </Link>
+              <Link href="/admin/site-copy" className="hover:text-[var(--color-accent)]">
+                Site text
+              </Link>
               <Link href="/admin/typing-words" className="hover:text-[var(--color-accent)]">
                 Typing words
               </Link>

@@ -1,12 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { PriestVestmentFigure } from "@/components/liturgical-vestments/PriestVestmentFigure";
 import {
   shuffleRounds,
   VESTMENT_COLORS,
+  VESTMENT_ROUND_COPY_KEY,
   type VestmentColor,
 } from "@/lib/liturgical-vestments-game";
+import { useMemo, useState } from "react";
 
 const COLOR_ORDER: VestmentColor[] = [
   "white",
@@ -20,6 +22,8 @@ const COLOR_ORDER: VestmentColor[] = [
 type Feedback = "idle" | "correct" | "wrong";
 
 export function LiturgicalVestmentsGame() {
+  const copy = useSiteCopy();
+  const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const [rounds, setRounds] = useState(() => shuffleRounds());
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -94,7 +98,9 @@ export function LiturgicalVestmentsGame() {
 
       <div className="grid gap-6 p-4 lg:grid-cols-[1fr_320px]">
         <div>
-          <h2 className="text-xl font-bold text-[var(--color-ink)]">{round.title}</h2>
+          <h2 className="text-xl font-bold text-[var(--color-ink)]">
+            {t(VESTMENT_ROUND_COPY_KEY[round.id] ?? "", round.title)}
+          </h2>
 
           <div className="mt-4 flex justify-center overflow-visible pt-1">
             <PriestVestmentFigure chasubleColor={selected} />
@@ -126,7 +132,7 @@ export function LiturgicalVestmentsGame() {
                       className="h-6 w-6 shrink-0 rounded-full border"
                       style={{ background: c.hex, borderColor: c.stroke }}
                     />
-                    {c.label}
+                    {t(`play.vestments.color.${key}`, c.label)}
                   </button>
                 );
               })}

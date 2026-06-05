@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { TypingGameHub } from "@/components/TypingGameHub";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
     "Word mode or Today’s Bible with today's Mass readings from Universalis.",
 };
 
-export default function PlayTypingPage() {
+export default async function PlayTypingPage() {
+  const copy = await getSiteCopyMap();
+
   return (
     <PageShell wide>
       <Link
@@ -22,9 +25,9 @@ export default function PlayTypingPage() {
 
       <div className="mt-6">
         <PageHeader
-          title="Typing Game"
-          subtitle="Quiet practice that still connects to the faith you are teaching this week."
-          programNote="Word mode: good for grades 2–6 and review. Today's Bible: loads today's Mass readings from Universalis (with copyright notice)—let readers finish early while others join."
+          title={copyText(copy, "play.typing.page.title", "Typing Game")}
+          subtitle={copyText(copy, "play.typing.page.subtitle", "")}
+          programNote={copyText(copy, "play.typing.page.program_note", "")}
         />
       </div>
 

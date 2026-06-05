@@ -1,19 +1,34 @@
 "use client";
 
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SiteLogo } from "@/components/SiteLogo";
 
-const nav = [
-  { href: "/mass", label: "Daily Mass", match: (p: string) => p === "/mass" },
-  { href: "/play", label: "Play", match: (p: string) => p.startsWith("/play") },
-  { href: "/curriculum", label: "Curriculum", match: (p: string) => p.startsWith("/curriculum") },
-  { href: "/resources", label: "Kids Resources", match: (p: string) => p.startsWith("/resources") },
-  { href: "/recommendations", label: "Recommendations", match: (p: string) => p.startsWith("/recommendations") },
-];
-
 export function SiteHeader() {
   const pathname = usePathname() ?? "";
+  const copy = useSiteCopy();
+  const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
+
+  const nav = [
+    { href: "/mass", label: t("global.nav.mass", "Daily Mass"), match: (p: string) => p === "/mass" },
+    { href: "/play", label: t("global.nav.play", "Play"), match: (p: string) => p.startsWith("/play") },
+    {
+      href: "/curriculum",
+      label: t("global.nav.curriculum", "Curriculum"),
+      match: (p: string) => p.startsWith("/curriculum"),
+    },
+    {
+      href: "/resources",
+      label: t("global.nav.resources", "Kids Resources"),
+      match: (p: string) => p.startsWith("/resources"),
+    },
+    {
+      href: "/recommendations",
+      label: t("global.nav.recommendations", "Recommendations"),
+      match: (p: string) => p.startsWith("/recommendations"),
+    },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-white">

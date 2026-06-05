@@ -1,5 +1,6 @@
 import { LegalPage } from "@/components/LegalPage";
 import { getTptStoreUrl } from "@/lib/tpt";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -9,13 +10,14 @@ export const metadata: Metadata = {
     "Why Catholic Kids Crafts exists—to support children's ministry in parishes and homes.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
   const tptStore = getTptStoreUrl();
+  const copy = await getSiteCopyMap();
 
   return (
     <LegalPage
-      title="Why Catholic Kids Crafts?"
-      subtitle="Built to share—so more parishes can run children's programs with confidence."
+      title={copyText(copy, "legal.about.title", "Why Catholic Kids Crafts?")}
+      subtitle={copyText(copy, "legal.about.subtitle", "")}
     >
       <p>
         This site started as a simple wish: make it easier for ordinary volunteers to help with

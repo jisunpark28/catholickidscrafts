@@ -1,15 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { BibleTypingMode } from "@/components/BibleTypingMode";
 import { WordFallTypingGame } from "@/components/WordFallTypingGame";
+import { useState } from "react";
 
 type Mode = "words" | "bible";
-
-const MODES: { id: Mode; label: string }[] = [
-  { id: "words", label: "Word mode" },
-  { id: "bible", label: "Today's Bible" },
-];
 
 const modeBtnClass = (active: boolean) =>
   `px-4 py-2 text-sm font-bold transition ${
@@ -19,19 +15,26 @@ const modeBtnClass = (active: boolean) =>
   }`;
 
 export function TypingGameHub() {
+  const copy = useSiteCopy();
+  const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const [mode, setMode] = useState<Mode>("words");
+
+  const modes: { id: Mode; labelKey: string; fallback: string }[] = [
+    { id: "words", labelKey: "play.typing.mode.words", fallback: "Word mode" },
+    { id: "bible", labelKey: "play.typing.mode.bible", fallback: "Today's Bible" },
+  ];
 
   return (
     <div>
       <div className="flex flex-wrap gap-2 border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
-        {MODES.map((m) => (
+        {modes.map((m) => (
           <button
             key={m.id}
             type="button"
             onClick={() => setMode(m.id)}
             className={modeBtnClass(mode === m.id)}
           >
-            {m.label}
+            {t(m.labelKey, m.fallback)}
           </button>
         ))}
       </div>

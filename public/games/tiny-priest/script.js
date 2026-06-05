@@ -55,7 +55,68 @@ function updateMassToggleButton() {
     if (!btn || !APP_STATE.threeWorld) return;
     const active = APP_STATE.threeWorld.isMassActive();
     btn.classList.toggle("is-active", active);
-    btn.textContent = active ? "Stop Mass" : "Start Mass";
+    const stopLabel =
+        typeof tpCopy === "function" ? tpCopy("mass.toggle_stop", "Stop Mass") : "Stop Mass";
+    const startLabel =
+        typeof tpCopy === "function" ? tpCopy("mass.toggle_start", "Start Mass") : "Start Mass";
+    btn.textContent = active ? stopLabel : startLabel;
+}
+
+function applyTinyPriestStaticCopy() {
+    if (typeof tpCopy !== "function") {
+        return;
+    }
+    document.title = tpCopy("page_title", document.title);
+    const mainTitle = document.querySelector(".main-title");
+    if (mainTitle) {
+        mainTitle.textContent = tpCopy("entry.title", mainTitle.textContent);
+    }
+    const massTitle = document.querySelector(".mass-nav-title");
+    if (massTitle) {
+        massTitle.textContent = tpCopy("mass.title", massTitle.textContent);
+    }
+    const massHint = document.querySelector(".mass-nav-hint");
+    if (massHint) {
+        massHint.textContent = tpCopy("mass.hint", massHint.textContent);
+    }
+    const liturgy = document.getElementById("liturgy-subtitle");
+    if (liturgy && !APP_STATE.threeWorld) {
+        liturgy.textContent = tpCopy("liturgy.placeholder", liturgy.textContent);
+    }
+    const yesBtn = document.getElementById("entry-confirm-btn");
+    if (yesBtn) {
+        yesBtn.textContent = tpCopy("entry.btn_yes", yesBtn.textContent);
+    }
+    const noBtn = document.getElementById("entry-decline-btn");
+    if (noBtn) {
+        noBtn.textContent = tpCopy("entry.btn_no", noBtn.textContent);
+    }
+    const exitBtn = document.getElementById("church-exit-btn");
+    if (exitBtn) {
+        exitBtn.textContent = tpCopy("exit.label", exitBtn.textContent);
+    }
+    CHARACTER_CONFIG.priest.greetingText = tpCopy(
+        "priest.greeting",
+        CHARACTER_CONFIG.priest.greetingText,
+    );
+    CHARACTER_CONFIG.priest.enterPromptText = tpCopy(
+        "priest.enter_prompt",
+        CHARACTER_CONFIG.priest.enterPromptText,
+    );
+    CHARACTER_CONFIG.nun.greetingText = tpCopy("nun.greeting", CHARACTER_CONFIG.nun.greetingText);
+    CHARACTER_CONFIG.nun.enterPromptText = tpCopy(
+        "nun.enter_prompt",
+        CHARACTER_CONFIG.nun.enterPromptText,
+    );
+    for (const key of Object.keys(GESTURE_NARRATION)) {
+        GESTURE_NARRATION[key] = tpCopy(`gesture.${key}`, GESTURE_NARRATION[key]);
+    }
+}
+
+function getDefaultEntryDialogue() {
+    return typeof tpCopy === "function"
+        ? tpCopy("entry.dialogue_default", DEFAULT_ENTRY_DIALOGUE)
+        : DEFAULT_ENTRY_DIALOGUE;
 }
 
 const APP_STATE = {
@@ -372,8 +433,12 @@ function showEntryScreenFromInterior() {
     APP_STATE.greetedCharacter = null;
     showEntryActions(false);
     highlightGreetedCharacter(null);
-    setDialogue(DEFAULT_ENTRY_DIALOGUE);
-    setLiturgySubtitle("Mass guidance will appear here.");
+    setDialogue(getDefaultEntryDialogue());
+    setLiturgySubtitle(
+        typeof tpCopy === "function"
+            ? tpCopy("liturgy.placeholder", "Mass guidance will appear here.")
+            : "Mass guidance will appear here.",
+    );
     setMassFlowStepState(-1, false);
     setMassFlowStatus("");
 }
@@ -678,7 +743,7 @@ function resetEntryPromptUi() {
     showEntryActions(false);
     highlightGreetedCharacter(null);
     unlockCharacterSelection();
-    setDialogue(DEFAULT_ENTRY_DIALOGUE);
+    setDialogue(getDefaultEntryDialogue());
 }
 
 
@@ -1562,19 +1627,42 @@ function createVoxelChurch(container) {
         if (actionState.massActive) {
             actionState.massIndex = actionState.currentMassStepIndex >= 0 ? actionState.currentMassStepIndex : 0;
             advanceMassStep();
-            setDialogue("Mass sequence started. Press M again to stop.");
+            setDialogue(
+                typeof tpCopy === "function"
+                    ? tpCopy("mass.started", "Mass sequence started. Press M again to stop.")
+                    : "Mass sequence started. Press M again to stop.",
+            );
             setMassFlowStatus("▶️ Auto Mass progression running...");
             return;
         }
         triggerGesture("idle", "", -1);
-        setLiturgySubtitle("⏸️ Mass sequence paused. Select any gesture manually.");
-        setDialogue("Mass sequence paused.");
-        setMassFlowStatus("⏸️ Paused. Click a step to jump there.");
+        setLiturgySubtitle(
+            typeof tpCopy === "function"
+                ? tpCopy(
+                      "mass.paused_subtitle",
+                      "⏸️ Mass sequence paused. Select any gesture manually.",
+                  )
+                : "⏸️ Mass sequence paused. Select any gesture manually.",
+        );
+        setDialogue(
+            typeof tpCopy === "function"
+                ? tpCopy("mass.paused_dialogue", "Mass sequence paused.")
+                : "Mass sequence paused.",
+        );
+        setMassFlowStatus(
+            typeof tpCopy === "function"
+                ? tpCopy("mass.paused_status", "⏸️ Paused. Click a step to jump there.")
+                : "⏸️ Paused. Click a step to jump there.",
+        );
     }
 
     triggerGesture("idle", "", -1);
     setMassFlowStepState(-1, false);
-    setMassFlowStatus("🧭 Choose a part and click a detailed step.");
+    setMassFlowStatus(
+        typeof tpCopy === "function"
+            ? tpCopy("mass.status_choose", "🧭 Choose a part and click a detailed step.")
+            : "🧭 Choose a part and click a detailed step.",
+    );
 
     const playerShadow = new THREE.Mesh(
         new THREE.CircleGeometry(0.82, 16),
@@ -2200,7 +2288,11 @@ function resetEntryAfterFailure(message) {
     showEntryActions(false);
     highlightGreetedCharacter(null);
     setDialogue(message);
-    setLiturgySubtitle("🎵 Mass guidance subtitles will appear here.");
+    setLiturgySubtitle(
+        typeof tpCopy === "function"
+            ? tpCopy("liturgy.placeholder_active", "🎵 Mass guidance subtitles will appear here.")
+            : "🎵 Mass guidance subtitles will appear here.",
+    );
 }
 
 async function activateThreeScene(role) {
@@ -2223,6 +2315,10 @@ async function activateThreeScene(role) {
     threeContainer.setAttribute("aria-hidden", "false");
     bindHudControls();
     bindChurchExitButton();
+    if (typeof loadTinyPriestSiteCopy === "function") {
+        await loadTinyPriestSiteCopy();
+        applyTinyPriestStaticCopy();
+    }
     await loadMassOrderSteps();
     resetMassFlowNavigation();
     bindMassNavigator();
@@ -2240,7 +2336,14 @@ async function activateThreeScene(role) {
 
         applyRoleCamera(role, APP_STATE.threeWorld.camera, APP_STATE.threeWorld.playerRig);
         setHudButtonsState(APP_STATE.threeWorld.getCurrentGesture(), APP_STATE.threeWorld.isMassActive());
-        setDialogue(`Today is ${liturgical.season}. Move: arrows/WASD, jump: Space, gestures: 1-7, Mass sequence: M.`);
+        const introTemplate =
+            typeof tpCopy === "function"
+                ? tpCopy(
+                      "enter.church_intro",
+                      "Today is {season}. Move: arrows/WASD, jump: Space, gestures: 1-7, Mass sequence: M.",
+                  )
+                : "Today is {season}. Move: arrows/WASD, jump: Space, gestures: 1-7, Mass sequence: M.";
+        setDialogue(introTemplate.replace("{season}", liturgical.season));
     } catch (error) {
         console.error("Failed to initialize 3D church scene:", error);
         resetEntryAfterFailure("The church interior could not load. Please refresh and try again.");
@@ -2329,6 +2432,13 @@ function bindEntryFlow() {
 console.info(`Tiny Priest build ${TINY_PRIEST_BUILD}`);
 
 bindEntryFlow();
+
+void (typeof loadTinyPriestSiteCopy === "function"
+    ? loadTinyPriestSiteCopy().then(() => {
+          applyTinyPriestStaticCopy();
+          setDialogue(getDefaultEntryDialogue());
+      })
+    : Promise.resolve());
 
 window.handleCharacterGreeting = handleCharacterGreeting;
 window.confirmEntryToChurch = confirmEntryToChurch;

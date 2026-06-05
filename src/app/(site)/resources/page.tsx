@@ -4,12 +4,15 @@ import { ResourceCard } from "@/components/ResourceCard";
 import { ResourcesToolbar } from "@/components/ResourcesToolbar";
 import {
   getAllResources,
-  getLiturgicalPeriod,
   getResourcesByPeriod,
-  LITURGICAL_PERIODS,
   searchPublishedResources,
 } from "@/lib/content";
-import { parseLiturgicalPeriodParam } from "@/lib/content-types";
+import {
+  getLiturgicalPeriodWithCopy,
+  getLiturgicalPeriodsWithCopy,
+  parseLiturgicalPeriodParam,
+} from "@/lib/content-types";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -29,17 +32,19 @@ export default async function ResourcesPage({ searchParams }: Props) {
   const q = params.q;
   const period = parseLiturgicalPeriodParam(params.period);
   const hasFilter = Boolean(q?.trim() || period);
+  const copy = await getSiteCopyMap();
+  const periods = getLiturgicalPeriodsWithCopy(copy);
 
   if (hasFilter) {
     const results = await searchPublishedResources({ q, period });
-    const periodLabel = period ? getLiturgicalPeriod(period).title : null;
+    const periodLabel = period ? getLiturgicalPeriodWithCopy(period, copy).title : null;
 
     return (
       <PageShell wide>
         <PageHeader
-          title="Kids Resources"
-          subtitle="Pick a season, pick an idea—most posts you can preview here before you buy or print."
-          programNote="Filter by Advent, Lent, and so on when your DRE asks for ‘something for purple time.’ Save the TPT link when you need the full classroom pack."
+          title={copyText(copy, "resources.page.title", "Kids Resources")}
+          subtitle={copyText(copy, "resources.page.subtitle", "")}
+          programNote={copyText(copy, "resources.page.program_note", "")}
         />
 
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>
@@ -70,14 +75,14 @@ export default async function ResourcesPage({ searchParams }: Props) {
   const all = await getAllResources();
 
   const periodCounts = await Promise.all(
-    LITURGICAL_PERIODS.map(async (p) => ({
+    periods.map(async (p) => ({
       period: p,
       count: (await getResourcesByPeriod(p.id)).length,
     })),
   );
 
   const periodPosts = await Promise.all(
-    LITURGICAL_PERIODS.map(async (p) => ({
+    periods.map(async (p) => ({
       period: p,
       posts: await getResourcesByPeriod(p.id),
     })),
@@ -86,9 +91,9 @@ export default async function ResourcesPage({ searchParams }: Props) {
   return (
     <PageShell wide>
       <PageHeader
-        title="Kids Resources"
-        subtitle="Pick a season, pick an idea—most posts you can preview here before you buy or print."
-        programNote="Filter by Advent, Lent, and so on when your DRE asks for ‘something for purple time.’ Save the TPT link when you need the full classroom pack."
+        title={copyText(copy, "resources.page.title", "Kids Resources")}
+        subtitle={copyText(copy, "resources.page.subtitle", "")}
+        programNote={copyText(copy, "resources.page.program_note", "")}
       />
 
       <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>
@@ -112,13 +117,11 @@ export default async function ResourcesPage({ searchParams }: Props) {
 
       <div className="space-y-16">
         {periodPosts.map(({ period: p, posts }) => {
-          const meta = getLiturgicalPeriod(p.id);
-
           return (
             <section key={p.id} id={p.id} className="scroll-mt-24">
               <div className="border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 sm:px-8">
-                <h2 className="text-2xl font-bold text-[var(--color-ink)]">{meta.title}</h2>
-                <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{meta.description}</p>
+                <h2 className="text-2xl font-bold text-[var(--color-ink)]">{p.title}</h2>
+                <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{p.description}</p>
               </div>
 
               {posts.length > 0 ? (

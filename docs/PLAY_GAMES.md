@@ -25,6 +25,13 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 - Public API: `GET /api/church-decorations`
 - Click uploaded images inside the 3D church to show title + description.
 
+## Site & game text (operator)
+
+- Admin: `/admin/site-copy` — nav labels, home page, page headers, game UI chrome, season filter names, Tiny Priest/Hangman shell text
+- Public API: `GET /api/site-copy` (optional `?group=…` or `?prefix=…`)
+- Seed: `npm run db:seed-site-copy`
+- **Not** included: Mass readings, typing/hangman word lists, church wall images, Mass Order step bodies (separate admins)
+
 ## Mass Order (operator)
 
 - Admin: `/admin/mass-order-steps` — edit subtitle text, button labels, and gestures for each step under **Mass Order** in the sanctuary

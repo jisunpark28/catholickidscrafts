@@ -1,6 +1,7 @@
 import { GameEmbed } from "@/components/GameEmbed";
 import { PageShell } from "@/components/PageShell";
-import { getPlayGame } from "@/lib/play-games";
+import { getPlayGameFromCopy } from "@/lib/play-games-copy";
+import { getSiteCopyMap } from "@/lib/site-copy";
 import { getTinyPriestEmbedPath } from "@/lib/tiny-priest";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -14,7 +15,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const game = getPlayGame(slug);
+  const copy = await getSiteCopyMap();
+  const game = getPlayGameFromCopy(copy, slug);
   if (!game) return { title: "Not found" };
   return { title: game.title, description: game.description };
 }
@@ -25,7 +27,8 @@ export default async function PlayGamePage({ params }: Props) {
     const { redirect } = await import("next/navigation");
     redirect("/play/photo-booth");
   }
-  const game = getPlayGame(slug);
+  const copy = await getSiteCopyMap();
+  const game = getPlayGameFromCopy(copy, slug);
   if (!game) notFound();
 
   const churchOverride = process.env.NEXT_PUBLIC_CHURCH_GAME_URL?.trim();

@@ -1,5 +1,6 @@
 import { LegalPage } from "@/components/LegalPage";
 import { getPublicContactEmail, getPublicContactMailto } from "@/lib/site-contact";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -8,12 +9,16 @@ export const metadata: Metadata = {
   description: "How Catholic Kids Crafts handles visitor data, cookies, and third-party services.",
 };
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
   const contactEmail = getPublicContactEmail();
   const contactMailto = getPublicContactMailto();
+  const copy = await getSiteCopyMap();
 
   return (
-    <LegalPage title="Privacy Policy" subtitle="Last updated: June 2026">
+    <LegalPage
+      title={copyText(copy, "legal.privacy.title", "Privacy Policy")}
+      subtitle={copyText(copy, "legal.privacy.subtitle", "Last updated: June 2026")}
+    >
       <p>
         Catholic Kids Crafts operates{" "}
         <strong>www.catholickidscrafts.com</strong> (the &quot;Site&quot;). This policy describes

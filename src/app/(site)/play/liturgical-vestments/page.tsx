@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
+import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
     "Dress Father in the right liturgical color for each season—using the Tiny Priest character.",
 };
 
-export default function LiturgicalVestmentsPage() {
+export default async function LiturgicalVestmentsPage() {
+  const copy = await getSiteCopyMap();
+
   return (
     <PageShell wide>
       <Link
@@ -22,9 +25,9 @@ export default function LiturgicalVestmentsPage() {
 
       <div className="mt-6">
         <PageHeader
-          title="Liturgical vestments"
-          subtitle="Match Father’s vestments to the season—then point to the real altar cloth in church."
-          programNote="Try this the week you teach Advent, Lent, or a feast. Ask: “What color should we see at Mass this Sunday?”"
+          title={copyText(copy, "play.vestments.page.title", "Liturgical vestments")}
+          subtitle={copyText(copy, "play.vestments.page.subtitle", "")}
+          programNote={copyText(copy, "play.vestments.page.program_note", "")}
         />
       </div>
 
