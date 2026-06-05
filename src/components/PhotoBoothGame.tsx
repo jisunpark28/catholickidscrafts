@@ -4,7 +4,14 @@ import {
   frameAppliesToMode,
   type PhotoBoothFrameItem,
 } from "@/lib/photo-booth-frame-utils";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 type BgId = "cream" | "sky" | "rose" | "lavender" | "gold" | "stained" | "mint" | "cloud";
 
@@ -208,6 +215,31 @@ async function drawFrameOverlay(
   }
 }
 
+/** Parish frame on top of live camera or strip grid (align face before capture). */
+function LiveFrameOverlay({
+  frameUrl,
+  children,
+  className = "",
+}: {
+  frameUrl: string | null;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      {children}
+      {frameUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={frameUrl}
+          alt=""
+          className="pointer-events-none absolute inset-0 z-10 h-full w-full object-fill"
+        />
+      ) : null}
+    </div>
+  );
+}
+
 export function PhotoBoothGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -249,6 +281,9 @@ export function PhotoBoothGame() {
   const stripCapturing = mode === "strip" && !stripComplete;
   const canDecorate =
     !cameraOn && ((mode === "single" && photo !== null) || (mode === "strip" && stripComplete));
+  const awaitingCapture = (mode === "single" && photo === null) || stripCapturing;
+  const showStyleSidebar = awaitingCapture || canDecorate;
+  const showStickerTools = canDecorate;
   const singleCameraOnly = mode === "single" && cameraOn;
   const stripDecorating = mode === "strip" && canDecorate;
 
@@ -333,6 +368,10 @@ export function PhotoBoothGame() {
       img.src = src;
     });
   }, []);
+
+  useEffect(() => {
+    if (frameImageUrl) void loadImage(frameImageUrl).catch(() => {});
+  }, [frameImageUrl, loadImage]);
 
   const paint = useCallback(async () => {
     if (!canDecorate) return;
@@ -688,7 +727,7 @@ export function PhotoBoothGame() {
         </button>
       </div>
 
-      <div className={`grid gap-6 p-4 ${canDecorate ? "lg:grid-cols-[1fr_280px]" : ""}`}>
+      <div className={`grid gap-6 p-4 ${showStyleSidebar ? "lg:grid-cols-[1fr_280px]" : ""}`}>
         <div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -733,8 +772,14 @@ export function PhotoBoothGame() {
 
           {stripCapturing && (
             <p className="mt-2 text-sm text-[var(--color-muted)]">
-              Photo {activeSlot + 1} of 4 — capture or upload each frame. Decorate after all four are
-              done.
+              Photo {activeSlot + 1} of 4 — pick a parish frame on the right, line up your face, then
+              capture or upload. Add stickers after all four photos are done.
+            </p>
+          )}
+
+          {awaitingCapture && mode === "single" && !cameraOn && (
+            <p className="mt-2 text-sm text-[var(--color-muted)]">
+              Choose a frame first, then use the camera or upload a photo.
             </p>
           )}
 
@@ -743,24 +788,34 @@ export function PhotoBoothGame() {
               <p className="mb-2 text-center text-sm font-semibold text-[var(--color-ink)]">
                 Camera preview
               </p>
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="mx-auto block aspect-[3/4] w-full rounded-lg border-2 border-[var(--color-accent)] bg-black object-cover [transform:scaleX(-1)]"
-              />
+              <LiveFrameOverlay
+                frameUrl={frameImageUrl}
+                className="rounded-lg border-2 border-[var(--color-accent)]"
+              >
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="mx-auto block aspect-[3/4] w-full bg-black object-cover [transform:scaleX(-1)]"
+                />
+              </LiveFrameOverlay>
               {cameraError && (
                 <p className="mt-2 text-center text-xs text-red-600">{cameraError}</p>
               )}
               <p className="mt-3 text-center text-xs text-[var(--color-muted)]">
-                Tap Capture when you are ready.
+                {frameImageUrl
+                  ? "Line up your face in the frame opening, then tap Capture."
+                  : "Pick a frame on the right (optional), then tap Capture."}
               </p>
             </div>
           )}
 
           {stripCapturing && (
-            <div className="mx-auto mt-4 aspect-[3/4] w-full max-w-[360px] overflow-hidden border border-[var(--color-border)] shadow-md">
+            <LiveFrameOverlay
+              frameUrl={frameImageUrl}
+              className="mx-auto mt-4 aspect-[3/4] w-full max-w-[360px] border border-[var(--color-border)] shadow-md"
+            >
               <div
                 className="grid h-full w-full grid-cols-2 grid-rows-2"
                 style={{ gap: STRIP_GAP }}
@@ -821,7 +876,7 @@ export function PhotoBoothGame() {
               {cameraError && (
                 <p className="mt-2 text-center text-xs text-red-600">{cameraError}</p>
               )}
-            </div>
+            </LiveFrameOverlay>
           )}
 
           {canDecorate && (
@@ -845,18 +900,25 @@ export function PhotoBoothGame() {
           )}
         </div>
 
-        {canDecorate && (
+        {showStyleSidebar && (
           <aside className="space-y-4">
             {stripDecorating && (
               <p className="rounded-md bg-[var(--color-surface)] px-3 py-2 text-sm font-bold text-[var(--color-ink)]">
                 Editing photo {selectedStripSlot + 1}
               </p>
             )}
+            {awaitingCapture && !canDecorate && (
+              <p className="rounded-md bg-[var(--color-surface)] px-3 py-2 text-sm font-semibold text-[var(--color-ink)]">
+                Step 1 — pick a frame and line up in the camera preview.
+              </p>
+            )}
             {availableFrames.length > 0 && (
               <div>
                 <p className="text-sm font-bold text-[var(--color-ink)]">Frame</p>
                 <p className="mt-1 text-xs text-[var(--color-muted)]">
-                  Parish frames sit on top of your photo (under stickers).
+                  {awaitingCapture
+                    ? "Choose before you capture so you can fit your face in the opening."
+                    : "Parish frames sit on top of your photo (under stickers)."}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <button
@@ -898,6 +960,11 @@ export function PhotoBoothGame() {
             )}
             <div>
               <p className="text-sm font-bold text-[var(--color-ink)]">Background</p>
+              {awaitingCapture && !canDecorate && (
+                <p className="mt-1 text-xs text-[var(--color-muted)]">
+                  Applied to your photo after capture (not shown on the live camera).
+                </p>
+              )}
               <div className="mt-2 grid grid-cols-4 gap-2">
                 {BACKGROUNDS.map((b) => {
                   const selected = stripDecorating ? activeStripBg === b.id : bg === b.id;
@@ -914,28 +981,30 @@ export function PhotoBoothGame() {
                 })}
               </div>
             </div>
-            <div>
-              <p className="text-sm font-bold text-[var(--color-ink)]">Stickers</p>
-              <div className="mt-2 flex flex-wrap gap-1">
-                {STICKERS.map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => addSticker(s)}
-                    className="flex h-10 w-10 items-center justify-center rounded border border-[var(--color-border)] text-xl hover:bg-[var(--color-surface)]"
-                  >
-                    {s}
-                  </button>
-                ))}
+            {showStickerTools && (
+              <div>
+                <p className="text-sm font-bold text-[var(--color-ink)]">Stickers</p>
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {STICKERS.map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => addSticker(s)}
+                      className="flex h-10 w-10 items-center justify-center rounded border border-[var(--color-border)] text-xl hover:bg-[var(--color-surface)]"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={clearActiveStickers}
+                  className="mt-2 text-xs font-semibold text-[var(--color-link)]"
+                >
+                  Clear stickers
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={clearActiveStickers}
-                className="mt-2 text-xs font-semibold text-[var(--color-link)]"
-              >
-                Clear stickers
-              </button>
-            </div>
+            )}
           </aside>
         )}
       </div>
