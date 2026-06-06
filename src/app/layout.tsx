@@ -2,6 +2,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { SiteJsonLd } from "@/components/SiteJsonLd";
 import { getGoogleSiteVerification } from "@/lib/google-site-verification";
 import { siteMetadata } from "@/lib/site-metadata";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Inter } from "next/font/google";
@@ -33,6 +34,7 @@ export default async function RootLayout({
       <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
         <SiteJsonLd />
         <AuthProvider>{children}</AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
