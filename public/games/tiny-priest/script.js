@@ -1,4 +1,4 @@
-const TINY_PRIEST_BUILD = "20260611";
+const TINY_PRIEST_BUILD = "20260613";
 
 const CHARACTER_CONFIG = {
     priest: {
@@ -889,9 +889,9 @@ function createVoxelChurch(container) {
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf5f5dc);
-    scene.fog = new THREE.Fog(0xf5f5dc, 20, 56);
+    scene.fog = new THREE.Fog(0xf5f5dc, 14, 44);
 
-    const camera = new THREE.PerspectiveCamera(54, window.innerWidth / window.innerHeight, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(54, window.innerWidth / window.innerHeight, 0.1, 52);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -956,7 +956,9 @@ function createVoxelChurch(container) {
     rightWall.position.set(16.5, 6, 0);
     const ceiling = new THREE.Mesh(new THREE.BoxGeometry(34, 1, 36), materials.roof);
     ceiling.position.set(0, 12.1, 0);
-    root.add(backWall, leftWall, rightWall, ceiling);
+    const frontWall = new THREE.Mesh(new THREE.BoxGeometry(34, 12, 1), materials.wall);
+    frontWall.position.set(0, 6, 17.25);
+    root.add(backWall, leftWall, rightWall, ceiling, frontWall);
 
     // Sanctuary back wall: plain wall with crucifix only (no flat paintings).
     backWall.visible = true;
@@ -1110,6 +1112,73 @@ function createVoxelChurch(container) {
     const collisionObstacles = [];
     const playerCollisionRadius = 0.56;
     const worldBounds = { minX: -13.8, maxX: 13.8, minZ: -14.6, maxZ: 14.8 };
+    const FLOOR_AISLE_Y = 0;
+    const FLOOR_NAVE_Y = 0.22;
+    const FLOOR_SANCTUARY_Y = 0.8;
+    const NAVE_HALF_WIDTH = 2.15;
+    const NAVE_CENTER_Z = 0.5;
+    const NAVE_HALF_DEPTH = 14.5;
+    const SANCTUARY_CENTER_Z = -12.4;
+    const SANCTUARY_HALF_WIDTH = 6;
+    const SANCTUARY_HALF_DEPTH = 3.5;
+    const interiorCameraBounds = { minX: -12.4, maxX: 12.4, minZ: -13.4, maxZ: 12.6 };
+    const interiorCameraMargin = 0.4;
+
+    function resolveGroundHeight(x, z) {
+        if (
+            Math.abs(x) <= SANCTUARY_HALF_WIDTH &&
+            Math.abs(z - SANCTUARY_CENTER_Z) <= SANCTUARY_HALF_DEPTH
+        ) {
+            return FLOOR_SANCTUARY_Y;
+        }
+        if (
+            Math.abs(x) <= NAVE_HALF_WIDTH &&
+            Math.abs(z - NAVE_CENTER_Z) <= NAVE_HALF_DEPTH
+        ) {
+            return FLOOR_NAVE_Y;
+        }
+        return FLOOR_AISLE_Y;
+    }
+
+    function computeCameraOffsetDistance(playerPos, behindDir, maxOffset) {
+        let offset = maxOffset;
+        if (behindDir.x > 0.001) {
+            offset = Math.min(
+                offset,
+                (interiorCameraBounds.maxX - interiorCameraMargin - playerPos.x) / behindDir.x,
+            );
+        } else if (behindDir.x < -0.001) {
+            offset = Math.min(
+                offset,
+                (interiorCameraBounds.minX + interiorCameraMargin - playerPos.x) / behindDir.x,
+            );
+        }
+        if (behindDir.z > 0.001) {
+            offset = Math.min(
+                offset,
+                (interiorCameraBounds.maxZ - interiorCameraMargin - playerPos.z) / behindDir.z,
+            );
+        } else if (behindDir.z < -0.001) {
+            offset = Math.min(
+                offset,
+                (interiorCameraBounds.minZ + interiorCameraMargin - playerPos.z) / behindDir.z,
+            );
+        }
+        return THREE.MathUtils.clamp(offset, 3.6, maxOffset);
+    }
+
+    function placeInteriorCamera(playerPos, behindDir, heightY, maxOffset, outPos) {
+        const offset = computeCameraOffsetDistance(playerPos, behindDir, maxOffset);
+        outPos.copy(playerPos);
+        outPos.x += behindDir.x * offset;
+        outPos.z += behindDir.z * offset;
+        outPos.y = playerPos.y + heightY;
+        outPos.x = THREE.MathUtils.clamp(outPos.x, interiorCameraBounds.minX, interiorCameraBounds.maxX);
+        outPos.z = THREE.MathUtils.clamp(outPos.z, interiorCameraBounds.minZ, interiorCameraBounds.maxZ);
+        outPos.y = THREE.MathUtils.clamp(outPos.y, 2.1, 9.8);
+        return outPos;
+    }
+
     function addCollisionRect(centerX, centerZ, width, depth, extra = playerCollisionRadius) {
         const halfW = width * 0.5 + extra;
         const halfD = depth * 0.5 + extra;
@@ -2078,7 +2147,7 @@ function createVoxelChurch(container) {
 
         playerSprite.scale.x = spriteFacingState.xDir * stretchX;
         playerSprite.scale.y = squash;
-        playerSprite.position.y = playerSpriteHeight * 0.5 + walkBob + Math.max(playerRig.position.y, 0) * 0.06;
+        playerSprite.position.y = playerSpriteHeight * 0.5 + walkBob;
         playerSpriteMaterial.rotation = THREE.MathUtils.lerp(
             playerSpriteMaterial.rotation,
             tiltTarget,
@@ -2136,6 +2205,23 @@ function createVoxelChurch(container) {
         const horizontalSpeed = playerVelocityXZ.length();
         playerRig.rotation.y = facingState.yaw;
 
+        const targetGroundY = resolveGroundHeight(playerRig.position.x, playerRig.position.z);
+        playerMotion.groundY = targetGroundY;
+        if (playerMotion.onGround) {
+            const groundDelta = targetGroundY - playerRig.position.y;
+            if (Math.abs(groundDelta) > 0.001) {
+                const maxStep = 4.8 * dt;
+                if (Math.abs(groundDelta) <= 0.28) {
+                    playerRig.position.y += THREE.MathUtils.clamp(groundDelta, -maxStep, maxStep);
+                } else if (groundDelta < 0) {
+                    playerRig.position.y += Math.max(groundDelta, -maxStep);
+                }
+                if (Math.abs(targetGroundY - playerRig.position.y) < 0.02) {
+                    playerRig.position.y = targetGroundY;
+                }
+            }
+        }
+
         if (jump) {
             attemptJump();
         }
@@ -2159,6 +2245,7 @@ function createVoxelChurch(container) {
         updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, dt);
 
         playerShadow.position.x = playerRig.position.x;
+        playerShadow.position.y = playerMotion.groundY + 0.02;
         playerShadow.position.z = playerRig.position.z;
         playerShadow.material.opacity = 0.2 - Math.min((playerRig.position.y - playerMotion.groundY) * 0.05, 0.1);
 
@@ -2193,16 +2280,29 @@ function createVoxelChurch(container) {
         flameL.scale.y = 0.85 + Math.sin(performance.now() * 0.013) * 0.08;
         flameR.scale.y = 0.85 + Math.sin(performance.now() * 0.012 + 0.8) * 0.08;
 
-        cameraTarget.copy(playerRig.position);
-        cameraTarget.x += cameraBehindDirection.x * cameraOffset.z;
-        cameraTarget.y += cameraOffset.y;
-        cameraTarget.z += cameraBehindDirection.z * cameraOffset.z;
+        placeInteriorCamera(
+            playerRig.position,
+            cameraBehindDirection,
+            cameraOffset.y,
+            cameraOffset.z,
+            cameraTarget,
+        );
         camera.position.lerp(cameraTarget, 0.11);
 
         cameraLookTarget.copy(playerRig.position);
         cameraLookTarget.x += moveDirection.x * 2.4;
-        cameraLookTarget.y += cameraLookOffset.y;
+        cameraLookTarget.y = playerRig.position.y + cameraLookOffset.y;
         cameraLookTarget.z += moveDirection.z * 2.4;
+        cameraLookTarget.x = THREE.MathUtils.clamp(
+            cameraLookTarget.x,
+            interiorCameraBounds.minX,
+            interiorCameraBounds.maxX,
+        );
+        cameraLookTarget.z = THREE.MathUtils.clamp(
+            cameraLookTarget.z,
+            interiorCameraBounds.minZ,
+            interiorCameraBounds.maxZ,
+        );
         camera.lookAt(cameraLookTarget);
 
         renderer.render(scene, camera);
@@ -2247,8 +2347,16 @@ function applyRoleCamera(role, camera, playerRig = null) {
     const anchorX = playerRig ? playerRig.position.x : 0;
     const anchorY = playerRig ? playerRig.position.y : 0;
     const anchorZ = playerRig ? playerRig.position.z : 10.8;
-    camera.position.set(anchorX, anchorY + 2.85, anchorZ + 8.6);
-    camera.lookAt(anchorX, anchorY + 1.45, anchorZ - 3.2);
+    const spawnGroundY = playerRig ? playerRig.position.y : 0;
+    const maxCamZ = 12.6;
+    const camZ = Math.min(anchorZ + 8.6, maxCamZ);
+    const camX = THREE.MathUtils.clamp(anchorX, -12.4, 12.4);
+    camera.position.set(camX, anchorY + 2.85, camZ);
+    camera.lookAt(
+        THREE.MathUtils.clamp(anchorX, -12.4, 12.4),
+        spawnGroundY + 1.45,
+        THREE.MathUtils.clamp(anchorZ - 3.2, -13.4, 12.6),
+    );
 }
 
 function resetEntryAfterFailure(message) {
