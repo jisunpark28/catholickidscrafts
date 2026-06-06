@@ -1,5 +1,5 @@
 import { ResourceEditor } from "@/components/admin/ResourceEditor";
-import { getCurriculumStageLabels } from "@/lib/curriculum-stages";
+import { getCurriculumTitleLabels } from "@/lib/curriculum-stages";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -8,9 +8,9 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function EditResourcePage({ params }: Props) {
   const { id } = await params;
-  const [item, stageOptions] = await Promise.all([
+  const [item, titleOptions] = await Promise.all([
     prisma.resource.findUnique({ where: { id } }),
-    getCurriculumStageLabels(),
+    getCurriculumTitleLabels(),
   ]);
   if (!item) notFound();
 
@@ -22,7 +22,7 @@ export default async function EditResourcePage({ params }: Props) {
       <h1 className="mt-4 text-2xl font-bold">Edit resource</h1>
       <div className="mt-6">
         <ResourceEditor
-          stageOptions={stageOptions}
+          titleOptions={titleOptions}
           initial={{
             id: item.id,
             title: item.title,
