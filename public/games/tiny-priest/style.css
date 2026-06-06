@@ -2,31 +2,34 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
-    min-height: 100vh;
+    height: 100%;
     background-color: #f5f5dc;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     color: #5d4037;
 }
 
+body.is-fullscreen {
+    background-color: #000;
+}
+
 .main-container {
-    min-height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
     width: 100%;
-    padding: clamp(12px, 2vw, 24px);
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: clamp(12px, 1.8vh, 22px);
+    padding: clamp(8px, 1.5vh, 18px);
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    align-items: stretch;
+    justify-items: center;
+    gap: clamp(6px, 1.2vh, 14px);
     text-align: center;
     transition: opacity 0.55s ease;
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
 }
 
 .main-container.is-hidden {
@@ -36,8 +39,8 @@ body {
 
 .main-title {
     margin: 0;
-    font-size: clamp(1.25rem, 2.8vw, 2.2rem);
-    line-height: 1.25;
+    font-size: clamp(1.05rem, 1.6vh + 0.55rem, 2rem);
+    line-height: 1.2;
     max-width: 920px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
@@ -45,11 +48,16 @@ body {
 .church-scene {
     --door-x: 50%;
     --door-y: 73%;
-    --character-size: clamp(88px, 15vw, 180px); /* ~half size — smaller than church */
-    --mary-size: clamp(110px, 18vw, 250px);
+    --character-size: clamp(64px, 12vw, 168px);
+    --mary-size: clamp(80px, 14vw, 220px);
     position: relative;
-    width: min(95vw, 1120px);
+    width: min(95vw, 1120px, calc((100dvh - 11rem) * 16 / 10));
+    max-height: min(calc(100dvh - 11rem), 72vh);
+    height: 100%;
+    max-width: 100%;
     aspect-ratio: 16 / 10;
+    min-height: 0;
+    align-self: center;
 }
 
 .church-building {
@@ -158,12 +166,15 @@ body {
     background-color: #fffef8;
     border: 3px solid #d2b48c;
     border-radius: 20px;
-    padding: 14px clamp(18px, 2.5vw, 34px);
+    padding: clamp(8px, 1.4vh, 14px) clamp(14px, 2.5vw, 28px);
     max-width: none;
+    max-height: min(22vh, 160px);
+    overflow-y: auto;
+    font-size: clamp(0.82rem, 1.5vh + 0.35rem, 1rem);
     font-weight: 600;
     box-shadow: 0 12px 26px rgba(93, 64, 55, 0.12);
     white-space: pre-line;
-    line-height: 1.45;
+    line-height: 1.4;
 }
 
 .three-container {
@@ -239,6 +250,54 @@ body {
     background: #fff8f0;
     border-color: rgba(149, 109, 73, 0.55);
 }
+
+.game-fullscreen-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 251;
+    border: 1px solid rgba(150, 116, 86, 0.45);
+    border-radius: 8px;
+    background: rgba(255, 252, 248, 0.95);
+    color: #5d4037;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 8px 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(82, 58, 44, 0.12);
+    transition:
+        opacity 0.24s ease,
+        transform 0.24s ease,
+        background 0.2s ease;
+}
+
+.game-fullscreen-btn:hover {
+    background: #fff8f0;
+    border-color: rgba(149, 109, 73, 0.55);
+}
+
+.game-fullscreen-btn.is-interior-only {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.game-fullscreen-btn.is-interior-only.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+body:fullscreen .three-container,
+body:fullscreen .three-container canvas {
+    width: 100%;
+    height: 100%;
+}
+
+body:fullscreen .mass-navigator.is-active {
+    max-height: calc(100dvh - 24px);
+}
+
 
 .mass-navigator {
     position: fixed;
@@ -612,11 +671,29 @@ body {
     }
 }
 
+@media (max-height: 720px) {
+    .main-title {
+        font-size: clamp(0.95rem, 1.2vh + 0.45rem, 1.35rem);
+    }
+
+    .dialogue-box {
+        max-height: min(18vh, 120px);
+        padding: 8px 12px;
+    }
+
+    .entry-action-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+}
+
 @media (max-width: 640px) {
     .church-scene {
         --door-y: 75%;
-        --character-size: clamp(72px, 17vw, 140px);
-        --mary-size: clamp(90px, 22vw, 160px);
+        --character-size: clamp(56px, 14vw, 120px);
+        --mary-size: clamp(72px, 18vw, 140px);
+        width: min(96vw, calc((100dvh - 10rem) * 16 / 10));
+        max-height: min(calc(100dvh - 10rem), 58vh);
     }
 
     .statue-mary {
@@ -633,14 +710,23 @@ body {
         max-height: 118px;
     }
 
-    .mass-navigator {
-        position: static;
-        width: min(1100px, 96vw);
-        max-height: 160px;
-        margin: 0 auto 8px;
-        transform: none;
-        opacity: 1;
-        pointer-events: auto;
+    .mass-navigator.is-active {
+        top: 48px;
+        right: 4px;
+        width: min(240px, 86vw);
+        max-height: calc(100dvh - 56px);
+    }
+
+    .game-fullscreen-btn {
+        top: max(8px, env(safe-area-inset-top));
+        right: max(8px, env(safe-area-inset-right));
+        font-size: 0.72rem;
+        padding: 7px 10px;
+    }
+
+    .church-exit-btn {
+        top: max(8px, env(safe-area-inset-top));
+        left: max(8px, env(safe-area-inset-left));
     }
 }
 
@@ -761,30 +847,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: clamp(6px, 1vh, 10px);
     flex-shrink: 0;
-    margin-top: 4px;
-    padding-bottom: max(16px, env(safe-area-inset-bottom));
-}
-
-.main-container {
-    justify-content: flex-start;
-    padding-top: clamp(12px, 2vh, 24px);
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
-    overflow-x: hidden;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-body {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.dialogue-box {
-    border-radius: 20px;
-    white-space: pre-line;
-    line-height: 1.45;
+    margin-top: 0;
+    padding-bottom: max(4px, env(safe-area-inset-bottom));
 }
 
 #entry-screen.is-entering-zoom .entry-footer {
