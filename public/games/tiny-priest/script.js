@@ -1,4 +1,4 @@
-const TINY_PRIEST_BUILD = "20260613";
+const TINY_PRIEST_BUILD = "20260614";
 
 const CHARACTER_CONFIG = {
     priest: {
@@ -624,6 +624,54 @@ function setHudButtonsState(_currentGesture, _massActive) {
 }
 
 
+
+function bindGameFullscreen() {
+    const btn = document.getElementById("fullscreen-btn");
+    if (!btn || btn.dataset.bound === "true") {
+        return;
+    }
+    btn.dataset.bound = "true";
+
+    const enterLabel =
+        typeof tpCopy === "function" ? tpCopy("fullscreen.enter", "Fullscreen") : "Fullscreen";
+    const exitLabel =
+        typeof tpCopy === "function" ? tpCopy("fullscreen.exit", "Exit fullscreen") : "Exit fullscreen";
+
+    function updateButton() {
+        const active = Boolean(document.fullscreenElement);
+        btn.textContent = active ? exitLabel : enterLabel;
+        btn.setAttribute("aria-label", active ? exitLabel : enterLabel);
+        document.body.classList.toggle("is-fullscreen", active);
+    }
+
+    async function toggleFullscreen() {
+        try {
+            if (document.fullscreenElement) {
+                await document.exitFullscreen();
+                return;
+            }
+            const root = document.documentElement;
+            if (root.requestFullscreen) {
+                await root.requestFullscreen();
+                return;
+            }
+            if (root.webkitRequestFullscreen) {
+                root.webkitRequestFullscreen();
+            }
+        } catch (error) {
+            console.warn("Fullscreen request failed:", error);
+        }
+    }
+
+    btn.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        void toggleFullscreen();
+    });
+    document.addEventListener("fullscreenchange", updateButton);
+    updateButton();
+}
+
 function bindChurchExitButton() {
     const exitBtn = document.getElementById("church-exit-btn");
     if (!exitBtn) {
@@ -653,6 +701,7 @@ function bindHudControls() {
         });
     }
     bindChurchExitButton();
+    bindGameFullscreen();
     bindHotspotModal();
     APP_STATE.hudBound = true;
 }
@@ -2540,6 +2589,7 @@ function bindEntryFlow() {
 console.info(`Tiny Priest build ${TINY_PRIEST_BUILD}`);
 
 bindEntryFlow();
+bindGameFullscreen();
 
 void (typeof loadTinyPriestSiteCopy === "function"
     ? loadTinyPriestSiteCopy().then(() => {
