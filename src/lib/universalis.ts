@@ -60,19 +60,34 @@ const READING_BLOCKS: {
   { key: "Mass_G", kind: "gospel", label: "Gospel" },
 ];
 
+function codePointToTypingChar(code: number): string {
+  if (code === 0xa0) return " ";
+  if (!Number.isFinite(code) || code < 0 || code > 0x10ffff) return "";
+  return String.fromCodePoint(code);
+}
+
 function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&nbsp;/g, " ")
+  let out = text.replace(/&#(\d+);/g, (_, digits: string) => {
+    const code = Number.parseInt(digits, 10);
+    const ch = codePointToTypingChar(code);
+    return ch || `&#${digits};`;
+  });
+  out = out.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex: string) => {
+    const code = Number.parseInt(hex, 16);
+    const ch = codePointToTypingChar(code);
+    return ch || `&#x${hex};`;
+  });
+  return out
+    .replace(/&nbsp;/gi, " ")
     .replace(/&quot;/g, '"')
     .replace(/&#039;/g, "'")
-    .replace(/&#x2019;/g, "'")
-    .replace(/&#8217;/g, "'")
-    .replace(/&#8216;/g, "'")
-    .replace(/&#x2018;/g, "'")
-    .replace(/&#x2010;/g, "-")
-    .replace(/&#xa0;/g, " ")
-    .replace(/&#8220;/g, '"')
-    .replace(/&#8221;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&rsquo;/g, "'")
+    .replace(/&lsquo;/g, "'")
+    .replace(/&rdquo;/g, '"')
+    .replace(/&ldquo;/g, '"')
+    .replace(/&ndash;/g, "-")
+    .replace(/&mdash;/g, "-")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">");
@@ -83,6 +98,7 @@ function htmlFragmentToPlainText(html: string): string {
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<\/p>/gi, "\n\n")
     .replace(/<[^>]+>/g, "")
+    .replace(/\u00A0/g, " ")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
