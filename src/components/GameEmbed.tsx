@@ -9,7 +9,7 @@ type Props = {
   description?: string;
   /** Show mobile/desktop tip under the title (off for hangman, etc.). */
   showTip?: boolean;
-  /** Use more of the viewport height (Tiny Priest church game). */
+  /** Taller iframe; game provides its own fullscreen control (Tiny Priest). */
   immersive?: boolean;
 };
 
@@ -22,14 +22,16 @@ export function GameEmbed({
 }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const showFrameFullscreen = !immersive;
 
   useEffect(() => {
+    if (!showFrameFullscreen) return;
     function onFullscreenChange() {
       setIsFullscreen(document.fullscreenElement === frameRef.current);
     }
     document.addEventListener("fullscreenchange", onFullscreenChange);
     return () => document.removeEventListener("fullscreenchange", onFullscreenChange);
-  }, []);
+  }, [showFrameFullscreen]);
 
   const toggleFullscreen = useCallback(async () => {
     const el = frameRef.current;
@@ -60,8 +62,9 @@ export function GameEmbed({
         ) : null}
         {showTip ? (
           <p className="mt-3 text-xs text-[var(--color-muted)]">
-            In class: one laptop on the projector, or rotate one child at a time. Use Fullscreen for
-            a larger play area; keyboard games work best on a computer.
+            {immersive
+              ? "Use Fullscreen in the game (top right) for a larger play area. Keyboard controls work best on a computer."
+              : "In class: one laptop on the projector, or rotate one child at a time. Use Fullscreen for a larger play area; keyboard games work best on a computer."}
           </p>
         ) : null}
       </header>
@@ -69,14 +72,16 @@ export function GameEmbed({
         ref={frameRef}
         className={`relative mt-4 border border-[var(--color-border)] bg-black ${isFullscreen ? "h-screen w-screen" : ""}`}
       >
-        <button
-          type="button"
-          onClick={() => void toggleFullscreen()}
-          className="absolute right-2 top-2 z-10 border border-[var(--color-border)] bg-white/95 px-3 py-1.5 text-xs font-bold text-[var(--color-ink)] shadow-sm hover:border-[var(--color-accent)]"
-          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-        >
-          {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-        </button>
+        {showFrameFullscreen ? (
+          <button
+            type="button"
+            onClick={() => void toggleFullscreen()}
+            className="absolute right-2 top-2 z-10 border border-[var(--color-border)] bg-white/95 px-3 py-1.5 text-xs font-bold text-[var(--color-ink)] shadow-sm hover:border-[var(--color-accent)]"
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+          >
+            {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+          </button>
+        ) : null}
         <iframe
           title={title}
           src={src}
