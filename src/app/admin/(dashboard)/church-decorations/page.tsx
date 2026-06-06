@@ -10,9 +10,9 @@ export default async function AdminChurchDecorationsPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">성당 소품 (Tiny Priest)</h1>
+          <h1 className="text-2xl font-bold">Church decorations (Tiny Priest)</h1>
           <p className="mt-1 text-sm text-[var(--color-muted)]">
-            소품(이미지)을 성당 안에 배치합니다. 이미지, 설명, 3D 위치(X/Y/Z), 크기(너비·높이), 회전을 설정할 수 있습니다.
+            Place decoration images inside the church. Set image, description, 3D position (X/Y/Z), size (width and height), and rotation.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -38,7 +38,7 @@ export default async function AdminChurchDecorationsPage() {
           {items.length === 0 ? (
             <tr>
               <td colSpan={4} className="p-6 text-center text-[var(--color-muted)]">
-                아직 소품이 없습니다. 성수반, 전례 안내판, 계절 장식 등을 추가해 보세요.
+                No decorations yet. Add holy water fonts, liturgy boards, seasonal displays, and more.
               </td>
             </tr>
           ) : (

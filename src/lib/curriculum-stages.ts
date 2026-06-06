@@ -1,19 +1,19 @@
 import { prisma } from "@/lib/prisma";
 
-/** Distinct Curriculum `stage` labels, in curriculum sort order. */
-export async function getCurriculumStageLabels(): Promise<string[]> {
+/** Distinct Curriculum track `title` labels, in curriculum sort order. */
+export async function getCurriculumTitleLabels(): Promise<string[]> {
   const rows = await prisma.curriculumTrack.findMany({
-    select: { stage: true, sortOrder: true },
-    orderBy: [{ sortOrder: "asc" }, { stage: "asc" }],
+    select: { title: true, sortOrder: true },
+    orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
   });
 
   const seen = new Set<string>();
-  const stages: string[] = [];
+  const titles: string[] = [];
   for (const row of rows) {
-    const label = row.stage.trim();
+    const label = row.title.trim();
     if (!label || seen.has(label)) continue;
     seen.add(label);
-    stages.push(label);
+    titles.push(label);
   }
-  return stages;
+  return titles;
 }

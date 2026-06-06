@@ -1,9 +1,9 @@
 import { ResourceEditor } from "@/components/admin/ResourceEditor";
-import { getCurriculumStageLabels } from "@/lib/curriculum-stages";
+import { getCurriculumTitleLabels } from "@/lib/curriculum-stages";
 import Link from "next/link";
 
 export default async function NewResourcePage() {
-  const stageOptions = await getCurriculumStageLabels();
+  const titleOptions = await getCurriculumTitleLabels();
 
   return (
     <div>
@@ -12,7 +12,7 @@ export default async function NewResourcePage() {
       </Link>
       <h1 className="mt-4 text-2xl font-bold">New resource</h1>
       <div className="mt-6">
-        <ResourceEditor stageOptions={stageOptions} />
+        <ResourceEditor titleOptions={titleOptions} />
       </div>
     </div>
   );
