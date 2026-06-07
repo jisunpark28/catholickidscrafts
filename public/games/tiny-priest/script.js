@@ -1,4 +1,4 @@
-const TINY_PRIEST_BUILD = "20260614";
+const TINY_PRIEST_BUILD = "20260615";
 
 const CHARACTER_CONFIG = {
     priest: {
@@ -387,6 +387,16 @@ function setChurchExitVisible(isVisible) {
     btn.setAttribute("aria-hidden", isVisible ? "false" : "true");
 }
 
+
+function showEntryScreenElement() {
+    const entryScreen = document.getElementById("entry-screen");
+    if (!entryScreen) {
+        return;
+    }
+    entryScreen.classList.remove("is-hidden", "is-entering-zoom");
+    entryScreen.style.removeProperty("display");
+}
+
 function showEntryScreenFromInterior() {
     const entryScreen = document.getElementById("entry-screen");
     const flash = document.getElementById("entry-flash");
@@ -423,10 +433,7 @@ function showEntryScreenFromInterior() {
         flash.removeAttribute("style");
     }
 
-    if (entryScreen) {
-        entryScreen.classList.remove("is-hidden", "is-entering-zoom");
-        entryScreen.style.display = "flex";
-    }
+    showEntryScreenElement();
 
     APP_STATE.isTransitioning = false;
     APP_STATE.selectedCharacter = null;
@@ -2438,8 +2445,7 @@ function resetEntryAfterFailure(message) {
     threeContainer.setAttribute("aria-hidden", "true");
     setLiturgyHudVisible(false);
     setMassNavigatorVisible(false);
-    entryScreen.classList.remove("is-hidden", "is-entering-zoom");
-    entryScreen.style.display = "flex";
+    showEntryScreenElement();
     APP_STATE.isTransitioning = false;
     APP_STATE.greetedCharacter = null;
     showEntryActions(false);
