@@ -34,6 +34,24 @@ model CurriculumTrack {
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  resourceLinks CurriculumTrackResource[]
+}
+
+/// Display order for resources on a curriculum track page (resource.grade = track.title).
+model CurriculumTrackResource {
+  id         String   @id @default(cuid())
+  trackId    String
+  resourceId String
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  track    CurriculumTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  resource Resource        @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([trackId, resourceId])
+  @@index([trackId, sortOrder])
 }
 
 model Resource {
@@ -56,6 +74,8 @@ model Resource {
   published         Boolean  @default(true)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  trackLinks CurriculumTrackResource[]
 }
 
 model UploadedFile {

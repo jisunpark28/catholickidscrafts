@@ -14,6 +14,7 @@ export {
   getLiturgicalPeriod,
 } from "@/lib/content-types";
 
+import { getPublishedResourcesForTrackTitle } from "@/lib/curriculum-resources";
 import type { CurriculumTrack, ResourcePost } from "@/lib/content-types";
 
 function mapResource(r: {
@@ -143,6 +144,19 @@ export async function getResourcesByPeriod(
     where: { published: true, liturgicalPeriod: periodId },
     orderBy: { updatedAt: "desc" },
   });
+  return rows.map(mapResource);
+}
+
+
+export async function getResourcesForCurriculumTrack(
+  slug: string,
+): Promise<ResourcePost[]> {
+  const track = await prisma.curriculumTrack.findFirst({
+    where: { slug, published: true },
+  });
+  if (!track) return [];
+
+  const rows = await getPublishedResourcesForTrackTitle(track.id, track.title);
   return rows.map(mapResource);
 }
 
