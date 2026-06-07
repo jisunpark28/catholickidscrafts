@@ -144,19 +144,26 @@ input.addEventListener("keypress", (e) => {
     if (e.key === "Enter") btn.click();
 });
 
+const resetWrap = resetBtn.closest(".reset-wrap");
+/** Max dodge distance from center (px) — keeps New Game on-screen without page scroll. */
+const RESET_BTN_MOVE_X = 96;
+const RESET_BTN_MOVE_Y = 28;
+
 resetBtn.addEventListener("mouseover", () => {
-    // Check if the game is NOT finished yet
-    if (!game.isFinished()) {
-        // Change position to absolute to move freely within the viewport
+    if (!game.isFinished() && resetWrap) {
         resetBtn.style.position = "absolute";
 
-        // Calculate random coordinates (keeping it within the visible screen)
-        const x = Math.random() * (window.innerWidth - resetBtn.clientWidth);
-        const y = Math.random() * (window.innerHeight - resetBtn.clientHeight);
+        const maxX = Math.max(0, resetWrap.clientWidth - resetBtn.clientWidth);
+        const maxY = Math.max(0, resetWrap.clientHeight - resetBtn.clientHeight);
+        const baseX = (resetWrap.clientWidth - resetBtn.clientWidth) / 2;
+        const baseY = (resetWrap.clientHeight - resetBtn.clientHeight) / 2;
+        const rangeX = Math.min(RESET_BTN_MOVE_X, maxX);
+        const rangeY = Math.min(RESET_BTN_MOVE_Y, maxY);
+        const x = baseX + (Math.random() - 0.5) * rangeX;
+        const y = baseY + (Math.random() - 0.5) * rangeY;
 
-        // Apply new coordinates
-        resetBtn.style.left = `${x}px`;
-        resetBtn.style.top = `${y}px`;
+        resetBtn.style.left = `${Math.max(0, Math.min(maxX, x))}px`;
+        resetBtn.style.top = `${Math.max(0, Math.min(maxY, y))}px`;
     }
 });
 
