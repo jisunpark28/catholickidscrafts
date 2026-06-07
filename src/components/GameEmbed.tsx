@@ -11,6 +11,8 @@ type Props = {
   showTip?: boolean;
   /** Taller iframe; game provides its own fullscreen control (Tiny Priest). */
   immersive?: boolean;
+  /** Taller iframe for games with a large illustration (Hangman). */
+  tall?: boolean;
 };
 
 export function GameEmbed({
@@ -19,6 +21,7 @@ export function GameEmbed({
   description,
   showTip = true,
   immersive = false,
+  tall = false,
 }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -51,7 +54,9 @@ export function GameEmbed({
     ? "h-full w-full flex-1 bg-white"
     : immersive
       ? "h-[min(calc(100svh-15rem),860px)] w-full bg-white"
-      : "h-[min(80vh,720px)] w-full bg-white";
+      : tall
+        ? "h-[min(88vh,820px)] w-full bg-white"
+        : "h-[min(80vh,720px)] w-full bg-white";
 
   return (
     <div>

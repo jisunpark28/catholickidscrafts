@@ -13,11 +13,6 @@ body {
     flex-direction: column;
 }
 
-:root {
-    /* ~2× previous embed scale (was ~0.85–1.0); caps at 2× base artboard */
-    --hangman-visual-scale: clamp(1.5, calc(68vh / 250), 2);
-}
-
 /* Container fills iframe height; no page scroll */
 .container {
     box-sizing: border-box;
@@ -76,25 +71,22 @@ body {
     font-size: clamp(0.72rem, 1.6vh, 0.85rem);
 }
 
-/* Flower visual — 2× prior embed size; reserve layout height for scale */
+/* Flower visual — real 2× layout size (600×500), not transform scale */
 .hangman-visual-wrap {
     flex: 0 0 auto;
-    width: 100%;
-    min-height: calc(250px * var(--hangman-visual-scale));
+    width: min(600px, 100%);
+    margin: 0.05rem auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0.05rem 0;
-    overflow: visible;
 }
 
 #hangman-visual {
     position: relative;
-    width: 300px;
-    height: 250px;
+    width: 100%;
+    aspect-ratio: 300 / 250;
+    height: auto;
     margin: 0;
-    transform: scale(var(--hangman-visual-scale));
-    transform-origin: center center;
 }
 
 #flower-bg {
@@ -106,7 +98,7 @@ body {
 /* Individual petal styling with radial distribution */
 .petal {
     position: absolute;
-    width: 80px;
+    width: 26.6667%;
     height: auto;
     top: 30%;
     left: 48%;
@@ -266,9 +258,3 @@ footer.signiture p {
     }
 }
 
-/* Fullscreen / tall viewport */
-@media (min-height: 800px) {
-    :root {
-        --hangman-visual-scale: 2;
-    }
-}
