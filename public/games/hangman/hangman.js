@@ -114,6 +114,7 @@ function updateUI() {
 
 // Event listener for the guess button
 btn.addEventListener("click", () => {
+    if (!game) return;
     const letter = input.value;
     if (letter && !game.isFinished()) {
         game.processGuess(letter);
@@ -153,7 +154,7 @@ const dodgeZone = document.querySelector(".game-body");
 const RESET_BTN_EDGE_PAD = 16;
 
 resetBtn.addEventListener("mouseover", () => {
-    if (game.isFinished() || !gameContainer || !dodgeZone) return;
+    if (!game || game.isFinished() || !gameContainer || !dodgeZone) return;
 
     resetBtn.style.position = "absolute";
 
@@ -185,4 +186,5 @@ resetBtn.addEventListener("click", () => {
     initGame();
 });
 
-window.onload = initGame;
+// hangman.js is injected after load — window.onload has already fired
+initGame();

@@ -23,7 +23,7 @@ body {
     height: 100%;
     max-height: 100%;
     margin: 0 auto;
-    padding: clamp(10px, 2vh, 20px) 20px clamp(12px, 2vh, 20px);
+    padding: clamp(8px, 1.5vh, 16px) 16px clamp(8px, 1.5vh, 12px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,7 +32,6 @@ body {
     overflow: hidden;
 }
 
-
 .game-body {
     flex: 1 1 auto;
     min-height: 0;
@@ -40,7 +39,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .container header,
@@ -56,27 +55,32 @@ body {
 
 .container header {
     flex-shrink: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .container header h1 {
-    margin: 0 0 0.35rem;
-    padding-top: 0.25rem;
+    margin: 0;
+    padding-top: 0;
+    font-size: clamp(1.1rem, 2.5vh, 1.5rem);
+    line-height: 1.2;
 }
 
 .container header p {
-    margin: 0;
-    line-height: 1.4;
+    margin: 0.15rem 0 0;
+    line-height: 1.3;
+    font-size: clamp(0.75rem, 1.8vh, 0.9rem);
 }
 
-/* Visual container for the flower and petals — 150% scale, reserved layout height */
+/* Flower visual — scale with viewport height to fit embed without scroll */
 .hangman-visual-wrap {
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    min-height: 0;
     width: 100%;
     display: flex;
     justify-content: center;
-    min-height: calc(250px * 1.5);
-    margin: 0.35rem 0 0.15rem;
+    align-items: center;
+    margin: 0.1rem 0;
+    overflow: hidden;
 }
 
 #hangman-visual {
@@ -84,8 +88,8 @@ body {
     width: 300px;
     height: 250px;
     margin: 0;
-    transform: scale(1.5);
-    transform-origin: top center;
+    transform: scale(clamp(0.85, calc(34vh / 250), 1.5));
+    transform-origin: center center;
 }
 
 #flower-bg {
@@ -120,26 +124,28 @@ body {
 
 #hint-display {
     flex-shrink: 0;
-    margin: 0.5rem 0 0.35rem;
-    line-height: 1.4;
+    margin: 0.2rem 0 0.15rem;
+    line-height: 1.3;
+    font-size: clamp(0.8rem, 1.8vh, 0.95rem);
 }
 
 #word-display {
     flex-shrink: 0;
-    font-size: 2.25rem;
+    font-size: clamp(1.35rem, 4vh, 2rem);
     font-weight: bold;
-    letter-spacing: 0.7rem;
-    margin: 8px 0 12px;
-    padding-left: 0.7rem;
+    letter-spacing: clamp(0.35rem, 1.2vh, 0.65rem);
+    margin: 4px 0 6px;
+    padding-left: clamp(0.35rem, 1.2vh, 0.65rem);
 }
 
 .info {
     flex-shrink: 0;
-    margin: 0 0 6px;
+    margin: 0;
+    font-size: clamp(0.8rem, 1.8vh, 0.9rem);
 }
 
 .info p {
-    margin: 0.3rem 0;
+    margin: 0.15rem 0;
 }
 
 #input-section {
@@ -148,7 +154,7 @@ body {
     justify-content: center;
     align-items: stretch;
     gap: 0;
-    margin: 10px 0 0;
+    margin: 6px 0 0;
     width: auto;
     max-width: none;
 }
@@ -156,24 +162,24 @@ body {
 #letter-input,
 #guess-btn {
     box-sizing: border-box;
-    height: 50px;
+    height: clamp(40px, 6.5vh, 46px);
     margin: 0 !important;
     line-height: 1;
     border: 2px solid #118bee;
 }
 
 #letter-input {
-    width: 80px;
+    width: 72px;
     border-radius: 8px 0 0 8px;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: clamp(1.15rem, 3vh, 1.35rem);
     padding: 0;
 }
 
 #guess-btn {
     border-radius: 0 8px 8px 0;
-    padding: 0 28px;
-    font-size: 1rem;
+    padding: 0 22px;
+    font-size: clamp(0.85rem, 2vh, 0.95rem);
     font-weight: 700;
     background-color: #118bee;
     color: white;
@@ -184,10 +190,10 @@ body {
     flex-shrink: 0;
     width: 100%;
     max-width: 420px;
-    min-height: 52px;
+    min-height: 44px;
     margin-top: 0;
     margin-bottom: 0;
-    padding: 10px 0 6px;
+    padding: 6px 0 4px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -205,7 +211,8 @@ body {
     position: relative;
     transition: all 0.2s ease;
     z-index: 100;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.85rem;
+    font-size: clamp(0.85rem, 2vh, 0.95rem);
 }
 
 #reset-btn.reset-btn--locked {
@@ -229,54 +236,30 @@ footer.signiture p {
     font-size: 0.9rem;
 }
 
-@media (max-width: 640px) {
-    #word-display {
-        font-size: 1.85rem;
-        letter-spacing: 0.5rem;
-        padding-left: 0.5rem;
-    }
-}
-
+/* Non-fullscreen embed (~80vh iframe): hide subtitle, tighten further */
 @media (max-height: 720px) {
-    .container {
-        padding-top: 10px;
-        padding-bottom: 20px;
-    }
-
-    .container header h1 {
-        font-size: 1.35rem;
-    }
-
-    .container header p {
-        font-size: 0.85rem;
-    }
-
-    #word-display {
-        font-size: 1.75rem;
-        letter-spacing: 0.45rem;
-        padding-left: 0.45rem;
-        margin: 6px 0 10px;
-    }
-}
-
-@media (max-height: 580px) {
-    .hangman-visual-wrap {
-        min-height: calc(250px * 1.15);
-        margin: 0.2rem 0;
-    }
-
-    #hangman-visual {
-        transform: scale(1.15);
-    }
-
     .container header p {
         display: none;
     }
+}
 
-    #word-display {
-        font-size: 1.65rem;
-        letter-spacing: 0.4rem;
-        padding-left: 0.4rem;
-        margin: 6px 0 8px;
+@media (max-height: 560px) {
+    .container {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+
+    #hint-display {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+/* Tall viewport (fullscreen): allow larger flower */
+@media (min-height: 800px) {
+    #hangman-visual {
+        transform: scale(1.5);
     }
 }
