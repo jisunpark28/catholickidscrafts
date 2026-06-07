@@ -12,6 +12,7 @@ import {
   getLiturgicalPeriodsWithCopy,
   parseLiturgicalPeriodParam,
 } from "@/lib/content-types";
+import { parseResourceSortParam } from "@/lib/resource-sort";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -24,19 +25,20 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams: Promise<{ q?: string; period?: string }>;
+  searchParams: Promise<{ q?: string; period?: string; sort?: string }>;
 };
 
 export default async function ResourcesPage({ searchParams }: Props) {
   const params = await searchParams;
   const q = params.q;
   const period = parseLiturgicalPeriodParam(params.period);
+  const sort = parseResourceSortParam(params.sort);
   const hasFilter = Boolean(q?.trim() || period);
   const copy = await getSiteCopyMap();
   const periods = getLiturgicalPeriodsWithCopy(copy);
 
   if (hasFilter) {
-    const results = await searchPublishedResources({ q, period });
+    const results = await searchPublishedResources({ q, period, sort });
     const periodLabel = period ? getLiturgicalPeriodWithCopy(period, copy).title : null;
 
     return (
@@ -72,19 +74,19 @@ export default async function ResourcesPage({ searchParams }: Props) {
     );
   }
 
-  const all = await getAllResources();
+  const all = await getAllResources(sort);
 
   const periodCounts = await Promise.all(
     periods.map(async (p) => ({
       period: p,
-      count: (await getResourcesByPeriod(p.id)).length,
+      count: (await getResourcesByPeriod(p.id, sort)).length,
     })),
   );
 
   const periodPosts = await Promise.all(
     periods.map(async (p) => ({
       period: p,
-      posts: await getResourcesByPeriod(p.id),
+      posts: await getResourcesByPeriod(p.id, sort),
     })),
   );
 

@@ -2,6 +2,10 @@
 
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { LITURGICAL_PERIODS } from "@/lib/content-types";
+import {
+  RESOURCE_SORT_OPTIONS,
+  type ResourceSortId,
+} from "@/lib/resource-sort";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState, useTransition } from "react";
 
@@ -14,16 +18,20 @@ export function ResourcesToolbar() {
   const [q, setQ] = useState(searchParams.get("q") ?? "");
 
   const activePeriod = searchParams.get("period") ?? "all";
+  const activeSort = (searchParams.get("sort") ?? "recent") as ResourceSortId;
   const hasFilter = Boolean(searchParams.get("q")?.trim() || searchParams.get("period"));
 
   const apply = useCallback(
-    (next: { q?: string; period?: string }) => {
+    (next: { q?: string; period?: string; sort?: string }) => {
       const params = new URLSearchParams();
       const query = next.q !== undefined ? next.q : searchParams.get("q") ?? "";
       const period =
         next.period !== undefined ? next.period : searchParams.get("period") ?? "all";
+      const sort =
+        next.sort !== undefined ? next.sort : searchParams.get("sort") ?? "recent";
       if (query.trim()) params.set("q", query.trim());
       if (period && period !== "all") params.set("period", period);
+      if (sort && sort !== "recent") params.set("sort", sort);
       const qs = params.toString();
       startTransition(() => {
         router.push(qs ? `/resources?${qs}` : "/resources");
@@ -70,6 +78,25 @@ export function ResourcesToolbar() {
       )}
 
       <div className="w-full border-t border-[var(--color-border)] pt-4">
+        <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
+          Sort
+        </p>
+        <div className="mb-4 flex flex-wrap gap-2">
+          {RESOURCE_SORT_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              onClick={() => apply({ sort: option.id })}
+              className={`border px-3 py-1.5 text-xs font-bold ${
+                activeSort === option.id
+                  ? "border-[var(--color-accent)] bg-[var(--color-accent)] text-white"
+                  : "border-[var(--color-border)] bg-[var(--color-surface)]"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
         <p className="mb-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
           Liturgical season
         </p>

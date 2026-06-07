@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContentBody } from "@/components/ContentBody";
 import { PageShell } from "@/components/PageShell";
+import { ResourceViewTracker } from "@/components/ResourceViewTracker";
 import { TptCta } from "@/components/TptCta";
 import { resolveAssetUrl } from "@/lib/asset-url";
 import { getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
@@ -33,6 +34,7 @@ export default async function ResourcePage({ params }: Props) {
 
   return (
     <PageShell>
+      <ResourceViewTracker slug={slug} />
       <Link
         href="/resources"
         className="text-sm font-semibold text-[var(--color-link)] hover:underline"

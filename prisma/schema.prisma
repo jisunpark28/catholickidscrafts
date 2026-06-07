@@ -72,6 +72,8 @@ model Resource {
   isFreeSample      Boolean  @default(true)
   previewImageUrl   String?
   published         Boolean  @default(true)
+  /// Page views for public resource detail pages (used for popularity sort).
+  viewCount         Int      @default(0)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
