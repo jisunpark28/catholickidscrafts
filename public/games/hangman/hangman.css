@@ -6,12 +6,40 @@ body {
     background: #fff;
 }
 
-﻿/* Container styling to center the game board */
+/* Container styling to center the game board */
 .container {
+    box-sizing: border-box;
     max-width: 600px;
+    min-height: 100%;
     margin: 0 auto;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+}
+
+.container header,
+.container .info,
+#hint-display,
+#word-display,
+#input-section,
+.reset-wrap {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.container header {
+    margin-bottom: 0.5rem;
+}
+
+.container header h1 {
+    margin: 0 0 0.35rem;
+}
+
+.container header p {
+    margin: 0;
 }
 
 /* Visual container for the flower and petals */
@@ -20,7 +48,8 @@ body {
     width: 300px;
     height: 250px;
     margin: 0 auto 30px auto;
-    transform: scale(1.7); /* Scale up the entire flower visual */
+    transform: scale(1.7);
+    flex-shrink: 0;
 }
 
 #flower-bg {
@@ -36,40 +65,51 @@ body {
     height: auto;
     top: 30%;
     left: 48%;
-    transform-origin: 8% 50%; /* Pivot point near the center of the flower */
+    transform-origin: 8% 50%;
     transition: opacity 0.5s ease;
     pointer-events: none;
 }
 
-/* Rotation for 6 petals (60 degrees each) */
-.petal-1 {transform: rotate(0deg);}
-.petal-2 {transform: rotate(60deg);}
-.petal-3 {transform: rotate(120deg);}
-.petal-4 {transform: rotate(180deg);}
-.petal-5 {transform: rotate(240deg);}
-.petal-6 {transform: rotate(300deg);}
+.petal-1 { transform: rotate(0deg); }
+.petal-2 { transform: rotate(60deg); }
+.petal-3 { transform: rotate(120deg); }
+.petal-4 { transform: rotate(180deg); }
+.petal-5 { transform: rotate(240deg); }
+.petal-6 { transform: rotate(300deg); }
 
-/* Class to hide petals when a guess is wrong */
 .petal-hidden {
     visibility: hidden;
     opacity: 0;
 }
 
-/* Word display styling */
+#hint-display {
+    margin: 0 0 10px;
+}
+
 #word-display {
     font-size: 2.5rem;
     font-weight: bold;
     letter-spacing: 0.8rem;
-    margin: 30px 0;
+    margin: 20px 0;
+    padding-left: 0.8rem;
 }
 
-/* Modern unified input and button layout */
+.info {
+    margin: 0 0 8px;
+}
+
+.info p {
+    margin: 0.35rem 0;
+}
+
 #input-section {
     display: flex;
     justify-content: center;
     align-items: stretch;
-    gap: 0; /* Remove gap to create a single 'capsule' look */
-    margin: 20px 0;
+    gap: 0;
+    margin: 20px 0 0;
+    width: auto;
+    max-width: none;
 }
 
 #letter-input,
@@ -99,29 +139,50 @@ body {
     cursor: pointer;
 }
 
+.reset-wrap {
+    position: relative;
+    min-height: 52px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #reset-btn {
     display: inline-block;
-    margin-top: 20px;
+    margin: 0;
     background-color: transparent;
     color: #118bee;
     border: 1px solid #118bee;
-    /* Add these for the 'runaway' effect */
-    position: relative; /* Logic will switch this to absolute when moving */
+    position: relative;
     transition: all 0.2s ease;
     z-index: 100;
+    padding: 0.5rem 1rem;
 }
 
-/* Left-aligned signature styling for the footer */
 footer.signiture {
     display: block !important;
     text-align: left !important;
     margin-top: 50px;
     border-top: 1px solid #eaeaea;
     padding-top: 10px;
+    width: 100%;
 }
 
-    footer.signiture p {
-        text-align: left !important;
-        margin: 0;
-        font-size: 0.9rem;
+footer.signiture p {
+    text-align: left !important;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+    #hangman-visual {
+        transform: scale(1.35);
     }
+
+    #word-display {
+        font-size: 2rem;
+        letter-spacing: 0.55rem;
+        padding-left: 0.55rem;
+    }
+}
