@@ -106,6 +106,10 @@ function updateUI() {
             petal.classList.remove("petal-hidden");
         }
     });
+
+    if (game.isFinished()) {
+        resetBtnPosition();
+    }
 }
 
 // Event listener for the guess button
@@ -145,18 +149,24 @@ input.addEventListener("keypress", (e) => {
 });
 
 const gameContainer = resetBtn.closest(".container");
+const dodgeZone = document.querySelector(".game-body");
 const RESET_BTN_EDGE_PAD = 16;
 
 resetBtn.addEventListener("mouseover", () => {
-    if (!game.isFinished() || !gameContainer) return;
+    if (game.isFinished() || !gameContainer || !dodgeZone) return;
 
     resetBtn.style.position = "absolute";
 
     const pad = RESET_BTN_EDGE_PAD;
-    const maxX = gameContainer.clientWidth - resetBtn.offsetWidth - pad * 2;
-    const maxY = gameContainer.clientHeight - resetBtn.offsetHeight - pad * 2;
+    const containerRect = gameContainer.getBoundingClientRect();
+    const zoneRect = dodgeZone.getBoundingClientRect();
+    const zoneTop = zoneRect.top - containerRect.top;
+    const zoneWidth = dodgeZone.clientWidth;
+    const zoneHeight = dodgeZone.clientHeight;
+    const maxX = zoneWidth - resetBtn.offsetWidth - pad * 2;
+    const maxY = zoneHeight - resetBtn.offsetHeight - pad * 2;
     const x = pad + Math.random() * Math.max(0, maxX);
-    const y = pad + Math.random() * Math.max(0, maxY);
+    const y = zoneTop + pad + Math.random() * Math.max(0, maxY);
 
     resetBtn.style.left = `${x}px`;
     resetBtn.style.top = `${y}px`;
@@ -167,6 +177,7 @@ function resetBtnPosition() {
     resetBtn.style.position = "relative";
     resetBtn.style.left = "auto";
     resetBtn.style.top = "auto";
+    resetBtn.classList.toggle("reset-btn--locked", game && game.isFinished());
 }
 
 // Reset game logic
