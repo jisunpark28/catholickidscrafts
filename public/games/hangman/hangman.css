@@ -1,3 +1,11 @@
+/* Full-height white canvas when embedded or fullscreen */
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    background: #fff;
+}
+
 ﻿/* Container styling to center the game board */
 .container {
     max-width: 600px;

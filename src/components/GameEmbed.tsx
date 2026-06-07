@@ -47,6 +47,12 @@ export function GameEmbed({
     }
   }, []);
 
+  const iframeClassName = isFullscreen
+    ? "h-full w-full flex-1 bg-white"
+    : immersive
+      ? "h-[min(calc(100svh-15rem),860px)] w-full bg-white"
+      : "h-[min(80vh,720px)] w-full bg-white";
+
   return (
     <div>
       <Link
@@ -70,7 +76,9 @@ export function GameEmbed({
       </header>
       <div
         ref={frameRef}
-        className={`relative mt-4 border border-[var(--color-border)] bg-black ${isFullscreen ? "h-screen w-screen" : ""}`}
+        className={`relative mt-4 flex flex-col border border-[var(--color-border)] bg-white ${
+          isFullscreen ? "h-screen w-screen" : ""
+        }`}
       >
         {showFrameFullscreen ? (
           <button
@@ -85,11 +93,7 @@ export function GameEmbed({
         <iframe
           title={title}
           src={src}
-          className={
-            immersive
-              ? "h-[min(calc(100svh-15rem),860px)] w-full bg-white"
-              : "h-[min(80vh,720px)] w-full bg-white"
-          }
+          className={iframeClassName}
           allow="fullscreen"
         />
       </div>
