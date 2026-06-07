@@ -1,4 +1,6 @@
 import { CurriculumEditor } from "@/components/admin/CurriculumEditor";
+import { CurriculumResourceOrder } from "@/components/admin/CurriculumResourceOrder";
+import { listAdminResourcesForTrack } from "@/lib/curriculum-resources";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -9,6 +11,8 @@ export default async function EditCurriculumPage({ params }: Props) {
   const { id } = await params;
   const item = await prisma.curriculumTrack.findUnique({ where: { id } });
   if (!item) notFound();
+
+  const resources = await listAdminResourcesForTrack(item.id, item.title);
 
   return (
     <div>
@@ -29,6 +33,11 @@ export default async function EditCurriculumPage({ params }: Props) {
             sortOrder: item.sortOrder,
             published: item.published,
           }}
+        />
+        <CurriculumResourceOrder
+          trackId={item.id}
+          trackTitle={item.title}
+          initialResources={resources}
         />
       </div>
     </div>

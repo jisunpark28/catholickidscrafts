@@ -2,23 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/PageShell";
 import { ResourceCard } from "@/components/ResourceCard";
-import {
-  getAllResources,
-  getCurriculumTrack,
-} from "@/lib/content";
+import { getCurriculumTrack, getResourcesForCurriculumTrack } from "@/lib/content";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ slug: string }> };
-
-const gradeByTrack: Record<string, string[]> = {
-  "pre-k-kindergarten": ["Pre-K", "Kindergarten"],
-  "first-holy-communion": ["Grade 1-2"],
-  "grades-3-5": ["Grade 3-5"],
-  "liturgical-year": [],
-};
-
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -35,11 +24,7 @@ export default async function CurriculumTrackPage({ params }: Props) {
   const track = await getCurriculumTrack(slug);
   if (!track) notFound();
 
-  const grades = gradeByTrack[slug] ?? [];
-  const all = await getAllResources();
-  const related = all.filter(
-    (r) => grades.length === 0 || grades.includes(r.grade),
-  );
+  const related = await getResourcesForCurriculumTrack(slug);
 
   return (
     <PageShell wide>
@@ -76,11 +61,11 @@ export default async function CurriculumTrackPage({ params }: Props) {
           </div>
         ) : (
           <p className="text-[var(--color-muted)]">
-            Browse by liturgical season on{" "}
+            No resources are linked to this track yet. Assign the track title in{" "}
             <Link href="/resources" className="font-semibold text-[var(--color-link)]">
               Kids Resources
-            </Link>
-            .
+            </Link>{" "}
+            (Title field), or browse all resources there.
           </p>
         )}
       </section>
