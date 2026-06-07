@@ -163,8 +163,8 @@ resetBtn.addEventListener("mouseover", () => {
 // Reset button position when a new game actually starts
 function resetBtnPosition() {
     resetBtn.style.position = "relative";
-    resetBtn.style.left = "0";
-    resetBtn.style.top = "0";
+    resetBtn.style.left = "auto";
+    resetBtn.style.top = "auto";
 }
 
 // Reset game logic
