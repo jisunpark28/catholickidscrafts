@@ -45,6 +45,7 @@ export default async function PlayGamePage({ params }: Props) {
         src={src}
         showTip={slug !== "hangman"}
         immersive={slug === "church"}
+        tall={slug === "hangman"}
       />
       {slug === "emoji" && (
         <p className="mt-6 text-xs text-[var(--color-muted)]">
