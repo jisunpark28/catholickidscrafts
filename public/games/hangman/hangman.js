@@ -144,27 +144,22 @@ input.addEventListener("keypress", (e) => {
     if (e.key === "Enter") btn.click();
 });
 
-const resetWrap = resetBtn.closest(".reset-wrap");
-/** Max dodge distance from center (px) — keeps New Game on-screen without page scroll. */
-const RESET_BTN_MOVE_X = 96;
-const RESET_BTN_MOVE_Y = 28;
+const gameContainer = resetBtn.closest(".container");
+const RESET_BTN_EDGE_PAD = 16;
 
 resetBtn.addEventListener("mouseover", () => {
-    if (!game.isFinished() && resetWrap) {
-        resetBtn.style.position = "absolute";
+    if (!game.isFinished() || !gameContainer) return;
 
-        const maxX = Math.max(0, resetWrap.clientWidth - resetBtn.clientWidth);
-        const maxY = Math.max(0, resetWrap.clientHeight - resetBtn.clientHeight);
-        const baseX = (resetWrap.clientWidth - resetBtn.clientWidth) / 2;
-        const baseY = (resetWrap.clientHeight - resetBtn.clientHeight) / 2;
-        const rangeX = Math.min(RESET_BTN_MOVE_X, maxX);
-        const rangeY = Math.min(RESET_BTN_MOVE_Y, maxY);
-        const x = baseX + (Math.random() - 0.5) * rangeX;
-        const y = baseY + (Math.random() - 0.5) * rangeY;
+    resetBtn.style.position = "absolute";
 
-        resetBtn.style.left = `${Math.max(0, Math.min(maxX, x))}px`;
-        resetBtn.style.top = `${Math.max(0, Math.min(maxY, y))}px`;
-    }
+    const pad = RESET_BTN_EDGE_PAD;
+    const maxX = gameContainer.clientWidth - resetBtn.offsetWidth - pad * 2;
+    const maxY = gameContainer.clientHeight - resetBtn.offsetHeight - pad * 2;
+    const x = pad + Math.random() * Math.max(0, maxX);
+    const y = pad + Math.random() * Math.max(0, maxY);
+
+    resetBtn.style.left = `${x}px`;
+    resetBtn.style.top = `${y}px`;
 });
 
 // Reset button position when a new game actually starts
