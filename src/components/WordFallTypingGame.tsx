@@ -77,6 +77,15 @@ function randomSpawnCenterX(word: string, hint: string): number {
   return minCenter + Math.random() * (maxCenter - minCenter);
 }
 
+function shuffleWords<T>(items: T[]): T[] {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
 function filterPool(all: TypingWordItem[], difficulty: WordFallDifficulty): TypingWordItem[] {
   const cfg = DIFFICULTY_CONFIG[difficulty];
   const filtered = all.filter((w) => {
@@ -98,6 +107,7 @@ export function WordFallTypingGame() {
 
   const uidRef = useRef(0);
   const poolIndexRef = useRef(0);
+  const shuffledPoolRef = useRef<TypingWordItem[]>([]);
   const spawnTimerRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
 
@@ -128,9 +138,12 @@ export function WordFallTypingGame() {
       setLives(cfg.lives);
       setGameOver(false);
       setPaused(false);
+      shuffledPoolRef.current = shuffleWords(
+        filterPool(allWords.length > 0 ? allWords : DEFAULT_WORDS, d),
+      );
       poolIndexRef.current = 0;
     },
-    [difficulty],
+    [difficulty, allWords],
   );
 
   const changeDifficulty = (next: WordFallDifficulty) => {
@@ -138,9 +151,25 @@ export function WordFallTypingGame() {
     resetGame(next);
   };
 
+  const reshufflePool = useCallback(() => {
+    shuffledPoolRef.current = shuffleWords(pool);
+    poolIndexRef.current = 0;
+  }, [pool]);
+
+  useEffect(() => {
+    reshufflePool();
+  }, [reshufflePool]);
+
   const nextWordFromPool = useCallback((): TypingWordItem | null => {
     if (pool.length === 0) return null;
-    const item = pool[poolIndexRef.current % pool.length]!;
+    if (
+      shuffledPoolRef.current.length === 0 ||
+      poolIndexRef.current >= shuffledPoolRef.current.length
+    ) {
+      shuffledPoolRef.current = shuffleWords(pool);
+      poolIndexRef.current = 0;
+    }
+    const item = shuffledPoolRef.current[poolIndexRef.current]!;
     poolIndexRef.current += 1;
     return item;
   }, [pool]);
