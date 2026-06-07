@@ -14,7 +14,12 @@ export {
   getLiturgicalPeriod,
 } from "@/lib/content-types";
 
+import { compareCurriculumStages } from "@/lib/curriculum-stage-order";
 import { getPublishedResourcesForTrackTitle } from "@/lib/curriculum-resources";
+import {
+  type ResourceSortId,
+  resourceOrderBy,
+} from "@/lib/resource-sort";
 import type { CurriculumTrack, ResourcePost } from "@/lib/content-types";
 
 function mapResource(r: {
@@ -72,7 +77,9 @@ export async function getCurriculumTracks(): Promise<CurriculumTrack[]> {
     where: { published: true },
     orderBy: { sortOrder: "asc" },
   });
-  return rows.map(mapTrack);
+  return rows
+    .map(mapTrack)
+    .sort((a, b) => compareCurriculumStages(a.stage, b.stage));
 }
 
 export async function getCurriculumTrack(
@@ -84,10 +91,12 @@ export async function getCurriculumTrack(
   return row ? mapTrack(row) : undefined;
 }
 
-export async function getAllResources(): Promise<ResourcePost[]> {
+export async function getAllResources(
+  sort: ResourceSortId = "recent",
+): Promise<ResourcePost[]> {
   const rows = await prisma.resource.findMany({
     where: { published: true },
-    orderBy: { updatedAt: "desc" },
+    orderBy: resourceOrderBy(sort),
   });
   return rows.map(mapResource);
 }
@@ -95,6 +104,7 @@ export async function getAllResources(): Promise<ResourcePost[]> {
 export async function searchPublishedResources(options: {
   q?: string;
   period?: LiturgicalPeriodId;
+  sort?: ResourceSortId;
 }): Promise<ResourcePost[]> {
   const where: Prisma.ResourceWhereInput = { published: true };
 
@@ -115,7 +125,7 @@ export async function searchPublishedResources(options: {
 
   const rows = await prisma.resource.findMany({
     where,
-    orderBy: { updatedAt: "desc" },
+    orderBy: resourceOrderBy(options.sort ?? "recent"),
   });
   return rows.map(mapResource);
 }
@@ -139,10 +149,11 @@ export async function getAllResourceSlugs(): Promise<string[]> {
 
 export async function getResourcesByPeriod(
   periodId: LiturgicalPeriodId,
+  sort: ResourceSortId = "recent",
 ): Promise<ResourcePost[]> {
   const rows = await prisma.resource.findMany({
     where: { published: true, liturgicalPeriod: periodId },
-    orderBy: { updatedAt: "desc" },
+    orderBy: resourceOrderBy(sort),
   });
   return rows.map(mapResource);
 }
@@ -160,10 +171,13 @@ export async function getResourcesForCurriculumTrack(
   return rows.map(mapResource);
 }
 
-export async function getResourcesByGrade(grade: string): Promise<ResourcePost[]> {
+export async function getResourcesByGrade(
+  grade: string,
+  sort: ResourceSortId = "recent",
+): Promise<ResourcePost[]> {
   const rows = await prisma.resource.findMany({
     where: { published: true, grade },
-    orderBy: { updatedAt: "desc" },
+    orderBy: resourceOrderBy(sort),
   });
   return rows.map(mapResource);
 }
