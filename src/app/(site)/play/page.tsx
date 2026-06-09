@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Play & Learn",
   description:
-    "Interactive Catholic games: explore the church, gospel typing, hangman, and emoji photo fun.",
+    "Interactive Catholic games: explore the church, gospel typing, hangman, face to emoji, and photo booth fun.",
   ...canonicalForPath("/play"),
 };
 

@@ -97,6 +97,11 @@
     </script>
   </head>
   <body>
+    <script>
+      if (new URLSearchParams(window.location.search).get("embed") === "1") {
+        document.documentElement.classList.add("embed-mode");
+      }
+    </script>
     <div class="app-shell">
       <header class="hero">
         <h1>

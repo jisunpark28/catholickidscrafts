@@ -21,6 +21,7 @@ export const SITE_COPY_GROUPS = [
   { id: "play_typing", label: "Typing game" },
   { id: "play_vestments", label: "Liturgical vestments" },
   { id: "play_photobooth", label: "Photo booth" },
+  { id: "play_facetemoji", label: "Face to Emoji" },
   { id: "legal", label: "About & legal pages" },
   { id: "taxonomy", label: "Season labels & filters" },
   { id: "game_tiny_priest", label: "Tiny Priest game" },

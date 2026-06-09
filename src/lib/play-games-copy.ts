@@ -38,6 +38,16 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
       embedPath: "/games/hangman/index.html",
     },
     {
+      slug: "face-to-emoji",
+      title: copyText(copy, "play.game.face-to-emoji.title", "Face to Emoji"),
+      description: copyText(
+        copy,
+        "play.game.face-to-emoji.description",
+        "Upload a photo and replace faces with emoji—automatic detection, edit stickers, download.",
+      ),
+      embedPath: "/play/face-to-emoji",
+    },
+    {
       slug: "emoji",
       title: copyText(copy, "play.game.emoji.title", "4-Cut Photo Booth"),
       description: copyText(copy, "play.game.emoji.description", "Four-photo strip with stickers."),
