@@ -6,6 +6,7 @@ import { ResourceViewTracker } from "@/components/ResourceViewTracker";
 import { TptCta } from "@/components/TptCta";
 import { resolveAssetUrl } from "@/lib/asset-url";
 import { getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt,
+    ...canonicalForPath(`/resources/${slug}`),
     openGraph: post.previewImageUrl
       ? { images: [{ url: post.previewImageUrl }] }
       : undefined,

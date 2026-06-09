@@ -1,12 +1,14 @@
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { LegalPage } from "@/components/LegalPage";
 import { AMAZON_ASSOCIATE_DISCLOSURE } from "@/lib/external-links";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Affiliate Disclosure",
   description:
     "How Catholic Kids Crafts uses Amazon Associate and other outbound links.",
+  ...canonicalForPath("/affiliate-disclosure"),
 };
 
 export default function AffiliateDisclosurePage() {

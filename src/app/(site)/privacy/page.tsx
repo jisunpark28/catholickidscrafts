@@ -1,12 +1,14 @@
 import { LegalPage } from "@/components/LegalPage";
 import { getPublicContactEmail, getPublicContactMailto } from "@/lib/site-contact";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "How Catholic Kids Crafts handles visitor data, cookies, and third-party services.",
+  ...canonicalForPath("/privacy"),
 };
 
 export default async function PrivacyPage() {

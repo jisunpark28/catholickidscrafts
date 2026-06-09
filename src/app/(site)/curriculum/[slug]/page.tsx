@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { PageShell } from "@/components/PageShell";
 import { ResourceCard } from "@/components/ResourceCard";
 import { getCurriculumTrack, getResourcesForCurriculumTrack } from "@/lib/content";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: track.title,
     description: track.description,
+    ...canonicalForPath(`/curriculum/${slug}`),
   };
 }
 

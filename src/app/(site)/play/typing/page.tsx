@@ -3,12 +3,14 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { TypingGameHub } from "@/components/TypingGameHub";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Typing Game",
   description:
     "Word mode or Today’s Bible with today's Mass readings from Universalis.",
+  ...canonicalForPath("/play/typing"),
 };
 
 export default async function PlayTypingPage() {

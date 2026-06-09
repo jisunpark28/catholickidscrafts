@@ -2,6 +2,7 @@ import { GameEmbed } from "@/components/GameEmbed";
 import { PageShell } from "@/components/PageShell";
 import { getPlayGameFromCopy } from "@/lib/play-games-copy";
 import { getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import { getTinyPriestEmbedPath } from "@/lib/tiny-priest";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -18,7 +19,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const copy = await getSiteCopyMap();
   const game = getPlayGameFromCopy(copy, slug);
   if (!game) return { title: "Not found" };
-  return { title: game.title, description: game.description };
+  const path = slug === "emoji" ? "/play/photo-booth" : `/play/${slug}`;
+  return {
+    title: game.title,
+    description: game.description,
+    ...canonicalForPath(path),
+  };
 }
 
 export default async function PlayGamePage({ params }: Props) {

@@ -5,6 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { isAmazonAffiliateLink } from "@/lib/external-links";
 import { kindLabel } from "@/lib/recommendation-types";
 import { getRecommendationBySlug } from "@/lib/recommendations";
+import { canonicalForPath } from "@/lib/site-metadata";
 import { youtubeVideoId } from "@/lib/youtube";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: item.title,
     description: item.excerpt || item.title,
+    ...canonicalForPath(`/recommendations/${slug}`),
     openGraph: item.imageUrl ? { images: [{ url: item.imageUrl }] } : undefined,
   };
 }

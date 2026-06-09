@@ -6,6 +6,7 @@ import { PageShell } from "@/components/PageShell";
 import { parseKindParam } from "@/lib/recommendation-types";
 import { getPublishedRecommendations } from "@/lib/recommendations";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
   title: "Recommendations",
   description:
     "Curated Catholic videos, books, templates, and resources for families and teachers.",
+  ...canonicalForPath("/recommendations"),
 };
 
 type Props = {
