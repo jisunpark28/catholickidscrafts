@@ -3,12 +3,14 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Liturgical Vestments Game",
   description:
     "Dress Father in the right liturgical color for each season—using the Tiny Priest character.",
+  ...canonicalForPath("/play/liturgical-vestments"),
 };
 
 export default async function LiturgicalVestmentsPage() {

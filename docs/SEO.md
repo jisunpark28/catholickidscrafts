@@ -26,8 +26,19 @@ Commits both `public/favicon.ico` and `src/app/favicon.ico`.
 
 Google may take **days to weeks** to refresh favicons in search results after recrawl.
 
+## Per-page canonical URLs
+
+Root layout metadata (`siteMetadata`) sets `metadataBase` only—**not** a global canonical. Each public page under `src/app/(site)/` sets its own canonical via `canonicalForPath()` from `src/lib/site-metadata.ts`.
+
+- Static pages: `...canonicalForPath("/mass")` in `export const metadata`
+- Dynamic pages: same helper in `generateMetadata` (e.g. `/resources/${slug}`)
+- Filter/query URLs (e.g. `/resources?q=…`) canonical to the base path (`/resources`) without query params
+- `/play/emoji` redirects to photo booth; its canonical is `/play/photo-booth`
+
+This fixes Google Search Console “Duplicate without user-selected canonical” when child pages incorrectly inherited `canonical: "/"` from the root layout.
+
 ## Google Search Console
 
 1. Verify `https://www.catholickidscrafts.com` (DNS or `GOOGLE_SITE_VERIFICATION` in Vercel env).
 2. Submit sitemap: `https://www.catholickidscrafts.com/sitemap.xml`
-3. Request indexing for the homepage after major SEO changes.
+3. After deploying per-page canonicals, validate the fix for affected URLs (e.g. `/mass`) and request re-indexing.

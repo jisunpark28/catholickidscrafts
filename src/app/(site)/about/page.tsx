@@ -1,6 +1,7 @@
 import { LegalPage } from "@/components/LegalPage";
 import { getTptStoreUrl } from "@/lib/tpt";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Why Catholic Kids Crafts exists—to support children's ministry in parishes and homes.",
+  ...canonicalForPath("/about"),
 };
 
 export default async function AboutPage() {

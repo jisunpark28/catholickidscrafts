@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { getCurriculumTracks } from "@/lib/content";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
@@ -10,6 +11,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Curriculum",
   description: "Structured catechism tracks for Sunday school and homeschool.",
+  ...canonicalForPath("/curriculum"),
 };
 
 export default async function CurriculumPage() {

@@ -14,6 +14,7 @@ import {
 } from "@/lib/content-types";
 import { parseResourceSortParam } from "@/lib/resource-sort";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -22,6 +23,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Kids Resources",
   description: "Catholic kids crafts and lesson plans by liturgical season.",
+  ...canonicalForPath("/resources"),
 };
 
 type Props = {

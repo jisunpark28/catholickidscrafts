@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { getPlayGamesFromCopy } from "@/lib/play-games-copy";
+import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
   title: "Play & Learn",
   description:
     "Interactive Catholic games: explore the church, gospel typing, hangman, and emoji photo fun.",
+  ...canonicalForPath("/play"),
 };
 
 export default async function PlayHubPage() {

@@ -6,12 +6,14 @@ import { todayUtc, toDateKey } from "@/lib/dates";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { fetchMassDaySummary, fetchMonthCalendar } from "@/lib/mass-source";
+import { canonicalForPath } from "@/lib/site-metadata";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Daily Mass",
   description: "English Catholic daily Mass calendar with links to official reading sites.",
+  ...canonicalForPath("/mass"),
 };
 
 export default async function DailyMassPage() {

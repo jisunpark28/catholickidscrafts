@@ -17,9 +17,6 @@ export const siteMetadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true },
   },
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -47,3 +44,9 @@ export const siteMetadata: Metadata = {
     apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
   },
 };
+
+/** Per-page canonical URL (path only; resolved via root `metadataBase`). */
+export function canonicalForPath(path: string): Pick<Metadata, "alternates"> {
+  const normalized = path.startsWith("/") ? path : `/${path}`;
+  return { alternates: { canonical: normalized } };
+}
