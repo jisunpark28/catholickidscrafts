@@ -696,3 +696,22 @@ input[type="range"] {
   font-size: 0.75rem;
   padding: 6px 8px;
 }
+
+/* Embedded in Catholic Kids Crafts /play/face-to-emoji */
+html.embed-mode .why-like,
+html.embed-mode .site-footer {
+  display: none;
+}
+
+html.embed-mode .app-shell {
+  max-width: none;
+  padding: 8px 4px 12px;
+}
+
+html.embed-mode .hero {
+  margin-bottom: 10px;
+}
+
+html.embed-mode .hero h1 {
+  font-size: 1.5rem;
+}

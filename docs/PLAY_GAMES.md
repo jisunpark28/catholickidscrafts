@@ -7,7 +7,8 @@ Public hub: `/play`
 | Tiny Priest (church 3D) | `/play/church` → `/games/tiny-priest/` | [tiny-priest](https://github.com/jisunpark28/tiny-priest) |
 | Gospel typing | `/mass/YYYY-MM-DD` (below readings) | Built in Next.js |
 | Hangman | `/play/hangman` → `/games/hangman/` | [portfolio Hangman](https://github.com/jisunpark28/my-course-portfolio/tree/main/Project/HANGMAN-GAME/JavaScript-Ver) + words from `GET /api/hangman-words` |
-| Face to Emoji | `/play/emoji` → `/games/face-to-emoji/` | [FaceToEmoji](https://github.com/jisunpark28/FaceToEmoji) |
+| Face to Emoji | `/play/face-to-emoji` → `/games/face-to-emoji/` (iframe) | [FaceToEmoji](https://github.com/jisunpark28/FaceToEmoji) |
+| 4-Cut Photo Booth | `/play/photo-booth` (legacy `/play/emoji` redirects here) | Built in Next.js |
 
 ## Updating embedded games
 
@@ -43,6 +44,14 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 - Admin: `/admin/photo-booth-frames` — upload transparent PNG overlays (360×480 px recommended).
 - Public API: `GET /api/photo-booth-frames`
 - Frames render **on top of photos**, under stickers, in single and 4-cut modes.
+
+## Face to Emoji (`/play/face-to-emoji`)
+
+- Vendor copy: `public/games/face-to-emoji/` from [FaceToEmoji](https://github.com/jisunpark28/FaceToEmoji)
+- Embedded via `FaceToEmojiEmbed` (`?embed=1` hides marketing footer inside the iframe)
+- **100% client-side**: face-api.js models load from CDN on first upload; photos never leave the browser
+- Upload → **Auto** (detect faces) → optional **Edit** → **Download Edited Image**
+- Site copy: `play.game.face-to-emoji.*`, `play.facetemoji.page.*` (seed: `npm run db:seed-site-copy`)
 
 ## Hangman (`/play/hangman`)
 

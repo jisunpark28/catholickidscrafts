@@ -39,6 +39,13 @@ export const PLAY_GAMES: PlayGame[] = [
     embedPath: "/games/hangman/index.html",
   },
   {
+    slug: "face-to-emoji",
+    title: "Face to Emoji",
+    description:
+      "Upload a photo and replace faces with emoji—automatic detection, edit stickers, download.",
+    embedPath: "/play/face-to-emoji",
+  },
+  {
     slug: "emoji",
     title: "4-Cut Photo Booth",
     description:

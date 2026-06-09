@@ -99,6 +99,8 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.game.typing.description", "Word mode for church vocabulary, or type along with today's readings—quiet focus time or early arrivers.", "play"),
   sc("play.game.hangman.title", "Hangman", "play"),
   sc("play.game.hangman.description", "Classic hangman with Catholic words—easy filler when you finish early or wait for parents.", "play"),
+  sc("play.game.face-to-emoji.title", "Face to Emoji", "play"),
+  sc("play.game.face-to-emoji.description", "Upload a class or family photo and replace faces with emoji—auto-detect, edit stickers, download. All processing stays on the device.", "play"),
   sc("play.game.emoji.title", "4-Cut Photo Booth", "play"),
   sc("play.game.emoji.description", "Four-photo strip with stickers—fun for feast days, First Communion prep, or end-of-year parties.", "play"),
 
@@ -120,6 +122,11 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.photobooth.page.title", "4-Cut Photo Booth", "play_photobooth"),
   sc("play.photobooth.page.subtitle", "A light celebration activity—great after a rehearsal or saint-day party.", "play_photobooth"),
   sc("play.photobooth.page.program_note", "Photos stay on the device (not uploaded here). Print or share from the family's phone if your parish allows.", "play_photobooth"),
+
+  sc("play.facetemoji.page.title", "Face to Emoji", "play_facetemoji"),
+  sc("play.facetemoji.page.subtitle", "Turn group photos into emoji fun—great for feast-day parties, First Communion, or end-of-year celebrations.", "play_facetemoji"),
+  sc("play.facetemoji.page.program_note", "Upload or drop a photo in Live Preview, tap Auto to detect faces, then Edit to fine-tune. Models load on first use only.", "play_facetemoji"),
+  sc("play.facetemoji.privacy_note", "Photos are processed in your browser only—they are not uploaded to our servers.", "play_facetemoji"),
 
   // Vestment rounds & colors
   sc("play.vestments.round.ordinary", "Ordinary Time", "play_vestments"),
