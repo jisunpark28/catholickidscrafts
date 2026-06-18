@@ -162,12 +162,6 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
           );
         })}
       </div>
-
-      <p className="px-4 py-3 text-xs text-[var(--color-muted)] sm:px-6">
-        Each day: open <span className="font-semibold">Living with Christ ↗</span> or{" "}
-        <span className="font-semibold">USCCB ↗</span> for that Sunday or weekday—use the link your
-        parish already trusts.
-      </p>
     </section>
   );
 }
