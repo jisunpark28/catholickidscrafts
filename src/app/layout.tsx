@@ -5,11 +5,12 @@ import { siteMetadata } from "@/lib/site-metadata";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { Inter } from "next/font/google";
+import { Schoolbell } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const schoolbell = Schoolbell({
+  variable: "--font-schoolbell",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -31,7 +32,7 @@ export default async function RootLayout({
           <meta name="google-site-verification" content={googleSiteVerification} />
         ) : null}
       </head>
-      <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
+      <body className={`${schoolbell.variable} min-h-screen font-sans antialiased`}>
         <SiteJsonLd />
         <AuthProvider>{children}</AuthProvider>
         <Analytics />

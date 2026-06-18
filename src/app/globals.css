@@ -9,7 +9,7 @@
   --color-accent: #d35400;
   --color-accent-hover: #b8470a;
   --color-link: #335599;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-schoolbell), "Comic Sans MS", cursive, ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
