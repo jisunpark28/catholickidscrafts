@@ -12,6 +12,7 @@ const schoolbell = Schoolbell({
   variable: "--font-schoolbell",
   weight: "400",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = siteMetadata;
@@ -26,13 +27,13 @@ export default async function RootLayout({
   const googleSiteVerification = getGoogleSiteVerification();
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${schoolbell.variable} ${schoolbell.className}`}>
       <head>
         {googleSiteVerification ? (
           <meta name="google-site-verification" content={googleSiteVerification} />
         ) : null}
       </head>
-      <body className={`${schoolbell.variable} min-h-screen font-sans antialiased`}>
+      <body className="min-h-screen antialiased">
         <SiteJsonLd />
         <AuthProvider>{children}</AuthProvider>
         <Analytics />
