@@ -62,6 +62,24 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("home.section.play.desc", "Quick games for church vocabulary, today's readings, and a little fun—no login.", "home"),
   sc("home.footer.why", "Why we built this", "home"),
   sc("home.footer.affiliate", "Affiliate disclosure", "home"),
+  sc(
+    "home.canvas.mass",
+    "Daily Mass",
+    "home",
+    "Home canvas — large link to /mass (random position each visit)",
+  ),
+  sc(
+    "home.canvas.game",
+    "Play Game",
+    "home",
+    "Home canvas — large link to /play",
+  ),
+  sc(
+    "home.canvas.sentence",
+    "Browse crafts and lessons by liturgical season.",
+    "home",
+    "Home canvas — sentence-style link to /resources",
+  ),
 
   // —— Page headers ——
   sc("mass.page.title", "Daily Mass", "mass"),
