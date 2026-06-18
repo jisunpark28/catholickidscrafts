@@ -1,5 +1,6 @@
 "use client";
 
+import { SketchbookFrame } from "@/components/SketchbookFrame";
 import logo from "@/Logo.png";
 import Image from "next/image";
 import Link from "next/link";
@@ -65,17 +66,14 @@ export function HomeLanding() {
       </div>
 
       <div className="relative mx-auto w-full max-w-[1600px] flex-1 px-4 pb-16 pt-6 sm:px-8 sm:pb-20">
-        <div
-          className="relative min-h-[min(72dvh,720px)] w-full rounded-sm border border-[var(--color-border)] bg-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]"
-          aria-label="Home navigation canvas"
-        >
+        <SketchbookFrame aria-label="Home navigation canvas">
           {HOME_LINKS.map((link, index) => {
             const { top, left } = placements[index];
             return (
               <Link
                 key={link.id}
                 href={link.href}
-                className="absolute max-w-[min(88vw,20rem)] -translate-x-1/2 -translate-y-1/2 text-[clamp(1.75rem,5vw,3.25rem)] leading-tight text-[var(--color-ink)] transition hover:text-[var(--color-accent)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]"
+                className="absolute max-w-[min(88vw,20rem)] -translate-x-1/2 -translate-y-1/2 font-sans text-[clamp(1.75rem,5vw,3.25rem)] leading-tight text-[var(--color-ink)] transition hover:text-[var(--color-accent)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-accent)]"
                 style={{
                   top: `${top}%`,
                   left: `${left}%`,
@@ -85,7 +83,7 @@ export function HomeLanding() {
               </Link>
             );
           })}
-        </div>
+        </SketchbookFrame>
       </div>
     </div>
   );

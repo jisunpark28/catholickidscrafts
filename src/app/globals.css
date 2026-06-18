@@ -9,7 +9,12 @@
   --color-accent: #d35400;
   --color-accent-hover: #b8470a;
   --color-link: #335599;
-  --font-sans: var(--font-schoolbell), "Comic Sans MS", cursive, ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-schoolbell), "Schoolbell", "Comic Sans MS", cursive, sans-serif;
+}
+
+html,
+body {
+  font-family: var(--font-sans);
 }
 
 html {
@@ -19,6 +24,15 @@ html {
 body {
   background-color: var(--color-page);
   color: var(--color-ink);
+}
+
+/* Schoolbell has a single weight; avoid faux-bold where possible */
+.font-bold,
+.font-semibold,
+.font-extrabold,
+b,
+strong {
+  font-weight: 400;
 }
 
 .prose-catechism h1,
