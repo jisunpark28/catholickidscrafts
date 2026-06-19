@@ -1,6 +1,6 @@
 "use client";
 
-import { HOME_HUB_DAILY_MASS_WIDTH_CLASS } from "@/components/HomeHubButton";
+import { HomeHubButton, HOME_HUB_DAILY_MASS_WIDTH_CLASS } from "@/components/HomeHubButton";
 import { MassCalendar } from "@/components/MassCalendar";
 import type { MonthCalendar } from "@/types/mass";
 import { useState } from "react";
