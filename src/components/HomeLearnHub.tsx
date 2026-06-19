@@ -27,10 +27,15 @@ export function HomeLearnHub({
         todayDate={todayDate}
       />
 
-      <div className="mx-auto max-w-xl space-y-10">
+      <div className="mx-auto max-w-xl space-y-10 pt-2">
         {sections.map((section) => (
-          <section key={section.id}>
-            <h2 className="mb-4 text-2xl text-[var(--color-ink)] sm:text-3xl">{section.title}</h2>
+          <section key={section.id} aria-labelledby={`home-section-${section.id}`}>
+            <h2
+              id={`home-section-${section.id}`}
+              className="mb-4 text-2xl text-[var(--color-ink)] sm:text-3xl"
+            >
+              {section.title}
+            </h2>
             <div className="space-y-4">
               {section.items.map((item) => (
                 <HomeNavPill key={item.id} href={item.href}>

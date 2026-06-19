@@ -1,3 +1,4 @@
+import { DEFAULT_HOME_SECTIONS } from "@/lib/home-sections-defaults";
 import { prisma } from "@/lib/prisma";
 
 export type HomeSectionWithItems = {
@@ -25,9 +26,11 @@ export async function getPublishedHomeSections(): Promise<HomeSectionWithItems[]
         },
       },
     });
-    return rows;
+    const published = rows.filter((s) => s.items.length > 0);
+    if (published.length > 0) return published;
+    return DEFAULT_HOME_SECTIONS;
   } catch {
-    return [];
+    return DEFAULT_HOME_SECTIONS;
   }
 }
 
