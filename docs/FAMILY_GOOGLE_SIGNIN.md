@@ -30,6 +30,20 @@ Also ensure:
 
 Redeploy after setting env vars. The **Continue with Google** button appears only when both Google variables are set.
 
+### Local dev: `findUnique` / `familyAccount` undefined
+
+If Google sign-in fails in the terminal with **`Cannot read properties of undefined (reading 'findUnique')`** on `prisma.familyAccount`, the Prisma client was generated before the `FamilyAccount` model existed (or the dev server cached an old client).
+
+1. Pull the latest branch and install deps: `pnpm install`
+2. Regenerate and migrate:
+   ```bash
+   npx prisma generate
+   npx prisma migrate deploy
+   ```
+3. **Stop and restart** `pnpm dev` (required after `prisma generate`)
+
+`pnpm dev` runs `prisma generate` automatically via `predev`. If you still see the error, delete `.next` and restart.
+
 ### Email sign-up troubleshooting
 
 If sign-up shows **“Could not create account”** or **“temporarily unavailable”**, check on Vercel (Production):
