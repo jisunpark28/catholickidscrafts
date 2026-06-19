@@ -1,4 +1,5 @@
 import { DailyMassPanel } from "@/components/DailyMassPanel";
+import { HomeLearnSearch } from "@/components/HomeLearnSearch";
 import { HomeNavPill } from "@/components/HomeNavPill";
 import type { HomeSectionWithItems } from "@/lib/home-sections";
 import type { MonthCalendar } from "@/types/mass";
@@ -20,6 +21,8 @@ export function HomeLearnHub({
 }: Props) {
   return (
     <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-8 sm:py-12">
+      <HomeLearnSearch />
+
       <DailyMassPanel
         label={dailyMassLabel}
         calendar={calendar}

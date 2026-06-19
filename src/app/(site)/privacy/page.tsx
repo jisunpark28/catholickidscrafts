@@ -55,10 +55,15 @@ export default async function PrivacyPage() {
           sticker progress. Children sign in with an Access ID only—no child email is collected.
         </li>
         <li>
-          <strong>Reader cookies:</strong> <code>ckc_family</code> (parent session),{" "}
-          <code>ckc_reader</code> (active reader for Bible typing), and{" "}
-          <code>ckc_bible_reader</code> (anonymous guest progress before sign-in). All are httpOnly,
-          same-site lax, up to one year.
+          <strong>Google sign-in (optional):</strong> If enabled, parents may use Google OAuth on{" "}
+          <code>/account/login</code>. We receive your Google account ID, verified email, and
+          display name from Google&apos;s OpenID service. We do not receive your Google password.
+          See <code>docs/FAMILY_GOOGLE_SIGNIN.md</code> for operator setup.
+        </li>
+        <li>
+          <strong>Home search:</strong> Queries you type on the home page are sent to our server to
+          search published resources, curriculum, games, and Bible titles. We do not log search
+          queries for advertising.
         </li>
       </ul>
 
@@ -104,6 +109,10 @@ export default async function PrivacyPage() {
         <li>
           <strong>Neon</strong> — PostgreSQL database for site content, traffic aggregates, and admin
           users.
+        </li>
+        <li>
+          <strong>Google</strong> — Optional parent sign-in (OAuth) when operators enable it; see
+          our family account privacy notes above.
         </li>
         <li>
           <strong>Evangelizo.org</strong> — Liturgical day titles on the{" "}

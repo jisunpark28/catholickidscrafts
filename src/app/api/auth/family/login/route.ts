@@ -29,6 +29,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }
 
+  if (!account.passwordHash) {
+    return NextResponse.json(
+      { error: "This account uses Google sign-in. Continue with Google instead." },
+      { status: 400 },
+    );
+  }
+
   const valid = await verifyFamilyPassword(password, account.passwordHash);
   if (!valid) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
