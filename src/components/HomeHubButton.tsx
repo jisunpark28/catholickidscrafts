@@ -96,4 +96,9 @@ export function HomeHubMenuButton({
   );
 }
 
-export const HOME_HUB_CONTENT_CLASS = "mx-auto w-full max-w-xl";
+/** Shared width for hub pills, notices, and typing panels (matches Daily Mass). */
+export const HOME_HUB_CONTENT_CLASS = "mx-auto w-full max-w-sm";
+
+/** Inset panel styling aligned with hub pill borders. */
+export const HOME_HUB_PANEL_CLASS =
+  "rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm leading-relaxed text-[var(--color-muted)]";

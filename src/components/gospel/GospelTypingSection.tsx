@@ -1,7 +1,7 @@
 "use client";
 
 import { PassageTypingGame } from "@/components/PassageTypingGame";
-import { HOME_HUB_CONTENT_CLASS } from "@/components/HomeHubButton";
+import { HOME_HUB_CONTENT_CLASS, HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { toDateKey } from "@/lib/dates";
 import type { UniversalisMassDay } from "@/lib/universalis";
@@ -80,7 +80,7 @@ export function GospelTypingSection({
       </h2>
 
       {!canType && (
-        <p className="rounded-2xl border border-[#e8e0d6] bg-white px-5 py-4 text-sm text-[var(--color-muted)]">
+        <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
           Typing is available for today only ({todayDate}). Select today on your calendar or come
           back on that day.
         </p>

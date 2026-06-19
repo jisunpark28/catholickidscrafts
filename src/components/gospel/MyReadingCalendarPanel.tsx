@@ -30,7 +30,7 @@ export function MyReadingCalendarPanel({
         </HomeHubButton>
       </div>
       {open && (
-        <div className="mt-6 w-full">
+        <div className={`mt-6 ${signedIn ? "w-full" : HOME_HUB_CONTENT_CLASS}`}>
           <GospelReadingCalendar
             signedIn={signedIn}
             initialCompleted={initialCompleted}

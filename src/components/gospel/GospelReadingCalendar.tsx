@@ -1,6 +1,7 @@
 "use client";
 
 import { GospelPraiseSticker } from "@/components/gospel/GospelPraiseSticker";
+import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { toDateKey } from "@/lib/dates";
 import { useCallback, useEffect, useState } from "react";
 
@@ -72,7 +73,7 @@ export function GospelReadingCalendar({
 
   if (!signedIn) {
     return (
-      <p className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm leading-relaxed text-[var(--color-muted)]">
+      <p className={HOME_HUB_PANEL_CLASS}>
         Sign in with a{" "}
         <a href="/account/login" className="font-semibold text-[var(--color-link)]">
           family account
