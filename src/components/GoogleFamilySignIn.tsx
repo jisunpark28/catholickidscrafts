@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 type Props = {
   enabled?: boolean;
   from?: "signup" | "login";
@@ -35,13 +33,14 @@ export function GoogleFamilySignIn({ enabled = false, from = "login" }: Props) {
 
   return (
     <>
-      <Link
+      {/* Full page navigation — Next.js Link breaks OAuth redirects on /api routes */}
+      <a
         href={href}
-        className="flex w-full items-center justify-center gap-3 rounded-lg border border-[var(--color-border)] bg-white py-3 text-sm font-semibold text-[var(--color-ink)] shadow-sm transition hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)]"
+        className="relative z-10 flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-[var(--color-border)] bg-white py-3 text-sm font-semibold text-[var(--color-ink)] shadow-sm transition hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)]"
       >
         <GoogleMark />
         Continue with Google
-      </Link>
+      </a>
       <div className="relative flex items-center py-4">
         <div className="grow border-t border-[var(--color-border)]" />
         <span className="mx-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
