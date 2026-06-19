@@ -48,5 +48,6 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - Bible progress: `npx prisma migrate deploy` includes `guestId` and `accessCodeLookup` on subs. Guest progress uses `ckc_bible_reader`; signed-in readers use `ckc_reader` JWT.
 - Family accounts: `/account/signup`, `/account/login`, `/reader/login` (Access ID). Optional Google OAuth — `docs/FAMILY_GOOGLE_SIGNIN.md`.
 - Home learn search: `GET /api/learn/search?q=` (resources, curriculum, games, Bible, home pills).
+- Today's Gospel (`/bible/gospel`): My Reading Calendar + daily stickers (`GospelDayProgress`). Sticker art: `public/images/gospel/praise-sticker.png`.
 - Bible text: Douay-Rheims via Latin Prayer public API (`src/lib/bible/latinprayer.ts`). Routes under `/bible/*`; reader Access ID login stub at `/reader/login`.
 - Full spec: `docs/HOME_LEARN_AND_BIBLE.md` (phases B–E: typing stickers, family accounts, home search).

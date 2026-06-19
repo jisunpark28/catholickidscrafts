@@ -281,6 +281,7 @@ model FamilyAccount {
   updatedAt    DateTime               @updatedAt
   subProfiles  SubProfile[]
   progress     BibleChapterProgress[] @relation("OwnerProgress")
+  gospelDays   GospelDayProgress[]    @relation("OwnerGospelDays")
 }
 
 /// Child/class sub-profile (max 30 per family); logs in with Access ID only.
@@ -297,6 +298,7 @@ model SubProfile {
   updatedAt        DateTime               @updatedAt
   familyAccount    FamilyAccount          @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
   progress         BibleChapterProgress[] @relation("SubProgress")
+  gospelDays       GospelDayProgress[]    @relation("SubGospelDays")
 
   @@index([familyAccountId, sortOrder])
 }
@@ -319,5 +321,23 @@ model BibleChapterProgress {
   @@unique([subProfileId, bookSlug, chapter])
   @@index([bookSlug, chapter])
   @@index([guestId])
+}
+
+/// Daily Gospel typing completed (one sticker per calendar day per reader).
+model GospelDayProgress {
+  id              String         @id @default(cuid())
+  dateKey         String
+  completedAt     DateTime       @default(now())
+  typingAccuracy  Float?
+  guestId         String?
+  familyAccountId String?
+  subProfileId    String?
+  familyAccount   FamilyAccount? @relation("OwnerGospelDays", fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?    @relation("SubGospelDays", fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([guestId, dateKey])
+  @@unique([familyAccountId, dateKey])
+  @@unique([subProfileId, dateKey])
+  @@index([dateKey])
 }
 

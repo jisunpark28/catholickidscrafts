@@ -1,36 +1,36 @@
-import Link from "next/link";
-import { PageShell } from "@/components/PageShell";
+import { GospelHub } from "@/components/gospel/GospelHub";
+import { todayUtc, toDateKey } from "@/lib/dates";
+import {
+  getGospelCompletedDateKeys,
+  isSignedInReader,
+} from "@/lib/gospel/progress";
+import { getReaderKey } from "@/lib/bible/reader";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Today's Gospel",
-  description: "Type along with today's Gospel reading.",
+  description: "Type today's Gospel and collect daily praise stickers on your reading calendar.",
   ...canonicalForPath("/bible/gospel"),
 };
 
-export default function TodaysGospelPage() {
+export default async function TodaysGospelPage() {
+  const today = todayUtc();
+  const todayDate = toDateKey(today);
+  const year = today.getUTCFullYear();
+  const month = today.getUTCMonth() + 1;
+
+  const key = await getReaderKey();
+  const signedIn = isSignedInReader(key);
+  const initialCompleted = signedIn
+    ? await getGospelCompletedDateKeys(year, month)
+    : [];
+
   return (
-    <PageShell>
-      <Link href="/" className="text-sm font-semibold text-[var(--color-link)]">
-        ← Home
-      </Link>
-      <h1 className="mt-6 text-3xl text-[var(--color-ink)]">Today&apos;s Gospel</h1>
-      <p className="mt-4 text-[var(--color-muted)]">
-        Gospel typing linked to the liturgical calendar is coming in the next release. For now, use{" "}
-        <Link href="/play/typing" className="text-[var(--color-link)]">
-          Play → Typing → Today&apos;s Bible
-        </Link>{" "}
-        or pick a book from the{" "}
-        <Link href="/bible/new-testament" className="text-[var(--color-link)]">
-          New Testament
-        </Link>
-        .
-      </p>
-      <p className="mt-4 text-sm text-[var(--color-muted)]">
-        Sign in with a family account or Access ID to save praise stickers (Phase C/D in{" "}
-        <code className="text-xs">docs/HOME_LEARN_AND_BIBLE.md</code>).
-      </p>
-    </PageShell>
+    <GospelHub
+      signedIn={signedIn}
+      initialCompleted={initialCompleted}
+      todayDate={todayDate}
+    />
   );
 }
