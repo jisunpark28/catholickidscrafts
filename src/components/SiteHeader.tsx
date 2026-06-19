@@ -1,5 +1,6 @@
 "use client";
 
+import { HomeHubHeader } from "@/components/HomeHubHeader";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,6 +9,11 @@ import { SiteLogo } from "@/components/SiteLogo";
 export function SiteHeader() {
   const pathname = usePathname() ?? "";
   const copy = useSiteCopy();
+
+  if (pathname === "/") {
+    return <HomeHubHeader />;
+  }
+
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
 
   const nav = [

@@ -12,12 +12,19 @@ const KIND_LABEL: Record<LearnSearchKind, string> = {
   home: "Home",
 };
 
-export function HomeLearnSearch() {
+type Props = {
+  /** Compact pill for the home hub header bar */
+  variant?: "default" | "header";
+  className?: string;
+};
+
+export function HomeLearnSearch({ variant = "default", className = "" }: Props) {
   const [q, setQ] = useState("");
   const [results, setResults] = useState<LearnSearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const isHeader = variant === "header";
 
   const runSearch = useCallback(async (query: string) => {
     const trimmed = query.trim();
@@ -54,13 +61,22 @@ export function HomeLearnSearch() {
 
   const showPanel = open && q.trim().length >= 2;
 
+  const inputClass = isHeader
+    ? "w-full min-w-0 rounded-[2rem] border border-[#e8d0bc] bg-[#fdf8f4] py-2.5 pl-9 pr-3 text-sm text-[var(--color-ink)] shadow-sm outline-none focus:border-[var(--color-accent)] sm:py-3 sm:pl-10"
+    : "w-full rounded-[2rem] border border-[var(--color-border)] bg-[#faf6f1] py-4 pl-11 pr-4 text-base text-[var(--color-ink)] shadow-sm outline-none focus:border-[var(--color-accent)]";
+
   return (
-    <div ref={rootRef} className="relative mb-8">
+    <div ref={rootRef} className={`relative ${className}`}>
       <label className="sr-only" htmlFor="home-learn-search">
         Search resources, curriculum, and games
       </label>
       <div className="relative">
-        <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">
+        <span
+          className={`pointer-events-none absolute top-1/2 -translate-y-1/2 text-[var(--color-ink)] opacity-70 ${
+            isHeader ? "left-3 text-sm sm:left-3.5" : "left-4"
+          }`}
+          aria-hidden
+        >
           ⌕
         </span>
         <input
@@ -72,14 +88,18 @@ export function HomeLearnSearch() {
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
-          placeholder="Search resources, curriculum, games, Bible…"
-          className="w-full rounded-[2rem] border border-[var(--color-border)] bg-[#faf6f1] py-4 pl-11 pr-4 text-base text-[var(--color-ink)] shadow-sm outline-none focus:border-[var(--color-accent)]"
+          placeholder={isHeader ? "Search…" : "Search resources, curriculum, games, Bible…"}
+          className={inputClass}
           autoComplete="off"
         />
       </div>
 
       {showPanel && (
-        <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-lg">
+        <div
+          className={`absolute z-[60] mt-2 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-lg ${
+            isHeader ? "left-0 min-w-[min(100%,20rem)] w-[min(100vw-2rem,24rem)] sm:w-80" : "w-full"
+          }`}
+        >
           {loading && (
             <p className="px-4 py-3 text-sm text-[var(--color-muted)]">Searching…</p>
           )}

@@ -16,12 +16,13 @@ export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Pro
 
   return (
     <section className="mb-10">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="relative block w-full rounded-[2rem] bg-[#f5d4b8] px-8 py-5 text-center text-xl text-[var(--color-ink)] shadow-md transition hover:bg-[#f0c9a8] sm:text-2xl"
-        aria-expanded={open}
-      >
+      <div className="mx-auto w-1/2 min-w-[9rem] max-w-md">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="relative block w-full rounded-[2rem] bg-[#f5d4b8] px-6 py-4 text-center text-lg text-[var(--color-ink)] shadow-md transition hover:bg-[#f0c9a8] sm:px-8 sm:py-5 sm:text-xl"
+          aria-expanded={open}
+        >
         <svg
           className="pointer-events-none absolute inset-0 h-full w-full text-[#2d3748]"
           viewBox="0 0 400 80"
@@ -47,7 +48,8 @@ export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Pro
           {label}
           <span className="ml-2 text-base opacity-70">{open ? "▲" : "▼"}</span>
         </span>
-      </button>
+        </button>
+      </div>
       {open && (
         <div className="mt-6">
           <MassCalendar initial={calendar} selectedDate={selectedDate} todayDate={todayDate} />
