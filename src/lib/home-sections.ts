@@ -1,4 +1,5 @@
 import { DEFAULT_HOME_SECTIONS } from "@/lib/home-sections-defaults";
+import { normalizeHubHref } from "@/lib/hub-href";
 import { prisma } from "@/lib/prisma";
 
 export type HomeSectionWithItems = {
@@ -26,7 +27,15 @@ export async function getPublishedHomeSections(): Promise<HomeSectionWithItems[]
         },
       },
     });
-    const published = rows.filter((s) => s.items.length > 0);
+    const published = rows
+      .filter((s) => s.items.length > 0)
+      .map((section) => ({
+        ...section,
+        items: section.items.map((item) => ({
+          ...item,
+          href: normalizeHubHref(item.href),
+        })),
+      }));
     if (published.length > 0) return published;
     return DEFAULT_HOME_SECTIONS;
   } catch {

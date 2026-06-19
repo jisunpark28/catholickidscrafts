@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { normalizeHubHref } from "@/lib/hub-href";
 
 type BaseProps = {
   children: React.ReactNode;
@@ -7,7 +10,7 @@ type BaseProps = {
 };
 
 const shell =
-  "flex w-full items-center justify-center gap-2 rounded-2xl border px-6 py-3.5 min-h-[3.25rem] text-center text-base font-semibold tracking-tight transition duration-200 sm:min-h-[3.5rem] sm:text-lg";
+  "flex w-full items-center justify-center gap-2 rounded-2xl border px-6 py-3.5 min-h-[3.25rem] text-center text-base font-semibold tracking-tight transition duration-200 touch-manipulation sm:min-h-[3.5rem] sm:text-lg";
 
 const variants = {
   primary:
@@ -37,8 +40,14 @@ export function HomeHubButtonLink({
   variant = "outline",
   className = "",
 }: LinkProps) {
+  const safeHref = normalizeHubHref(href);
+
   return (
-    <Link href={href} className={`relative z-[1] ${classes(variant, className)}`}>
+    <Link
+      href={safeHref}
+      prefetch
+      className={`relative z-20 block cursor-pointer ${classes(variant, className)}`}
+    >
       {children}
     </Link>
   );

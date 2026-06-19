@@ -28,7 +28,7 @@ export function HomeLearnHub({
         todayDate={todayDate}
       />
 
-      <div className={`${HOME_HUB_CONTENT_CLASS} relative z-[1] space-y-10`}>
+      <div className={`${HOME_HUB_CONTENT_CLASS} relative z-20 space-y-10`}>
         {sections.map((section) => (
           <section key={section.id} aria-labelledby={`home-section-${section.id}`}>
             <h2

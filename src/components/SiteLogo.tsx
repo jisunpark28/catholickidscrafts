@@ -6,6 +6,8 @@ type Props = {
   size?: "header" | "hero";
   showWordmark?: boolean;
   className?: string;
+  /** Use same-origin home link (hub header) instead of canonical production URL */
+  linkToHome?: boolean;
 };
 
 const heights = { header: 72, hero: 140 } as const;
@@ -17,12 +19,14 @@ export function SiteLogo({
   size = "header",
   showWordmark = true,
   className = "",
+  linkToHome = false,
 }: Props) {
   const height = heights[size];
+  const href = linkToHome ? "/" : SITE_HOME_URL;
 
   return (
     <Link
-      href={SITE_HOME_URL}
+      href={href}
       className={`inline-flex items-center gap-3 bg-transparent ${className}`}
       aria-label="Catholic Kids Crafts — go to home page"
     >

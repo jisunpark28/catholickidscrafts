@@ -11,7 +11,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <SiteCopyProvider copy={copy}>
       <VisitTracker />
       <SiteHeader />
-      <main>{children}</main>
+      <main className="relative z-0">{children}</main>
       <SiteFooter />
     </SiteCopyProvider>
   );

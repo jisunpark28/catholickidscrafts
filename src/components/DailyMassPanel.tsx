@@ -26,7 +26,7 @@ export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Pro
         </HomeHubButton>
       </div>
       {open && (
-        <div className="mt-6 w-full">
+        <div className="relative z-0 mt-6 w-full">
           <MassCalendar initial={calendar} selectedDate={selectedDate} todayDate={todayDate} />
         </div>
       )}
