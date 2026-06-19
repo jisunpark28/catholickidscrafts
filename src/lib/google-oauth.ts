@@ -22,10 +22,13 @@ export function getGoogleOAuthClientId(): string | null {
 }
 
 export function getGoogleRedirectUri(): string {
+  const authUrl = process.env.AUTH_URL?.trim();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  // Local dev: AUTH_URL wins so production NEXT_PUBLIC_SITE_URL does not break OAuth.
   const base = (
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    process.env.AUTH_URL ||
-    "http://localhost:3000"
+    process.env.NODE_ENV === "development" && authUrl
+      ? authUrl
+      : siteUrl || authUrl || "http://localhost:3000"
   ).replace(/\/$/, "");
   return `${base}/api/auth/family/google/callback`;
 }
