@@ -1,7 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { getPrismaClient } from "@/lib/prisma";
 import type { GoogleUserProfile } from "@/lib/google-oauth";
 
 export async function findOrCreateFamilyFromGoogle(profile: GoogleUserProfile) {
+  const prisma = getPrismaClient();
   const byGoogle = await prisma.familyAccount.findUnique({
     where: { googleId: profile.googleId },
   });

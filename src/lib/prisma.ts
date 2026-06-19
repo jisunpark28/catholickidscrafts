@@ -32,3 +32,18 @@ export const prisma =
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+/** Use in routes/libs — fails fast with a clear message if generate/migrate was skipped. */
+export function getPrismaClient(): PrismaClient {
+  const client = prisma;
+  if (!client) {
+    throw new Error("Prisma client failed to initialize. Check DATABASE_URL in .env.");
+  }
+  const account = (client as PrismaClient & { familyAccount?: unknown }).familyAccount;
+  if (!account) {
+    throw new Error(
+      "Prisma client is missing FamilyAccount. Run: npx prisma generate && npx prisma migrate deploy — then restart pnpm dev.",
+    );
+  }
+  return client;
+}
