@@ -59,6 +59,15 @@ export function HomeLearnSearch({ variant = "default", className = "" }: Props) 
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    function onScroll() {
+      setOpen(false);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open]);
+
   const showPanel = open && q.trim().length >= 2;
 
   const inputClass = isHeader
@@ -97,7 +106,9 @@ export function HomeLearnSearch({ variant = "default", className = "" }: Props) 
       {showPanel && (
         <div
           className={`absolute z-[60] mt-2 overflow-hidden rounded-2xl border border-[#e8e0d6] bg-white shadow-md ${
-            isHeader ? "left-0 min-w-[min(100%,20rem)] w-[min(100vw-2rem,24rem)] sm:w-80" : "w-full"
+            isHeader
+              ? "left-0 max-h-[min(16rem,50vh)] min-w-[min(100%,20rem)] w-[min(100vw-2rem,24rem)] sm:w-80"
+              : "w-full"
           }`}
         >
           {loading && (
@@ -107,7 +118,7 @@ export function HomeLearnSearch({ variant = "default", className = "" }: Props) 
             <p className="px-4 py-3 text-sm text-[var(--color-muted)]">No matches. Try another word.</p>
           )}
           {!loading && results.length > 0 && (
-            <ul className="max-h-80 overflow-y-auto">
+            <ul className={`overflow-y-auto ${isHeader ? "max-h-[min(16rem,50vh)]" : "max-h-80"}`}>
               {results.map((item) => (
                 <li key={item.id} className="border-b border-[var(--color-border)] last:border-b-0">
                   <Link

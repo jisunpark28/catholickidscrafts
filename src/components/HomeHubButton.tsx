@@ -38,7 +38,7 @@ export function HomeHubButtonLink({
   className = "",
 }: LinkProps) {
   return (
-    <Link href={href} className={classes(variant, className)}>
+    <Link href={href} className={`relative z-[1] ${classes(variant, className)}`}>
       {children}
     </Link>
   );

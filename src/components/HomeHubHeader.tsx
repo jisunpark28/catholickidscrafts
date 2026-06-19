@@ -34,21 +34,19 @@ export function HomeHubHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#e8dccf] bg-[#f5ebe0]">
       <div className="mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-8 lg:px-12">
-        <div className="relative flex min-h-[3.25rem] items-center justify-between gap-3">
-          <div className="z-10 flex min-w-0 flex-1 justify-start">
+        <div className="grid min-h-[3.25rem] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3">
+          <div className="flex min-w-0 justify-start">
             <HomeLearnSearch
               variant="header"
               className="w-full max-w-[10.5rem] sm:max-w-xs"
             />
           </div>
 
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="pointer-events-auto scale-[0.88] sm:scale-100">
-              <SiteLogo size="header" showWordmark={false} />
-            </div>
+          <div className="flex shrink-0 justify-center scale-[0.88] sm:scale-100">
+            <SiteLogo size="header" showWordmark={false} />
           </div>
 
-          <div className="z-10 flex flex-1 justify-end">
+          <div className="flex justify-end">
             <HomeHubMenuButton onClick={() => setMenuOpen((v) => !v)} ariaExpanded={menuOpen}>
               Menu
             </HomeHubMenuButton>

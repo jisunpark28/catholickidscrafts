@@ -16,13 +16,15 @@ export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Pro
   const [open, setOpen] = useState(false);
 
   return (
-    <section className={`${HOME_HUB_CONTENT_CLASS} mb-10`}>
-      <HomeHubButton variant="primary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
-        <span>{label}</span>
-        <span className="text-sm font-normal opacity-60" aria-hidden>
-          {open ? "▲" : "▼"}
-        </span>
-      </HomeHubButton>
+    <section className="mb-10">
+      <div className={HOME_HUB_CONTENT_CLASS}>
+        <HomeHubButton variant="primary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+          <span>{label}</span>
+          <span className="text-sm font-normal opacity-60" aria-hidden>
+            {open ? "▲" : "▼"}
+          </span>
+        </HomeHubButton>
+      </div>
       {open && (
         <div className="mt-6 w-full">
           <MassCalendar initial={calendar} selectedDate={selectedDate} todayDate={todayDate} />

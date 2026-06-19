@@ -107,7 +107,7 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
         {Array.from({ length: firstDow }).map((_, i) => (
           <div
             key={`pad-${i}`}
-            className="min-h-[8rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[9.5rem] lg:min-h-[10.5rem]"
+            className="min-h-[9rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[11rem] lg:min-h-[12rem]"
           />
         ))}
         {calendar.days.map((day) => {
@@ -120,7 +120,7 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
           return (
             <div
               key={day.date}
-              className={`flex min-h-[8rem] flex-col border-b border-r border-[var(--color-border)] p-2 sm:min-h-[9.5rem] sm:p-3 lg:min-h-[10.5rem] ${rankStyles[day.rank]} ${
+              className={`flex min-h-[9rem] flex-col border-b border-r border-[var(--color-border)] p-2 sm:min-h-[11rem] sm:p-3 lg:min-h-[12rem] ${rankStyles[day.rank]} ${
                 isSelected ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
               }`}
             >
