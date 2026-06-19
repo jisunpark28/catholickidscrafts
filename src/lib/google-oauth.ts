@@ -98,10 +98,17 @@ export async function fetchGoogleUserProfile(code: string): Promise<GoogleUserPr
   });
 
   if (!tokenRes.ok) {
-    throw new Error(`Google token exchange failed (${tokenRes.status})`);
+    const detail = await tokenRes.text().catch(() => "");
+    throw new Error(`Google token exchange failed (${tokenRes.status})${detail ? `: ${detail.slice(0, 200)}` : ""}`);
   }
 
-  const tokenData = (await tokenRes.json()) as { access_token?: string };
+  const tokenText = await tokenRes.text();
+  let tokenData: { access_token?: string };
+  try {
+    tokenData = tokenText ? (JSON.parse(tokenText) as { access_token?: string }) : {};
+  } catch {
+    throw new Error("Google token response was not valid JSON");
+  }
   if (!tokenData.access_token) {
     throw new Error("Google token response missing access_token");
   }
@@ -114,12 +121,18 @@ export async function fetchGoogleUserProfile(code: string): Promise<GoogleUserPr
     throw new Error(`Google userinfo failed (${userRes.status})`);
   }
 
-  const user = (await userRes.json()) as {
+  const userText = await userRes.text();
+  let user: {
     sub?: string;
     email?: string;
     email_verified?: boolean;
     name?: string;
   };
+  try {
+    user = userText ? (JSON.parse(userText) as typeof user) : {};
+  } catch {
+    throw new Error("Google userinfo response was not valid JSON");
+  }
 
   if (!user.sub || !user.email) {
     throw new Error("Google profile missing sub or email");

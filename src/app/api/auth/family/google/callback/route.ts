@@ -3,6 +3,7 @@ import {
   getGuestIdFromCookies,
 } from "@/lib/bible/reader";
 import { mergeGuestProgressIntoReader } from "@/lib/bible/progress";
+import { assertFamilyAuthConfigured, googleAccountFailureReason } from "@/lib/family-auth-errors";
 import { findOrCreateFamilyFromGoogle } from "@/lib/family-google";
 import { setFamilyAndOwnerReaderCookies } from "@/lib/family-auth";
 import {
@@ -53,10 +54,14 @@ export async function GET(request: Request) {
     account = await findOrCreateFamilyFromGoogle(profile);
   } catch (e) {
     console.error("google callback account", e);
-    if (e instanceof Error && e.message === "EMAIL_LINKED_OTHER_GOOGLE") {
-      return failRedirect("google_email_conflict");
-    }
-    return failRedirect("google_account");
+    return failRedirect(googleAccountFailureReason(e));
+  }
+
+  try {
+    assertFamilyAuthConfigured();
+  } catch (e) {
+    console.error("google callback auth secret", e);
+    return failRedirect("google_session");
   }
 
   const guestId = (await getGuestIdFromCookies()) ?? null;
@@ -67,10 +72,15 @@ export async function GET(request: Request) {
     }).catch((err) => console.error("merge guest on google login", err));
   }
 
-  const res = NextResponse.redirect(new URL("/account", request.url));
-  await setFamilyAndOwnerReaderCookies(res, account.id, account.email);
-  if (guestId) {
-    res.cookies.set(BIBLE_GUEST_COOKIE, "", { path: "/", maxAge: 0 });
+  try {
+    const res = NextResponse.redirect(new URL("/account", request.url));
+    await setFamilyAndOwnerReaderCookies(res, account.id, account.email);
+    if (guestId) {
+      res.cookies.set(BIBLE_GUEST_COOKIE, "", { path: "/", maxAge: 0 });
+    }
+    return res;
+  } catch (e) {
+    console.error("google callback cookies", e);
+    return failRedirect("google_session");
   }
-  return res;
 }
