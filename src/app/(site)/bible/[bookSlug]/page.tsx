@@ -2,9 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BibleBookSelect } from "@/components/BibleBookSelect";
 import { BibleStickerGrid } from "@/components/BibleStickerGrid";
+import { ReaderStatusBar } from "@/components/ReaderStatusBar";
 import { PageShell } from "@/components/PageShell";
 import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { getCompletedChaptersForBook } from "@/lib/bible/progress";
+import { getReaderDisplay } from "@/lib/reader-display";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
@@ -29,7 +31,10 @@ export default async function BibleBookPage({ params }: Props) {
   if (!book) notFound();
 
   const testamentBooks = booksByTestament(books, book.testament);
-  const completedChapters = await getCompletedChaptersForBook(bookSlug);
+  const [completedChapters, reader] = await Promise.all([
+    getCompletedChaptersForBook(bookSlug),
+    getReaderDisplay(),
+  ]);
 
   const testamentHref =
     book.testament === "OT" ? "/bible/old-testament" : "/bible/new-testament";
@@ -43,6 +48,7 @@ export default async function BibleBookPage({ params }: Props) {
       <p className="mt-2 text-sm text-[var(--color-muted)]">
         {book.totalChapters} chapters · Douay-Rheims (public domain)
       </p>
+      <ReaderStatusBar reader={reader} />
       <BibleBookSelect books={testamentBooks} currentSlug={book.slug} />
       <BibleStickerGrid
         bookSlug={book.slug}

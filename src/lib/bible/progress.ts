@@ -96,3 +96,26 @@ export async function saveChapterProgress(
     update: { typingAccuracy, completedAt: data.completedAt },
   });
 }
+
+/** Move anonymous guest stickers onto a signed-in reader (best-effort merge). */
+export async function mergeGuestProgressIntoReader(
+  guestId: string,
+  key: Exclude<ReaderKey, { type: "guest" }>,
+): Promise<void> {
+  const guestRows = await prisma.bibleChapterProgress.findMany({
+    where: { guestId },
+  });
+  if (guestRows.length === 0) return;
+
+  for (const row of guestRows) {
+    await saveChapterProgress(
+      key,
+      row.bookSlug,
+      row.chapter,
+      row.typingAccuracy ?? 0.9,
+    );
+  }
+
+  await prisma.bibleChapterProgress.deleteMany({ where: { guestId } });
+}
+

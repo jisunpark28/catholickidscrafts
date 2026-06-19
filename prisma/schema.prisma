@@ -284,17 +284,18 @@ model FamilyAccount {
 
 /// Child/class sub-profile (max 30 per family); logs in with Access ID only.
 model SubProfile {
-  id              String                 @id @default(cuid())
-  familyAccountId String
-  displayName     String
-  accessCodeHash  String
-  accessCodeLast4 String?
-  active          Boolean                @default(true)
-  sortOrder       Int                    @default(0)
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @updatedAt
-  familyAccount   FamilyAccount          @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
-  progress        BibleChapterProgress[] @relation("SubProgress")
+  id               String                 @id @default(cuid())
+  familyAccountId  String
+  displayName      String
+  accessCodeHash   String
+  accessCodeLookup String                 @unique
+  accessCodeLast4  String?
+  active           Boolean                @default(true)
+  sortOrder        Int                    @default(0)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  familyAccount    FamilyAccount          @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  progress         BibleChapterProgress[] @relation("SubProgress")
 
   @@index([familyAccountId, sortOrder])
 }

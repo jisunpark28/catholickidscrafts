@@ -1,10 +1,10 @@
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { saveChapterProgress } from "@/lib/bible/progress";
 import {
-  BIBLE_READER_COOKIE,
+  BIBLE_GUEST_COOKIE,
   getReaderKey,
+  guestCookieOptions,
   newGuestId,
-  readerCookieOptions,
 } from "@/lib/bible/reader";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -53,7 +53,6 @@ export async function POST(request: Request) {
     );
   }
 
-  const jar = await cookies();
   let key = await getReaderKey();
   let setGuestCookie: string | null = null;
 
@@ -72,7 +71,7 @@ export async function POST(request: Request) {
 
   const res = NextResponse.json({ ok: true, chapter, bookSlug });
   if (setGuestCookie) {
-    const opts = readerCookieOptions(setGuestCookie);
+    const opts = guestCookieOptions(setGuestCookie);
     res.cookies.set(opts.name, opts.value, {
       httpOnly: opts.httpOnly,
       sameSite: opts.sameSite,
@@ -80,15 +79,18 @@ export async function POST(request: Request) {
       path: opts.path,
       maxAge: opts.maxAge,
     });
-  } else if (!jar.get(BIBLE_READER_COOKIE)?.value && key.type === "guest") {
-    const opts = readerCookieOptions(key.guestId);
-    res.cookies.set(opts.name, opts.value, {
-      httpOnly: opts.httpOnly,
-      sameSite: opts.sameSite,
-      secure: opts.secure,
-      path: opts.path,
-      maxAge: opts.maxAge,
-    });
+  } else {
+    const jar = await cookies();
+    if (key.type === "guest" && !jar.get(BIBLE_GUEST_COOKIE)?.value) {
+      const opts = guestCookieOptions(key.guestId);
+      res.cookies.set(opts.name, opts.value, {
+        httpOnly: opts.httpOnly,
+        sameSite: opts.sameSite,
+        secure: opts.secure,
+        path: opts.path,
+        maxAge: opts.maxAge,
+      });
+    }
   }
 
   return res;
