@@ -1,7 +1,7 @@
 import { FamilySignupForm } from "@/components/FamilySignupForm";
-import { GoogleFamilySignIn } from "@/components/GoogleFamilySignIn";
 import { PageShell } from "@/components/PageShell";
 import { getFamilySession } from "@/lib/family-auth";
+import { googleAuthErrorMessage } from "@/lib/google-auth-messages";
 import { isGoogleSignInConfigured } from "@/lib/google-oauth";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -14,9 +14,14 @@ export const metadata: Metadata = {
   ...canonicalForPath("/account/signup"),
 };
 
-export default async function AccountSignupPage() {
+type Props = { searchParams: Promise<{ error?: string }> };
+
+export default async function AccountSignupPage({ searchParams }: Props) {
   const session = await getFamilySession();
   if (session) redirect("/account");
+
+  const params = await searchParams;
+  const googleError = googleAuthErrorMessage(params.error);
   const googleEnabled = isGoogleSignInConfigured();
 
   return (
@@ -25,9 +30,13 @@ export default async function AccountSignupPage() {
         ← Home
       </Link>
       <h1 className="mt-6 text-3xl text-[var(--color-ink)]">Create family account</h1>
+      {googleError && (
+        <p className="mt-4 max-w-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {googleError}
+        </p>
+      )}
       <div className="mt-8">
-        <FamilySignupForm />
-        <GoogleFamilySignIn enabled={googleEnabled} />
+        <FamilySignupForm googleEnabled={googleEnabled} />
       </div>
       <p className="mt-6 text-sm text-[var(--color-muted)]">
         Already have an account?{" "}

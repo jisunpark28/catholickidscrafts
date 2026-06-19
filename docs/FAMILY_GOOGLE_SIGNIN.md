@@ -30,6 +30,16 @@ Also ensure:
 
 Redeploy after setting env vars. The **Continue with Google** button appears only when both Google variables are set.
 
+### Email sign-up troubleshooting
+
+If sign-up shows **“Could not create account”** or **“temporarily unavailable”**, check on Vercel (Production):
+
+1. **`AUTH_SECRET`** — required for sessions (generate: `openssl rand -base64 32`)
+2. **`DATABASE_URL`** and **`DIRECT_URL`** — Neon Postgres connection strings
+3. **Build logs** — confirm `prisma migrate deploy` succeeded (creates `FamilyAccount` table)
+
+After changing env vars, **redeploy** Production.
+
 ## 3. Behavior
 
 | Flow | Result |

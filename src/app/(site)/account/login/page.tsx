@@ -1,7 +1,7 @@
 import { FamilyLoginForm } from "@/components/FamilyLoginForm";
-import { GoogleFamilySignIn } from "@/components/GoogleFamilySignIn";
 import { PageShell } from "@/components/PageShell";
 import { getFamilySession } from "@/lib/family-auth";
+import { googleAuthErrorMessage } from "@/lib/google-auth-messages";
 import { isGoogleSignInConfigured } from "@/lib/google-oauth";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -14,23 +14,6 @@ export const metadata: Metadata = {
   ...canonicalForPath("/account/login"),
 };
 
-function googleErrorMessage(code: string | undefined): string | null {
-  switch (code) {
-    case "google_denied":
-      return "Google sign-in was canceled.";
-    case "google_email_conflict":
-      return "This email is already linked to a different Google account.";
-    case "google_state":
-      return "Sign-in expired. Please try again.";
-    case "google_profile":
-    case "google_account":
-    case "google_missing":
-      return "Google sign-in failed. Please try again or use email and password.";
-    default:
-      return null;
-  }
-}
-
 type Props = { searchParams: Promise<{ error?: string }> };
 
 export default async function AccountLoginPage({ searchParams }: Props) {
@@ -38,7 +21,7 @@ export default async function AccountLoginPage({ searchParams }: Props) {
   if (session) redirect("/account");
 
   const params = await searchParams;
-  const googleError = googleErrorMessage(params.error);
+  const googleError = googleAuthErrorMessage(params.error);
   const googleEnabled = isGoogleSignInConfigured();
 
   return (
@@ -53,8 +36,7 @@ export default async function AccountLoginPage({ searchParams }: Props) {
         </p>
       )}
       <div className="mt-8">
-        <FamilyLoginForm />
-        <GoogleFamilySignIn enabled={googleEnabled} />
+        <FamilyLoginForm googleEnabled={googleEnabled} />
       </div>
       <p className="mt-6 text-sm text-[var(--color-muted)]">
         New here?{" "}

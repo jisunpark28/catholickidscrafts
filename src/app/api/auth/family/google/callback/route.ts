@@ -8,6 +8,7 @@ import { setFamilyAndOwnerReaderCookies } from "@/lib/family-auth";
 import {
   fetchGoogleUserProfile,
   verifyGoogleOAuthState,
+  type GoogleOAuthFrom,
 } from "@/lib/google-oauth";
 import { NextResponse } from "next/server";
 
@@ -17,8 +18,11 @@ export async function GET(request: Request) {
   const state = searchParams.get("state");
   const oauthError = searchParams.get("error");
 
+  let from: GoogleOAuthFrom = "login";
+
   const failRedirect = (reason: string) => {
-    const url = new URL("/account/login", request.url);
+    const path = from === "signup" ? "/account/signup" : "/account/login";
+    const url = new URL(path, request.url);
     url.searchParams.set("error", reason);
     return NextResponse.redirect(url);
   };
@@ -30,10 +34,11 @@ export async function GET(request: Request) {
     return failRedirect("google_missing");
   }
 
-  const stateOk = await verifyGoogleOAuthState(state);
-  if (!stateOk) {
+  const statePayload = await verifyGoogleOAuthState(state);
+  if (!statePayload) {
     return failRedirect("google_state");
   }
+  from = statePayload.from;
 
   let profile;
   try {

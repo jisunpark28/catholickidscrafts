@@ -30,20 +30,24 @@ export function getGoogleRedirectUri(): string {
   return `${base}/api/auth/family/google/callback`;
 }
 
-export async function createGoogleOAuthState(): Promise<string> {
-  return new SignJWT({ nonce: randomUUID() })
+export type GoogleOAuthFrom = "signup" | "login";
+
+export async function createGoogleOAuthState(from: GoogleOAuthFrom = "login"): Promise<string> {
+  return new SignJWT({ nonce: randomUUID(), from })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("10m")
     .sign(authSecret());
 }
 
-export async function verifyGoogleOAuthState(state: string): Promise<boolean> {
+export async function verifyGoogleOAuthState(
+  state: string,
+): Promise<{ from: GoogleOAuthFrom } | null> {
   try {
-    await jwtVerify(state, authSecret());
-    return true;
+    const { payload } = await jwtVerify(state, authSecret());
+    return { from: payload.from === "signup" ? "signup" : "login" };
   } catch {
-    return false;
+    return null;
   }
 }
 
