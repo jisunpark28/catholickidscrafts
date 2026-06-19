@@ -62,8 +62,8 @@ export function HomeLearnSearch({ variant = "default", className = "" }: Props) 
   const showPanel = open && q.trim().length >= 2;
 
   const inputClass = isHeader
-    ? "w-full min-w-0 rounded-[2rem] border border-[#e8d0bc] bg-[#fdf8f4] py-2.5 pl-9 pr-3 text-sm text-[var(--color-ink)] shadow-sm outline-none focus:border-[var(--color-accent)] sm:py-3 sm:pl-10"
-    : "w-full rounded-[2rem] border border-[var(--color-border)] bg-[#faf6f1] py-4 pl-11 pr-4 text-base text-[var(--color-ink)] shadow-sm outline-none focus:border-[var(--color-accent)]";
+    ? "w-full min-w-0 rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] py-2.5 pl-9 pr-3 text-sm font-medium text-[var(--color-ink)] shadow-sm outline-none transition placeholder:text-[var(--color-muted)] focus:border-[#d4b896] focus:bg-white sm:min-h-[3rem] sm:py-3 sm:pl-10"
+    : "w-full rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] py-3.5 pl-10 pr-4 text-base font-medium text-[var(--color-ink)] shadow-sm outline-none transition focus:border-[#d4b896] focus:bg-white";
 
   return (
     <div ref={rootRef} className={`relative ${className}`}>
@@ -72,7 +72,7 @@ export function HomeLearnSearch({ variant = "default", className = "" }: Props) 
       </label>
       <div className="relative">
         <span
-          className={`pointer-events-none absolute top-1/2 -translate-y-1/2 text-[var(--color-ink)] opacity-70 ${
+          className={`pointer-events-none absolute top-1/2 -translate-y-1/2 text-[var(--color-muted)] ${
             isHeader ? "left-3 text-sm sm:left-3.5" : "left-4"
           }`}
           aria-hidden
@@ -96,7 +96,7 @@ export function HomeLearnSearch({ variant = "default", className = "" }: Props) 
 
       {showPanel && (
         <div
-          className={`absolute z-[60] mt-2 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white shadow-lg ${
+          className={`absolute z-[60] mt-2 overflow-hidden rounded-2xl border border-[#e8e0d6] bg-white shadow-md ${
             isHeader ? "left-0 min-w-[min(100%,20rem)] w-[min(100vw-2rem,24rem)] sm:w-80" : "w-full"
           }`}
         >
