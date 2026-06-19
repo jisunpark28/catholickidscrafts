@@ -96,8 +96,15 @@ export function HomeHubMenuButton({
   );
 }
 
-/** Shared width for hub pills, notices, and typing panels (matches Daily Mass). */
-export const HOME_HUB_CONTENT_CLASS = "mx-auto w-full max-w-sm";
+/**
+ * Home hub widths (fixed rem — do not use ad-hoc max-w-* elsewhere).
+ * Section pills are always exactly 2× Daily Mass.
+ */
+export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-full max-w-[20rem]";
+export const HOME_HUB_SECTIONS_WIDTH_CLASS = "mx-auto w-full max-w-[40rem]";
+
+/** Sub-page panels (gospel typing, notices) — same as section pill row. */
+export const HOME_HUB_CONTENT_CLASS = HOME_HUB_SECTIONS_WIDTH_CLASS;
 
 /** Inset panel styling aligned with hub pill borders. */
 export const HOME_HUB_PANEL_CLASS =

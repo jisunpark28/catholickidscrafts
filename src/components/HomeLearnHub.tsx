@@ -1,5 +1,5 @@
 import { DailyMassPanel } from "@/components/DailyMassPanel";
-import { HOME_HUB_CONTENT_CLASS } from "@/components/HomeHubButton";
+import { HOME_HUB_SECTIONS_WIDTH_CLASS } from "@/components/HomeHubButton";
 import { HomeNavPill } from "@/components/HomeNavPill";
 import type { HomeSectionWithItems } from "@/lib/home-sections";
 import type { MonthCalendar } from "@/types/mass";
@@ -28,7 +28,7 @@ export function HomeLearnHub({
         todayDate={todayDate}
       />
 
-      <div className={`${HOME_HUB_CONTENT_CLASS} relative z-20 space-y-10`}>
+      <div className={`${HOME_HUB_SECTIONS_WIDTH_CLASS} relative z-20 space-y-10`}>
         {sections.map((section) => (
           <section key={section.id} aria-labelledby={`home-section-${section.id}`}>
             <h2
