@@ -1,23 +1,39 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   text: string;
   title?: string;
+  /** Called once when the passage is finished at or above accuracyThreshold. */
+  onComplete?: (accuracy: number) => void;
+  /** Fraction 0–1 required to count as complete (default 0.9). */
+  accuracyThreshold?: number;
+  /** Shown after a successful completion (e.g. sticker unlocked). */
+  completionMessage?: React.ReactNode;
 };
 
 /** Type-along UI for a passage (Today's Bible mode). */
-export function PassageTypingGame({ text, title = "Typing practice" }: Props) {
+export function PassageTypingGame({
+  text,
+  title = "Typing practice",
+  onComplete,
+  accuracyThreshold = 0.9,
+  completionMessage,
+}: Props) {
   const target = useMemo(() => text.replace(/\s+/g, " ").trim(), [text]);
   const [typed, setTyped] = useState("");
   const [started, setStarted] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [unlocked, setUnlocked] = useState(false);
+  const reportedRef = useRef(false);
 
   useEffect(() => {
     setTyped("");
     setStarted(false);
     setElapsed(0);
+    setUnlocked(false);
+    reportedRef.current = false;
   }, [target]);
 
   useEffect(() => {
@@ -26,17 +42,29 @@ export function PassageTypingGame({ text, title = "Typing practice" }: Props) {
     return () => clearInterval(id);
   }, [started, typed.length, target.length]);
 
-  const done = typed.length >= target.length && target.length > 0;
   const correctPrefix = useMemo(() => {
     let i = 0;
     while (i < typed.length && typed[i] === target[i]) i++;
     return i;
   }, [typed, target]);
 
+  const done = typed.length >= target.length && target.length > 0;
+  const accuracy = target.length > 0 ? correctPrefix / target.length : 0;
+  const passedThreshold = done && accuracy >= accuracyThreshold;
+
+  useEffect(() => {
+    if (!onComplete || !passedThreshold || reportedRef.current) return;
+    reportedRef.current = true;
+    setUnlocked(true);
+    onComplete(accuracy);
+  }, [onComplete, passedThreshold, accuracy]);
+
   const reset = useCallback(() => {
     setTyped("");
     setStarted(false);
     setElapsed(0);
+    setUnlocked(false);
+    reportedRef.current = false;
   }, []);
 
   if (!target) {
@@ -91,10 +119,18 @@ export function PassageTypingGame({ text, title = "Typing practice" }: Props) {
 
         <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-[var(--color-muted)]">
           <span>
-            Progress: {Math.min(100, Math.round((correctPrefix / target.length) * 100))}%
+            Accuracy: {Math.min(100, Math.round(accuracy * 100))}%
           </span>
           {started && <span>Time: {elapsed}s</span>}
-          {done && <span className="font-bold text-[var(--color-accent)]">Well done!</span>}
+          {passedThreshold && (
+            <span className="font-bold text-[var(--color-accent)]">Praise sticker unlocked!</span>
+          )}
+          {done && !passedThreshold && (
+            <span className="font-semibold text-amber-700">
+              Finish with at least {Math.round(accuracyThreshold * 100)}% accuracy to unlock the
+              sticker. Reset and try again.
+            </span>
+          )}
           <button
             type="button"
             onClick={reset}
@@ -103,6 +139,11 @@ export function PassageTypingGame({ text, title = "Typing practice" }: Props) {
             Reset
           </button>
         </div>
+        {unlocked && completionMessage && (
+          <div className="mt-4 border border-[var(--color-accent)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)]">
+            {completionMessage}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -145,9 +145,9 @@ Access ID format: `CKC-XXXX-XXXX` (crypto random); store bcrypt hash only.
 
 | Phase | Deliverable |
 |-------|-------------|
-| **A** (this PR) | Home hub, Daily Mass toggle, admin sections, seed English defaults |
+| **A** | Home hub, Daily Mass toggle, admin sections, seed English defaults |
 | **B** | Bible book picker + sticker grid + latinprayer proxy |
-| **C** | Chapter typing + progress save |
+| **C** | Chapter typing + `POST /api/bible/progress` (90% accuracy; guest `ckc_bible_reader` cookie) |
 | **D** | Family account + Access ID + sub limit 30 |
 | **E** | Home search across resources + games + catalog |
 

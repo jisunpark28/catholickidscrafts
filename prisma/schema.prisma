@@ -299,20 +299,23 @@ model SubProfile {
   @@index([familyAccountId, sortOrder])
 }
 
-/// Completed Bible chapter (typing) for owner or sub reader.
+/// Completed Bible chapter (typing) for owner, sub, or guest reader.
 model BibleChapterProgress {
   id              String         @id @default(cuid())
   bookSlug        String
   chapter         Int
   completedAt     DateTime       @default(now())
   typingAccuracy  Float?
+  guestId         String?
   familyAccountId String?
   subProfileId    String?
   familyAccount   FamilyAccount? @relation("OwnerProgress", fields: [familyAccountId], references: [id], onDelete: Cascade)
   subProfile      SubProfile?    @relation("SubProgress", fields: [subProfileId], references: [id], onDelete: Cascade)
 
+  @@unique([guestId, bookSlug, chapter])
   @@unique([familyAccountId, bookSlug, chapter])
   @@unique([subProfileId, bookSlug, chapter])
   @@index([bookSlug, chapter])
+  @@index([guestId])
 }
 

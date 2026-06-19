@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BibleBookSelect } from "@/components/BibleBookSelect";
 import { BibleStickerGrid } from "@/components/BibleStickerGrid";
 import { PageShell } from "@/components/PageShell";
-import { fetchBibleBooks } from "@/lib/bible/latinprayer";
+import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
+import { getCompletedChaptersForBook } from "@/lib/bible/progress";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
@@ -26,6 +28,9 @@ export default async function BibleBookPage({ params }: Props) {
   const book = books.find((b) => b.slug === bookSlug);
   if (!book) notFound();
 
+  const testamentBooks = booksByTestament(books, book.testament);
+  const completedChapters = await getCompletedChaptersForBook(bookSlug);
+
   const testamentHref =
     book.testament === "OT" ? "/bible/old-testament" : "/bible/new-testament";
 
@@ -38,18 +43,13 @@ export default async function BibleBookPage({ params }: Props) {
       <p className="mt-2 text-sm text-[var(--color-muted)]">
         {book.totalChapters} chapters · Douay-Rheims (public domain)
       </p>
+      <BibleBookSelect books={testamentBooks} currentSlug={book.slug} />
       <BibleStickerGrid
         bookSlug={book.slug}
         bookName={book.name}
         chapterCount={book.totalChapters}
-        completedChapters={[]}
+        completedChapters={completedChapters}
       />
-      <p className="mt-8 text-xs text-[var(--color-muted)]">
-        <Link href="/reader/login" className="text-[var(--color-link)]">
-          Sign in with Access ID
-        </Link>{" "}
-        or a family account to save sticker progress.
-      </p>
     </PageShell>
   );
 }

@@ -48,9 +48,6 @@ export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Pro
           <span className="ml-2 text-base opacity-70">{open ? "▲" : "▼"}</span>
         </span>
       </button>
-      <p className="mt-2 text-center text-sm text-[var(--color-muted)]">
-        {open ? "Tap Daily Mass again to hide the calendar" : "Tap to show the liturgical calendar"}
-      </p>
       {open && (
         <div className="mt-6">
           <MassCalendar initial={calendar} selectedDate={selectedDate} todayDate={todayDate} />

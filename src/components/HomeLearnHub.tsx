@@ -19,7 +19,7 @@ export function HomeLearnHub({
   sections,
 }: Props) {
   return (
-    <div className="mx-auto w-full max-w-lg px-4 py-8 sm:max-w-xl sm:py-12">
+    <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-8 sm:py-12">
       <DailyMassPanel
         label={dailyMassLabel}
         calendar={calendar}
@@ -27,7 +27,7 @@ export function HomeLearnHub({
         todayDate={todayDate}
       />
 
-      <div className="space-y-10">
+      <div className="mx-auto max-w-xl space-y-10">
         {sections.map((section) => (
           <section key={section.id}>
             <h2 className="mb-4 text-2xl text-[var(--color-ink)] sm:text-3xl">{section.title}</h2>
@@ -41,12 +41,6 @@ export function HomeLearnHub({
           </section>
         ))}
       </div>
-
-      {sections.length === 0 && (
-        <p className="text-center text-sm text-[var(--color-muted)]">
-          Home sections are not configured yet. Operators can add them in Admin → Home sections.
-        </p>
-      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BibleChapterTyping } from "@/components/BibleChapterTyping";
 import { PageShell } from "@/components/PageShell";
 import { chapterPlainText, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { canonicalForPath } from "@/lib/site-metadata";
@@ -38,13 +39,13 @@ export default async function BibleReadPage({ params }: Props) {
         {data.meta.book.name} — Chapter {data.meta.chapter}
       </h1>
       <p className="mt-2 text-xs text-[var(--color-muted)]">{data.citation}</p>
-      <div className="mt-8 border border-[var(--color-border)] bg-white p-6">
-        <p className="text-sm leading-relaxed text-[var(--color-ink)] whitespace-pre-wrap">{text}</p>
-      </div>
-      <p className="mt-6 text-sm text-[var(--color-muted)]">
-        Interactive typing + sticker unlock will connect here in Phase C. Text source: Douay-Rheims
-        via latinprayer.org (public domain).
-      </p>
+      <BibleChapterTyping
+        bookSlug={bookSlug}
+        bookName={data.meta.book.name}
+        chapter={data.meta.chapter}
+        text={text}
+        citation={data.citation}
+      />
     </PageShell>
   );
 }

@@ -107,7 +107,7 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
         {Array.from({ length: firstDow }).map((_, i) => (
           <div
             key={`pad-${i}`}
-            className="min-h-[7rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[8.5rem] lg:min-h-[9.5rem]"
+            className="min-h-[8rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[9.5rem] lg:min-h-[10.5rem]"
           />
         ))}
         {calendar.days.map((day) => {
@@ -120,7 +120,7 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
           return (
             <div
               key={day.date}
-              className={`flex min-h-[7rem] flex-col border-b border-r border-[var(--color-border)] p-2 sm:min-h-[8.5rem] sm:p-3 lg:min-h-[9.5rem] ${rankStyles[day.rank]} ${
+              className={`flex min-h-[8rem] flex-col border-b border-r border-[var(--color-border)] p-2 sm:min-h-[9.5rem] sm:p-3 lg:min-h-[10.5rem] ${rankStyles[day.rank]} ${
                 isSelected ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
               }`}
             >
@@ -132,20 +132,11 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
                 >
                   {dayNum}
                 </span>
-                <span className="mt-1 line-clamp-3 flex-1 text-[11px] leading-snug text-[var(--color-muted)] sm:line-clamp-4 sm:text-xs sm:leading-tight">
+                <span className="mt-1 flex-1 text-[10px] leading-snug text-[var(--color-muted)] sm:text-[11px] sm:leading-tight">
                   {day.liturgicalTitle}
                 </span>
               </div>
               <div className="mt-2 flex flex-col gap-1">
-                <a
-                  href={lwcUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[10px] font-semibold text-[var(--color-link)] hover:underline"
-                  title={`${day.liturgicalTitle} — Living with Christ`}
-                >
-                  Living with Christ ↗
-                </a>
                 {usccbUrl && (
                   <a
                     href={usccbUrl}
@@ -157,17 +148,20 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
                     USCCB ↗
                   </a>
                 )}
+                <a
+                  href={lwcUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] font-semibold text-[var(--color-link)] hover:underline"
+                  title={`${day.liturgicalTitle} — Living with Christ`}
+                >
+                  Living with Christ ↗
+                </a>
               </div>
             </div>
           );
         })}
       </div>
-
-      <p className="px-4 py-3 text-xs text-[var(--color-muted)] sm:px-6">
-        Each day: open <span className="font-semibold">Living with Christ ↗</span> or{" "}
-        <span className="font-semibold">USCCB ↗</span> for that Sunday or weekday—use the link your
-        parish already trusts.
-      </p>
     </section>
   );
 }
