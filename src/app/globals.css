@@ -109,3 +109,21 @@ body {
   font-size: 1.0625rem;
   color: var(--color-ink);
 }
+
+/* Hub pills — fixed width (Tailwind cannot see JS string constants). Header excluded. */
+@layer components {
+  .ckc-hub-pill {
+    box-sizing: border-box;
+    width: 28rem;
+    max-width: 100%;
+    margin-inline: auto;
+    flex-shrink: 0;
+  }
+
+  .ckc-hub-pill-width {
+    box-sizing: border-box;
+    width: 28rem;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+}

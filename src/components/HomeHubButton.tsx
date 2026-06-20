@@ -9,7 +9,7 @@ type BaseProps = {
 };
 
 const shell =
-  "flex w-full items-center justify-center gap-2 rounded-2xl border px-6 py-3.5 min-h-[3.25rem] text-center text-base font-semibold tracking-tight transition duration-200 touch-manipulation sm:min-h-[3.5rem] sm:text-lg";
+  "ckc-hub-pill relative z-30 flex items-center justify-center gap-2 rounded-2xl border px-6 py-3.5 min-h-[3.25rem] text-center text-base font-semibold tracking-tight transition duration-200 touch-manipulation sm:min-h-[3.5rem] sm:text-lg";
 
 const variants = {
   primary:
@@ -32,7 +32,7 @@ type ButtonProps = BaseProps & {
   "aria-expanded"?: boolean;
 };
 
-/** Unified home hub pill — Daily Mass and section links share the same size. */
+/** Unified home hub pill — same fixed width as Daily Mass on every page (not header). */
 export function HomeHubButtonLink({
   href,
   children,
@@ -42,10 +42,7 @@ export function HomeHubButtonLink({
   const safeHref = normalizeHubHref(href);
 
   return (
-    <a
-      href={safeHref}
-      className={`relative z-30 block cursor-pointer no-underline ${classes(variant, className)}`}
-    >
+    <a href={safeHref} className={`block cursor-pointer no-underline ${classes(variant, className)}`}>
       {children}
     </a>
   );
@@ -70,7 +67,7 @@ export function HomeHubButton({
   );
 }
 
-/** Header account / menu control — matches hub button height rhythm. */
+/** Header account control — not hub pill width. */
 export function HomeHubMenuButton({
   children,
   onClick,
@@ -83,7 +80,6 @@ export function HomeHubMenuButton({
   onClick?: () => void;
   ariaExpanded?: boolean;
   ariaControls?: string;
-  /** When true, use normal case (user name) instead of MENU uppercase. */
   authLabel?: boolean;
   className?: string;
 }) {
@@ -104,21 +100,14 @@ export function HomeHubMenuButton({
   );
 }
 
-/** All hub pills and page buttons (header excluded) — fixed 28rem, matches Daily Mass. */
-export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-[28rem] max-w-full";
+/** Panels/notices aligned to hub pill width — use on non-button blocks only. */
+export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "ckc-hub-pill-width";
 
-/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS — use that name instead. */
+/** @deprecated Use HOME_HUB_DAILY_MASS_WIDTH_CLASS */
 export const HOME_HUB_SECTIONS_WIDTH_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
-
-/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS. */
 export const HOME_HUB_TYPING_WIDTH_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
-
-/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS. */
 export const HOME_HUB_NARROW_CONTENT_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
-
-/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS. */
 export const HOME_HUB_CONTENT_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
 
-/** Inset panel styling aligned with hub pill borders. */
 export const HOME_HUB_PANEL_CLASS =
   "rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm leading-relaxed text-[var(--color-muted)]";
