@@ -1,5 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 type Props = {
-  enabled?: boolean;
   from?: "signup" | "login";
 };
 
@@ -26,8 +29,47 @@ function GoogleMark() {
   );
 }
 
-export function GoogleFamilySignIn({ enabled = false, from = "login" }: Props) {
-  if (!enabled) return null;
+export function GoogleFamilySignIn({ from = "login" }: Props) {
+  const [enabled, setEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetch("/api/auth/family/google/status", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : { enabled: false }))
+      .then((data: { enabled?: boolean }) => {
+        if (!cancelled) setEnabled(Boolean(data.enabled));
+      })
+      .catch(() => {
+        if (!cancelled) setEnabled(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (enabled === null) {
+    return (
+      <div
+        className="h-[46px] w-full animate-pulse rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]"
+        aria-hidden
+      />
+    );
+  }
+
+  if (!enabled) {
+    if (process.env.NODE_ENV === "development") {
+      return (
+        <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
+          Google sign-in is off: set <code className="font-mono">GOOGLE_CLIENT_ID</code> and{" "}
+          <code className="font-mono">GOOGLE_CLIENT_SECRET</code> in{" "}
+          <code className="font-mono">.env</code>, then restart{" "}
+          <code className="font-mono">pnpm dev</code>. See{" "}
+          <code className="font-mono">docs/FAMILY_GOOGLE_SIGNIN.md</code>.
+        </p>
+      );
+    }
+    return null;
+  }
 
   const href = from === "signup" ? "/api/auth/family/google?from=signup" : "/api/auth/family/google";
 
