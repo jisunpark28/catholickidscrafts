@@ -1,5 +1,5 @@
 import { DailyMassPanel } from "@/components/DailyMassPanel";
-import { HOME_HUB_SECTIONS_WIDTH_CLASS } from "@/components/HomeHubButton";
+import { HOME_HUB_DAILY_MASS_WIDTH_CLASS } from "@/components/HomeHubButton";
 import { HomeNavPill } from "@/components/HomeNavPill";
 import type { HomeSectionWithItems } from "@/lib/home-sections";
 import type { MonthCalendar } from "@/types/mass";
@@ -39,7 +39,7 @@ export function HomeLearnHub({
             </h2>
             <div className="flex flex-col items-center gap-3">
               {section.items.map((item) => (
-                <div key={item.id} className={`${HOME_HUB_SECTIONS_WIDTH_CLASS} relative z-30`}>
+                <div key={item.id} className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} relative z-30`}>
                   <HomeNavPill href={item.href}>{item.title}</HomeNavPill>
                 </div>
               ))}

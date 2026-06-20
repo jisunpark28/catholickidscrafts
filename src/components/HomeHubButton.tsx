@@ -104,20 +104,20 @@ export function HomeHubMenuButton({
   );
 }
 
-/**
- * Home hub widths — fixed rem caps (not viewport %). Section pills = 2× Daily Mass.
- */
+/** All hub pills and page buttons (header excluded) — fixed 28rem, matches Daily Mass. */
 export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-[28rem] max-w-full";
-export const HOME_HUB_SECTIONS_WIDTH_CLASS = "mx-auto w-[56rem] max-w-full";
 
-/** Gospel typing panel — 2× Daily Mass pill width. */
-export const HOME_HUB_TYPING_WIDTH_CLASS = HOME_HUB_SECTIONS_WIDTH_CLASS;
+/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS — use that name instead. */
+export const HOME_HUB_SECTIONS_WIDTH_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
 
-/** Gospel sign-in notice — same width as Daily Mass pill. */
+/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS. */
+export const HOME_HUB_TYPING_WIDTH_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
+
+/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS. */
 export const HOME_HUB_NARROW_CONTENT_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
 
-/** @deprecated Prefer HOME_HUB_NARROW_CONTENT_CLASS for gospel sub-pages. */
-export const HOME_HUB_CONTENT_CLASS = HOME_HUB_NARROW_CONTENT_CLASS;
+/** @deprecated Same as HOME_HUB_DAILY_MASS_WIDTH_CLASS. */
+export const HOME_HUB_CONTENT_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
 
 /** Inset panel styling aligned with hub pill borders. */
 export const HOME_HUB_PANEL_CLASS =

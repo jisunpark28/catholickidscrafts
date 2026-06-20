@@ -1,6 +1,6 @@
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
 import { BibleReaderNotice } from "@/components/bible/BibleReaderNotice";
-import { HomeHubButtonLink, HOME_HUB_SECTIONS_WIDTH_CLASS } from "@/components/HomeHubButton";
+import { HomeHubButtonLink, HOME_HUB_DAILY_MASS_WIDTH_CLASS } from "@/components/HomeHubButton";
 import type { BibleBookMeta } from "@/lib/bible/latinprayer";
 import type { ReaderDisplay } from "@/lib/reader-display";
 
@@ -30,7 +30,7 @@ export function BibleTestamentHub({ title, description, books, reader }: Props) 
           </h2>
           <div className="flex flex-col items-center gap-3">
             {books.map((book) => (
-              <div key={book.slug} className={`${HOME_HUB_SECTIONS_WIDTH_CLASS} relative z-30`}>
+              <div key={book.slug} className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} relative z-30`}>
                 <HomeHubButtonLink href={`/bible/${book.slug}`}>
                   {book.name}
                   <span className="ml-2 text-sm font-normal opacity-70">

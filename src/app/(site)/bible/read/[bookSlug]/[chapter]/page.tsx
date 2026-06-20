@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { BibleChapterTyping } from "@/components/BibleChapterTyping";
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
-import { HOME_HUB_TYPING_WIDTH_CLASS } from "@/components/HomeHubButton";
+import { HOME_HUB_DAILY_MASS_WIDTH_CLASS } from "@/components/HomeHubButton";
 import { chapterPlainText, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -35,7 +35,7 @@ export default async function BibleReadPage({ params }: Props) {
       backHref={`/bible/${bookSlug}`}
       backLabel={`← ${data.meta.book.name}`}
     >
-      <section className={`${HOME_HUB_TYPING_WIDTH_CLASS} space-y-4`}>
+      <section className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} space-y-4`}>
         <div>
           <h1 className="text-xl font-semibold text-[var(--color-ink)] sm:text-2xl">
             {data.meta.book.name} — Chapter {data.meta.chapter}

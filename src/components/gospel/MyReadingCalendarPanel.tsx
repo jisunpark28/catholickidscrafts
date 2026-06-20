@@ -1,7 +1,7 @@
 "use client";
 
 import { GospelReadingCalendar } from "@/components/gospel/GospelReadingCalendar";
-import { HomeHubButton, HOME_HUB_DAILY_MASS_WIDTH_CLASS, HOME_HUB_NARROW_CONTENT_CLASS, HOME_HUB_SECTIONS_WIDTH_CLASS } from "@/components/HomeHubButton";
+import { HomeHubButton, HOME_HUB_DAILY_MASS_WIDTH_CLASS } from "@/components/HomeHubButton";
 import { useState } from "react";
 
 type Props = {
@@ -30,7 +30,7 @@ export function MyReadingCalendarPanel({
         </HomeHubButton>
       </div>
       {open && (
-        <div className={`mt-6 ${signedIn ? HOME_HUB_SECTIONS_WIDTH_CLASS : HOME_HUB_NARROW_CONTENT_CLASS}`}>
+        <div className="mt-6 w-full">
           <GospelReadingCalendar
             signedIn={signedIn}
             initialCompleted={initialCompleted}

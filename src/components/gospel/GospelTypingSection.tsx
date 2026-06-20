@@ -2,9 +2,8 @@
 
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import {
-  HOME_HUB_NARROW_CONTENT_CLASS,
+  HOME_HUB_DAILY_MASS_WIDTH_CLASS,
   HOME_HUB_PANEL_CLASS,
-  HOME_HUB_TYPING_WIDTH_CLASS,
 } from "@/components/HomeHubButton";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import type { UniversalisMassDay } from "@/lib/universalis";
@@ -102,13 +101,13 @@ export function GospelTypingSection({
   );
 
   return (
-    <section className={`${HOME_HUB_TYPING_WIDTH_CLASS} space-y-4`}>
+    <section className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} space-y-4`}>
       <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
         Today&apos;s Readings
       </h2>
 
       {!canType && (
-        <p className={`${HOME_HUB_NARROW_CONTENT_CLASS} ${HOME_HUB_PANEL_CLASS} bg-white`}>
+        <p className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} ${HOME_HUB_PANEL_CLASS} bg-white`}>
           Typing is available for today only ({todayDate}). Select today on your calendar or come
           back on that day.
         </p>

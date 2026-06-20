@@ -1,5 +1,5 @@
 import {
-  HOME_HUB_NARROW_CONTENT_CLASS,
+  HOME_HUB_DAILY_MASS_WIDTH_CLASS,
   HOME_HUB_PANEL_CLASS,
 } from "@/components/HomeHubButton";
 import Link from "next/link";
@@ -10,7 +10,7 @@ type Props = { reader: ReaderDisplay };
 export function BibleReaderNotice({ reader }: Props) {
   if (reader.mode === "guest") {
     return (
-      <p className={`${HOME_HUB_NARROW_CONTENT_CLASS} ${HOME_HUB_PANEL_CLASS} bg-white`}>
+      <p className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} ${HOME_HUB_PANEL_CLASS} bg-white`}>
         Sign in with a{" "}
         <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
           family account
@@ -30,7 +30,7 @@ export function BibleReaderNotice({ reader }: Props) {
       : reader.displayName || reader.email || "Parent";
 
   return (
-    <p className={`${HOME_HUB_NARROW_CONTENT_CLASS} text-sm text-[var(--color-muted)]`}>
+    <p className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} text-sm text-[var(--color-muted)]`}>
       Signed in as <strong className="text-[var(--color-ink)]">{label}</strong>
       {reader.mode === "owner" ? " (parent)" : " (reader)"}.{" "}
       <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
