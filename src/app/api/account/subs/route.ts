@@ -7,6 +7,7 @@ import {
   MAX_SUB_PROFILES_PER_FAMILY,
   normalizeAccessCode,
 } from "@/lib/access-code";
+import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { requireFamilySession } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
@@ -31,28 +32,11 @@ export async function GET() {
     return NextResponse.json({ error: "Not signed in" }, { status: 401 });
   }
 
-  const subs = await prisma.subProfile.findMany({
-    where: { familyAccountId: session.familyAccountId },
-    orderBy: { sortOrder: "asc" },
-    select: {
-      id: true,
-      displayName: true,
-      accessCodeLast4: true,
-      active: true,
-      sortOrder: true,
-      _count: { select: { progress: true } },
-    },
-  });
+  const { owner, subs } = await loadAccountDashboardReaders(session.familyAccountId);
 
   return NextResponse.json({
-    subs: subs.map((s) => ({
-      id: s.id,
-      displayName: s.displayName,
-      accessCodeLast4: s.accessCodeLast4,
-      active: s.active,
-      sortOrder: s.sortOrder,
-      stickerCount: s._count.progress,
-    })),
+    owner,
+    subs,
     maxSubs: MAX_SUB_PROFILES_PER_FAMILY,
   });
 }
