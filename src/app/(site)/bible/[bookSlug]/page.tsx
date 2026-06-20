@@ -33,7 +33,7 @@ export default async function BibleBookPage({ params }: Props) {
   ]);
 
   const testamentHref =
-    book.testament === "OT" ? "/bible/genesis" : "/bible/matthew";
+    book.testament === "OT" ? "/bible/old-testament" : "/bible/new-testament";
   const testamentLabel = book.testament === "OT" ? "Old Testament" : "New Testament";
 
   return (

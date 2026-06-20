@@ -25,13 +25,16 @@ export default async function RootLayout({
   const googleSiteVerification = getGoogleSiteVerification();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {googleSiteVerification ? (
           <meta name="google-site-verification" content={googleSiteVerification} />
         ) : null}
       </head>
-      <body className={`${inter.variable} min-h-screen font-sans antialiased`}>
+      <body
+        className={`${inter.variable} min-h-screen font-sans antialiased`}
+        suppressHydrationWarning
+      >
         <SiteJsonLd />
         <AuthProvider>{children}</AuthProvider>
         <Analytics />

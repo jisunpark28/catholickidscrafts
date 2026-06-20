@@ -1,6 +1,28 @@
-import { redirect } from "next/navigation";
+import { BibleTestamentHub } from "@/components/bible/BibleTestamentHub";
+import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
+import { getReaderDisplay } from "@/lib/reader-display";
+import { canonicalForPath } from "@/lib/site-metadata";
+import type { Metadata } from "next";
 
-/** New Testament hub — opens Matthew directly. */
-export default function NewTestamentPage() {
-  redirect("/bible/matthew");
+export const metadata: Metadata = {
+  title: "New Testament",
+  description: "Choose a New Testament book to read and collect praise stickers.",
+  ...canonicalForPath("/bible/new-testament"),
+};
+
+export default async function NewTestamentPage() {
+  const [books, reader] = await Promise.all([
+    fetchBibleBooks().catch(() => []),
+    getReaderDisplay(),
+  ]);
+  const ntBooks = booksByTestament(books, "NT");
+
+  return (
+    <BibleTestamentHub
+      title="New Testament"
+      description="Choose a book to read chapter by chapter. Type with 90% accuracy to earn praise stickers."
+      books={ntBooks}
+      reader={reader}
+    />
+  );
 }
