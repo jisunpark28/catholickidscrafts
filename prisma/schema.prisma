@@ -292,6 +292,8 @@ model SubProfile {
   accessCodeHash   String
   accessCodeLookup String                 @unique
   accessCodeLast4  String?
+  /// Full Access ID for parent dashboard (login still uses hash only).
+  accessCodeDisplay String?
   active           Boolean                @default(true)
   sortOrder        Int                    @default(0)
   createdAt        DateTime               @default(now())
