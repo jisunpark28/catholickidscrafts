@@ -49,8 +49,21 @@ export default async function PrivacyPage() {
           (NextAuth).
         </li>
         <li>
-          <strong>Content you do not submit on the public site:</strong> We do not operate a public
-          comment form or newsletter signup on the Site at this time.
+          <strong>Family accounts (optional):</strong> Parents may create an account at{" "}
+          <code>/account/signup</code> with email and a hashed password. We store reader display
+          names, Access ID hashes (not plain Access IDs), and Bible chapter completion counts for
+          sticker progress. Children sign in with an Access ID only—no child email is collected.
+        </li>
+        <li>
+          <strong>Google sign-in (optional):</strong> If enabled, parents may use Google OAuth on{" "}
+          <code>/account/login</code>. We receive your Google account ID, verified email, and
+          display name from Google&apos;s OpenID service. We do not receive your Google password.
+          See <code>docs/FAMILY_GOOGLE_SIGNIN.md</code> for operator setup.
+        </li>
+        <li>
+          <strong>Home search:</strong> Queries you type on the home page are sent to our server to
+          search published resources, curriculum, games, and Bible titles. We do not log search
+          queries for advertising.
         </li>
       </ul>
 
@@ -63,6 +76,10 @@ export default async function PrivacyPage() {
         <li>
           <strong>Admin session:</strong> Authentication cookies when you sign in at{" "}
           <code>/admin/login</code>.
+        </li>
+        <li>
+          <strong>Family / reader sessions:</strong> <code>ckc_family</code>, <code>ckc_reader</code>
+          , and <code>ckc_bible_reader</code> for optional Bible sticker progress (see above).
         </li>
         <li>
           <strong>We do not</strong> run third-party advertising or social-tracking pixels on the
@@ -92,6 +109,10 @@ export default async function PrivacyPage() {
         <li>
           <strong>Neon</strong> — PostgreSQL database for site content, traffic aggregates, and admin
           users.
+        </li>
+        <li>
+          <strong>Google</strong> — Optional parent sign-in (OAuth) when operators enable it; see
+          our family account privacy notes above.
         </li>
         <li>
           <strong>Evangelizo.org</strong> — Liturgical day titles on the{" "}

@@ -34,6 +34,9 @@ export default async function AdminLayout({
               <Link href="/admin/site-copy" className="hover:text-[var(--color-accent)]">
                 Site text
               </Link>
+              <Link href="/admin/home-sections" className="hover:text-[var(--color-accent)]">
+                Home sections
+              </Link>
               <Link href="/admin/typing-words" className="hover:text-[var(--color-accent)]">
                 Typing words
               </Link>

@@ -6,7 +6,7 @@ import type { UniversalisMassDay } from "@/lib/universalis";
 
 const DEFAULT_UNIVERSALIS_MASS_URL =
   "https://universalis.com/Europe.England/mass.htm";
-import { toDateKey } from "@/lib/dates";
+import { todayUniversalis, toDateKey } from "@/lib/dates";
 import type { ReadingKind } from "@/types/mass";
 
 const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
@@ -17,7 +17,7 @@ const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
 ];
 
 export function BibleTypingMode() {
-  const today = useMemo(() => toDateKey(new Date()), []);
+  const today = useMemo(() => toDateKey(todayUniversalis()), []);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
   const [day, setDay] = useState<UniversalisMassDay | null>(null);
   const massPageUrl = day?.pageUrl ?? DEFAULT_UNIVERSALIS_MASS_URL;
@@ -29,9 +29,15 @@ export function BibleTypingMode() {
     setError("");
     try {
       const res = await fetch(`/api/universalis-readings/${today}`);
-      const data = await res.json();
+      const text = await res.text();
+      let data: UniversalisMassDay & { error?: string };
+      try {
+        data = text ? (JSON.parse(text) as typeof data) : ({} as typeof data);
+      } catch {
+        throw new Error("Could not load readings");
+      }
       if (!res.ok) throw new Error(data.error ?? "Could not load readings");
-      setDay(data as UniversalisMassDay);
+      setDay(data);
     } catch (e) {
       setDay(null);
       setError(e instanceof Error ? e.message : "Could not load readings");

@@ -109,3 +109,5 @@ body {
   font-size: 1.0625rem;
   color: var(--color-ink);
 }
+
+/* Hub pill width is set via inline styles in src/lib/hub-pill-style.ts */

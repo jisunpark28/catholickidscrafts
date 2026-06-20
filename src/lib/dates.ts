@@ -41,6 +41,25 @@ export function todayUtc(): Date {
   return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
 }
 
+/** Calendar date in a specific IANA timezone (UTC midnight for that civil day). */
+export function todayInTimeZone(timeZone: string): Date {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const y = Number(parts.find((p) => p.type === "year")!.value);
+  const m = Number(parts.find((p) => p.type === "month")!.value);
+  const d = Number(parts.find((p) => p.type === "day")!.value);
+  return buildUtcDate(y, m, d)!;
+}
+
+/** Universalis Europe.England JSONP always reflects this liturgical day. */
+export function todayUniversalis(): Date {
+  return todayInTimeZone("Europe/London");
+}
+
 export function daysInMonth(year: number, month: number): Date[] {
   const count = new Date(Date.UTC(year, month, 0)).getUTCDate();
   const days: Date[] = [];

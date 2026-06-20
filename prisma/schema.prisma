@@ -241,3 +241,103 @@ model HangmanWord {
   @@index([published])
 }
 
+/// Home learn hub section headings (e.g. "Bible Reading").
+model HomeSection {
+  id        String            @id @default(cuid())
+  title     String
+  sortOrder Int               @default(0)
+  published Boolean           @default(true)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  items     HomeSectionItem[]
+
+  @@index([published, sortOrder])
+}
+
+/// Pill buttons under each home section (title + href).
+model HomeSectionItem {
+  id        String      @id @default(cuid())
+  sectionId String
+  title     String
+  href      String
+  sortOrder Int         @default(0)
+  published Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  section   HomeSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId, sortOrder])
+  @@index([published])
+}
+
+/// Parent account for Bible sticker progress and sub-profiles.
+model FamilyAccount {
+  id           String                 @id @default(cuid())
+  email        String                 @unique
+  passwordHash String?
+  googleId     String?                @unique
+  displayName  String?
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  subProfiles  SubProfile[]
+  progress     BibleChapterProgress[] @relation("OwnerProgress")
+  gospelDays   GospelDayProgress[]    @relation("OwnerGospelDays")
+}
+
+/// Child/class sub-profile (max 30 per family); logs in with Access ID only.
+model SubProfile {
+  id               String                 @id @default(cuid())
+  familyAccountId  String
+  displayName      String
+  accessCodeHash   String
+  accessCodeLookup String                 @unique
+  accessCodeLast4  String?
+  active           Boolean                @default(true)
+  sortOrder        Int                    @default(0)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  familyAccount    FamilyAccount          @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  progress         BibleChapterProgress[] @relation("SubProgress")
+  gospelDays       GospelDayProgress[]    @relation("SubGospelDays")
+
+  @@index([familyAccountId, sortOrder])
+}
+
+/// Completed Bible chapter (typing) for owner, sub, or guest reader.
+model BibleChapterProgress {
+  id              String         @id @default(cuid())
+  bookSlug        String
+  chapter         Int
+  completedAt     DateTime       @default(now())
+  typingAccuracy  Float?
+  guestId         String?
+  familyAccountId String?
+  subProfileId    String?
+  familyAccount   FamilyAccount? @relation("OwnerProgress", fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?    @relation("SubProgress", fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([guestId, bookSlug, chapter])
+  @@unique([familyAccountId, bookSlug, chapter])
+  @@unique([subProfileId, bookSlug, chapter])
+  @@index([bookSlug, chapter])
+  @@index([guestId])
+}
+
+/// Daily Gospel typing completed (one sticker per calendar day per reader).
+model GospelDayProgress {
+  id              String         @id @default(cuid())
+  dateKey         String
+  completedAt     DateTime       @default(now())
+  typingAccuracy  Float?
+  guestId         String?
+  familyAccountId String?
+  subProfileId    String?
+  familyAccount   FamilyAccount? @relation("OwnerGospelDays", fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?    @relation("SubGospelDays", fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([guestId, dateKey])
+  @@unique([familyAccountId, dateKey])
+  @@unique([subProfileId, dateKey])
+  @@index([dateKey])
+}
+

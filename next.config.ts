@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  serverExternalPackages: ["@prisma/client", "prisma"],
   async redirects() {
     return [
       {
@@ -17,6 +18,21 @@ const nextConfig: NextConfig = {
       {
         source: "/mass/:date",
         destination: "/mass",
+        permanent: true,
+      },
+      {
+        source: "/gospel",
+        destination: "/bible/gospel",
+        permanent: true,
+      },
+      {
+        source: "/old-testament",
+        destination: "/bible/old-testament",
+        permanent: true,
+      },
+      {
+        source: "/new-testament",
+        destination: "/bible/new-testament",
         permanent: true,
       },
     ];

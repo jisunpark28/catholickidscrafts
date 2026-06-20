@@ -1,4 +1,4 @@
-import { toDateKey } from "@/lib/dates";
+import { todayUniversalis, toDateKey } from "@/lib/dates";
 import type { MassReading, ReadingKind } from "@/types/mass";
 
 const UNIVERSALIS_ORIGIN = "https://universalis.com";
@@ -152,9 +152,8 @@ function blockToReading(
   };
 }
 
-export async function fetchUniversalisMassDay(
-  date: Date,
-): Promise<UniversalisMassDay> {
+/** JSONP endpoint always returns Universalis “today” for the configured calendar. */
+export async function fetchUniversalisMassToday(): Promise<UniversalisMassDay> {
   const calendarPath = universalisCalendarPath();
   const pageUrl = universalisMassPageUrl(calendarPath);
   const url = universalisJsonpUrl(calendarPath);
@@ -178,13 +177,6 @@ export async function fetchUniversalisMassDay(
 
   if (!dateKey) {
     throw new Error("Universalis returned an invalid date.");
-  }
-
-  const requestedKey = toDateKey(date);
-  if (dateKey !== requestedKey) {
-    throw new Error(
-      `Universalis returned readings for ${dateKey}, not ${requestedKey}.`,
-    );
   }
 
   const liturgicalTitle = payload.day
@@ -215,4 +207,17 @@ export async function fetchUniversalisMassDay(
     pageUrl,
     copyrightNotice,
   };
+}
+
+/** @deprecated Use fetchUniversalisMassToday — JSONP has no per-date parameter. */
+export async function fetchUniversalisMassDay(date: Date): Promise<UniversalisMassDay> {
+  const day = await fetchUniversalisMassToday();
+  const requestedKey = toDateKey(date);
+  const universalisKey = toDateKey(todayUniversalis());
+  if (requestedKey !== day.date && requestedKey !== universalisKey) {
+    throw new Error(
+      `Only today's readings are available (Universalis: ${day.date}).`,
+    );
+  }
+  return day;
 }

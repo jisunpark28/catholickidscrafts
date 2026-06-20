@@ -40,20 +40,20 @@ export default async function DailyMassPage() {
       >
         <div className="flex flex-wrap gap-3">
           <a
-            href={lwcToday}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
-          >
-            {copyText(copy, "mass.page.cta.lwc", "Today's readings (Living with Christ) ↗")}
-          </a>
-          <a
             href={usccbToday}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
           >
             {copyText(copy, "mass.page.cta.usccb", "Today's readings (USCCB) ↗")}
+          </a>
+          <a
+            href={lwcToday}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[var(--color-accent)] px-6 py-3 text-sm font-bold text-white transition hover:bg-[var(--color-accent-hover)]"
+          >
+            {copyText(copy, "mass.page.cta.lwc", "Today's readings (Living with Christ) ↗")}
           </a>
         </div>
         <p className="mt-3 text-sm text-[var(--color-muted)]">

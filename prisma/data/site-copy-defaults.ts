@@ -62,13 +62,14 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("home.section.play.desc", "Quick games for church vocabulary, today's readings, and a little fun—no login.", "home"),
   sc("home.footer.why", "Why we built this", "home"),
   sc("home.footer.affiliate", "Affiliate disclosure", "home"),
+  sc("home.daily_mass.label", "Daily Mass", "home", "Home page primary pill — toggles calendar"),
 
   // —— Page headers ——
   sc("mass.page.title", "Daily Mass", "mass"),
   sc("mass.page.subtitle", "What is the Church celebrating? Start here before you plan your lesson or activity.", "mass"),
   sc("mass.page.program_note", "In class: show today on the calendar, then open the official readings site your community uses. Text stays on their site—we link you there.", "mass"),
-  sc("mass.page.cta.lwc", "Today's readings (Living with Christ) ↗", "mass"),
   sc("mass.page.cta.usccb", "Today's readings (USCCB) ↗", "mass"),
+  sc("mass.page.cta.lwc", "Today's readings (Living with Christ) ↗", "mass"),
   sc("mass.page.link_hint", "Pick the link your parish or diocese normally uses for daily Mass texts.", "mass"),
 
   sc("resources.page.title", "Kids Resources", "resources"),
