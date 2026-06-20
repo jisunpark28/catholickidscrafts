@@ -19,14 +19,14 @@ export default async function AccountDashboardPage() {
   const { owner, subs } = await loadAccountDashboardReaders(session!.familyAccountId);
 
   return (
-    <PageShell>
+    <PageShell wide>
       <Link href="/" className="text-sm font-semibold text-[var(--color-link)]">
         ← Home
       </Link>
       <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
+        <div className="min-w-0 flex-1">
           <h1 className="text-3xl text-[var(--color-ink)]">Dashboard</h1>
-          <p className="mt-2 text-sm text-[var(--color-muted)]">{session!.email}</p>
+          <p className="mt-2 break-all text-sm text-[var(--color-muted)]">{session!.email}</p>
         </div>
         <FamilyLogoutButton />
       </div>

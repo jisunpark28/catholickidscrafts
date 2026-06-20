@@ -178,15 +178,15 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
       )}
 
       <div className="mt-6 overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse text-sm">
+        <table className="w-full min-w-[52rem] border-collapse text-sm">
           <thead>
             <tr className="border-b border-[var(--color-border)] text-left text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
-              <th className="py-3 pr-3 font-semibold">Name</th>
-              <th className="py-3 pr-3 font-semibold">Account</th>
-              <th className="py-3 pr-3 font-semibold">Total stickers</th>
-              <th className="py-3 pr-3 font-semibold">Item</th>
-              <th className="py-3 pr-3 font-semibold">Progress</th>
-              <th className="py-3 font-semibold">Actions</th>
+              <th className="w-[14%] py-3 pr-4 font-semibold">Name</th>
+              <th className="w-[28%] py-3 pr-4 font-semibold">Account</th>
+              <th className="w-[10%] py-3 pr-4 font-semibold">Total stickers</th>
+              <th className="w-[18%] py-3 pr-4 font-semibold">Item</th>
+              <th className="w-[12%] py-3 pr-4 font-semibold">Progress</th>
+              <th className="w-[18%] py-3 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -197,7 +197,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
 
               return (
                 <tr key={key} className="border-b border-[var(--color-border)]">
-                  <td className="py-3 pr-3 align-middle">
+                  <td className="py-3 pr-4 align-top">
                     {isEditing ? (
                       <div className="flex flex-wrap items-center gap-2">
                         <input
@@ -234,13 +234,13 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                       </span>
                     )}
                   </td>
-                  <td className="py-3 pr-3 align-middle text-[var(--color-muted)]">
+                  <td className="break-all py-3 pr-4 align-top text-[var(--color-muted)]">
                     {row.accountLabel}
                   </td>
-                  <td className="py-3 pr-3 align-middle font-semibold text-[var(--color-ink)]">
+                  <td className="py-3 pr-4 align-top font-semibold text-[var(--color-ink)]">
                     {row.totalStickers}
                   </td>
-                  <td className="py-3 pr-3 align-middle">
+                  <td className="py-3 pr-4 align-top">
                     <select
                       value={categoryKey}
                       onChange={(e) =>
@@ -249,7 +249,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                           [key]: e.target.value as StickerCategoryKey,
                         }))
                       }
-                      className="border border-[var(--color-border)] bg-white px-2 py-1 text-sm"
+                      className="w-full max-w-full border border-[var(--color-border)] bg-white px-2 py-1 text-sm"
                     >
                       {row.categories.map((cat) => (
                         <option key={cat.key} value={cat.key}>
@@ -258,10 +258,10 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                       ))}
                     </select>
                   </td>
-                  <td className="py-3 pr-3 align-middle font-mono text-[var(--color-ink)]">
+                  <td className="py-3 pr-4 align-top font-mono text-[var(--color-ink)]">
                     {categoryProgress(row, categoryKey)}
                   </td>
-                  <td className="py-3 align-middle">
+                  <td className="py-3 align-top">
                     {row.kind === "sub" ? (
                       <select
                         defaultValue=""
@@ -269,7 +269,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                           handleAction(row, e.target.value);
                           e.target.value = "";
                         }}
-                        className="border border-[var(--color-border)] bg-white px-2 py-1 text-sm"
+                        className="w-full max-w-full border border-[var(--color-border)] bg-white px-2 py-1 text-sm"
                       >
                         <option value="" disabled>
                           Choose…
@@ -289,7 +289,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
 
             {addingReader && (
               <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
-                <td className="py-3 pr-3 align-middle" colSpan={6}>
+                <td className="py-3 pr-4 align-middle" colSpan={6}>
                   <div className="flex flex-wrap items-center gap-2">
                     <input
                       type="text"

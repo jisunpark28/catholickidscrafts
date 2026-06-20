@@ -142,7 +142,7 @@ export async function loadAccountDashboardReaders(familyAccountId: string): Prom
     id: null,
     kind: "owner",
     displayName: ownerName,
-    accountLabel: "Main",
+    accountLabel: account.email,
     active: true,
     ...ownerStats,
   };
@@ -157,7 +157,9 @@ export async function loadAccountDashboardReaders(familyAccountId: string): Prom
         id: sub.id,
         kind: "sub" as const,
         displayName: sub.displayName,
-        accountLabel: sub.accessCodeLast4 ? `…${sub.accessCodeLast4}` : "Access ID",
+        accountLabel: sub.accessCodeLast4
+          ? `Access ID ····${sub.accessCodeLast4}`
+          : "Access ID",
         active: sub.active,
         ...stats,
       };

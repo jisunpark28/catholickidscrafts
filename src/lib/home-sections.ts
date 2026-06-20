@@ -1,4 +1,4 @@
-import { DEFAULT_HOME_SECTIONS } from "@/lib/home-sections-defaults";
+import { DEFAULT_HOME_SECTIONS, sortHomeSectionsByTitle } from "@/lib/home-sections-defaults";
 import { normalizeHubHref } from "@/lib/hub-href";
 import { prisma } from "@/lib/prisma";
 
@@ -36,7 +36,7 @@ export async function getPublishedHomeSections(): Promise<HomeSectionWithItems[]
           href: normalizeHubHref(item.href),
         })),
       }));
-    if (published.length > 0) return published;
+    if (published.length > 0) return sortHomeSectionsByTitle(published);
     return DEFAULT_HOME_SECTIONS;
   } catch {
     return DEFAULT_HOME_SECTIONS;
