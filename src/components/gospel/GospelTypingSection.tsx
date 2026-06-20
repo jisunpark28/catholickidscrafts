@@ -1,9 +1,8 @@
 "use client";
 
 import { PassageTypingGame } from "@/components/PassageTypingGame";
-import { HOME_HUB_CONTENT_CLASS, HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
+import { HOME_HUB_NARROW_CONTENT_CLASS, HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
-import { toDateKey } from "@/lib/dates";
 import type { UniversalisMassDay } from "@/lib/universalis";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -34,9 +33,15 @@ export function GospelTypingSection({
     setError("");
     try {
       const res = await fetch(`/api/universalis-readings/${todayDate}`);
-      const data = await res.json();
+      const text = await res.text();
+      let data: UniversalisMassDay & { error?: string };
+      try {
+        data = text ? (JSON.parse(text) as typeof data) : ({} as typeof data);
+      } catch {
+        throw new Error("Could not load readings");
+      }
       if (!res.ok) throw new Error(data.error ?? "Could not load readings");
-      setDay(data as UniversalisMassDay);
+      setDay(data);
     } catch (e) {
       setDay(null);
       setError(e instanceof Error ? e.message : "Could not load readings");
@@ -74,7 +79,7 @@ export function GospelTypingSection({
   );
 
   return (
-    <section className={`${HOME_HUB_CONTENT_CLASS} space-y-4`}>
+    <section className={`${HOME_HUB_NARROW_CONTENT_CLASS} space-y-4`}>
       <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
         Today&apos;s Gospel
       </h2>

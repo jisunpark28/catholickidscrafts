@@ -1,5 +1,5 @@
 import { GospelHub } from "@/components/gospel/GospelHub";
-import { todayUtc, toDateKey } from "@/lib/dates";
+import { todayUniversalis, toDateKey } from "@/lib/dates";
 import {
   getGospelCompletedDateKeys,
   isSignedInReader,
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TodaysGospelPage() {
-  const today = todayUtc();
+  const today = todayUniversalis();
   const todayDate = toDateKey(today);
   const year = today.getUTCFullYear();
   const month = today.getUTCMonth() + 1;

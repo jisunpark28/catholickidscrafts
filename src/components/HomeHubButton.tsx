@@ -97,14 +97,18 @@ export function HomeHubMenuButton({
 }
 
 /**
- * Home hub widths (fixed rem — do not use ad-hoc max-w-* elsewhere).
- * Section pills are always exactly 2× Daily Mass.
+ * Home hub widths (fixed — do not use ad-hoc max-w-* elsewhere).
+ * Daily Mass pill: ~half row, capped at md (original home design).
+ * Section pills: exactly 2× Daily Mass max width.
  */
-export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-full max-w-[20rem]";
-export const HOME_HUB_SECTIONS_WIDTH_CLASS = "mx-auto w-full max-w-[40rem]";
+export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-1/2 min-w-[9rem] max-w-md";
+export const HOME_HUB_SECTIONS_WIDTH_CLASS = "mx-auto w-full max-w-[56rem]";
 
-/** Sub-page panels (gospel typing, notices) — same as section pill row. */
-export const HOME_HUB_CONTENT_CLASS = HOME_HUB_SECTIONS_WIDTH_CLASS;
+/** Gospel sign-in notice, typing panel — same width as Daily Mass pill (not full row). */
+export const HOME_HUB_NARROW_CONTENT_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
+
+/** @deprecated Prefer HOME_HUB_NARROW_CONTENT_CLASS for gospel sub-pages. */
+export const HOME_HUB_CONTENT_CLASS = HOME_HUB_NARROW_CONTENT_CLASS;
 
 /** Inset panel styling aligned with hub pill borders. */
 export const HOME_HUB_PANEL_CLASS =
