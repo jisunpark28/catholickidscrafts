@@ -1,17 +1,14 @@
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
-import { BibleReaderNotice } from "@/components/bible/BibleReaderNotice";
 import { HomeHubButtonLink } from "@/components/HomeHubButton";
 import type { BibleBookMeta } from "@/lib/bible/latinprayer";
-import type { ReaderDisplay } from "@/lib/reader-display";
 
 type Props = {
   title: string;
   description: string;
   books: BibleBookMeta[];
-  reader: ReaderDisplay;
 };
 
-export function BibleTestamentHub({ title, description, books, reader }: Props) {
+export function BibleTestamentHub({ title, description, books }: Props) {
   return (
     <BibleHubShell>
       <section className="space-y-6">
@@ -21,8 +18,6 @@ export function BibleTestamentHub({ title, description, books, reader }: Props) 
           </h1>
           <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{description}</p>
         </div>
-
-        <BibleReaderNotice reader={reader} />
 
         <div>
           <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">

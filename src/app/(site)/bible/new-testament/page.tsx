@@ -1,6 +1,5 @@
 import { BibleTestamentHub } from "@/components/bible/BibleTestamentHub";
 import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
-import { getReaderDisplay } from "@/lib/reader-display";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
@@ -11,10 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NewTestamentPage() {
-  const [books, reader] = await Promise.all([
-    fetchBibleBooks().catch(() => []),
-    getReaderDisplay(),
-  ]);
+  const books = await fetchBibleBooks().catch(() => []);
   const ntBooks = booksByTestament(books, "NT");
 
   return (
@@ -22,7 +18,6 @@ export default async function NewTestamentPage() {
       title="New Testament"
       description="Choose a book to read chapter by chapter. Type with 90% accuracy to earn praise stickers."
       books={ntBooks}
-      reader={reader}
     />
   );
 }

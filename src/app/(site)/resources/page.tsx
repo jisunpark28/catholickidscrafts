@@ -45,11 +45,7 @@ export default async function ResourcesPage({ searchParams }: Props) {
 
     return (
       <PageShell wide>
-        <PageHeader
-          title={copyText(copy, "resources.page.title", "Kids Resources")}
-          subtitle={copyText(copy, "resources.page.subtitle", "")}
-          programNote={copyText(copy, "resources.page.program_note", "")}
-        />
+        <PageHeader title={copyText(copy, "resources.page.title", "Kids Resources")} />
 
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>
           <ResourcesToolbar />
@@ -94,11 +90,7 @@ export default async function ResourcesPage({ searchParams }: Props) {
 
   return (
     <PageShell wide>
-      <PageHeader
-        title={copyText(copy, "resources.page.title", "Kids Resources")}
-        subtitle={copyText(copy, "resources.page.subtitle", "")}
-        programNote={copyText(copy, "resources.page.program_note", "")}
-      />
+      <PageHeader title={copyText(copy, "resources.page.title", "Kids Resources")} />
 
       <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading search…</p>}>
         <ResourcesToolbar />
