@@ -48,28 +48,23 @@ async function stickerStatsForScope(
   const totals = bibleTotals(books);
   const year = new Date().getFullYear();
 
-  const bibleWhere =
+  const readerWhere =
     scope.kind === "owner"
       ? { familyAccountId: scope.familyAccountId }
       : { subProfileId: scope.subProfileId };
 
-  const gospelWhere =
-    scope.kind === "owner"
-      ? {
-          familyAccountId: scope.familyAccountId,
-          dateKey: { startsWith: `${year}-` },
-        }
-      : {
-          subProfileId: scope.subProfileId,
-          dateKey: { startsWith: `${year}-` },
-        };
+  const gospelYearWhere = {
+    ...readerWhere,
+    dateKey: { startsWith: `${year}-` },
+  };
 
-  const [bibleRows, gospelCount] = await Promise.all([
+  const [bibleRows, gospelYearCount, gospelAllCount] = await Promise.all([
     prisma.bibleChapterProgress.findMany({
-      where: bibleWhere,
+      where: readerWhere,
       select: { bookSlug: true },
     }),
-    prisma.gospelDayProgress.count({ where: gospelWhere }),
+    prisma.gospelDayProgress.count({ where: gospelYearWhere }),
+    prisma.gospelDayProgress.count({ where: readerWhere }),
   ]);
 
   let otCompleted = 0;
@@ -80,7 +75,7 @@ async function stickerStatsForScope(
   }
 
   const bibleCompleted = bibleRows.length;
-  const totalStickers = bibleCompleted + gospelCount;
+  const totalStickers = bibleCompleted + gospelAllCount;
 
   return {
     totalStickers,
@@ -106,7 +101,7 @@ async function stickerStatsForScope(
       {
         key: "gospel",
         label: "Gospel",
-        completed: gospelCount,
+        completed: gospelYearCount,
         total: daysInYear(year),
       },
     ],
