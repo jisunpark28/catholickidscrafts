@@ -84,3 +84,22 @@ export function clearFamilyCookies(res: NextResponse) {
   res.cookies.set(FAMILY_SESSION_COOKIE, "", { path: "/", maxAge: 0 });
   res.cookies.set(READER_SESSION_COOKIE, "", { path: "/", maxAge: 0 });
 }
+
+/** Restore reader cookie when parent is signed in but reader cookie was missing. */
+export async function ensureOwnerReaderCookie(
+  res: NextResponse,
+  familyAccountId: string,
+): Promise<void> {
+  const jar = await cookies();
+  if (jar.get(READER_SESSION_COOKIE)?.value?.trim()) return;
+
+  const token = await signReaderSession({ type: "owner", familyAccountId });
+  const readerOpts = readerCookieOptions(token);
+  res.cookies.set(readerOpts.name, readerOpts.value, {
+    httpOnly: readerOpts.httpOnly,
+    sameSite: readerOpts.sameSite,
+    secure: readerOpts.secure,
+    path: readerOpts.path,
+    maxAge: readerOpts.maxAge,
+  });
+}
