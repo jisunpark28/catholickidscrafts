@@ -1,21 +1,17 @@
 "use client";
 
+import { HomeHubAccountMenu } from "@/components/HomeHubAccountMenu";
 import { HomeLearnSearch } from "@/components/HomeLearnSearch";
-import { HomeHubMenuButton } from "@/components/HomeHubButton";
 import { SiteLogo } from "@/components/SiteLogo";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useId, useState } from "react";
+import { useId } from "react";
 
 export function HomeHubHeader() {
-  const pathname = usePathname() ?? "";
   const copy = useSiteCopy();
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
-  const [menuOpen, setMenuOpen] = useState(false);
   const searchResultsSlotId = useId();
 
-  const nav = [
+  const siteNav = [
     { href: "/mass", label: t("global.nav.mass", "Daily Mass") },
     { href: "/play", label: t("global.nav.play", "Play") },
     { href: "/curriculum", label: t("global.nav.curriculum", "Curriculum") },
@@ -24,13 +20,7 @@ export function HomeHubHeader() {
       href: "/recommendations",
       label: t("global.nav.recommendations", "Recommendations"),
     },
-    { href: "/account/login", label: "Family account" },
-    { href: "/reader/login", label: "Reader sign-in" },
   ];
-
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e8dccf] bg-[#f5ebe0]">
@@ -49,34 +39,11 @@ export function HomeHubHeader() {
           </div>
 
           <div className="col-start-3 row-start-1 flex justify-end">
-            <HomeHubMenuButton onClick={() => setMenuOpen((v) => !v)} ariaExpanded={menuOpen}>
-              Menu
-            </HomeHubMenuButton>
+            <HomeHubAccountMenu siteNav={siteNav} />
           </div>
 
           <div id={searchResultsSlotId} className="col-span-3 row-start-2" />
         </div>
-
-        {menuOpen && (
-          <nav
-            id="home-hub-menu"
-            className="mt-3 rounded-2xl border border-[#e8e0d6] bg-white/90 px-4 py-3 shadow-sm backdrop-blur-sm"
-          >
-            <ul className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-1">
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="block rounded-lg px-1 py-2 text-sm font-medium text-[var(--color-ink)] transition hover:text-[var(--color-accent)]"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
       </div>
     </header>
   );

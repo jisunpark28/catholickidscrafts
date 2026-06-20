@@ -72,16 +72,21 @@ export function HomeHubButton({
   );
 }
 
-/** Header MENU control — matches hub button height rhythm. */
+/** Header account / menu control — matches hub button height rhythm. */
 export function HomeHubMenuButton({
   children,
   onClick,
   ariaExpanded,
+  ariaControls,
+  authLabel = false,
   className = "",
 }: {
   children: React.ReactNode;
   onClick?: () => void;
   ariaExpanded?: boolean;
+  ariaControls?: string;
+  /** When true, use normal case (user name) instead of MENU uppercase. */
+  authLabel?: boolean;
   className?: string;
 }) {
   return (
@@ -89,7 +94,12 @@ export function HomeHubMenuButton({
       type="button"
       onClick={onClick}
       aria-expanded={ariaExpanded}
-      className={`inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-3 min-h-[2.75rem] text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-sm transition hover:border-[#d9cfc3] hover:bg-white sm:min-h-[3rem] sm:px-6 sm:text-sm ${className}`}
+      aria-controls={ariaControls}
+      className={`inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-3 min-h-[2.75rem] shadow-sm transition hover:border-[#d9cfc3] hover:bg-white sm:min-h-[3rem] sm:px-6 ${
+        authLabel
+          ? "text-sm font-semibold normal-case tracking-normal text-[var(--color-ink)]"
+          : "text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] sm:text-sm"
+      } ${className}`}
     >
       {children}
     </button>
