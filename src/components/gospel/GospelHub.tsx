@@ -21,7 +21,7 @@ export function GospelHub({ signedIn, initialCompleted, todayDate }: Props) {
   }
 
   return (
-    <BibleHubShell>
+    <BibleHubShell showBack={false}>
       <MyReadingCalendarPanel
         signedIn={signedIn}
         initialCompleted={completed}

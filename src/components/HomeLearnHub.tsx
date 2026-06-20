@@ -1,4 +1,5 @@
 import { DailyMassPanel } from "@/components/DailyMassPanel";
+import { HubPillWidth } from "@/components/HubPillWidth";
 import { HomeNavPill } from "@/components/HomeNavPill";
 import type { HomeSectionWithItems } from "@/lib/home-sections";
 import type { MonthCalendar } from "@/types/mass";
@@ -30,12 +31,14 @@ export function HomeLearnHub({
       <div className="relative z-30 space-y-10">
         {sections.map((section) => (
           <section key={section.id} aria-labelledby={`home-section-${section.id}`}>
-            <h2
-              id={`home-section-${section.id}`}
-              className="mb-3 text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]"
-            >
-              {section.title}
-            </h2>
+            <HubPillWidth>
+              <h2
+                id={`home-section-${section.id}`}
+                className="mb-3 text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]"
+              >
+                {section.title}
+              </h2>
+            </HubPillWidth>
             <div className="flex flex-col gap-3">
               {section.items.map((item) => (
                 <HomeNavPill key={item.id} href={item.href}>

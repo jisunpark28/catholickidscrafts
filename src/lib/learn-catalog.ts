@@ -145,8 +145,8 @@ export async function searchLearnCatalog(query: string): Promise<LearnSearchResu
 
   const bibleStatic = [
     { title: "Today's Gospel", excerpt: "Bible reading", href: "/gospel" },
-    { title: "Old Testament", excerpt: "73-book Catholic Bible", href: "/bible/old-testament" },
-    { title: "New Testament", excerpt: "73-book Catholic Bible", href: "/bible/new-testament" },
+    { title: "Old Testament", excerpt: "73-book Catholic Bible", href: "/bible/genesis" },
+    { title: "New Testament", excerpt: "73-book Catholic Bible", href: "/bible/matthew" },
   ];
   for (const entry of bibleStatic) {
     const score = scoreMatch(q, entry.title, entry.excerpt);

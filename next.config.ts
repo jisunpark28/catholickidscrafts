@@ -27,12 +27,22 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/old-testament",
-        destination: "/bible/old-testament",
+        destination: "/bible/genesis",
+        permanent: true,
+      },
+      {
+        source: "/bible/old-testament",
+        destination: "/bible/genesis",
         permanent: true,
       },
       {
         source: "/new-testament",
-        destination: "/bible/new-testament",
+        destination: "/bible/matthew",
+        permanent: true,
+      },
+      {
+        source: "/bible/new-testament",
+        destination: "/bible/matthew",
         permanent: true,
       },
     ];

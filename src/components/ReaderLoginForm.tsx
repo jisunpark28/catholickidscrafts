@@ -24,7 +24,7 @@ export function ReaderLoginForm() {
       setError(data.error ?? "Access ID not recognized");
       return;
     }
-    router.push("/bible/old-testament");
+    router.push("/bible/genesis");
     router.refresh();
   }
 

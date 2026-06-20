@@ -23,3 +23,13 @@ export const HUB_PILL_CONTAINER_STYLE: CSSProperties = {
   marginRight: "auto",
   boxSizing: "border-box",
 };
+
+/** Typing panels — 2× hub pill width. */
+export const HUB_TYPING_CONTAINER_STYLE: CSSProperties = {
+  width: "56rem",
+  maxWidth: "100%",
+  minWidth: "9rem",
+  marginLeft: "auto",
+  marginRight: "auto",
+  boxSizing: "border-box",
+};

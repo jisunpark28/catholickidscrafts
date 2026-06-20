@@ -2,7 +2,7 @@
 
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
-import { HubPillWidth } from "@/components/HubPillWidth";
+import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import type { UniversalisMassDay } from "@/lib/universalis";
 import type { ReadingKind } from "@/types/mass";
@@ -99,7 +99,7 @@ export function GospelTypingSection({
   );
 
   return (
-    <HubPillWidth className="space-y-4">
+    <HubTypingWidth className="space-y-4">
       <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
         Today&apos;s Readings
       </h2>
@@ -120,18 +120,6 @@ export function GospelTypingSection({
 
       {canType && day && !loading && !error && (
         <>
-          <p className="text-sm text-[var(--color-muted)]">
-            {day.liturgicalTitle ?? todayDate} · Text from{" "}
-            <a
-              href={day.pageUrl ?? "https://universalis.com/"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-[var(--color-link)]"
-            >
-              Universalis
-            </a>
-          </p>
-
           <fieldset className="text-sm font-semibold">
             <legend className="mb-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
               Choose a reading
@@ -211,6 +199,6 @@ export function GospelTypingSection({
           )}
         </>
       )}
-    </HubPillWidth>
+    </HubTypingWidth>
   );
 }

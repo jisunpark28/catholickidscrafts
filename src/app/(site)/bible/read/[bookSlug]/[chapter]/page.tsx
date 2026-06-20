@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { BibleChapterTyping } from "@/components/BibleChapterTyping";
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
-import { HubPillWidth } from "@/components/HubPillWidth";
+import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { chapterPlainText, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -35,7 +35,7 @@ export default async function BibleReadPage({ params }: Props) {
       backHref={`/bible/${bookSlug}`}
       backLabel={`← ${data.meta.book.name}`}
     >
-      <HubPillWidth className="space-y-4">
+      <HubTypingWidth className="space-y-4">
         <div>
           <h1 className="text-xl font-semibold text-[var(--color-ink)] sm:text-2xl">
             {data.meta.book.name} — Chapter {data.meta.chapter}
@@ -49,7 +49,7 @@ export default async function BibleReadPage({ params }: Props) {
           text={text}
           citation={data.citation}
         />
-      </HubPillWidth>
+      </HubTypingWidth>
     </BibleHubShell>
   );
 }
