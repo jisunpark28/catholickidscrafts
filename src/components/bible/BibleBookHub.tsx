@@ -23,8 +23,14 @@ export function BibleBookHub({
   completedChapters,
   reader,
 }: Props) {
+  const showTestamentBack = book.slug !== "genesis" && book.slug !== "matthew";
+
   return (
-    <BibleHubShell backHref={testamentHref} backLabel={`← ${testamentLabel}`}>
+    <BibleHubShell
+      showBack={showTestamentBack}
+      backHref={testamentHref}
+      backLabel={`← ${testamentLabel}`}
+    >
       <HubTypingWidth className="space-y-4">
         <div>
           <h1 className="text-2xl font-semibold text-[var(--color-ink)] sm:text-3xl">{book.name}</h1>
