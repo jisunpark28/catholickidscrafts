@@ -34,15 +34,13 @@ def main() -> None:
         print(f"Wrote {path} ({size}x{size})")
 
     favicon_app = ROOT / "src" / "app" / "favicon.ico"
-    favicon_public = ROOT / "public" / "favicon.ico"
     master = square_icon(48)
     master.save(
         favicon_app,
         format="ICO",
         sizes=[(16, 16), (32, 32), (48, 48)],
     )
-    favicon_public.write_bytes(favicon_app.read_bytes())
-    print(f"Wrote {favicon_app} and {favicon_public} (16/32/48)")
+    print(f"Wrote {favicon_app} (16/32/48)")
 
 
 if __name__ == "__main__":

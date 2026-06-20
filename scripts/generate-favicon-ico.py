@@ -10,7 +10,6 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "public" / "icon.png"
 OUTPUTS = [
-    ROOT / "public" / "favicon.ico",
     ROOT / "src" / "app" / "favicon.ico",
 ]
 SIZES = [(16, 16), (32, 32), (48, 48), (64, 64), (96, 96)]

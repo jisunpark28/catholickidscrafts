@@ -14,16 +14,16 @@ export async function recordPublicVisit(visitorId: string): Promise<void> {
     update: { pageViews: { increment: 1 } },
   });
 
-  try {
-    await prisma.trafficVisitorDay.create({
-      data: { visitorId, date },
-    });
+  const created = await prisma.trafficVisitorDay.createMany({
+    data: [{ visitorId, date }],
+    skipDuplicates: true,
+  });
+
+  if (created.count > 0) {
     await prisma.trafficDay.update({
       where: { date },
       data: { uniqueVisitors: { increment: 1 } },
     });
-  } catch {
-    // Already counted this visitor today (composite primary key).
   }
 }
 
