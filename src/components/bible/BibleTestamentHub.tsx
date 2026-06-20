@@ -14,7 +14,7 @@ type Props = {
 export function BibleTestamentHub({ title, description, books, reader }: Props) {
   return (
     <BibleHubShell>
-      <section className={`${HOME_HUB_SECTIONS_WIDTH_CLASS} space-y-6`}>
+      <section className="space-y-6">
         <div>
           <h1 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
             {title}
@@ -28,14 +28,16 @@ export function BibleTestamentHub({ title, description, books, reader }: Props) 
           <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
             Choose a book
           </h2>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col items-center gap-3">
             {books.map((book) => (
-              <HomeHubButtonLink key={book.slug} href={`/bible/${book.slug}`}>
-                {book.name}
-                <span className="ml-2 text-sm font-normal opacity-70">
-                  ({book.totalChapters} chapters)
-                </span>
-              </HomeHubButtonLink>
+              <div key={book.slug} className={`${HOME_HUB_SECTIONS_WIDTH_CLASS} relative z-30`}>
+                <HomeHubButtonLink href={`/bible/${book.slug}`}>
+                  {book.name}
+                  <span className="ml-2 text-sm font-normal opacity-70">
+                    ({book.totalChapters} chapters)
+                  </span>
+                </HomeHubButtonLink>
+              </div>
             ))}
           </div>
         </div>

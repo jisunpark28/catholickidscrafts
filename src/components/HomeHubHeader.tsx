@@ -42,7 +42,10 @@ export function HomeHubHeader() {
             <HomeHubAccountMenu siteNav={siteNav} />
           </div>
 
-          <div id={searchResultsSlotId} className="col-span-3 row-start-2" />
+          <div
+            id={searchResultsSlotId}
+            className="pointer-events-none col-span-3 row-start-2 [&>*]:pointer-events-auto"
+          />
         </div>
       </div>
     </header>

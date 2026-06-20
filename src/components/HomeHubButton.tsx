@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { normalizeHubHref } from "@/lib/hub-href";
 
 type BaseProps = {
@@ -43,13 +42,12 @@ export function HomeHubButtonLink({
   const safeHref = normalizeHubHref(href);
 
   return (
-    <Link
+    <a
       href={safeHref}
-      prefetch
-      className={`relative z-20 block cursor-pointer ${classes(variant, className)}`}
+      className={`relative z-30 block cursor-pointer no-underline ${classes(variant, className)}`}
     >
       {children}
-    </Link>
+    </a>
   );
 }
 
@@ -107,12 +105,10 @@ export function HomeHubMenuButton({
 }
 
 /**
- * Home hub widths (fixed — do not use ad-hoc max-w-* elsewhere).
- * Daily Mass pill: ~half row, capped at md (original home design).
- * Section pills: exactly 2× Daily Mass max width.
+ * Home hub widths — fixed rem caps (not viewport %). Section pills = 2× Daily Mass.
  */
-export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-1/2 min-w-[9rem] max-w-md";
-export const HOME_HUB_SECTIONS_WIDTH_CLASS = "mx-auto w-full max-w-[56rem]";
+export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-[28rem] max-w-full";
+export const HOME_HUB_SECTIONS_WIDTH_CLASS = "mx-auto w-[56rem] max-w-full";
 
 /** Gospel typing panel — 2× Daily Mass pill width. */
 export const HOME_HUB_TYPING_WIDTH_CLASS = HOME_HUB_SECTIONS_WIDTH_CLASS;

@@ -28,7 +28,7 @@ export function HomeLearnHub({
         todayDate={todayDate}
       />
 
-      <div className={`${HOME_HUB_SECTIONS_WIDTH_CLASS} relative z-20 space-y-10`}>
+      <div className="relative z-30 space-y-10">
         {sections.map((section) => (
           <section key={section.id} aria-labelledby={`home-section-${section.id}`}>
             <h2
@@ -37,11 +37,11 @@ export function HomeLearnHub({
             >
               {section.title}
             </h2>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col items-center gap-3">
               {section.items.map((item) => (
-                <HomeNavPill key={item.id} href={item.href}>
-                  {item.title}
-                </HomeNavPill>
+                <div key={item.id} className={`${HOME_HUB_SECTIONS_WIDTH_CLASS} relative z-30`}>
+                  <HomeNavPill href={item.href}>{item.title}</HomeNavPill>
+                </div>
               ))}
             </div>
           </section>
