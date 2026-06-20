@@ -21,14 +21,12 @@ export function MyReadingCalendarPanel({
 
   return (
     <section className="mb-8">
-      <div className="flex justify-center">
-        <HomeHubButton variant="primary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+      <HomeHubButton variant="primary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
           <span>My Reading Calendar</span>
           <span className="text-sm font-normal opacity-60" aria-hidden>
             {open ? "▲" : "▼"}
           </span>
-        </HomeHubButton>
-      </div>
+      </HomeHubButton>
       {open && (
         <div className="mt-6 w-full">
           <GospelReadingCalendar

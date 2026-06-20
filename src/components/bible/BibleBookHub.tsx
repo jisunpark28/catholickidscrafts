@@ -2,7 +2,7 @@ import { BibleBookSelect } from "@/components/BibleBookSelect";
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
 import { BibleReaderNotice } from "@/components/bible/BibleReaderNotice";
 import { BibleStickerGrid } from "@/components/BibleStickerGrid";
-import { HOME_HUB_DAILY_MASS_WIDTH_CLASS } from "@/components/HomeHubButton";
+import { HubPillWidth } from "@/components/HubPillWidth";
 import type { BibleBookMeta } from "@/lib/bible/latinprayer";
 import type { ReaderDisplay } from "@/lib/reader-display";
 
@@ -25,7 +25,7 @@ export function BibleBookHub({
 }: Props) {
   return (
     <BibleHubShell backHref={testamentHref} backLabel={`← ${testamentLabel}`}>
-      <section className={`${HOME_HUB_DAILY_MASS_WIDTH_CLASS} space-y-4`}>
+      <HubPillWidth className="space-y-4">
         <div>
           <h1 className="text-2xl font-semibold text-[var(--color-ink)] sm:text-3xl">{book.name}</h1>
           <p className="mt-1 text-sm text-[var(--color-muted)]">
@@ -43,7 +43,7 @@ export function BibleBookHub({
           chapterCount={book.totalChapters}
           completedChapters={completedChapters}
         />
-      </section>
+      </HubPillWidth>
     </BibleHubShell>
   );
 }

@@ -36,7 +36,7 @@ export function HomeLearnHub({
             >
               {section.title}
             </h2>
-            <div className="flex flex-col items-center gap-3">
+            <div className="flex flex-col gap-3">
               {section.items.map((item) => (
                 <HomeNavPill key={item.id} href={item.href}>
                   {item.title}

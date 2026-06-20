@@ -17,14 +17,12 @@ export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Pro
 
   return (
     <section className="mb-10">
-      <div className="flex justify-center">
-        <HomeHubButton variant="primary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+      <HomeHubButton variant="primary" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
           <span>{label}</span>
           <span className="text-sm font-normal opacity-60" aria-hidden>
             {open ? "▲" : "▼"}
           </span>
-        </HomeHubButton>
-      </div>
+      </HomeHubButton>
       {open && (
         <div className="relative z-10 mt-6 w-full">
           <MassCalendar initial={calendar} selectedDate={selectedDate} todayDate={todayDate} />

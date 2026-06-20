@@ -10,7 +10,7 @@ type Props = {
 export function BibleHubShell({ children, backHref = "/", backLabel = "← Home" }: Props) {
   return (
     <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-8 sm:py-10">
-      <div className="mb-8 flex justify-center">
+      <div className="mb-8">
         <HomeHubButtonLink
           href={backHref}
           variant="outline"

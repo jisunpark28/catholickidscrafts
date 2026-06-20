@@ -1,5 +1,6 @@
 "use client";
 
+import { HUB_PILL_STYLE } from "@/lib/hub-pill-style";
 import { normalizeHubHref } from "@/lib/hub-href";
 
 type BaseProps = {
@@ -9,7 +10,7 @@ type BaseProps = {
 };
 
 const shell =
-  "ckc-hub-pill relative z-30 flex items-center justify-center gap-2 rounded-2xl border px-6 py-3.5 min-h-[3.25rem] text-center text-base font-semibold tracking-tight transition duration-200 touch-manipulation sm:min-h-[3.5rem] sm:text-lg";
+  "relative z-30 items-center justify-center gap-2 rounded-2xl border px-6 py-3.5 min-h-[3.25rem] text-center text-base font-semibold tracking-tight transition duration-200 touch-manipulation sm:min-h-[3.5rem] sm:text-lg";
 
 const variants = {
   primary:
@@ -32,7 +33,7 @@ type ButtonProps = BaseProps & {
   "aria-expanded"?: boolean;
 };
 
-/** Unified home hub pill — same fixed width as Daily Mass on every page (not header). */
+/** Unified home hub pill — same size as Daily Mass on every page (header excluded). */
 export function HomeHubButtonLink({
   href,
   children,
@@ -42,7 +43,11 @@ export function HomeHubButtonLink({
   const safeHref = normalizeHubHref(href);
 
   return (
-    <a href={safeHref} className={`block cursor-pointer no-underline ${classes(variant, className)}`}>
+    <a
+      href={safeHref}
+      style={HUB_PILL_STYLE}
+      className={`cursor-pointer no-underline ${classes(variant, className)}`}
+    >
       {children}
     </a>
   );
@@ -60,6 +65,7 @@ export function HomeHubButton({
       type="button"
       onClick={onClick}
       aria-expanded={ariaExpanded}
+      style={HUB_PILL_STYLE}
       className={classes(variant, className)}
     >
       {children}
@@ -100,10 +106,8 @@ export function HomeHubMenuButton({
   );
 }
 
-/** Panels/notices aligned to hub pill width — use on non-button blocks only. */
+/** @deprecated Use HUB_PILL_CONTAINER_STYLE via HubPillWidth or inline style */
 export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "ckc-hub-pill-width";
-
-/** @deprecated Use HOME_HUB_DAILY_MASS_WIDTH_CLASS */
 export const HOME_HUB_SECTIONS_WIDTH_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
 export const HOME_HUB_TYPING_WIDTH_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
 export const HOME_HUB_NARROW_CONTENT_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;

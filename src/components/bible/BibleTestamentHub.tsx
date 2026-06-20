@@ -28,7 +28,7 @@ export function BibleTestamentHub({ title, description, books, reader }: Props) 
           <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
             Choose a book
           </h2>
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col gap-3">
             {books.map((book) => (
               <HomeHubButtonLink key={book.slug} href={`/bible/${book.slug}`}>
                 {book.name}
