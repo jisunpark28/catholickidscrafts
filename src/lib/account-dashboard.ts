@@ -124,6 +124,7 @@ export async function loadAccountDashboardReaders(familyAccountId: string): Prom
         id: true,
         displayName: true,
         accessCodeLast4: true,
+        accessCodeDisplay: true,
         active: true,
       },
     }),
@@ -157,9 +158,11 @@ export async function loadAccountDashboardReaders(familyAccountId: string): Prom
         id: sub.id,
         kind: "sub" as const,
         displayName: sub.displayName,
-        accountLabel: sub.accessCodeLast4
-          ? `Access ID ····${sub.accessCodeLast4}`
-          : "Access ID",
+        accountLabel: sub.accessCodeDisplay
+          ? sub.accessCodeDisplay
+          : sub.accessCodeLast4
+            ? `CKC-····-${sub.accessCodeLast4}`
+            : "Access ID",
         active: sub.active,
         ...stats,
       };

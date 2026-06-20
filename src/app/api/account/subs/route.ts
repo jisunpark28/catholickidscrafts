@@ -79,6 +79,7 @@ export async function POST(request: Request) {
       accessCodeHash,
       accessCodeLookup: accessCodeLookupKey(normalized),
       accessCodeLast4: accessCodeLast4(normalized),
+      accessCodeDisplay: normalized,
       sortOrder: count,
       active: true,
     },

@@ -234,7 +234,11 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                       </span>
                     )}
                   </td>
-                  <td className="break-all py-3 pr-4 align-top text-[var(--color-muted)]">
+                  <td
+                    className={`break-all py-3 pr-4 align-top ${
+                      row.kind === "sub" ? "font-mono text-sm text-[var(--color-ink)]" : "text-[var(--color-muted)]"
+                    }`}
+                  >
                     {row.accountLabel}
                   </td>
                   <td className="py-3 pr-4 align-top font-semibold text-[var(--color-ink)]">
