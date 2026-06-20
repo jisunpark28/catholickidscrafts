@@ -1,5 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { getReaderKey, type ReaderKey } from "@/lib/bible/reader";
+import {
+  BIBLE_GUEST_COOKIE,
+  getGuestIdFromCookies,
+  getReaderKey,
+  type ReaderKey,
+} from "@/lib/bible/reader";
+import type { NextResponse } from "next/server";
 
 function progressWhere(key: ReaderKey, bookSlug?: string) {
   if (key.type === "guest") {
@@ -117,5 +123,19 @@ export async function mergeGuestProgressIntoReader(
   }
 
   await prisma.bibleChapterProgress.deleteMany({ where: { guestId } });
+}
+
+/** Merge anonymous guest stickers when the active reader is signed in. */
+export async function attachGuestProgressIfAny(
+  key: Exclude<ReaderKey, { type: "guest" }>,
+): Promise<boolean> {
+  const guestId = await getGuestIdFromCookies();
+  if (!guestId) return false;
+  await mergeGuestProgressIntoReader(guestId, key);
+  return true;
+}
+
+export function clearGuestProgressCookie(res: NextResponse) {
+  res.cookies.set(BIBLE_GUEST_COOKIE, "", { path: "/", maxAge: 0 });
 }
 

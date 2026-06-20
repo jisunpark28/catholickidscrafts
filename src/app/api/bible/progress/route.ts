@@ -1,11 +1,17 @@
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
-import { saveChapterProgress } from "@/lib/bible/progress";
+import {
+  attachGuestProgressIfAny,
+  clearGuestProgressCookie,
+  saveChapterProgress,
+} from "@/lib/bible/progress";
 import {
   BIBLE_GUEST_COOKIE,
   getReaderKey,
   guestCookieOptions,
+  isSignedInReaderKey,
   newGuestId,
 } from "@/lib/bible/reader";
+import { ensureOwnerReaderCookie } from "@/lib/family-auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -70,7 +76,14 @@ export async function POST(request: Request) {
   }
 
   const res = NextResponse.json({ ok: true, chapter, bookSlug });
-  if (setGuestCookie) {
+
+  if (isSignedInReaderKey(key)) {
+    const mergedGuest = await attachGuestProgressIfAny(key);
+    if (mergedGuest) clearGuestProgressCookie(res);
+    if (key.type === "owner") {
+      await ensureOwnerReaderCookie(res, key.familyAccountId);
+    }
+  } else if (setGuestCookie) {
     const opts = guestCookieOptions(setGuestCookie);
     res.cookies.set(opts.name, opts.value, {
       httpOnly: opts.httpOnly,

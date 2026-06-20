@@ -1,10 +1,12 @@
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
+import { attachGuestProgressIfAny, clearGuestProgressCookie } from "@/lib/bible/progress";
+import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
+import { ensureOwnerReaderCookie } from "@/lib/family-auth";
 import {
   getGospelCompletedDateKeys,
   isSignedInReader,
   saveGospelDayProgress,
 } from "@/lib/gospel/progress";
-import { getReaderKey } from "@/lib/bible/reader";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -63,5 +65,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Could not save progress" }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, dateKey });
+  const res = NextResponse.json({ ok: true, dateKey });
+  const mergedGuest = await attachGuestProgressIfAny(key);
+  if (mergedGuest) clearGuestProgressCookie(res);
+  if (key.type === "owner") {
+    await ensureOwnerReaderCookie(res, key.familyAccountId);
+  }
+  return res;
 }

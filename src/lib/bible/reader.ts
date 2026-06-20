@@ -1,4 +1,5 @@
 import { verifyReaderSession, READER_SESSION_COOKIE } from "@/lib/family-session";
+import { getFamilySession } from "@/lib/family-auth";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
 
@@ -12,7 +13,7 @@ export type ReaderKey =
   | { type: "owner"; familyAccountId: string }
   | { type: "sub"; subProfileId: string };
 
-/** Active reader for Bible progress: signed session first, then guest cookie. */
+/** Active reader for Bible progress: reader session, then parent family sign-in, then guest. */
 export async function getReaderKey(): Promise<ReaderKey | null> {
   const jar = await cookies();
 
@@ -27,10 +28,21 @@ export async function getReaderKey(): Promise<ReaderKey | null> {
     }
   }
 
+  const family = await getFamilySession();
+  if (family) {
+    return { type: "owner", familyAccountId: family.familyAccountId };
+  }
+
   const guestId = jar.get(BIBLE_GUEST_COOKIE)?.value?.trim();
   if (guestId) return { type: "guest", guestId };
 
   return null;
+}
+
+export function isSignedInReaderKey(
+  key: ReaderKey | null,
+): key is Exclude<ReaderKey, { type: "guest" }> {
+  return Boolean(key && key.type !== "guest");
 }
 
 export function guestCookieOptions(guestId: string) {
