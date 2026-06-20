@@ -6,10 +6,9 @@ import { useState } from "react";
 
 type Props = {
   redirectTo?: string;
-  googleEnabled?: boolean;
 };
 
-export function FamilyLoginForm({ redirectTo = "/account", googleEnabled = false }: Props) {
+export function FamilyLoginForm({ redirectTo = "/account" }: Props) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -53,7 +52,7 @@ export function FamilyLoginForm({ redirectTo = "/account", googleEnabled = false
       )}
 
       <div className="mt-6">
-        <GoogleFamilySignIn enabled={googleEnabled} from="login" />
+        <GoogleFamilySignIn from="login" />
       </div>
 
       <form onSubmit={onSubmit}>

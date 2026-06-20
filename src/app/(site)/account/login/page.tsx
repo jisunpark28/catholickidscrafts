@@ -2,11 +2,12 @@ import { FamilyLoginForm } from "@/components/FamilyLoginForm";
 import { PageShell } from "@/components/PageShell";
 import { getFamilySession } from "@/lib/family-auth";
 import { googleAuthErrorMessage } from "@/lib/google-auth-messages";
-import { isGoogleSignInConfigured } from "@/lib/google-oauth";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Parent sign-in",
@@ -22,7 +23,6 @@ export default async function AccountLoginPage({ searchParams }: Props) {
 
   const params = await searchParams;
   const googleError = googleAuthErrorMessage(params.error);
-  const googleEnabled = isGoogleSignInConfigured();
 
   return (
     <PageShell>
@@ -36,7 +36,7 @@ export default async function AccountLoginPage({ searchParams }: Props) {
         </p>
       )}
       <div className="mt-8">
-        <FamilyLoginForm googleEnabled={googleEnabled} />
+        <FamilyLoginForm />
       </div>
       <p className="mt-6 text-sm text-[var(--color-muted)]">
         New here?{" "}
