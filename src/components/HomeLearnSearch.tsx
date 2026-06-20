@@ -180,6 +180,7 @@ export function HomeLearnSearch({
             placeholder={isHeader ? "Search…" : "Search resources, curriculum, games, Bible…"}
             className={inputClass}
             autoComplete="off"
+            suppressHydrationWarning
           />
         </div>
 

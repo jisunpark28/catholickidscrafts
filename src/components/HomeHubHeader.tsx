@@ -4,9 +4,14 @@ import { HomeHubAccountMenu } from "@/components/HomeHubAccountMenu";
 import { HomeLearnSearch } from "@/components/HomeLearnSearch";
 import { SiteLogo } from "@/components/SiteLogo";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
+import type { HeaderSessionResponse } from "@/lib/header-session";
 import { useId } from "react";
 
-export function HomeHubHeader() {
+type Props = {
+  initialSession: HeaderSessionResponse;
+};
+
+export function HomeHubHeader({ initialSession }: Props) {
   const copy = useSiteCopy();
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
   const searchResultsSlotId = useId();
@@ -39,7 +44,7 @@ export function HomeHubHeader() {
           </div>
 
           <div className="col-start-3 row-start-1 flex justify-end">
-            <HomeHubAccountMenu siteNav={siteNav} />
+            <HomeHubAccountMenu siteNav={siteNav} initialSession={initialSession} />
           </div>
 
           <div

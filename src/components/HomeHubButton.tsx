@@ -65,6 +65,7 @@ export function HomeHubButton({
       type="button"
       onClick={onClick}
       aria-expanded={ariaExpanded}
+      suppressHydrationWarning
       style={HUB_PILL_STYLE}
       className={classes(variant, className)}
     >
@@ -95,6 +96,7 @@ export function HomeHubMenuButton({
       onClick={onClick}
       aria-expanded={ariaExpanded}
       aria-controls={ariaControls}
+      suppressHydrationWarning
       className={`inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-3 min-h-[2.75rem] shadow-sm transition hover:border-[#d9cfc3] hover:bg-white sm:min-h-[3rem] sm:px-6 ${
         authLabel
           ? "text-sm font-semibold normal-case tracking-normal text-[var(--color-ink)]"

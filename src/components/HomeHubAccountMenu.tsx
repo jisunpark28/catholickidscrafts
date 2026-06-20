@@ -1,25 +1,14 @@
 "use client";
 
 import { HomeHubMenuButton } from "@/components/HomeHubButton";
-import type { HeaderSessionResponse } from "@/lib/header-session";
+import {
+  headerButtonLabel,
+  isHeaderSignedIn,
+  type HeaderSessionResponse,
+} from "@/lib/header-session";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-
-function headerButtonLabel(session: HeaderSessionResponse | null): string {
-  if (!session) return "Sign in";
-  if (session.family) {
-    return session.family.displayName?.trim() || session.family.email;
-  }
-  if (session.reader) {
-    return session.reader.displayName;
-  }
-  return "Sign in";
-}
-
-function isSignedIn(session: HeaderSessionResponse | null): boolean {
-  return Boolean(session?.family || session?.reader);
-}
 
 type MenuLinkProps = {
   href: string;
@@ -49,6 +38,7 @@ function MenuButton({ children, onClick }: MenuButtonProps) {
     <button
       type="button"
       onClick={onClick}
+      suppressHydrationWarning
       className="block w-full rounded-lg px-2 py-2 text-right text-sm font-medium text-[var(--color-ink)] transition hover:bg-[#fdfaf7] hover:text-[var(--color-accent)]"
     >
       {children}
@@ -58,34 +48,36 @@ function MenuButton({ children, onClick }: MenuButtonProps) {
 
 type Props = {
   siteNav: { href: string; label: string }[];
+  initialSession: HeaderSessionResponse;
 };
 
-export function HomeHubAccountMenu({ siteNav }: Props) {
+export function HomeHubAccountMenu({ siteNav, initialSession }: Props) {
   const pathname = usePathname() ?? "";
   const menuId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [session, setSession] = useState<HeaderSessionResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState<HeaderSessionResponse>(initialSession);
 
-  const signedIn = isSignedIn(session);
-  const label = loading ? "…" : headerButtonLabel(session);
+  const signedIn = isHeaderSignedIn(session);
+  const label = headerButtonLabel(session);
 
   const loadSession = useCallback(async () => {
     try {
       const res = await fetch("/api/auth/session", { cache: "no-store" });
       if (!res.ok) {
-        setSession(null);
+        setSession({ family: null, reader: null });
         return;
       }
       const data = (await res.json()) as HeaderSessionResponse;
       setSession(data);
     } catch {
-      setSession(null);
-    } finally {
-      setLoading(false);
+      setSession({ family: null, reader: null });
     }
   }, []);
+
+  useEffect(() => {
+    setSession(initialSession);
+  }, [initialSession]);
 
   useEffect(() => {
     void loadSession();
@@ -139,17 +131,17 @@ export function HomeHubAccountMenu({ siteNav }: Props) {
           className="absolute right-0 top-[calc(100%+0.5rem)] z-[60] min-w-[12rem] max-w-[18rem] rounded-2xl border border-[#e8e0d6] bg-white/95 py-2 pl-4 pr-3 shadow-lg backdrop-blur-sm"
         >
           <div className="text-right">
-            {session?.family && (
+            {session.family && (
               <p className="px-2 pb-1 text-xs text-[var(--color-muted)]">{session.family.email}</p>
             )}
-            {session?.reader && !session.family && (
+            {session.reader && !session.family && (
               <p className="px-2 pb-1 text-xs text-[var(--color-muted)]">
                 {session.reader.type === "sub" ? "Reader" : "Parent reader"}
               </p>
             )}
 
             <ul className="flex flex-col items-end">
-              {session?.family && (
+              {session.family && (
                 <>
                   <li className="w-full">
                     <MenuLink href="/account" onNavigate={close}>
@@ -167,7 +159,7 @@ export function HomeHubAccountMenu({ siteNav }: Props) {
                 </>
               )}
 
-              {!session?.family && session?.reader && (
+              {!session.family && session.reader && (
                 <>
                   <li className="w-full">
                     <MenuLink href="/reader/login" onNavigate={close}>
