@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BibleChapterTyping } from "@/components/BibleChapterTyping";
-import { PageShell } from "@/components/PageShell";
+import { BibleHubShell } from "@/components/bible/BibleHubShell";
+import { HOME_HUB_TYPING_WIDTH_CLASS } from "@/components/HomeHubButton";
 import { chapterPlainText, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -31,21 +31,25 @@ export default async function BibleReadPage({ params }: Props) {
   const text = chapterPlainText(data);
 
   return (
-    <PageShell>
-      <Link href={`/bible/${bookSlug}`} className="text-sm font-semibold text-[var(--color-link)]">
-        ← {data.meta.book.name}
-      </Link>
-      <h1 className="mt-6 text-2xl text-[var(--color-ink)]">
-        {data.meta.book.name} — Chapter {data.meta.chapter}
-      </h1>
-      <p className="mt-2 text-xs text-[var(--color-muted)]">{data.citation}</p>
-      <BibleChapterTyping
-        bookSlug={bookSlug}
-        bookName={data.meta.book.name}
-        chapter={data.meta.chapter}
-        text={text}
-        citation={data.citation}
-      />
-    </PageShell>
+    <BibleHubShell
+      backHref={`/bible/${bookSlug}`}
+      backLabel={`← ${data.meta.book.name}`}
+    >
+      <section className={`${HOME_HUB_TYPING_WIDTH_CLASS} space-y-4`}>
+        <div>
+          <h1 className="text-xl font-semibold text-[var(--color-ink)] sm:text-2xl">
+            {data.meta.book.name} — Chapter {data.meta.chapter}
+          </h1>
+          <p className="mt-1 text-xs text-[var(--color-muted)]">{data.citation}</p>
+        </div>
+        <BibleChapterTyping
+          bookSlug={bookSlug}
+          bookName={data.meta.book.name}
+          chapter={data.meta.chapter}
+          text={text}
+          citation={data.citation}
+        />
+      </section>
+    </BibleHubShell>
   );
 }

@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         destination: "/mass",
         permanent: true,
       },
+      {
+        source: "/gospel",
+        destination: "/bible/gospel",
+        permanent: true,
+      },
     ];
   },
 };

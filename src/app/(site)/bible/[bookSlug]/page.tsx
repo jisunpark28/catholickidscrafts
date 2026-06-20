@@ -1,9 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BibleBookSelect } from "@/components/BibleBookSelect";
-import { BibleStickerGrid } from "@/components/BibleStickerGrid";
-import { ReaderStatusBar } from "@/components/ReaderStatusBar";
-import { PageShell } from "@/components/PageShell";
+import { BibleBookHub } from "@/components/bible/BibleBookHub";
 import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { getCompletedChaptersForBook } from "@/lib/bible/progress";
 import { getReaderDisplay } from "@/lib/reader-display";
@@ -38,24 +34,16 @@ export default async function BibleBookPage({ params }: Props) {
 
   const testamentHref =
     book.testament === "OT" ? "/bible/old-testament" : "/bible/new-testament";
+  const testamentLabel = book.testament === "OT" ? "Old Testament" : "New Testament";
 
   return (
-    <PageShell>
-      <Link href={testamentHref} className="text-sm font-semibold text-[var(--color-link)]">
-        ← {book.testament === "OT" ? "Old Testament" : "New Testament"}
-      </Link>
-      <h1 className="mt-6 text-3xl text-[var(--color-ink)]">{book.name}</h1>
-      <p className="mt-2 text-sm text-[var(--color-muted)]">
-        {book.totalChapters} chapters · Douay-Rheims (public domain)
-      </p>
-      <ReaderStatusBar reader={reader} />
-      <BibleBookSelect books={testamentBooks} currentSlug={book.slug} />
-      <BibleStickerGrid
-        bookSlug={book.slug}
-        bookName={book.name}
-        chapterCount={book.totalChapters}
-        completedChapters={completedChapters}
-      />
-    </PageShell>
+    <BibleBookHub
+      book={book}
+      testamentBooks={testamentBooks}
+      testamentHref={testamentHref}
+      testamentLabel={testamentLabel}
+      completedChapters={completedChapters}
+      reader={reader}
+    />
   );
 }

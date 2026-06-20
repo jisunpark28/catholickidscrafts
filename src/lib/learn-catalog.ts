@@ -144,7 +144,7 @@ export async function searchLearnCatalog(query: string): Promise<LearnSearchResu
   }
 
   const bibleStatic = [
-    { title: "Today's Gospel", excerpt: "Bible reading", href: "/bible/gospel" },
+    { title: "Today's Gospel", excerpt: "Bible reading", href: "/gospel" },
     { title: "Old Testament", excerpt: "73-book Catholic Bible", href: "/bible/old-testament" },
     { title: "New Testament", excerpt: "73-book Catholic Bible", href: "/bible/new-testament" },
   ];

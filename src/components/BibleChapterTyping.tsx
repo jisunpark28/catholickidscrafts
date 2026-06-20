@@ -46,7 +46,7 @@ export function BibleChapterTyping({
   );
 
   return (
-    <div className="mt-8">
+    <div className="space-y-4">
       <PassageTypingGame
         text={text}
         title={`${bookName} — Chapter ${chapter}`}

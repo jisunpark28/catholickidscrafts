@@ -7,7 +7,7 @@ export const DEFAULT_HOME_SECTIONS: HomeSectionWithItems[] = [
     title: "Bible Reading",
     sortOrder: 0,
     items: [
-      { id: "default-gospel", title: "Today's Gospel", href: "/bible/gospel", sortOrder: 0 },
+      { id: "default-gospel", title: "Today's Gospel", href: "/gospel", sortOrder: 0 },
       { id: "default-ot", title: "Old Testament", href: "/bible/old-testament", sortOrder: 1 },
       { id: "default-nt", title: "New Testament", href: "/bible/new-testament", sortOrder: 2 },
     ],
