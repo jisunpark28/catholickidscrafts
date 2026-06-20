@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  countMatchingChars,
+  normalizePassageText,
+  typingAccuracy,
+} from "@/lib/typing-accuracy";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
@@ -21,36 +26,46 @@ export function PassageTypingGame({
   accuracyThreshold = 0.9,
   completionMessage,
 }: Props) {
-  const target = useMemo(() => text.replace(/\s+/g, " ").trim(), [text]);
+  const target = useMemo(() => normalizePassageText(text), [text]);
   const [typed, setTyped] = useState("");
   const [started, setStarted] = useState(false);
-  const [elapsed, setElapsed] = useState(0);
+  const [elapsedMs, setElapsedMs] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
   const reportedRef = useRef(false);
+  const startTimeRef = useRef<number | null>(null);
+
+  const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
 
   useEffect(() => {
     setTyped("");
     setStarted(false);
-    setElapsed(0);
+    setElapsedMs(0);
     setUnlocked(false);
     reportedRef.current = false;
+    startTimeRef.current = null;
   }, [target]);
 
+  const done = typedNorm.length >= target.length && target.length > 0;
+
   useEffect(() => {
-    if (!started || typed.length >= target.length) return;
-    const id = window.setInterval(() => setElapsed((e) => e + 1), 1000);
+    if (!started || done) return;
+    const tick = () => {
+      if (startTimeRef.current != null) {
+        setElapsedMs(Date.now() - startTimeRef.current);
+      }
+    };
+    tick();
+    const id = window.setInterval(tick, 250);
     return () => clearInterval(id);
-  }, [started, typed.length, target.length]);
+  }, [started, done]);
 
-  const correctPrefix = useMemo(() => {
-    let i = 0;
-    while (i < typed.length && typed[i] === target[i]) i++;
-    return i;
-  }, [typed, target]);
+  const accuracy = useMemo(
+    () => typingAccuracy(typedNorm, target),
+    [typedNorm, target],
+  );
 
-  const done = typed.length >= target.length && target.length > 0;
-  const accuracy = target.length > 0 ? correctPrefix / target.length : 0;
   const passedThreshold = done && accuracy >= accuracyThreshold;
+  const elapsedSec = Math.floor(elapsedMs / 1000);
 
   useEffect(() => {
     if (!onComplete || !passedThreshold || reportedRef.current) return;
@@ -62,9 +77,17 @@ export function PassageTypingGame({
   const reset = useCallback(() => {
     setTyped("");
     setStarted(false);
-    setElapsed(0);
+    setElapsedMs(0);
     setUnlocked(false);
     reportedRef.current = false;
+    startTimeRef.current = null;
+  }, []);
+
+  const beginTyping = useCallback(() => {
+    if (startTimeRef.current == null) {
+      startTimeRef.current = Date.now();
+    }
+    setStarted(true);
   }, []);
 
   if (!target) {
@@ -86,12 +109,12 @@ export function PassageTypingGame({
         <p className="mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]">
           {target.split("").map((char, i) => {
             let className = "opacity-40";
-            if (i < typed.length) {
+            if (i < typedNorm.length) {
               className =
-                typed[i] === char
+                typedNorm[i] === char
                   ? "font-semibold text-green-700 opacity-100"
                   : "bg-red-50 font-semibold text-red-600";
-            } else if (i === typed.length) {
+            } else if (i === typedNorm.length) {
               className = "underline decoration-[var(--color-accent)] opacity-100";
             }
             return (
@@ -105,11 +128,11 @@ export function PassageTypingGame({
         <textarea
           value={typed}
           onChange={(e) => {
-            if (!started) setStarted(true);
+            beginTyping();
             setTyped(e.target.value);
           }}
           onPaste={(e) => e.preventDefault()}
-          rows={4}
+          rows={6}
           className="w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm"
           placeholder="Start typing here…"
           spellCheck={false}
@@ -120,8 +143,14 @@ export function PassageTypingGame({
         <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-[var(--color-muted)]">
           <span>
             Accuracy: {Math.min(100, Math.round(accuracy * 100))}%
+            {started && typedNorm.length > 0 && !done && (
+              <span className="text-xs opacity-70">
+                {" "}
+                ({countMatchingChars(typedNorm, target)}/{target.length} chars)
+              </span>
+            )}
           </span>
-          {started && <span>Time: {elapsed}s</span>}
+          {started && <span>Time: {elapsedSec}s</span>}
           {passedThreshold && (
             <span className="font-bold text-[var(--color-accent)]">Praise sticker unlocked!</span>
           )}

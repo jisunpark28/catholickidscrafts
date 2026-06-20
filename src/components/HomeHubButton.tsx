@@ -104,7 +104,10 @@ export function HomeHubMenuButton({
 export const HOME_HUB_DAILY_MASS_WIDTH_CLASS = "mx-auto w-1/2 min-w-[9rem] max-w-md";
 export const HOME_HUB_SECTIONS_WIDTH_CLASS = "mx-auto w-full max-w-[56rem]";
 
-/** Gospel sign-in notice, typing panel — same width as Daily Mass pill (not full row). */
+/** Gospel typing panel — 2× Daily Mass pill width. */
+export const HOME_HUB_TYPING_WIDTH_CLASS = HOME_HUB_SECTIONS_WIDTH_CLASS;
+
+/** Gospel sign-in notice — same width as Daily Mass pill. */
 export const HOME_HUB_NARROW_CONTENT_CLASS = HOME_HUB_DAILY_MASS_WIDTH_CLASS;
 
 /** @deprecated Prefer HOME_HUB_NARROW_CONTENT_CLASS for gospel sub-pages. */
