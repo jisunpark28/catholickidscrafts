@@ -19,11 +19,7 @@ export default async function PlayHubPage() {
 
   return (
     <PageShell wide>
-      <PageHeader
-        title={copyText(copy, "play.hub.title", "Play & Learn")}
-        subtitle={copyText(copy, "play.hub.subtitle", "")}
-        programNote={copyText(copy, "play.hub.program_note", "")}
-      />
+      <PageHeader title={copyText(copy, "play.hub.title", "Play & Learn")} />
 
       <div className="grid gap-4 sm:grid-cols-2">
         {games.map((game) => (

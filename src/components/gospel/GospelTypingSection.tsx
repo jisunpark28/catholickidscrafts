@@ -23,7 +23,7 @@ type Props = {
 };
 
 export function GospelTypingSection({
-  signedIn,
+  signedIn: signedInFromServer,
   todayDate,
   focusDate,
   onCompleted,
@@ -33,8 +33,29 @@ export function GospelTypingSection({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [saveError, setSaveError] = useState("");
+  const [signedIn, setSignedIn] = useState(signedInFromServer);
 
   const canType = focusDate === todayDate;
+
+  useEffect(() => {
+    setSignedIn(signedInFromServer);
+  }, [signedInFromServer]);
+
+  useEffect(() => {
+    if (signedInFromServer) return;
+    const [year, month] = todayDate.split("-").map(Number);
+    if (!year || !month) return;
+    let cancelled = false;
+    void fetch(`/api/gospel/progress?year=${year}&month=${month}`)
+      .then((res) => res.json())
+      .then((data: { signedIn?: boolean }) => {
+        if (!cancelled && data.signedIn) setSignedIn(true);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [signedInFromServer, todayDate]);
 
   const loadToday = useCallback(async () => {
     if (!canType) return;
@@ -93,6 +114,7 @@ export function GospelTypingSection({
         setSaveError(data.error ?? "Could not save sticker");
         return;
       }
+      setSignedIn(true);
       onCompleted(todayDate);
     },
     [signedIn, todayDate, onCompleted],
