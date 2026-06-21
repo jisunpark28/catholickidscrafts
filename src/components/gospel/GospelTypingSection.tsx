@@ -1,5 +1,6 @@
 "use client";
 
+import { GospelReadingRecorder } from "@/components/gospel/GospelReadingRecorder";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
@@ -145,8 +146,9 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
 
       {canType && day && !loading && !error && (
         <>
-          <div className="flex flex-wrap gap-2">
-            {GOSPEL_READING_OPTIONS.map((opt) => {
+          <div className="flex w-full max-w-full items-center justify-between gap-2">
+            <div className="flex min-w-0 flex-wrap gap-2">
+              {GOSPEL_READING_OPTIONS.map((opt) => {
                 const available = availableKinds.includes(opt.kind);
                 const active = readingKind === opt.kind;
                 return (
@@ -165,6 +167,8 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
                   </button>
                 );
               })}
+            </div>
+            <GospelReadingRecorder storageKey={`${todayDate}:${readingKind}`} />
           </div>
 
           {readingText ? (
