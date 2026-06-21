@@ -3,7 +3,8 @@
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
 import { GospelTypingSection } from "@/components/gospel/GospelTypingSection";
 import { MyReadingCalendarPanel } from "@/components/gospel/MyReadingCalendarPanel";
-import { useState } from "react";
+import { isHeaderSignedIn, type HeaderSessionResponse } from "@/lib/header-session";
+import { useCallback, useEffect, useState } from "react";
 
 type Props = {
   signedIn: boolean;
@@ -11,11 +12,34 @@ type Props = {
   todayDate: string;
 };
 
-export function GospelHub({ signedIn, initialCompleted, todayDate }: Props) {
+export function GospelHub({ signedIn: initialSignedIn, initialCompleted, todayDate }: Props) {
+  const [signedIn, setSignedIn] = useState(initialSignedIn);
   const [completed, setCompleted] = useState<string[]>(initialCompleted);
   const [focusDate, setFocusDate] = useState(todayDate);
 
+  useEffect(() => {
+    setSignedIn(initialSignedIn);
+    setCompleted(initialCompleted);
+  }, [initialSignedIn, initialCompleted]);
+
+  const refreshSignedIn = useCallback(async () => {
+    try {
+      const res = await fetch("/api/auth/session", { cache: "no-store" });
+      if (!res.ok) return;
+      const session = (await res.json()) as HeaderSessionResponse;
+      if (isHeaderSignedIn(session)) setSignedIn(true);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    if (initialSignedIn) return;
+    void refreshSignedIn();
+  }, [initialSignedIn, refreshSignedIn]);
+
   function handleCompleted(dateKey: string) {
+    setSignedIn(true);
     setCompleted((prev) => (prev.includes(dateKey) ? prev : [...prev, dateKey]));
     setFocusDate(dateKey);
   }
@@ -30,7 +54,6 @@ export function GospelHub({ signedIn, initialCompleted, todayDate }: Props) {
       />
 
       <GospelTypingSection
-        signedIn={signedIn}
         todayDate={todayDate}
         focusDate={focusDate}
         onCompleted={handleCompleted}

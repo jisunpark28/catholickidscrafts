@@ -16,46 +16,21 @@ const GOSPEL_READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
 ];
 
 type Props = {
-  signedIn: boolean;
   todayDate: string;
   focusDate: string;
   onCompleted: (dateKey: string) => void;
 };
 
-export function GospelTypingSection({
-  signedIn: signedInFromServer,
-  todayDate,
-  focusDate,
-  onCompleted,
-}: Props) {
+export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props) {
   const [day, setDay] = useState<UniversalisMassDay | null>(null);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [saveError, setSaveError] = useState("");
-  const [signedIn, setSignedIn] = useState(signedInFromServer);
+  const [saved, setSaved] = useState(false);
+  const [needsSignIn, setNeedsSignIn] = useState(false);
 
   const canType = focusDate === todayDate;
-
-  useEffect(() => {
-    setSignedIn(signedInFromServer);
-  }, [signedInFromServer]);
-
-  useEffect(() => {
-    if (signedInFromServer) return;
-    const [year, month] = todayDate.split("-").map(Number);
-    if (!year || !month) return;
-    let cancelled = false;
-    void fetch(`/api/gospel/progress?year=${year}&month=${month}`)
-      .then((res) => res.json())
-      .then((data: { signedIn?: boolean }) => {
-        if (!cancelled && data.signedIn) setSignedIn(true);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [signedInFromServer, todayDate]);
 
   const loadToday = useCallback(async () => {
     if (!canType) return;
@@ -84,6 +59,12 @@ export function GospelTypingSection({
     void loadToday();
   }, [loadToday]);
 
+  useEffect(() => {
+    setSaved(false);
+    setNeedsSignIn(false);
+    setSaveError("");
+  }, [todayDate, readingKind]);
+
   const availableKinds = useMemo(() => {
     if (!day) return GOSPEL_READING_OPTIONS.map((o) => o.kind);
     return GOSPEL_READING_OPTIONS.filter((o) =>
@@ -102,23 +83,45 @@ export function GospelTypingSection({
 
   const onComplete = useCallback(
     async (accuracy: number) => {
-      if (!signedIn) return;
       setSaveError("");
+      setNeedsSignIn(false);
       const res = await fetch("/api/gospel/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ dateKey: todayDate, typingAccuracy: accuracy }),
       });
+      if (res.status === 401) {
+        setNeedsSignIn(true);
+        return;
+      }
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         setSaveError(data.error ?? "Could not save sticker");
         return;
       }
-      setSignedIn(true);
+      setSaved(true);
       onCompleted(todayDate);
     },
-    [signedIn, todayDate, onCompleted],
+    [todayDate, onCompleted],
   );
+
+  const completionMessage = saved ? (
+    <p>
+      Your praise sticker for today was added to My Reading Calendar (
+      {reading?.label ?? "reading"}).
+    </p>
+  ) : needsSignIn ? (
+    <p>
+      <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
+        Sign in
+      </Link>{" "}
+      or{" "}
+      <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
+        Access ID
+      </Link>{" "}
+      to save this sticker on your calendar.
+    </p>
+  ) : null;
 
   return (
     <HubTypingWidth className="space-y-4">
@@ -136,9 +139,7 @@ export function GospelTypingSection({
       {canType && loading && (
         <p className="text-sm text-[var(--color-muted)]">Loading today&apos;s readings…</p>
       )}
-      {canType && error && (
-        <p className="text-sm text-red-600">{error}</p>
-      )}
+      {canType && error && <p className="text-sm text-red-600">{error}</p>}
 
       {canType && day && !loading && !error && (
         <>
@@ -179,26 +180,8 @@ export function GospelTypingSection({
               text={readingText}
               title={reading?.label ?? "Typing practice"}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
-              onComplete={signedIn ? onComplete : undefined}
-              completionMessage={
-                signedIn ? (
-                  <p>
-                    Your praise sticker for today was added to My Reading Calendar (
-                    {reading?.label ?? "reading"}).
-                  </p>
-                ) : (
-                  <p>
-                    <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
-                      Sign in
-                    </Link>{" "}
-                    or{" "}
-                    <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-                      Access ID
-                    </Link>{" "}
-                    to save this sticker on your calendar.
-                  </p>
-                )
-              }
+              onComplete={onComplete}
+              completionMessage={completionMessage}
             />
           ) : (
             <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>

@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   ...canonicalForPath("/bible/gospel"),
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function TodaysGospelPage() {
   const today = todayUniversalis();
   const todayDate = toDateKey(today);
