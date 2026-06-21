@@ -23,7 +23,7 @@ export function BibleChapterTyping({
   const [saveError, setSaveError] = useState("");
   const [saved, setSaved] = useState(false);
 
-  const onComplete = useCallback(
+  const saveProgress = useCallback(
     async (accuracy: number) => {
       setSaveError("");
       const res = await fetch("/api/bible/progress", {
@@ -37,8 +37,9 @@ export function BibleChapterTyping({
       });
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setSaveError(data.error ?? "Could not save progress");
-        return;
+        const message = data.error ?? "Could not save progress";
+        setSaveError(message);
+        throw new Error(message);
       }
       setSaved(true);
     },
@@ -51,7 +52,8 @@ export function BibleChapterTyping({
         text={text}
         title={`${bookName} — Chapter ${chapter}`}
         accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
-        onComplete={onComplete}
+        showSaveButton
+        onSave={saveProgress}
         completionMessage={
           <p>
             Your praise sticker for chapter {chapter} is saved.{" "}

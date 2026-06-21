@@ -81,7 +81,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   const reading = day?.readings.find((r) => r.kind === readingKind);
   const readingText = reading?.text?.trim() ?? "";
 
-  const onComplete = useCallback(
+  const saveProgress = useCallback(
     async (accuracy: number) => {
       setSaveError("");
       setNeedsSignIn(false);
@@ -92,12 +92,13 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
       });
       if (res.status === 401) {
         setNeedsSignIn(true);
-        return;
+        throw new Error("Sign in required");
       }
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setSaveError(data.error ?? "Could not save sticker");
-        return;
+        const message = data.error ?? "Could not save sticker";
+        setSaveError(message);
+        throw new Error(message);
       }
       setSaved(true);
       onCompleted(todayDate);
@@ -143,12 +144,8 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
 
       {canType && day && !loading && !error && (
         <>
-          <fieldset className="text-sm font-semibold">
-            <legend className="mb-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
-              Choose a reading
-            </legend>
-            <div className="flex flex-wrap gap-2">
-              {GOSPEL_READING_OPTIONS.map((opt) => {
+          <div className="flex flex-wrap gap-2">
+            {GOSPEL_READING_OPTIONS.map((opt) => {
                 const available = availableKinds.includes(opt.kind);
                 const active = readingKind === opt.kind;
                 return (
@@ -167,12 +164,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
                   </button>
                 );
               })}
-            </div>
-            <p className="mt-2 text-xs font-normal text-[var(--color-muted)]">
-              Type any reading with {Math.round(BIBLE_STICKER_ACCURACY_THRESHOLD * 100)}% accuracy
-              to earn today&apos;s praise sticker.
-            </p>
-          </fieldset>
+          </div>
 
           {readingText ? (
             <PassageTypingGame
@@ -180,7 +172,8 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
               text={readingText}
               title={reading?.label ?? "Typing practice"}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
-              onComplete={onComplete}
+              showSaveButton
+              onSave={saveProgress}
               completionMessage={completionMessage}
             />
           ) : (
