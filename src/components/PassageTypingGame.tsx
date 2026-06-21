@@ -79,21 +79,25 @@ export function PassageTypingGame({
   const passedThreshold = done && accuracy + 1e-9 >= accuracyThreshold;
   const elapsedSec = Math.floor(elapsedMs / 1000);
 
-  const invokeSave = useCallback(async () => {
-    if (!persist || !passedThreshold || savePending) return;
-    setSavePending(true);
-    try {
-      await persist(accuracy);
-      setUnlocked(true);
-    } finally {
-      setSavePending(false);
-    }
-  }, [persist, passedThreshold, savePending, accuracy]);
+  const invokeSave = useCallback(
+    async (options?: { requireThreshold?: boolean }) => {
+      if (!persist || savePending) return;
+      if (options?.requireThreshold && !passedThreshold) return;
+      setSavePending(true);
+      try {
+        await persist(accuracy);
+        setUnlocked(true);
+      } finally {
+        setSavePending(false);
+      }
+    },
+    [persist, passedThreshold, savePending, accuracy],
+  );
 
   useEffect(() => {
     if (!persist || !passedThreshold || reportedRef.current) return;
     reportedRef.current = true;
-    void invokeSave();
+    void invokeSave({ requireThreshold: true });
   }, [persist, passedThreshold, invokeSave]);
 
   useEffect(() => {
@@ -202,7 +206,7 @@ export function PassageTypingGame({
               <button
                 type="button"
                 onClick={() => void invokeSave()}
-                disabled={!persist || !passedThreshold || savePending}
+                disabled={!persist || savePending}
                 className="border-2 border-[var(--color-accent)] bg-white px-4 py-1.5 font-semibold text-[var(--color-accent)] hover:bg-[var(--color-surface)] disabled:cursor-not-allowed disabled:border-[var(--color-border)] disabled:bg-[var(--color-surface)] disabled:text-[var(--color-muted)]"
               >
                 {savePending ? "Saving…" : "Save"}
