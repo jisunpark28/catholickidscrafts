@@ -27,14 +27,15 @@ export function isSignedInReader(key: ReaderKey | null): key is Exclude<ReaderKe
 export async function getGospelCompletedDateKeys(
   year: number,
   month: number,
+  key?: ReaderKey | null,
 ): Promise<string[]> {
-  const key = await getReaderKey();
-  if (!isSignedInReader(key)) return [];
+  const resolved = key ?? (await getReaderKey());
+  if (!isSignedInReader(resolved)) return [];
 
   const prefix = `${year}-${String(month).padStart(2, "0")}`;
   try {
     const rows = await prisma.gospelDayProgress.findMany({
-      where: progressWhere(key, prefix),
+      where: progressWhere(resolved, prefix),
       select: { dateKey: true },
       orderBy: { dateKey: "asc" },
     });

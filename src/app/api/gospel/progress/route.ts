@@ -1,6 +1,6 @@
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { attachGuestProgressIfAny, clearGuestProgressCookie } from "@/lib/bible/progress";
-import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
+import { getReaderKey } from "@/lib/bible/reader";
 import { ensureOwnerReaderCookie } from "@/lib/family-auth";
 import {
   getGospelCompletedDateKeys,
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ signedIn: false, completedDates: [] });
   }
 
-  const completedDates = await getGospelCompletedDateKeys(year, month);
+  const completedDates = await getGospelCompletedDateKeys(year, month, key);
   return NextResponse.json({ signedIn: true, completedDates });
 }
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
   if (!dateKey || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) {
     return NextResponse.json({ error: "dateKey must be YYYY-MM-DD" }, { status: 400 });
   }
-  if (!Number.isFinite(typingAccuracy) || typingAccuracy! < BIBLE_STICKER_ACCURACY_THRESHOLD) {
+  if (!Number.isFinite(typingAccuracy) || typingAccuracy! + 1e-9 < BIBLE_STICKER_ACCURACY_THRESHOLD) {
     return NextResponse.json(
       {
         error: `Accuracy must be at least ${Math.round(BIBLE_STICKER_ACCURACY_THRESHOLD * 100)}%`,
