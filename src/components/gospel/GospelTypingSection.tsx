@@ -144,12 +144,8 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
 
       {canType && day && !loading && !error && (
         <>
-          <fieldset className="text-sm font-semibold">
-            <legend className="mb-2 text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
-              Choose a reading
-            </legend>
-            <div className="flex flex-wrap gap-2">
-              {GOSPEL_READING_OPTIONS.map((opt) => {
+          <div className="flex flex-wrap gap-2">
+            {GOSPEL_READING_OPTIONS.map((opt) => {
                 const available = availableKinds.includes(opt.kind);
                 const active = readingKind === opt.kind;
                 return (
@@ -168,12 +164,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
                   </button>
                 );
               })}
-            </div>
-            <p className="mt-2 text-xs font-normal text-[var(--color-muted)]">
-              Type any reading with {Math.round(BIBLE_STICKER_ACCURACY_THRESHOLD * 100)}% accuracy,
-              then press Save to add today&apos;s praise sticker to your calendar.
-            </p>
-          </fieldset>
+          </div>
 
           {readingText ? (
             <PassageTypingGame
@@ -181,6 +172,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
               text={readingText}
               title={reading?.label ?? "Typing practice"}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
+              showSaveButton
               onSave={saveProgress}
               completionMessage={completionMessage}
             />

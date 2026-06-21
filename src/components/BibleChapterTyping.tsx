@@ -52,6 +52,7 @@ export function BibleChapterTyping({
         text={text}
         title={`${bookName} — Chapter ${chapter}`}
         accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
+        showSaveButton
         onSave={saveProgress}
         completionMessage={
           <p>
