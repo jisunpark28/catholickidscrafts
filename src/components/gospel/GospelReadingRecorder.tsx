@@ -9,120 +9,48 @@ type Props = {
 
 type Phase = "idle" | "recording" | "paused" | "ready";
 
-const APPLE_RECORDER_MIME_CANDIDATES = [
-  "audio/mp4",
-  "audio/mp4;codecs=mp4a",
-  "audio/aac",
-  "audio/webm;codecs=opus",
-  "audio/webm",
-  "audio/ogg;codecs=opus",
-] as const;
+const AUDIO_CONSTRAINTS: MediaTrackConstraints = {
+  echoCancellation: true,
+  noiseSuppression: true,
+  autoGainControl: true,
+};
 
-/** Chrome/Edge record and play WebM reliably; MP4 MediaRecorder blobs often fail playback. */
-const CHROMIUM_RECORDER_MIME_CANDIDATES = [
-  "audio/webm;codecs=opus",
-  "audio/webm",
-  "audio/ogg;codecs=opus",
-  "audio/mp4",
-  "audio/mp4;codecs=mp4a",
-  "audio/aac",
-] as const;
-
-function isAppleBrowser(): boolean {
-  if (typeof navigator === "undefined") return false;
-  const ua = navigator.userAgent;
-  return /iPad|iPhone|iPod/.test(ua) || (/Safari/i.test(ua) && !/Chrome|Chromium|CriOS|Edg/i.test(ua));
-}
-
-function canPlayMimeType(mime: string): boolean {
-  if (typeof document === "undefined") return true;
-  const audio = document.createElement("audio");
-  const base = mime.split(";")[0]?.trim() ?? mime;
-  return (audio.canPlayType(mime) || audio.canPlayType(base)) !== "";
-}
-
-function recorderMimeCandidates(): readonly string[] {
-  return isAppleBrowser() ? APPLE_RECORDER_MIME_CANDIDATES : CHROMIUM_RECORDER_MIME_CANDIDATES;
-}
-
-function pickRecorderMimeType(): string {
-  for (const type of recorderMimeCandidates()) {
-    if (!MediaRecorder.isTypeSupported(type)) continue;
-    if (canPlayMimeType(type)) return type;
-  }
-  for (const type of recorderMimeCandidates()) {
+function pickMimeType(): string {
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus",
+  ];
+  for (const type of candidates) {
     if (MediaRecorder.isTypeSupported(type)) return type;
   }
   return "";
 }
 
-function blobMimeType(chunks: Blob[], fallback: string): string {
-  const fromChunk = chunks.find((c) => c.size > 0 && c.type)?.type;
-  if (fromChunk) return fromChunk;
-  if (fallback) return fallback;
-  return "audio/webm";
-}
-
-function createMediaRecorder(stream: MediaStream, preferredMime: string): MediaRecorder {
-  const candidates = recorderMimeCandidates();
-  const attempts = preferredMime
-    ? [preferredMime, ...candidates.filter((t) => t !== preferredMime), ""]
-    : [...candidates, ""];
-
-  for (const mime of attempts) {
-    try {
-      return mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
-    } catch {
-      continue;
-    }
+function readMicPeak(analyser: AnalyserNode, buffer: Uint8Array): number {
+  analyser.getByteTimeDomainData(buffer as Uint8Array<ArrayBuffer>);
+  let peak = 0;
+  for (let i = 0; i < buffer.length; i++) {
+    const deviation = Math.abs(buffer[i]! - 128);
+    if (deviation > peak) peak = deviation;
   }
-  return new MediaRecorder(stream);
+  return peak;
 }
 
-function waitForRecorderChunks(recorder: MediaRecorder, hasChunks: () => boolean): Promise<void> {
+async function probeAudioDuration(url: string): Promise<number> {
   return new Promise((resolve) => {
-    if (hasChunks()) {
-      resolve();
-      return;
-    }
-
-    const onData = (event: BlobEvent) => {
-      if (event.data.size > 0) {
-        recorder.removeEventListener("dataavailable", onData);
-        resolve();
-      }
+    const audio = document.createElement("audio");
+    const finish = (duration: number) => {
+      audio.removeAttribute("src");
+      audio.load();
+      resolve(duration);
     };
-
-    recorder.addEventListener("dataavailable", onData);
-    window.setTimeout(() => {
-      recorder.removeEventListener("dataavailable", onData);
-      resolve();
-    }, 300);
-  });
-}
-
-function waitForAudioReady(audio: HTMLAudioElement, timeoutMs = 4000): Promise<boolean> {
-  return new Promise((resolve) => {
-    if (audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      resolve(true);
-      return;
-    }
-
-    const done = (ok: boolean) => {
-      audio.removeEventListener("loadeddata", onReady);
-      audio.removeEventListener("canplaythrough", onReady);
-      audio.removeEventListener("error", onFail);
-      window.clearTimeout(timer);
-      resolve(ok);
-    };
-
-    const onReady = () => done(true);
-    const onFail = () => done(false);
-    const timer = window.setTimeout(() => done(audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA), timeoutMs);
-
-    audio.addEventListener("loadeddata", onReady, { once: true });
-    audio.addEventListener("canplaythrough", onReady, { once: true });
-    audio.addEventListener("error", onFail, { once: true });
+    audio.preload = "metadata";
+    audio.onloadedmetadata = () => finish(audio.duration);
+    audio.onerror = () => finish(0);
+    window.setTimeout(() => finish(audio.duration || 0), 2000);
+    audio.src = url;
   });
 }
 
@@ -168,175 +96,164 @@ function StopIcon() {
   );
 }
 
-function ListenIcon({ active }: { active?: boolean }) {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M11 5 6 9H3v6h3l5 4V5Z"
-        stroke={active ? "#c45c26" : "currentColor"}
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8 8 0 0 1 0 12"
-        stroke={active ? "#c45c26" : "currentColor"}
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 export function GospelReadingRecorder({ storageKey }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
-  const [hasRecording, setHasRecording] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackUrl, setPlaybackUrl] = useState<string | null>(null);
   const [micError, setMicError] = useState("");
+  const [micLevel, setMicLevel] = useState(0);
 
-  const recordingsRef = useRef<Map<string, Blob>>(new Map());
-  const mimeTypeRef = useRef("");
+  const urlsRef = useRef<Map<string, string>>(new Map());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-  const audioElRef = useRef<HTMLAudioElement | null>(null);
-  const playUrlRef = useRef<string | null>(null);
-  const webAudioRef = useRef<{
-    context: AudioContext;
-    source: AudioBufferSourceNode;
-  } | null>(null);
+  const activeKeyRef = useRef(storageKey);
   const discardOnStopRef = useRef(false);
-  const storageKeyRef = useRef(storageKey);
-  const stopPlaybackRef = useRef<() => void>(() => {});
-  const stopActiveRecorderRef = useRef<() => void>(() => {});
-  const syncRecordingStateRef = useRef<(key: string) => void>(() => {});
+  const peakRef = useRef(0);
+  const meterRef = useRef<{
+    context: AudioContext;
+    analyser: AnalyserNode;
+    buffer: Uint8Array;
+    rafId: number;
+  } | null>(null);
 
-  storageKeyRef.current = storageKey;
+  activeKeyRef.current = storageKey;
 
-  const syncRecordingState = useCallback((key: string) => {
-    const has = recordingsRef.current.has(key);
-    setHasRecording(has);
-    setPhase(has ? "ready" : "idle");
+  const revokeUrl = useCallback((url: string | null) => {
+    if (url) URL.revokeObjectURL(url);
+  }, []);
+
+  const stopMeter = useCallback(() => {
+    const meter = meterRef.current;
+    if (!meter) return;
+    window.cancelAnimationFrame(meter.rafId);
+    void meter.context.close();
+    meterRef.current = null;
+    setMicLevel(0);
   }, []);
 
   const stopStream = useCallback(() => {
-    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
   }, []);
 
-  const detachAudioElement = useCallback((audio: HTMLAudioElement) => {
-    audio.onended = null;
-    audio.onerror = null;
-    audio.pause();
-    audio.src = "";
-    audio.load();
-  }, []);
+  const stopActiveRecorder = useCallback(() => {
+    const recorder = mediaRecorderRef.current;
+    if (!recorder || recorder.state === "inactive") return;
 
-  const stopWebAudio = useCallback(() => {
-    const active = webAudioRef.current;
-    if (!active) return;
-    try {
-      active.source.stop();
-    } catch {
-      /* already stopped */
-    }
-    void active.context.close();
-    webAudioRef.current = null;
-  }, []);
-
-  const stopPlayback = useCallback(() => {
-    stopWebAudio();
-    const audio = audioElRef.current;
-    if (audio) {
-      detachAudioElement(audio);
-    }
-    if (playUrlRef.current) {
-      URL.revokeObjectURL(playUrlRef.current);
-      playUrlRef.current = null;
-    }
-    setIsPlaying(false);
-  }, [detachAudioElement, stopWebAudio]);
-
-  stopPlaybackRef.current = stopPlayback;
-  syncRecordingStateRef.current = syncRecordingState;
-
-  const finalizeRecording = useCallback(
-    (key: string, discard: boolean, recorderMime = "") => {
-      if (!discard) {
-        const mimeType = blobMimeType(chunksRef.current, recorderMime || mimeTypeRef.current);
-        const blob = new Blob(chunksRef.current, { type: mimeType });
-        if (blob.size > 0) {
-          recordingsRef.current.set(key, blob);
-        } else {
-          recordingsRef.current.delete(key);
-        }
+    if (recorder.state === "paused") {
+      try {
+        recorder.resume();
+      } catch {
+        /* ignore */
       }
+    }
+
+    try {
+      recorder.stop();
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const startMeter = useCallback((stream: MediaStream) => {
+    stopMeter();
+    peakRef.current = 0;
+
+    const AudioCtx =
+      window.AudioContext ||
+      (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioCtx) return;
+
+    const context = new AudioCtx();
+    const analyser = context.createAnalyser();
+    analyser.fftSize = 512;
+    const source = context.createMediaStreamSource(stream);
+    source.connect(analyser);
+
+    const buffer = new Uint8Array(analyser.fftSize);
+
+    const tick = () => {
+      const peak = readMicPeak(analyser, buffer);
+      peakRef.current = Math.max(peakRef.current, peak);
+      setMicLevel(peak);
+      meterRef.current!.rafId = window.requestAnimationFrame(tick);
+    };
+
+    meterRef.current = { context, analyser, buffer, rafId: window.requestAnimationFrame(tick) };
+  }, [stopMeter]);
+
+  const saveRecording = useCallback(
+    async (key: string, mimeType: string) => {
+      const blob = new Blob(chunksRef.current, {
+        type: mimeType || "audio/webm",
+      });
       chunksRef.current = [];
-      stopStream();
-      mediaRecorderRef.current = null;
-      if (key === storageKeyRef.current) {
-        syncRecordingState(key);
-        if (!discard && !recordingsRef.current.has(key)) {
-          setMicError("Recording was empty. Try again and tap Stop when finished.");
+
+      const previous = urlsRef.current.get(key);
+      if (previous) revokeUrl(previous);
+
+      if (blob.size === 0) {
+        urlsRef.current.delete(key);
+        if (key === activeKeyRef.current) {
+          setPlaybackUrl(null);
+          setPhase("idle");
+          setMicError("Recording was empty. Speak for a second, then tap Stop.");
         }
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const duration = await probeAudioDuration(url);
+      const heardVoice = peakRef.current >= 8;
+      const hasPlayableAudio = duration >= 0.2 && Number.isFinite(duration);
+
+      if (!heardVoice || !hasPlayableAudio) {
+        revokeUrl(url);
+        urlsRef.current.delete(key);
+        if (key === activeKeyRef.current) {
+          setPlaybackUrl(null);
+          setPhase("idle");
+          setMicError(
+            heardVoice
+              ? "Recording saved but is too short. Speak longer, then tap Stop."
+              : "No voice detected. Check Windows mic settings and Chrome mic permission.",
+          );
+        }
+        return;
+      }
+
+      urlsRef.current.set(key, url);
+      if (key === activeKeyRef.current) {
+        setPlaybackUrl(url);
+        setPhase("ready");
+        setMicError("");
       }
     },
-    [stopStream, syncRecordingState],
+    [revokeUrl],
   );
 
-  const stopActiveRecorder = useCallback(() => {
-    const rec = mediaRecorderRef.current;
-    if (!rec) return;
-    if (rec.state === "inactive") return;
-
-    if (rec.state === "paused") {
-      try {
-        rec.resume();
-      } catch {
-        /* ignore */
-      }
-    }
-
-    const useTimeslice = !isAppleBrowser();
-    if (useTimeslice) {
-      try {
-        if (typeof rec.requestData === "function") {
-          rec.requestData();
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-
-    try {
-      rec.stop();
-    } catch {
-      void waitForRecorderChunks(rec, () => chunksRef.current.length > 0).then(() => {
-        finalizeRecording(storageKeyRef.current, discardOnStopRef.current, rec.mimeType);
-      });
-    }
-  }, [finalizeRecording]);
-
-  stopActiveRecorderRef.current = stopActiveRecorder;
-
   useEffect(() => {
-    stopPlaybackRef.current();
     discardOnStopRef.current = true;
-    stopActiveRecorderRef.current();
+    stopActiveRecorder();
     discardOnStopRef.current = false;
+    stopMeter();
     chunksRef.current = [];
-    syncRecordingStateRef.current(storageKey);
+    setPlaybackUrl(urlsRef.current.get(storageKey) ?? null);
+    setPhase(urlsRef.current.has(storageKey) ? "ready" : "idle");
     setMicError("");
-  }, [storageKey]);
+  }, [storageKey, stopActiveRecorder, stopMeter]);
 
   useEffect(() => {
-    const recordings = recordingsRef.current;
+    const urls = urlsRef.current;
     return () => {
-      stopPlaybackRef.current();
-      streamRef.current?.getTracks().forEach((t) => t.stop());
-      streamRef.current = null;
-      recordings.clear();
+      stopMeter();
+      stopStream();
+      for (const url of urls.values()) {
+        revokeUrl(url);
+      }
+      urls.clear();
     };
-  }, []);
+  }, [revokeUrl, stopMeter, stopStream]);
 
   const iconButtonClass = (disabled: boolean, active?: boolean) =>
     `flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition ${
@@ -348,32 +265,52 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     }`;
 
   const startRecord = async () => {
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setMicError("Recording is not supported in this browser.");
-      return;
-    }
-    if (typeof MediaRecorder === "undefined") {
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
       setMicError("Recording is not supported in this browser.");
       return;
     }
 
     setMicError("");
-    stopPlayback();
+    stopActiveRecorder();
+    stopMeter();
+    stopStream();
 
-    recordingsRef.current.delete(storageKey);
-    syncRecordingState(storageKey);
+    const previous = urlsRef.current.get(storageKey);
+    if (previous) {
+      revokeUrl(previous);
+      urlsRef.current.delete(storageKey);
+    }
+    setPlaybackUrl(null);
+    setPhase("idle");
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: AUDIO_CONSTRAINTS,
+      });
       streamRef.current = stream;
-      chunksRef.current = [];
 
-      const preferredMime = pickRecorderMimeType();
-      const recorder = createMediaRecorder(stream, preferredMime);
-      mediaRecorderRef.current = recorder;
-      mimeTypeRef.current = recorder.mimeType || preferredMime || "audio/webm";
+      const audioTrack = stream.getAudioTracks()[0];
+      if (!audioTrack) {
+        throw new Error("No microphone track");
+      }
+      audioTrack.enabled = true;
+
+      if (audioTrack.muted) {
+        setMicError("Your microphone is muted in Windows or the browser.");
+      }
+
+      chunksRef.current = [];
+      startMeter(stream);
+
+      const mimeType = pickMimeType();
+      const recorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
 
       const keyForRecording = storageKey;
+      const recorderMime = recorder.mimeType || mimeType || "audio/webm";
+
+      mediaRecorderRef.current = recorder;
 
       recorder.addEventListener("dataavailable", (event) => {
         if (event.data.size > 0) {
@@ -382,27 +319,30 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       });
 
       recorder.addEventListener("stop", () => {
-        void waitForRecorderChunks(recorder, () => chunksRef.current.length > 0).then(() => {
-          finalizeRecording(
-            keyForRecording,
-            discardOnStopRef.current,
-            recorder.mimeType || mimeTypeRef.current,
-          );
-        });
+        mediaRecorderRef.current = null;
+        stopMeter();
+
+        if (discardOnStopRef.current) {
+          chunksRef.current = [];
+          stopStream();
+          return;
+        }
+
+        window.setTimeout(() => {
+          void saveRecording(keyForRecording, recorderMime).finally(() => {
+            stopStream();
+          });
+        }, 100);
       });
 
-      if (isAppleBrowser()) {
-        recorder.start();
-      } else {
-        recorder.start(250);
-      }
+      // One complete file on stop — most reliable on Windows Chrome (no silent chunk joins).
+      recorder.start();
       setPhase("recording");
-      setHasRecording(false);
     } catch {
       setMicError("Allow microphone access to record.");
+      stopMeter();
       stopStream();
       setPhase("idle");
-      setHasRecording(false);
     }
   };
 
@@ -418,111 +358,23 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     }
   };
 
-  const playWithWebAudio = useCallback(
-    async (blob: Blob): Promise<boolean> => {
-      const AudioCtx =
-        typeof window !== "undefined"
-          ? window.AudioContext ||
-            (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
-          : undefined;
-      if (!AudioCtx) return false;
-
-      stopWebAudio();
-      const context = new AudioCtx();
-      try {
-        const buffer = await context.decodeAudioData(await blob.arrayBuffer());
-        const source = context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(context.destination);
-        source.onended = () => {
-          stopWebAudio();
-          setIsPlaying(false);
-        };
-        webAudioRef.current = { context, source };
-        if (context.state === "suspended") {
-          await context.resume();
-        }
-        source.start(0);
-        setIsPlaying(true);
-        return true;
-      } catch {
-        await context.close();
-        return false;
-      }
-    },
-    [stopWebAudio],
-  );
-
-  const playWithAudioElement = useCallback(
-    async (blob: Blob): Promise<boolean> => {
-      const audio = audioElRef.current;
-      if (!audio) return false;
-
-      detachAudioElement(audio);
-
-      const url = URL.createObjectURL(blob);
-      playUrlRef.current = url;
-
-      audio.src = url;
-      audio.volume = 1;
-      audio.setAttribute("playsinline", "true");
-      audio.load();
-
-      const loaded = await waitForAudioReady(audio);
-      if (!loaded) return false;
-
-      audio.onended = () => stopPlayback();
-
-      try {
-        await audio.play();
-        setIsPlaying(true);
-        return true;
-      } catch {
-        return false;
-      }
-    },
-    [detachAudioElement, stopPlayback],
-  );
-
-  const playRecording = async () => {
-    const blob = recordingsRef.current.get(storageKey);
-    if (!blob || blob.size === 0) {
-      setMicError("No recording yet. Tap Stop after you record.");
-      syncRecordingState(storageKey);
-      return;
-    }
-
-    setMicError("");
-    stopPlayback();
-
-    const played =
-      (await playWithAudioElement(blob)) || (await playWithWebAudio(blob));
-
-    if (!played) {
-      setMicError("Could not play this recording in your browser.");
-      stopPlayback();
-    }
-  };
-
   const isCapturing = phase === "recording" || phase === "paused";
-  const canListen = hasRecording && !isCapturing;
+  const levelPercent = Math.min(100, Math.round((micLevel / 48) * 100));
 
-  const statusHint =
-    phase === "recording"
-      ? "Recording… tap Stop when done"
-      : phase === "paused"
-        ? "Paused — tap Resume or Stop"
-        : hasRecording
-          ? "Tap Listen to hear your reading"
-          : "";
+  const statusHint = isCapturing
+    ? levelPercent > 8
+      ? "Voice detected — tap Stop when finished"
+      : "Speak now — watch the orange bar move"
+    : playbackUrl
+      ? "Press play below to hear your reading"
+      : "Tap Record, read aloud, then Stop";
 
   return (
-    <div className="flex shrink-0 flex-col items-end">
-      <audio ref={audioElRef} className="hidden" preload="auto" playsInline />
+    <div className="flex shrink-0 flex-col items-end gap-1">
       <div
         className="flex items-center gap-1.5"
         role="toolbar"
-        aria-label="Record and listen to your reading"
+        aria-label="Record your reading"
       >
         <button
           type="button"
@@ -551,25 +403,39 @@ export function GospelReadingRecorder({ storageKey }: Props) {
         >
           <StopIcon />
         </button>
-        <button
-          type="button"
-          className={iconButtonClass(!canListen, isPlaying)}
-          aria-label="Listen to recording"
-          disabled={!canListen}
-          onClick={() => void playRecording()}
-        >
-          <ListenIcon active={isPlaying} />
-        </button>
       </div>
+
+      {isCapturing ? (
+        <div
+          className="h-1.5 w-44 max-w-[11rem] overflow-hidden rounded-full bg-[#e8e0d6]"
+          aria-hidden
+        >
+          <div
+            className="h-full rounded-full bg-[#c45c26] transition-[width] duration-75"
+            style={{ width: `${Math.max(levelPercent, isCapturing ? 4 : 0)}%` }}
+          />
+        </div>
+      ) : null}
+
+      {playbackUrl ? (
+        <audio
+          key={playbackUrl}
+          src={playbackUrl}
+          controls
+          preload="auto"
+          playsInline
+          className="h-8 w-44 max-w-[11rem]"
+          aria-label="Play your recording"
+        />
+      ) : null}
+
       {micError ? (
-        <p className="mt-1 max-w-[12rem] text-right text-[10px] leading-tight text-red-600">
-          {micError}
-        </p>
-      ) : statusHint ? (
-        <p className="mt-1 max-w-[12rem] text-right text-[10px] leading-tight text-[var(--color-muted)]">
+        <p className="max-w-[11rem] text-right text-[10px] leading-tight text-red-600">{micError}</p>
+      ) : (
+        <p className="max-w-[11rem] text-right text-[10px] leading-tight text-[var(--color-muted)]">
           {statusHint}
         </p>
-      ) : null}
+      )}
     </div>
   );
 }
