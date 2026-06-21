@@ -2,6 +2,7 @@
 
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
+import { typingDraftKey } from "@/lib/typing-draft-keys";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
@@ -20,12 +21,12 @@ export function BibleChapterTyping({
   text,
   citation,
 }: Props) {
-  const [saveError, setSaveError] = useState("");
-  const [saved, setSaved] = useState(false);
+  const [stickerError, setStickerError] = useState("");
+  const [stickerSaved, setStickerSaved] = useState(false);
 
-  const saveProgress = useCallback(
+  const unlockSticker = useCallback(
     async (accuracy: number) => {
-      setSaveError("");
+      setStickerError("");
       const res = await fetch("/api/bible/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,11 +38,11 @@ export function BibleChapterTyping({
       });
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
-        const message = data.error ?? "Could not save progress";
-        setSaveError(message);
+        const message = data.error ?? "Could not save sticker";
+        setStickerError(message);
         throw new Error(message);
       }
-      setSaved(true);
+      setStickerSaved(true);
     },
     [bookSlug, chapter],
   );
@@ -51,9 +52,9 @@ export function BibleChapterTyping({
       <PassageTypingGame
         text={text}
         title={`${bookName} — Chapter ${chapter}`}
+        draftKey={typingDraftKey.bibleChapter(bookSlug, chapter)}
         accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
-        showSaveButton
-        onSave={saveProgress}
+        onStickerUnlock={unlockSticker}
         completionMessage={
           <p>
             Your praise sticker for chapter {chapter} is saved.{" "}
@@ -64,8 +65,8 @@ export function BibleChapterTyping({
           </p>
         }
       />
-      {saveError && <p className="mt-3 text-sm text-red-600">{saveError}</p>}
-      {saved && !saveError && (
+      {stickerError && <p className="mt-3 text-sm text-red-600">{stickerError}</p>}
+      {stickerSaved && !stickerError && (
         <p className="mt-3 text-xs text-[var(--color-muted)]">
           {citation} · Douay-Rheims (public domain) via latinprayer.org
         </p>

@@ -4,6 +4,7 @@ import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
+import { typingDraftKey } from "@/lib/typing-draft-keys";
 import type { UniversalisMassDay } from "@/lib/universalis";
 import type { ReadingKind } from "@/types/mass";
 import Link from "next/link";
@@ -26,8 +27,8 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [saveError, setSaveError] = useState("");
-  const [saved, setSaved] = useState(false);
+  const [stickerError, setStickerError] = useState("");
+  const [stickerSaved, setStickerSaved] = useState(false);
   const [needsSignIn, setNeedsSignIn] = useState(false);
 
   const canType = focusDate === todayDate;
@@ -60,9 +61,9 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   }, [loadToday]);
 
   useEffect(() => {
-    setSaved(false);
+    setStickerSaved(false);
     setNeedsSignIn(false);
-    setSaveError("");
+    setStickerError("");
   }, [todayDate, readingKind]);
 
   const availableKinds = useMemo(() => {
@@ -81,9 +82,9 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   const reading = day?.readings.find((r) => r.kind === readingKind);
   const readingText = reading?.text?.trim() ?? "";
 
-  const saveProgress = useCallback(
+  const unlockSticker = useCallback(
     async (accuracy: number) => {
-      setSaveError("");
+      setStickerError("");
       setNeedsSignIn(false);
       const res = await fetch("/api/gospel/progress", {
         method: "POST",
@@ -97,16 +98,16 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         const message = data.error ?? "Could not save sticker";
-        setSaveError(message);
+        setStickerError(message);
         throw new Error(message);
       }
-      setSaved(true);
+      setStickerSaved(true);
       onCompleted(todayDate);
     },
     [todayDate, onCompleted],
   );
 
-  const completionMessage = saved ? (
+  const completionMessage = stickerSaved ? (
     <p>
       Your praise sticker for today was added to My Reading Calendar (
       {reading?.label ?? "reading"}).
@@ -171,9 +172,9 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
               key={`${todayDate}-${readingKind}`}
               text={readingText}
               title={reading?.label ?? "Typing practice"}
+              draftKey={typingDraftKey.gospelReading(todayDate, readingKind)}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
-              showSaveButton
-              onSave={saveProgress}
+              onStickerUnlock={unlockSticker}
               completionMessage={completionMessage}
             />
           ) : (
@@ -191,7 +192,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
             </p>
           )}
 
-          {saveError && <p className="text-sm text-red-600">{saveError}</p>}
+          {stickerError && <p className="text-sm text-red-600">{stickerError}</p>}
           {day.copyrightNotice && (
             <p className="text-xs text-[var(--color-muted)]">{day.copyrightNotice}</p>
           )}
