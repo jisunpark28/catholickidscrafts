@@ -9,6 +9,20 @@ type Props = {
 
 type Phase = "idle" | "recording" | "paused" | "ready";
 
+function pickRecorderMimeType(): string {
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/aac",
+    "audio/ogg;codecs=opus",
+  ];
+  for (const type of candidates) {
+    if (MediaRecorder.isTypeSupported(type)) return type;
+  }
+  return "";
+}
+
 function MicIcon({ active }: { active?: boolean }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -51,18 +65,18 @@ function StopIcon() {
   );
 }
 
-function ListenIcon() {
+function ListenIcon({ active }: { active?: boolean }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
       <path
         d="M11 5 6 9H3v6h3l5 4V5Z"
-        stroke="currentColor"
+        stroke={active ? "#c45c26" : "currentColor"}
         strokeWidth="2"
         strokeLinejoin="round"
       />
       <path
         d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8 8 0 0 1 0 12"
-        stroke="currentColor"
+        stroke={active ? "#c45c26" : "currentColor"}
         strokeWidth="2"
         strokeLinecap="round"
       />
@@ -73,14 +87,26 @@ function ListenIcon() {
 export function GospelReadingRecorder({ storageKey }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [hasRecording, setHasRecording] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [micError, setMicError] = useState("");
 
-  const recordingsRef = useRef<Map<string, string>>(new Map());
+  const recordingsRef = useRef<Map<string, Blob>>(new Map());
+  const mimeTypeRef = useRef("");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playUrlRef = useRef<string | null>(null);
   const discardOnStopRef = useRef(false);
+  const storageKeyRef = useRef(storageKey);
+
+  storageKeyRef.current = storageKey;
+
+  const syncRecordingState = useCallback((key: string) => {
+    const has = recordingsRef.current.has(key);
+    setHasRecording(has);
+    setPhase(has ? "ready" : "idle");
+  }, []);
 
   const stopStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
@@ -90,39 +116,81 @@ export function GospelReadingRecorder({ storageKey }: Props) {
   const stopPlayback = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.pause();
+      audioRef.current.src = "";
       audioRef.current = null;
     }
+    if (playUrlRef.current) {
+      URL.revokeObjectURL(playUrlRef.current);
+      playUrlRef.current = null;
+    }
+    setIsPlaying(false);
   }, []);
+
+  const finalizeRecording = useCallback(
+    (key: string, discard: boolean) => {
+      if (!discard) {
+        const mimeType = mimeTypeRef.current || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type: mimeType });
+        if (blob.size > 0) {
+          recordingsRef.current.set(key, blob);
+        } else {
+          recordingsRef.current.delete(key);
+        }
+      }
+      chunksRef.current = [];
+      stopStream();
+      mediaRecorderRef.current = null;
+      if (key === storageKeyRef.current) {
+        syncRecordingState(key);
+      }
+    },
+    [stopStream, syncRecordingState],
+  );
 
   const stopActiveRecorder = useCallback(() => {
     const rec = mediaRecorderRef.current;
-    if (rec && (rec.state === "recording" || rec.state === "paused")) {
-      rec.stop();
+    if (!rec) return;
+    if (rec.state === "inactive") return;
+
+    if (rec.state === "paused") {
+      try {
+        rec.resume();
+      } catch {
+        /* ignore */
+      }
     }
-  }, []);
+
+    try {
+      if (typeof rec.requestData === "function") {
+        rec.requestData();
+      }
+    } catch {
+      /* ignore */
+    }
+
+    try {
+      rec.stop();
+    } catch {
+      finalizeRecording(storageKeyRef.current, discardOnStopRef.current);
+    }
+  }, [finalizeRecording]);
 
   useEffect(() => {
     stopPlayback();
     discardOnStopRef.current = true;
     stopActiveRecorder();
     discardOnStopRef.current = false;
-    stopStream();
-    mediaRecorderRef.current = null;
     chunksRef.current = [];
-    setPhase(recordingsRef.current.has(storageKey) ? "ready" : "idle");
-    setHasRecording(recordingsRef.current.has(storageKey));
+    syncRecordingState(storageKey);
     setMicError("");
-  }, [storageKey, stopActiveRecorder, stopPlayback, stopStream]);
+  }, [storageKey, stopActiveRecorder, stopPlayback, syncRecordingState]);
 
   useEffect(() => {
-    const urls = recordingsRef.current;
+    const recordings = recordingsRef.current;
     return () => {
       stopPlayback();
       stopStream();
-      for (const url of urls.values()) {
-        URL.revokeObjectURL(url);
-      }
-      urls.clear();
+      recordings.clear();
     };
   }, [stopPlayback, stopStream]);
 
@@ -144,23 +212,16 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     setMicError("");
     stopPlayback();
 
-    const existing = recordingsRef.current.get(storageKey);
-    if (existing) {
-      URL.revokeObjectURL(existing);
-      recordingsRef.current.delete(storageKey);
-      setHasRecording(false);
-    }
+    recordingsRef.current.delete(storageKey);
+    syncRecordingState(storageKey);
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
       chunksRef.current = [];
 
-      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-        ? "audio/webm;codecs=opus"
-        : MediaRecorder.isTypeSupported("audio/webm")
-          ? "audio/webm"
-          : "";
+      const mimeType = pickRecorderMimeType();
+      mimeTypeRef.current = mimeType || "audio/webm";
 
       const keyForRecording = storageKey;
       const recorder = mimeType
@@ -169,42 +230,24 @@ export function GospelReadingRecorder({ storageKey }: Props) {
 
       mediaRecorderRef.current = recorder;
 
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) chunksRef.current.push(event.data);
-      };
-
-      recorder.onstop = () => {
-        const discard = discardOnStopRef.current;
-        if (!discard) {
-          const blob = new Blob(chunksRef.current, {
-            type: recorder.mimeType || "audio/webm",
-          });
-          if (blob.size > 0) {
-            const url = URL.createObjectURL(blob);
-            recordingsRef.current.set(keyForRecording, url);
-            if (keyForRecording === storageKey) {
-              setHasRecording(true);
-              setPhase("ready");
-            }
-          } else if (keyForRecording === storageKey) {
-            setPhase("idle");
-            setHasRecording(false);
-          }
-        } else if (keyForRecording === storageKey) {
-          setPhase(recordingsRef.current.has(storageKey) ? "ready" : "idle");
-          setHasRecording(recordingsRef.current.has(storageKey));
+      recorder.addEventListener("dataavailable", (event) => {
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data);
         }
-        stopStream();
-        mediaRecorderRef.current = null;
-        chunksRef.current = [];
-      };
+      });
 
-      recorder.start();
+      recorder.addEventListener("stop", () => {
+        finalizeRecording(keyForRecording, discardOnStopRef.current);
+      });
+
+      recorder.start(250);
       setPhase("recording");
+      setHasRecording(false);
     } catch {
       setMicError("Allow microphone access to record.");
       stopStream();
       setPhase("idle");
+      setHasRecording(false);
     }
   };
 
@@ -220,25 +263,43 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     }
   };
 
-  const stopRecord = () => {
-    stopActiveRecorder();
-  };
+  const playRecording = async () => {
+    const blob = recordingsRef.current.get(storageKey);
+    if (!blob || blob.size === 0) {
+      setMicError("No recording yet. Tap Stop after you record.");
+      syncRecordingState(storageKey);
+      return;
+    }
 
-  const playRecording = () => {
-    const url = recordingsRef.current.get(storageKey);
-    if (!url) return;
+    setMicError("");
     stopPlayback();
-    const audio = new Audio(url);
+
+    const url = URL.createObjectURL(blob);
+    playUrlRef.current = url;
+
+    const audio = new Audio();
+    audio.src = url;
+    audio.volume = 1;
+    audio.setAttribute("playsinline", "true");
     audioRef.current = audio;
-    audio.onended = () => {
-      audioRef.current = null;
+
+    audio.onended = () => stopPlayback();
+    audio.onerror = () => {
+      setMicError("Could not play this recording in your browser.");
+      stopPlayback();
     };
-    void audio.play().catch(() => {
-      setMicError("Could not play recording.");
-    });
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+    } catch {
+      setMicError("Tap Listen again to play your recording.");
+      stopPlayback();
+    }
   };
 
   const isCapturing = phase === "recording" || phase === "paused";
+  const canListen = hasRecording && !isCapturing;
 
   return (
     <div className="flex shrink-0 flex-col items-end">
@@ -270,18 +331,18 @@ export function GospelReadingRecorder({ storageKey }: Props) {
           className={iconButtonClass(!isCapturing)}
           aria-label="Stop recording"
           disabled={!isCapturing}
-          onClick={stopRecord}
+          onClick={stopActiveRecorder}
         >
           <StopIcon />
         </button>
         <button
           type="button"
-          className={iconButtonClass(!hasRecording || isCapturing, false)}
+          className={iconButtonClass(!canListen, isPlaying)}
           aria-label="Listen to recording"
-          disabled={!hasRecording || isCapturing}
-          onClick={playRecording}
+          disabled={!canListen}
+          onClick={() => void playRecording()}
         >
-          <ListenIcon />
+          <ListenIcon active={isPlaying} />
         </button>
       </div>
       {micError ? (
