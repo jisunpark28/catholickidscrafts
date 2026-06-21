@@ -9,7 +9,7 @@ type Props = {
 
 type Phase = "idle" | "recording" | "paused" | "ready";
 
-const RECORDER_MIME_CANDIDATES = [
+const APPLE_RECORDER_MIME_CANDIDATES = [
   "audio/mp4",
   "audio/mp4;codecs=mp4a",
   "audio/aac",
@@ -18,20 +18,39 @@ const RECORDER_MIME_CANDIDATES = [
   "audio/ogg;codecs=opus",
 ] as const;
 
+/** Chrome/Edge record and play WebM reliably; MP4 MediaRecorder blobs often fail playback. */
+const CHROMIUM_RECORDER_MIME_CANDIDATES = [
+  "audio/webm;codecs=opus",
+  "audio/webm",
+  "audio/ogg;codecs=opus",
+  "audio/mp4",
+  "audio/mp4;codecs=mp4a",
+  "audio/aac",
+] as const;
+
+function isAppleBrowser(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  return /iPad|iPhone|iPod/.test(ua) || (/Safari/i.test(ua) && !/Chrome|Chromium|CriOS|Edg/i.test(ua));
+}
+
 function canPlayMimeType(mime: string): boolean {
   if (typeof document === "undefined") return true;
   const audio = document.createElement("audio");
   const base = mime.split(";")[0]?.trim() ?? mime;
-  const level = audio.canPlayType(mime) || audio.canPlayType(base);
-  return level !== "";
+  return (audio.canPlayType(mime) || audio.canPlayType(base)) !== "";
+}
+
+function recorderMimeCandidates(): readonly string[] {
+  return isAppleBrowser() ? APPLE_RECORDER_MIME_CANDIDATES : CHROMIUM_RECORDER_MIME_CANDIDATES;
 }
 
 function pickRecorderMimeType(): string {
-  for (const type of RECORDER_MIME_CANDIDATES) {
+  for (const type of recorderMimeCandidates()) {
     if (!MediaRecorder.isTypeSupported(type)) continue;
     if (canPlayMimeType(type)) return type;
   }
-  for (const type of RECORDER_MIME_CANDIDATES) {
+  for (const type of recorderMimeCandidates()) {
     if (MediaRecorder.isTypeSupported(type)) return type;
   }
   return "";
@@ -44,10 +63,67 @@ function blobMimeType(chunks: Blob[], fallback: string): string {
   return "audio/webm";
 }
 
-function prefersSingleBlobOnStop(): boolean {
-  if (typeof navigator === "undefined") return false;
-  const ua = navigator.userAgent;
-  return /iPad|iPhone|iPod/.test(ua) || (/Safari/i.test(ua) && !/Chrome|Chromium|CriOS|Edg/i.test(ua));
+function createMediaRecorder(stream: MediaStream, preferredMime: string): MediaRecorder {
+  const candidates = recorderMimeCandidates();
+  const attempts = preferredMime
+    ? [preferredMime, ...candidates.filter((t) => t !== preferredMime), ""]
+    : [...candidates, ""];
+
+  for (const mime of attempts) {
+    try {
+      return mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+    } catch {
+      continue;
+    }
+  }
+  return new MediaRecorder(stream);
+}
+
+function waitForRecorderChunks(recorder: MediaRecorder, hasChunks: () => boolean): Promise<void> {
+  return new Promise((resolve) => {
+    if (hasChunks()) {
+      resolve();
+      return;
+    }
+
+    const onData = (event: BlobEvent) => {
+      if (event.data.size > 0) {
+        recorder.removeEventListener("dataavailable", onData);
+        resolve();
+      }
+    };
+
+    recorder.addEventListener("dataavailable", onData);
+    window.setTimeout(() => {
+      recorder.removeEventListener("dataavailable", onData);
+      resolve();
+    }, 300);
+  });
+}
+
+function waitForAudioReady(audio: HTMLAudioElement, timeoutMs = 4000): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      resolve(true);
+      return;
+    }
+
+    const done = (ok: boolean) => {
+      audio.removeEventListener("loadeddata", onReady);
+      audio.removeEventListener("canplaythrough", onReady);
+      audio.removeEventListener("error", onFail);
+      window.clearTimeout(timer);
+      resolve(ok);
+    };
+
+    const onReady = () => done(true);
+    const onFail = () => done(false);
+    const timer = window.setTimeout(() => done(audio.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA), timeoutMs);
+
+    audio.addEventListener("loadeddata", onReady, { once: true });
+    audio.addEventListener("canplaythrough", onReady, { once: true });
+    audio.addEventListener("error", onFail, { once: true });
+  });
 }
 
 function MicIcon({ active }: { active?: boolean }) {
@@ -130,6 +206,9 @@ export function GospelReadingRecorder({ storageKey }: Props) {
   } | null>(null);
   const discardOnStopRef = useRef(false);
   const storageKeyRef = useRef(storageKey);
+  const stopPlaybackRef = useRef<() => void>(() => {});
+  const stopActiveRecorderRef = useRef<() => void>(() => {});
+  const syncRecordingStateRef = useRef<(key: string) => void>(() => {});
 
   storageKeyRef.current = storageKey;
 
@@ -147,12 +226,9 @@ export function GospelReadingRecorder({ storageKey }: Props) {
   const detachAudioElement = useCallback((audio: HTMLAudioElement) => {
     audio.onended = null;
     audio.onerror = null;
-    audio.oncanplaythrough = null;
     audio.pause();
-    while (audio.firstChild) {
-      audio.removeChild(audio.firstChild);
-    }
-    audio.removeAttribute("src");
+    audio.src = "";
+    audio.load();
   }, []);
 
   const stopWebAudio = useCallback(() => {
@@ -180,6 +256,9 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     setIsPlaying(false);
   }, [detachAudioElement, stopWebAudio]);
 
+  stopPlaybackRef.current = stopPlayback;
+  syncRecordingStateRef.current = syncRecordingState;
+
   const finalizeRecording = useCallback(
     (key: string, discard: boolean, recorderMime = "") => {
       if (!discard) {
@@ -196,6 +275,9 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       mediaRecorderRef.current = null;
       if (key === storageKeyRef.current) {
         syncRecordingState(key);
+        if (!discard && !recordingsRef.current.has(key)) {
+          setMicError("Recording was empty. Try again and tap Stop when finished.");
+        }
       }
     },
     [stopStream, syncRecordingState],
@@ -214,39 +296,47 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       }
     }
 
-    try {
-      if (typeof rec.requestData === "function") {
-        rec.requestData();
+    const useTimeslice = !isAppleBrowser();
+    if (useTimeslice) {
+      try {
+        if (typeof rec.requestData === "function") {
+          rec.requestData();
+        }
+      } catch {
+        /* ignore */
       }
-    } catch {
-      /* ignore */
     }
 
     try {
       rec.stop();
     } catch {
-      finalizeRecording(storageKeyRef.current, discardOnStopRef.current, rec.mimeType);
+      void waitForRecorderChunks(rec, () => chunksRef.current.length > 0).then(() => {
+        finalizeRecording(storageKeyRef.current, discardOnStopRef.current, rec.mimeType);
+      });
     }
   }, [finalizeRecording]);
 
+  stopActiveRecorderRef.current = stopActiveRecorder;
+
   useEffect(() => {
-    stopPlayback();
+    stopPlaybackRef.current();
     discardOnStopRef.current = true;
-    stopActiveRecorder();
+    stopActiveRecorderRef.current();
     discardOnStopRef.current = false;
     chunksRef.current = [];
-    syncRecordingState(storageKey);
+    syncRecordingStateRef.current(storageKey);
     setMicError("");
-  }, [storageKey, stopActiveRecorder, stopPlayback, syncRecordingState]);
+  }, [storageKey]);
 
   useEffect(() => {
     const recordings = recordingsRef.current;
     return () => {
-      stopPlayback();
-      stopStream();
+      stopPlaybackRef.current();
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
       recordings.clear();
     };
-  }, [stopPlayback, stopStream]);
+  }, []);
 
   const iconButtonClass = (disabled: boolean, active?: boolean) =>
     `flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition ${
@@ -262,6 +352,10 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       setMicError("Recording is not supported in this browser.");
       return;
     }
+    if (typeof MediaRecorder === "undefined") {
+      setMicError("Recording is not supported in this browser.");
+      return;
+    }
 
     setMicError("");
     stopPlayback();
@@ -274,16 +368,12 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       streamRef.current = stream;
       chunksRef.current = [];
 
-      const mimeType = pickRecorderMimeType();
-      mimeTypeRef.current = mimeType;
+      const preferredMime = pickRecorderMimeType();
+      const recorder = createMediaRecorder(stream, preferredMime);
+      mediaRecorderRef.current = recorder;
+      mimeTypeRef.current = recorder.mimeType || preferredMime || "audio/webm";
 
       const keyForRecording = storageKey;
-      const recorder = mimeType
-        ? new MediaRecorder(stream, { mimeType })
-        : new MediaRecorder(stream);
-
-      mediaRecorderRef.current = recorder;
-      mimeTypeRef.current = recorder.mimeType || mimeType || "audio/webm";
 
       recorder.addEventListener("dataavailable", (event) => {
         if (event.data.size > 0) {
@@ -292,14 +382,16 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       });
 
       recorder.addEventListener("stop", () => {
-        finalizeRecording(
-          keyForRecording,
-          discardOnStopRef.current,
-          recorder.mimeType || mimeTypeRef.current,
-        );
+        void waitForRecorderChunks(recorder, () => chunksRef.current.length > 0).then(() => {
+          finalizeRecording(
+            keyForRecording,
+            discardOnStopRef.current,
+            recorder.mimeType || mimeTypeRef.current,
+          );
+        });
       });
 
-      if (prefersSingleBlobOnStop()) {
+      if (isAppleBrowser()) {
         recorder.start();
       } else {
         recorder.start(250);
@@ -366,42 +458,18 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       const audio = audioElRef.current;
       if (!audio) return false;
 
-      stopPlayback();
+      detachAudioElement(audio);
 
       const url = URL.createObjectURL(blob);
       playUrlRef.current = url;
 
-      detachAudioElement(audio);
-
-      const source = document.createElement("source");
-      source.src = url;
-      source.type = blob.type || "audio/mp4";
-      audio.appendChild(source);
+      audio.src = url;
       audio.volume = 1;
       audio.setAttribute("playsinline", "true");
+      audio.load();
 
-      const loaded = await new Promise<boolean>((resolve) => {
-        const onReady = () => {
-          cleanup();
-          resolve(true);
-        };
-        const onFail = () => {
-          cleanup();
-          resolve(false);
-        };
-        const cleanup = () => {
-          audio.removeEventListener("canplaythrough", onReady);
-          audio.removeEventListener("error", onFail);
-        };
-        audio.addEventListener("canplaythrough", onReady, { once: true });
-        audio.addEventListener("error", onFail, { once: true });
-        audio.load();
-      });
-
-      if (!loaded) {
-        stopPlayback();
-        return false;
-      }
+      const loaded = await waitForAudioReady(audio);
+      if (!loaded) return false;
 
       audio.onended = () => stopPlayback();
 
@@ -410,7 +478,6 @@ export function GospelReadingRecorder({ storageKey }: Props) {
         setIsPlaying(true);
         return true;
       } catch {
-        stopPlayback();
         return false;
       }
     },
@@ -439,6 +506,15 @@ export function GospelReadingRecorder({ storageKey }: Props) {
 
   const isCapturing = phase === "recording" || phase === "paused";
   const canListen = hasRecording && !isCapturing;
+
+  const statusHint =
+    phase === "recording"
+      ? "Recording… tap Stop when done"
+      : phase === "paused"
+        ? "Paused — tap Resume or Stop"
+        : hasRecording
+          ? "Tap Listen to hear your reading"
+          : "";
 
   return (
     <div className="flex shrink-0 flex-col items-end">
@@ -488,6 +564,10 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       {micError ? (
         <p className="mt-1 max-w-[12rem] text-right text-[10px] leading-tight text-red-600">
           {micError}
+        </p>
+      ) : statusHint ? (
+        <p className="mt-1 max-w-[12rem] text-right text-[10px] leading-tight text-[var(--color-muted)]">
+          {statusHint}
         </p>
       ) : null}
     </div>
