@@ -9,13 +9,23 @@ type Props = {
 
 type Phase = "idle" | "recording" | "paused" | "ready";
 
-const RECORDER_MIME_CANDIDATES = [
+const APPLE_RECORDER_MIME_CANDIDATES = [
   "audio/mp4",
   "audio/mp4;codecs=mp4a",
   "audio/aac",
   "audio/webm;codecs=opus",
   "audio/webm",
   "audio/ogg;codecs=opus",
+] as const;
+
+/** Chrome/Edge record and play WebM reliably; MP4 MediaRecorder blobs often fail playback. */
+const CHROMIUM_RECORDER_MIME_CANDIDATES = [
+  "audio/webm;codecs=opus",
+  "audio/webm",
+  "audio/ogg;codecs=opus",
+  "audio/mp4",
+  "audio/mp4;codecs=mp4a",
+  "audio/aac",
 ] as const;
 
 function isAppleBrowser(): boolean {
@@ -31,12 +41,16 @@ function canPlayMimeType(mime: string): boolean {
   return (audio.canPlayType(mime) || audio.canPlayType(base)) !== "";
 }
 
+function recorderMimeCandidates(): readonly string[] {
+  return isAppleBrowser() ? APPLE_RECORDER_MIME_CANDIDATES : CHROMIUM_RECORDER_MIME_CANDIDATES;
+}
+
 function pickRecorderMimeType(): string {
-  for (const type of RECORDER_MIME_CANDIDATES) {
+  for (const type of recorderMimeCandidates()) {
     if (!MediaRecorder.isTypeSupported(type)) continue;
     if (canPlayMimeType(type)) return type;
   }
-  for (const type of RECORDER_MIME_CANDIDATES) {
+  for (const type of recorderMimeCandidates()) {
     if (MediaRecorder.isTypeSupported(type)) return type;
   }
   return "";
@@ -50,9 +64,10 @@ function blobMimeType(chunks: Blob[], fallback: string): string {
 }
 
 function createMediaRecorder(stream: MediaStream, preferredMime: string): MediaRecorder {
+  const candidates = recorderMimeCandidates();
   const attempts = preferredMime
-    ? [preferredMime, ...RECORDER_MIME_CANDIDATES.filter((t) => t !== preferredMime), ""]
-    : [...RECORDER_MIME_CANDIDATES, ""];
+    ? [preferredMime, ...candidates.filter((t) => t !== preferredMime), ""]
+    : [...candidates, ""];
 
   for (const mime of attempts) {
     try {
@@ -212,10 +227,8 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     audio.onended = null;
     audio.onerror = null;
     audio.pause();
-    while (audio.firstChild) {
-      audio.removeChild(audio.firstChild);
-    }
-    audio.removeAttribute("src");
+    audio.src = "";
+    audio.load();
   }, []);
 
   const stopWebAudio = useCallback(() => {
@@ -445,10 +458,11 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       const audio = audioElRef.current;
       if (!audio) return false;
 
+      detachAudioElement(audio);
+
       const url = URL.createObjectURL(blob);
       playUrlRef.current = url;
 
-      detachAudioElement(audio);
       audio.src = url;
       audio.volume = 1;
       audio.setAttribute("playsinline", "true");
