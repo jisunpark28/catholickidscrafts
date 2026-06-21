@@ -282,6 +282,7 @@ model FamilyAccount {
   subProfiles  SubProfile[]
   progress     BibleChapterProgress[] @relation("OwnerProgress")
   gospelDays   GospelDayProgress[]    @relation("OwnerGospelDays")
+  typingDrafts TypingDraft[]          @relation("OwnerTypingDrafts")
 }
 
 /// Child/class sub-profile (max 30 per family); logs in with Access ID only.
@@ -301,6 +302,7 @@ model SubProfile {
   familyAccount    FamilyAccount          @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
   progress         BibleChapterProgress[] @relation("SubProgress")
   gospelDays       GospelDayProgress[]    @relation("SubGospelDays")
+  typingDrafts     TypingDraft[]          @relation("SubTypingDrafts")
 
   @@index([familyAccountId, sortOrder])
 }
@@ -341,5 +343,24 @@ model GospelDayProgress {
   @@unique([familyAccountId, dateKey])
   @@unique([subProfileId, dateKey])
   @@index([dateKey])
+}
+
+/// Saved typing text so readers can pause and continue later (separate from stickers).
+model TypingDraft {
+  id              String         @id @default(cuid())
+  draftKey        String
+  typedText       String         @db.Text
+  elapsedMs       Int?
+  updatedAt       DateTime       @updatedAt
+  guestId         String?
+  familyAccountId String?
+  subProfileId    String?
+  familyAccount   FamilyAccount? @relation("OwnerTypingDrafts", fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?    @relation("SubTypingDrafts", fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([guestId, draftKey])
+  @@unique([familyAccountId, draftKey])
+  @@unique([subProfileId, draftKey])
+  @@index([draftKey])
 }
 

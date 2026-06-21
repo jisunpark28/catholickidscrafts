@@ -10,15 +10,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 type Props = {
   text: string;
   title?: string;
-  /** Called when saving progress (auto on pass, or via Save button). */
-  onSave?: (accuracy: number) => void | Promise<void>;
-  /** @deprecated Use onSave */
+  /** Unique key for draft save/load (e.g. bible:genesis:1). */
+  draftKey?: string;
+  /** Sticker unlock only — called automatically at 90%+ completion. */
+  onStickerUnlock?: (accuracy: number) => void | Promise<void>;
+  /** @deprecated Use onStickerUnlock */
   onComplete?: (accuracy: number) => void | Promise<void>;
-  /** Fraction 0–1 required to count as complete (default 0.9). */
+  /** Fraction 0–1 required to unlock sticker (default 0.9). */
   accuracyThreshold?: number;
-  /** Shown after a successful completion (e.g. sticker unlocked). */
+  /** Shown after sticker unlock. */
   completionMessage?: React.ReactNode;
-  /** Show Save next to Reset (e.g. Gospel / Bible stickers). */
+  /** Show Save draft button (defaults to true when draftKey is set). */
   showSaveButton?: boolean;
 };
 
@@ -26,36 +28,72 @@ type Props = {
 export function PassageTypingGame({
   text,
   title = "Typing practice",
-  onSave,
+  draftKey,
+  onStickerUnlock,
   onComplete,
   accuracyThreshold = 0.9,
   completionMessage,
-  showSaveButton = false,
+  showSaveButton,
 }: Props) {
-  const persist = onSave ?? onComplete;
+  const unlockSticker = onStickerUnlock ?? onComplete;
+  const canSaveDraft = showSaveButton ?? Boolean(draftKey);
   const target = useMemo(() => normalizePassageText(text), [text]);
   const [typed, setTyped] = useState("");
   const [started, setStarted] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
-  const [savePending, setSavePending] = useState(false);
+  const [draftSavePending, setDraftSavePending] = useState(false);
+  const [draftSaved, setDraftSaved] = useState(false);
+  const [draftError, setDraftError] = useState("");
+  const [draftLoaded, setDraftLoaded] = useState(false);
   const reportedRef = useRef(false);
   const startTimeRef = useRef<number | null>(null);
-  const passageRef = useRef<HTMLParagraphElement>(null);
   const nextCharRef = useRef<HTMLSpanElement>(null);
 
   const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
   const nextIndex = typedNorm.length;
 
-  useEffect(() => {
+  const resetLocal = useCallback(() => {
     setTyped("");
     setStarted(false);
     setElapsedMs(0);
     setUnlocked(false);
-    setSavePending(false);
+    setDraftSavePending(false);
+    setDraftSaved(false);
+    setDraftError("");
     reportedRef.current = false;
     startTimeRef.current = null;
-  }, [target]);
+  }, []);
+
+  useEffect(() => {
+    resetLocal();
+    setDraftLoaded(false);
+  }, [target, draftKey, resetLocal]);
+
+  useEffect(() => {
+    if (!draftKey || draftLoaded) return;
+    let cancelled = false;
+    void fetch(`/api/typing/draft?draftKey=${encodeURIComponent(draftKey)}`)
+      .then((res) => res.json())
+      .then((data: { typedText?: string; elapsedMs?: number | null }) => {
+        if (cancelled) return;
+        const savedText = data.typedText ?? "";
+        if (savedText.length > 0) {
+          setTyped(savedText);
+          setStarted(true);
+          const ms = data.elapsedMs ?? 0;
+          setElapsedMs(ms);
+          startTimeRef.current = Date.now() - ms;
+        }
+        setDraftLoaded(true);
+      })
+      .catch(() => {
+        if (!cancelled) setDraftLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [draftKey, draftLoaded]);
 
   const done = typedNorm.length >= target.length && target.length > 0;
 
@@ -79,46 +117,56 @@ export function PassageTypingGame({
   const passedThreshold = done && accuracy + 1e-9 >= accuracyThreshold;
   const elapsedSec = Math.floor(elapsedMs / 1000);
 
-  const invokeSave = useCallback(
-    async (options?: { requireThreshold?: boolean }) => {
-      if (!persist || savePending) return;
-      if (options?.requireThreshold && !passedThreshold) return;
-      setSavePending(true);
-      try {
-        await persist(accuracy);
-        setUnlocked(true);
-      } finally {
-        setSavePending(false);
+  const saveDraft = useCallback(async () => {
+    if (!draftKey || draftSavePending) return;
+    setDraftSavePending(true);
+    setDraftError("");
+    setDraftSaved(false);
+    try {
+      const res = await fetch("/api/typing/draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ draftKey, typedText: typed, elapsedMs }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(data.error ?? "Could not save draft");
       }
-    },
-    [persist, passedThreshold, savePending, accuracy],
-  );
+      setDraftSaved(true);
+    } catch (e) {
+      setDraftError(e instanceof Error ? e.message : "Could not save draft");
+    } finally {
+      setDraftSavePending(false);
+    }
+  }, [draftKey, draftSavePending, typed, elapsedMs]);
 
   useEffect(() => {
-    if (!persist || !passedThreshold || reportedRef.current) return;
+    if (!unlockSticker || !passedThreshold || reportedRef.current) return;
     reportedRef.current = true;
-    void invokeSave({ requireThreshold: true });
-  }, [persist, passedThreshold, invokeSave]);
+    setUnlocked(true);
+    void unlockSticker(accuracy);
+  }, [unlockSticker, passedThreshold, accuracy]);
 
   useEffect(() => {
     nextCharRef.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [nextIndex]);
 
-  const reset = useCallback(() => {
-    setTyped("");
-    setStarted(false);
-    setElapsedMs(0);
-    setUnlocked(false);
-    setSavePending(false);
-    reportedRef.current = false;
-    startTimeRef.current = null;
-  }, []);
+  const reset = useCallback(async () => {
+    if (draftKey) {
+      await fetch(`/api/typing/draft?draftKey=${encodeURIComponent(draftKey)}`, {
+        method: "DELETE",
+      }).catch(() => {});
+    }
+    resetLocal();
+    setDraftLoaded(true);
+  }, [draftKey, resetLocal]);
 
   const beginTyping = useCallback(() => {
     if (startTimeRef.current == null) {
       startTimeRef.current = Date.now();
     }
     setStarted(true);
+    setDraftSaved(false);
   }, []);
 
   if (!target) {
@@ -132,15 +180,12 @@ export function PassageTypingGame({
       <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4">
         <h2 className="text-lg font-bold text-[var(--color-ink)]">{title}</h2>
         <p className="mt-1 text-sm text-[var(--color-muted)]">
-          Type the passage below. Correct letters turn green.
+          Type the passage below. Correct letters turn green. Use Save to pause and continue later.
         </p>
       </div>
 
       <div className="px-6 py-6">
-        <p
-          ref={passageRef}
-          className="mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]"
-        >
+        <p className="mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]">
           {target.split("").map((char, i) => {
             let className = "opacity-40";
             if (i < typedNorm.length) {
@@ -200,21 +245,25 @@ export function PassageTypingGame({
                 sticker. Reset and try again.
               </span>
             )}
+            {draftSaved && (
+              <span className="font-semibold text-green-700">Draft saved — you can continue later.</span>
+            )}
           </div>
+          {draftError && <p className="text-sm text-red-600">{draftError}</p>}
           <div className="flex flex-wrap gap-2">
-            {showSaveButton && (
+            {canSaveDraft && draftKey && (
               <button
                 type="button"
-                onClick={() => void invokeSave()}
-                disabled={!persist || savePending}
-                className="border-2 border-[var(--color-accent)] bg-white px-4 py-1.5 font-semibold text-[var(--color-accent)] hover:bg-[var(--color-surface)] disabled:cursor-not-allowed disabled:border-[var(--color-border)] disabled:bg-[var(--color-surface)] disabled:text-[var(--color-muted)]"
+                onClick={() => void saveDraft()}
+                disabled={draftSavePending}
+                className="border-2 border-[var(--color-accent)] bg-white px-4 py-1.5 font-semibold text-[var(--color-accent)] hover:bg-[var(--color-surface)] disabled:cursor-not-allowed disabled:border-[var(--color-border)] disabled:text-[var(--color-muted)]"
               >
-                {savePending ? "Saving…" : "Save"}
+                {draftSavePending ? "Saving…" : "Save"}
               </button>
             )}
             <button
               type="button"
-              onClick={reset}
+              onClick={() => void reset()}
               className="border border-[var(--color-border)] px-4 py-1.5 font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)]"
             >
               Reset

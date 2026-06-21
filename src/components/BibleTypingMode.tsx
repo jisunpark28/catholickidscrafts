@@ -7,6 +7,7 @@ import type { UniversalisMassDay } from "@/lib/universalis";
 const DEFAULT_UNIVERSALIS_MASS_URL =
   "https://universalis.com/Europe.England/mass.htm";
 import { todayUniversalis, toDateKey } from "@/lib/dates";
+import { typingDraftKey } from "@/lib/typing-draft-keys";
 import type { ReadingKind } from "@/types/mass";
 
 const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
@@ -154,6 +155,7 @@ export function BibleTypingMode() {
             key={`${today}-${reading.kind}`}
             title={reading.label}
             text={readingText}
+            draftKey={typingDraftKey.massReading(today, reading.kind)}
           />
           {copyrightNotice.length > 0 && (
             <p className="text-xs leading-relaxed text-[var(--color-muted)]">
