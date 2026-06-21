@@ -5,42 +5,61 @@ import {
   normalizePassageText,
   typingAccuracy,
 } from "@/lib/typing-accuracy";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   text: string;
   title?: string;
-  /** Called once when the passage is finished at or above accuracyThreshold. */
-  onComplete?: (accuracy: number) => void;
+  /** Called when saving progress (auto on pass, or via Save button). */
+  onSave?: (accuracy: number) => void | Promise<void>;
+  /** @deprecated Use onSave */
+  onComplete?: (accuracy: number) => void | Promise<void>;
   /** Fraction 0–1 required to count as complete (default 0.9). */
   accuracyThreshold?: number;
   /** Shown after a successful completion (e.g. sticker unlocked). */
   completionMessage?: React.ReactNode;
 };
 
+function TypingCaret({ caretRef }: { caretRef?: React.RefObject<HTMLSpanElement | null> }) {
+  return (
+    <span
+      ref={caretRef}
+      className="mx-px inline-block h-[1.1em] w-0.5 animate-pulse bg-[var(--color-accent)] align-text-bottom"
+      aria-hidden
+    />
+  );
+}
+
 /** Type-along UI for a passage (Today's Bible mode). */
 export function PassageTypingGame({
   text,
   title = "Typing practice",
+  onSave,
   onComplete,
   accuracyThreshold = 0.9,
   completionMessage,
 }: Props) {
+  const persist = onSave ?? onComplete;
   const target = useMemo(() => normalizePassageText(text), [text]);
   const [typed, setTyped] = useState("");
   const [started, setStarted] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
+  const [savePending, setSavePending] = useState(false);
   const reportedRef = useRef(false);
   const startTimeRef = useRef<number | null>(null);
+  const passageRef = useRef<HTMLParagraphElement>(null);
+  const caretRef = useRef<HTMLSpanElement>(null);
 
   const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
+  const nextIndex = typedNorm.length;
 
   useEffect(() => {
     setTyped("");
     setStarted(false);
     setElapsedMs(0);
     setUnlocked(false);
+    setSavePending(false);
     reportedRef.current = false;
     startTimeRef.current = null;
   }, [target]);
@@ -64,21 +83,36 @@ export function PassageTypingGame({
     [typedNorm, target],
   );
 
-  const passedThreshold = done && accuracy >= accuracyThreshold;
+  const passedThreshold = done && accuracy + 1e-9 >= accuracyThreshold;
   const elapsedSec = Math.floor(elapsedMs / 1000);
 
+  const invokeSave = useCallback(async () => {
+    if (!persist || !passedThreshold || savePending) return;
+    setSavePending(true);
+    try {
+      await persist(accuracy);
+      setUnlocked(true);
+    } finally {
+      setSavePending(false);
+    }
+  }, [persist, passedThreshold, savePending, accuracy]);
+
   useEffect(() => {
-    if (!onComplete || !passedThreshold || reportedRef.current) return;
+    if (!persist || !passedThreshold || reportedRef.current) return;
     reportedRef.current = true;
-    setUnlocked(true);
-    onComplete(accuracy);
-  }, [onComplete, passedThreshold, accuracy]);
+    void invokeSave();
+  }, [persist, passedThreshold, invokeSave]);
+
+  useEffect(() => {
+    caretRef.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [nextIndex]);
 
   const reset = useCallback(() => {
     setTyped("");
     setStarted(false);
     setElapsedMs(0);
     setUnlocked(false);
+    setSavePending(false);
     reportedRef.current = false;
     startTimeRef.current = null;
   }, []);
@@ -106,7 +140,10 @@ export function PassageTypingGame({
       </div>
 
       <div className="px-6 py-6">
-        <p className="mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]">
+        <p
+          ref={passageRef}
+          className="mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]"
+        >
           {target.split("").map((char, i) => {
             let className = "opacity-40";
             if (i < typedNorm.length) {
@@ -114,15 +151,18 @@ export function PassageTypingGame({
                 typedNorm[i] === char
                   ? "font-semibold text-green-700 opacity-100"
                   : "bg-red-50 font-semibold text-red-600";
-            } else if (i === typedNorm.length) {
-              className = "underline decoration-[var(--color-accent)] opacity-100";
             }
+            const showCaret = i === nextIndex;
             return (
-              <span key={i} className={className}>
-                {char}
-              </span>
+              <Fragment key={i}>
+                {showCaret && <TypingCaret caretRef={caretRef} />}
+                <span className={className}>{char}</span>
+              </Fragment>
             );
           })}
+          {nextIndex >= target.length && target.length > 0 && (
+            <TypingCaret caretRef={caretRef} />
+          )}
         </p>
 
         <textarea
@@ -159,6 +199,16 @@ export function PassageTypingGame({
               Finish with at least {Math.round(accuracyThreshold * 100)}% accuracy to unlock the
               sticker. Reset and try again.
             </span>
+          )}
+          {persist && (
+            <button
+              type="button"
+              onClick={() => void invokeSave()}
+              disabled={!passedThreshold || savePending}
+              className="border border-[var(--color-accent)] bg-[var(--color-surface)] px-3 py-1 font-semibold text-[var(--color-accent)] hover:bg-white disabled:cursor-not-allowed disabled:border-[var(--color-border)] disabled:text-[var(--color-muted)]"
+            >
+              {savePending ? "Saving…" : "Save"}
+            </button>
           )}
           <button
             type="button"

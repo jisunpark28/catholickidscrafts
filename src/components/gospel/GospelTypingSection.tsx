@@ -81,7 +81,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   const reading = day?.readings.find((r) => r.kind === readingKind);
   const readingText = reading?.text?.trim() ?? "";
 
-  const onComplete = useCallback(
+  const saveProgress = useCallback(
     async (accuracy: number) => {
       setSaveError("");
       setNeedsSignIn(false);
@@ -92,12 +92,13 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
       });
       if (res.status === 401) {
         setNeedsSignIn(true);
-        return;
+        throw new Error("Sign in required");
       }
       if (!res.ok) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
-        setSaveError(data.error ?? "Could not save sticker");
-        return;
+        const message = data.error ?? "Could not save sticker";
+        setSaveError(message);
+        throw new Error(message);
       }
       setSaved(true);
       onCompleted(todayDate);
@@ -169,8 +170,8 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
               })}
             </div>
             <p className="mt-2 text-xs font-normal text-[var(--color-muted)]">
-              Type any reading with {Math.round(BIBLE_STICKER_ACCURACY_THRESHOLD * 100)}% accuracy
-              to earn today&apos;s praise sticker.
+              Type any reading with {Math.round(BIBLE_STICKER_ACCURACY_THRESHOLD * 100)}% accuracy,
+              then press Save to add today&apos;s praise sticker to your calendar.
             </p>
           </fieldset>
 
@@ -180,7 +181,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
               text={readingText}
               title={reading?.label ?? "Typing practice"}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
-              onComplete={onComplete}
+              onSave={saveProgress}
               completionMessage={completionMessage}
             />
           ) : (
