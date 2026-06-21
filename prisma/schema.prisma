@@ -364,3 +364,30 @@ model TypingDraft {
   @@index([draftKey])
 }
 
+/// Anonymous question/thought on a Bible chapter typing page (OT/NT).
+model BibleChapterThread {
+  id              String                @id @default(cuid())
+  bookSlug        String
+  chapter         Int
+  body            String                @db.Text
+  authorTokenHash String
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  comments        BibleChapterComment[]
+
+  @@index([bookSlug, chapter, createdAt])
+}
+
+/// Reply on a Bible chapter thread (anonymous).
+model BibleChapterComment {
+  id              String             @id @default(cuid())
+  threadId        String
+  body            String             @db.Text
+  authorTokenHash String
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  thread          BibleChapterThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@index([threadId, createdAt])
+}
+
