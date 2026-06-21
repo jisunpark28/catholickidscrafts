@@ -5,7 +5,7 @@ import {
   normalizePassageText,
   typingAccuracy,
 } from "@/lib/typing-accuracy";
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   text: string;
@@ -21,16 +21,6 @@ type Props = {
   /** Show Save next to Reset (e.g. Gospel / Bible stickers). */
   showSaveButton?: boolean;
 };
-
-function TypingCaret({ caretRef }: { caretRef?: React.RefObject<HTMLSpanElement | null> }) {
-  return (
-    <span
-      ref={caretRef}
-      className="mx-px inline-block h-[1.1em] w-0.5 animate-pulse bg-[var(--color-accent)] align-text-bottom"
-      aria-hidden
-    />
-  );
-}
 
 /** Type-along UI for a passage (Today's Bible mode). */
 export function PassageTypingGame({
@@ -52,7 +42,7 @@ export function PassageTypingGame({
   const reportedRef = useRef(false);
   const startTimeRef = useRef<number | null>(null);
   const passageRef = useRef<HTMLParagraphElement>(null);
-  const caretRef = useRef<HTMLSpanElement>(null);
+  const nextCharRef = useRef<HTMLSpanElement>(null);
 
   const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
   const nextIndex = typedNorm.length;
@@ -107,7 +97,7 @@ export function PassageTypingGame({
   }, [persist, passedThreshold, invokeSave]);
 
   useEffect(() => {
-    caretRef.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    nextCharRef.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [nextIndex]);
 
   const reset = useCallback(() => {
@@ -154,18 +144,20 @@ export function PassageTypingGame({
                 typedNorm[i] === char
                   ? "font-semibold text-green-700 opacity-100"
                   : "bg-red-50 font-semibold text-red-600";
+            } else if (i === nextIndex) {
+              className =
+                "underline decoration-2 underline-offset-2 decoration-[var(--color-accent)] opacity-100";
             }
-            const showCaret = i === nextIndex;
             return (
-              <Fragment key={i}>
-                {showCaret && <TypingCaret caretRef={caretRef} />}
-                <span className={className}>{char}</span>
-              </Fragment>
+              <span
+                key={i}
+                ref={i === nextIndex ? nextCharRef : undefined}
+                className={className}
+              >
+                {char}
+              </span>
             );
           })}
-          {nextIndex >= target.length && target.length > 0 && (
-            <TypingCaret caretRef={caretRef} />
-          )}
         </p>
 
         <textarea
