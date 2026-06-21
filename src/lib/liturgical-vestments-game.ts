@@ -40,6 +40,19 @@ export const LITURGICAL_DRESS_ROUNDS: LiturgicalDressRound[] = [
   { id: "lent-5", title: "Lent — 5th Sunday", correctColor: "purple" },
 ];
 
+/** Site-copy template; `{occasion}` is replaced with the liturgical day or season name. */
+export const VESTMENT_ROUND_QUESTION_KEY = "play.vestments.round.question";
+
+export const VESTMENT_ROUND_QUESTION_FALLBACK =
+  "{occasion} — What color vestments does Father wear?";
+
+export function formatVestmentRoundQuestion(
+  occasion: string,
+  template = VESTMENT_ROUND_QUESTION_FALLBACK,
+): string {
+  return template.replace("{occasion}", occasion);
+}
+
 export const VESTMENT_ROUND_COPY_KEY: Record<string, string> = {
   ordinary: "play.vestments.round.ordinary",
   christmas: "play.vestments.round.christmas",
