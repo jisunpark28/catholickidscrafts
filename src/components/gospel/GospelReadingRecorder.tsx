@@ -96,11 +96,29 @@ function StopIcon() {
   );
 }
 
+function ListenIcon({ active }: { active?: boolean }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M11 5 6 9H3v6h3l5 4V5Z"
+        stroke={active ? "#c45c26" : "currentColor"}
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8 8 0 0 1 0 12"
+        stroke={active ? "#c45c26" : "currentColor"}
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export function GospelReadingRecorder({ storageKey }: Props) {
   const [phase, setPhase] = useState<Phase>("idle");
-  const [playbackUrl, setPlaybackUrl] = useState<string | null>(null);
-  const [micError, setMicError] = useState("");
-  const [micLevel, setMicLevel] = useState(0);
+  const [hasRecording, setHasRecording] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const urlsRef = useRef<Map<string, string>>(new Map());
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -109,6 +127,7 @@ export function GospelReadingRecorder({ storageKey }: Props) {
   const activeKeyRef = useRef(storageKey);
   const discardOnStopRef = useRef(false);
   const peakRef = useRef(0);
+  const playbackAudioRef = useRef<HTMLAudioElement | null>(null);
   const meterRef = useRef<{
     context: AudioContext;
     analyser: AnalyserNode;
@@ -128,12 +147,23 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     window.cancelAnimationFrame(meter.rafId);
     void meter.context.close();
     meterRef.current = null;
-    setMicLevel(0);
   }, []);
 
   const stopStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
+  }, []);
+
+  const stopPlayback = useCallback(() => {
+    const audio = playbackAudioRef.current;
+    if (audio) {
+      audio.onended = null;
+      audio.onerror = null;
+      audio.pause();
+      audio.src = "";
+      playbackAudioRef.current = null;
+    }
+    setIsPlaying(false);
   }, []);
 
   const stopActiveRecorder = useCallback(() => {
@@ -155,32 +185,40 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     }
   }, []);
 
-  const startMeter = useCallback((stream: MediaStream) => {
-    stopMeter();
-    peakRef.current = 0;
+  const startMeter = useCallback(
+    (stream: MediaStream) => {
+      stopMeter();
+      peakRef.current = 0;
 
-    const AudioCtx =
-      window.AudioContext ||
-      (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioCtx) return;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
 
-    const context = new AudioCtx();
-    const analyser = context.createAnalyser();
-    analyser.fftSize = 512;
-    const source = context.createMediaStreamSource(stream);
-    source.connect(analyser);
+      const context = new AudioCtx();
+      const analyser = context.createAnalyser();
+      analyser.fftSize = 512;
+      const source = context.createMediaStreamSource(stream);
+      source.connect(analyser);
 
-    const buffer = new Uint8Array(analyser.fftSize);
+      const buffer = new Uint8Array(analyser.fftSize);
 
-    const tick = () => {
-      const peak = readMicPeak(analyser, buffer);
-      peakRef.current = Math.max(peakRef.current, peak);
-      setMicLevel(peak);
-      meterRef.current!.rafId = window.requestAnimationFrame(tick);
-    };
+      const tick = () => {
+        const peak = readMicPeak(analyser, buffer);
+        peakRef.current = Math.max(peakRef.current, peak);
+        meterRef.current!.rafId = window.requestAnimationFrame(tick);
+      };
 
-    meterRef.current = { context, analyser, buffer, rafId: window.requestAnimationFrame(tick) };
-  }, [stopMeter]);
+      meterRef.current = { context, analyser, buffer, rafId: window.requestAnimationFrame(tick) };
+    },
+    [stopMeter],
+  );
+
+  const syncRecordingState = useCallback((key: string) => {
+    const has = urlsRef.current.has(key);
+    setHasRecording(has);
+    setPhase(has ? "ready" : "idle");
+  }, []);
 
   const saveRecording = useCallback(
     async (key: string, mimeType: string) => {
@@ -195,9 +233,7 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       if (blob.size === 0) {
         urlsRef.current.delete(key);
         if (key === activeKeyRef.current) {
-          setPlaybackUrl(null);
-          setPhase("idle");
-          setMicError("Recording was empty. Speak for a second, then tap Stop.");
+          syncRecordingState(key);
         }
         return;
       }
@@ -211,41 +247,33 @@ export function GospelReadingRecorder({ storageKey }: Props) {
         revokeUrl(url);
         urlsRef.current.delete(key);
         if (key === activeKeyRef.current) {
-          setPlaybackUrl(null);
-          setPhase("idle");
-          setMicError(
-            heardVoice
-              ? "Recording saved but is too short. Speak longer, then tap Stop."
-              : "No voice detected. Check Windows mic settings and Chrome mic permission.",
-          );
+          syncRecordingState(key);
         }
         return;
       }
 
       urlsRef.current.set(key, url);
       if (key === activeKeyRef.current) {
-        setPlaybackUrl(url);
-        setPhase("ready");
-        setMicError("");
+        syncRecordingState(key);
       }
     },
-    [revokeUrl],
+    [revokeUrl, syncRecordingState],
   );
 
   useEffect(() => {
+    stopPlayback();
     discardOnStopRef.current = true;
     stopActiveRecorder();
     discardOnStopRef.current = false;
     stopMeter();
     chunksRef.current = [];
-    setPlaybackUrl(urlsRef.current.get(storageKey) ?? null);
-    setPhase(urlsRef.current.has(storageKey) ? "ready" : "idle");
-    setMicError("");
-  }, [storageKey, stopActiveRecorder, stopMeter]);
+    syncRecordingState(storageKey);
+  }, [storageKey, stopActiveRecorder, stopMeter, stopPlayback, syncRecordingState]);
 
   useEffect(() => {
     const urls = urlsRef.current;
     return () => {
+      stopPlayback();
       stopMeter();
       stopStream();
       for (const url of urls.values()) {
@@ -253,7 +281,7 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       }
       urls.clear();
     };
-  }, [revokeUrl, stopMeter, stopStream]);
+  }, [revokeUrl, stopMeter, stopPlayback, stopStream]);
 
   const iconButtonClass = (disabled: boolean, active?: boolean) =>
     `flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition ${
@@ -266,11 +294,10 @@ export function GospelReadingRecorder({ storageKey }: Props) {
 
   const startRecord = async () => {
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
-      setMicError("Recording is not supported in this browser.");
       return;
     }
 
-    setMicError("");
+    stopPlayback();
     stopActiveRecorder();
     stopMeter();
     stopStream();
@@ -280,8 +307,7 @@ export function GospelReadingRecorder({ storageKey }: Props) {
       revokeUrl(previous);
       urlsRef.current.delete(storageKey);
     }
-    setPlaybackUrl(null);
-    setPhase("idle");
+    syncRecordingState(storageKey);
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -294,10 +320,6 @@ export function GospelReadingRecorder({ storageKey }: Props) {
         throw new Error("No microphone track");
       }
       audioTrack.enabled = true;
-
-      if (audioTrack.muted) {
-        setMicError("Your microphone is muted in Windows or the browser.");
-      }
 
       chunksRef.current = [];
       startMeter(stream);
@@ -335,14 +357,14 @@ export function GospelReadingRecorder({ storageKey }: Props) {
         }, 100);
       });
 
-      // One complete file on stop — most reliable on Windows Chrome (no silent chunk joins).
       recorder.start();
       setPhase("recording");
+      setHasRecording(false);
     } catch {
-      setMicError("Allow microphone access to record.");
       stopMeter();
       stopStream();
       setPhase("idle");
+      setHasRecording(false);
     }
   };
 
@@ -358,84 +380,71 @@ export function GospelReadingRecorder({ storageKey }: Props) {
     }
   };
 
-  const isCapturing = phase === "recording" || phase === "paused";
-  const levelPercent = Math.min(100, Math.round((micLevel / 48) * 100));
+  const playRecording = async () => {
+    const url = urlsRef.current.get(storageKey);
+    if (!url) return;
 
-  const statusHint = isCapturing
-    ? levelPercent > 8
-      ? "Voice detected — tap Stop when finished"
-      : "Speak now — watch the orange bar move"
-    : playbackUrl
-      ? "Press play below to hear your reading"
-      : "Tap Record, read aloud, then Stop";
+    stopPlayback();
+
+    const audio = new Audio(url);
+    audio.setAttribute("playsinline", "true");
+    playbackAudioRef.current = audio;
+    audio.onended = () => stopPlayback();
+    audio.onerror = () => stopPlayback();
+
+    try {
+      await audio.play();
+      setIsPlaying(true);
+    } catch {
+      stopPlayback();
+    }
+  };
+
+  const isCapturing = phase === "recording" || phase === "paused";
+  const canListen = hasRecording && !isCapturing;
 
   return (
-    <div className="flex shrink-0 flex-col items-end gap-1">
-      <div
-        className="flex items-center gap-1.5"
-        role="toolbar"
-        aria-label="Record your reading"
+    <div
+      className="flex shrink-0 items-center gap-1.5"
+      role="toolbar"
+      aria-label="Record and listen to your reading"
+    >
+      <button
+        type="button"
+        className={iconButtonClass(isCapturing, phase === "recording")}
+        aria-label="Record"
+        disabled={isCapturing}
+        onClick={() => void startRecord()}
       >
-        <button
-          type="button"
-          className={iconButtonClass(isCapturing, phase === "recording")}
-          aria-label="Record"
-          disabled={isCapturing}
-          onClick={() => void startRecord()}
-        >
-          <MicIcon active={phase === "recording"} />
-        </button>
-        <button
-          type="button"
-          className={iconButtonClass(!isCapturing, phase === "paused")}
-          aria-label={phase === "paused" ? "Resume recording" : "Pause recording"}
-          disabled={!isCapturing}
-          onClick={togglePause}
-        >
-          {phase === "paused" ? <ResumeIcon /> : <PauseIcon />}
-        </button>
-        <button
-          type="button"
-          className={iconButtonClass(!isCapturing)}
-          aria-label="Stop recording"
-          disabled={!isCapturing}
-          onClick={stopActiveRecorder}
-        >
-          <StopIcon />
-        </button>
-      </div>
-
-      {isCapturing ? (
-        <div
-          className="h-1.5 w-44 max-w-[11rem] overflow-hidden rounded-full bg-[#e8e0d6]"
-          aria-hidden
-        >
-          <div
-            className="h-full rounded-full bg-[#c45c26] transition-[width] duration-75"
-            style={{ width: `${Math.max(levelPercent, isCapturing ? 4 : 0)}%` }}
-          />
-        </div>
-      ) : null}
-
-      {playbackUrl ? (
-        <audio
-          key={playbackUrl}
-          src={playbackUrl}
-          controls
-          preload="auto"
-          playsInline
-          className="h-8 w-44 max-w-[11rem]"
-          aria-label="Play your recording"
-        />
-      ) : null}
-
-      {micError ? (
-        <p className="max-w-[11rem] text-right text-[10px] leading-tight text-red-600">{micError}</p>
-      ) : (
-        <p className="max-w-[11rem] text-right text-[10px] leading-tight text-[var(--color-muted)]">
-          {statusHint}
-        </p>
-      )}
+        <MicIcon active={phase === "recording"} />
+      </button>
+      <button
+        type="button"
+        className={iconButtonClass(!isCapturing, phase === "paused")}
+        aria-label={phase === "paused" ? "Resume recording" : "Pause recording"}
+        disabled={!isCapturing}
+        onClick={togglePause}
+      >
+        {phase === "paused" ? <ResumeIcon /> : <PauseIcon />}
+      </button>
+      <button
+        type="button"
+        className={iconButtonClass(!isCapturing)}
+        aria-label="Stop recording"
+        disabled={!isCapturing}
+        onClick={stopActiveRecorder}
+      >
+        <StopIcon />
+      </button>
+      <button
+        type="button"
+        className={iconButtonClass(!canListen, isPlaying)}
+        aria-label="Listen to recording"
+        disabled={!canListen}
+        onClick={() => void playRecording()}
+      >
+        <ListenIcon active={isPlaying} />
+      </button>
     </div>
   );
 }
