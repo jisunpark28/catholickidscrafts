@@ -1,5 +1,6 @@
 "use client";
 
+import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
@@ -71,6 +72,7 @@ export function BibleChapterTyping({
           {citation} · Douay-Rheims (public domain) via latinprayer.org
         </p>
       )}
+      <BibleChapterDiscussion bookSlug={bookSlug} chapter={chapter} />
     </div>
   );
 }

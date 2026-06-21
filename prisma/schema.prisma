@@ -272,37 +272,45 @@ model HomeSectionItem {
 
 /// Parent account for Bible sticker progress and sub-profiles.
 model FamilyAccount {
-  id           String                 @id @default(cuid())
-  email        String                 @unique
-  passwordHash String?
-  googleId     String?                @unique
-  displayName  String?
-  createdAt    DateTime               @default(now())
-  updatedAt    DateTime               @updatedAt
-  subProfiles  SubProfile[]
-  progress     BibleChapterProgress[] @relation("OwnerProgress")
-  gospelDays   GospelDayProgress[]    @relation("OwnerGospelDays")
-  typingDrafts TypingDraft[]          @relation("OwnerTypingDrafts")
+  id                 String                 @id @default(cuid())
+  email              String                 @unique
+  passwordHash       String?
+  googleId           String?                @unique
+  displayName        String?
+  /// Pen name for Bible chapter discussion (fallback: displayName).
+  discussionPenName  String?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+  subProfiles        SubProfile[]
+  progress           BibleChapterProgress[] @relation("OwnerProgress")
+  gospelDays         GospelDayProgress[]    @relation("OwnerGospelDays")
+  typingDrafts       TypingDraft[]          @relation("OwnerTypingDrafts")
+  discussionThreads  BibleChapterThread[]   @relation("OwnerDiscussionThreads")
+  discussionComments BibleChapterComment[]  @relation("OwnerDiscussionComments")
 }
 
 /// Child/class sub-profile (max 30 per family); logs in with Access ID only.
 model SubProfile {
-  id               String                 @id @default(cuid())
-  familyAccountId  String
-  displayName      String
-  accessCodeHash   String
-  accessCodeLookup String                 @unique
-  accessCodeLast4  String?
+  id                 String                 @id @default(cuid())
+  familyAccountId    String
+  displayName        String
+  /// Pen name for Bible chapter discussion (fallback: displayName).
+  discussionPenName  String?
+  accessCodeHash     String
+  accessCodeLookup   String                 @unique
+  accessCodeLast4    String?
   /// Full Access ID for parent dashboard (login still uses hash only).
-  accessCodeDisplay String?
-  active           Boolean                @default(true)
-  sortOrder        Int                    @default(0)
-  createdAt        DateTime               @default(now())
-  updatedAt        DateTime               @updatedAt
-  familyAccount    FamilyAccount          @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
-  progress         BibleChapterProgress[] @relation("SubProgress")
-  gospelDays       GospelDayProgress[]    @relation("SubGospelDays")
-  typingDrafts     TypingDraft[]          @relation("SubTypingDrafts")
+  accessCodeDisplay  String?
+  active             Boolean                @default(true)
+  sortOrder          Int                    @default(0)
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+  familyAccount      FamilyAccount          @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  progress           BibleChapterProgress[] @relation("SubProgress")
+  gospelDays         GospelDayProgress[]    @relation("SubGospelDays")
+  typingDrafts       TypingDraft[]          @relation("SubTypingDrafts")
+  discussionThreads  BibleChapterThread[]   @relation("SubDiscussionThreads")
+  discussionComments BibleChapterComment[]  @relation("SubDiscussionComments")
 
   @@index([familyAccountId, sortOrder])
 }
@@ -362,5 +370,47 @@ model TypingDraft {
   @@unique([familyAccountId, draftKey])
   @@unique([subProfileId, draftKey])
   @@index([draftKey])
+}
+
+/// Question or thought on a Bible chapter typing page (signed-in readers).
+model BibleChapterThread {
+  id              String                @id @default(cuid())
+  bookSlug        String
+  chapter         Int
+  body            String                @db.Text
+  isAnonymous     Boolean               @default(false)
+  /// Snapshot of pen name when posted (ignored when isAnonymous).
+  authorLabel     String
+  familyAccountId String?
+  subProfileId    String?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  familyAccount   FamilyAccount?        @relation("OwnerDiscussionThreads", fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?           @relation("SubDiscussionThreads", fields: [subProfileId], references: [id], onDelete: Cascade)
+  comments        BibleChapterComment[]
+
+  @@index([bookSlug, chapter, createdAt])
+  @@index([familyAccountId])
+  @@index([subProfileId])
+}
+
+/// Reply on a Bible chapter thread.
+model BibleChapterComment {
+  id              String             @id @default(cuid())
+  threadId        String
+  body            String             @db.Text
+  isAnonymous     Boolean            @default(false)
+  authorLabel     String
+  familyAccountId String?
+  subProfileId    String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  thread          BibleChapterThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  familyAccount   FamilyAccount?     @relation("OwnerDiscussionComments", fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?        @relation("SubDiscussionComments", fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@index([threadId, createdAt])
+  @@index([familyAccountId])
+  @@index([subProfileId])
 }
 
