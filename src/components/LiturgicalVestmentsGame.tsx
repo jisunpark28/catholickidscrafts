@@ -3,9 +3,12 @@
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { PriestVestmentFigure } from "@/components/liturgical-vestments/PriestVestmentFigure";
 import {
+  formatVestmentRoundQuestion,
   shuffleRounds,
   VESTMENT_COLORS,
   VESTMENT_ROUND_COPY_KEY,
+  VESTMENT_ROUND_QUESTION_FALLBACK,
+  VESTMENT_ROUND_QUESTION_KEY,
   type VestmentColor,
 } from "@/lib/liturgical-vestments-game";
 import { useMemo, useState } from "react";
@@ -87,6 +90,12 @@ export function LiturgicalVestmentsGame() {
 
   if (!round) return null;
 
+  const occasion = t(VESTMENT_ROUND_COPY_KEY[round.id] ?? "", round.title);
+  const roundQuestion = formatVestmentRoundQuestion(
+    occasion,
+    t(VESTMENT_ROUND_QUESTION_KEY, VESTMENT_ROUND_QUESTION_FALLBACK),
+  );
+
   return (
     <div className="border border-[var(--color-border)] bg-white">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm">
@@ -98,9 +107,7 @@ export function LiturgicalVestmentsGame() {
 
       <div className="grid gap-6 p-4 lg:grid-cols-[1fr_320px]">
         <div>
-          <h2 className="text-xl font-bold text-[var(--color-ink)]">
-            {t(VESTMENT_ROUND_COPY_KEY[round.id] ?? "", round.title)}
-          </h2>
+          <h2 className="text-xl font-bold text-[var(--color-ink)]">{roundQuestion}</h2>
 
           <div className="mt-4 flex justify-center overflow-visible pt-1">
             <PriestVestmentFigure chasubleColor={selected} />

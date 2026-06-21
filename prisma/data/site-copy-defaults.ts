@@ -115,6 +115,11 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.vestments.page.subtitle", "Match Father's vestments to the season—then point to the real altar cloth in church.", "play_vestments"),
   sc("play.vestments.page.program_note", "Try this the week you teach Advent, Lent, or a feast. Ask: \"What color should we see at Mass this Sunday?\"", "play_vestments"),
   sc("play.vestments.prompt", "What color vestments for this time?", "play_vestments"),
+  sc(
+    "play.vestments.round.question",
+    "{occasion} — What color vestments does Father wear?",
+    "play_vestments",
+  ),
   sc("play.vestments.correct", "Yes! That's the right liturgical color.", "play_vestments"),
   sc("play.vestments.wrong", "Not quite—try another color.", "play_vestments"),
   sc("play.vestments.next", "Next round", "play_vestments"),
