@@ -26,11 +26,7 @@ export default async function PhotoBoothPage() {
       </Link>
 
       <div className="mt-6">
-        <PageHeader
-          title={copyText(copy, "play.photobooth.page.title", "4-Cut Photo Booth")}
-          subtitle={copyText(copy, "play.photobooth.page.subtitle", "")}
-          programNote={copyText(copy, "play.photobooth.page.program_note", "")}
-        />
+        <PageHeader title={copyText(copy, "play.photobooth.page.title", "4-Cut Photo Booth")} />
       </div>
 
       <PhotoBoothGame />

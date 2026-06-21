@@ -121,8 +121,8 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.vestments.done", "Great job! You finished all rounds.", "play_vestments"),
 
   sc("play.photobooth.page.title", "4-Cut Photo Booth", "play_photobooth"),
-  sc("play.photobooth.page.subtitle", "A light celebration activity—great after a rehearsal or saint-day party.", "play_photobooth"),
-  sc("play.photobooth.page.program_note", "Photos stay on the device (not uploaded here). Print or share from the family's phone if your parish allows.", "play_photobooth"),
+  sc("play.photobooth.page.subtitle", "", "play_photobooth"),
+  sc("play.photobooth.page.program_note", "", "play_photobooth"),
 
   sc("play.facetemoji.page.title", "Face to Emoji", "play_facetemoji"),
   sc("play.facetemoji.page.subtitle", "Turn group photos into emoji fun—great for feast-day parties, First Communion, or end-of-year celebrations.", "play_facetemoji"),

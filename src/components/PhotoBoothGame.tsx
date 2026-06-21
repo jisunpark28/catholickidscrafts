@@ -13,32 +13,6 @@ import {
   type ReactNode,
 } from "react";
 
-type BgId = "cream" | "sky" | "rose" | "lavender" | "gold" | "stained" | "mint" | "cloud";
-
-const BACKGROUNDS: { id: BgId; label: string }[] = [
-  { id: "cream", label: "Cream" },
-  { id: "sky", label: "Sky" },
-  { id: "rose", label: "Rose" },
-  { id: "lavender", label: "Lavender" },
-  { id: "gold", label: "Gold" },
-  { id: "stained", label: "Stained glass" },
-  { id: "mint", label: "Mint" },
-  { id: "cloud", label: "Cloud" },
-];
-
-const BG_CSS: Record<BgId, string> = {
-  cream: "linear-gradient(160deg,#fff8f0,#fdebd0)",
-  sky: "linear-gradient(160deg,#e3f2fd,#90caf9)",
-  rose: "linear-gradient(160deg,#fce4ec,#f8bbd9)",
-  lavender: "linear-gradient(160deg,#ede7f6,#b39ddb)",
-  gold: "linear-gradient(160deg,#fffde7,#ffe082)",
-  stained: "linear-gradient(135deg,#5c6bc0 0%,#ec407a 50%,#ffb74d 100%)",
-  mint: "linear-gradient(160deg,#e8f5e9,#a5d6a7)",
-  cloud: "linear-gradient(180deg,#ffffff 0%,#e1f5fe 100%)",
-};
-
-const STICKERS = ["✝️", "❤️", "🕊️", "⭐", "🌈", "🌟", "👼", "🙏", "⛪", "🌸", "☘️", "📿", "💛", "🎀", "✨", "🤍"];
-
 type PlacedSticker = {
   id: number;
   char: string;
@@ -48,10 +22,11 @@ type PlacedSticker = {
 };
 
 type StripSlotEdit = {
-  bg: BgId;
   stickers: PlacedSticker[];
   frameId: string | null;
 };
+
+const STICKERS = ["✝️", "❤️", "🕊️", "⭐", "🌈", "🌟", "👼", "🙏", "⛪", "🌸", "☘️", "📿", "💛", "🎀", "✨", "🤍"];
 
 function resolveFrameImageUrl(
   frames: PhotoBoothFrameItem[],
@@ -128,7 +103,7 @@ function cropImageToStripCell(src: string): Promise<string> {
 }
 
 function createDefaultStripEdits(): StripSlotEdit[] {
-  return Array.from({ length: 4 }, () => ({ bg: "cream", stickers: [], frameId: null }));
+  return Array.from({ length: 4 }, () => ({ stickers: [], frameId: null }));
 }
 
 function stripCellRect(index: number) {
@@ -150,35 +125,8 @@ function stripCellIndexAt(x: number, y: number): number | null {
   return null;
 }
 
-function fillBackground(ctx: CanvasRenderingContext2D, bgId: BgId, w: number, h: number) {
-  const g = ctx.createLinearGradient(0, 0, w, h);
-  if (bgId === "stained") {
-    g.addColorStop(0, "#5c6bc0");
-    g.addColorStop(0.5, "#ec407a");
-    g.addColorStop(1, "#ffb74d");
-  } else if (bgId === "sky") {
-    g.addColorStop(0, "#e3f2fd");
-    g.addColorStop(1, "#90caf9");
-  } else if (bgId === "rose") {
-    g.addColorStop(0, "#fce4ec");
-    g.addColorStop(1, "#f8bbd9");
-  } else if (bgId === "lavender") {
-    g.addColorStop(0, "#ede7f6");
-    g.addColorStop(1, "#b39ddb");
-  } else if (bgId === "gold") {
-    g.addColorStop(0, "#fffde7");
-    g.addColorStop(1, "#ffe082");
-  } else if (bgId === "mint") {
-    g.addColorStop(0, "#e8f5e9");
-    g.addColorStop(1, "#a5d6a7");
-  } else if (bgId === "cloud") {
-    g.addColorStop(0, "#ffffff");
-    g.addColorStop(1, "#e1f5fe");
-  } else {
-    g.addColorStop(0, "#fff8f0");
-    g.addColorStop(1, "#fdebd0");
-  }
-  ctx.fillStyle = g;
+function fillBackground(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, w, h);
 }
 
@@ -256,7 +204,6 @@ export function PhotoBoothGame() {
   const fileRef = useRef<HTMLInputElement>(null);
   const imagesRef = useRef<Map<string, HTMLImageElement>>(new Map());
 
-  const [bg, setBg] = useState<BgId>("cream");
   const [photo, setPhoto] = useState<string | null>(null);
   const [stripPhotos, setStripPhotos] = useState<(string | null)[]>([null, null, null, null]);
   const [stripEdits, setStripEdits] = useState<StripSlotEdit[]>(createDefaultStripEdits);
@@ -294,7 +241,6 @@ export function PhotoBoothGame() {
 
   const firstEmptySlot = stripPhotos.findIndex((p) => p === null);
   const activeSlot = firstEmptySlot === -1 ? 3 : firstEmptySlot;
-  const activeStripBg = stripEdits[selectedStripSlot]?.bg ?? "cream";
   const stripSlotFrameId = stripEdits[selectedStripSlot]?.frameId ?? null;
 
   const stopCamera = useCallback(() => {
@@ -374,15 +320,34 @@ export function PhotoBoothGame() {
 
   const loadImage = useCallback((src: string): Promise<HTMLImageElement> => {
     const cached = imagesRef.current.get(src);
-    if (cached?.complete) return Promise.resolve(cached);
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        imagesRef.current.set(src, img);
-        resolve(img);
-      };
-      img.onerror = reject;
-      img.src = src;
+    if (cached?.complete && cached.naturalWidth > 0) return Promise.resolve(cached);
+
+    const loadFromUrl = (url: string, crossOrigin: boolean) =>
+      new Promise<HTMLImageElement>((resolve, reject) => {
+        const img = new Image();
+        if (crossOrigin) img.crossOrigin = "anonymous";
+        img.onload = () => {
+          imagesRef.current.set(src, img);
+          resolve(img);
+        };
+        img.onerror = () => reject(new Error("Failed to load image"));
+        img.src = url;
+      });
+
+    if (src.startsWith("data:") || src.startsWith("blob:")) {
+      return loadFromUrl(src, false);
+    }
+
+    return loadFromUrl(src, true).catch(async () => {
+      const res = await fetch(src);
+      if (!res.ok) throw new Error("Failed to load image");
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      try {
+        return await loadFromUrl(objectUrl, false);
+      } finally {
+        URL.revokeObjectURL(objectUrl);
+      }
     });
   }, []);
 
@@ -421,7 +386,7 @@ export function PhotoBoothGame() {
         const edit = editsSnapshot[i];
         ctx.save();
         ctx.translate(x, y);
-        fillBackground(ctx, edit.bg, w, h);
+        fillBackground(ctx, w, h);
         const src = photosSnapshot[i];
         if (src) {
           try {
@@ -454,7 +419,7 @@ export function PhotoBoothGame() {
       ctx.lineWidth = 3;
       ctx.strokeRect(x + 1.5, y + 1.5, w - 3, h - 3);
     } else {
-      fillBackground(ctx, bg, CANVAS_W, CANVAS_H);
+      fillBackground(ctx, CANVAS_W, CANVAS_H);
       if (photo) {
         try {
           const img = await loadImage(photo);
@@ -477,7 +442,6 @@ export function PhotoBoothGame() {
       drawStickers(ctx, stickers);
     }
   }, [
-    bg,
     photo,
     stripPhotos,
     stripEdits,
@@ -609,17 +573,6 @@ export function PhotoBoothGame() {
     bumpPaint();
   }
 
-  function setActiveBackground(nextBg: BgId) {
-    if (mode === "strip") {
-      setStripEdits((prev) =>
-        prev.map((slot, i) => (i === selectedStripSlot ? { ...slot, bg: nextBg } : slot)),
-      );
-    } else {
-      setBg(nextBg);
-    }
-    bumpPaint();
-  }
-
   function clearActiveStickers() {
     if (mode === "strip") {
       setStripEdits((prev) =>
@@ -706,13 +659,22 @@ export function PhotoBoothGame() {
     bumpPaint();
   }
 
-  function download() {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const a = document.createElement("a");
-    a.download = mode === "strip" ? "my-4-cut-photos.png" : "my-photo-booth.png";
-    a.href = canvas.toDataURL("image/png");
-    a.click();
+  async function download() {
+    try {
+      await paint();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const dataUrl = canvas.toDataURL("image/png");
+      const a = document.createElement("a");
+      a.download = mode === "strip" ? "my-4-cut-photos.png" : "my-photo-booth.png";
+      a.href = dataUrl;
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch {
+      alert("Could not save the image. Wait a moment for the frame to load, then try again.");
+    }
   }
 
   function resetAll() {
@@ -722,7 +684,6 @@ export function PhotoBoothGame() {
     setSelectedStripSlot(0);
     setStripIndex(0);
     setStickers([]);
-    setBg("cream");
     stopCamera();
     bumpPaint();
   }
@@ -787,7 +748,7 @@ export function PhotoBoothGame() {
             {canDecorate && (
               <button
                 type="button"
-                onClick={download}
+                onClick={() => void download()}
                 className="border border-[var(--color-border)] px-4 py-2 text-sm font-bold"
               >
                 Save image
@@ -932,7 +893,7 @@ export function PhotoBoothGame() {
               />
               {!stripDecorating && (
                 <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
-                  Choose a background and stickers, then drag stickers on your photo.
+                  Drag stickers on your photo.
                 </p>
               )}
             </>
@@ -1013,30 +974,6 @@ export function PhotoBoothGame() {
                 </div>
               </div>
             )}
-            <div>
-              <p className="text-sm font-bold text-[var(--color-ink)]">Background</p>
-              {awaitingCapture && !canDecorate && (
-                <p className="mt-1 text-xs text-[var(--color-muted)]">
-                  Applied to your photo after capture (not shown on the live camera).
-                </p>
-              )}
-              <div className="mt-2 grid grid-cols-4 gap-2">
-                {BACKGROUNDS.map((b) => {
-                  const selected =
-                    mode === "strip" ? activeStripBg === b.id : bg === b.id;
-                  return (
-                    <button
-                      key={b.id}
-                      type="button"
-                      title={b.label}
-                      onClick={() => setActiveBackground(b.id)}
-                      className={`h-10 rounded border-2 ${selected ? "border-[var(--color-accent)]" : "border-transparent"}`}
-                      style={{ background: BG_CSS[b.id] }}
-                    />
-                  );
-                })}
-              </div>
-            </div>
             {showStickerTools && (
               <div>
                 <p className="text-sm font-bold text-[var(--color-ink)]">Stickers</p>
