@@ -3,6 +3,7 @@ import {
   getChapterThread,
   normalizeDiscussionBody,
 } from "@/lib/bible/discussion";
+import { ensureDiscussionSchema } from "@/lib/bible/discussion-schema";
 import { getAuthorLabelForPost } from "@/lib/bible/discussion-pen-name";
 import { publicAuthorDisplay } from "@/lib/bible/discussion-permissions";
 import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
@@ -42,6 +43,7 @@ export async function POST(request: Request, context: RouteContext) {
 
     const authorLabel = await getAuthorLabelForPost(readerKey);
 
+    await ensureDiscussionSchema();
     const comment = await createChapterComment(threadId, {
       body: text,
       isAnonymous: false,

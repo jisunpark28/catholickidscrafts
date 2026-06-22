@@ -121,7 +121,6 @@ export function BibleChapterDiscussion({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [composerOpen, setComposerOpen] = useState(false);
 
   const signedIn = session ? isHeaderSignedIn(session) : initialSignedIn;
   const readerLabel = session ? readerLabelFromSession(session) : initialReaderLabel;
@@ -175,6 +174,20 @@ export function BibleChapterDiscussion({
     const body = newThreadBody.trim();
     if (!body || submitting) return;
     setSubmitting(true);
+
+    const optimisticId = `pending-${Date.now()}`;
+    const optimisticThread: DiscussionThread = {
+      id: optimisticId,
+      body,
+      authorDisplay: viewer.penName ?? readerLabel,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      canEdit: false,
+      canDelete: false,
+      comments: [],
+    };
+    setThreads((prev) => [...prev, optimisticThread]);
+
     try {
       const res = await fetch("/api/bible/discussion", {
         method: "POST",
@@ -185,13 +198,17 @@ export function BibleChapterDiscussion({
       const data = await readJson<{ thread?: DiscussionThread }>(res);
       if (res.ok && data.thread) {
         setNewThreadBody("");
-        setComposerOpen(false);
+        setThreads((prev) =>
+          prev.map((thread) => (thread.id === optimisticId ? data.thread! : thread)),
+        );
+      } else {
+        setThreads((prev) => prev.filter((thread) => thread.id !== optimisticId));
       }
       if (res.ok) {
         await loadDiscussion();
       }
     } catch {
-      // Keep draft in the composer.
+      setThreads((prev) => prev.filter((thread) => thread.id !== optimisticId));
     } finally {
       setSubmitting(false);
     }
@@ -364,48 +381,31 @@ export function BibleChapterDiscussion({
       {canCompose ? (
         <div className="flex gap-3">
           <Avatar label={viewer.penName ?? readerLabel} />
-          <div className="min-w-0 flex-1">
-            {!composerOpen ? (
+          <div className="min-w-0 flex-1 space-y-2">
+            <textarea
+              rows={2}
+              maxLength={2000}
+              placeholder="Add a comment…"
+              className="w-full resize-none border-0 border-b border-[#e8e0d6] bg-transparent pb-2 text-sm text-[var(--color-ink)] placeholder:text-[var(--color-muted)] focus:border-[#cfc4b8] focus:outline-none"
+              value={newThreadBody}
+              onChange={(e) => setNewThreadBody(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  void postThread();
+                }
+              }}
+            />
+            <div className="flex justify-end">
               <button
                 type="button"
-                className="w-full border-b border-[#e8e0d6] pb-2 text-left text-sm text-[var(--color-muted)] hover:border-[#cfc4b8]"
-                onClick={() => setComposerOpen(true)}
+                className="rounded-full bg-[var(--color-accent)] px-4 py-1 text-xs font-bold text-white disabled:opacity-40"
+                disabled={submitting || !newThreadBody.trim()}
+                onClick={() => void postThread()}
               >
-                Add a comment…
+                {submitting ? "…" : "Comment"}
               </button>
-            ) : (
-              <div className="space-y-2">
-                <textarea
-                  rows={2}
-                  maxLength={2000}
-                  autoFocus
-                  placeholder="Add a comment…"
-                  className="w-full resize-none border-0 border-b border-[#e8e0d6] bg-transparent pb-2 text-sm text-[var(--color-ink)] placeholder:text-[var(--color-muted)] focus:border-[#cfc4b8] focus:outline-none"
-                  value={newThreadBody}
-                  onChange={(e) => setNewThreadBody(e.target.value)}
-                />
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--color-muted)] hover:bg-[#f5ebe0]"
-                    onClick={() => {
-                      setComposerOpen(false);
-                      setNewThreadBody("");
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-full bg-[var(--color-accent)] px-4 py-1 text-xs font-bold text-white disabled:opacity-40"
-                    disabled={submitting || !newThreadBody.trim()}
-                    onClick={() => void postThread()}
-                  >
-                    Comment
-                  </button>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       ) : (
