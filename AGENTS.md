@@ -20,7 +20,7 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 ### Lint / build
 
 - `pnpm lint` / `pnpm build` (build needs valid Postgres URLs if prerender touches DB; most CMS routes use `force-dynamic`)
-- Vercel: `pnpm run vercel-build` runs `scripts/vercel-migrate-deploy.sh` (auto-recovers failed `20260622120000_bible_chapter_discussion`) then `next build`
+- Vercel: `pnpm run vercel-build` runs `tsx scripts/vercel-migrate-deploy.ts` (recovers failed Bible discussion migrations, bootstraps tables if needed) then `next build`
 
 ### Admin
 

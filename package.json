@@ -14,7 +14,7 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && bash scripts/vercel-migrate-deploy.sh && next build",
+    "vercel-build": "prisma generate && tsx scripts/vercel-migrate-deploy.ts && next build",
     "db:seed-typing": "tsx prisma/seed-typing-words.ts",
     "db:seed-hangman": "tsx prisma/seed-hangman-words.ts",
     "db:seed-mass-order": "tsx prisma/seed-mass-order-steps.ts",
