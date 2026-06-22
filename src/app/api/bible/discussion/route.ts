@@ -84,19 +84,20 @@ export async function GET(request: Request) {
 
   const readerKey = await getSignedInDiscussionReader();
   const canModerate = await isDiscussionModerator();
+  const viewer = await buildViewer(readerKey, canModerate);
 
   try {
-    const [threads, viewer] = await Promise.all([
-      listChapterDiscussion(bookSlug, chapter),
-      buildViewer(readerKey, canModerate),
-    ]);
+    const threads = await listChapterDiscussion(bookSlug, chapter);
     return NextResponse.json({
       viewer,
       threads: threads.map((thread) => serializeThread(thread, readerKey, canModerate)),
     });
   } catch (e) {
     console.error("discussion list", e);
-    return NextResponse.json({ error: "Could not load discussion" }, { status: 500 });
+    return NextResponse.json(
+      { viewer, threads: [], error: "Could not load discussion" },
+      { status: 500 },
+    );
   }
 }
 

@@ -13,11 +13,14 @@ export function normalizeDiscussionPenName(name: unknown): string | null {
 export function resolveDiscussionPenName(
   discussionPenName: string | null | undefined,
   displayName: string | null | undefined,
+  email?: string | null,
 ): string | null {
   const pen = discussionPenName?.trim();
   if (pen) return pen;
   const display = displayName?.trim();
   if (display) return display;
+  const local = email?.split("@")[0]?.trim();
+  if (local) return local.slice(0, DISCUSSION_PEN_NAME_MAX);
   return null;
 }
 
@@ -27,11 +30,12 @@ export async function getDiscussionPenNameForReader(
   if (readerKey.type === "owner") {
     const account = await prisma.familyAccount.findUnique({
       where: { id: readerKey.familyAccountId },
-      select: { discussionPenName: true, displayName: true },
+      select: { discussionPenName: true, displayName: true, email: true },
     });
     const penName = resolveDiscussionPenName(
       account?.discussionPenName,
       account?.displayName,
+      account?.email,
     );
     return { penName, needsPenName: !penName };
   }

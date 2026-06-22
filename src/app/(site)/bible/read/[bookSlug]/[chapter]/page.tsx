@@ -3,6 +3,8 @@ import { BibleChapterTyping } from "@/components/BibleChapterTyping";
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { chapterPlainText, fetchBibleChapter } from "@/lib/bible/latinprayer";
+import { getHeaderSession } from "@/lib/get-header-session";
+import { isHeaderSignedIn } from "@/lib/header-session";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
@@ -29,6 +31,13 @@ export default async function BibleReadPage({ params }: Props) {
   }
 
   const text = chapterPlainText(data);
+  const headerSession = await getHeaderSession();
+  const signedIn = isHeaderSignedIn(headerSession);
+  const readerLabel =
+    headerSession.reader?.displayName ??
+    headerSession.family?.displayName?.trim() ??
+    headerSession.family?.email?.split("@")[0] ??
+    "?";
 
   return (
     <BibleHubShell
@@ -48,6 +57,8 @@ export default async function BibleReadPage({ params }: Props) {
           chapter={data.meta.chapter}
           text={text}
           citation={data.citation}
+          discussionSignedIn={signedIn}
+          discussionReaderLabel={readerLabel}
         />
       </HubTypingWidth>
     </BibleHubShell>
