@@ -113,7 +113,6 @@ export function BibleChapterDiscussion({
     readerType: null,
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [newThreadBody, setNewThreadBody] = useState("");
   const [replyBodies, setReplyBodies] = useState<Record<string, string>>({});
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
@@ -134,7 +133,6 @@ export function BibleChapterDiscussion({
   );
 
   const loadDiscussion = useCallback(async () => {
-    setError("");
     setLoading(true);
     try {
       const [sessionRes, discussionRes] = await Promise.all([
@@ -153,17 +151,12 @@ export function BibleChapterDiscussion({
       const data = await readJson<{
         threads?: DiscussionThread[];
         viewer?: DiscussionViewer;
-        error?: string;
       }>(discussionRes);
 
       if (data.viewer) setViewer(data.viewer);
-      setThreads(data.threads ?? []);
-
-      if (!discussionRes.ok && !data.threads) {
-        throw new Error(data.error ?? "Could not load comments");
-      }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not load comments");
+      if (discussionRes.ok) setThreads(data.threads ?? []);
+    } catch {
+      // Keep existing comments; no user-facing error.
     } finally {
       setLoading(false);
     }
@@ -177,20 +170,19 @@ export function BibleChapterDiscussion({
     const body = newThreadBody.trim();
     if (!body || submitting || !canCompose) return;
     setSubmitting(true);
-    setError("");
     try {
       const res = await fetch("/api/bible/discussion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookSlug, chapter, body }),
       });
-      const data = await readJson<{ thread?: DiscussionThread; error?: string }>(res);
-      if (!res.ok || !data.thread) throw new Error(data.error ?? "Could not post");
+      const data = await readJson<{ thread?: DiscussionThread }>(res);
+      if (!res.ok || !data.thread) return;
       setThreads((prev) => [...prev, data.thread!]);
       setNewThreadBody("");
       setComposerOpen(false);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not post");
+    } catch {
+      // Keep draft in the composer.
     } finally {
       setSubmitting(false);
     }
@@ -200,15 +192,14 @@ export function BibleChapterDiscussion({
     const body = (replyBodies[threadId] ?? "").trim();
     if (!body || submitting || !canCompose) return;
     setSubmitting(true);
-    setError("");
     try {
       const res = await fetch(`/api/bible/discussion/${threadId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body }),
       });
-      const data = await readJson<{ comment?: DiscussionComment; error?: string }>(res);
-      if (!res.ok || !data.comment) throw new Error(data.error ?? "Could not reply");
+      const data = await readJson<{ comment?: DiscussionComment }>(res);
+      if (!res.ok || !data.comment) return;
       setThreads((prev) =>
         prev.map((thread) =>
           thread.id === threadId
@@ -219,8 +210,8 @@ export function BibleChapterDiscussion({
       setReplyBodies((prev) => ({ ...prev, [threadId]: "" }));
       setReplyingTo(null);
       setExpandedReplies((prev) => ({ ...prev, [threadId]: true }));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not reply");
+    } catch {
+      // Keep draft in the reply box.
     } finally {
       setSubmitting(false);
     }
@@ -230,7 +221,6 @@ export function BibleChapterDiscussion({
     const body = editDraft.trim();
     if (!body || submitting) return;
     setSubmitting(true);
-    setError("");
     try {
       const res = await fetch(`/api/bible/discussion/${threadId}`, {
         method: "PATCH",
@@ -239,9 +229,8 @@ export function BibleChapterDiscussion({
       });
       const data = await readJson<{
         thread?: { id: string; body: string; updatedAt: string };
-        error?: string;
       }>(res);
-      if (!res.ok || !data.thread) throw new Error(data.error ?? "Could not update");
+      if (!res.ok || !data.thread) return;
       setThreads((prev) =>
         prev.map((thread) =>
           thread.id === threadId
@@ -251,8 +240,8 @@ export function BibleChapterDiscussion({
       );
       setEditingThreadId(null);
       setEditDraft("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not update");
+    } catch {
+      // Keep edit draft open.
     } finally {
       setSubmitting(false);
     }
@@ -262,7 +251,6 @@ export function BibleChapterDiscussion({
     const body = editDraft.trim();
     if (!body || submitting) return;
     setSubmitting(true);
-    setError("");
     try {
       const res = await fetch(`/api/bible/discussion/comments/${commentId}`, {
         method: "PATCH",
@@ -271,9 +259,8 @@ export function BibleChapterDiscussion({
       });
       const data = await readJson<{
         comment?: { id: string; body: string; updatedAt: string };
-        error?: string;
       }>(res);
-      if (!res.ok || !data.comment) throw new Error(data.error ?? "Could not update");
+      if (!res.ok || !data.comment) return;
       setThreads((prev) =>
         prev.map((thread) =>
           thread.id === threadId
@@ -294,8 +281,8 @@ export function BibleChapterDiscussion({
       );
       setEditingCommentId(null);
       setEditDraft("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not update");
+    } catch {
+      // Keep edit draft open.
     } finally {
       setSubmitting(false);
     }
@@ -304,14 +291,12 @@ export function BibleChapterDiscussion({
   const deleteThread = async (threadId: string) => {
     if (submitting || !window.confirm("Delete this comment and all replies?")) return;
     setSubmitting(true);
-    setError("");
     try {
       const res = await fetch(`/api/bible/discussion/${threadId}`, { method: "DELETE" });
-      const data = await readJson<{ error?: string }>(res);
-      if (!res.ok) throw new Error(data.error ?? "Could not delete");
+      if (!res.ok) return;
       setThreads((prev) => prev.filter((thread) => thread.id !== threadId));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not delete");
+    } catch {
+      // No user-facing error.
     } finally {
       setSubmitting(false);
     }
@@ -320,13 +305,11 @@ export function BibleChapterDiscussion({
   const deleteComment = async (commentId: string, threadId: string) => {
     if (submitting || !window.confirm("Delete this reply?")) return;
     setSubmitting(true);
-    setError("");
     try {
       const res = await fetch(`/api/bible/discussion/comments/${commentId}`, {
         method: "DELETE",
       });
-      const data = await readJson<{ error?: string }>(res);
-      if (!res.ok) throw new Error(data.error ?? "Could not delete");
+      if (!res.ok) return;
       setThreads((prev) =>
         prev.map((thread) =>
           thread.id === threadId
@@ -337,8 +320,8 @@ export function BibleChapterDiscussion({
             : thread,
         ),
       );
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not delete");
+    } catch {
+      // No user-facing error.
     } finally {
       setSubmitting(false);
     }
@@ -432,8 +415,6 @@ export function BibleChapterDiscussion({
           to comment.
         </p>
       )}
-
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
       {loading ? <p className="text-sm text-[var(--color-muted)]">Loading…</p> : null}
 
