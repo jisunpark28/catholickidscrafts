@@ -1,6 +1,23 @@
+import { PrismaClient } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 let ready: Promise<void> | null = null;
+let ddlClient: PrismaClient | undefined;
+
+/** Neon DDL must use the direct connection; pooled DATABASE_URL often rejects CREATE TABLE. */
+function getDdlPrisma(): PrismaClient {
+  const url = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim();
+  if (!url) {
+    throw new Error("Missing DATABASE_URL");
+  }
+  if (!ddlClient) {
+    ddlClient = new PrismaClient({
+      datasources: { db: { url } },
+      log: ["error"],
+    });
+  }
+  return ddlClient;
+}
 
 /** Idempotent DDL so discussion works even if migrate deploy was skipped on deploy. */
 export function ensureDiscussionSchema(): Promise<void> {
@@ -25,14 +42,14 @@ async function tableExists(table: string): Promise<boolean> {
 }
 
 async function exec(sql: string): Promise<void> {
-  await prisma.$executeRawUnsafe(sql);
+  await getDdlPrisma().$executeRawUnsafe(sql);
 }
 
 async function applyDiscussionSchema(): Promise<void> {
-  if (await tableExists("BibleChapterThread")) return;
-
   await exec(`ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
   await exec(`ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
+
+  if (await tableExists("BibleChapterThread")) return;
 
   await exec(`
     CREATE TABLE IF NOT EXISTS "BibleChapterThread" (

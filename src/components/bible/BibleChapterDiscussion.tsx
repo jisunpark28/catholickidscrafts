@@ -181,7 +181,23 @@ export function BibleChapterDiscussion({
   const postThread = async () => {
     const body = newThreadBody.trim();
     if (!body || submitting) return;
+
+    const optimisticId = `pending-${Date.now()}`;
+    const optimisticThread: DiscussionThread = {
+      id: optimisticId,
+      body,
+      authorDisplay: viewer.penName ?? readerLabel,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      canEdit: false,
+      canDelete: false,
+      comments: [],
+    };
+
     setSubmitting(true);
+    loadGeneration.current += 1;
+    setNewThreadBody("");
+    setThreads((prev) => [...prev, optimisticThread]);
 
     try {
       const res = await fetch("/api/bible/discussion", {
@@ -192,18 +208,16 @@ export function BibleChapterDiscussion({
       });
       const data = await readJson<{ thread?: DiscussionThread }>(res);
       if (res.ok && data.thread) {
-        loadGeneration.current += 1;
-        setNewThreadBody("");
-        setThreads((prev) => {
-          const thread = data.thread!;
-          if (prev.some((item) => item.id === thread.id)) {
-            return prev.map((item) => (item.id === thread.id ? thread : item));
-          }
-          return [...prev, thread];
-        });
+        setThreads((prev) =>
+          prev.map((thread) => (thread.id === optimisticId ? data.thread! : thread)),
+        );
+      } else {
+        setThreads((prev) => prev.filter((thread) => thread.id !== optimisticId));
+        setNewThreadBody(body);
       }
     } catch {
-      // No user-facing error.
+      setThreads((prev) => prev.filter((thread) => thread.id !== optimisticId));
+      setNewThreadBody(body);
     } finally {
       setSubmitting(false);
     }

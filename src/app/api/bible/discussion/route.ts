@@ -85,12 +85,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "bookSlug and chapter are required" }, { status: 400 });
   }
 
-  const readerKey = await getSignedInDiscussionReader();
-  const canModerate = await isDiscussionModerator();
-  const viewer = await buildViewer(readerKey, canModerate);
-
   try {
     await ensureDiscussionSchema();
+
+    const readerKey = await getSignedInDiscussionReader();
+    const canModerate = await isDiscussionModerator();
+    const viewer = await buildViewer(readerKey, canModerate);
     const threads = await listChapterDiscussion(bookSlug, chapter);
     return NextResponse.json({
       viewer,
@@ -99,7 +99,17 @@ export async function GET(request: Request) {
   } catch (e) {
     console.error("discussion list", e);
     return NextResponse.json(
-      { viewer, threads: [], error: "Could not load discussion" },
+      {
+        viewer: {
+          canWrite: false,
+          penName: null,
+          needsPenName: false,
+          canModerate: false,
+          readerType: null,
+        },
+        threads: [],
+        error: "Could not load discussion",
+      },
       { status: 500 },
     );
   }
@@ -137,9 +147,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
     }
 
-    const authorLabel = await getAuthorLabelForPost(readerKey);
-
     await ensureDiscussionSchema();
+    const authorLabel = await getAuthorLabelForPost(readerKey);
     const thread = await createChapterThread(bookSlug, chapter, {
       body: text,
       isAnonymous: false,
