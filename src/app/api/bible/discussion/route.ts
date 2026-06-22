@@ -3,6 +3,7 @@ import {
   listChapterDiscussion,
   normalizeDiscussionBody,
 } from "@/lib/bible/discussion";
+import { ensureDiscussionSchema } from "@/lib/bible/discussion-schema";
 import { getAuthorLabelForPost, getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
 import {
   canManageDiscussionPost,
@@ -89,6 +90,7 @@ export async function GET(request: Request) {
   const viewer = await buildViewer(readerKey, canModerate);
 
   try {
+    await ensureDiscussionSchema();
     const threads = await listChapterDiscussion(bookSlug, chapter);
     return NextResponse.json({
       viewer,
@@ -137,6 +139,7 @@ export async function POST(request: Request) {
 
     const authorLabel = await getAuthorLabelForPost(readerKey);
 
+    await ensureDiscussionSchema();
     const thread = await createChapterThread(bookSlug, chapter, {
       body: text,
       isAnonymous: false,
