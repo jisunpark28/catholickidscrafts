@@ -5,7 +5,7 @@ import {
   type HeaderSessionResponse,
 } from "@/lib/header-session";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type DiscussionComment = {
   id: string;
@@ -121,6 +121,7 @@ export function BibleChapterDiscussion({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const loadGeneration = useRef(0);
 
   const signedIn = session ? isHeaderSignedIn(session) : initialSignedIn;
   const readerLabel = session ? readerLabelFromSession(session) : initialReaderLabel;
@@ -132,6 +133,7 @@ export function BibleChapterDiscussion({
   );
 
   const loadDiscussion = useCallback(async () => {
+    const generation = ++loadGeneration.current;
     setLoading(true);
     try {
       const [sessionRes, discussionRes] = await Promise.all([
@@ -141,6 +143,8 @@ export function BibleChapterDiscussion({
           { cache: "no-store", credentials: "include" },
         ),
       ]);
+
+      if (generation !== loadGeneration.current) return;
 
       if (sessionRes.ok) {
         const sessionData = await readJson<HeaderSessionResponse>(sessionRes);
@@ -152,6 +156,8 @@ export function BibleChapterDiscussion({
         viewer?: DiscussionViewer;
       }>(discussionRes);
 
+      if (generation !== loadGeneration.current) return;
+
       if (data.viewer) {
         setViewer((prev) => ({
           ...data.viewer!,
@@ -162,7 +168,9 @@ export function BibleChapterDiscussion({
     } catch {
       // Keep existing comments; no user-facing error.
     } finally {
-      setLoading(false);
+      if (generation === loadGeneration.current) {
+        setLoading(false);
+      }
     }
   }, [bookSlug, chapter, initialSignedIn]);
 
@@ -175,19 +183,6 @@ export function BibleChapterDiscussion({
     if (!body || submitting) return;
     setSubmitting(true);
 
-    const optimisticId = `pending-${Date.now()}`;
-    const optimisticThread: DiscussionThread = {
-      id: optimisticId,
-      body,
-      authorDisplay: viewer.penName ?? readerLabel,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      canEdit: false,
-      canDelete: false,
-      comments: [],
-    };
-    setThreads((prev) => [...prev, optimisticThread]);
-
     try {
       const res = await fetch("/api/bible/discussion", {
         method: "POST",
@@ -197,18 +192,18 @@ export function BibleChapterDiscussion({
       });
       const data = await readJson<{ thread?: DiscussionThread }>(res);
       if (res.ok && data.thread) {
+        loadGeneration.current += 1;
         setNewThreadBody("");
-        setThreads((prev) =>
-          prev.map((thread) => (thread.id === optimisticId ? data.thread! : thread)),
-        );
-      } else {
-        setThreads((prev) => prev.filter((thread) => thread.id !== optimisticId));
-      }
-      if (res.ok) {
-        await loadDiscussion();
+        setThreads((prev) => {
+          const thread = data.thread!;
+          if (prev.some((item) => item.id === thread.id)) {
+            return prev.map((item) => (item.id === thread.id ? thread : item));
+          }
+          return [...prev, thread];
+        });
       }
     } catch {
-      setThreads((prev) => prev.filter((thread) => thread.id !== optimisticId));
+      // No user-facing error.
     } finally {
       setSubmitting(false);
     }
@@ -227,10 +222,25 @@ export function BibleChapterDiscussion({
       });
       const data = await readJson<{ comment?: DiscussionComment }>(res);
       if (res.ok && data.comment) {
+        loadGeneration.current += 1;
+        const comment = data.comment;
         setReplyBodies((prev) => ({ ...prev, [threadId]: "" }));
         setReplyingTo(null);
         setExpandedReplies((prev) => ({ ...prev, [threadId]: true }));
-        await loadDiscussion();
+        setThreads((prev) =>
+          prev.map((thread) => {
+            if (thread.id !== threadId) return thread;
+            if (thread.comments.some((item) => item.id === comment.id)) {
+              return {
+                ...thread,
+                comments: thread.comments.map((item) =>
+                  item.id === comment.id ? comment : item,
+                ),
+              };
+            }
+            return { ...thread, comments: [...thread.comments, comment] };
+          }),
+        );
       }
     } catch {
       // Keep draft in the reply box.
