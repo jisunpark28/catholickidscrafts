@@ -24,6 +24,8 @@ export async function POST(request: Request, context: RouteContext) {
       );
     }
 
+    await ensureDiscussionSchema();
+
     const thread = await getChapterThread(threadId);
     if (!thread) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -42,8 +44,6 @@ export async function POST(request: Request, context: RouteContext) {
     }
 
     const authorLabel = await getAuthorLabelForPost(readerKey);
-
-    await ensureDiscussionSchema();
     const comment = await createChapterComment(threadId, {
       body: text,
       isAnonymous: false,
