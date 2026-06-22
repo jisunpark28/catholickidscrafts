@@ -2,7 +2,6 @@ import {
   createChapterComment,
   getChapterThread,
   normalizeDiscussionBody,
-  parseDiscussionAnonymous,
 } from "@/lib/bible/discussion";
 import { getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
 import { publicAuthorDisplay } from "@/lib/bible/discussion-permissions";
@@ -12,46 +11,45 @@ import { NextResponse } from "next/server";
 type RouteContext = { params: Promise<{ threadId: string }> };
 
 export async function POST(request: Request, context: RouteContext) {
-  const { threadId } = await context.params;
-
-  const readerKey = await getSignedInDiscussionReader();
-  if (!readerKey) {
-    return NextResponse.json(
-      { error: "Sign in with a family account or Access ID to reply." },
-      { status: 401 },
-    );
-  }
-
-  const thread = await getChapterThread(threadId);
-  if (!thread) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
-
-  let body: { body?: string; anonymous?: boolean };
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+    const { threadId } = await context.params;
 
-  const text = normalizeDiscussionBody(body.body);
-  const isAnonymous = parseDiscussionAnonymous(body.anonymous);
-  if (!text) {
-    return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
-  }
+    const readerKey = await getSignedInDiscussionReader();
+    if (!readerKey) {
+      return NextResponse.json(
+        { error: "Sign in with a family account or Access ID to reply." },
+        { status: 401 },
+      );
+    }
 
-  const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
-  if (needsPenName || !penName) {
-    return NextResponse.json(
-      { error: "Choose a pen name before posting." },
-      { status: 400 },
-    );
-  }
+    const thread = await getChapterThread(threadId);
+    if (!thread) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
 
-  try {
+    let body: { body?: string };
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
+
+    const text = normalizeDiscussionBody(body.body);
+    if (!text) {
+      return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
+    }
+
+    const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
+    if (needsPenName || !penName) {
+      return NextResponse.json(
+        { error: "Choose a pen name before posting." },
+        { status: 400 },
+      );
+    }
+
     const comment = await createChapterComment(threadId, {
       body: text,
-      isAnonymous,
+      isAnonymous: false,
       authorLabel: penName,
       readerKey,
     });

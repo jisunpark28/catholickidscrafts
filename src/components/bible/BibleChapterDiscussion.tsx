@@ -43,6 +43,19 @@ type Props = {
   initialReaderLabel: string;
 };
 
+async function readJson<T>(res: Response): Promise<T> {
+  const text = await res.text();
+  if (!text.trim()) {
+    if (!res.ok) throw new Error(`Request failed (${res.status})`);
+    return {} as T;
+  }
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error(res.ok ? "Invalid server response" : `Request failed (${res.status})`);
+  }
+}
+
 function formatWhen(iso: string): string {
   try {
     const date = new Date(iso);
@@ -102,9 +115,7 @@ export function BibleChapterDiscussion({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [newThreadBody, setNewThreadBody] = useState("");
-  const [postAnonymous, setPostAnonymous] = useState(false);
   const [replyBodies, setReplyBodies] = useState<Record<string, string>>({});
-  const [replyAnonymous, setReplyAnonymous] = useState<Record<string, boolean>>({});
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [expandedReplies, setExpandedReplies] = useState<Record<string, boolean>>({});
   const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
@@ -135,15 +146,15 @@ export function BibleChapterDiscussion({
       ]);
 
       if (sessionRes.ok) {
-        const sessionData = (await sessionRes.json()) as HeaderSessionResponse;
+        const sessionData = await readJson<HeaderSessionResponse>(sessionRes);
         setSession(sessionData);
       }
 
-      const data = (await discussionRes.json()) as {
+      const data = await readJson<{
         threads?: DiscussionThread[];
         viewer?: DiscussionViewer;
         error?: string;
-      };
+      }>(discussionRes);
 
       if (data.viewer) setViewer(data.viewer);
       setThreads(data.threads ?? []);
@@ -171,13 +182,12 @@ export function BibleChapterDiscussion({
       const res = await fetch("/api/bible/discussion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bookSlug, chapter, body, anonymous: postAnonymous }),
+        body: JSON.stringify({ bookSlug, chapter, body }),
       });
-      const data = (await res.json()) as { thread?: DiscussionThread; error?: string };
+      const data = await readJson<{ thread?: DiscussionThread; error?: string }>(res);
       if (!res.ok || !data.thread) throw new Error(data.error ?? "Could not post");
       setThreads((prev) => [...prev, data.thread!]);
       setNewThreadBody("");
-      setPostAnonymous(false);
       setComposerOpen(false);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not post");
@@ -195,9 +205,9 @@ export function BibleChapterDiscussion({
       const res = await fetch(`/api/bible/discussion/${threadId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body, anonymous: replyAnonymous[threadId] ?? false }),
+        body: JSON.stringify({ body }),
       });
-      const data = (await res.json()) as { comment?: DiscussionComment; error?: string };
+      const data = await readJson<{ comment?: DiscussionComment; error?: string }>(res);
       if (!res.ok || !data.comment) throw new Error(data.error ?? "Could not reply");
       setThreads((prev) =>
         prev.map((thread) =>
@@ -207,7 +217,6 @@ export function BibleChapterDiscussion({
         ),
       );
       setReplyBodies((prev) => ({ ...prev, [threadId]: "" }));
-      setReplyAnonymous((prev) => ({ ...prev, [threadId]: false }));
       setReplyingTo(null);
       setExpandedReplies((prev) => ({ ...prev, [threadId]: true }));
     } catch (e) {
@@ -228,10 +237,10 @@ export function BibleChapterDiscussion({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body }),
       });
-      const data = (await res.json()) as {
+      const data = await readJson<{
         thread?: { id: string; body: string; updatedAt: string };
         error?: string;
-      };
+      }>(res);
       if (!res.ok || !data.thread) throw new Error(data.error ?? "Could not update");
       setThreads((prev) =>
         prev.map((thread) =>
@@ -260,10 +269,10 @@ export function BibleChapterDiscussion({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body }),
       });
-      const data = (await res.json()) as {
+      const data = await readJson<{
         comment?: { id: string; body: string; updatedAt: string };
         error?: string;
-      };
+      }>(res);
       if (!res.ok || !data.comment) throw new Error(data.error ?? "Could not update");
       setThreads((prev) =>
         prev.map((thread) =>
@@ -298,7 +307,7 @@ export function BibleChapterDiscussion({
     setError("");
     try {
       const res = await fetch(`/api/bible/discussion/${threadId}`, { method: "DELETE" });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = await readJson<{ error?: string }>(res);
       if (!res.ok) throw new Error(data.error ?? "Could not delete");
       setThreads((prev) => prev.filter((thread) => thread.id !== threadId));
     } catch (e) {
@@ -316,7 +325,7 @@ export function BibleChapterDiscussion({
       const res = await fetch(`/api/bible/discussion/comments/${commentId}`, {
         method: "DELETE",
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = await readJson<{ error?: string }>(res);
       if (!res.ok) throw new Error(data.error ?? "Could not delete");
       setThreads((prev) =>
         prev.map((thread) =>
@@ -387,36 +396,25 @@ export function BibleChapterDiscussion({
                   value={newThreadBody}
                   onChange={(e) => setNewThreadBody(e.target.value)}
                 />
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <label className="inline-flex items-center gap-1.5 text-xs text-[var(--color-muted)]">
-                    <input
-                      type="checkbox"
-                      checked={postAnonymous}
-                      onChange={(e) => setPostAnonymous(e.target.checked)}
-                    />
-                    Anonymous
-                  </label>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--color-muted)] hover:bg-[#f5ebe0]"
-                      onClick={() => {
-                        setComposerOpen(false);
-                        setNewThreadBody("");
-                        setPostAnonymous(false);
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-full bg-[var(--color-accent)] px-4 py-1 text-xs font-bold text-white disabled:opacity-40"
-                      disabled={submitting || !newThreadBody.trim()}
-                      onClick={() => void postThread()}
-                    >
-                      Comment
-                    </button>
-                  </div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--color-muted)] hover:bg-[#f5ebe0]"
+                    onClick={() => {
+                      setComposerOpen(false);
+                      setNewThreadBody("");
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-full bg-[var(--color-accent)] px-4 py-1 text-xs font-bold text-white disabled:opacity-40"
+                    disabled={submitting || !newThreadBody.trim()}
+                    onClick={() => void postThread()}
+                  >
+                    Comment
+                  </button>
                 </div>
               </div>
             )}
@@ -548,37 +546,22 @@ export function BibleChapterDiscussion({
                             setReplyBodies((prev) => ({ ...prev, [thread.id]: e.target.value }))
                           }
                         />
-                        <div className="flex flex-wrap items-center justify-between gap-2">
-                          <label className="inline-flex items-center gap-1.5 text-xs text-[var(--color-muted)]">
-                            <input
-                              type="checkbox"
-                              checked={replyAnonymous[thread.id] ?? false}
-                              onChange={(e) =>
-                                setReplyAnonymous((prev) => ({
-                                  ...prev,
-                                  [thread.id]: e.target.checked,
-                                }))
-                              }
-                            />
-                            Anonymous
-                          </label>
-                          <div className="flex gap-2">
-                            <button
-                              type="button"
-                              className="text-xs text-[var(--color-muted)]"
-                              onClick={() => setReplyingTo(null)}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              type="button"
-                              className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-xs font-bold text-white disabled:opacity-40"
-                              disabled={submitting || !(replyBodies[thread.id] ?? "").trim()}
-                              onClick={() => void postReply(thread.id)}
-                            >
-                              Reply
-                            </button>
-                          </div>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            className="text-xs text-[var(--color-muted)]"
+                            onClick={() => setReplyingTo(null)}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-xs font-bold text-white disabled:opacity-40"
+                            disabled={submitting || !(replyBodies[thread.id] ?? "").trim()}
+                            onClick={() => void postReply(thread.id)}
+                          >
+                            Reply
+                          </button>
                         </div>
                       </div>
                     </div>

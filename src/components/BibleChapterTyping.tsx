@@ -12,7 +12,6 @@ type Props = {
   bookName: string;
   chapter: number;
   text: string;
-  citation: string;
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
 };
@@ -22,12 +21,10 @@ export function BibleChapterTyping({
   bookName,
   chapter,
   text,
-  citation,
   discussionSignedIn,
   discussionReaderLabel,
 }: Props) {
   const [stickerError, setStickerError] = useState("");
-  const [stickerSaved, setStickerSaved] = useState(false);
 
   const unlockSticker = useCallback(
     async (accuracy: number) => {
@@ -47,7 +44,6 @@ export function BibleChapterTyping({
         setStickerError(message);
         throw new Error(message);
       }
-      setStickerSaved(true);
     },
     [bookSlug, chapter],
   );
@@ -71,11 +67,6 @@ export function BibleChapterTyping({
         }
       />
       {stickerError && <p className="mt-3 text-sm text-red-600">{stickerError}</p>}
-      {stickerSaved && !stickerError && (
-        <p className="mt-3 text-xs text-[var(--color-muted)]">
-          {citation} · Douay-Rheims (public domain) via latinprayer.org
-        </p>
-      )}
       <BibleChapterDiscussion
         bookSlug={bookSlug}
         chapter={chapter}

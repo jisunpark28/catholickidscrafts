@@ -56,7 +56,6 @@ export default async function BibleReadPage({ params }: Props) {
           bookName={data.meta.book.name}
           chapter={data.meta.chapter}
           text={text}
-          citation={data.citation}
           discussionSignedIn={signedIn}
           discussionReaderLabel={readerLabel}
         />

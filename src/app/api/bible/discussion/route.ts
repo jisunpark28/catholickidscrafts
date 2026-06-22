@@ -2,7 +2,6 @@ import {
   createChapterThread,
   listChapterDiscussion,
   normalizeDiscussionBody,
-  parseDiscussionAnonymous,
 } from "@/lib/bible/discussion";
 import { getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
 import {
@@ -15,6 +14,8 @@ import {
   type SignedInReaderKey,
 } from "@/lib/bible/discussion-reader";
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 function parseChapter(value: string | null): number | null {
   if (!value) return null;
@@ -102,45 +103,48 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const readerKey = await getSignedInDiscussionReader();
-  if (!readerKey) {
-    return NextResponse.json(
-      { error: "Sign in with a family account or Access ID to post." },
-      { status: 401 },
-    );
-  }
-
-  let body: { bookSlug?: string; chapter?: number; body?: string; anonymous?: boolean };
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+    const readerKey = await getSignedInDiscussionReader();
+    if (!readerKey) {
+      return NextResponse.json(
+        { error: "Sign in with a family account or Access ID to post." },
+        { status: 401 },
+      );
+    }
 
-  const bookSlug = body.bookSlug?.trim();
-  const chapter = body.chapter;
-  const text = normalizeDiscussionBody(body.body);
-  const isAnonymous = parseDiscussionAnonymous(body.anonymous);
+    let body: { bookSlug?: string; chapter?: number | string; body?: string };
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    }
 
-  if (!bookSlug || !Number.isFinite(chapter) || chapter! < 1) {
-    return NextResponse.json({ error: "bookSlug and chapter are required" }, { status: 400 });
-  }
-  if (!text) {
-    return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
-  }
-
-  const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
-  if (needsPenName || !penName) {
-    return NextResponse.json(
-      { error: "Choose a pen name before posting." },
-      { status: 400 },
+    const bookSlug = body.bookSlug?.trim();
+    const chapter = parseChapter(
+      body.chapter === undefined || body.chapter === null
+        ? null
+        : String(body.chapter),
     );
-  }
+    const text = normalizeDiscussionBody(body.body);
 
-  try {
-    const thread = await createChapterThread(bookSlug, chapter!, {
+    if (!bookSlug || chapter === null) {
+      return NextResponse.json({ error: "bookSlug and chapter are required" }, { status: 400 });
+    }
+    if (!text) {
+      return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
+    }
+
+    const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
+    if (needsPenName || !penName) {
+      return NextResponse.json(
+        { error: "Choose a pen name before posting." },
+        { status: 400 },
+      );
+    }
+
+    const thread = await createChapterThread(bookSlug, chapter, {
       body: text,
-      isAnonymous,
+      isAnonymous: false,
       authorLabel: penName,
       readerKey,
     });
