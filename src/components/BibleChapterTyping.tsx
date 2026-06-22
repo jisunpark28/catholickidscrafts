@@ -13,6 +13,8 @@ type Props = {
   chapter: number;
   text: string;
   citation: string;
+  discussionSignedIn: boolean;
+  discussionReaderLabel: string;
 };
 
 export function BibleChapterTyping({
@@ -21,6 +23,8 @@ export function BibleChapterTyping({
   chapter,
   text,
   citation,
+  discussionSignedIn,
+  discussionReaderLabel,
 }: Props) {
   const [stickerError, setStickerError] = useState("");
   const [stickerSaved, setStickerSaved] = useState(false);
@@ -72,7 +76,12 @@ export function BibleChapterTyping({
           {citation} · Douay-Rheims (public domain) via latinprayer.org
         </p>
       )}
-      <BibleChapterDiscussion bookSlug={bookSlug} chapter={chapter} />
+      <BibleChapterDiscussion
+        bookSlug={bookSlug}
+        chapter={chapter}
+        initialSignedIn={discussionSignedIn}
+        initialReaderLabel={discussionReaderLabel}
+      />
     </div>
   );
 }

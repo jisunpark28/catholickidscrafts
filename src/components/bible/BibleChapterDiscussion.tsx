@@ -1,9 +1,11 @@
 "use client";
 
-import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
-import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
+import {
+  isHeaderSignedIn,
+  type HeaderSessionResponse,
+} from "@/lib/header-session";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 type DiscussionComment = {
   id: string;
@@ -37,43 +39,62 @@ type DiscussionViewer = {
 type Props = {
   bookSlug: string;
   chapter: number;
+  initialSignedIn: boolean;
+  initialReaderLabel: string;
 };
 
 function formatWhen(iso: string): string {
   try {
-    return new Date(iso).toLocaleString(undefined, {
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-    });
+    const date = new Date(iso);
+    const diffMs = Date.now() - date.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return "just now";
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr}h ago`;
+    const diffDay = Math.floor(diffHr / 24);
+    if (diffDay < 7) return `${diffDay}d ago`;
+    return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
   } catch {
     return "";
   }
 }
 
-function textAreaClass() {
-  return "w-full resize-y rounded-xl border border-[#e8e0d6] bg-white px-3 py-2 text-sm text-[var(--color-ink)] placeholder:text-[var(--color-muted)] focus:border-[#dfc9b0] focus:outline-none focus:ring-1 focus:ring-[#dfc9b0]";
+function avatarInitial(label: string): string {
+  const ch = label.trim().charAt(0);
+  return ch ? ch.toUpperCase() : "?";
 }
 
-function actionButtonClass(kind: "primary" | "ghost" | "danger" = "ghost") {
-  if (kind === "primary") {
-    return "rounded-lg bg-[var(--color-accent)] px-3 py-1.5 text-xs font-bold text-white hover:opacity-90 disabled:opacity-40";
-  }
-  if (kind === "danger") {
-    return "rounded-lg px-2 py-1 text-xs font-semibold text-red-700 hover:bg-red-50";
-  }
-  return "rounded-lg px-2 py-1 text-xs font-semibold text-[var(--color-muted)] hover:bg-[#f5ebe0]";
+function Avatar({ label }: { label: string }) {
+  return (
+    <div
+      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dfc9b0] text-sm font-bold text-[var(--color-ink)]"
+      aria-hidden
+    >
+      {avatarInitial(label)}
+    </div>
+  );
 }
 
-export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
-  const copy = useSiteCopy();
-  const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
+function readerLabelFromSession(session: HeaderSessionResponse | null): string {
+  if (!session) return "?";
+  if (session.reader?.displayName) return session.reader.displayName;
+  if (session.family?.displayName?.trim()) return session.family.displayName.trim();
+  if (session.family?.email) return session.family.email.split("@")[0] ?? "?";
+  return "?";
+}
 
+export function BibleChapterDiscussion({
+  bookSlug,
+  chapter,
+  initialSignedIn,
+  initialReaderLabel,
+}: Props) {
+  const [session, setSession] = useState<HeaderSessionResponse | null>(null);
   const [threads, setThreads] = useState<DiscussionThread[]>([]);
   const [viewer, setViewer] = useState<DiscussionViewer>({
-    canWrite: false,
-    penName: null,
+    canWrite: initialSignedIn,
+    penName: initialSignedIn ? initialReaderLabel : null,
     needsPenName: false,
     canModerate: false,
     readerType: null,
@@ -82,41 +103,56 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
   const [error, setError] = useState("");
   const [newThreadBody, setNewThreadBody] = useState("");
   const [postAnonymous, setPostAnonymous] = useState(false);
-  const [replyAnonymous, setReplyAnonymous] = useState<Record<string, boolean>>({});
   const [replyBodies, setReplyBodies] = useState<Record<string, string>>({});
-  const [penNameDraft, setPenNameDraft] = useState("");
-  const [savingPenName, setSavingPenName] = useState(false);
+  const [replyAnonymous, setReplyAnonymous] = useState<Record<string, boolean>>({});
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [expandedReplies, setExpandedReplies] = useState<Record<string, boolean>>({});
   const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [composerOpen, setComposerOpen] = useState(false);
+
+  const signedIn = session ? isHeaderSignedIn(session) : initialSignedIn;
+  const readerLabel = session ? readerLabelFromSession(session) : initialReaderLabel;
+  const canCompose = signedIn || viewer.canWrite;
+
+  const commentCount = useMemo(
+    () => threads.reduce((sum, thread) => sum + 1 + thread.comments.length, 0),
+    [threads],
+  );
 
   const loadDiscussion = useCallback(async () => {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch(
-        `/api/bible/discussion?bookSlug=${encodeURIComponent(bookSlug)}&chapter=${chapter}`,
-      );
-      const data = (await res.json()) as {
+      const [sessionRes, discussionRes] = await Promise.all([
+        fetch("/api/auth/session", { cache: "no-store" }),
+        fetch(
+          `/api/bible/discussion?bookSlug=${encodeURIComponent(bookSlug)}&chapter=${chapter}`,
+          { cache: "no-store" },
+        ),
+      ]);
+
+      if (sessionRes.ok) {
+        const sessionData = (await sessionRes.json()) as HeaderSessionResponse;
+        setSession(sessionData);
+      }
+
+      const data = (await discussionRes.json()) as {
         threads?: DiscussionThread[];
         viewer?: DiscussionViewer;
         error?: string;
       };
-      if (!res.ok) throw new Error(data.error ?? "Could not load discussion");
+
+      if (data.viewer) setViewer(data.viewer);
       setThreads(data.threads ?? []);
-      setViewer(
-        data.viewer ?? {
-          canWrite: false,
-          penName: null,
-          needsPenName: false,
-          canModerate: false,
-          readerType: null,
-        },
-      );
+
+      if (!discussionRes.ok && !data.threads) {
+        throw new Error(data.error ?? "Could not load comments");
+      }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not load discussion");
-      setThreads([]);
+      setError(e instanceof Error ? e.message : "Could not load comments");
     } finally {
       setLoading(false);
     }
@@ -126,35 +162,9 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
     void loadDiscussion();
   }, [loadDiscussion]);
 
-  const savePenName = async () => {
-    const penName = penNameDraft.trim();
-    if (!penName || savingPenName) return;
-    setSavingPenName(true);
-    setError("");
-    try {
-      const res = await fetch("/api/bible/discussion/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ penName }),
-      });
-      const data = (await res.json()) as { penName?: string; error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Could not save pen name");
-      setViewer((prev) => ({
-        ...prev,
-        penName: data.penName ?? penName,
-        needsPenName: false,
-      }));
-      setPenNameDraft("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not save pen name");
-    } finally {
-      setSavingPenName(false);
-    }
-  };
-
   const postThread = async () => {
     const body = newThreadBody.trim();
-    if (!body || submitting || !viewer.canWrite || viewer.needsPenName) return;
+    if (!body || submitting || !canCompose) return;
     setSubmitting(true);
     setError("");
     try {
@@ -168,6 +178,7 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
       setThreads((prev) => [...prev, data.thread!]);
       setNewThreadBody("");
       setPostAnonymous(false);
+      setComposerOpen(false);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not post");
     } finally {
@@ -177,7 +188,7 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
 
   const postReply = async (threadId: string) => {
     const body = (replyBodies[threadId] ?? "").trim();
-    if (!body || submitting || !viewer.canWrite || viewer.needsPenName) return;
+    if (!body || submitting || !canCompose) return;
     setSubmitting(true);
     setError("");
     try {
@@ -197,6 +208,8 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
       );
       setReplyBodies((prev) => ({ ...prev, [threadId]: "" }));
       setReplyAnonymous((prev) => ({ ...prev, [threadId]: false }));
+      setReplyingTo(null);
+      setExpandedReplies((prev) => ({ ...prev, [threadId]: true }));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not reply");
     } finally {
@@ -280,10 +293,7 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
   };
 
   const deleteThread = async (threadId: string) => {
-    if (submitting) return;
-    if (!window.confirm(t("bible.discussion.delete_thread_confirm", "Delete this post and all replies?"))) {
-      return;
-    }
+    if (submitting || !window.confirm("Delete this comment and all replies?")) return;
     setSubmitting(true);
     setError("");
     try {
@@ -299,10 +309,7 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
   };
 
   const deleteComment = async (commentId: string, threadId: string) => {
-    if (submitting) return;
-    if (!window.confirm(t("bible.discussion.delete_reply_confirm", "Delete this reply?"))) {
-      return;
-    }
+    if (submitting || !window.confirm("Delete this reply?")) return;
     setSubmitting(true);
     setError("");
     try {
@@ -328,357 +335,324 @@ export function BibleChapterDiscussion({ bookSlug, chapter }: Props) {
     }
   };
 
-  function visibilityRadios(
-    idPrefix: string,
-    anonymous: boolean,
-    onChange: (anonymous: boolean) => void,
-    penName: string,
+  function renderCommentActions(
+    canEdit: boolean,
+    canDelete: boolean,
+    onEdit: () => void,
+    onDelete: () => void,
   ) {
+    if (!canEdit && !canDelete) return null;
     return (
-      <fieldset className="flex flex-wrap gap-4 text-xs text-[var(--color-ink)]">
-        <legend className="sr-only">{t("bible.discussion.visibility_label", "Post visibility")}</legend>
-        <label className="inline-flex cursor-pointer items-center gap-2">
-          <input
-            type="radio"
-            name={`${idPrefix}-visibility`}
-            checked={!anonymous}
-            onChange={() => onChange(false)}
-          />
-          {t("bible.discussion.show_name", "Show my name ({name})").replace("{name}", penName)}
-        </label>
-        <label className="inline-flex cursor-pointer items-center gap-2">
-          <input
-            type="radio"
-            name={`${idPrefix}-visibility`}
-            checked={anonymous}
-            onChange={() => onChange(true)}
-          />
-          {t("bible.discussion.post_anonymous", "Post anonymously")}
-        </label>
-      </fieldset>
+      <span className="ml-2 inline-flex gap-2 text-xs text-[var(--color-muted)]">
+        {canEdit ? (
+          <button type="button" className="hover:text-[var(--color-ink)]" onClick={onEdit}>
+            Edit
+          </button>
+        ) : null}
+        {canDelete ? (
+          <button type="button" className="hover:text-red-700" onClick={onDelete}>
+            Delete
+          </button>
+        ) : null}
+      </span>
     );
   }
 
-  const penName = viewer.penName ?? "";
-
   return (
-    <section className={`${HOME_HUB_PANEL_CLASS} space-y-4 bg-white`}>
-      <div>
-        <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-          {t("bible.discussion.title", "Questions & thoughts")}
-        </h2>
-        <p className="mt-1 text-xs text-[var(--color-muted)]">
-          {viewer.canModerate
-            ? t(
-                "bible.discussion.subtitle_moderator",
-                "Sign in to write. You can edit or delete your own posts. Operators can moderate all posts.",
-              )
-            : t(
-                "bible.discussion.subtitle",
-                "Sign in to write. Choose to show your pen name or post anonymously on each message.",
-              )}
-        </p>
-      </div>
+    <section className="mt-8 space-y-4 border-t border-[#e8e0d6] pt-6">
+      <h2 className="text-base font-semibold text-[var(--color-ink)]">
+        {commentCount} {commentCount === 1 ? "Comment" : "Comments"}
+      </h2>
 
-      {!viewer.canWrite ? (
-        <p className="text-sm text-[var(--color-ink)]">
-          <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
-            {t("bible.discussion.sign_in", "Sign in")}
-          </Link>{" "}
-          {t("bible.discussion.sign_in_or", "or")}{" "}
-          <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-            {t("bible.discussion.access_id", "Access ID")}
-          </Link>{" "}
-          {t("bible.discussion.sign_in_suffix", "to join the discussion.")}
-        </p>
-      ) : null}
-
-      {viewer.canWrite && viewer.needsPenName ? (
-        <div className="space-y-2 rounded-xl border border-[#e8e0d6] bg-[#faf8f5] p-3">
-          <p className="text-sm font-semibold text-[var(--color-ink)]">
-            {t("bible.discussion.pen_name_title", "Choose a pen name")}
-          </p>
-          <p className="text-xs text-[var(--color-muted)]">
-            {t(
-              "bible.discussion.pen_name_hint",
-              "This name is saved on your profile. You can still post anonymously when you prefer.",
+      {canCompose ? (
+        <div className="flex gap-3">
+          <Avatar label={viewer.penName ?? readerLabel} />
+          <div className="min-w-0 flex-1">
+            {!composerOpen ? (
+              <button
+                type="button"
+                className="w-full border-b border-[#e8e0d6] pb-2 text-left text-sm text-[var(--color-muted)] hover:border-[#cfc4b8]"
+                onClick={() => setComposerOpen(true)}
+              >
+                Add a comment…
+              </button>
+            ) : (
+              <div className="space-y-2">
+                <textarea
+                  rows={2}
+                  maxLength={2000}
+                  autoFocus
+                  placeholder="Add a comment…"
+                  className="w-full resize-none border-0 border-b border-[#e8e0d6] bg-transparent pb-2 text-sm text-[var(--color-ink)] placeholder:text-[var(--color-muted)] focus:border-[#cfc4b8] focus:outline-none"
+                  value={newThreadBody}
+                  onChange={(e) => setNewThreadBody(e.target.value)}
+                />
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <label className="inline-flex items-center gap-1.5 text-xs text-[var(--color-muted)]">
+                    <input
+                      type="checkbox"
+                      checked={postAnonymous}
+                      onChange={(e) => setPostAnonymous(e.target.checked)}
+                    />
+                    Anonymous
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      className="rounded-full px-3 py-1 text-xs font-semibold text-[var(--color-muted)] hover:bg-[#f5ebe0]"
+                      onClick={() => {
+                        setComposerOpen(false);
+                        setNewThreadBody("");
+                        setPostAnonymous(false);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-full bg-[var(--color-accent)] px-4 py-1 text-xs font-bold text-white disabled:opacity-40"
+                      disabled={submitting || !newThreadBody.trim()}
+                      onClick={() => void postThread()}
+                    >
+                      Comment
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
-          </p>
-          <label className="sr-only" htmlFor={`discussion-pen-name-${bookSlug}-${chapter}`}>
-            {t("bible.discussion.pen_name_label", "Pen name")}
-          </label>
-          <input
-            id={`discussion-pen-name-${bookSlug}-${chapter}`}
-            type="text"
-            maxLength={40}
-            className="w-full rounded-xl border border-[#e8e0d6] bg-white px-3 py-2 text-sm"
-            placeholder={t("bible.discussion.pen_name_placeholder", "e.g. Lily")}
-            value={penNameDraft}
-            onChange={(e) => setPenNameDraft(e.target.value)}
-          />
-          <div className="flex justify-end">
-            <button
-              type="button"
-              className={actionButtonClass("primary")}
-              disabled={savingPenName || !penNameDraft.trim()}
-              onClick={() => void savePenName()}
-            >
-              {t("bible.discussion.pen_name_save", "Save pen name")}
-            </button>
           </div>
         </div>
-      ) : null}
-
-      {viewer.canWrite && !viewer.needsPenName ? (
-        <div className="space-y-2">
-          <label className="sr-only" htmlFor={`discussion-new-${bookSlug}-${chapter}`}>
-            {t("bible.discussion.new_post_label", "Share a question or thought")}
-          </label>
-          <textarea
-            id={`discussion-new-${bookSlug}-${chapter}`}
-            rows={3}
-            maxLength={2000}
-            placeholder={t(
-              "bible.discussion.new_post_placeholder",
-              "Share a question or thought about this chapter…",
-            )}
-            className={textAreaClass()}
-            value={newThreadBody}
-            onChange={(e) => setNewThreadBody(e.target.value)}
-          />
-          {visibilityRadios(
-            `new-${bookSlug}-${chapter}`,
-            postAnonymous,
-            setPostAnonymous,
-            penName,
-          )}
-          <div className="flex justify-end">
-            <button
-              type="button"
-              className={actionButtonClass("primary")}
-              disabled={submitting || !newThreadBody.trim()}
-              onClick={() => void postThread()}
-            >
-              {t("bible.discussion.post", "Post")}
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {loading ? (
+      ) : (
         <p className="text-sm text-[var(--color-muted)]">
-          {t("bible.discussion.loading", "Loading discussion…")}
+          <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
+            Sign in
+          </Link>{" "}
+          or{" "}
+          <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
+            Access ID
+          </Link>{" "}
+          to comment.
         </p>
-      ) : null}
+      )}
+
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-      {!loading && threads.length === 0 ? (
-        <p className="text-sm text-[var(--color-muted)]">
-          {t("bible.discussion.empty", "No posts yet. Be the first to share.")}
-        </p>
-      ) : null}
+      {loading ? <p className="text-sm text-[var(--color-muted)]">Loading…</p> : null}
 
-      <ul className="space-y-4">
-        {threads.map((thread) => (
-          <li
-            key={thread.id}
-            className="rounded-xl border border-[#e8e0d6] bg-[#faf8f5] p-3"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-2">
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--color-muted)]">
-                  {thread.authorDisplay} · {formatWhen(thread.createdAt)}
-                  {thread.updatedAt !== thread.createdAt
-                    ? ` · ${t("bible.discussion.edited", "edited")}`
-                    : ""}
-                </p>
-                {editingThreadId === thread.id ? (
-                  <textarea
-                    rows={3}
-                    maxLength={2000}
-                    className={`${textAreaClass()} mt-2`}
-                    value={editDraft}
-                    onChange={(e) => setEditDraft(e.target.value)}
-                  />
-                ) : (
-                  <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--color-ink)]">
-                    {thread.body}
-                  </p>
-                )}
-              </div>
-              {thread.canEdit || thread.canDelete ? (
-                <div className="flex shrink-0 gap-1">
-                  {editingThreadId === thread.id ? (
-                    <>
-                      <button
-                        type="button"
-                        className={actionButtonClass("primary")}
-                        disabled={submitting || !editDraft.trim()}
-                        onClick={() => void saveThreadEdit(thread.id)}
-                      >
-                        {t("bible.discussion.save", "Save")}
-                      </button>
-                      <button
-                        type="button"
-                        className={actionButtonClass()}
-                        onClick={() => {
-                          setEditingThreadId(null);
-                          setEditDraft("");
-                        }}
-                      >
-                        {t("bible.discussion.cancel", "Cancel")}
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      {thread.canEdit ? (
-                        <button
-                          type="button"
-                          className={actionButtonClass()}
-                          onClick={() => {
+      <ul className="space-y-5">
+        {threads.map((thread) => {
+          const repliesOpen = expandedReplies[thread.id] ?? false;
+          return (
+            <li key={thread.id}>
+              <div className="flex gap-3">
+                <Avatar label={thread.authorDisplay} />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm">
+                    <span className="font-semibold text-[var(--color-ink)]">
+                      {thread.authorDisplay}
+                    </span>
+                    <span className="ml-2 text-xs text-[var(--color-muted)]">
+                      {formatWhen(thread.createdAt)}
+                    </span>
+                    {thread.canEdit || thread.canDelete
+                      ? renderCommentActions(
+                          thread.canEdit,
+                          thread.canDelete,
+                          () => {
                             setEditingThreadId(thread.id);
                             setEditingCommentId(null);
                             setEditDraft(thread.body);
-                          }}
-                        >
-                          {t("bible.discussion.edit", "Edit")}
-                        </button>
-                      ) : null}
-                      {thread.canDelete ? (
+                          },
+                          () => void deleteThread(thread.id),
+                        )
+                      : null}
+                  </p>
+                  {editingThreadId === thread.id ? (
+                    <div className="mt-1 space-y-2">
+                      <textarea
+                        rows={2}
+                        maxLength={2000}
+                        className="w-full resize-y rounded-lg border border-[#e8e0d6] px-2 py-1 text-sm"
+                        value={editDraft}
+                        onChange={(e) => setEditDraft(e.target.value)}
+                      />
+                      <div className="flex gap-2">
                         <button
                           type="button"
-                          className={actionButtonClass("danger")}
-                          onClick={() => void deleteThread(thread.id)}
+                          className="text-xs font-semibold text-[var(--color-accent)]"
+                          disabled={submitting || !editDraft.trim()}
+                          onClick={() => void saveThreadEdit(thread.id)}
                         >
-                          {t("bible.discussion.delete", "Delete")}
+                          Save
                         </button>
-                      ) : null}
-                    </>
-                  )}
-                </div>
-              ) : null}
-            </div>
-
-            {thread.comments.length > 0 ? (
-              <ul className="mt-3 space-y-2 border-t border-[#e8e0d6] pt-3">
-                {thread.comments.map((comment) => (
-                  <li key={comment.id} className="rounded-lg bg-white px-3 py-2">
-                    <div className="flex flex-wrap items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--color-muted)]">
-                          {comment.authorDisplay} · {formatWhen(comment.createdAt)}
-                          {comment.updatedAt !== comment.createdAt
-                            ? ` · ${t("bible.discussion.edited", "edited")}`
-                            : ""}
-                        </p>
-                        {editingCommentId === comment.id ? (
-                          <textarea
-                            rows={2}
-                            maxLength={2000}
-                            className={`${textAreaClass()} mt-2`}
-                            value={editDraft}
-                            onChange={(e) => setEditDraft(e.target.value)}
-                          />
-                        ) : (
-                          <p className="mt-1 whitespace-pre-wrap text-sm text-[var(--color-ink)]">
-                            {comment.body}
-                          </p>
-                        )}
+                        <button
+                          type="button"
+                          className="text-xs text-[var(--color-muted)]"
+                          onClick={() => {
+                            setEditingThreadId(null);
+                            setEditDraft("");
+                          }}
+                        >
+                          Cancel
+                        </button>
                       </div>
-                      {comment.canEdit || comment.canDelete ? (
-                        <div className="flex shrink-0 gap-1">
-                          {editingCommentId === comment.id ? (
-                            <>
-                              <button
-                                type="button"
-                                className={actionButtonClass("primary")}
-                                disabled={submitting || !editDraft.trim()}
-                                onClick={() => void saveCommentEdit(comment.id, thread.id)}
-                              >
-                                {t("bible.discussion.save", "Save")}
-                              </button>
-                              <button
-                                type="button"
-                                className={actionButtonClass()}
-                                onClick={() => {
-                                  setEditingCommentId(null);
-                                  setEditDraft("");
-                                }}
-                              >
-                                {t("bible.discussion.cancel", "Cancel")}
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              {comment.canEdit ? (
-                                <button
-                                  type="button"
-                                  className={actionButtonClass()}
-                                  onClick={() => {
-                                    setEditingCommentId(comment.id);
-                                    setEditingThreadId(null);
-                                    setEditDraft(comment.body);
-                                  }}
-                                >
-                                  {t("bible.discussion.edit", "Edit")}
-                                </button>
-                              ) : null}
-                              {comment.canDelete ? (
-                                <button
-                                  type="button"
-                                  className={actionButtonClass("danger")}
-                                  onClick={() => void deleteComment(comment.id, thread.id)}
-                                >
-                                  {t("bible.discussion.delete", "Delete")}
-                                </button>
-                              ) : null}
-                            </>
-                          )}
-                        </div>
-                      ) : null}
                     </div>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+                  ) : (
+                    <p className="mt-1 whitespace-pre-wrap text-sm text-[var(--color-ink)]">
+                      {thread.body}
+                    </p>
+                  )}
 
-            {viewer.canWrite && !viewer.needsPenName ? (
-              <div className="mt-3 space-y-2 border-t border-[#e8e0d6] pt-3">
-                <label className="sr-only" htmlFor={`reply-${thread.id}`}>
-                  {t("bible.discussion.reply_label", "Reply to post")}
-                </label>
-                <textarea
-                  id={`reply-${thread.id}`}
-                  rows={2}
-                  maxLength={2000}
-                  placeholder={t("bible.discussion.reply_placeholder", "Write a reply…")}
-                  className={textAreaClass()}
-                  value={replyBodies[thread.id] ?? ""}
-                  onChange={(e) =>
-                    setReplyBodies((prev) => ({ ...prev, [thread.id]: e.target.value }))
-                  }
-                />
-                {visibilityRadios(
-                  `reply-${thread.id}`,
-                  replyAnonymous[thread.id] ?? false,
-                  (anonymous) =>
-                    setReplyAnonymous((prev) => ({ ...prev, [thread.id]: anonymous })),
-                  penName,
-                )}
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    className={actionButtonClass("primary")}
-                    disabled={submitting || !(replyBodies[thread.id] ?? "").trim()}
-                    onClick={() => void postReply(thread.id)}
-                  >
-                    {t("bible.discussion.reply", "Reply")}
-                  </button>
+                  <div className="mt-1 flex flex-wrap items-center gap-3 text-xs font-semibold text-[var(--color-muted)]">
+                    {canCompose ? (
+                      <button
+                        type="button"
+                        className="hover:text-[var(--color-ink)]"
+                        onClick={() =>
+                          setReplyingTo((prev) => (prev === thread.id ? null : thread.id))
+                        }
+                      >
+                        Reply
+                      </button>
+                    ) : null}
+                    {thread.comments.length > 0 ? (
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1 hover:text-[var(--color-ink)]"
+                        onClick={() =>
+                          setExpandedReplies((prev) => ({
+                            ...prev,
+                            [thread.id]: !repliesOpen,
+                          }))
+                        }
+                      >
+                        <span aria-hidden>{repliesOpen ? "▾" : "▸"}</span>
+                        {thread.comments.length}{" "}
+                        {thread.comments.length === 1 ? "reply" : "replies"}
+                      </button>
+                    ) : null}
+                  </div>
+
+                  {replyingTo === thread.id && canCompose ? (
+                    <div className="mt-3 flex gap-3">
+                      <Avatar label={viewer.penName ?? readerLabel} />
+                      <div className="min-w-0 flex-1 space-y-2">
+                        <textarea
+                          rows={2}
+                          maxLength={2000}
+                          autoFocus
+                          placeholder="Add a reply…"
+                          className="w-full resize-none border-0 border-b border-[#e8e0d6] bg-transparent pb-2 text-sm focus:border-[#cfc4b8] focus:outline-none"
+                          value={replyBodies[thread.id] ?? ""}
+                          onChange={(e) =>
+                            setReplyBodies((prev) => ({ ...prev, [thread.id]: e.target.value }))
+                          }
+                        />
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <label className="inline-flex items-center gap-1.5 text-xs text-[var(--color-muted)]">
+                            <input
+                              type="checkbox"
+                              checked={replyAnonymous[thread.id] ?? false}
+                              onChange={(e) =>
+                                setReplyAnonymous((prev) => ({
+                                  ...prev,
+                                  [thread.id]: e.target.checked,
+                                }))
+                              }
+                            />
+                            Anonymous
+                          </label>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              className="text-xs text-[var(--color-muted)]"
+                              onClick={() => setReplyingTo(null)}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-xs font-bold text-white disabled:opacity-40"
+                              disabled={submitting || !(replyBodies[thread.id] ?? "").trim()}
+                              onClick={() => void postReply(thread.id)}
+                            >
+                              Reply
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {repliesOpen && thread.comments.length > 0 ? (
+                    <ul className="mt-3 space-y-4 pl-3 sm:pl-6">
+                      {thread.comments.map((comment) => (
+                        <li key={comment.id} className="flex gap-3">
+                          <Avatar label={comment.authorDisplay} />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm">
+                              <span className="font-semibold">{comment.authorDisplay}</span>
+                              <span className="ml-2 text-xs text-[var(--color-muted)]">
+                                {formatWhen(comment.createdAt)}
+                              </span>
+                              {comment.canEdit || comment.canDelete
+                                ? renderCommentActions(
+                                    comment.canEdit,
+                                    comment.canDelete,
+                                    () => {
+                                      setEditingCommentId(comment.id);
+                                      setEditingThreadId(null);
+                                      setEditDraft(comment.body);
+                                    },
+                                    () => void deleteComment(comment.id, thread.id),
+                                  )
+                                : null}
+                            </p>
+                            {editingCommentId === comment.id ? (
+                              <div className="mt-1 space-y-2">
+                                <textarea
+                                  rows={2}
+                                  maxLength={2000}
+                                  className="w-full resize-y rounded-lg border border-[#e8e0d6] px-2 py-1 text-sm"
+                                  value={editDraft}
+                                  onChange={(e) => setEditDraft(e.target.value)}
+                                />
+                                <div className="flex gap-2">
+                                  <button
+                                    type="button"
+                                    className="text-xs font-semibold text-[var(--color-accent)]"
+                                    disabled={submitting || !editDraft.trim()}
+                                    onClick={() => void saveCommentEdit(comment.id, thread.id)}
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="text-xs text-[var(--color-muted)]"
+                                    onClick={() => {
+                                      setEditingCommentId(null);
+                                      setEditDraft("");
+                                    }}
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="mt-1 whitespace-pre-wrap text-sm text-[var(--color-ink)]">
+                                {comment.body}
+                              </p>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
               </div>
-            ) : null}
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
