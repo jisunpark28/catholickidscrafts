@@ -1,18 +1,14 @@
 import { PrismaClient } from "@prisma/client";
+import { getDirectDatabaseUrl } from "@/lib/neon-database-url";
 import { prisma } from "@/lib/prisma";
 
 let ready: Promise<void> | null = null;
 let ddlClient: PrismaClient | undefined;
 
-/** Neon DDL must use the direct connection; pooled DATABASE_URL often rejects CREATE TABLE. */
 function getDdlPrisma(): PrismaClient {
-  const url = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim();
-  if (!url) {
-    throw new Error("Missing DATABASE_URL");
-  }
   if (!ddlClient) {
     ddlClient = new PrismaClient({
-      datasources: { db: { url } },
+      datasources: { db: { url: getDirectDatabaseUrl() } },
       log: ["error"],
     });
   }
@@ -24,6 +20,7 @@ export function ensureDiscussionSchema(): Promise<void> {
   if (!ready) {
     ready = applyDiscussionSchema().catch((e) => {
       ready = null;
+      console.error("ensureDiscussionSchema failed", e);
       throw e;
     });
   }
@@ -34,8 +31,9 @@ async function tableExists(table: string): Promise<boolean> {
   const rows = await prisma.$queryRaw<{ exists: boolean }[]>`
     SELECT EXISTS (
       SELECT 1
-      FROM information_schema.tables
-      WHERE table_schema = 'public' AND table_name = ${table}
+      FROM pg_catalog.pg_class c
+      JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+      WHERE n.nspname = 'public' AND c.relname = ${table}
     ) AS "exists"
   `;
   return Boolean(rows[0]?.exists);
@@ -62,7 +60,7 @@ async function applyDiscussionSchema(): Promise<void> {
       "familyAccountId" TEXT,
       "subProfileId" TEXT,
       "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      "updatedAt" TIMESTAMP(3) NOT NULL,
+      "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
       CONSTRAINT "BibleChapterThread_pkey" PRIMARY KEY ("id")
     )
   `);
@@ -77,7 +75,7 @@ async function applyDiscussionSchema(): Promise<void> {
       "familyAccountId" TEXT,
       "subProfileId" TEXT,
       "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      "updatedAt" TIMESTAMP(3) NOT NULL,
+      "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
       CONSTRAINT "BibleChapterComment_pkey" PRIMARY KEY ("id")
     )
   `);

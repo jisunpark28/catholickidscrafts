@@ -1,8 +1,8 @@
 -- AlterTable
-ALTER TABLE "FamilyAccount" ADD COLUMN "discussionPenName" TEXT;
+ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT;
 
 -- AlterTable
-ALTER TABLE "SubProfile" ADD COLUMN "discussionPenName" TEXT;
+ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT;
 
 -- CreateTable
 CREATE TABLE "BibleChapterThread" (
