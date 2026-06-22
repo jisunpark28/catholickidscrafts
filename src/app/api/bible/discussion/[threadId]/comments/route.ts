@@ -3,9 +3,10 @@ import {
   getChapterThread,
   normalizeDiscussionBody,
 } from "@/lib/bible/discussion";
-import { getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
+import { getAuthorLabelForPost } from "@/lib/bible/discussion-pen-name";
 import { publicAuthorDisplay } from "@/lib/bible/discussion-permissions";
 import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
+import { ensureOwnerReaderCookie } from "@/lib/family-auth";
 import { NextResponse } from "next/server";
 
 type RouteContext = { params: Promise<{ threadId: string }> };
@@ -39,22 +40,16 @@ export async function POST(request: Request, context: RouteContext) {
       return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
     }
 
-    const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
-    if (needsPenName || !penName) {
-      return NextResponse.json(
-        { error: "Choose a pen name before posting." },
-        { status: 400 },
-      );
-    }
+    const authorLabel = await getAuthorLabelForPost(readerKey);
 
     const comment = await createChapterComment(threadId, {
       body: text,
       isAnonymous: false,
-      authorLabel: penName,
+      authorLabel,
       readerKey,
     });
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       comment: {
         id: comment.id,
         body: comment.body,
@@ -65,6 +60,10 @@ export async function POST(request: Request, context: RouteContext) {
         canDelete: true,
       },
     });
+    if (readerKey.type === "owner") {
+      await ensureOwnerReaderCookie(res, readerKey.familyAccountId);
+    }
+    return res;
   } catch (e) {
     console.error("discussion create comment", e);
     return NextResponse.json({ error: "Could not reply" }, { status: 500 });

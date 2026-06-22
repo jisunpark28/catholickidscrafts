@@ -48,6 +48,33 @@ export async function getDiscussionPenNameForReader(
   return { penName, needsPenName: !penName };
 }
 
+/** Label stored on new comments; always returns a non-empty string. */
+export async function getAuthorLabelForPost(
+  readerKey: Exclude<ReaderKey, { type: "guest" }>,
+): Promise<string> {
+  const { penName } = await getDiscussionPenNameForReader(readerKey);
+  if (penName) return penName;
+
+  if (readerKey.type === "owner") {
+    const account = await prisma.familyAccount.findUnique({
+      where: { id: readerKey.familyAccountId },
+      select: { email: true },
+    });
+    const fallback =
+      resolveDiscussionPenName(null, null, account?.email) ?? "Parent";
+    await saveDiscussionPenName(readerKey, fallback).catch(() => undefined);
+    return fallback;
+  }
+
+  const sub = await prisma.subProfile.findUnique({
+    where: { id: readerKey.subProfileId },
+    select: { displayName: true },
+  });
+  const fallback = sub?.displayName?.trim() || "Reader";
+  await saveDiscussionPenName(readerKey, fallback).catch(() => undefined);
+  return fallback;
+}
+
 export async function saveDiscussionPenName(
   readerKey: Exclude<ReaderKey, { type: "guest" }>,
   penName: string,

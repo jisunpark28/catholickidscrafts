@@ -3,7 +3,7 @@ import {
   listChapterDiscussion,
   normalizeDiscussionBody,
 } from "@/lib/bible/discussion";
-import { getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
+import { getAuthorLabelForPost, getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
 import {
   canManageDiscussionPost,
   isDiscussionModerator,
@@ -13,6 +13,7 @@ import {
   getSignedInDiscussionReader,
   type SignedInReaderKey,
 } from "@/lib/bible/discussion-reader";
+import { ensureOwnerReaderCookie } from "@/lib/family-auth";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -64,11 +65,11 @@ async function buildViewer(readerKey: SignedInReaderKey | null, canModerate: boo
     };
   }
 
-  const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
+  const { penName } = await getDiscussionPenNameForReader(readerKey);
   return {
     canWrite: true,
-    penName,
-    needsPenName,
+    penName: penName ?? (readerKey.type === "owner" ? "Parent" : "Reader"),
+    needsPenName: false,
     canModerate,
     readerType: readerKey.type,
   };
@@ -134,22 +135,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
     }
 
-    const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
-    if (needsPenName || !penName) {
-      return NextResponse.json(
-        { error: "Choose a pen name before posting." },
-        { status: 400 },
-      );
-    }
+    const authorLabel = await getAuthorLabelForPost(readerKey);
 
     const thread = await createChapterThread(bookSlug, chapter, {
       body: text,
       isAnonymous: false,
-      authorLabel: penName,
+      authorLabel,
       readerKey,
     });
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       thread: {
         id: thread.id,
         body: thread.body,
@@ -161,6 +156,10 @@ export async function POST(request: Request) {
         comments: [],
       },
     });
+    if (readerKey.type === "owner") {
+      await ensureOwnerReaderCookie(res, readerKey.familyAccountId);
+    }
+    return res;
   } catch (e) {
     console.error("discussion create thread", e);
     return NextResponse.json({ error: "Could not post" }, { status: 500 });

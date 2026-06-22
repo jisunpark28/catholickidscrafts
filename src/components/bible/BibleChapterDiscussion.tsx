@@ -125,7 +125,7 @@ export function BibleChapterDiscussion({
 
   const signedIn = session ? isHeaderSignedIn(session) : initialSignedIn;
   const readerLabel = session ? readerLabelFromSession(session) : initialReaderLabel;
-  const canCompose = signedIn || viewer.canWrite;
+  const canCompose = signedIn || viewer.canWrite || initialSignedIn;
 
   const commentCount = useMemo(
     () => threads.reduce((sum, thread) => sum + 1 + thread.comments.length, 0),
@@ -136,10 +136,10 @@ export function BibleChapterDiscussion({
     setLoading(true);
     try {
       const [sessionRes, discussionRes] = await Promise.all([
-        fetch("/api/auth/session", { cache: "no-store" }),
+        fetch("/api/auth/session", { cache: "no-store", credentials: "include" }),
         fetch(
           `/api/bible/discussion?bookSlug=${encodeURIComponent(bookSlug)}&chapter=${chapter}`,
-          { cache: "no-store" },
+          { cache: "no-store", credentials: "include" },
         ),
       ]);
 
@@ -153,14 +153,19 @@ export function BibleChapterDiscussion({
         viewer?: DiscussionViewer;
       }>(discussionRes);
 
-      if (data.viewer) setViewer(data.viewer);
+      if (data.viewer) {
+        setViewer((prev) => ({
+          ...data.viewer!,
+          canWrite: data.viewer!.canWrite || prev.canWrite || initialSignedIn,
+        }));
+      }
       if (discussionRes.ok) setThreads(data.threads ?? []);
     } catch {
       // Keep existing comments; no user-facing error.
     } finally {
       setLoading(false);
     }
-  }, [bookSlug, chapter]);
+  }, [bookSlug, chapter, initialSignedIn]);
 
   useEffect(() => {
     void loadDiscussion();
@@ -168,19 +173,23 @@ export function BibleChapterDiscussion({
 
   const postThread = async () => {
     const body = newThreadBody.trim();
-    if (!body || submitting || !canCompose) return;
+    if (!body || submitting) return;
     setSubmitting(true);
     try {
       const res = await fetch("/api/bible/discussion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ bookSlug, chapter, body }),
       });
       const data = await readJson<{ thread?: DiscussionThread }>(res);
-      if (!res.ok || !data.thread) return;
-      setThreads((prev) => [...prev, data.thread!]);
-      setNewThreadBody("");
-      setComposerOpen(false);
+      if (res.ok && data.thread) {
+        setNewThreadBody("");
+        setComposerOpen(false);
+      }
+      if (res.ok) {
+        await loadDiscussion();
+      }
     } catch {
       // Keep draft in the composer.
     } finally {
@@ -190,26 +199,22 @@ export function BibleChapterDiscussion({
 
   const postReply = async (threadId: string) => {
     const body = (replyBodies[threadId] ?? "").trim();
-    if (!body || submitting || !canCompose) return;
+    if (!body || submitting) return;
     setSubmitting(true);
     try {
       const res = await fetch(`/api/bible/discussion/${threadId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ body }),
       });
       const data = await readJson<{ comment?: DiscussionComment }>(res);
-      if (!res.ok || !data.comment) return;
-      setThreads((prev) =>
-        prev.map((thread) =>
-          thread.id === threadId
-            ? { ...thread, comments: [...thread.comments, data.comment!] }
-            : thread,
-        ),
-      );
-      setReplyBodies((prev) => ({ ...prev, [threadId]: "" }));
-      setReplyingTo(null);
-      setExpandedReplies((prev) => ({ ...prev, [threadId]: true }));
+      if (res.ok && data.comment) {
+        setReplyBodies((prev) => ({ ...prev, [threadId]: "" }));
+        setReplyingTo(null);
+        setExpandedReplies((prev) => ({ ...prev, [threadId]: true }));
+        await loadDiscussion();
+      }
     } catch {
       // Keep draft in the reply box.
     } finally {
