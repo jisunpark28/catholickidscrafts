@@ -43,12 +43,7 @@ async function exec(sql: string): Promise<void> {
   await getDdlPrisma().$executeRawUnsafe(sql);
 }
 
-async function applyDiscussionSchema(): Promise<void> {
-  await exec(`ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
-  await exec(`ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
-
-  if (await tableExists("BibleChapterThread")) return;
-
+async function ensureThreadTable(): Promise<void> {
   await exec(`
     CREATE TABLE IF NOT EXISTS "BibleChapterThread" (
       "id" TEXT NOT NULL,
@@ -64,7 +59,9 @@ async function applyDiscussionSchema(): Promise<void> {
       CONSTRAINT "BibleChapterThread_pkey" PRIMARY KEY ("id")
     )
   `);
+}
 
+async function ensureCommentTable(): Promise<void> {
   await exec(`
     CREATE TABLE IF NOT EXISTS "BibleChapterComment" (
       "id" TEXT NOT NULL,
@@ -79,7 +76,9 @@ async function applyDiscussionSchema(): Promise<void> {
       CONSTRAINT "BibleChapterComment_pkey" PRIMARY KEY ("id")
     )
   `);
+}
 
+async function ensureIndexesAndConstraints(): Promise<void> {
   await exec(
     `CREATE INDEX IF NOT EXISTS "BibleChapterThread_bookSlug_chapter_createdAt_idx" ON "BibleChapterThread"("bookSlug", "chapter", "createdAt")`,
   );
@@ -144,4 +143,25 @@ async function applyDiscussionSchema(): Promise<void> {
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$
   `);
+}
+
+async function applyDiscussionSchema(): Promise<void> {
+  await exec(`ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
+  await exec(`ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
+
+  const hasThread = await tableExists("BibleChapterThread");
+  const hasComment = await tableExists("BibleChapterComment");
+
+  if (hasThread && hasComment) {
+    return;
+  }
+
+  if (!hasThread) {
+    await ensureThreadTable();
+  }
+  if (!hasComment) {
+    await ensureCommentTable();
+  }
+
+  await ensureIndexesAndConstraints();
 }
