@@ -50,5 +50,5 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - Home learn search: `GET /api/learn/search?q=` (resources, curriculum, games, Bible, home pills).
 - Today's Gospel (`/bible/gospel`): My Reading Calendar + daily stickers (`GospelDayProgress`). Sticker art: `public/images/gospel/praise-sticker.png`.
 - Bible text: Douay-Rheims via Latin Prayer public API (`src/lib/bible/latinprayer.ts`). Routes under `/bible/*`; reader Access ID login stub at `/reader/login`.
-- Chapter discussion (OT/NT): below typing on `/bible/read/[book]/[chapter]`; migration `20260622120000_bible_chapter_discussion`. Signed-in readers post with pen name or anonymous; guests read only.
+- Chapter discussion (OT/NT): below typing on `/bible/read/[book]/[chapter]`; migrations `20260622120000_bible_chapter_discussion` + `20260623150000_bible_discussion_tables_recovery`. Runtime `ensureDiscussionSchema()` uses Neon **direct** URL (auto-derived from pooled `DATABASE_URL` if `DIRECT_URL` unset). Signed-in readers post; guests read only.
 - Full spec: `docs/HOME_LEARN_AND_BIBLE.md` (phases B–E: typing stickers, family accounts, home search).
