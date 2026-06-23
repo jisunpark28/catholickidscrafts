@@ -1,5 +1,5 @@
 import { parseDateParam, todayUniversalis, toDateKey } from "@/lib/dates";
-import { fetchUniversalisMassToday } from "@/lib/universalis";
+import { fetchMassDayForTyping } from "@/lib/universalis";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ date: string }> };
@@ -27,7 +27,7 @@ export async function GET(_request: Request, { params }: Params) {
   }
 
   try {
-    const day = await fetchUniversalisMassToday();
+    const day = await fetchMassDayForTyping();
     if (day.date !== requestedKey) {
       return NextResponse.json(
         {
