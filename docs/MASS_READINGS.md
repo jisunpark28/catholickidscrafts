@@ -43,7 +43,7 @@ Site copy (editable in admin **Site text**): *“Text stays on their site—we l
 4. **바티칸**: 일일 복음 데이터 소스로 사용하지 않음. 필요 시 Vatican News **위젯**만 별도 페이지에 embed 검토.
 5. **교구 RSS/위젯**: 대부분 뉴스·공지용. 미사 전문은 **소속 주교회의(USCCB/CBCK 등)** 공식 채널 우선.
 
-코드: `src/lib/official-reading-sources.ts`, UI: `OfficialReadingLinks` on `/bible/gospel`.
+코드: `src/lib/official-reading-sources.ts` (운영자 참고용 링크 목록).
 
 ### USCCB RSS vs 타이핑 게임 (법무 회색지대)
 

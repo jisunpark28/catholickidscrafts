@@ -1,6 +1,5 @@
 "use client";
 
-import { OfficialReadingLinks } from "@/components/mass/OfficialReadingLinks";
 import { GospelReadingRecorder } from "@/components/gospel/GospelReadingRecorder";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
@@ -125,12 +124,6 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
       <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
         Today&apos;s Readings
       </h2>
-
-      {canType && (
-        <div className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
-          <OfficialReadingLinks />
-        </div>
-      )}
 
       {!canType && (
         <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
