@@ -1,5 +1,5 @@
 import { parseDateParam, todayUniversalis, toDateKey } from "@/lib/dates";
-import { fetchUniversalisMassToday } from "@/lib/universalis";
+import { fetchMassDayForTyping } from "@/lib/universalis";
 import { NextResponse } from "next/server";
 
 /** @deprecated Prefer `/api/universalis-readings/[date]`. Same Universalis JSONP source. */
@@ -26,7 +26,7 @@ export async function GET(_request: Request, { params }: Params) {
   }
 
   try {
-    const day = await fetchUniversalisMassToday();
+    const day = await fetchMassDayForTyping();
     return NextResponse.json(day, {
       headers: { "Cache-Control": "public, s-maxage=3600" },
     });

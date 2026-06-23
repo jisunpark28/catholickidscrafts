@@ -1,4 +1,9 @@
 import { todayUniversalis, toDateKey } from "@/lib/dates";
+import {
+  fetchUsccbReadingsForDate,
+  MASS_READINGS_PRIMARY_SOURCE,
+  USCCB_COPYRIGHT_NOTICE,
+} from "@/lib/usccb-rss";
 import type { MassReading, ReadingKind } from "@/types/mass";
 
 const UNIVERSALIS_ORIGIN = "https://universalis.com";
@@ -220,4 +225,29 @@ export async function fetchUniversalisMassDay(date: Date): Promise<UniversalisMa
     );
   }
   return day;
+}
+
+/** Today's readings for typing — Universalis first, USCCB RSS if Universalis blocks the server. */
+export async function fetchMassDayForTyping(): Promise<UniversalisMassDay> {
+  try {
+    return await fetchUniversalisMassToday();
+  } catch (primaryError) {
+    console.error("Universalis fetch failed; falling back to USCCB RSS", primaryError);
+
+    const usccb = await fetchUsccbReadingsForDate(todayUniversalis());
+    if (!usccb || usccb.readings.length === 0) {
+      throw new Error(
+        "Could not load today's readings. Please try again in a few minutes.",
+      );
+    }
+
+    return {
+      date: usccb.dateKey,
+      liturgicalTitle: usccb.liturgicalTitle,
+      readings: usccb.readings,
+      source: MASS_READINGS_PRIMARY_SOURCE,
+      pageUrl: usccb.pageUrl,
+      copyrightNotice: USCCB_COPYRIGHT_NOTICE,
+    };
+  }
 }
