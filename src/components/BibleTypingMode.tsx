@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
-import type { UniversalisMassDay } from "@/lib/universalis";
+import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
+import { universalisMassPageUrlClient } from "@/lib/universalis-client";
+import type { UniversalisMassDay } from "@/lib/universalis-parse";
 
-const DEFAULT_UNIVERSALIS_MASS_URL =
-  "https://universalis.com/Europe.England/mass.htm";
+const DEFAULT_UNIVERSALIS_MASS_URL = universalisMassPageUrlClient();
 import { todayUniversalis, toDateKey } from "@/lib/dates";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
 import type { ReadingKind } from "@/types/mass";
@@ -29,16 +30,7 @@ export function BibleTypingMode() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`/api/universalis-readings/${today}`);
-      const text = await res.text();
-      let data: UniversalisMassDay & { error?: string };
-      try {
-        data = text ? (JSON.parse(text) as typeof data) : ({} as typeof data);
-      } catch {
-        throw new Error("Could not load readings");
-      }
-      if (!res.ok) throw new Error(data.error ?? "Could not load readings");
-      setDay(data);
+      setDay(await loadMassDayForTyping(today));
     } catch (e) {
       setDay(null);
       setError(e instanceof Error ? e.message : "Could not load readings");

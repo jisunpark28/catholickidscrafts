@@ -1,14 +1,16 @@
 import { todayUniversalis, toDateKey } from "@/lib/dates";
 import {
-  fetchUsccbReadingsForDate,
-  MASS_READINGS_PRIMARY_SOURCE,
-  USCCB_COPYRIGHT_NOTICE,
-} from "@/lib/usccb-rss";
-import type { MassReading, ReadingKind } from "@/types/mass";
+  massDayFromUniversalisPayload,
+  parseUniversalisJsonpBody,
+  UNIVERSALIS_ORIGIN,
+  UNIVERSALIS_READINGS_SOURCE,
+  type UniversalisMassDay,
+} from "@/lib/universalis-parse";
 
-const UNIVERSALIS_ORIGIN = "https://universalis.com";
-
-export const UNIVERSALIS_READINGS_SOURCE = "Universalis (universalis.com)";
+export {
+  UNIVERSALIS_READINGS_SOURCE,
+  type UniversalisMassDay,
+} from "@/lib/universalis-parse";
 
 /** Calendar path segment, e.g. `Europe.England` for ICEL / ESV-CE on Universalis. */
 export function universalisCalendarPath(): string {
@@ -24,143 +26,9 @@ export function universalisJsonpUrl(calendarPath = universalisCalendarPath()): s
   return `${UNIVERSALIS_ORIGIN}/${calendarPath}/jsonpmass.js`;
 }
 
-type UniversalisReadingBlock = {
-  heading?: string;
-  source?: string;
-  text?: string;
-};
-
-type UniversalisMassPayload = {
-  number: number;
-  date?: string;
-  day?: string;
-  Mass_R1?: UniversalisReadingBlock;
-  Mass_Ps?: UniversalisReadingBlock;
-  Mass_R2?: UniversalisReadingBlock;
-  Mass_G?: UniversalisReadingBlock;
-  copyright?: { text?: string };
-};
-
-export type UniversalisMassDay = {
-  date: string;
-  liturgicalTitle: string;
-  readings: MassReading[];
-  source: string;
-  pageUrl: string;
-  /** Plain-text copyright notice — must stay visible when showing reading text (Universalis terms). */
-  copyrightNotice: string;
-};
-
-const READING_BLOCKS: {
-  key: keyof Pick<
-    UniversalisMassPayload,
-    "Mass_R1" | "Mass_Ps" | "Mass_R2" | "Mass_G"
-  >;
-  kind: ReadingKind;
-  label: string;
-}[] = [
-  { key: "Mass_R1", kind: "first_reading", label: "First Reading" },
-  { key: "Mass_Ps", kind: "psalm", label: "Responsorial Psalm" },
-  { key: "Mass_R2", kind: "second_reading", label: "Second Reading" },
-  { key: "Mass_G", kind: "gospel", label: "Gospel" },
-];
-
-function codePointToTypingChar(code: number): string {
-  if (code === 0xa0) return " ";
-  if (!Number.isFinite(code) || code < 0 || code > 0x10ffff) return "";
-  return String.fromCodePoint(code);
-}
-
-function decodeHtmlEntities(text: string): string {
-  let out = text.replace(/&#(\d+);/g, (_, digits: string) => {
-    const code = Number.parseInt(digits, 10);
-    const ch = codePointToTypingChar(code);
-    return ch || `&#${digits};`;
-  });
-  out = out.replace(/&#x([0-9a-fA-F]+);/gi, (_, hex: string) => {
-    const code = Number.parseInt(hex, 16);
-    const ch = codePointToTypingChar(code);
-    return ch || `&#x${hex};`;
-  });
-  return out
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
-    .replace(/&apos;/g, "'")
-    .replace(/&rsquo;/g, "'")
-    .replace(/&lsquo;/g, "'")
-    .replace(/&rdquo;/g, '"')
-    .replace(/&ldquo;/g, '"')
-    .replace(/&ndash;/g, "-")
-    .replace(/&mdash;/g, "-")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">");
-}
-
-function htmlFragmentToPlainText(html: string): string {
-  return decodeHtmlEntities(html)
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/p>/gi, "\n\n")
-    .replace(/<[^>]+>/g, "")
-    .replace(/\u00A0/g, " ")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-}
-
-function numberToDateKey(number: number): string | null {
-  const s = String(number);
-  if (!/^\d{8}$/.test(s)) return null;
-  const y = s.slice(0, 4);
-  const m = s.slice(4, 6);
-  const d = s.slice(6, 8);
-  const key = `${y}-${m}-${d}`;
-  return /^\d{4}-\d{2}-\d{2}$/.test(key) ? key : null;
-}
-
-function parseUniversalisJsonp(body: string): UniversalisMassPayload {
-  const trimmed = body.trim();
-  const match = trimmed.match(/^universalisCallback\s*\(\s*([\s\S]*)\s*\)\s*;?\s*$/);
-  if (!match) {
-    throw new Error("Universalis response was not valid JSONP.");
-  }
-  try {
-    return JSON.parse(match[1]!) as UniversalisMassPayload;
-  } catch {
-    throw new Error("Universalis JSONP payload could not be parsed.");
-  }
-}
-
-function blockToReading(
-  block: UniversalisReadingBlock,
-  kind: ReadingKind,
-  label: string,
-  pageUrl: string,
-): MassReading | null {
-  const text = block.text ? htmlFragmentToPlainText(block.text) : "";
-  if (!text) return null;
-
-  const sourceLine = block.source
-    ? htmlFragmentToPlainText(block.source)
-    : "";
-  const heading = block.heading
-    ? htmlFragmentToPlainText(block.heading)
-    : "";
-  const title = sourceLine || heading || label;
-
-  return {
-    kind,
-    label,
-    title,
-    text,
-    externalUrl: pageUrl,
-  };
-}
-
 /** JSONP endpoint always returns Universalis “today” for the configured calendar. */
 export async function fetchUniversalisMassToday(): Promise<UniversalisMassDay> {
   const calendarPath = universalisCalendarPath();
-  const pageUrl = universalisMassPageUrl(calendarPath);
   const url = universalisJsonpUrl(calendarPath);
 
   const response = await fetch(url, {
@@ -177,41 +45,8 @@ export async function fetchUniversalisMassToday(): Promise<UniversalisMassDay> {
   }
 
   const body = await response.text();
-  const payload = parseUniversalisJsonp(body);
-  const dateKey = numberToDateKey(payload.number);
-
-  if (!dateKey) {
-    throw new Error("Universalis returned an invalid date.");
-  }
-
-  const liturgicalTitle = payload.day
-    ? htmlFragmentToPlainText(payload.day)
-    : payload.date?.trim() ?? dateKey;
-
-  const readings: MassReading[] = [];
-  for (const { key, kind, label } of READING_BLOCKS) {
-    const block = payload[key];
-    if (!block) continue;
-    const reading = blockToReading(block, kind, label, pageUrl);
-    if (reading) readings.push(reading);
-  }
-
-  if (readings.length === 0) {
-    throw new Error("Universalis returned no Mass readings for today.");
-  }
-
-  const copyrightNotice = payload.copyright?.text
-    ? htmlFragmentToPlainText(payload.copyright.text)
-    : "Copyright © Universalis Publishing Limited. See https://universalis.com.";
-
-  return {
-    date: dateKey,
-    liturgicalTitle,
-    readings,
-    source: UNIVERSALIS_READINGS_SOURCE,
-    pageUrl,
-    copyrightNotice,
-  };
+  const payload = parseUniversalisJsonpBody(body);
+  return massDayFromUniversalisPayload(payload, calendarPath);
 }
 
 /** @deprecated Use fetchUniversalisMassToday — JSONP has no per-date parameter. */
@@ -227,27 +62,7 @@ export async function fetchUniversalisMassDay(date: Date): Promise<UniversalisMa
   return day;
 }
 
-/** Today's readings for typing — Universalis first, USCCB RSS if Universalis blocks the server. */
+/** Today's readings for typing — Universalis JSONP only (see universalis.com/n-web.htm). */
 export async function fetchMassDayForTyping(): Promise<UniversalisMassDay> {
-  try {
-    return await fetchUniversalisMassToday();
-  } catch (primaryError) {
-    console.error("Universalis fetch failed; falling back to USCCB RSS", primaryError);
-
-    const usccb = await fetchUsccbReadingsForDate(todayUniversalis());
-    if (!usccb || usccb.readings.length === 0) {
-      throw new Error(
-        "Could not load today's readings. Please try again in a few minutes.",
-      );
-    }
-
-    return {
-      date: usccb.dateKey,
-      liturgicalTitle: usccb.liturgicalTitle,
-      readings: usccb.readings,
-      source: MASS_READINGS_PRIMARY_SOURCE,
-      pageUrl: usccb.pageUrl,
-      copyrightNotice: USCCB_COPYRIGHT_NOTICE,
-    };
-  }
+  return fetchUniversalisMassToday();
 }

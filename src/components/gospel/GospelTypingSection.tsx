@@ -1,12 +1,15 @@
 "use client";
 
+import { OfficialReadingLinks } from "@/components/mass/OfficialReadingLinks";
 import { GospelReadingRecorder } from "@/components/gospel/GospelReadingRecorder";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
-import type { UniversalisMassDay } from "@/lib/universalis";
+import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
+import { universalisMassPageUrlClient } from "@/lib/universalis-client";
+import type { UniversalisMassDay } from "@/lib/universalis-parse";
 import type { ReadingKind } from "@/types/mass";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -39,16 +42,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`/api/universalis-readings/${todayDate}`);
-      const text = await res.text();
-      let data: UniversalisMassDay & { error?: string };
-      try {
-        data = text ? (JSON.parse(text) as typeof data) : ({} as typeof data);
-      } catch {
-        throw new Error("Could not load readings");
-      }
-      if (!res.ok) throw new Error(data.error ?? "Could not load readings");
-      setDay(data);
+      setDay(await loadMassDayForTyping(todayDate));
     } catch (e) {
       setDay(null);
       setError(e instanceof Error ? e.message : "Could not load readings");
@@ -132,6 +126,12 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
         Today&apos;s Readings
       </h2>
 
+      {canType && (
+        <div className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
+          <OfficialReadingLinks />
+        </div>
+      )}
+
       {!canType && (
         <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
           Typing is available for today only ({todayDate}). Select today on your calendar or come
@@ -142,7 +142,20 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
       {canType && loading && (
         <p className="text-sm text-[var(--color-muted)]">Loading today&apos;s readings…</p>
       )}
-      {canType && error && <p className="text-sm text-red-600">{error}</p>}
+      {canType && error && (
+        <p className={`${HOME_HUB_PANEL_CLASS} bg-white text-sm text-[var(--color-ink)]`}>
+          {error} Open{" "}
+          <a
+            href={universalisMassPageUrlClient()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-[var(--color-link)]"
+          >
+            Universalis
+          </a>{" "}
+          for today&apos;s readings (official JSONP source for this page).
+        </p>
+      )}
 
       {canType && day && !loading && !error && (
         <>
