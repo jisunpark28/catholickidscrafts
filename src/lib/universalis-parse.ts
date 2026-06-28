@@ -72,6 +72,8 @@ function decodeHtmlEntities(text: string): string {
     .replace(/&ldquo;/g, '"')
     .replace(/&ndash;/g, "-")
     .replace(/&mdash;/g, "-")
+    .replace(/[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g, "-")
+    .replace(/\u00AD/g, "")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">");
