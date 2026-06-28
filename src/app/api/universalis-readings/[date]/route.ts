@@ -2,6 +2,18 @@ import { parseDateParam, todayUniversalis, toDateKey } from "@/lib/dates";
 import { fetchMassDayForTyping } from "@/lib/universalis";
 import { NextResponse } from "next/server";
 
+function isAcceptableUniversalisDate(
+  universalisDateKey: string,
+  siteTodayKey: string,
+): boolean {
+  if (universalisDateKey === siteTodayKey) return true;
+  const site = parseDateParam(siteTodayKey);
+  const uni = parseDateParam(universalisDateKey);
+  if (!site || !uni) return false;
+  const diffDays = (site.getTime() - uni.getTime()) / (1000 * 60 * 60 * 24);
+  return diffDays >= 0 && diffDays <= 1;
+}
+
 type Params = { params: Promise<{ date: string }> };
 
 export async function GET(_request: Request, { params }: Params) {
@@ -28,7 +40,7 @@ export async function GET(_request: Request, { params }: Params) {
 
   try {
     const day = await fetchMassDayForTyping();
-    if (day.date !== requestedKey) {
+    if (!isAcceptableUniversalisDate(day.date, requestedKey)) {
       return NextResponse.json(
         {
           error: `Universalis readings are for ${day.date}; try again after the liturgical day changes.`,

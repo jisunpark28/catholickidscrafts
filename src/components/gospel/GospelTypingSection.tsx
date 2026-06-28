@@ -35,6 +35,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   const [needsSignIn, setNeedsSignIn] = useState(false);
 
   const canType = focusDate === todayDate;
+  const readingsDateKey = day?.date ?? todayDate;
 
   const loadToday = useCallback(async () => {
     if (!canType) return;
@@ -58,7 +59,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
     setStickerSaved(false);
     setNeedsSignIn(false);
     setStickerError("");
-  }, [todayDate, readingKind]);
+  }, [todayDate, readingKind, readingsDateKey]);
 
   const availableKinds = useMemo(() => {
     if (!day) return GOSPEL_READING_OPTIONS.map((o) => o.kind);
@@ -83,7 +84,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
       const res = await fetch("/api/gospel/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dateKey: todayDate, typingAccuracy: accuracy }),
+        body: JSON.stringify({ dateKey: readingsDateKey, typingAccuracy: accuracy }),
       });
       if (res.status === 401) {
         setNeedsSignIn(true);
@@ -96,9 +97,9 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
         throw new Error(message);
       }
       setStickerSaved(true);
-      onCompleted(todayDate);
+      onCompleted(readingsDateKey);
     },
-    [todayDate, onCompleted],
+    [readingsDateKey, onCompleted],
   );
 
   const completionMessage = stickerSaved ? (
@@ -174,15 +175,15 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
                 );
               })}
             </div>
-            <GospelReadingRecorder storageKey={`${todayDate}:${readingKind}`} />
+            <GospelReadingRecorder storageKey={`${readingsDateKey}:${readingKind}`} />
           </div>
 
           {readingText ? (
             <PassageTypingGame
-              key={`${todayDate}-${readingKind}`}
+              key={`${readingsDateKey}-${readingKind}`}
               text={readingText}
               title={reading?.label ?? "Typing practice"}
-              draftKey={typingDraftKey.gospelReading(todayDate, readingKind)}
+              draftKey={typingDraftKey.gospelReading(readingsDateKey, readingKind)}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
               onStickerUnlock={unlockSticker}
               completionMessage={completionMessage}
