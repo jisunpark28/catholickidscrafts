@@ -10,7 +10,6 @@ type Props = {
   signedIn: boolean;
   initialCompleted: string[];
   todayDate: string;
-  focusDate: string;
   onSelectDate?: (dateKey: string) => void;
 };
 
@@ -18,7 +17,6 @@ export function GospelReadingCalendar({
   signedIn,
   initialCompleted,
   todayDate,
-  focusDate,
   onSelectDate,
 }: Props) {
   const today = new Date(`${todayDate}T12:00:00Z`);
@@ -115,25 +113,28 @@ export function GospelReadingCalendar({
           const date = new Date(Date.UTC(year, month - 1, day));
           const dateKey = toDateKey(date);
           const isToday = dateKey === todayDate;
-          const isSelected = dateKey === focusDate;
           const isDone = signedIn && completed.has(dateKey);
           const isFuture = dateKey > todayDate;
+          const isPast = dateKey < todayDate;
+          const canSelect = isToday;
 
           return (
             <button
               key={dateKey}
               type="button"
-              disabled={isFuture}
-              onClick={() => onSelectDate?.(dateKey)}
+              disabled={!canSelect}
+              onClick={() => canSelect && onSelectDate?.(dateKey)}
               className={`flex min-h-[4.5rem] flex-col items-center border-b border-r border-[#e8e0d6] p-1 transition sm:min-h-[5.5rem] sm:p-2 ${
-                isFuture ? "cursor-not-allowed bg-[#faf8f5]/60" : "hover:bg-[#fdfaf7]"
-              } ${isToday ? "ring-2 ring-inset ring-[#dfc9b0]" : ""} ${
-                isSelected && !isToday ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
-              }`}
+                !canSelect ? "cursor-default bg-[#faf8f5]/80" : "hover:bg-[#fdfaf7]"
+              } ${isToday ? "ring-2 ring-inset ring-[#dfc9b0]" : ""}`}
             >
               <span
                 className={`text-xs font-bold sm:text-sm ${
-                  isToday ? "text-[var(--color-accent)]" : "text-[var(--color-ink)]"
+                  isToday
+                    ? "text-[var(--color-accent)]"
+                    : isFuture || isPast
+                      ? "text-[var(--color-muted)] opacity-60"
+                      : "text-[var(--color-ink)]"
                 }`}
               >
                 {day}
@@ -156,7 +157,7 @@ export function GospelReadingCalendar({
           <a href="/reader/login" className="font-semibold text-[var(--color-link)]">
             Access ID
           </a>{" "}
-          to save praise stickers on your calendar (today&apos;s Gospel only).
+          to save praise stickers on your calendar.
         </p>
       )}
     </section>

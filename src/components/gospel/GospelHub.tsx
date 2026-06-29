@@ -50,7 +50,6 @@ export function GospelHub({ signedIn: initialSignedIn, initialCompleted, todayDa
         signedIn={signedIn}
         initialCompleted={completed}
         todayDate={todayDate}
-        focusDate={focusDate}
         onSelectDate={setFocusDate}
       />
 
