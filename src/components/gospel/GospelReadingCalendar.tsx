@@ -1,7 +1,6 @@
 "use client";
 
 import { GospelPraiseSticker } from "@/components/gospel/GospelPraiseSticker";
-import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { toDateKey } from "@/lib/dates";
 import { useCallback, useEffect, useState } from "react";
 
@@ -11,6 +10,7 @@ type Props = {
   signedIn: boolean;
   initialCompleted: string[];
   todayDate: string;
+  focusDate: string;
   onSelectDate?: (dateKey: string) => void;
 };
 
@@ -18,6 +18,7 @@ export function GospelReadingCalendar({
   signedIn,
   initialCompleted,
   todayDate,
+  focusDate,
   onSelectDate,
 }: Props) {
   const today = new Date(`${todayDate}T12:00:00Z`);
@@ -71,22 +72,6 @@ export function GospelReadingCalendar({
   const firstDow = new Date(Date.UTC(year, month - 1, 1)).getUTCDay();
   const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
 
-  if (!signedIn) {
-    return (
-      <p className={HOME_HUB_PANEL_CLASS}>
-        Sign in with a{" "}
-        <a href="/account/login" className="font-semibold text-[var(--color-link)]">
-          family account
-        </a>{" "}
-        or{" "}
-        <a href="/reader/login" className="font-semibold text-[var(--color-link)]">
-          Access ID
-        </a>{" "}
-        to save daily Gospel stickers on your calendar.
-      </p>
-    );
-  }
-
   return (
     <section className="w-full overflow-hidden rounded-2xl border border-[#e8e0d6] bg-white shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e8e0d6] bg-[#fdfaf7] px-4 py-3 sm:px-5">
@@ -130,7 +115,8 @@ export function GospelReadingCalendar({
           const date = new Date(Date.UTC(year, month - 1, day));
           const dateKey = toDateKey(date);
           const isToday = dateKey === todayDate;
-          const isDone = completed.has(dateKey);
+          const isSelected = dateKey === focusDate;
+          const isDone = signedIn && completed.has(dateKey);
           const isFuture = dateKey > todayDate;
 
           return (
@@ -141,7 +127,9 @@ export function GospelReadingCalendar({
               onClick={() => onSelectDate?.(dateKey)}
               className={`flex min-h-[4.5rem] flex-col items-center border-b border-r border-[#e8e0d6] p-1 transition sm:min-h-[5.5rem] sm:p-2 ${
                 isFuture ? "cursor-not-allowed bg-[#faf8f5]/60" : "hover:bg-[#fdfaf7]"
-              } ${isToday ? "ring-2 ring-inset ring-[#dfc9b0]" : ""}`}
+              } ${isToday ? "ring-2 ring-inset ring-[#dfc9b0]" : ""} ${
+                isSelected && !isToday ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
+              }`}
             >
               <span
                 className={`text-xs font-bold sm:text-sm ${
@@ -151,7 +139,7 @@ export function GospelReadingCalendar({
                 {day}
               </span>
               <div className="mt-auto flex flex-1 items-end justify-center pb-0.5">
-                {!isFuture && (
+                {signedIn && !isFuture && (
                   <GospelPraiseSticker completed={isDone} size="sm" />
                 )}
               </div>
@@ -159,6 +147,18 @@ export function GospelReadingCalendar({
           );
         })}
       </div>
+      {!signedIn && (
+        <p className="border-t border-[#e8e0d6] px-4 py-3 text-sm text-[var(--color-muted)]">
+          <a href="/account/login" className="font-semibold text-[var(--color-link)]">
+            Sign in
+          </a>{" "}
+          or{" "}
+          <a href="/reader/login" className="font-semibold text-[var(--color-link)]">
+            Access ID
+          </a>{" "}
+          to save praise stickers on your calendar (today&apos;s Gospel only).
+        </p>
+      )}
     </section>
   );
 }

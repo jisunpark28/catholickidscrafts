@@ -5,8 +5,8 @@ import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
+import { loadGospelReadingsForDate } from "@/lib/load-gospel-readings";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
-import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
 import { universalisMassPageUrlClient } from "@/lib/universalis-client";
 import type { UniversalisMassDay } from "@/lib/universalis-parse";
 import type { ReadingKind } from "@/types/mass";
@@ -34,32 +34,38 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   const [stickerSaved, setStickerSaved] = useState(false);
   const [needsSignIn, setNeedsSignIn] = useState(false);
 
-  const canType = focusDate === todayDate;
-  const readingsDateKey = day?.date ?? todayDate;
+  const isToday = focusDate === todayDate;
+  const isFuture = focusDate > todayDate;
+  const readingsDateKey = day?.date ?? focusDate;
+  const earnsSticker = isToday;
 
-  const loadToday = useCallback(async () => {
-    if (!canType) return;
+  const loadReadings = useCallback(async () => {
+    if (isFuture) {
+      setDay(null);
+      setError("");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
-      setDay(await loadMassDayForTyping(todayDate));
+      setDay(await loadGospelReadingsForDate(focusDate, todayDate));
     } catch (e) {
       setDay(null);
       setError(e instanceof Error ? e.message : "Could not load readings");
     } finally {
       setLoading(false);
     }
-  }, [canType, todayDate]);
+  }, [focusDate, todayDate, isFuture]);
 
   useEffect(() => {
-    void loadToday();
-  }, [loadToday]);
+    void loadReadings();
+  }, [loadReadings]);
 
   useEffect(() => {
     setStickerSaved(false);
     setNeedsSignIn(false);
     setStickerError("");
-  }, [todayDate, readingKind, readingsDateKey]);
+  }, [focusDate, readingKind, readingsDateKey]);
 
   const availableKinds = useMemo(() => {
     if (!day) return GOSPEL_READING_OPTIONS.map((o) => o.kind);
@@ -79,12 +85,13 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
 
   const unlockSticker = useCallback(
     async (accuracy: number) => {
+      if (!earnsSticker) return;
       setStickerError("");
       setNeedsSignIn(false);
       const res = await fetch("/api/gospel/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dateKey: readingsDateKey, typingAccuracy: accuracy }),
+        body: JSON.stringify({ dateKey: todayDate, typingAccuracy: accuracy }),
       });
       if (res.status === 401) {
         setNeedsSignIn(true);
@@ -97,61 +104,85 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
         throw new Error(message);
       }
       setStickerSaved(true);
-      onCompleted(readingsDateKey);
+      onCompleted(todayDate);
     },
-    [readingsDateKey, onCompleted],
+    [earnsSticker, todayDate, onCompleted],
   );
 
-  const completionMessage = stickerSaved ? (
-    <p>
-      Your praise sticker for today was added to My Reading Calendar (
-      {reading?.label ?? "reading"}).
+  const completionMessage = earnsSticker ? (
+    stickerSaved ? (
+      <p>
+        Your praise sticker for today was added to My Reading Calendar (
+        {reading?.label ?? "reading"}).
+      </p>
+    ) : needsSignIn ? (
+      <p>
+        <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
+          Sign in
+        </Link>{" "}
+        or{" "}
+        <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
+          Access ID
+        </Link>{" "}
+        to save this sticker on your calendar.
+      </p>
+    ) : null
+  ) : (
+    <p className="text-[var(--color-muted)]">
+      Nice work! Praise stickers are only awarded when you type today&apos;s Gospel (
+      {todayDate}).
     </p>
-  ) : needsSignIn ? (
-    <p>
-      <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
-        Sign in
-      </Link>{" "}
-      or{" "}
-      <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-        Access ID
-      </Link>{" "}
-      to save this sticker on your calendar.
-    </p>
-  ) : null;
+  );
+
+  const sectionTitle = isToday ? "Today's Readings" : `Readings — ${focusDate}`;
 
   return (
     <HubTypingWidth className="space-y-4">
       <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-        Today&apos;s Readings
+        {sectionTitle}
       </h2>
 
-      {!canType && (
+      {day?.liturgicalTitle && !isFuture && (
+        <p className="text-sm font-medium text-[var(--color-ink)]">{day.liturgicalTitle}</p>
+      )}
+
+      {!isToday && !isFuture && (
+        <p className={`${HOME_HUB_PANEL_CLASS} bg-white text-sm text-[var(--color-muted)]`}>
+          Practice typing for this past date. Stickers are only saved for today ({todayDate}).
+        </p>
+      )}
+
+      {isFuture && (
         <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
-          Typing is available for today only ({todayDate}). Select today on your calendar or come
-          back on that day.
+          Readings are not available for future dates. Select today or a past day on your
+          calendar.
         </p>
       )}
 
-      {canType && loading && (
-        <p className="text-sm text-[var(--color-muted)]">Loading today&apos;s readings…</p>
+      {!isFuture && loading && (
+        <p className="text-sm text-[var(--color-muted)]">Loading readings…</p>
       )}
-      {canType && error && (
+      {!isFuture && error && (
         <p className={`${HOME_HUB_PANEL_CLASS} bg-white text-sm text-[var(--color-ink)]`}>
-          {error} Open{" "}
-          <a
-            href={universalisMassPageUrlClient()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-[var(--color-link)]"
-          >
-            Universalis
-          </a>{" "}
-          for today&apos;s readings (official JSONP source for this page).
+          {error}{" "}
+          {isToday && (
+            <>
+              Open{" "}
+              <a
+                href={universalisMassPageUrlClient()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-[var(--color-link)]"
+              >
+                Universalis
+              </a>{" "}
+              for today&apos;s readings.
+            </>
+          )}
         </p>
       )}
 
-      {canType && day && !loading && !error && (
+      {!isFuture && day && !loading && !error && (
         <>
           <div className="flex w-full max-w-full items-center justify-between gap-2">
             <div className="flex min-w-0 flex-wrap gap-2">
@@ -185,19 +216,20 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
               title={reading?.label ?? "Typing practice"}
               draftKey={typingDraftKey.gospelReading(readingsDateKey, readingKind)}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
-              onStickerUnlock={unlockSticker}
+              onStickerUnlock={earnsSticker ? unlockSticker : undefined}
+              celebrateOnComplete={!earnsSticker}
               completionMessage={completionMessage}
             />
           ) : (
             <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
-              No text is available for this reading today. Try another reading or open{" "}
+              No text is available for this reading. Try another reading or open{" "}
               <a
                 href={day.pageUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-[var(--color-link)]"
               >
-                Universalis
+                {day.source.includes("USCCB") ? "USCCB" : "Universalis"}
               </a>
               .
             </p>

@@ -1,4 +1,5 @@
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
+import { todayUniversalis, toDateKey } from "@/lib/dates";
 import { attachGuestProgressIfAny, clearGuestProgressCookie } from "@/lib/bible/progress";
 import { getReaderKey } from "@/lib/bible/reader";
 import { ensureOwnerReaderCookie } from "@/lib/family-auth";
@@ -49,6 +50,15 @@ export async function POST(request: Request) {
   if (!dateKey || !/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) {
     return NextResponse.json({ error: "dateKey must be YYYY-MM-DD" }, { status: 400 });
   }
+
+  const todayKey = toDateKey(todayUniversalis());
+  if (dateKey !== todayKey) {
+    return NextResponse.json(
+      { error: "Praise stickers are only awarded for today's Gospel." },
+      { status: 403 },
+    );
+  }
+
   if (!Number.isFinite(typingAccuracy) || typingAccuracy! + 1e-9 < BIBLE_STICKER_ACCURACY_THRESHOLD) {
     return NextResponse.json(
       {
