@@ -24,6 +24,8 @@ type Props = {
   celebrateOnComplete?: boolean;
   /** Show Save draft button (defaults to true when draftKey is set). */
   showSaveButton?: boolean;
+  /** Hide the default typing instructions under the title. */
+  hideInstructions?: boolean;
 };
 
 /** Type-along UI for a passage (Today's Bible mode). */
@@ -37,6 +39,7 @@ export function PassageTypingGame({
   completionMessage,
   celebrateOnComplete = false,
   showSaveButton,
+  hideInstructions = false,
 }: Props) {
   const unlockSticker = onStickerUnlock ?? onComplete;
   const canSaveDraft = showSaveButton ?? Boolean(draftKey);
@@ -187,9 +190,12 @@ export function PassageTypingGame({
     <section className="border border-[var(--color-border)] bg-white">
       <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4">
         <h2 className="text-lg font-bold text-[var(--color-ink)]">{title}</h2>
-        <p className="mt-1 text-sm text-[var(--color-muted)]">
-          Type the passage below. Correct letters turn green. Use Save to pause and continue later.
-        </p>
+        {!hideInstructions && (
+          <p className="mt-1 text-sm text-[var(--color-muted)]">
+            Type the passage below. Correct letters turn green. Use Save to pause and continue
+            later.
+          </p>
+        )}
       </div>
 
       <div className="px-6 py-6">
