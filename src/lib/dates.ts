@@ -55,9 +55,13 @@ export function todayInTimeZone(timeZone: string): Date {
   return buildUtcDate(y, m, d)!;
 }
 
-/** Universalis Europe.England JSONP always reflects this liturgical day. */
+/**
+ * Civil date for Universalis JSONP “today”.
+ * Universalis cache rolls at midnight GMT (see jsonpmass.js Expires headers),
+ * not Europe/London civil midnight — during BST, London date can be +1h ahead.
+ */
 export function todayUniversalis(): Date {
-  return todayInTimeZone("Europe/London");
+  return todayInTimeZone("Etc/UTC");
 }
 
 export function daysInMonth(year: number, month: number): Date[] {
