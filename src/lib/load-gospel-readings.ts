@@ -3,19 +3,18 @@ import { isAcceptableUniversalisDate } from "@/lib/universalis-date-match";
 import type { UniversalisMassDay } from "@/lib/universalis-parse";
 
 /**
- * Load today's Mass readings for typing UI.
- * 1. Site API (server-side Universalis JSONP)
- * 2. Browser JSONP fallback (user's device → universalis.com)
- *
- * Does not use USCCB RSS — on-site text stays under Universalis webmaster terms only.
+ * Load Mass readings for the gospel calendar date.
+ * Server: GET /api/gospel/readings/[date] (today = Universalis, past = USCCB RSS).
+ * Client fallback for today only: Universalis JSONP in the browser.
  */
-export async function loadMassDayForTyping(
+export async function loadGospelReadingsForDate(
+  dateKey: string,
   todayDateKey: string,
 ): Promise<UniversalisMassDay> {
   let apiError = "Could not load readings";
 
   try {
-    const res = await fetch(`/api/universalis-readings/${todayDateKey}`);
+    const res = await fetch(`/api/gospel/readings/${dateKey}`);
     const text = await res.text();
     let data: UniversalisMassDay & { error?: string };
     try {
@@ -29,7 +28,7 @@ export async function loadMassDayForTyping(
     }
     return data;
   } catch {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || dateKey !== todayDateKey) {
       throw new Error(apiError);
     }
     const clientDay = await loadUniversalisMassTodayClient();

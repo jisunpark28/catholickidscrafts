@@ -20,6 +20,8 @@ type Props = {
   accuracyThreshold?: number;
   /** Shown after sticker unlock. */
   completionMessage?: React.ReactNode;
+  /** Show completionMessage when the passage is finished (practice mode, no sticker). */
+  celebrateOnComplete?: boolean;
   /** Show Save draft button (defaults to true when draftKey is set). */
   showSaveButton?: boolean;
 };
@@ -33,6 +35,7 @@ export function PassageTypingGame({
   onComplete,
   accuracyThreshold = 0.9,
   completionMessage,
+  celebrateOnComplete = false,
   showSaveButton,
 }: Props) {
   const unlockSticker = onStickerUnlock ?? onComplete;
@@ -141,11 +144,16 @@ export function PassageTypingGame({
   }, [draftKey, draftSavePending, typed, elapsedMs]);
 
   useEffect(() => {
+    if (celebrateOnComplete && done && !reportedRef.current) {
+      reportedRef.current = true;
+      setUnlocked(true);
+      return;
+    }
     if (!unlockSticker || !passedThreshold || reportedRef.current) return;
     reportedRef.current = true;
     setUnlocked(true);
     void unlockSticker(accuracy);
-  }, [unlockSticker, passedThreshold, accuracy]);
+  }, [celebrateOnComplete, done, unlockSticker, passedThreshold, accuracy]);
 
   useEffect(() => {
     nextCharRef.current?.scrollIntoView({ block: "nearest", inline: "nearest" });

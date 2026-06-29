@@ -8,6 +8,7 @@ type Props = {
   signedIn: boolean;
   initialCompleted: string[];
   todayDate: string;
+  focusDate: string;
   onSelectDate?: (dateKey: string) => void;
 };
 
@@ -15,6 +16,7 @@ export function MyReadingCalendarPanel({
   signedIn,
   initialCompleted,
   todayDate,
+  focusDate,
   onSelectDate,
 }: Props) {
   const [open, setOpen] = useState(false);
@@ -33,6 +35,7 @@ export function MyReadingCalendarPanel({
             signedIn={signedIn}
             initialCompleted={initialCompleted}
             todayDate={todayDate}
+            focusDate={focusDate}
             onSelectDate={onSelectDate}
           />
         </div>
