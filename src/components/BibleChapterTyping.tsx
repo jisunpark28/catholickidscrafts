@@ -56,6 +56,8 @@ export function BibleChapterTyping({
         draftKey={typingDraftKey.bibleChapter(bookSlug, chapter)}
         accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
         onStickerUnlock={unlockSticker}
+        hideInstructions
+        appearance="gospel"
         completionMessage={
           <p>
             Your praise sticker for chapter {chapter} is saved.{" "}
