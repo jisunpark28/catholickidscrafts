@@ -181,6 +181,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
               onStickerUnlock={unlockSticker}
               completionMessage={completionMessage}
               hideInstructions
+              appearance="gospel"
             />
           ) : (
             <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>

@@ -6,6 +6,9 @@ import {
   typingAccuracy,
 } from "@/lib/typing-accuracy";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import "@/styles/gospel-typing.css";
+
+type Appearance = "default" | "gospel";
 
 type Props = {
   text: string;
@@ -26,7 +29,35 @@ type Props = {
   showSaveButton?: boolean;
   /** Hide the default typing instructions under the title. */
   hideInstructions?: boolean;
+  /** Gospel hub styling — Nanum YeonJiCe, larger type, warm card. */
+  appearance?: Appearance;
 };
+
+function charClassName(
+  appearance: Appearance,
+  i: number,
+  typedNorm: string,
+  target: string,
+  nextIndex: number,
+): string {
+  const char = target[i]!;
+  if (i < typedNorm.length) {
+    const correct = typedNorm[i] === char;
+    if (appearance === "gospel") {
+      return correct ? "gospel-typing-char--correct" : "gospel-typing-char--wrong";
+    }
+    return correct
+      ? "font-semibold text-green-700 opacity-100"
+      : "bg-red-50 font-semibold text-red-600";
+  }
+  if (i === nextIndex) {
+    if (appearance === "gospel") {
+      return "gospel-typing-char--next";
+    }
+    return "underline decoration-2 underline-offset-2 decoration-[var(--color-accent)] opacity-100";
+  }
+  return appearance === "gospel" ? "gospel-typing-char--pending" : "opacity-40";
+}
 
 /** Type-along UI for a passage (Today's Bible mode). */
 export function PassageTypingGame({
@@ -40,7 +71,9 @@ export function PassageTypingGame({
   celebrateOnComplete = false,
   showSaveButton,
   hideInstructions = false,
+  appearance = "default",
 }: Props) {
+  const isGospel = appearance === "gospel";
   const unlockSticker = onStickerUnlock ?? onComplete;
   const canSaveDraft = showSaveButton ?? Boolean(draftKey);
   const target = useMemo(() => normalizePassageText(text), [text]);
@@ -186,10 +219,52 @@ export function PassageTypingGame({
     );
   }
 
+  const sectionClass = isGospel
+    ? "gospel-typing overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
+    : "border border-[var(--color-border)] bg-white";
+
+  const headerClass = isGospel
+    ? "border-b border-[#e8e0d6] bg-[#f5ebe0]/70 px-5 py-4 sm:px-8"
+    : "border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4";
+
+  const bodyClass = isGospel ? "space-y-5 px-5 py-6 sm:px-8 sm:py-8" : "px-6 py-6";
+
+  const passageClass = isGospel
+    ? "gospel-typing-passage mb-0 max-h-64 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:max-h-80 sm:p-6"
+    : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
+
+  const textareaClass = isGospel
+    ? "gospel-typing-input w-full min-h-[11rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[12rem]"
+    : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
+
+  const statsClass = isGospel
+    ? "flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-[var(--color-muted)]"
+    : "flex flex-wrap items-center gap-4 text-sm text-[var(--color-muted)]";
+
+  const saveBtnClass = isGospel
+    ? "rounded-xl border-2 border-[#dfc9b0] bg-[#f5d4b8] px-5 py-2 text-sm font-bold text-[var(--color-ink)] transition hover:bg-[#f0c9a8] disabled:cursor-not-allowed disabled:opacity-50"
+    : "border-2 border-[var(--color-accent)] bg-white px-4 py-1.5 font-semibold text-[var(--color-accent)] hover:bg-[var(--color-surface)] disabled:cursor-not-allowed disabled:border-[var(--color-border)] disabled:text-[var(--color-muted)]";
+
+  const resetBtnClass = isGospel
+    ? "rounded-xl border border-[#e8e0d6] bg-white px-5 py-2 text-sm font-bold text-[var(--color-ink)] transition hover:border-[#dfc9b0]"
+    : "border border-[var(--color-border)] px-4 py-1.5 font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)]";
+
+  const completionBoxClass = isGospel
+    ? "mt-4 rounded-xl border border-[#dfc9b0] bg-[#fdf8f3] px-5 py-4 text-base text-[var(--color-ink)]"
+    : "mt-4 border border-[var(--color-accent)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)]";
+
   return (
-    <section className="border border-[var(--color-border)] bg-white">
-      <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4">
-        <h2 className="text-lg font-bold text-[var(--color-ink)]">{title}</h2>
+    <section className={sectionClass}>
+      <div className={headerClass}>
+        <h2
+          className={
+            isGospel
+              ? "text-xl font-bold text-[var(--color-ink)] sm:text-2xl"
+              : "text-lg font-bold text-[var(--color-ink)]"
+          }
+        >
+          {title}
+        </h2>
         {!hideInstructions && (
           <p className="mt-1 text-sm text-[var(--color-muted)]">
             Type the passage below. Correct letters turn green. Use Save to pause and continue
@@ -198,29 +273,17 @@ export function PassageTypingGame({
         )}
       </div>
 
-      <div className="px-6 py-6">
-        <p className="mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]">
-          {target.split("").map((char, i) => {
-            let className = "opacity-40";
-            if (i < typedNorm.length) {
-              className =
-                typedNorm[i] === char
-                  ? "font-semibold text-green-700 opacity-100"
-                  : "bg-red-50 font-semibold text-red-600";
-            } else if (i === nextIndex) {
-              className =
-                "underline decoration-2 underline-offset-2 decoration-[var(--color-accent)] opacity-100";
-            }
-            return (
-              <span
-                key={i}
-                ref={i === nextIndex ? nextCharRef : undefined}
-                className={className}
-              >
-                {char}
-              </span>
-            );
-          })}
+      <div className={bodyClass}>
+        <p className={passageClass}>
+          {target.split("").map((char, i) => (
+            <span
+              key={i}
+              ref={i === nextIndex ? nextCharRef : undefined}
+              className={charClassName(appearance, i, typedNorm, target, nextIndex)}
+            >
+              {char}
+            </span>
+          ))}
         </p>
 
         <textarea
@@ -230,20 +293,20 @@ export function PassageTypingGame({
             setTyped(e.target.value);
           }}
           onPaste={(e) => e.preventDefault()}
-          rows={6}
-          className="w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm"
+          rows={isGospel ? 7 : 6}
+          className={textareaClass}
           placeholder="Start typing here…"
           spellCheck={false}
           autoComplete="off"
           autoCorrect="off"
         />
 
-        <div className="mt-4 space-y-3">
-          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--color-muted)]">
+        <div className="space-y-3">
+          <div className={statsClass}>
             <span>
               Accuracy: {Math.min(100, Math.round(accuracy * 100))}%
               {started && typedNorm.length > 0 && !done && (
-                <span className="text-xs opacity-70">
+                <span className={isGospel ? "text-sm opacity-70" : "text-xs opacity-70"}>
                   {" "}
                   ({countMatchingChars(typedNorm, target)}/{target.length} chars)
                 </span>
@@ -270,24 +333,18 @@ export function PassageTypingGame({
                 type="button"
                 onClick={() => void saveDraft()}
                 disabled={draftSavePending}
-                className="border-2 border-[var(--color-accent)] bg-white px-4 py-1.5 font-semibold text-[var(--color-accent)] hover:bg-[var(--color-surface)] disabled:cursor-not-allowed disabled:border-[var(--color-border)] disabled:text-[var(--color-muted)]"
+                className={saveBtnClass}
               >
                 {draftSavePending ? "Saving…" : "Save"}
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => void reset()}
-              className="border border-[var(--color-border)] px-4 py-1.5 font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)]"
-            >
+            <button type="button" onClick={() => void reset()} className={resetBtnClass}>
               Reset
             </button>
           </div>
         </div>
         {unlocked && completionMessage && (
-          <div className="mt-4 border border-[var(--color-accent)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)]">
-            {completionMessage}
-          </div>
+          <div className={completionBoxClass}>{completionMessage}</div>
         )}
       </div>
     </section>
