@@ -31,6 +31,11 @@ const AUTOSAVE_MS = 1200;
 
 type Props = {
   initialKit: LessonKitDto;
+  apiBase?: string;
+  backHref?: string;
+  backLabel?: string;
+  printHref?: string | null;
+  adminMeta?: boolean;
 };
 
 function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
@@ -56,13 +61,23 @@ function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
   }
 }
 
-export function LessonKitEditor({ initialKit }: Props) {
+export function LessonKitEditor({
+  initialKit,
+  apiBase = "/api/program/kits",
+  backHref = "/program",
+  backLabel = "Lesson Kits",
+  printHref,
+  adminMeta = false,
+}: Props) {
   const [kit, setKit] = useState(initialKit);
   const [title, setTitle] = useState(kit.title);
   const [description, setDescription] = useState(kit.description);
   const [gradeBand, setGradeBand] = useState(kit.gradeBand ?? "");
   const [tptUrl, setTptUrl] = useState(kit.tptUrl ?? "");
   const [isFreeSample, setIsFreeSample] = useState(kit.isFreeSample);
+  const [published, setPublished] = useState(kit.published);
+  const [sortOrder, setSortOrder] = useState(kit.sortOrder);
+  const [liturgicalPeriod, setLiturgicalPeriod] = useState(kit.liturgicalPeriod ?? "");
   const [blocks, setBlocks] = useState<LessonBlockDto[]>(kit.blocks);
   const [saving, setSaving] = useState(false);
   const [saveState, setSaveState] = useState<"idle" | "dirty" | "saved" | "error">("idle");
@@ -77,6 +92,9 @@ export function LessonKitEditor({ initialKit }: Props) {
       gradeBand: initialKit.gradeBand ?? "",
       tptUrl: initialKit.tptUrl ?? "",
       isFreeSample: initialKit.isFreeSample,
+      published: initialKit.published,
+      sortOrder: initialKit.sortOrder,
+      liturgicalPeriod: initialKit.liturgicalPeriod ?? "",
       blocks: initialKit.blocks,
     }),
   );
@@ -85,7 +103,7 @@ export function LessonKitEditor({ initialKit }: Props) {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch(`/api/program/kits/${kit.id}`, {
+      const res = await fetch(`${apiBase}/${kit.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -94,10 +112,17 @@ export function LessonKitEditor({ initialKit }: Props) {
           gradeBand: gradeBand.trim() || null,
           tptUrl: tptUrl.trim() || null,
           isFreeSample,
+          ...(adminMeta
+            ? {
+                published,
+                sortOrder,
+                liturgicalPeriod: liturgicalPeriod.trim() || null,
+              }
+            : {}),
         }),
       });
       if (!res.ok) throw new Error("Could not save lesson details");
-      const blockRes = await fetch(`/api/program/kits/${kit.id}/blocks`, {
+      const blockRes = await fetch(`${apiBase}/${kit.id}/blocks`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -113,12 +138,18 @@ export function LessonKitEditor({ initialKit }: Props) {
       const data = (await blockRes.json()) as { kit: LessonKitDto };
       setKit(data.kit);
       setBlocks(data.kit.blocks);
+      setPublished(data.kit.published);
+      setSortOrder(data.kit.sortOrder);
+      setLiturgicalPeriod(data.kit.liturgicalPeriod ?? "");
       lastSavedRef.current = JSON.stringify({
         title,
         description,
         gradeBand: gradeBand.trim() || "",
         tptUrl: tptUrl.trim() || "",
         isFreeSample,
+        published,
+        sortOrder,
+        liturgicalPeriod: liturgicalPeriod.trim() || "",
         blocks: data.kit.blocks,
       });
       setSaveState("saved");
@@ -128,7 +159,20 @@ export function LessonKitEditor({ initialKit }: Props) {
     } finally {
       setSaving(false);
     }
-  }, [kit.id, title, description, gradeBand, tptUrl, isFreeSample, blocks]);
+  }, [
+    apiBase,
+    adminMeta,
+    kit.id,
+    title,
+    description,
+    gradeBand,
+    tptUrl,
+    isFreeSample,
+    published,
+    sortOrder,
+    liturgicalPeriod,
+    blocks,
+  ]);
 
   useEffect(() => {
     const snapshot = JSON.stringify({
@@ -137,6 +181,9 @@ export function LessonKitEditor({ initialKit }: Props) {
       gradeBand: gradeBand.trim() || "",
       tptUrl: tptUrl.trim() || "",
       isFreeSample,
+      published,
+      sortOrder,
+      liturgicalPeriod: liturgicalPeriod.trim() || "",
       blocks,
     });
     if (snapshot === lastSavedRef.current) return;
@@ -150,7 +197,10 @@ export function LessonKitEditor({ initialKit }: Props) {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
     };
-  }, [title, description, gradeBand, tptUrl, isFreeSample, blocks, save]);
+  }, [title, description, gradeBand, tptUrl, isFreeSample, published, sortOrder, liturgicalPeriod, blocks, save]);
+
+  const resolvedPrintHref =
+    printHref === undefined ? `/program/kit/${kit.id}/print` : printHref;
 
   const addBlock = (type: LessonBlockType) => {
     setBlocks((prev) => [
@@ -211,8 +261,8 @@ export function LessonKitEditor({ initialKit }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link href="/program" className="text-sm font-semibold text-[var(--color-link)]">
-          ← Lesson Kits
+        <Link href={backHref} className="text-sm font-semibold text-[var(--color-link)]">
+          ← {backLabel}
         </Link>
         <div className="flex items-center gap-3">
           {saveHint ? (
@@ -224,14 +274,49 @@ export function LessonKitEditor({ initialKit }: Props) {
           >
             Run
           </Link>
-          <Link
-            href={`/program/kit/${kit.id}/print`}
-            className="text-sm font-semibold text-[var(--color-link)]"
-          >
-            Print
-          </Link>
+          {resolvedPrintHref ? (
+            <Link
+              href={resolvedPrintHref}
+              className="text-sm font-semibold text-[var(--color-link)]"
+            >
+              Print
+            </Link>
+          ) : null}
         </div>
       </div>
+
+      {adminMeta ? (
+        <div className="flex flex-wrap items-center gap-4 rounded border border-[var(--color-border)] bg-[#fffaf5] px-4 py-3 text-sm">
+          <label className="flex items-center gap-2 font-semibold text-[var(--color-ink)]">
+            <input
+              type="checkbox"
+              checked={published}
+              onChange={(e) => setPublished(e.target.checked)}
+            />
+            Published on /program
+          </label>
+          <label className="flex items-center gap-2 text-[var(--color-muted)]">
+            Sort order
+            <input
+              type="number"
+              min={0}
+              value={sortOrder}
+              onChange={(e) => setSortOrder(Number(e.target.value) || 0)}
+              className="w-20 border border-[var(--color-border)] px-2 py-1"
+            />
+          </label>
+          <label className="flex min-w-[12rem] flex-1 items-center gap-2 text-[var(--color-muted)]">
+            Liturgical period
+            <input
+              type="text"
+              value={liturgicalPeriod}
+              onChange={(e) => setLiturgicalPeriod(e.target.value)}
+              placeholder="advent, lent, …"
+              className="min-w-0 flex-1 border border-[var(--color-border)] px-2 py-1"
+            />
+          </label>
+        </div>
+      ) : null}
 
       <label className="block">
         <span className="text-sm font-semibold text-[var(--color-ink)]">Title</span>
