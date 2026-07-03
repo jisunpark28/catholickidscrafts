@@ -66,6 +66,7 @@ Vercel **build** still runs `prisma migrate deploy` automatically; this workflow
 ```bash
 # .env with Neon URLs
 pnpm run db:migrate-deploy
+pnpm exec prisma generate   # also runs automatically via db:seed-production-once
 pnpm run db:seed-production-once
 ```
 
