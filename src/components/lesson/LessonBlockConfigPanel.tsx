@@ -6,7 +6,12 @@ import {
   LESSON_RESOURCE_SLUGS,
   LESSON_WORD_PRESETS,
 } from "@/lib/lesson-kit/constants";
+import {
+  defaultFamilyIncludedByType,
+  familyIncludeHint,
+} from "@/lib/lesson-kit/family-blocks";
 import type { LessonBlockDto } from "@/lib/lesson-kit/types";
+import type { FamilyPickMode } from "@/components/lesson/LessonFamilyModePanel";
 import type { LessonBlockType } from "@prisma/client";
 
 const BIBLE_BOOK_OPTIONS = [
@@ -22,6 +27,7 @@ const BIBLE_BOOK_OPTIONS = [
 
 type Props = {
   block: LessonBlockDto;
+  familyPickMode?: FamilyPickMode;
   onChange: (next: LessonBlockDto) => void;
   onClose: () => void;
 };
@@ -30,7 +36,18 @@ function fieldLabel(type: LessonBlockType) {
   return LESSON_BLOCK_DEFAULT_LABEL[type];
 }
 
-export function LessonBlockConfigPanel({ block, onChange, onClose }: Props) {
+function triStateFamilyInclude(block: LessonBlockDto): "on" | "off" | "default" {
+  if (block.config.familyInclude === true) return "on";
+  if (block.config.familyInclude === false) return "off";
+  return "default";
+}
+
+export function LessonBlockConfigPanel({
+  block,
+  familyPickMode = "auto",
+  onChange,
+  onClose,
+}: Props) {
   const patch = (partial: Partial<LessonBlockDto["config"]>, label?: string | null) => {
     onChange({
       ...block,
@@ -38,6 +55,9 @@ export function LessonBlockConfigPanel({ block, onChange, onClose }: Props) {
       config: { ...block.config, ...partial },
     });
   };
+
+  const familyState = triStateFamilyInclude(block);
+  const defaultOn = defaultFamilyIncludedByType(block.type);
 
   return (
     <div className="lesson-block-config border border-[var(--color-border)] bg-[#fffaf5] p-4">
@@ -98,7 +118,7 @@ export function LessonBlockConfigPanel({ block, onChange, onClose }: Props) {
 
       {block.type === "GOSPEL_TYPING" && (
         <label className="lesson-block-config__field">
-          <span>Max characters</span>
+          <span>Max characters (class)</span>
           <input
             type="number"
             min={80}
@@ -106,6 +126,9 @@ export function LessonBlockConfigPanel({ block, onChange, onClose }: Props) {
             value={block.config.maxChars ?? 400}
             onChange={(e) => patch({ maxChars: Number(e.target.value) || 400, readingKind: "gospel" })}
           />
+          <p className="mt-1 text-xs text-[var(--color-muted)]">
+            At-home Gospel length is set in At-home link above.
+          </p>
         </label>
       )}
 
@@ -190,15 +213,50 @@ export function LessonBlockConfigPanel({ block, onChange, onClose }: Props) {
         </p>
       )}
 
-      {block.type !== "MASS_TODAY" && (
-        <label className="lesson-block-config__field flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={block.config.familyInclude !== false}
-            onChange={(e) => patch({ familyInclude: e.target.checked })}
-          />
-          <span className="!mb-0">Include in at-home link</span>
-        </label>
+      {familyPickMode === "auto" ? (
+        <div className="lesson-block-config__field mt-2 border-t border-[var(--color-border)] pt-3">
+          <span className="font-semibold text-[var(--color-ink)]">At-home link</span>
+          <p className="mt-1 text-xs text-[var(--color-muted)]">{familyIncludeHint(block)}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(
+              [
+                { value: "default" as const, label: defaultOn ? "Default (on)" : "Default (off)" },
+                { value: "on" as const, label: "Always on" },
+                { value: "off" as const, label: "Class only" },
+              ] as const
+            ).map((opt) => (
+              <label
+                key={opt.value}
+                className={`cursor-pointer rounded border px-3 py-1.5 text-xs font-semibold ${
+                  familyState === opt.value
+                    ? "border-[var(--color-accent)] bg-white text-[var(--color-ink)]"
+                    : "border-[var(--color-border)] text-[var(--color-muted)]"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name={`family-${block.id}`}
+                  className="sr-only"
+                  checked={familyState === opt.value}
+                  onChange={() => {
+                    if (opt.value === "default") {
+                      const nextConfig = { ...block.config };
+                      delete nextConfig.familyInclude;
+                      onChange({ ...block, config: nextConfig });
+                    } else {
+                      patch({ familyInclude: opt.value === "on" });
+                    }
+                  }}
+                />
+                {opt.label}
+              </label>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p className="mt-2 border-t border-[var(--color-border)] pt-3 text-xs text-[var(--color-muted)]">
+          At-home steps are chosen in <strong>Pick exact steps</strong> above.
+        </p>
       )}
     </div>
   );

@@ -1,6 +1,10 @@
 "use client";
 
 import { LessonBlockConfigPanel } from "@/components/lesson/LessonBlockConfigPanel";
+import {
+  LessonFamilyModePanel,
+  type FamilyPickMode,
+} from "@/components/lesson/LessonFamilyModePanel";
 import { LessonBlockIcon, LessonIcon } from "@/components/icons/lesson/LessonIcon";
 import { LessonShareSheet } from "@/components/lesson/LessonShareSheet";
 import { TptPartnerNote } from "@/components/lesson/TptPartnerNote";
@@ -16,7 +20,12 @@ import {
   LESSON_GAME_SLUGS,
   LESSON_WORD_PRESETS,
 } from "@/lib/lesson-kit/constants";
-import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
+import {
+  blockDisplayLabel,
+  buildFamilyModeConfig,
+  isBlockIncludedInFamily,
+  stepIndexesFromIncludedIds,
+} from "@/lib/lesson-kit/family-blocks";
 import type { LessonBlockDto, LessonKitDto } from "@/lib/lesson-kit/types";
 import type { LessonBlockType } from "@prisma/client";
 import Link from "next/link";
@@ -67,6 +76,36 @@ function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
   }
 }
 
+function remapIndexesOnRemove(indexes: number[], removed: number): number[] {
+  return indexes.filter((i) => i !== removed).map((i) => (i > removed ? i - 1 : i));
+}
+
+function remapIndexesOnMove(indexes: number[], from: number, to: number): number[] {
+  return indexes.map((i) => {
+    if (i === from) return to;
+    if (from < to && i > from && i <= to) return i - 1;
+    if (from > to && i >= to && i < from) return i + 1;
+    return i;
+  });
+}
+
+function snapshotKey(input: {
+  title: string;
+  description: string;
+  gradeBand: string;
+  tptUrl: string;
+  isFreeSample: boolean;
+  published: boolean;
+  sortOrder: number;
+  liturgicalPeriod: string;
+  gospelMaxChars: number;
+  familyPickMode: FamilyPickMode;
+  includedStepIndexes: number[];
+  blocks: LessonBlockDto[];
+}) {
+  return JSON.stringify(input);
+}
+
 export function LessonKitEditor({
   initialKit,
   apiBase = "/api/program/kits",
@@ -83,6 +122,13 @@ export function LessonKitEditor({
   const [published, setPublished] = useState(kit.published);
   const [sortOrder, setSortOrder] = useState(kit.sortOrder);
   const [liturgicalPeriod, setLiturgicalPeriod] = useState(kit.liturgicalPeriod ?? "");
+  const [gospelMaxChars, setGospelMaxChars] = useState(kit.familyMode?.gospelMaxChars ?? 150);
+  const [familyPickMode, setFamilyPickMode] = useState<FamilyPickMode>(
+    (kit.familyMode?.includedBlockIds?.length ?? 0) > 0 ? "manual" : "auto",
+  );
+  const [includedStepIndexes, setIncludedStepIndexes] = useState<number[]>(() =>
+    stepIndexesFromIncludedIds(kit.blocks, kit.familyMode?.includedBlockIds),
+  );
   const [blocks, setBlocks] = useState<LessonBlockDto[]>(kit.blocks);
   const [saving, setSaving] = useState(false);
   const [saveState, setSaveState] = useState<"idle" | "dirty" | "saved" | "error">("idle");
@@ -91,7 +137,7 @@ export function LessonKitEditor({
   const [error, setError] = useState("");
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedRef = useRef(
-    JSON.stringify({
+    snapshotKey({
       title: initialKit.title,
       description: initialKit.description,
       gradeBand: initialKit.gradeBand ?? "",
@@ -100,33 +146,31 @@ export function LessonKitEditor({
       published: initialKit.published,
       sortOrder: initialKit.sortOrder,
       liturgicalPeriod: initialKit.liturgicalPeriod ?? "",
+      gospelMaxChars: initialKit.familyMode?.gospelMaxChars ?? 150,
+      familyPickMode:
+        (initialKit.familyMode?.includedBlockIds?.length ?? 0) > 0 ? "manual" : "auto",
+      includedStepIndexes: stepIndexesFromIncludedIds(
+        initialKit.blocks,
+        initialKit.familyMode?.includedBlockIds,
+      ),
       blocks: initialKit.blocks,
     }),
   );
+
+  const previewFamilyMode =
+    familyPickMode === "manual" && includedStepIndexes.length > 0
+      ? {
+          gospelMaxChars,
+          includedBlockIds: includedStepIndexes
+            .map((i) => blocks[i]?.id)
+            .filter((id): id is string => Boolean(id)),
+        }
+      : { gospelMaxChars };
 
   const save = useCallback(async () => {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch(`${apiBase}/${kit.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          description,
-          gradeBand: gradeBand.trim() || null,
-          tptUrl: tptUrl.trim() || null,
-          isFreeSample,
-          ...(adminMeta
-            ? {
-                published,
-                sortOrder,
-                liturgicalPeriod: liturgicalPeriod.trim() || null,
-              }
-            : {}),
-        }),
-      });
-      if (!res.ok) throw new Error("Could not save lesson details");
       const blockRes = await fetch(`${apiBase}/${kit.id}/blocks`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -141,21 +185,67 @@ export function LessonKitEditor({
       });
       if (!blockRes.ok) throw new Error("Could not save steps");
       const data = (await blockRes.json()) as { kit: LessonKitDto };
-      setKit(data.kit);
-      setBlocks(data.kit.blocks);
-      setPublished(data.kit.published);
-      setSortOrder(data.kit.sortOrder);
-      setLiturgicalPeriod(data.kit.liturgicalPeriod ?? "");
-      lastSavedRef.current = JSON.stringify({
+      const savedBlocks = data.kit.blocks;
+
+      const includedIds =
+        familyPickMode === "manual"
+          ? includedStepIndexes
+              .map((i) => savedBlocks[i]?.id)
+              .filter((id): id is string => Boolean(id))
+          : [];
+
+      const familyMode = buildFamilyModeConfig(gospelMaxChars, familyPickMode, includedIds);
+
+      const res = await fetch(`${apiBase}/${kit.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          description,
+          gradeBand: gradeBand.trim() || null,
+          tptUrl: tptUrl.trim() || null,
+          isFreeSample,
+          familyMode,
+          ...(adminMeta
+            ? {
+                published,
+                sortOrder,
+                liturgicalPeriod: liturgicalPeriod.trim() || null,
+              }
+            : {}),
+        }),
+      });
+      if (!res.ok) throw new Error("Could not save lesson details");
+
+      const meta = (await res.json()) as { kit: LessonKitDto };
+      setKit(meta.kit);
+      setBlocks(meta.kit.blocks);
+      setPublished(meta.kit.published);
+      setSortOrder(meta.kit.sortOrder);
+      setLiturgicalPeriod(meta.kit.liturgicalPeriod ?? "");
+      setGospelMaxChars(meta.kit.familyMode?.gospelMaxChars ?? gospelMaxChars);
+      const nextPickMode =
+        (meta.kit.familyMode?.includedBlockIds?.length ?? 0) > 0 ? "manual" : "auto";
+      setFamilyPickMode(nextPickMode);
+      const nextIndexes = stepIndexesFromIncludedIds(
+        meta.kit.blocks,
+        meta.kit.familyMode?.includedBlockIds,
+      );
+      setIncludedStepIndexes(nextIndexes);
+
+      lastSavedRef.current = snapshotKey({
         title,
         description,
         gradeBand: gradeBand.trim() || "",
         tptUrl: tptUrl.trim() || "",
         isFreeSample,
-        published,
-        sortOrder,
+        published: meta.kit.published,
+        sortOrder: meta.kit.sortOrder,
         liturgicalPeriod: liturgicalPeriod.trim() || "",
-        blocks: data.kit.blocks,
+        gospelMaxChars: meta.kit.familyMode?.gospelMaxChars ?? gospelMaxChars,
+        familyPickMode: nextPickMode,
+        includedStepIndexes: nextIndexes,
+        blocks: meta.kit.blocks,
       });
       setSaveState("saved");
     } catch (e) {
@@ -176,11 +266,14 @@ export function LessonKitEditor({
     published,
     sortOrder,
     liturgicalPeriod,
+    gospelMaxChars,
+    familyPickMode,
+    includedStepIndexes,
     blocks,
   ]);
 
   useEffect(() => {
-    const snapshot = JSON.stringify({
+    const snapshot = snapshotKey({
       title,
       description,
       gradeBand: gradeBand.trim() || "",
@@ -189,6 +282,9 @@ export function LessonKitEditor({
       published,
       sortOrder,
       liturgicalPeriod: liturgicalPeriod.trim() || "",
+      gospelMaxChars,
+      familyPickMode,
+      includedStepIndexes,
       blocks,
     });
     if (snapshot === lastSavedRef.current) return;
@@ -202,7 +298,21 @@ export function LessonKitEditor({
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
     };
-  }, [title, description, gradeBand, tptUrl, isFreeSample, published, sortOrder, liturgicalPeriod, blocks, save]);
+  }, [
+    title,
+    description,
+    gradeBand,
+    tptUrl,
+    isFreeSample,
+    published,
+    sortOrder,
+    liturgicalPeriod,
+    gospelMaxChars,
+    familyPickMode,
+    includedStepIndexes,
+    blocks,
+    save,
+  ]);
 
   const resolvedPrintHref =
     printHref === undefined ? `/program/kit/${kit.id}/print` : printHref;
@@ -227,6 +337,7 @@ export function LessonKitEditor({
 
   const removeBlock = (index: number) => {
     setBlocks((prev) => prev.filter((_, i) => i !== index));
+    setIncludedStepIndexes((prev) => remapIndexesOnRemove(prev, index));
     setEditingIndex((current) => {
       if (current === index) return null;
       if (current !== null && current > index) return current - 1;
@@ -235,21 +346,50 @@ export function LessonKitEditor({
   };
 
   const moveBlock = (index: number, dir: -1 | 1) => {
+    const j = index + dir;
     setBlocks((prev) => {
+      if (j < 0 || j >= prev.length) return prev;
       const next = [...prev];
-      const j = index + dir;
-      if (j < 0 || j >= next.length) return prev;
       const tmp = next[index]!;
       next[index] = next[j]!;
       next[j] = tmp;
       return next;
     });
+    setIncludedStepIndexes((prev) => remapIndexesOnMove(prev, index, j));
     setEditingIndex((current) => {
       if (current === null) return null;
-      const j = current + dir;
       if (current === index) return j;
-      if (current === index + dir) return index;
+      if (current === j) return index;
       return current;
+    });
+  };
+
+  const handlePickModeChange = (mode: FamilyPickMode) => {
+    if (mode === "manual" && familyPickMode === "auto") {
+      const indexes = blocks
+        .map((b, i) => (isBlockIncludedInFamily(b, { gospelMaxChars }) ? i : -1))
+        .filter((i) => i >= 0);
+      setIncludedStepIndexes(indexes);
+    }
+    setFamilyPickMode(mode);
+  };
+
+  const toggleManualStep = (index: number) => {
+    setIncludedStepIndexes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index].sort((a, b) => a - b),
+    );
+  };
+
+  const toggleAtHomeForStep = (index: number) => {
+    if (familyPickMode === "manual") {
+      toggleManualStep(index);
+      return;
+    }
+    const block = blocks[index]!;
+    const included = isBlockIncludedInFamily(block, previewFamilyMode);
+    updateBlock(index, {
+      ...block,
+      config: { ...block.config, familyInclude: !included },
     });
   };
 
@@ -379,8 +519,21 @@ export function LessonKitEditor({
 
       <TptPartnerNote variant="inline" tptUrl={tptUrl || null} isFreeSample={isFreeSample} />
 
+      <LessonFamilyModePanel
+        shareSlug={kit.shareSlug}
+        blocks={blocks}
+        gospelMaxChars={gospelMaxChars}
+        onGospelMaxCharsChange={setGospelMaxChars}
+        pickMode={familyPickMode}
+        onPickModeChange={handlePickModeChange}
+        includedStepIndexes={includedStepIndexes}
+        onToggleManualStep={toggleManualStep}
+      />
+
       <ul className="space-y-2">
-        {blocks.map((block, index) => (
+        {blocks.map((block, index) => {
+          const atHome = isBlockIncludedInFamily(block, previewFamilyMode);
+          return (
           <li key={block.id} className="space-y-2">
             <div
               className={`lesson-block-row ${editingIndex === index ? "lesson-block-row--active" : ""}`}
@@ -393,6 +546,15 @@ export function LessonKitEditor({
                 className="lesson-block-row__label text-left hover:text-[var(--color-accent)]"
               >
                 {blockDisplayLabel(block)}
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleAtHomeForStep(index)}
+                className={`lesson-family-pill ${atHome ? "lesson-family-pill--on" : ""}`}
+                title={atHome ? "Included in at-home link" : "Class only"}
+              >
+                <LessonIcon name="home" size="sm" />
+                <span className="sr-only">{atHome ? "At home" : "Class only"}</span>
               </button>
               <div className="flex items-center gap-1">
                 <button
@@ -425,12 +587,14 @@ export function LessonKitEditor({
             {editingIndex === index ? (
               <LessonBlockConfigPanel
                 block={block}
+                familyPickMode={familyPickMode}
                 onChange={(next) => updateBlock(index, next)}
                 onClose={() => setEditingIndex(null)}
               />
             ) : null}
           </li>
-        ))}
+          );
+        })}
       </ul>
 
       <button
