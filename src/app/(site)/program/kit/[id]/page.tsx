@@ -1,5 +1,5 @@
 import { LessonKitEditor } from "@/components/lesson/LessonKitEditor";
-import { getLessonKitById } from "@/lib/lesson-kit/db";
+import { getLessonKitById, canEditLessonKit } from "@/lib/lesson-kit/db";
 import { requireFamilySession } from "@/lib/family-auth";
 import { PageShell } from "@/components/PageShell";
 import { redirect, notFound } from "next/navigation";
@@ -14,7 +14,7 @@ export default async function ProgramKitEditPage({ params }: Props) {
   }
   const { id } = await params;
   const kit = await getLessonKitById(id);
-  if (!kit || kit.familyAccountId !== session.familyAccountId) {
+  if (!kit || !(await canEditLessonKit(kit, session.familyAccountId))) {
     notFound();
   }
 

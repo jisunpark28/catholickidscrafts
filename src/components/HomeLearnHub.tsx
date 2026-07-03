@@ -1,8 +1,10 @@
 import { DailyMassPanel } from "@/components/DailyMassPanel";
 import { HubPillWidth } from "@/components/HubPillWidth";
 import { HomeNavPill } from "@/components/HomeNavPill";
+import { ReaderThisWeekCard } from "@/components/lesson/ReaderThisWeekCard";
 import type { HomeSectionWithItems } from "@/lib/home-sections";
 import type { MonthCalendar } from "@/types/mass";
+import "@/styles/lesson-kit.css";
 
 type Props = {
   dailyMassLabel: string;
@@ -27,6 +29,10 @@ export function HomeLearnHub({
         selectedDate={selectedDate}
         todayDate={todayDate}
       />
+
+      <HubPillWidth>
+        <ReaderThisWeekCard />
+      </HubPillWidth>
 
       <div className="relative z-30 space-y-10">
         {sections.map((section) => (

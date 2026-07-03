@@ -1,4 +1,4 @@
-import { getLessonKitById, updateLessonKitMeta } from "@/lib/lesson-kit/db";
+import { getLessonKitById, updateLessonKitMeta, canEditLessonKit } from "@/lib/lesson-kit/db";
 import { requireFamilySession } from "@/lib/family-auth";
 import { NextResponse } from "next/server";
 
@@ -11,7 +11,7 @@ export async function GET(_req: Request, { params }: Params) {
   }
   const { id } = await params;
   const kit = await getLessonKitById(id);
-  if (!kit || kit.familyAccountId !== session.familyAccountId) {
+  if (!kit || !(await canEditLessonKit(kit, session.familyAccountId))) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
   return NextResponse.json({ kit });
@@ -27,6 +27,7 @@ export async function PATCH(req: Request, { params }: Params) {
     title?: string;
     description?: string;
     published?: boolean;
+    familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig;
   };
 
   const kit = await updateLessonKitMeta(id, session.familyAccountId, body);

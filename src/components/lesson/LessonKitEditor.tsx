@@ -192,6 +192,12 @@ export function LessonKitEditor({ initialKit }: Props) {
           >
             Run
           </Link>
+          <Link
+            href={`/program/kit/${kit.id}/print`}
+            className="text-sm font-semibold text-[var(--color-link)]"
+          >
+            Print
+          </Link>
         </div>
       </div>
 

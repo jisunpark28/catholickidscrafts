@@ -155,6 +155,10 @@ export function ProgramHub({ initialData }: Props) {
         <Link href="/program/join" className="font-semibold text-[var(--color-link)]">
           Join with code
         </Link>
+        {" · "}
+        <Link href="/program/parish/setup" className="font-semibold text-[var(--color-link)]">
+          Create parish
+        </Link>
       </p>
     </div>
   );

@@ -189,6 +189,17 @@ export function LessonBlockConfigPanel({ block, onChange, onClose }: Props) {
           Links to today&apos;s Mass calendar page.
         </p>
       )}
+
+      {block.type !== "MASS_TODAY" && (
+        <label className="lesson-block-config__field flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={block.config.familyInclude !== false}
+            onChange={(e) => patch({ familyInclude: e.target.checked })}
+          />
+          <span className="!mb-0">Include in at-home link</span>
+        </label>
+      )}
     </div>
   );
 }

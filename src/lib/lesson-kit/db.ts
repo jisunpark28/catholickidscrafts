@@ -66,9 +66,12 @@ export async function duplicateLessonKit(opts: {
   });
   if (!source) return null;
 
-  const title = opts.titleSuffix
-    ? `${source.title}${opts.titleSuffix}`
-    : `${source.title} (copy)`;
+  const title =
+    opts.titleSuffix !== undefined
+      ? opts.titleSuffix
+        ? `${source.title}${opts.titleSuffix}`
+        : source.title
+      : `${source.title} (copy)`;
 
   const created = await prisma.lessonKit.create({
     data: {
@@ -110,15 +113,18 @@ export async function recordLessonOpen(kitId: string, dateKey: string) {
 export async function updateLessonKitMeta(
   id: string,
   familyAccountId: string,
-  data: { title?: string; description?: string; published?: boolean },
+  data: { title?: string; description?: string; published?: boolean; familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig },
 ) {
-  const kit = await prisma.lessonKit.findFirst({
-    where: { id, familyAccountId },
-  });
+  const kit = await prisma.lessonKit.findUnique({ where: { id } });
   if (!kit) return null;
+  const allowed = await canEditLessonKit(kit, familyAccountId);
+  if (!allowed) return null;
   const updated = await prisma.lessonKit.update({
     where: { id },
-    data,
+    data: {
+      ...data,
+      familyMode: data.familyMode ? (data.familyMode as Prisma.InputJsonValue) : undefined,
+    },
     include: kitInclude,
   });
   return serializeLessonKit(updated);
@@ -134,10 +140,13 @@ export async function replaceLessonBlocks(
     label?: string | null;
     config: LessonBlockConfig;
   }[],
+  opts?: { skipOwnershipCheck?: boolean },
 ) {
-  const kit = await prisma.lessonKit.findFirst({
-    where: { id: kitId, familyAccountId },
-  });
+  const kit = opts?.skipOwnershipCheck
+    ? await prisma.lessonKit.findFirst({ where: { id: kitId } })
+    : await prisma.lessonKit.findFirst({
+        where: { id: kitId, familyAccountId },
+      });
   if (!kit) return null;
 
   await prisma.$transaction([
@@ -214,6 +223,37 @@ export async function getParishMembership(familyAccountId: string) {
   return prisma.parishMember.findFirst({
     where: { familyAccountId },
     include: { parish: true },
+  });
+}
+
+export async function canEditLessonKit(
+  kit: { id: string; familyAccountId: string | null; parishId: string | null; scope: import("@prisma/client").LessonKitScope },
+  familyAccountId: string,
+) {
+  if (kit.familyAccountId === familyAccountId) return true;
+  if (kit.scope === "PARISH" && kit.parishId) {
+    const membership = await getParishMembership(familyAccountId);
+    return membership?.role === "DRE" && membership.parishId === kit.parishId;
+  }
+  return false;
+}
+
+export async function replaceLessonBlocksForEditor(
+  kitId: string,
+  familyAccountId: string,
+  blocks: {
+    sortOrder: number;
+    type: LessonBlockType;
+    label?: string | null;
+    config: LessonBlockConfig;
+  }[],
+) {
+  const kit = await prisma.lessonKit.findUnique({ where: { id: kitId } });
+  if (!kit) return null;
+  const allowed = await canEditLessonKit(kit, familyAccountId);
+  if (!allowed) return null;
+  return replaceLessonBlocks(kitId, kit.familyAccountId ?? familyAccountId, blocks, {
+    skipOwnershipCheck: kit.scope === "PARISH",
   });
 }
 
