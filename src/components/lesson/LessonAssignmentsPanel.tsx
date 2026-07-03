@@ -81,9 +81,10 @@ export function LessonAssignmentsPanel({ subs }: Props) {
 
   return (
     <section className="mt-10 border-t border-[var(--color-border)] pt-8">
-      <h2 className="text-xl font-bold text-[var(--color-ink)]">At-home lessons</h2>
+      <h2 className="text-xl font-bold text-[var(--color-ink)]">Assign to students</h2>
       <p className="mt-1 text-sm text-[var(--color-muted)]">
-        Assign a lesson for {weekStart ? formatWeekLabel(weekStart) : "this week"}. Readers see it on the home page.
+        Pick a lesson for {weekStart ? formatWeekLabel(weekStart) : "this week"}. Students see it on the home page when
+        they sign in with their Access ID.
       </p>
 
       <form onSubmit={(e) => void assign(e)} className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -103,13 +104,13 @@ export function LessonAssignmentsPanel({ subs }: Props) {
           </select>
         </label>
         <label className="block">
-          <span className="text-xs font-semibold text-[var(--color-muted)]">Reader (optional)</span>
+          <span className="text-xs font-semibold text-[var(--color-muted)]">Student (optional)</span>
           <select
             value={subId}
             onChange={(e) => setSubId(e.target.value)}
             className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 text-sm"
           >
-            <option value="">All children</option>
+            <option value="">All students</option>
             {subs.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.displayName}
@@ -147,7 +148,7 @@ export function LessonAssignmentsPanel({ subs }: Props) {
               <div>
                 <p className="font-semibold text-[var(--color-ink)]">{a.kit.title}</p>
                 <p className="text-xs text-[var(--color-muted)]">
-                  {a.subDisplayName ? `For ${a.subDisplayName}` : "All children"}
+                  {a.subDisplayName ? `For ${a.subDisplayName}` : "All students"}
                   {a.note ? ` · ${a.note}` : ""}
                   {a.completedAt ? " · Done" : ""}
                 </p>
@@ -157,7 +158,7 @@ export function LessonAssignmentsPanel({ subs }: Props) {
                   href={`/lesson/${a.kit.shareSlug}/family`}
                   className="font-semibold text-[var(--color-link)]"
                 >
-                  At-home link
+                  Student link
                 </Link>
                 <button
                   type="button"

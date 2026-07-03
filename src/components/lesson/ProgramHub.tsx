@@ -1,7 +1,9 @@
 "use client";
 
 import { LessonKitCard } from "@/components/lesson/LessonKitCard";
+import { TptPartnerNote } from "@/components/lesson/TptPartnerNote";
 import type { ProgramHubData } from "@/lib/lesson-kit/program-hub";
+import { LESSON_KIT_PRODUCT_NAME } from "@/lib/lesson-kit/branding";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -47,17 +49,19 @@ export function ProgramHub({ initialData }: Props) {
 
   return (
     <div className="space-y-10">
+      <TptPartnerNote variant="hub" />
+
       {data.signedIn ? (
         <section>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-xl font-bold text-[var(--color-ink)]">My lessons</h2>
+            <h2 className="text-xl font-bold text-[var(--color-ink)]">My {LESSON_KIT_PRODUCT_NAME}s</h2>
             <Link href="/program/templates" className="text-sm font-semibold text-[var(--color-link)]">
-              Templates
+              Browse templates
             </Link>
           </div>
           {data.personal.length === 0 ? (
             <p className="text-sm text-[var(--color-muted)]">
-              Pick a template below and tap <strong>Use this</strong>.
+              Pick a template below and tap <strong>Use this</strong> to make your own copy.
             </p>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -71,6 +75,7 @@ export function ProgramHub({ initialData }: Props) {
                   runHref={`/lesson/${kit.shareSlug}`}
                   secondaryHref={`/program/kit/${kit.id}`}
                   secondaryLabel="Edit"
+                  tptUrl={kit.tptUrl}
                 />
               ))}
             </div>
@@ -79,46 +84,14 @@ export function ProgramHub({ initialData }: Props) {
       ) : (
         <p className="rounded border border-[#e8e0d6] bg-[#fffaf5] px-4 py-3 text-sm text-[var(--color-muted)]">
           <Link href="/account/login?next=/program" className="font-semibold text-[var(--color-link)]">
-            Sign in
+            Sign in free
           </Link>{" "}
-          to save your own copies. Templates run without an account.
+          to save and edit your own {LESSON_KIT_PRODUCT_NAME.toLowerCase()}s. Templates run without an account.
         </p>
       )}
 
-      {data.parishInfo && (
-        <section>
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-[var(--color-ink)]">{data.parishInfo.name}</h2>
-            {data.parishInfo.role === "DRE" && (
-              <Link href="/program/parish" className="text-sm font-semibold text-[var(--color-link)]">
-                Dashboard
-              </Link>
-            )}
-          </div>
-          {data.parish.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {data.parish.map((kit) => (
-                <LessonKitCard
-                  key={kit.id}
-                  title={kit.title}
-                  description={kit.description}
-                  stepCount={kit.stepCount}
-                  estMinutes={kit.estMinutes}
-                  runHref={`/lesson/${kit.shareSlug}`}
-                  secondaryLabel={data.signedIn ? "Use this" : undefined}
-                  onSecondaryClick={
-                    data.signedIn ? () => void duplicateTemplate(kit.id) : undefined
-                  }
-                  secondaryDisabled={duplicating === kit.id}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-      )}
-
       <section>
-        <h2 className="mb-4 text-xl font-bold text-[var(--color-ink)]">Templates</h2>
+        <h2 className="mb-4 text-xl font-bold text-[var(--color-ink)]">Starter templates</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.templates.map((kit) => (
             <article key={kit.id} className="lesson-kit-card">
@@ -128,13 +101,14 @@ export function ProgramHub({ initialData }: Props) {
               ) : null}
               <p className="lesson-kit-card__meta">
                 {kit.stepCount} steps · ~{kit.estMinutes} min
+                {kit.gradeBand ? ` · ${kit.gradeBand}` : ""}
               </p>
               <div className="mt-auto flex flex-wrap gap-2">
                 <Link
                   href={`/lesson/${kit.shareSlug}`}
                   className="lesson-big-button flex-1 text-center no-underline"
                 >
-                  Run
+                  Run in class
                 </Link>
                 <button
                   type="button"
@@ -151,14 +125,16 @@ export function ProgramHub({ initialData }: Props) {
       </section>
 
       <p className="text-sm text-[var(--color-muted)]">
-        New parish?{" "}
-        <Link href="/program/join" className="font-semibold text-[var(--color-link)]">
-          Join with code
-        </Link>
-        {" · "}
-        <Link href="/program/parish/setup" className="font-semibold text-[var(--color-link)]">
-          Create parish
-        </Link>
+        Need crafts and worksheets? Many kits link to free samples on{" "}
+        <a
+          href={process.env.NEXT_PUBLIC_TPT_STORE_URL ?? "https://www.teacherspayteachers.com/store/catholic-kids-crafts"}
+          className="font-semibold text-[var(--color-link)]"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Teachers Pay Teachers
+        </a>
+        .
       </p>
     </div>
   );

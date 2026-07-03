@@ -1,9 +1,7 @@
 import {
   duplicateLessonKit,
   listGlobalTemplates,
-  listParishKits,
   listPersonalKits,
-  getParishMembership,
 } from "@/lib/lesson-kit/db";
 import { requireFamilySession } from "@/lib/family-auth";
 import { NextResponse } from "next/server";
@@ -13,24 +11,15 @@ export async function GET() {
   const templates = await listGlobalTemplates();
 
   if (!session) {
-    return NextResponse.json({ templates, personal: [], parish: [], signedIn: false });
+    return NextResponse.json({ templates, personal: [], signedIn: false });
   }
 
-  const [personal, membership] = await Promise.all([
-    listPersonalKits(session.familyAccountId),
-    getParishMembership(session.familyAccountId),
-  ]);
-
-  const parish = membership ? await listParishKits(membership.parishId) : [];
+  const personal = await listPersonalKits(session.familyAccountId);
 
   return NextResponse.json({
     templates,
     personal,
-    parish,
     signedIn: true,
-    parishInfo: membership
-      ? { name: membership.parish.name, role: membership.role, parishId: membership.parishId }
-      : null,
   });
 }
 

@@ -3,6 +3,7 @@
 import { LessonBlockConfigPanel } from "@/components/lesson/LessonBlockConfigPanel";
 import { LessonBlockIcon, LessonIcon } from "@/components/icons/lesson/LessonIcon";
 import { LessonShareSheet } from "@/components/lesson/LessonShareSheet";
+import { TptPartnerNote } from "@/components/lesson/TptPartnerNote";
 import { LessonBigButton } from "@/components/lesson/LessonUi";
 import {
   LESSON_BLOCK_DEFAULT_LABEL,
@@ -58,6 +59,10 @@ function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
 export function LessonKitEditor({ initialKit }: Props) {
   const [kit, setKit] = useState(initialKit);
   const [title, setTitle] = useState(kit.title);
+  const [description, setDescription] = useState(kit.description);
+  const [gradeBand, setGradeBand] = useState(kit.gradeBand ?? "");
+  const [tptUrl, setTptUrl] = useState(kit.tptUrl ?? "");
+  const [isFreeSample, setIsFreeSample] = useState(kit.isFreeSample);
   const [blocks, setBlocks] = useState<LessonBlockDto[]>(kit.blocks);
   const [saving, setSaving] = useState(false);
   const [saveState, setSaveState] = useState<"idle" | "dirty" | "saved" | "error">("idle");
@@ -66,7 +71,14 @@ export function LessonKitEditor({ initialKit }: Props) {
   const [error, setError] = useState("");
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedRef = useRef(
-    JSON.stringify({ title: initialKit.title, blocks: initialKit.blocks }),
+    JSON.stringify({
+      title: initialKit.title,
+      description: initialKit.description,
+      gradeBand: initialKit.gradeBand ?? "",
+      tptUrl: initialKit.tptUrl ?? "",
+      isFreeSample: initialKit.isFreeSample,
+      blocks: initialKit.blocks,
+    }),
   );
 
   const save = useCallback(async () => {
@@ -76,9 +88,15 @@ export function LessonKitEditor({ initialKit }: Props) {
       const res = await fetch(`/api/program/kits/${kit.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title }),
+        body: JSON.stringify({
+          title,
+          description,
+          gradeBand: gradeBand.trim() || null,
+          tptUrl: tptUrl.trim() || null,
+          isFreeSample,
+        }),
       });
-      if (!res.ok) throw new Error("Could not save title");
+      if (!res.ok) throw new Error("Could not save lesson details");
       const blockRes = await fetch(`/api/program/kits/${kit.id}/blocks`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -95,7 +113,14 @@ export function LessonKitEditor({ initialKit }: Props) {
       const data = (await blockRes.json()) as { kit: LessonKitDto };
       setKit(data.kit);
       setBlocks(data.kit.blocks);
-      lastSavedRef.current = JSON.stringify({ title, blocks: data.kit.blocks });
+      lastSavedRef.current = JSON.stringify({
+        title,
+        description,
+        gradeBand: gradeBand.trim() || "",
+        tptUrl: tptUrl.trim() || "",
+        isFreeSample,
+        blocks: data.kit.blocks,
+      });
       setSaveState("saved");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");
@@ -103,10 +128,17 @@ export function LessonKitEditor({ initialKit }: Props) {
     } finally {
       setSaving(false);
     }
-  }, [kit.id, title, blocks]);
+  }, [kit.id, title, description, gradeBand, tptUrl, isFreeSample, blocks]);
 
   useEffect(() => {
-    const snapshot = JSON.stringify({ title, blocks });
+    const snapshot = JSON.stringify({
+      title,
+      description,
+      gradeBand: gradeBand.trim() || "",
+      tptUrl: tptUrl.trim() || "",
+      isFreeSample,
+      blocks,
+    });
     if (snapshot === lastSavedRef.current) return;
 
     setSaveState("dirty");
@@ -118,7 +150,7 @@ export function LessonKitEditor({ initialKit }: Props) {
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
     };
-  }, [title, blocks, save]);
+  }, [title, description, gradeBand, tptUrl, isFreeSample, blocks, save]);
 
   const addBlock = (type: LessonBlockType) => {
     setBlocks((prev) => [
@@ -180,7 +212,7 @@ export function LessonKitEditor({ initialKit }: Props) {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link href="/program" className="text-sm font-semibold text-[var(--color-link)]">
-          ← My lessons
+          ← Lesson Kits
         </Link>
         <div className="flex items-center gap-3">
           {saveHint ? (
@@ -210,6 +242,51 @@ export function LessonKitEditor({ initialKit }: Props) {
           className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 text-lg font-bold"
         />
       </label>
+
+      <label className="block">
+        <span className="text-sm font-semibold text-[var(--color-ink)]">Description (optional)</span>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={2}
+          className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 text-sm"
+          placeholder="What your class will do this week"
+        />
+      </label>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="block">
+          <span className="text-sm font-semibold text-[var(--color-ink)]">Grade band (optional)</span>
+          <input
+            type="text"
+            value={gradeBand}
+            onChange={(e) => setGradeBand(e.target.value)}
+            className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 text-sm"
+            placeholder="e.g. Grades 2–4"
+          />
+        </label>
+        <label className="block">
+          <span className="text-sm font-semibold text-[var(--color-ink)]">TPT pack link (optional)</span>
+          <input
+            type="url"
+            value={tptUrl}
+            onChange={(e) => setTptUrl(e.target.value)}
+            className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 text-sm"
+            placeholder="https://www.teacherspayteachers.com/..."
+          />
+        </label>
+      </div>
+
+      <label className="flex items-center gap-2 text-sm text-[var(--color-muted)]">
+        <input
+          type="checkbox"
+          checked={isFreeSample}
+          onChange={(e) => setIsFreeSample(e.target.checked)}
+        />
+        Show as free sample on this site (full pack on TPT)
+      </label>
+
+      <TptPartnerNote variant="inline" tptUrl={tptUrl || null} isFreeSample={isFreeSample} />
 
       <ul className="space-y-2">
         {blocks.map((block, index) => (

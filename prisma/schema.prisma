@@ -288,12 +288,11 @@ model FamilyAccount {
   discussionThreads  BibleChapterThread[]   @relation("OwnerDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("OwnerDiscussionComments")
   lessonKits         LessonKit[]
-  parishMemberships  ParishMember[]
   lessonAssignments  LessonAssignment[]
   lessonProgress     LessonKitProgress[]
 }
 
-/// Child/class sub-profile (max 30 per family); logs in with Access ID only.
+/// Student profile under a teacher account (Access ID login); max per account in access-code config.
 model SubProfile {
   id                 String                 @id @default(cuid())
   familyAccountId    String
@@ -403,7 +402,6 @@ model BibleChapterThread {
 enum LessonKitScope {
   GLOBAL_TEMPLATE
   PERSONAL
-  PARISH
 }
 
 enum LessonBlockType {
@@ -417,38 +415,7 @@ enum LessonBlockType {
   MASS_TODAY
 }
 
-enum ParishRole {
-  DRE
-  CATECHIST
-}
-
-/// Parish / PSR workspace (Phase 2).
-model Parish {
-  id         String         @id @default(cuid())
-  name       String
-  slug       String         @unique
-  inviteCode String         @unique
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
-  members    ParishMember[]
-  lessonKits LessonKit[]
-  plans      ParishPlan[]
-}
-
-model ParishMember {
-  id              String     @id @default(cuid())
-  parishId        String
-  familyAccountId String
-  role            ParishRole @default(CATECHIST)
-  createdAt       DateTime   @default(now())
-  parish          Parish     @relation(fields: [parishId], references: [id], onDelete: Cascade)
-  familyAccount   FamilyAccount @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
-
-  @@unique([parishId, familyAccountId])
-  @@index([familyAccountId])
-}
-
-/// Assembled lesson (templates + personal copies) for classroom run.
+/// Assembled lesson kit for classroom run (/lesson/[shareSlug]).
 model LessonKit {
   id               String          @id @default(cuid())
   shareSlug        String          @unique
@@ -457,9 +424,12 @@ model LessonKit {
   scope            LessonKitScope  @default(PERSONAL)
   sourceKitId      String?
   familyAccountId  String?
-  parishId         String?
   liturgicalPeriod String?
   gradeBand        String?
+  /// Optional Teachers Pay Teachers URL for the full classroom pack.
+  tptUrl           String?
+  /// When true, on-site kit is a sample; full pack on TPT.
+  isFreeSample     Boolean         @default(true)
   /// JSON: { gospelMaxChars?, includedBlockIds? } for /family route
   familyMode       Json?
   published        Boolean         @default(false)
@@ -470,13 +440,10 @@ model LessonKit {
   opens            LessonKitOpen[]
   assignments      LessonAssignment[]
   progress         LessonKitProgress[]
-  parishPlans      ParishPlan[]
   familyAccount    FamilyAccount?  @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
-  parish           Parish?         @relation(fields: [parishId], references: [id], onDelete: SetNull)
 
   @@index([scope, published, sortOrder])
   @@index([familyAccountId])
-  @@index([parishId])
 }
 
 model LessonBlock {
@@ -493,7 +460,7 @@ model LessonBlock {
   @@index([kitId, sortOrder])
 }
 
-/// Anonymous daily open counts per kit (DRE dashboard).
+/// Anonymous daily open counts per lesson kit.
 model LessonKitOpen {
   id      String    @id @default(cuid())
   kitId   String
@@ -505,7 +472,7 @@ model LessonKitOpen {
   @@index([dateKey])
 }
 
-/// Parent assigns an at-home lesson to a reader (or whole family) for a week.
+/// Teacher assigns an at-home lesson kit to a student for a week.
 model LessonAssignment {
   id              String    @id @default(cuid())
   lessonKitId     String
@@ -541,23 +508,6 @@ model LessonKitProgress {
   @@index([familyAccountId])
   @@index([subProfileId])
   @@index([guestId])
-}
-
-/// DRE scheduled kit for a parish week (Phase 4).
-model ParishPlan {
-  id          String   @id @default(cuid())
-  parishId    String
-  title       String
-  weekStart   String
-  lessonKitId String?
-  notes       String   @default("")
-  sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  parish      Parish    @relation(fields: [parishId], references: [id], onDelete: Cascade)
-  lessonKit   LessonKit? @relation(fields: [lessonKitId], references: [id], onDelete: SetNull)
-
-  @@index([parishId, weekStart])
 }
 
 /// Reply on a Bible chapter thread.

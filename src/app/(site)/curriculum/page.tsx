@@ -3,6 +3,7 @@ import { LessonKitCard } from "@/components/lesson/LessonKitCard";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { getCurriculumTracks } from "@/lib/content";
+import { LESSON_KIT_PRODUCT_NAME_PLURAL } from "@/lib/lesson-kit/branding";
 import { listGlobalTemplates } from "@/lib/lesson-kit/db";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { canonicalForPath } from "@/lib/site-metadata";
@@ -48,13 +49,13 @@ export default async function CurriculumPage() {
         <section className="mt-12">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 className="text-2xl font-bold text-[var(--color-ink)]">Ready-made lesson kits</h2>
+              <h2 className="text-2xl font-bold text-[var(--color-ink)]">{LESSON_KIT_PRODUCT_NAME_PLURAL}</h2>
               <p className="mt-1 text-sm text-[var(--color-muted)]">
                 One classroom link—games, Gospel typing, crafts. Copy and edit for your class.
               </p>
             </div>
             <Link href="/program" className="text-sm font-semibold text-[var(--color-link)]">
-              All class lessons →
+              All {LESSON_KIT_PRODUCT_NAME_PLURAL.toLowerCase()} →
             </Link>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -68,6 +69,9 @@ export default async function CurriculumPage() {
                 runHref={`/lesson/${kit.shareSlug}`}
                 secondaryHref="/program"
                 secondaryLabel="Browse"
+                gradeBand={kit.gradeBand}
+                tptUrl={kit.tptUrl}
+                isFreeSample={kit.isFreeSample}
               />
             ))}
           </div>

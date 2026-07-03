@@ -1,15 +1,15 @@
 # Lesson Kits — Personas & Phases
 
-Lesson Kits connect **DRE → catechist → parent → reader** on one platform layer (not content replacement).
+Lesson Kits connect **teacher → student** on one platform layer (classroom runner + at-home follow-up). Full printable packs are linked on **Teachers Pay Teachers**.
 
 ## Personas
 
 | Persona | Goal | Primary routes |
 |---------|------|----------------|
-| **DRE** | Parish workspace, invite catechists, parish kits, weekly plan, usage stats | `/program/parish/setup`, `/program/parish` |
-| **Catechist** | Copy template, edit steps, run classroom, share at-home link + QR | `/program`, `/program/kit/[id]`, `/lesson/[slug]` |
-| **Parent** | Assign at-home lesson to child(ren), copy family link | `/account`, `/program` |
-| **Reader (child)** | See “This week” on home, run shortened family lesson | `/` (home card), `/lesson/[slug]/family` |
+| **Teacher** | Copy template, edit steps, run class, link TPT pack, assign to students | `/program`, `/program/kit/[id]`, `/lesson/[slug]`, `/account` |
+| **Student** | See assigned lesson on home, run shortened family lesson | `/reader/login`, `/` (home card), `/lesson/[slug]/family` |
+
+Parish/DRE workspace flows were removed in favor of individual teacher accounts.
 
 ## Phase status
 
@@ -17,26 +17,24 @@ Lesson Kits connect **DRE → catechist → parent → reader** on one platform 
 |-------|-------------|--------|
 | **P0** | Unified SVG icons, block types, CSS | Done |
 | **P1** | DB, runner, `/program`, editor, templates, admin list | Done |
-| **P2** | Family runner, share + QR, parish join, DRE dashboard | Done |
-| **P2+** | DRE create parish, parish kit CRUD, invite code on dashboard | Done |
-| **P3** | `LessonAssignment`, parent assign UI, reader home card, completion | Done |
-| **P4** | `ParishPlan` scheduling, print/PDF, offline cache on device, parish UGC (DRE publishes personal kit) | Done |
+| **P2** | Family runner, share + QR | Done |
+| **P3** | `LessonAssignment`, teacher assign UI, student home card, completion | Done |
+| **P4** | Print/PDF, offline cache, TPT links on kits | Done |
 
 ## Data model (persona-related)
 
-- `Parish` / `ParishMember` — DRE + catechists (`role`)
-- `LessonKit` — `GLOBAL_TEMPLATE` \| `PERSONAL` \| `PARISH`
-- `LessonAssignment` — parent → reader(s) per week
+- `LessonKit` — `GLOBAL_TEMPLATE` \| `PERSONAL`; optional `tptUrl`, `isFreeSample`
+- `LessonAssignment` — teacher → student(s) per week
 - `LessonKitProgress` — completion stamp
-- `ParishPlan` — DRE week → kit mapping
+- `SubProfile` — student Access IDs under teacher account
 
 ## Deploy
 
 After merge:
 
 ```bash
-npm run db:migrate-deploy
-npm run db:seed
+pnpm run db:migrate-deploy
+pnpm run db:seed-production-once
 ```
 
-Seed creates global templates and home “Class lessons” pill.
+Seed creates global templates and home “Lesson Kits” pill.

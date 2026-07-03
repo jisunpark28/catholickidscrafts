@@ -34,9 +34,10 @@ export type LessonKitDto = {
   scope: LessonKitScope;
   sourceKitId: string | null;
   familyAccountId: string | null;
-  parishId: string | null;
   liturgicalPeriod: string | null;
   gradeBand: string | null;
+  tptUrl: string | null;
+  isFreeSample: boolean;
   familyMode: FamilyModeConfig | null;
   published: boolean;
   sortOrder: number;

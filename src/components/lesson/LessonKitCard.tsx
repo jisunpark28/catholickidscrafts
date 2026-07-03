@@ -1,3 +1,4 @@
+import { TptPartnerNote } from "@/components/lesson/TptPartnerNote";
 import Link from "next/link";
 
 type Props = {
@@ -10,6 +11,9 @@ type Props = {
   secondaryLabel?: string;
   onSecondaryClick?: () => void;
   secondaryDisabled?: boolean;
+  gradeBand?: string | null;
+  tptUrl?: string | null;
+  isFreeSample?: boolean;
 };
 
 export function LessonKitCard({
@@ -22,6 +26,9 @@ export function LessonKitCard({
   secondaryLabel,
   onSecondaryClick,
   secondaryDisabled,
+  gradeBand,
+  tptUrl,
+  isFreeSample,
 }: Props) {
   return (
     <article className="lesson-kit-card">
@@ -31,7 +38,9 @@ export function LessonKitCard({
       ) : null}
       <p className="lesson-kit-card__meta">
         {stepCount} steps · ~{estMinutes} min
+        {gradeBand ? ` · ${gradeBand}` : ""}
       </p>
+      <TptPartnerNote tptUrl={tptUrl} isFreeSample={isFreeSample} />
       <div className="mt-auto flex flex-wrap gap-2">
         <Link href={runHref} className="lesson-big-button flex-1 text-center no-underline">
           Run
