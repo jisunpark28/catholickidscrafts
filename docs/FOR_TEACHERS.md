@@ -17,7 +17,7 @@ Create students from **Teacher dashboard** (`/account`) → **Add student**. Cop
 
 ## Lesson Kits (`/program`)
 
-1. **Run** a starter template in class (one link: games, Gospel typing, crafts).
+1. **Run** a starter template in class (one link: games, Gospel typing, crafts). Try the showcase kit: [`/lesson/lent-wk1-g3`](/lesson/lent-wk1-g3) (Lent Week 1, Grade 3).
 2. **Use this** to copy a template into your account and edit steps.
 3. Optional **TPT pack link** on your kit — free sample on this site, full worksheets on [Teachers Pay Teachers](https://www.teacherspayteachers.com/store/catholic-kids-crafts).
 

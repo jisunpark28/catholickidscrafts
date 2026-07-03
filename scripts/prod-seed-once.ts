@@ -1,6 +1,7 @@
 /**
  * Idempotent production seed: lesson templates + home hub.
- * Skips when GLOBAL_TEMPLATE kits and home sections already exist (unless FORCE_PROD_SEED=true).
+ * Lesson templates are always upserted by shareSlug (safe to re-run).
+ * Home sections skip when already present (unless FORCE_PROD_SEED=true).
  * Set RUN_FULL_SEED=true to also run `prisma db seed` (needs ADMIN_EMAIL / ADMIN_PASSWORD).
  */
 import "dotenv/config";
@@ -9,29 +10,55 @@ import { execSync } from "node:child_process";
 import { seedLessonKits } from "../prisma/seed-lesson-kits";
 import { seedHomeSections } from "../prisma/seed-home-sections-lib";
 
+type CountDelegate = { count: () => Promise<number> };
+
+function prismaDelegate(client: PrismaClient, name: string): CountDelegate | null {
+  const delegate = (client as unknown as Record<string, unknown>)[name];
+  if (!delegate || typeof (delegate as CountDelegate).count !== "function") {
+    return null;
+  }
+  return delegate as CountDelegate;
+}
+
+function missingClientHint(model: string): string {
+  return (
+    `Prisma client is missing model "${model}" (stale @prisma/client).\n` +
+    "Run:\n" +
+    "  pnpm exec prisma generate\n" +
+    "  pnpm run db:migrate-deploy\n" +
+    "Then retry:\n" +
+    "  pnpm run db:seed-production-once"
+  );
+}
+
 async function main() {
   const force = process.env.FORCE_PROD_SEED === "true";
   const runFull = process.env.RUN_FULL_SEED === "true";
 
   const prisma = new PrismaClient();
   try {
-    const [templateCount, homeCount] = await Promise.all([
-      prisma.lessonKit.count({ where: { scope: "GLOBAL_TEMPLATE" } }),
-      prisma.homeSection.count(),
-    ]);
-
-    if (!force && templateCount > 0 && homeCount > 0) {
-      console.log(
-        "Production seed already applied (lesson templates + home sections). Nothing to do.",
-      );
-      console.log("Set FORCE_PROD_SEED=true to run again.");
-      return;
+    if (!prismaDelegate(prisma, "lessonKit")) {
+      throw new Error(missingClientHint("lessonKit"));
     }
 
-    console.log("Running production seed (lesson kits + home sections)…");
+    console.log("Upserting global lesson templates…");
     await seedLessonKits(prisma);
-    await seedHomeSections(prisma);
-    console.log("Lesson kits + home sections done.");
+
+    const homeSection = prismaDelegate(prisma, "homeSection");
+    if (!homeSection) {
+      console.warn(missingClientHint("homeSection"));
+      console.warn("Lesson templates were upserted; home sections were skipped.");
+    } else {
+      const homeCount = await homeSection.count();
+      if (force || homeCount === 0) {
+        await seedHomeSections(prisma);
+        console.log("Home sections seeded.");
+      } else {
+        console.log("Home sections already exist — skip (set FORCE_PROD_SEED=true to re-run).");
+      }
+    }
+
+    console.log("Production seed done (lesson kits + home sections as needed).");
 
     if (runFull) {
       if (!process.env.ADMIN_EMAIL?.trim() || !process.env.ADMIN_PASSWORD) {
