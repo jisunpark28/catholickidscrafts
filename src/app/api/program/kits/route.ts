@@ -1,6 +1,5 @@
 import {
   duplicateLessonKit,
-  getLessonKitById,
   listGlobalTemplates,
   listParishKits,
   listPersonalKits,

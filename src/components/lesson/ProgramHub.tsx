@@ -30,7 +30,7 @@ export function ProgramHub() {
     load();
   }, [load]);
 
-  const useTemplate = async (sourceId: string) => {
+  const duplicateTemplate = async (sourceId: string) => {
     if (!data?.signedIn) {
       router.push("/account/login?next=/program");
       return;
@@ -147,7 +147,7 @@ export function ProgramHub() {
                 <button
                   type="button"
                   disabled={duplicating === kit.id}
-                  onClick={() => void useTemplate(kit.id)}
+                  onClick={() => void duplicateTemplate(kit.id)}
                   className="lesson-big-button lesson-big-button--secondary flex-1"
                 >
                   {duplicating === kit.id ? "…" : "Use this"}
