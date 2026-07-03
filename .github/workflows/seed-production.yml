@@ -1,0 +1,89 @@
+name: Seed production database
+
+# Runs idempotent lesson-kit + home-hub seed against Neon.
+# Safe to re-run: skips when templates + home sections already exist (unless force=true).
+#
+# Setup (GitHub repo → Settings → Secrets and variables → Actions):
+#   DATABASE_URL   — Neon pooled URL
+#   DIRECT_URL     — Neon direct URL (migrations)
+# Optional for "full seed":
+#   ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Re-run even if lesson templates already exist
+        type: boolean
+        default: false
+      full:
+        description: Also run full db:seed (admin, curriculum, resources)
+        type: boolean
+        default: false
+      wait_for_vercel_seconds:
+        description: Seconds to wait before seeding (0 = skip; use ~120 after a fresh Vercel deploy)
+        type: number
+        default: 0
+  repository_dispatch:
+    types: [vercel-deployment-success]
+
+concurrency:
+  group: prod-database-seed
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate secrets
+        run: |
+          if [ -z "${{ secrets.DATABASE_URL }}" ] || [ -z "${{ secrets.DIRECT_URL }}" ]; then
+            echo "::error::Add DATABASE_URL and DIRECT_URL to GitHub Actions secrets."
+            exit 1
+          fi
+
+      - name: Wait for Vercel deploy
+        if: github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && github.event.inputs.wait_for_vercel_seconds != '0')
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            SECONDS=120
+          else
+            SECONDS="${{ github.event.inputs.wait_for_vercel_seconds }}"
+          fi
+          echo "Waiting ${SECONDS}s so Vercel can finish prisma migrate deploy…"
+          sleep "$SECONDS"
+
+      - name: Apply Prisma migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: pnpm run db:migrate-deploy
+
+      - name: Seed once (lesson kits + home hub)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          FORCE_PROD_SEED: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.force == true && 'true' || 'false' }}
+          RUN_FULL_SEED: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.full == true && 'true' || 'false' }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          ADMIN_NAME: ${{ secrets.ADMIN_NAME }}
+        run: pnpm run db:seed-production-once

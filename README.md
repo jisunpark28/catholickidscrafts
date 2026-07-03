@@ -63,7 +63,7 @@ This project uses **PostgreSQL** (Neon). Set both `DATABASE_URL` (pooled) and `D
 
 1. Neon project → copy pooled + direct connection strings.
 2. Vercel env: `DATABASE_URL`, `DIRECT_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL=https://www.catholickidscrafts.com`, `BLOB_READ_WRITE_TOKEN`.
-3. Run `npm run db:seed` once locally with Neon URLs in `.env` to create the super-admin and sample content.
+3. Run **`npm run db:seed-production-once`** once with Neon URLs in `.env` (or GitHub Actions — `docs/GITHUB_PROD_SEED.md`). For full bootstrap including admin: `npm run db:seed` with `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 4. Deploy; `vercel-build` runs `prisma migrate deploy` automatically.
 
 ### Multiple operators & rich text

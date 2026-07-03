@@ -65,9 +65,12 @@ Open **http://localhost:3000/admin/login** and sign in with the seeded email and
 | `GOOGLE_SITE_VERIFICATION` | Search Console HTML tag `content=` value (see `docs/GOOGLE_SEARCH.md`) |
 | `BLOB_READ_WRITE_TOKEN` | After Blob setup (step 4) |
 
-You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Run `npm run db:seed` once locally with Neon URLs in `.env` to seed production data.
+You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Seed production data once using either:
 
-3. **Deploy** — the build runs `prisma migrate deploy` automatically (`vercel-build` script).
+- **GitHub Actions** (recommended): see [`docs/GITHUB_PROD_SEED.md`](GITHUB_PROD_SEED.md) — Actions → **Seed production database** → Run workflow (idempotent; safe to click once after deploy).
+- **Local CLI**: `npm run db:seed-production-once` with Neon URLs in `.env` (or full `npm run db:seed` with admin env vars).
+
+3. **Deploy** — the build runs `prisma migrate deploy` automatically (`vercel-build` script). **Seed is not part of the Vercel build**; run the GitHub Action or CLI above once.
 
 ---
 

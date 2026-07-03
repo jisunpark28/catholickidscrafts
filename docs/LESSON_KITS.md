@@ -52,4 +52,4 @@ See **persona map**: [`docs/LESSON_PERSONAS.md`](LESSON_PERSONAS.md).
 
 `npm run db:seed` creates 3 global templates if none exist.
 
-Production: `npm run db:migrate-deploy` then `npm run db:seed`.
+Production: `npm run db:migrate-deploy` then `npm run db:seed-production-once` (or GitHub Actions — see `docs/GITHUB_PROD_SEED.md`).
