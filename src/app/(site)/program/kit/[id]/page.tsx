@@ -3,6 +3,7 @@ import { getLessonKitById } from "@/lib/lesson-kit/db";
 import { requireFamilySession } from "@/lib/family-auth";
 import { PageShell } from "@/components/PageShell";
 import { redirect, notFound } from "next/navigation";
+import "@/styles/lesson-kit.css";
 
 type Props = { params: Promise<{ id: string }> };
 

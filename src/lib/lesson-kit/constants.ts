@@ -33,6 +33,14 @@ export const LESSON_GAME_SLUGS = [
   { slug: "church", label: "Tiny Priest church" },
 ] as const;
 
+/** Common craft pages for lesson RESOURCE blocks (slug must match DB). */
+export const LESSON_RESOURCE_SLUGS = [
+  { slug: "advent-wreath-craft", label: "Advent wreath craft" },
+  { slug: "first-communion-examination", label: "First Communion examination" },
+  { slug: "lent-stations-cross-craft", label: "Stations of the Cross craft" },
+  { slug: "easter-egg-decorating", label: "Easter egg decorating" },
+] as const;
+
 export function estimateLessonMinutes(blockCount: number): number {
   if (blockCount <= 0) return 0;
   return Math.max(10, blockCount * 7);

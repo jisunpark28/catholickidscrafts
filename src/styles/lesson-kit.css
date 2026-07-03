@@ -196,3 +196,72 @@
   font-weight: 600;
   color: var(--color-ink);
 }
+
+.lesson-share-block {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.lesson-share-block:last-child {
+  border-bottom: none;
+}
+
+.lesson-share-qr-toggle {
+  min-width: 2.5rem;
+  border: 1px solid var(--color-border);
+  background: #fff;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.lesson-share-qr-toggle:hover {
+  border-color: var(--color-accent);
+}
+
+.lesson-share-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0 1rem;
+}
+
+.lesson-share-qr__img {
+  border: 1px solid var(--color-border);
+  background: #fff;
+}
+
+.lesson-share-qr__hint {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.lesson-block-row--active {
+  border-color: var(--color-accent);
+  background: #fffaf5;
+}
+
+.lesson-block-config__field {
+  display: block;
+  margin-top: 0.75rem;
+}
+
+.lesson-block-config__field span {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.lesson-block-config__field input,
+.lesson-block-config__field select,
+.lesson-block-config__field textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.65rem;
+  font-size: 0.875rem;
+  color: var(--color-ink);
+  background: #fff;
+}
