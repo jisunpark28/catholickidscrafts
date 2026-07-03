@@ -49,6 +49,9 @@ export default async function AdminLayout({
               <Link href="/admin/recommendations" className="hover:text-[var(--color-accent)]">
                 Recommendations
               </Link>
+              <Link href="/admin/lesson-templates" className="hover:text-[var(--color-accent)]">
+                Lesson templates
+              </Link>
               {superAdmin && (
                 <Link href="/admin/operators" className="hover:text-[var(--color-accent)]">
                   Operators

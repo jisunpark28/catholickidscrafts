@@ -31,6 +31,12 @@ type Props = {
   hideInstructions?: boolean;
   /** Gospel hub styling — Nanum YeonJiCe, larger type, warm card. */
   appearance?: Appearance;
+  /** Shorter passage for lesson / family mode. */
+  maxChars?: number;
+  /** Minimal chrome for lesson runner embed. */
+  embedded?: boolean;
+  /** Called when user reaches maxChars or completes (lesson flow). */
+  onLessonStepReady?: () => void;
 };
 
 function charClassName(
@@ -72,11 +78,21 @@ export function PassageTypingGame({
   showSaveButton,
   hideInstructions = false,
   appearance = "default",
+  maxChars,
+  embedded = false,
+  onLessonStepReady,
 }: Props) {
   const isGospel = appearance === "gospel";
   const unlockSticker = onStickerUnlock ?? onComplete;
-  const canSaveDraft = showSaveButton ?? Boolean(draftKey);
-  const target = useMemo(() => normalizePassageText(text), [text]);
+  const canSaveDraft = (showSaveButton ?? Boolean(draftKey)) && !embedded;
+  const fullTarget = useMemo(() => normalizePassageText(text), [text]);
+  const target = useMemo(() => {
+    if (!maxChars || maxChars >= fullTarget.length) return fullTarget;
+    const slice = fullTarget.slice(0, maxChars);
+    const lastSpace = slice.lastIndexOf(" ");
+    if (lastSpace > maxChars * 0.6) return slice.slice(0, lastSpace).trimEnd();
+    return slice;
+  }, [fullTarget, maxChars]);
   const [typed, setTyped] = useState("");
   const [started, setStarted] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
@@ -183,13 +199,22 @@ export function PassageTypingGame({
     if (celebrateOnComplete && done && !reportedRef.current) {
       reportedRef.current = true;
       setUnlocked(true);
+      onLessonStepReady?.();
       return;
     }
     if (!unlockSticker || !passedThreshold || reportedRef.current) return;
     reportedRef.current = true;
     setUnlocked(true);
     void unlockSticker(accuracy);
-  }, [celebrateOnComplete, done, unlockSticker, passedThreshold, accuracy]);
+    onLessonStepReady?.();
+  }, [
+    celebrateOnComplete,
+    done,
+    unlockSticker,
+    passedThreshold,
+    accuracy,
+    onLessonStepReady,
+  ]);
 
   useEffect(() => {
     nextCharRef.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
@@ -219,15 +244,23 @@ export function PassageTypingGame({
     );
   }
 
-  const sectionClass = isGospel
-    ? "gospel-typing overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
-    : "border border-[var(--color-border)] bg-white";
+  const sectionClass = embedded
+    ? "gospel-typing"
+    : isGospel
+      ? "gospel-typing overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
+      : "border border-[var(--color-border)] bg-white";
 
-  const headerClass = isGospel
-    ? "border-b border-[#e8e0d6] bg-[#f5ebe0]/70 px-5 py-4 sm:px-8"
-    : "border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4";
+  const headerClass = embedded
+    ? "hidden"
+    : isGospel
+      ? "border-b border-[#e8e0d6] bg-[#f5ebe0]/70 px-5 py-4 sm:px-8"
+      : "border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4";
 
-  const bodyClass = isGospel ? "space-y-5 px-5 py-6 sm:px-8 sm:py-8" : "px-6 py-6";
+  const bodyClass = embedded
+    ? "space-y-4"
+    : isGospel
+      ? "space-y-5 px-5 py-6 sm:px-8 sm:py-8"
+      : "px-6 py-6";
 
   const passageClass = isGospel
     ? "gospel-typing-passage mb-0 max-h-64 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:max-h-80 sm:p-6"
@@ -252,6 +285,40 @@ export function PassageTypingGame({
   const completionBoxClass = isGospel
     ? "mt-4 rounded-xl border border-[#dfc9b0] bg-[#fdf8f3] px-5 py-4 text-base text-[var(--color-ink)]"
     : "mt-4 border border-[var(--color-accent)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)]";
+
+  if (embedded) {
+    return (
+      <section className={sectionClass}>
+        <div className={bodyClass}>
+          <p className={passageClass}>
+            {target.split("").map((char, i) => (
+              <span
+                key={i}
+                ref={i === nextIndex ? nextCharRef : undefined}
+                className={charClassName(appearance, i, typedNorm, target, nextIndex)}
+              >
+                {char}
+              </span>
+            ))}
+          </p>
+          <textarea
+            value={typed}
+            onChange={(e) => {
+              beginTyping();
+              setTyped(e.target.value);
+            }}
+            onPaste={(e) => e.preventDefault()}
+            rows={5}
+            className={textareaClass}
+            placeholder="Start typing here…"
+            spellCheck={false}
+            autoComplete="off"
+            autoCorrect="off"
+          />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={sectionClass}>

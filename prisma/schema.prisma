@@ -287,6 +287,8 @@ model FamilyAccount {
   typingDrafts       TypingDraft[]          @relation("OwnerTypingDrafts")
   discussionThreads  BibleChapterThread[]   @relation("OwnerDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("OwnerDiscussionComments")
+  lessonKits         LessonKit[]
+  parishMemberships  ParishMember[]
 }
 
 /// Child/class sub-profile (max 30 per family); logs in with Access ID only.
@@ -392,6 +394,107 @@ model BibleChapterThread {
   @@index([bookSlug, chapter, createdAt])
   @@index([familyAccountId])
   @@index([subProfileId])
+}
+
+enum LessonKitScope {
+  GLOBAL_TEMPLATE
+  PERSONAL
+  PARISH
+}
+
+enum LessonBlockType {
+  CUSTOM_NOTE
+  RESOURCE
+  PLAY_GAME
+  TYPING_WORDS
+  HANGMAN_WORDS
+  GOSPEL_TYPING
+  BIBLE_CHAPTER
+  MASS_TODAY
+}
+
+enum ParishRole {
+  DRE
+  CATECHIST
+}
+
+/// Parish / PSR workspace (Phase 2).
+model Parish {
+  id         String         @id @default(cuid())
+  name       String
+  slug       String         @unique
+  inviteCode String         @unique
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  members    ParishMember[]
+  lessonKits LessonKit[]
+}
+
+model ParishMember {
+  id              String     @id @default(cuid())
+  parishId        String
+  familyAccountId String
+  role            ParishRole @default(CATECHIST)
+  createdAt       DateTime   @default(now())
+  parish          Parish     @relation(fields: [parishId], references: [id], onDelete: Cascade)
+  familyAccount   FamilyAccount @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([parishId, familyAccountId])
+  @@index([familyAccountId])
+}
+
+/// Assembled lesson (templates + personal copies) for classroom run.
+model LessonKit {
+  id               String          @id @default(cuid())
+  shareSlug        String          @unique
+  title            String
+  description      String          @default("")
+  scope            LessonKitScope  @default(PERSONAL)
+  sourceKitId      String?
+  familyAccountId  String?
+  parishId         String?
+  liturgicalPeriod String?
+  gradeBand        String?
+  /// JSON: { gospelMaxChars?, includedBlockIds? } for /family route
+  familyMode       Json?
+  published        Boolean         @default(false)
+  sortOrder        Int             @default(0)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  blocks           LessonBlock[]
+  opens            LessonKitOpen[]
+  familyAccount    FamilyAccount?  @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  parish           Parish?         @relation(fields: [parishId], references: [id], onDelete: SetNull)
+
+  @@index([scope, published, sortOrder])
+  @@index([familyAccountId])
+  @@index([parishId])
+}
+
+model LessonBlock {
+  id        String          @id @default(cuid())
+  kitId     String
+  sortOrder Int             @default(0)
+  type      LessonBlockType
+  label     String?
+  config    Json            @default("{}")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  kit       LessonKit       @relation(fields: [kitId], references: [id], onDelete: Cascade)
+
+  @@index([kitId, sortOrder])
+}
+
+/// Anonymous daily open counts per kit (DRE dashboard).
+model LessonKitOpen {
+  id      String    @id @default(cuid())
+  kitId   String
+  dateKey String
+  opens   Int       @default(0)
+  kit     LessonKit @relation(fields: [kitId], references: [id], onDelete: Cascade)
+
+  @@unique([kitId, dateKey])
+  @@index([dateKey])
 }
 
 /// Reply on a Bible chapter thread.
