@@ -1,0 +1,57 @@
+.lesson-print {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  color: #1a1a1a;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.lesson-print__header h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem;
+}
+
+.lesson-print__meta {
+  font-size: 0.8125rem;
+  color: #555;
+}
+
+.lesson-print__steps {
+  margin-top: 1.5rem;
+  padding-left: 1.25rem;
+}
+
+.lesson-print__steps li {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.lesson-print__type {
+  font-size: 0.875rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.lesson-print__note {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.lesson-print__hint {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #888;
+  font-style: italic;
+}
+
+.lesson-print__footer {
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+@media print {
+  .lesson-print {
+    padding: 0;
+  }
+}

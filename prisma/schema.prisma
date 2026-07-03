@@ -289,6 +289,8 @@ model FamilyAccount {
   discussionComments BibleChapterComment[]  @relation("OwnerDiscussionComments")
   lessonKits         LessonKit[]
   parishMemberships  ParishMember[]
+  lessonAssignments  LessonAssignment[]
+  lessonProgress     LessonKitProgress[]
 }
 
 /// Child/class sub-profile (max 30 per family); logs in with Access ID only.
@@ -313,6 +315,8 @@ model SubProfile {
   typingDrafts       TypingDraft[]          @relation("SubTypingDrafts")
   discussionThreads  BibleChapterThread[]   @relation("SubDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("SubDiscussionComments")
+  lessonAssignments  LessonAssignment[]
+  lessonProgress     LessonKitProgress[]
 
   @@index([familyAccountId, sortOrder])
 }
@@ -428,6 +432,7 @@ model Parish {
   updatedAt  DateTime       @updatedAt
   members    ParishMember[]
   lessonKits LessonKit[]
+  plans      ParishPlan[]
 }
 
 model ParishMember {
@@ -463,6 +468,9 @@ model LessonKit {
   updatedAt        DateTime        @updatedAt
   blocks           LessonBlock[]
   opens            LessonKitOpen[]
+  assignments      LessonAssignment[]
+  progress         LessonKitProgress[]
+  parishPlans      ParishPlan[]
   familyAccount    FamilyAccount?  @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
   parish           Parish?         @relation(fields: [parishId], references: [id], onDelete: SetNull)
 
@@ -495,6 +503,61 @@ model LessonKitOpen {
 
   @@unique([kitId, dateKey])
   @@index([dateKey])
+}
+
+/// Parent assigns an at-home lesson to a reader (or whole family) for a week.
+model LessonAssignment {
+  id              String    @id @default(cuid())
+  lessonKitId     String
+  familyAccountId String
+  subProfileId    String?
+  weekStart       String
+  note            String    @default("")
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lessonKit       LessonKit     @relation(fields: [lessonKitId], references: [id], onDelete: Cascade)
+  familyAccount   FamilyAccount @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?   @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonKitId, familyAccountId, subProfileId, weekStart])
+  @@index([familyAccountId, weekStart])
+  @@index([subProfileId, weekStart])
+}
+
+/// Reader finished a lesson (family or classroom run).
+model LessonKitProgress {
+  id              String    @id @default(cuid())
+  lessonKitId     String
+  familyAccountId String?
+  subProfileId    String?
+  guestId         String?
+  completedAt     DateTime  @default(now())
+  lessonKit       LessonKit      @relation(fields: [lessonKitId], references: [id], onDelete: Cascade)
+  familyAccount   FamilyAccount? @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?    @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@index([lessonKitId])
+  @@index([familyAccountId])
+  @@index([subProfileId])
+  @@index([guestId])
+}
+
+/// DRE scheduled kit for a parish week (Phase 4).
+model ParishPlan {
+  id          String   @id @default(cuid())
+  parishId    String
+  title       String
+  weekStart   String
+  lessonKitId String?
+  notes       String   @default("")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  parish      Parish    @relation(fields: [parishId], references: [id], onDelete: Cascade)
+  lessonKit   LessonKit? @relation(fields: [lessonKitId], references: [id], onDelete: SetNull)
+
+  @@index([parishId, weekStart])
 }
 
 /// Reply on a Bible chapter thread.

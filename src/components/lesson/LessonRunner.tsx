@@ -24,16 +24,27 @@ export function LessonRunner({ kit, mode, onOpenRecorded = true }: Props) {
     void fetch(`/api/lesson/${kit.shareSlug}/open`, { method: "POST" }).catch(() => {});
   }, [kit.shareSlug, onOpenRecorded]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(`lesson-offline:${kit.shareSlug}`, JSON.stringify(kit));
+    } catch {
+      /* ignore quota */
+    }
+  }, [kit]);
+
   const current = blocks[step];
   const isLast = step >= blocks.length - 1;
 
   const goNext = useCallback(() => {
     if (isLast) {
       setFinished(true);
+      if (mode === "family") {
+        void fetch(`/api/lesson/${kit.shareSlug}/complete`, { method: "POST" }).catch(() => {});
+      }
       return;
     }
     setStep((s) => s + 1);
-  }, [isLast]);
+  }, [isLast, mode, kit.shareSlug]);
 
   if (blocks.length === 0) {
     return (

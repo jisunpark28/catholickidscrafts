@@ -1,3 +1,4 @@
+import { listParishPlans } from "@/lib/lesson-kit/parish-admin";
 import { joinParishByInviteCode, getParishMembership } from "@/lib/lesson-kit/db";
 import { requireFamilySession } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
@@ -13,10 +14,14 @@ export async function GET() {
     return NextResponse.json({ parish: null });
   }
 
-  const kits = await prisma.lessonKit.findMany({
-    where: { parishId: membership.parishId },
-    include: { opens: { orderBy: { dateKey: "desc" }, take: 14 } },
-  });
+  const [kits, memberCount, plans] = await Promise.all([
+    prisma.lessonKit.findMany({
+      where: { parishId: membership.parishId },
+      include: { opens: { orderBy: { dateKey: "desc" }, take: 14 } },
+    }),
+    prisma.parishMember.count({ where: { parishId: membership.parishId } }),
+    listParishPlans(membership.parishId),
+  ]);
 
   const weekOpens = kits.reduce((sum, k) => sum + k.opens.reduce((s, o) => s + o.opens, 0), 0);
 
@@ -25,12 +30,22 @@ export async function GET() {
       id: membership.parish.id,
       name: membership.parish.name,
       role: membership.role,
+      inviteCode: membership.role === "DRE" ? membership.parish.inviteCode : undefined,
+      memberCount,
       weekOpens,
       kits: kits.map((k) => ({
         id: k.id,
         title: k.title,
         shareSlug: k.shareSlug,
+        published: k.published,
         opens: k.opens.reduce((s, o) => s + o.opens, 0),
+      })),
+      plans: plans.map((p) => ({
+        id: p.id,
+        weekStart: p.weekStart,
+        title: p.title,
+        notes: p.notes,
+        lessonKit: p.lessonKit,
       })),
     },
   });
