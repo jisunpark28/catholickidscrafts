@@ -1,10 +1,10 @@
 import { listGlobalTemplates } from "@/lib/lesson-kit/db";
 import { LessonKitCard } from "@/components/lesson/LessonKitCard";
+import { LessonKitNav, teacherTemplatesNavItems } from "@/components/lesson/LessonKitNav";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Lesson templates",
@@ -16,13 +16,9 @@ export default async function ProgramTemplatesPage() {
 
   return (
     <PageShell>
-      <Link href="/program" className="text-sm font-semibold text-[var(--color-link)]">
-        ← Class lessons
-      </Link>
-      <div className="mt-6">
-        <PageHeader title="Templates" subtitle="Ready-made kits from Catholic Kids Crafts." />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <LessonKitNav items={teacherTemplatesNavItems()} className="mb-6" />
+      <PageHeader title="Templates" subtitle="Ready-made kits from Catholic Kids Crafts." />
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {templates.map((kit) => (
           <LessonKitCard
             key={kit.id}
