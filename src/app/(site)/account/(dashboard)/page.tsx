@@ -27,6 +27,12 @@ export default async function AccountDashboardPage() {
         <div className="min-w-0 flex-1">
           <h1 className="text-3xl text-[var(--color-ink)]">Dashboard</h1>
           <p className="mt-2 break-all text-sm text-[var(--color-muted)]">{session!.email}</p>
+          <p className="mt-3 text-sm">
+            <Link href="/program" className="font-semibold text-[var(--color-link)]">
+              Class lessons
+            </Link>
+            <span className="text-[var(--color-muted)]"> — edit and share lesson kits</span>
+          </p>
         </div>
         <FamilyLogoutButton />
       </div>

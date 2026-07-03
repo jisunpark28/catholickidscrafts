@@ -1,6 +1,8 @@
 import { ProgramHub } from "@/components/lesson/ProgramHub";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
+import { requireFamilySession } from "@/lib/family-auth";
+import { loadProgramHubData } from "@/lib/lesson-kit/program-hub";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import "@/styles/lesson-kit.css";
@@ -11,14 +13,17 @@ export const metadata: Metadata = {
   ...canonicalForPath("/program"),
 };
 
-export default function ProgramPage() {
+export default async function ProgramPage() {
+  const session = await requireFamilySession();
+  const initialData = await loadProgramHubData(session?.familyAccountId ?? null);
+
   return (
     <PageShell>
       <PageHeader
         title="Class lessons"
         subtitle="One link for your classroom. Copy a template, edit steps, run."
       />
-      <ProgramHub />
+      <ProgramHub initialData={initialData} />
     </PageShell>
   );
 }

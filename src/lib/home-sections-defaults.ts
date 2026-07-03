@@ -23,7 +23,10 @@ export const DEFAULT_HOME_SECTIONS: HomeSectionWithItems[] = [
     id: "default-play-learn",
     title: "Play & Learn",
     sortOrder: 1,
-    items: [{ id: "default-games", title: "Games", href: "/play", sortOrder: 0 }],
+    items: [
+      { id: "default-games", title: "Games", href: "/play", sortOrder: 0 },
+      { id: "default-class-lessons", title: "Class lessons", href: "/program", sortOrder: 1 },
+    ],
   },
   {
     id: "default-liturgical-catechesis",

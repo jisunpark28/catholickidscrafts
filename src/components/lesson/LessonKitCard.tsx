@@ -8,6 +8,8 @@ type Props = {
   runHref: string;
   secondaryHref?: string;
   secondaryLabel?: string;
+  onSecondaryClick?: () => void;
+  secondaryDisabled?: boolean;
 };
 
 export function LessonKitCard({
@@ -18,6 +20,8 @@ export function LessonKitCard({
   runHref,
   secondaryHref,
   secondaryLabel,
+  onSecondaryClick,
+  secondaryDisabled,
 }: Props) {
   return (
     <article className="lesson-kit-card">
@@ -32,7 +36,16 @@ export function LessonKitCard({
         <Link href={runHref} className="lesson-big-button flex-1 text-center no-underline">
           Run
         </Link>
-        {secondaryHref && secondaryLabel ? (
+        {secondaryLabel && onSecondaryClick ? (
+          <button
+            type="button"
+            disabled={secondaryDisabled}
+            onClick={onSecondaryClick}
+            className="lesson-big-button lesson-big-button--secondary flex-1"
+          >
+            {secondaryLabel}
+          </button>
+        ) : secondaryHref && secondaryLabel ? (
           <Link
             href={secondaryHref}
             className="lesson-big-button lesson-big-button--secondary flex-1 text-center no-underline"

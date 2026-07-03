@@ -1,5 +1,6 @@
 "use client";
 
+import { LessonBlockConfigPanel } from "@/components/lesson/LessonBlockConfigPanel";
 import { LessonBlockIcon, LessonIcon } from "@/components/icons/lesson/LessonIcon";
 import { LessonShareSheet } from "@/components/lesson/LessonShareSheet";
 import { LessonBigButton } from "@/components/lesson/LessonUi";
@@ -12,16 +13,20 @@ import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
 import type { LessonBlockDto, LessonKitDto } from "@/lib/lesson-kit/types";
 import type { LessonBlockType } from "@prisma/client";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const ADD_TYPES: LessonBlockType[] = [
   "PLAY_GAME",
   "TYPING_WORDS",
   "GOSPEL_TYPING",
+  "BIBLE_CHAPTER",
+  "HANGMAN_WORDS",
   "MASS_TODAY",
   "CUSTOM_NOTE",
   "RESOURCE",
 ];
+
+const AUTOSAVE_MS = 1200;
 
 type Props = {
   initialKit: LessonKitDto;
@@ -35,6 +40,10 @@ function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
       return { wordPreset: "advent" };
     case "GOSPEL_TYPING":
       return { readingKind: "gospel", maxChars: 400 };
+    case "BIBLE_CHAPTER":
+      return { bookSlug: "matthew", chapter: 1, maxChars: 400 };
+    case "HANGMAN_WORDS":
+      return { gameSlug: "hangman" };
     case "CUSTOM_NOTE":
       return { html: "<p>Ask the children a question about today's Mass.</p>" };
     case "RESOURCE":
@@ -51,8 +60,14 @@ export function LessonKitEditor({ initialKit }: Props) {
   const [title, setTitle] = useState(kit.title);
   const [blocks, setBlocks] = useState<LessonBlockDto[]>(kit.blocks);
   const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState<"idle" | "dirty" | "saved" | "error">("idle");
   const [showAdd, setShowAdd] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSavedRef = useRef(
+    JSON.stringify({ title: initialKit.title, blocks: initialKit.blocks }),
+  );
 
   const save = useCallback(async () => {
     setSaving(true);
@@ -80,12 +95,30 @@ export function LessonKitEditor({ initialKit }: Props) {
       const data = (await blockRes.json()) as { kit: LessonKitDto };
       setKit(data.kit);
       setBlocks(data.kit.blocks);
+      lastSavedRef.current = JSON.stringify({ title, blocks: data.kit.blocks });
+      setSaveState("saved");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");
+      setSaveState("error");
     } finally {
       setSaving(false);
     }
   }, [kit.id, title, blocks]);
+
+  useEffect(() => {
+    const snapshot = JSON.stringify({ title, blocks });
+    if (snapshot === lastSavedRef.current) return;
+
+    setSaveState("dirty");
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      void save();
+    }, AUTOSAVE_MS);
+
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+    };
+  }, [title, blocks, save]);
 
   const addBlock = (type: LessonBlockType) => {
     setBlocks((prev) => [
@@ -99,10 +132,16 @@ export function LessonKitEditor({ initialKit }: Props) {
       },
     ]);
     setShowAdd(false);
+    setEditingIndex(blocks.length);
   };
 
   const removeBlock = (index: number) => {
     setBlocks((prev) => prev.filter((_, i) => i !== index));
+    setEditingIndex((current) => {
+      if (current === index) return null;
+      if (current !== null && current > index) return current - 1;
+      return current;
+    });
   };
 
   const moveBlock = (index: number, dir: -1 | 1) => {
@@ -115,7 +154,27 @@ export function LessonKitEditor({ initialKit }: Props) {
       next[j] = tmp;
       return next;
     });
+    setEditingIndex((current) => {
+      if (current === null) return null;
+      const j = current + dir;
+      if (current === index) return j;
+      if (current === index + dir) return index;
+      return current;
+    });
   };
+
+  const updateBlock = (index: number, next: LessonBlockDto) => {
+    setBlocks((prev) => prev.map((b, i) => (i === index ? next : b)));
+  };
+
+  const saveHint =
+    saveState === "dirty" || saving
+      ? "Saving…"
+      : saveState === "saved"
+        ? "All changes saved"
+        : saveState === "error"
+          ? "Save failed — tap Save"
+          : "";
 
   return (
     <div className="space-y-6">
@@ -123,12 +182,17 @@ export function LessonKitEditor({ initialKit }: Props) {
         <Link href="/program" className="text-sm font-semibold text-[var(--color-link)]">
           ← My lessons
         </Link>
-        <Link
-          href={`/lesson/${kit.shareSlug}`}
-          className="lesson-big-button !min-h-0 !w-auto !px-5 !py-2 !text-sm no-underline"
-        >
-          Run
-        </Link>
+        <div className="flex items-center gap-3">
+          {saveHint ? (
+            <span className="text-xs font-semibold text-[var(--color-muted)]">{saveHint}</span>
+          ) : null}
+          <Link
+            href={`/lesson/${kit.shareSlug}`}
+            className="lesson-big-button !min-h-0 !w-auto !px-5 !py-2 !text-sm no-underline"
+          >
+            Run
+          </Link>
+        </div>
       </div>
 
       <label className="block">
@@ -143,37 +207,54 @@ export function LessonKitEditor({ initialKit }: Props) {
 
       <ul className="space-y-2">
         {blocks.map((block, index) => (
-          <li key={block.id} className="lesson-block-row">
-            <span className="text-sm font-bold text-[var(--color-muted)]">{index + 1}</span>
-            <LessonBlockIcon type={block.type} active size="sm" />
-            <span className="lesson-block-row__label">{blockDisplayLabel(block)}</span>
-            <div className="flex items-center gap-1">
+          <li key={block.id} className="space-y-2">
+            <div
+              className={`lesson-block-row ${editingIndex === index ? "lesson-block-row--active" : ""}`}
+            >
+              <span className="text-sm font-bold text-[var(--color-muted)]">{index + 1}</span>
+              <LessonBlockIcon type={block.type} active size="sm" />
               <button
                 type="button"
-                aria-label="Move up"
-                onClick={() => moveBlock(index, -1)}
-                className="p-2 text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+                onClick={() => setEditingIndex(editingIndex === index ? null : index)}
+                className="lesson-block-row__label text-left hover:text-[var(--color-accent)]"
               >
-                ↑
+                {blockDisplayLabel(block)}
               </button>
-              <button
-                type="button"
-                aria-label="Move down"
-                onClick={() => moveBlock(index, 1)}
-                className="p-2 text-[var(--color-muted)] hover:text-[var(--color-ink)]"
-              >
-                ↓
-              </button>
-              <LessonIcon name="grip" size="sm" />
-              <button
-                type="button"
-                aria-label="Remove step"
-                onClick={() => removeBlock(index)}
-                className="p-2 text-[var(--color-muted)] hover:text-red-600"
-              >
-                <LessonIcon name="trash" size="sm" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  aria-label="Move up"
+                  onClick={() => moveBlock(index, -1)}
+                  className="p-2 text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  aria-label="Move down"
+                  onClick={() => moveBlock(index, 1)}
+                  className="p-2 text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+                >
+                  ↓
+                </button>
+                <LessonIcon name="grip" size="sm" />
+                <button
+                  type="button"
+                  aria-label="Remove step"
+                  onClick={() => removeBlock(index)}
+                  className="p-2 text-[var(--color-muted)] hover:text-red-600"
+                >
+                  <LessonIcon name="trash" size="sm" />
+                </button>
+              </div>
             </div>
+            {editingIndex === index ? (
+              <LessonBlockConfigPanel
+                block={block}
+                onChange={(next) => updateBlock(index, next)}
+                onClose={() => setEditingIndex(null)}
+              />
+            ) : null}
           </li>
         ))}
       </ul>
@@ -214,7 +295,7 @@ export function LessonKitEditor({ initialKit }: Props) {
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <LessonBigButton onClick={() => void save()} disabled={saving}>
-        {saving ? "Saving…" : "Save"}
+        {saving ? "Saving…" : "Save now"}
       </LessonBigButton>
 
       <LessonShareSheet shareSlug={kit.shareSlug} title={kit.title} />

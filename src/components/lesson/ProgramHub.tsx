@@ -1,37 +1,29 @@
 "use client";
 
 import { LessonKitCard } from "@/components/lesson/LessonKitCard";
-import type { LessonKitDto } from "@/lib/lesson-kit/types";
+import type { ProgramHubData } from "@/lib/lesson-kit/program-hub";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import "@/styles/lesson-kit.css";
 
-type LoadState = {
-  templates: LessonKitDto[];
-  personal: LessonKitDto[];
-  parish: LessonKitDto[];
-  signedIn: boolean;
-  parishInfo: { name: string; role: string } | null;
+type Props = {
+  initialData: ProgramHubData;
 };
 
-export function ProgramHub() {
+export function ProgramHub({ initialData }: Props) {
   const router = useRouter();
-  const [data, setData] = useState<LoadState | null>(null);
+  const [data, setData] = useState(initialData);
   const [duplicating, setDuplicating] = useState<string | null>(null);
 
-  const load = useCallback(() => {
+  const refresh = useCallback(() => {
     void fetch("/api/program/kits")
       .then((r) => r.json())
-      .then((json: LoadState) => setData(json));
+      .then((json: ProgramHubData) => setData(json));
   }, []);
 
-  useEffect(() => {
-    load();
-  }, [load]);
-
   const duplicateTemplate = async (sourceId: string) => {
-    if (!data?.signedIn) {
+    if (!data.signedIn) {
       router.push("/account/login?next=/program");
       return;
     }
@@ -42,19 +34,16 @@ export function ProgramHub() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sourceId }),
       });
-      const json = (await res.json()) as { kit?: LessonKitDto };
+      const json = (await res.json()) as { kit?: { id: string } };
       if (json.kit) {
         router.push(`/program/kit/${json.kit.id}`);
+        return;
       }
     } finally {
       setDuplicating(null);
-      load();
+      refresh();
     }
   };
-
-  if (!data) {
-    return <p className="text-sm text-[var(--color-muted)]">Loading…</p>;
-  }
 
   return (
     <div className="space-y-10">
@@ -116,8 +105,11 @@ export function ProgramHub() {
                   stepCount={kit.stepCount}
                   estMinutes={kit.estMinutes}
                   runHref={`/lesson/${kit.shareSlug}`}
-                  secondaryHref={data.signedIn ? undefined : undefined}
                   secondaryLabel={data.signedIn ? "Use this" : undefined}
+                  onSecondaryClick={
+                    data.signedIn ? () => void duplicateTemplate(kit.id) : undefined
+                  }
+                  secondaryDisabled={duplicating === kit.id}
                 />
               ))}
             </div>
