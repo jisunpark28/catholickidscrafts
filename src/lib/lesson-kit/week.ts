@@ -13,3 +13,15 @@ export function formatWeekLabel(weekStart: string): string {
   const fmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
   return `${fmt.format(start)} – ${fmt.format(end)}`;
 }
+
+/** UTC date keys (YYYY-MM-DD) from Sunday through Saturday of the week. */
+export function weekDateKeysUtc(weekStart: string): string[] {
+  const start = new Date(`${weekStart}T12:00:00.000Z`);
+  const keys: string[] = [];
+  for (let i = 0; i < 7; i += 1) {
+    const d = new Date(start);
+    d.setUTCDate(d.getUTCDate() + i);
+    keys.push(d.toISOString().slice(0, 10));
+  }
+  return keys;
+}

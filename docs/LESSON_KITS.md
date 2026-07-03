@@ -43,6 +43,7 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 - `GET|POST /api/program/kits` — list / duplicate templates
 - `PATCH /api/program/kits/[id]` — title, TPT link, grade band, etc.
 - `GET|POST /api/program/assignments` — teacher weekly assignments
+- `GET /api/program/teacher-stats` — student kit completions + weekly opens
 - `POST /api/lesson/[shareSlug]/complete` — mark family lesson done
 
 ## Seed

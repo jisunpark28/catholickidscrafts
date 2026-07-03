@@ -1,5 +1,6 @@
 import { FamilyLogoutButton } from "@/components/FamilyLogoutButton";
 import { LessonAssignmentsPanel } from "@/components/lesson/LessonAssignmentsPanel";
+import { TeacherLessonStatsPanel } from "@/components/lesson/TeacherLessonStatsPanel";
 import { SubProfilesManager } from "@/components/SubProfilesManager";
 import { PageShell } from "@/components/PageShell";
 import { MAX_SUB_PROFILES_PER_FAMILY } from "@/lib/access-code";
@@ -48,6 +49,8 @@ export default async function AccountDashboardPage() {
       <LessonAssignmentsPanel
         subs={subs.map((s) => ({ id: s.id!, displayName: s.displayName }))}
       />
+
+      <TeacherLessonStatsPanel />
     </PageShell>
   );
 }
