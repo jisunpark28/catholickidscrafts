@@ -19,6 +19,29 @@ function log(output: string): void {
   if (output.trim()) process.stdout.write(`${output}\n`);
 }
 
+function isParishRemovalIssue(output: string): boolean {
+  return (
+    output.includes("20260704120000_remove_parish_teacher_kits") ||
+    output.includes("cannot drop table \"Parish\"") ||
+    output.includes("LessonKit_parishId_fkey")
+  );
+}
+
+function recoverParishRemovalMigration(output: string): boolean {
+  if (!isParishRemovalIssue(output)) return false;
+
+  if (output.includes("P3009") || output.includes("failed migrations")) {
+    console.log("Recovering failed parish-removal migration (rolled back, will retry)...");
+    const rolled = run(
+      `${PRISMA} migrate resolve --rolled-back 20260704120000_remove_parish_teacher_kits`,
+    );
+    log(rolled.output);
+    return true;
+  }
+
+  return false;
+}
+
 function isDiscussionIssue(output: string): boolean {
   return (
     output.includes(DISCUSSION_MIGRATION) ||
@@ -87,6 +110,10 @@ for (let attempt = 1; attempt <= 4; attempt += 1) {
   }
 
   if (recoverDiscussionMigration(output)) {
+    continue;
+  }
+
+  if (recoverParishRemovalMigration(output)) {
     continue;
   }
 
