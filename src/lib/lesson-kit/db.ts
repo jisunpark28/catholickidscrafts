@@ -330,4 +330,22 @@ export async function replaceLessonBlocksForEditor(
   return replaceLessonBlocks(kitId, familyAccountId, blocks);
 }
 
+/** Delete a teacher-owned personal kit (blocks, assignments, etc. cascade). */
+export async function deletePersonalLessonKit(id: string, familyAccountId: string) {
+  const kit = await prisma.lessonKit.findFirst({
+    where: { id, familyAccountId, scope: "PERSONAL" },
+    select: { id: true },
+  });
+  if (!kit) return false;
+
+  await prisma.$transaction([
+    prisma.familyAccount.updateMany({
+      where: { sundayLessonKitId: id },
+      data: { sundayLessonKitId: null, sundayWeekStart: null },
+    }),
+    prisma.lessonKit.delete({ where: { id } }),
+  ]);
+  return true;
+}
+
 export type { LessonKitWithBlocks };

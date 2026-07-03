@@ -11,6 +11,8 @@ type Props = {
   secondaryLabel?: string;
   onSecondaryClick?: () => void;
   secondaryDisabled?: boolean;
+  onDelete?: () => void;
+  deletePending?: boolean;
   gradeBand?: string | null;
   tptUrl?: string | null;
   isFreeSample?: boolean;
@@ -26,6 +28,8 @@ export function LessonKitCard({
   secondaryLabel,
   onSecondaryClick,
   secondaryDisabled,
+  onDelete,
+  deletePending,
   gradeBand,
   tptUrl,
   isFreeSample,
@@ -63,6 +67,16 @@ export function LessonKitCard({
           </Link>
         ) : null}
       </div>
+      {onDelete ? (
+        <button
+          type="button"
+          disabled={deletePending}
+          onClick={onDelete}
+          className="lesson-kit-card__delete"
+        >
+          {deletePending ? "Deleting…" : "Delete"}
+        </button>
+      ) : null}
     </article>
   );
 }

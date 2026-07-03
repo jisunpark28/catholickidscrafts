@@ -18,12 +18,28 @@ export function ProgramHub({ initialData }: Props) {
   const router = useRouter();
   const [data, setData] = useState(initialData);
   const [duplicating, setDuplicating] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   const refresh = useCallback(() => {
     void fetch("/api/program/kits")
       .then((r) => r.json())
       .then((json: ProgramHubData) => setData(json));
   }, []);
+
+  const deleteKit = async (id: string, title: string) => {
+    if (!window.confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    setDeleting(id);
+    try {
+      const res = await fetch(`/api/program/kits/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("delete failed");
+      refresh();
+      router.refresh();
+    } catch {
+      window.alert("Could not delete this lesson kit.");
+    } finally {
+      setDeleting(null);
+    }
+  };
 
   const duplicateTemplate = async (sourceId: string) => {
     if (!data.signedIn) {
@@ -52,7 +68,7 @@ export function ProgramHub({ initialData }: Props) {
     <div className="space-y-10">
       <MySundayCard
         signedIn={data.signedIn}
-        initialPin={initialData.sundayPin}
+        initialPin={data.sundayPin}
         personal={data.personal}
         templates={data.templates}
       />
@@ -83,6 +99,8 @@ export function ProgramHub({ initialData }: Props) {
                   secondaryHref={`/program/kit/${kit.id}`}
                   secondaryLabel="Edit"
                   tptUrl={kit.tptUrl}
+                  onDelete={() => void deleteKit(kit.id, kit.title)}
+                  deletePending={deleting === kit.id}
                 />
               ))}
             </div>
