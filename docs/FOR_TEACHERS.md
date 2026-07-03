@@ -25,6 +25,8 @@ Create students from **Teacher dashboard** (`/account`) → **Add student**. Cop
 
 From `/account`, pick a kit for the week and optionally one student. They see **Teacher assigned** on the home page and open the shortened family runner.
 
+**Lesson activity** (same dashboard) shows kit opens this week and each student’s completions, including whether this week’s assignment is done.
+
 ## TPT partnership
 
 - Site = run lessons, games, and samples in the room.

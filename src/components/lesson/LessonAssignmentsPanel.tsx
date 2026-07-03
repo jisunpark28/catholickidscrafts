@@ -43,6 +43,10 @@ export function LessonAssignmentsPanel({ subs }: Props) {
       });
   }, []);
 
+  const notifyStatsRefresh = () => {
+    window.dispatchEvent(new Event("teacher-lesson-refresh"));
+  };
+
   useEffect(() => {
     load();
   }, [load]);
@@ -67,6 +71,7 @@ export function LessonAssignmentsPanel({ subs }: Props) {
       setSubId("");
       setNote("");
       load();
+      notifyStatsRefresh();
     } catch {
       setError("Could not assign lesson");
     } finally {
@@ -77,6 +82,7 @@ export function LessonAssignmentsPanel({ subs }: Props) {
   const remove = async (id: string) => {
     await fetch(`/api/program/assignments/${id}`, { method: "DELETE" });
     load();
+    notifyStatsRefresh();
   };
 
   return (
