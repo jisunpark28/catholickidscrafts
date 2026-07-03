@@ -290,6 +290,10 @@ model FamilyAccount {
   lessonKits         LessonKit[]
   lessonAssignments  LessonAssignment[]
   lessonProgress     LessonKitProgress[]
+  /// Kit pinned for this Sunday on /program (My Sunday).
+  sundayLessonKitId  String?
+  sundayWeekStart    String?
+  sundayLessonKit    LessonKit?             @relation("TeacherSundayKit", fields: [sundayLessonKitId], references: [id], onDelete: SetNull)
 }
 
 /// Student profile under a teacher account (Access ID login); max per account in access-code config.
@@ -441,6 +445,7 @@ model LessonKit {
   assignments      LessonAssignment[]
   progress         LessonKitProgress[]
   familyAccount    FamilyAccount?  @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  sundayPinnedBy   FamilyAccount[] @relation("TeacherSundayKit")
 
   @@index([scope, published, sortOrder])
   @@index([familyAccountId])

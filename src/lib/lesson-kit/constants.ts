@@ -1,5 +1,8 @@
 import type { LessonBlockType } from "@prisma/client";
 
+/** Stable shareSlug for the Lent Week 1 showcase template (seed). */
+export const LENT_WK1_SHOWCASE_SLUG = "lent-wk1-g3";
+
 export const LESSON_BLOCK_DEFAULT_LABEL: Record<LessonBlockType, string> = {
   CUSTOM_NOTE: "Note",
   RESOURCE: "Craft",
