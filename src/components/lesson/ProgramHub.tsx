@@ -1,6 +1,7 @@
 "use client";
 
 import { LessonKitCard } from "@/components/lesson/LessonKitCard";
+import { MySundayCard } from "@/components/lesson/MySundayCard";
 import { TptPartnerNote } from "@/components/lesson/TptPartnerNote";
 import type { ProgramHubData } from "@/lib/lesson-kit/program-hub";
 import { LESSON_KIT_PRODUCT_NAME } from "@/lib/lesson-kit/branding";
@@ -49,6 +50,12 @@ export function ProgramHub({ initialData }: Props) {
 
   return (
     <div className="space-y-10">
+      <MySundayCard
+        signedIn={data.signedIn}
+        initialPin={initialData.sundayPin}
+        personal={data.personal}
+        templates={data.templates}
+      />
       <TptPartnerNote variant="hub" />
 
       {data.signedIn ? (

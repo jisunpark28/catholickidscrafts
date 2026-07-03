@@ -326,3 +326,107 @@
 .lesson-family-pill:hover {
   border-color: var(--color-accent);
 }
+
+.my-sunday-panel {
+  border: 1px solid var(--color-border);
+  background: #fffaf5;
+  padding: 1.25rem 1.5rem;
+}
+
+.my-sunday-panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.my-sunday-panel__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.my-sunday-panel__week {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.my-sunday-panel__lead {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+.my-sunday-panel__kit-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.my-sunday-panel__meta {
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.my-sunday-panel__stale {
+  margin-bottom: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #e8c9a8;
+  background: #fff5eb;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.my-sunday-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.my-sunday-panel__actions .lesson-big-button {
+  flex: 1 1 10rem;
+}
+
+.my-sunday-panel__form {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.my-sunday-panel__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.my-sunday-panel__select {
+  width: 100%;
+  max-width: 28rem;
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.65rem;
+  font-size: 0.875rem;
+  background: #fff;
+  color: var(--color-ink);
+}
+
+.my-sunday-panel__hint {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.my-sunday-panel__error {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #b42318;
+}
