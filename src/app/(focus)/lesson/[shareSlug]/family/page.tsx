@@ -1,3 +1,4 @@
+import { LessonRunHeader } from "@/components/lesson/LessonRunHeader";
 import { LessonRunner } from "@/components/lesson/LessonRunner";
 import { getLessonKitByShareSlug } from "@/lib/lesson-kit/db";
 import { canonicalForPath } from "@/lib/site-metadata";
@@ -22,10 +23,7 @@ export default async function LessonFamilyPage({ params }: Props) {
 
   return (
     <>
-      <header className="border-b border-[#e8e0d6] bg-[#fffaf5] px-4 py-3 text-center">
-        <p className="text-sm font-bold text-[var(--color-ink)]">{kit.title}</p>
-        <p className="text-xs text-[var(--color-muted)]">At home</p>
-      </header>
+      <LessonRunHeader title={kit.title} subtitle="At home" />
       <LessonRunner kit={kit} mode="family" />
     </>
   );

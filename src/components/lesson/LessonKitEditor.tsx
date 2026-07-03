@@ -29,6 +29,7 @@ import {
 import type { LessonBlockDto, LessonKitDto } from "@/lib/lesson-kit/types";
 import type { LessonBlockType } from "@prisma/client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const ADD_TYPES: LessonBlockType[] = [
@@ -113,6 +114,7 @@ export function LessonKitEditor({
   adminMeta = false,
   navItems,
 }: Props) {
+  const router = useRouter();
   const [kit, setKit] = useState(initialKit);
   const [title, setTitle] = useState(kit.title);
   const [description, setDescription] = useState(kit.description);
@@ -135,6 +137,7 @@ export function LessonKitEditor({
   const [showAdd, setShowAdd] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedRef = useRef(
     snapshotKey({
@@ -319,6 +322,22 @@ export function LessonKitEditor({
 
   const breadcrumb =
     navItems ?? (adminMeta ? adminTemplateEditNavItems() : teacherEditNavItems());
+
+  const deleteKit = async () => {
+    if (adminMeta || kit.scope !== "PERSONAL") return;
+    if (!window.confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    setDeleting(true);
+    setError("");
+    try {
+      const res = await fetch(`${apiBase}/${kit.id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("delete failed");
+      router.push("/program");
+      router.refresh();
+    } catch {
+      setError("Could not delete this lesson kit.");
+      setDeleting(false);
+    }
+  };
 
   const addBlock = (type: LessonBlockType) => {
     setBlocks((prev) => [
@@ -637,6 +656,17 @@ export function LessonKitEditor({
       </LessonBigButton>
 
       <LessonShareSheet shareSlug={kit.shareSlug} title={kit.title} />
+
+      {!adminMeta && kit.scope === "PERSONAL" ? (
+        <button
+          type="button"
+          disabled={deleting || saving}
+          onClick={() => void deleteKit()}
+          className="lesson-kit-editor__delete"
+        >
+          {deleting ? "Deleting…" : "Delete this kit"}
+        </button>
+      ) : null}
 
       <details className="text-xs text-[var(--color-muted)]">
         <summary className="cursor-pointer font-semibold">Presets reference</summary>

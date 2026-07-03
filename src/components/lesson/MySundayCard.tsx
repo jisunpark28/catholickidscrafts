@@ -6,7 +6,7 @@ import type { SundayPinDto } from "@/lib/lesson-kit/sunday-pin";
 import type { LessonKitDto } from "@/lib/lesson-kit/types";
 import { formatWeekLabel } from "@/lib/lesson-kit/week";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type PinOption = { id: string; title: string; scope: string };
 
@@ -37,6 +37,10 @@ export function MySundayCard({ signedIn, initialPin, personal, templates }: Prop
   const [pending, setPending] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setPin(initialPin);
+  }, [initialPin]);
 
   const options = pinOptionsFromKits(personal, templates);
   const showcase =

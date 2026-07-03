@@ -3,6 +3,7 @@ import {
   listGlobalTemplates,
   listPersonalKits,
 } from "@/lib/lesson-kit/db";
+import { getTeacherSundayPin } from "@/lib/lesson-kit/sunday-pin";
 import { requireFamilySession } from "@/lib/family-auth";
 import { NextResponse } from "next/server";
 
@@ -11,15 +12,17 @@ export async function GET() {
   const templates = await listGlobalTemplates();
 
   if (!session) {
-    return NextResponse.json({ templates, personal: [], signedIn: false });
+    return NextResponse.json({ templates, personal: [], signedIn: false, sundayPin: null });
   }
 
   const personal = await listPersonalKits(session.familyAccountId);
+  const sundayPin = await getTeacherSundayPin(session.familyAccountId);
 
   return NextResponse.json({
     templates,
     personal,
     signedIn: true,
+    sundayPin,
   });
 }
 
