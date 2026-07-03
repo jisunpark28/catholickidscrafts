@@ -1,4 +1,5 @@
 import { ProgramHub } from "@/components/lesson/ProgramHub";
+import { LessonKitNav, teacherProgramNavItems } from "@/components/lesson/LessonKitNav";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { requireFamilySession } from "@/lib/family-auth";
@@ -23,6 +24,7 @@ export default async function ProgramPage() {
 
   return (
     <PageShell>
+      <LessonKitNav items={teacherProgramNavItems()} className="mb-6" />
       <PageHeader
         title={LESSON_KIT_PRODUCT_NAME_PLURAL}
         subtitle={LESSON_KIT_TAGLINE}

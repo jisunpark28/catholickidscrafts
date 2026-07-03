@@ -6,6 +6,12 @@ import { LessonShareSheet } from "@/components/lesson/LessonShareSheet";
 import { TptPartnerNote } from "@/components/lesson/TptPartnerNote";
 import { LessonBigButton } from "@/components/lesson/LessonUi";
 import {
+  adminTemplateEditNavItems,
+  LessonKitNav,
+  type LessonKitNavItem,
+  teacherEditNavItems,
+} from "@/components/lesson/LessonKitNav";
+import {
   LESSON_BLOCK_DEFAULT_LABEL,
   LESSON_GAME_SLUGS,
   LESSON_WORD_PRESETS,
@@ -32,10 +38,10 @@ const AUTOSAVE_MS = 1200;
 type Props = {
   initialKit: LessonKitDto;
   apiBase?: string;
-  backHref?: string;
-  backLabel?: string;
   printHref?: string | null;
   adminMeta?: boolean;
+  /** Override default breadcrumb trail. */
+  navItems?: LessonKitNavItem[];
 };
 
 function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
@@ -64,10 +70,9 @@ function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
 export function LessonKitEditor({
   initialKit,
   apiBase = "/api/program/kits",
-  backHref = "/program",
-  backLabel = "Lesson Kits",
   printHref,
   adminMeta = false,
+  navItems,
 }: Props) {
   const [kit, setKit] = useState(initialKit);
   const [title, setTitle] = useState(kit.title);
@@ -202,6 +207,9 @@ export function LessonKitEditor({
   const resolvedPrintHref =
     printHref === undefined ? `/program/kit/${kit.id}/print` : printHref;
 
+  const breadcrumb =
+    navItems ?? (adminMeta ? adminTemplateEditNavItems() : teacherEditNavItems());
+
   const addBlock = (type: LessonBlockType) => {
     setBlocks((prev) => [
       ...prev,
@@ -261,9 +269,7 @@ export function LessonKitEditor({
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link href={backHref} className="text-sm font-semibold text-[var(--color-link)]">
-          ← {backLabel}
-        </Link>
+        <LessonKitNav items={breadcrumb} />
         <div className="flex items-center gap-3">
           {saveHint ? (
             <span className="text-xs font-semibold text-[var(--color-muted)]">{saveHint}</span>

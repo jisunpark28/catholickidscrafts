@@ -265,3 +265,39 @@
   color: var(--color-ink);
   background: #fff;
 }
+
+.lesson-kit-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.15rem 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lesson-kit-nav__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.lesson-kit-nav__sep {
+  color: var(--color-muted);
+  user-select: none;
+}
+
+.lesson-kit-nav__link {
+  font-weight: 600;
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.lesson-kit-nav__link:hover {
+  text-decoration: underline;
+}
+
+.lesson-kit-nav__current {
+  font-weight: 600;
+  color: var(--color-ink);
+}

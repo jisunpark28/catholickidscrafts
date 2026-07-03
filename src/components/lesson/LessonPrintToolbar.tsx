@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LessonKitNav, teacherPrintNavItems } from "@/components/lesson/LessonKitNav";
 
 type Props = {
   kitId: string;
@@ -9,9 +9,7 @@ type Props = {
 export function LessonPrintToolbar({ kitId }: Props) {
   return (
     <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-white px-4 py-3 print:hidden">
-      <Link href={`/program/kit/${kitId}`} className="text-sm font-semibold text-[var(--color-link)]">
-        ← Back to editor
-      </Link>
+      <LessonKitNav items={teacherPrintNavItems(kitId)} />
       <button
         type="button"
         onClick={() => window.print()}
