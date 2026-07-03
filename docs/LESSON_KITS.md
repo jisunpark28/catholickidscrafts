@@ -42,6 +42,9 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 
 - `GET|POST /api/program/kits` — list / duplicate templates
 - `PATCH /api/program/kits/[id]` — title, TPT link, grade band, etc.
+- `GET|POST /api/admin/lesson-templates` — admin global template CRUD (create)
+- `GET|PATCH|DELETE /api/admin/lesson-templates/[id]` — admin template meta
+- `PUT /api/admin/lesson-templates/[id]/blocks` — admin template steps
 - `GET|POST /api/program/assignments` — teacher weekly assignments
 - `GET /api/program/teacher-stats` — student kit completions + weekly opens
 - `POST /api/lesson/[shareSlug]/complete` — mark family lesson done
