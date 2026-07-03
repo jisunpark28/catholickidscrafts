@@ -337,7 +337,14 @@ export async function deletePersonalLessonKit(id: string, familyAccountId: strin
     select: { id: true },
   });
   if (!kit) return false;
-  await prisma.lessonKit.delete({ where: { id } });
+
+  await prisma.$transaction([
+    prisma.familyAccount.updateMany({
+      where: { sundayLessonKitId: id },
+      data: { sundayLessonKitId: null, sundayWeekStart: null },
+    }),
+    prisma.lessonKit.delete({ where: { id } }),
+  ]);
   return true;
 }
 

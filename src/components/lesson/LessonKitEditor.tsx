@@ -326,6 +326,10 @@ export function LessonKitEditor({
   const deleteKit = async () => {
     if (adminMeta || kit.scope !== "PERSONAL") return;
     if (!window.confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+      saveTimer.current = null;
+    }
     setDeleting(true);
     setError("");
     try {

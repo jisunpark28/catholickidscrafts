@@ -40,7 +40,7 @@ export function MySundayCard({ signedIn, initialPin, personal, templates }: Prop
 
   useEffect(() => {
     setPin(initialPin);
-  }, [initialPin]);
+  }, [initialPin?.kit?.id, initialPin?.weekStart, initialPin?.stale, initialPin?.pinnedWeekStart]);
 
   const options = pinOptionsFromKits(personal, templates);
   const showcase =

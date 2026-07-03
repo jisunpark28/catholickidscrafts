@@ -437,21 +437,31 @@
 }
 
 .lesson-run-header__inner {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1rem;
+  justify-content: center;
+  min-height: 3rem;
   max-width: 48rem;
   margin: 0 auto;
   padding: 0.65rem 1rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
 }
 
 .lesson-run-header__back {
-  flex-shrink: 0;
+  position: absolute;
+  left: max(1rem, env(safe-area-inset-left));
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 42%;
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--color-link);
   text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lesson-run-header__back:hover {
@@ -459,8 +469,8 @@
 }
 
 .lesson-run-header__title-wrap {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
+  padding: 0 6.5rem;
   text-align: center;
 }
 
@@ -468,6 +478,9 @@
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lesson-run-header__subtitle {
