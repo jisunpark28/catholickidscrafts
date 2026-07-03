@@ -67,11 +67,11 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     });
     const data = (await res.json()) as { error?: string; accessId?: string };
     if (!res.ok) {
-      setError(data.error ?? "Could not add reader");
+      setError(data.error ?? "Could not add student");
       return;
     }
     setNewAccessId(data.accessId ?? null);
-    setMessage("Reader added. Copy the Access ID now — it will not be shown again.");
+    setMessage("Student added. Copy the Access ID now — give it to the child for login at /reader/login.");
     setAddingReader(false);
     setNewReaderName("");
     await refresh();
@@ -123,7 +123,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
 
   async function deleteSub(row: DashboardReaderRow) {
     if (row.kind !== "sub" || !row.id) return;
-    if (!window.confirm(`Delete "${row.displayName}" and all sticker progress for this reader?`)) {
+    if (!window.confirm(`Delete "${row.displayName}" and all progress for this student?`)) {
       return;
     }
     await fetch(`/api/account/subs/${row.id}`, { method: "DELETE" });
@@ -154,7 +154,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
   return (
     <section className="mt-10 border border-[var(--color-border)] bg-white p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h2 className="text-xl font-bold text-[var(--color-ink)]">Reader profiles</h2>
+        <h2 className="text-xl font-bold text-[var(--color-ink)]">Students</h2>
         <button
           type="button"
           onClick={() => {
@@ -164,7 +164,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
           disabled={subs.length >= maxSubs || addingReader}
           className="bg-[var(--color-accent)] px-4 py-2 text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
         >
-          Add Reader
+          Add student
         </button>
       </div>
 
@@ -306,7 +306,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                           setNewReaderName("");
                         }
                       }}
-                      placeholder="Reader name"
+                      placeholder="Student name"
                       className="min-w-[12rem] border border-[var(--color-border)] px-3 py-2"
                       autoFocus
                     />

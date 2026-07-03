@@ -44,19 +44,9 @@ export async function listPersonalKits(familyAccountId: string) {
   return kits.map(serializeLessonKit);
 }
 
-export async function listParishKits(parishId: string) {
-  const kits = await prisma.lessonKit.findMany({
-    where: { parishId, scope: "PARISH", published: true },
-    orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-    include: kitInclude,
-  });
-  return kits.map(serializeLessonKit);
-}
-
 export async function duplicateLessonKit(opts: {
   sourceId: string;
   familyAccountId?: string | null;
-  parishId?: string | null;
   scope: LessonKitScope;
   titleSuffix?: string;
 }) {
@@ -81,9 +71,10 @@ export async function duplicateLessonKit(opts: {
       scope: opts.scope,
       sourceKitId: source.id,
       familyAccountId: opts.familyAccountId ?? null,
-      parishId: opts.parishId ?? null,
       liturgicalPeriod: source.liturgicalPeriod,
       gradeBand: source.gradeBand,
+      tptUrl: source.tptUrl,
+      isFreeSample: source.isFreeSample,
       familyMode: source.familyMode ?? undefined,
       published: opts.scope === "PERSONAL",
       sortOrder: source.sortOrder,
@@ -113,12 +104,20 @@ export async function recordLessonOpen(kitId: string, dateKey: string) {
 export async function updateLessonKitMeta(
   id: string,
   familyAccountId: string,
-  data: { title?: string; description?: string; published?: boolean; familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig },
+  data: {
+    title?: string;
+    description?: string;
+    published?: boolean;
+    familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig;
+    tptUrl?: string | null;
+    isFreeSample?: boolean;
+    gradeBand?: string | null;
+  },
 ) {
-  const kit = await prisma.lessonKit.findUnique({ where: { id } });
+  const kit = await prisma.lessonKit.findFirst({
+    where: { id, familyAccountId },
+  });
   if (!kit) return null;
-  const allowed = await canEditLessonKit(kit, familyAccountId);
-  if (!allowed) return null;
   const updated = await prisma.lessonKit.update({
     where: { id },
     data: {
@@ -140,13 +139,10 @@ export async function replaceLessonBlocks(
     label?: string | null;
     config: LessonBlockConfig;
   }[],
-  opts?: { skipOwnershipCheck?: boolean },
 ) {
-  const kit = opts?.skipOwnershipCheck
-    ? await prisma.lessonKit.findFirst({ where: { id: kitId } })
-    : await prisma.lessonKit.findFirst({
-        where: { id: kitId, familyAccountId },
-      });
+  const kit = await prisma.lessonKit.findFirst({
+    where: { id: kitId, familyAccountId },
+  });
   if (!kit) return null;
 
   await prisma.$transaction([
@@ -219,23 +215,11 @@ export async function createGlobalTemplate(data: {
   return serializeLessonKit(created);
 }
 
-export async function getParishMembership(familyAccountId: string) {
-  return prisma.parishMember.findFirst({
-    where: { familyAccountId },
-    include: { parish: true },
-  });
-}
-
 export async function canEditLessonKit(
-  kit: { id: string; familyAccountId: string | null; parishId: string | null; scope: import("@prisma/client").LessonKitScope },
+  kit: { familyAccountId: string | null },
   familyAccountId: string,
 ) {
-  if (kit.familyAccountId === familyAccountId) return true;
-  if (kit.scope === "PARISH" && kit.parishId) {
-    const membership = await getParishMembership(familyAccountId);
-    return membership?.role === "DRE" && membership.parishId === kit.parishId;
-  }
-  return false;
+  return kit.familyAccountId === familyAccountId;
 }
 
 export async function replaceLessonBlocksForEditor(
@@ -248,28 +232,11 @@ export async function replaceLessonBlocksForEditor(
     config: LessonBlockConfig;
   }[],
 ) {
-  const kit = await prisma.lessonKit.findUnique({ where: { id: kitId } });
+  const kit = await prisma.lessonKit.findFirst({
+    where: { id: kitId, familyAccountId },
+  });
   if (!kit) return null;
-  const allowed = await canEditLessonKit(kit, familyAccountId);
-  if (!allowed) return null;
-  return replaceLessonBlocks(kitId, kit.familyAccountId ?? familyAccountId, blocks, {
-    skipOwnershipCheck: kit.scope === "PARISH",
-  });
-}
-
-export async function joinParishByInviteCode(familyAccountId: string, inviteCode: string) {
-  const parish = await prisma.parish.findUnique({
-    where: { inviteCode: inviteCode.trim().toUpperCase() },
-  });
-  if (!parish) return null;
-  await prisma.parishMember.upsert({
-    where: {
-      parishId_familyAccountId: { parishId: parish.id, familyAccountId },
-    },
-    create: { parishId: parish.id, familyAccountId, role: "CATECHIST" },
-    update: {},
-  });
-  return parish;
+  return replaceLessonBlocks(kitId, familyAccountId, blocks);
 }
 
 export type { LessonKitWithBlocks };

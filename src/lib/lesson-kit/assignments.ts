@@ -82,7 +82,7 @@ export async function createFamilyAssignment(opts: {
   const kit = await prisma.lessonKit.findFirst({
     where: {
       id: opts.lessonKitId,
-      OR: [{ familyAccountId: opts.familyAccountId }, { scope: { in: ["GLOBAL_TEMPLATE", "PARISH"] } }],
+      OR: [{ familyAccountId: opts.familyAccountId }, { scope: "GLOBAL_TEMPLATE" }],
     },
   });
   if (!kit) return null;
@@ -212,18 +212,11 @@ export async function markAssignmentCompleteForReader(
 }
 
 export async function listAssignableKits(familyAccountId: string) {
-  const membership = await prisma.parishMember.findFirst({
-    where: { familyAccountId },
-  });
-
   const kits = await prisma.lessonKit.findMany({
     where: {
       OR: [
         { familyAccountId, scope: "PERSONAL" },
         { scope: "GLOBAL_TEMPLATE", published: true },
-        ...(membership
-          ? [{ parishId: membership.parishId, scope: "PARISH" as const, published: true }]
-          : []),
       ],
     },
     orderBy: { title: "asc" },

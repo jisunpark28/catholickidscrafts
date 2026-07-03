@@ -1,6 +1,6 @@
 import { LessonPrintView } from "@/components/lesson/LessonPrintView";
 import { LessonPrintToolbar } from "@/components/lesson/LessonPrintToolbar";
-import { getLessonKitById, canEditLessonKit } from "@/lib/lesson-kit/db";
+import { getLessonKitById } from "@/lib/lesson-kit/db";
 import { requireFamilySession } from "@/lib/family-auth";
 import { notFound, redirect } from "next/navigation";
 import "@/styles/lesson-kit.css";
@@ -14,7 +14,7 @@ export default async function LessonKitPrintPage({ params }: Props) {
 
   const { id } = await params;
   const kit = await getLessonKitById(id);
-  if (!kit || !(await canEditLessonKit(kit, session.familyAccountId))) {
+  if (!kit || kit.familyAccountId !== session.familyAccountId) {
     notFound();
   }
 

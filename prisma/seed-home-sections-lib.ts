@@ -14,7 +14,7 @@ export async function ensureMissingHomeItems(client: PrismaClient) {
     await client.homeSectionItem.create({
       data: {
         sectionId: playLearn.id,
-        title: "Class lessons",
+        title: "Lesson Kits",
         href: "/program",
         sortOrder: 1,
         published: true,

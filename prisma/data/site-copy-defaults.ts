@@ -41,9 +41,9 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("global.footer.disclosure_link", "disclosure", "global"),
 
   // —— Home ——
-  sc("home.hero.eyebrow", "For parish & family programs", "home"),
-  sc("home.hero.title", "Help for children's ministry—without starting from scratch every week", "home"),
-  sc("home.hero.lead", "Catholic Kids Crafts is here for catechists, volunteers, and parents in parishes and homes. Plan with the Church calendar, grab a ready activity, and open a game when you need something that works in the room.", "home"),
+  sc("home.hero.eyebrow", "For Sunday school & religion teachers", "home"),
+  sc("home.hero.title", "Classroom-ready Catholic lessons—without starting from scratch every week", "home"),
+  sc("home.hero.lead", "Catholic Kids Crafts helps catechists and Catholic school teachers run Sunday school and religion class. Plan with the Church calendar, open a Lesson Kit in one link, and send follow-up work to students at home.", "home"),
   sc("home.hero.sub", "Free planning tools on this site; fuller printable packs on Teachers Pay Teachers when you need them.", "home"),
   sc("home.cta.mass", "Plan from today's Mass", "home"),
   sc("home.cta.resources", "Find an activity", "home"),

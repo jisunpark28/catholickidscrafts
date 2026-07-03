@@ -25,7 +25,7 @@ export const DEFAULT_HOME_SECTIONS: HomeSectionWithItems[] = [
     sortOrder: 1,
     items: [
       { id: "default-games", title: "Games", href: "/play", sortOrder: 0 },
-      { id: "default-class-lessons", title: "Class lessons", href: "/program", sortOrder: 1 },
+      { id: "default-class-lessons", title: "Lesson Kits", href: "/program", sortOrder: 1 },
     ],
   },
   {

@@ -2,14 +2,18 @@ import { ProgramHub } from "@/components/lesson/ProgramHub";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { requireFamilySession } from "@/lib/family-auth";
+import {
+  LESSON_KIT_PRODUCT_NAME_PLURAL,
+  LESSON_KIT_TAGLINE,
+} from "@/lib/lesson-kit/branding";
 import { loadProgramHubData } from "@/lib/lesson-kit/program-hub";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import "@/styles/lesson-kit.css";
 
 export const metadata: Metadata = {
-  title: "Class lessons",
-  description: "Run ready-made catechist lesson kits—games, Gospel typing, and crafts in one link.",
+  title: LESSON_KIT_PRODUCT_NAME_PLURAL,
+  description: LESSON_KIT_TAGLINE,
   ...canonicalForPath("/program"),
 };
 
@@ -20,8 +24,8 @@ export default async function ProgramPage() {
   return (
     <PageShell>
       <PageHeader
-        title="Class lessons"
-        subtitle="One link for your classroom. Copy a template, edit steps, run."
+        title={LESSON_KIT_PRODUCT_NAME_PLURAL}
+        subtitle={LESSON_KIT_TAGLINE}
       />
       <ProgramHub initialData={initialData} />
     </PageShell>
