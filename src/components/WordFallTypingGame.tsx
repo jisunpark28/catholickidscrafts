@@ -95,7 +95,14 @@ function filterPool(all: TypingWordItem[], difficulty: WordFallDifficulty): Typi
   return filtered.length > 0 ? filtered : all.filter((w) => w.word.length <= cfg.maxWordLength);
 }
 
-export function WordFallTypingGame() {
+type Props = {
+  /** Limit pool to these words (lowercase match). */
+  wordFilter?: string[];
+  /** Hide difficulty controls (lesson embed). */
+  compact?: boolean;
+};
+
+export function WordFallTypingGame({ wordFilter, compact = false }: Props) {
   const [allWords, setAllWords] = useState<TypingWordItem[]>([]);
   const [difficulty, setDifficulty] = useState<WordFallDifficulty>("medium");
   const [falling, setFalling] = useState<FallingWord[]>([]);
@@ -113,10 +120,19 @@ export function WordFallTypingGame() {
 
   const config = DIFFICULTY_CONFIG[difficulty];
 
-  const pool = useMemo(
-    () => filterPool(allWords.length > 0 ? allWords : DEFAULT_WORDS, difficulty),
-    [allWords, difficulty],
-  );
+  const pool = useMemo(() => {
+    let base = filterPool(allWords.length > 0 ? allWords : DEFAULT_WORDS, difficulty);
+    if (wordFilter?.length) {
+      const set = new Set(wordFilter.map((w) => w.toLowerCase()));
+      base = base.filter((w) => set.has(w.word.toLowerCase()));
+      if (base.length === 0) {
+        base = (allWords.length > 0 ? allWords : DEFAULT_WORDS).filter((w) =>
+          set.has(w.word.toLowerCase()),
+        );
+      }
+    }
+    return base;
+  }, [allWords, difficulty, wordFilter]);
 
   useEffect(() => {
     fetch("/api/typing-words")
@@ -257,30 +273,34 @@ export function WordFallTypingGame() {
 
   return (
     <div className="border border-[var(--color-border)] bg-white">
-      <p className="border-b border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[var(--color-muted)]">
-        <strong className="text-[var(--color-ink)]">Word mode:</strong> church words fall from the
-        top—good for spelling saints, seasons, and Mass vocabulary. Start on Easy for younger
-        grades.
-      </p>
-      <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
-        <p className="text-sm font-semibold text-[var(--color-ink)]">Difficulty</p>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {DIFFICULTY_OPTIONS.map((opt) => (
-            <button
-              key={opt.id}
-              type="button"
-              onClick={() => changeDifficulty(opt.id)}
-              className={`border px-4 py-2 text-sm font-bold transition ${
-                difficulty === opt.id
-                  ? "border-[var(--color-accent)] bg-white text-[var(--color-ink)]"
-                  : "border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)]"
-              }`}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      {!compact && (
+        <>
+          <p className="border-b border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[var(--color-muted)]">
+            <strong className="text-[var(--color-ink)]">Word mode:</strong> church words fall from
+            the top—good for spelling saints, seasons, and Mass vocabulary. Start on Easy for
+            younger grades.
+          </p>
+          <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
+            <p className="text-sm font-semibold text-[var(--color-ink)]">Difficulty</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {DIFFICULTY_OPTIONS.map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => changeDifficulty(opt.id)}
+                  className={`border px-4 py-2 text-sm font-bold transition ${
+                    difficulty === opt.id
+                      ? "border-[var(--color-accent)] bg-white text-[var(--color-ink)]"
+                      : "border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)]"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
         <p className="text-sm text-[var(--color-muted)]">
