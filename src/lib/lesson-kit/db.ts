@@ -177,11 +177,14 @@ export async function deleteLessonBlock(
 }
 
 export async function createGlobalTemplate(data: {
+  shareSlug?: string;
   title: string;
   description?: string;
   liturgicalPeriod?: string;
   gradeBand?: string;
   sortOrder?: number;
+  tptUrl?: string | null;
+  isFreeSample?: boolean;
   familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig;
   blocks: {
     sortOrder: number;
@@ -192,12 +195,14 @@ export async function createGlobalTemplate(data: {
 }) {
   const created = await prisma.lessonKit.create({
     data: {
-      shareSlug: generateLessonShareSlug(),
+      shareSlug: data.shareSlug ?? generateLessonShareSlug(),
       title: data.title,
       description: data.description ?? "",
       scope: "GLOBAL_TEMPLATE",
       liturgicalPeriod: data.liturgicalPeriod ?? null,
       gradeBand: data.gradeBand ?? null,
+      tptUrl: data.tptUrl ?? null,
+      isFreeSample: data.isFreeSample ?? true,
       familyMode: (data.familyMode ?? { gospelMaxChars: 150 }) as Prisma.InputJsonValue,
       published: true,
       sortOrder: data.sortOrder ?? 0,
@@ -213,6 +218,92 @@ export async function createGlobalTemplate(data: {
     include: kitInclude,
   });
   return serializeLessonKit(created);
+}
+
+/** Idempotent global template seed (fixed shareSlug). */
+export async function upsertGlobalTemplate(data: {
+  shareSlug: string;
+  title: string;
+  description?: string;
+  liturgicalPeriod?: string;
+  gradeBand?: string;
+  sortOrder?: number;
+  tptUrl?: string | null;
+  isFreeSample?: boolean;
+  familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig;
+  blocks: {
+    sortOrder: number;
+    type: LessonBlockType;
+    label?: string;
+    config: LessonBlockConfig;
+  }[];
+}) {
+  const familyMode = (data.familyMode ?? { gospelMaxChars: 150 }) as Prisma.InputJsonValue;
+  const existing = await prisma.lessonKit.findUnique({
+    where: { shareSlug: data.shareSlug },
+    select: { id: true, scope: true },
+  });
+
+  if (existing && existing.scope !== "GLOBAL_TEMPLATE") {
+    throw new Error(`shareSlug ${data.shareSlug} is not a global template`);
+  }
+
+  const kitId = existing
+    ? (
+        await prisma.lessonKit.update({
+          where: { id: existing.id },
+          data: {
+            title: data.title,
+            description: data.description ?? "",
+            liturgicalPeriod: data.liturgicalPeriod ?? null,
+            gradeBand: data.gradeBand ?? null,
+            tptUrl: data.tptUrl ?? null,
+            isFreeSample: data.isFreeSample ?? true,
+            familyMode,
+            published: true,
+            sortOrder: data.sortOrder ?? 0,
+          },
+        })
+      ).id
+    : (
+        await prisma.lessonKit.create({
+          data: {
+            shareSlug: data.shareSlug,
+            title: data.title,
+            description: data.description ?? "",
+            scope: "GLOBAL_TEMPLATE",
+            liturgicalPeriod: data.liturgicalPeriod ?? null,
+            gradeBand: data.gradeBand ?? null,
+            tptUrl: data.tptUrl ?? null,
+            isFreeSample: data.isFreeSample ?? true,
+            familyMode,
+            published: true,
+            sortOrder: data.sortOrder ?? 0,
+          },
+        })
+      ).id;
+
+  await prisma.$transaction([
+    prisma.lessonBlock.deleteMany({ where: { kitId } }),
+    ...data.blocks.map((b) =>
+      prisma.lessonBlock.create({
+        data: {
+          kitId,
+          sortOrder: b.sortOrder,
+          type: b.type,
+          label: b.label ?? null,
+          config: b.config as Prisma.InputJsonValue,
+        },
+      }),
+    ),
+  ]);
+
+  const kit = await prisma.lessonKit.findUnique({
+    where: { id: kitId },
+    include: kitInclude,
+  });
+  if (!kit) throw new Error("upsertGlobalTemplate: kit missing after write");
+  return serializeLessonKit(kit);
 }
 
 export async function canEditLessonKit(

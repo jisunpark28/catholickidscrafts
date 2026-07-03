@@ -1,6 +1,7 @@
 /**
  * Idempotent production seed: lesson templates + home hub.
- * Skips when GLOBAL_TEMPLATE kits and home sections already exist (unless FORCE_PROD_SEED=true).
+ * Lesson templates are always upserted by shareSlug (safe to re-run).
+ * Home sections skip when already present (unless FORCE_PROD_SEED=true).
  * Set RUN_FULL_SEED=true to also run `prisma db seed` (needs ADMIN_EMAIL / ADMIN_PASSWORD).
  */
 import "dotenv/config";
@@ -15,23 +16,19 @@ async function main() {
 
   const prisma = new PrismaClient();
   try {
-    const [templateCount, homeCount] = await Promise.all([
-      prisma.lessonKit.count({ where: { scope: "GLOBAL_TEMPLATE" } }),
-      prisma.homeSection.count(),
-    ]);
+    const homeCount = await prisma.homeSection.count();
 
-    if (!force && templateCount > 0 && homeCount > 0) {
-      console.log(
-        "Production seed already applied (lesson templates + home sections). Nothing to do.",
-      );
-      console.log("Set FORCE_PROD_SEED=true to run again.");
-      return;
+    console.log("Upserting global lesson templates…");
+    await seedLessonKits(prisma);
+
+    if (force || homeCount === 0) {
+      await seedHomeSections(prisma);
+      console.log("Home sections seeded.");
+    } else {
+      console.log("Home sections already exist — skip (set FORCE_PROD_SEED=true to re-run).");
     }
 
-    console.log("Running production seed (lesson kits + home sections)…");
-    await seedLessonKits(prisma);
-    await seedHomeSections(prisma);
-    console.log("Lesson kits + home sections done.");
+    console.log("Production seed done (lesson kits + home sections as needed).");
 
     if (runFull) {
       if (!process.env.ADMIN_EMAIL?.trim() || !process.env.ADMIN_PASSWORD) {

@@ -24,6 +24,21 @@ export const LESSON_WORD_PRESETS: Record<string, { label: string; words: string[
     label: "Sunday words",
     words: ["alleluia", "amen", "gospel", "mass", "lord", "praise", "sunday", "church"],
   },
+  lent: {
+    label: "Lent words",
+    words: [
+      "lent",
+      "ashes",
+      "fast",
+      "prayer",
+      "almsgiving",
+      "purple",
+      "cross",
+      "mercy",
+      "repent",
+      "easter",
+    ],
+  },
 };
 
 export const LESSON_GAME_SLUGS = [
