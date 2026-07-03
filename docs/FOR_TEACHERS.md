@@ -21,6 +21,8 @@ Create students from **Teacher dashboard** (`/account`) → **Add student**. Cop
 2. **Use this** to copy a template into your account and edit steps.
 3. Optional **TPT pack link** on your kit — free sample on this site, full worksheets on [Teachers Pay Teachers](https://www.teacherspayteachers.com/store/catholic-kids-crafts).
 
+In the kit editor, use **At-home link** to set Gospel length, choose smart defaults per step, or pick exact steps for the `/family` runner.
+
 ## Assign to students
 
 From `/account`, pick a kit for the week and optionally one student. They see **Teacher assigned** on the home page and open the shortened family runner.
