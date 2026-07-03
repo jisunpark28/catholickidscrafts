@@ -265,3 +265,28 @@
   color: var(--color-ink);
   background: #fff;
 }
+
+.lesson-family-panel {
+  margin-top: 0.25rem;
+}
+
+.lesson-family-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  padding: 0.35rem 0.45rem;
+  color: var(--color-muted);
+  background: #fff;
+}
+
+.lesson-family-pill--on {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: #fffaf5;
+}
+
+.lesson-family-pill:hover {
+  border-color: var(--color-accent);
+}
