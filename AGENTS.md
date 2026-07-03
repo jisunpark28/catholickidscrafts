@@ -41,6 +41,12 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - Church game hotspots: `/admin/church-decorations`, API `/api/church-decorations`.
 - Photo booth frames: `/admin/photo-booth-frames`. Admin uploads need `BLOB_READ_WRITE_TOKEN` on Vercel (`src/lib/upload.ts`).
 
+### Production database seed (GitHub Actions)
+
+- Migrations run on every Vercel deploy (`vercel-build`). **Data seed does not.**
+- One-time prod seed: GitHub → Actions → **Seed production database** (see `docs/GITHUB_PROD_SEED.md`). Requires repo secrets `DATABASE_URL`, `DIRECT_URL`.
+- Local equivalent: `pnpm run db:seed-production-once` (idempotent).
+
 ### Home learn hub & Bible (2026-06)
 
 - Home (`/`) uses `HomeLearnHub`: **Daily Mass** pill toggles liturgical calendar; sections/pills from `HomeSection` / `HomeSectionItem` (admin: `/admin/home-sections`).

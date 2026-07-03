@@ -20,6 +20,7 @@
     "db:seed-mass-order": "tsx prisma/seed-mass-order-steps.ts",
     "db:seed-site-copy": "tsx prisma/seed-site-copy.ts",
     "db:seed-home-sections": "tsx prisma/seed-home-sections.ts",
+    "db:seed-production-once": "tsx scripts/prod-seed-once.ts",
     "db:seed-trinity-resource": "tsx prisma/seed-holy-trinity-resource.ts",
     "vestments:split": "node scripts/split-vestment-spritesheet.mjs",
     "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs",

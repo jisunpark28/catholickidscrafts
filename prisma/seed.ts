@@ -9,6 +9,7 @@ import { seedLessonKits } from "./seed-lesson-kits";
 import { seedMassOrderSteps } from "./seed-mass-order-steps";
 import { seedSiteCopy } from "./seed-site-copy";
 import { seedTypingWords } from "./seed-typing-words";
+import { seedHomeSections } from "./seed-home-sections-lib";
 
 const prisma = new PrismaClient();
 
@@ -161,6 +162,7 @@ async function main() {
   console.log(`Site copy seeded: ${siteCopyCount}`);
 
   await seedLessonKits(prisma);
+  await seedHomeSections(prisma);
 }
 
 main()
