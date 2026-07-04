@@ -74,6 +74,6 @@ Personal kits can be listed on **`/program/community`** when the teacher enables
 
 ## Seed
 
-`pnpm run db:seed` creates global templates if none exist.
+`pnpm run db:seed` creates global templates if none exist (includes `mass-etiquette-lower` — Mass etiquette for Grades K–2).
 
 Production: `pnpm run db:migrate-deploy` then `pnpm run db:seed-production-once` (or GitHub Actions — see `docs/GITHUB_PROD_SEED.md`).

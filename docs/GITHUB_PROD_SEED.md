@@ -56,7 +56,7 @@ The workflow `.github/workflows/seed-production.yml` listens for this event, wai
 
 | Mode | Contents |
 |------|----------|
-| Default (`db:seed-production-once`) | 4 global lesson templates (showcase: `/lesson/lent-wk1-g3` — link, writing, games), home sections on first run |
+| Default (`db:seed-production-once`) | 5 global lesson templates (showcase: `/lesson/lent-wk1-g3`, `/lesson/mass-etiquette-lower`), home sections on first run |
 | **full** checkbox | Above + full `prisma db seed` (admin, curriculum tracks, resources from markdown, typing/hangman words, site copy) |
 
 Vercel **build** still runs `prisma migrate deploy` automatically; this workflow adds data only.
