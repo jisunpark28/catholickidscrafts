@@ -4,7 +4,8 @@ import type { LessonBlockType } from "@prisma/client";
 export const LENT_WK1_SHOWCASE_SLUG = "lent-wk1-g3";
 
 export const LESSON_BLOCK_DEFAULT_LABEL: Record<LessonBlockType, string> = {
-  CUSTOM_NOTE: "Note",
+  CUSTOM_NOTE: "Teacher note",
+  WRITING: "Writing",
   RESOURCE: "Craft",
   LINK: "Link",
   PLAY_GAME: "Game",

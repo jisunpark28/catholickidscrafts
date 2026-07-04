@@ -10,6 +10,13 @@ import {
   lessonLinkHref,
   lessonLinkOpensInNewTab,
 } from "@/lib/lesson-kit/link-block";
+import {
+  lessonWritingMaxChars,
+  lessonWritingMinChars,
+  lessonWritingMode,
+  lessonWritingPlaceholder,
+  lessonWritingPrompt,
+} from "@/lib/lesson-kit/writing-block";
 import type { LessonBlockDto, LessonKitDto } from "@/lib/lesson-kit/types";
 import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
 import { todayUniversalis, toDateKey } from "@/lib/dates";
@@ -233,10 +240,64 @@ function LessonLinkBlock({ block }: { block: LessonBlockDto }) {
   );
 }
 
+function LessonWritingBlock({ block }: { block: LessonBlockDto }) {
+  const prompt = lessonWritingPrompt(block);
+  const mode = lessonWritingMode(block);
+  const maxChars = lessonWritingMaxChars(block);
+  const minChars = lessonWritingMinChars(block);
+  const [text, setText] = useState("");
+
+  if (!prompt) {
+    return (
+      <p className="text-sm text-[var(--color-muted)]">
+        Writing prompt not configured. Add a question in the lesson editor.
+      </p>
+    );
+  }
+
+  if (mode === "display") {
+    return (
+      <div className="lesson-note">
+        <p className="whitespace-pre-wrap text-lg leading-relaxed text-[var(--color-ink)]">
+          {prompt}
+        </p>
+      </div>
+    );
+  }
+
+  const count = text.length;
+  const belowMin = minChars > 0 && count > 0 && count < minChars;
+
+  return (
+    <div className="space-y-3">
+      <p className="text-lg font-semibold leading-relaxed text-[var(--color-ink)] whitespace-pre-wrap">
+        {prompt}
+      </p>
+      <textarea
+        className="lesson-writing-field"
+        rows={5}
+        value={text}
+        maxLength={maxChars}
+        placeholder={lessonWritingPlaceholder(block)}
+        onChange={(e) => setText(e.target.value)}
+        aria-label="Your answer"
+      />
+      <p
+        className={`text-xs font-semibold ${belowMin ? "text-amber-700" : "text-[var(--color-muted)]"}`}
+      >
+        {count} / {maxChars} characters
+        {minChars > 0 ? ` · at least ${minChars}` : ""}
+      </p>
+    </div>
+  );
+}
+
 export function LessonBlockContent({ block, kit, mode }: Props) {
   switch (block.type) {
     case "CUSTOM_NOTE":
       return <LessonNoteBlock block={block} />;
+    case "WRITING":
+      return <LessonWritingBlock block={block} />;
     case "PLAY_GAME":
       return <LessonPlayGameBlock block={block} />;
     case "TYPING_WORDS":

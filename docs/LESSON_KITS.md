@@ -23,17 +23,19 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 | `TYPING_WORDS` | `{ wordPreset }` or `{ wordIds }` |
 | `GOSPEL_TYPING` | `{ readingKind, maxChars, familyInclude? }` |
 | `MASS_TODAY` | `{}` |
-| `CUSTOM_NOTE` | `{ html, familyInclude? }` |
+| `CUSTOM_NOTE` | `{ html, familyInclude? }` — teacher-only |
+| `WRITING` | `{ prompt, placeholder?, minChars?, maxChars?, writingMode?: "display" \| "student" }` |
 | `RESOURCE` | `{ resourceSlug, familyInclude? }` |
 | `LINK` | `{ url, buttonLabel?, openInNewTab? }` |
 | `BIBLE_CHAPTER` | `{ bookSlug, chapter, maxChars?, familyInclude? }` |
 | `HANGMAN_WORDS` | `{ gameSlug: "hangman" }` |
 
-### Editor palette (PR-1) & LINK block (PR-2)
+### Editor palette (PR-1) & content blocks (PR-2–3)
 
 Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/block-palette.ts`).  
 `MASS_TODAY`, `GOSPEL_TYPING`, and `BIBLE_CHAPTER` stay in the schema for existing kits but are **hidden from the add palette**.  
-`LINK` blocks use `url`, `buttonLabel`, and `openInNewTab` (`src/lib/lesson-kit/link-block.ts`).
+`LINK` blocks use `url`, `buttonLabel`, and `openInNewTab` (`src/lib/lesson-kit/link-block.ts`).  
+`WRITING` is for student prompts/responses; `CUSTOM_NOTE` remains teacher-only (`src/lib/lesson-kit/writing-block.ts`).
 
 ## Routes
 

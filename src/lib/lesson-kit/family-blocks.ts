@@ -15,6 +15,8 @@ export function defaultFamilyIncludedByType(type: LessonBlockType): boolean {
     case "LINK":
     case "BIBLE_CHAPTER":
       return false;
+    case "WRITING":
+      return true;
     default:
       return true;
   }
@@ -42,6 +44,7 @@ export function isBlockIncludedInFamily(
   if (block.config.familyInclude === true) return true;
 
   if (block.type === "CUSTOM_NOTE") return false;
+  if (block.type === "WRITING" && block.config.writingMode === "display") return false;
   return defaultFamilyIncludedByType(block.type);
 }
 
