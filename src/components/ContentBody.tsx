@@ -28,14 +28,14 @@ function markdownComponents(noDownloadLinks: boolean): Components {
         decoding="async"
       />
     ),
-    a: ({ href, children, ...rest }) => {
+    a: ({ href, children, download, target, rel, ...linkRest }) => {
       const url = resolveAssetUrl(typeof href === "string" ? href : undefined);
       const isExternal = url.startsWith("http");
-      const { download: _omitDownload, target, rel, ...linkRest } = rest;
       return (
         <a
           href={url}
           {...linkRest}
+          {...(!noDownloadLinks && download !== undefined ? { download } : {})}
           target={isExternal ? "_blank" : target}
           rel={isExternal ? "noopener noreferrer" : rel}
         >

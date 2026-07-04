@@ -49,9 +49,8 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const externalUrl = data.externalUrl ?? existing.externalUrl;
   let linkType = data.linkType ?? existing.linkType;
-  if (data.linkType === undefined && data.externalUrl && isAmazonUrl(data.externalUrl)) {
+  if (data.linkType === undefined && data.externalUrl !== undefined && isAmazonUrl(data.externalUrl)) {
     linkType = ExternalLinkType.AMAZON_AFFILIATE;
   }
 
@@ -63,7 +62,7 @@ export async function PATCH(request: Request, { params }: Params) {
       description: data.description,
       kind: data.kind,
       linkType,
-      externalUrl: data.externalUrl,
+      ...(data.externalUrl !== undefined ? { externalUrl: data.externalUrl } : {}),
       author: data.author,
       imageUrl: data.imageUrl,
       tags: data.tags,

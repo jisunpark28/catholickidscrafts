@@ -1,5 +1,5 @@
 import { toDateKey } from "@/lib/dates";
-import type { MassDay, MassDaySummary, MassReading, MonthCalendar } from "@/types/mass";
+import type { MassDay, MassReading } from "@/types/mass";
 import {
   fetchLiturgicalTitle,
   fetchMassDaySummary,

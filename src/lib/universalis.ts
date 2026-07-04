@@ -3,7 +3,6 @@ import {
   massDayFromUniversalisPayload,
   parseUniversalisJsonpBody,
   UNIVERSALIS_ORIGIN,
-  UNIVERSALIS_READINGS_SOURCE,
   type UniversalisMassDay,
 } from "@/lib/universalis-parse";
 

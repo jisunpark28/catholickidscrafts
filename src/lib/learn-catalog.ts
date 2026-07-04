@@ -46,6 +46,17 @@ function takeTop<T extends { score: number }>(rows: T[], limit: number): T[] {
   return rows.sort((a, b) => b.score - a.score).slice(0, limit);
 }
 
+function toSearchResult(row: LearnSearchResult & { score: number }): LearnSearchResult {
+  return {
+    id: row.id,
+    kind: row.kind,
+    title: row.title,
+    excerpt: row.excerpt,
+    href: row.href,
+    badge: row.badge,
+  };
+}
+
 export async function searchLearnCatalog(query: string): Promise<LearnSearchResult[]> {
   const q = query.trim();
   if (q.length < 2) return [];
@@ -176,5 +187,5 @@ export async function searchLearnCatalog(query: string): Promise<LearnSearchResu
     });
   }
 
-  return takeTop(results, MAX_TOTAL).map(({ score: _score, ...row }) => row);
+  return takeTop(results, MAX_TOTAL).map(toSearchResult);
 }
