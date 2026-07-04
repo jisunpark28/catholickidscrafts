@@ -29,6 +29,8 @@ export type LessonBlockConfig = {
   /** PR-6+ slides blocks */
   embedUrl?: string;
   assetUrl?: string;
+  assetFilename?: string;
+  assetMimeType?: string;
   slidesSource?: "embed" | "upload";
   /** PR-7+ unified game data */
   gameFormat?: string;
