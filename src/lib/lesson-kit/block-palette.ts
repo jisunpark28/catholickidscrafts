@@ -1,8 +1,11 @@
 import type { LessonBlockDto } from "@/lib/lesson-kit/types";
 import type { LessonBlockType } from "@prisma/client";
+import { defaultGameConfig } from "@/lib/lesson-kit/game-block";
 
 /** Palette categories for the lesson-plan editor (lego / puzzle pieces). */
 export type LessonBlockPaletteCategory = "content" | "media" | "games";
+
+export const DEFAULT_PALETTE_CATEGORY: LessonBlockPaletteCategory = "content";
 
 export type LessonBlockPaletteEntry = {
   type: LessonBlockType;
@@ -80,25 +83,18 @@ export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
     description: "Game formats — you supply words and settings",
     blocks: [
       {
+        type: "GAME",
+        paletteLabel: "Custom game",
+        description: "Hangman, typing, quizzes — you supply words and data",
+      },
+      {
         type: "PLAY_GAME",
         paletteLabel: "Site game",
         description: "Liturgical colors, church builder, and more",
       },
-      {
-        type: "TYPING_WORDS",
-        paletteLabel: "Typing",
-        description: "Word-list typing practice",
-      },
-      {
-        type: "HANGMAN_WORDS",
-        paletteLabel: "Hangman",
-        description: "Hangman with your word list (coming: custom words)",
-      },
     ],
   },
 ];
-
-export const DEFAULT_PALETTE_CATEGORY: LessonBlockPaletteCategory = "content";
 
 /** Default config when a block is added from the palette. */
 export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["config"] {
@@ -146,6 +142,8 @@ export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["confi
         slidesSource: "embed",
         buttonLabel: "Open slides",
       };
+    case "GAME":
+      return defaultGameConfig("hangman");
     case "MASS_TODAY":
       return {};
     default:

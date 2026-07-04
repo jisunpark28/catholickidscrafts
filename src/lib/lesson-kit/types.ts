@@ -34,6 +34,20 @@ export type LessonBlockConfig = {
   slidesSource?: "embed" | "upload";
   /** PR-7+ unified game data */
   gameFormat?: string;
+  gameWords?: string[];
+  gameHint?: string;
+  gamePassage?: string;
+  typingMode?: "words" | "passage";
+  pictureMatch?: Array<{ imageUrl: string; word: string }>;
+  fillBlankText?: string;
+  fillBlankAnswers?: string[];
+  trueFalseItems?: Array<{ statement: string; answer: boolean }>;
+  multipleChoiceItems?: Array<{
+    question: string;
+    choices: string[];
+    correctIndex: number;
+  }>;
+  printAnswerKey?: boolean;
   words?: string[];
   [key: string]: unknown;
 };

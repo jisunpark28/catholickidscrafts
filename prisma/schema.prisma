@@ -415,6 +415,7 @@ enum LessonBlockType {
   LINK
   IMAGE
   SLIDES
+  GAME
   PLAY_GAME
   TYPING_WORDS
   HANGMAN_WORDS

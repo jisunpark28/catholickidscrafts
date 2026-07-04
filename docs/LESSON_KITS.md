@@ -19,7 +19,8 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 
 | Type | Config |
 |------|--------|
-| `PLAY_GAME` | `{ gameSlug }` |
+| `GAME` | `{ gameFormat, … }` — teacher-supplied game data (see below) |
+| `PLAY_GAME` | `{ gameSlug }` — built-in site games |
 | `TYPING_WORDS` | `{ wordPreset }` or `{ wordIds }` |
 | `GOSPEL_TYPING` | `{ readingKind, maxChars, familyInclude? }` |
 | `MASS_TODAY` | `{}` |
@@ -41,6 +42,22 @@ Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/b
 Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/lib/lesson-kit/media-upload.ts`, `LessonMediaUpload`).  
 `IMAGE` blocks use upload or external URL (`src/lib/lesson-kit/image-block.ts`, `LessonImageFigure`).  
 `SLIDES` blocks embed Google Slides/Drive or uploaded PDF/PPTX (`src/lib/lesson-kit/slides-block.ts`). PPTX uploads show a download button — export to PDF for inline class view.
+
+### `GAME` block (PR-7)
+
+Unified teacher-configured games (`src/lib/lesson-kit/game-block.ts`, `LessonGamePlayer`).
+
+| `gameFormat` | Config fields | Runner |
+|--------------|---------------|--------|
+| `hangman` | `gameWords[]`, `gameHint?` | `LessonHangmanGame` |
+| `typing` | `typingMode`: `words` \| `passage`; `gameWords[]` or `gamePassage` | `WordFallTypingGame` / `PassageTypingGame` |
+| `picture_match` | `pictureMatch: { imageUrl, word }[]` | `LessonPictureMatchGame` |
+| `fill_blank` | `fillBlankText` (use `___`), `fillBlankAnswers[]` | `LessonFillBlankGame` |
+| `true_false` | `trueFalseItems: { statement, answer }[]` | `LessonTrueFalseGame` |
+| `multiple_choice` | `multipleChoiceItems: { question, choices, correctIndex }[]` | `LessonMultipleChoiceGame` |
+
+Print view shows a format summary plus optional teacher answer key (`printAnswerKey`, default on).  
+Legacy `TYPING_WORDS`, `HANGMAN_WORDS`, and `PLAY_GAME` blocks still run in older kits; the editor palette offers `GAME` + site `PLAY_GAME`.
 
 ## Routes
 

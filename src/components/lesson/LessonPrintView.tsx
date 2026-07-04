@@ -1,4 +1,5 @@
 import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
+import { LessonGamePrintSummary } from "@/components/lesson/LessonGamePrintSummary";
 import { LessonImageFigure } from "@/components/lesson/LessonImageFigure";
 import { lessonImageSrc } from "@/lib/lesson-kit/image-block";
 import {
@@ -80,6 +81,7 @@ export function LessonPrintView({ kit }: Props) {
                 ) : null}
               </div>
             ) : null}
+            {block.type === "GAME" ? <LessonGamePrintSummary block={block} /> : null}
             {block.config.familyInclude === false ? (
               <p className="lesson-print__hint">Classroom only (hidden at home)</p>
             ) : null}

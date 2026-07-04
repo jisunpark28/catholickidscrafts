@@ -1,5 +1,6 @@
 "use client";
 
+import { LessonGamePlayer } from "@/components/lesson/LessonGamePlayer";
 import { LessonImageFigure } from "@/components/lesson/LessonImageFigure";
 import { LessonSlidesPlayer } from "@/components/lesson/LessonSlidesPlayer";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
@@ -334,6 +335,8 @@ export function LessonBlockContent({ block, kit, mode }: Props) {
       return <LessonImageFigure block={block} />;
     case "SLIDES":
       return <LessonSlidesPlayer block={block} />;
+    case "GAME":
+      return <LessonGamePlayer block={block} />;
     case "MASS_TODAY":
       return <LessonMassTodayBlock />;
     default:
