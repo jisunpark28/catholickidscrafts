@@ -35,7 +35,8 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/block-palette.ts`).  
 `MASS_TODAY`, `GOSPEL_TYPING`, and `BIBLE_CHAPTER` stay in the schema for existing kits but are **hidden from the add palette**.  
 `LINK` blocks use `url`, `buttonLabel`, and `openInNewTab` (`src/lib/lesson-kit/link-block.ts`).  
-`WRITING` is for student prompts/responses; `CUSTOM_NOTE` remains teacher-only (`src/lib/lesson-kit/writing-block.ts`).
+`WRITING` is for student prompts/responses; `CUSTOM_NOTE` remains teacher-only (`src/lib/lesson-kit/writing-block.ts`).  
+Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/lib/lesson-kit/media-upload.ts`, `LessonMediaUpload`).
 
 ## Routes
 
@@ -50,6 +51,7 @@ Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/b
 ## APIs
 
 - `GET|POST /api/program/kits` — list / duplicate templates
+- `POST /api/program/uploads` — teacher media (images, PDF, PPT) → `assetUrl`
 - `PATCH /api/program/kits/[id]` — title, TPT link, grade band, etc.
 - `GET|POST /api/admin/lesson-templates` — admin global template CRUD (create)
 - `GET|PATCH|DELETE /api/admin/lesson-templates/[id]` — admin template meta

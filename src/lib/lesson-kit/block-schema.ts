@@ -26,6 +26,8 @@ const baseConfig = z
     imageSource: z.enum(["upload", "url"]).optional(),
     embedUrl: z.string().optional(),
     assetUrl: z.string().optional(),
+    assetFilename: z.string().optional(),
+    assetMimeType: z.string().optional(),
     slidesSource: z.enum(["embed", "upload"]).optional(),
     gameFormat: z.string().optional(),
     words: z.array(z.string()).optional(),

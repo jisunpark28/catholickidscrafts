@@ -37,9 +37,14 @@ export function LessonPrintView({ kit }: Props) {
               />
             ) : null}
             {block.type === "LINK" ? (
-              <p className="lesson-print__link">
-                {lessonLinkHref(block) ?? block.config.url?.trim() ?? "(no URL)"}
-              </p>
+              <>
+                {lessonLinkHref(block) ? (
+                  <p className="lesson-print__link">{lessonLinkHref(block)}</p>
+                ) : null}
+                {block.config.assetUrl?.trim() ? (
+                  <p className="lesson-print__link">{block.config.assetUrl.trim()}</p>
+                ) : null}
+              </>
             ) : null}
             {block.type === "WRITING" && lessonWritingPrompt(block) ? (
               <div className="lesson-print__writing">

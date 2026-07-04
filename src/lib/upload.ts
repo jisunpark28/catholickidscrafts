@@ -47,12 +47,14 @@ async function uploadToVercelBlob(
 
 export async function saveUploadedFile(
   file: File,
+  opts?: { keyPrefix?: string },
 ): Promise<{ url: string; filename: string; sizeBytes: number }> {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const unique = `${Date.now()}-${safeName}`;
-  const key = `uploads/${unique}`;
+  const prefix = opts?.keyPrefix?.replace(/\/?$/, "/") ?? "uploads/";
+  const key = `${prefix}${unique}`;
 
   if (isVercelBlobLinked() || isVercelServerless()) {
     if (isVercelServerless() && !isVercelBlobLinked()) {

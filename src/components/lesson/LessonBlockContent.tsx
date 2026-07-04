@@ -216,26 +216,42 @@ function LessonNoteBlock({ block }: { block: LessonBlockDto }) {
 
 function LessonLinkBlock({ block }: { block: LessonBlockDto }) {
   const href = lessonLinkHref(block);
-  if (!href) {
+  const assetUrl = block.config.assetUrl?.trim();
+  const newTab = lessonLinkOpensInNewTab(block);
+  const label = lessonLinkButtonLabel(block);
+  const fileLabel = block.config.assetFilename?.trim() || "Open file";
+
+  if (!href && !assetUrl) {
     return (
       <p className="text-sm text-[var(--color-muted)]">
-        Link not configured. Add a valid URL in the lesson editor.
+        Link not configured. Add a URL or upload a file in the lesson editor.
       </p>
     );
   }
 
-  const newTab = lessonLinkOpensInNewTab(block);
   return (
-    <div className="flex justify-center py-4">
-      <a
-        href={href}
-        className="lesson-big-button inline-flex no-underline"
-        {...(newTab
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
-      >
-        {lessonLinkButtonLabel(block)}
-      </a>
+    <div className="flex flex-col items-center gap-3 py-4">
+      {href ? (
+        <a
+          href={href}
+          className="lesson-big-button inline-flex no-underline"
+          {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {label}
+        </a>
+      ) : null}
+      {assetUrl ? (
+        <a
+          href={assetUrl}
+          className={`inline-flex no-underline ${
+            href ? "lesson-big-button lesson-big-button--secondary" : "lesson-big-button"
+          }`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {href ? fileLabel : label !== "Open link" ? label : fileLabel}
+        </a>
+      ) : null}
     </div>
   );
 }

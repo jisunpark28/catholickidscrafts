@@ -1,5 +1,6 @@
 "use client";
 
+import { LessonMediaUpload } from "@/components/lesson/LessonMediaUpload";
 import {
   LESSON_BLOCK_DEFAULT_LABEL,
   LESSON_GAME_SLUGS,
@@ -53,12 +54,62 @@ function triStateFamilyInclude(block: LessonBlockDto): "on" | "off" | "default" 
   return "default";
 }
 
-function LessonLinkConfigFields({
+function clearBlockMediaAsset(
+  block: LessonBlockDto,
+  onChange: (next: LessonBlockDto) => void,
+) {
+  const nextConfig = { ...block.config };
+  delete nextConfig.assetUrl;
+  delete nextConfig.assetFilename;
+  delete nextConfig.assetMimeType;
+  onChange({ ...block, config: nextConfig });
+}
+
+function LessonMediaAssetField({
   block,
   patch,
+  onChange,
+  label,
+  hint,
 }: {
   block: LessonBlockDto;
   patch: (partial: Partial<LessonBlockDto["config"]>) => void;
+  onChange: (next: LessonBlockDto) => void;
+  label?: string;
+  hint?: string;
+}) {
+  return (
+    <div className="lesson-block-config__field">
+      <LessonMediaUpload
+        assetUrl={block.config.assetUrl}
+        filename={block.config.assetFilename}
+        mimeType={block.config.assetMimeType}
+        label={label}
+        hint={hint}
+        onChange={(url, meta) => {
+          if (!url) {
+            clearBlockMediaAsset(block, onChange);
+            return;
+          }
+          patch({
+            assetUrl: url,
+            assetFilename: meta?.filename,
+            assetMimeType: meta?.mimeType ?? undefined,
+          });
+        }}
+      />
+    </div>
+  );
+}
+
+function LessonLinkConfigFields({
+  block,
+  patch,
+  onChange,
+}: {
+  block: LessonBlockDto;
+  patch: (partial: Partial<LessonBlockDto["config"]>) => void;
+  onChange: (next: LessonBlockDto) => void;
 }) {
   const urlInput = block.config.url ?? "";
   const validation = urlInput.trim() ? validateLessonLinkUrl(urlInput) : null;
@@ -116,6 +167,14 @@ function LessonLinkConfigFields({
           <p className="mt-2 break-all text-xs text-[var(--color-muted)]">{previewHref}</p>
         </div>
       ) : null}
+
+      <LessonMediaAssetField
+        block={block}
+        patch={patch}
+        onChange={onChange}
+        label="Or upload a file"
+        hint="PDF, image, or PowerPoint — opens from a button when no URL is set"
+      />
     </>
   );
 }
@@ -123,9 +182,11 @@ function LessonLinkConfigFields({
 function LessonWritingConfigFields({
   block,
   patch,
+  onChange,
 }: {
   block: LessonBlockDto;
   patch: (partial: Partial<LessonBlockDto["config"]>) => void;
+  onChange: (next: LessonBlockDto) => void;
 }) {
   const mode = lessonWritingMode(block);
   const prompt = block.config.prompt ?? "";
@@ -243,6 +304,14 @@ function LessonWritingConfigFields({
           ) : null}
         </div>
       ) : null}
+
+      <LessonMediaAssetField
+        block={block}
+        patch={patch}
+        onChange={onChange}
+        label="Teacher reference file (optional)"
+        hint="Worksheet or image for your own use — not shown during Run yet"
+      />
     </>
   );
 }
@@ -396,7 +465,7 @@ export function LessonBlockConfigPanel({
       )}
 
       {block.type === "LINK" && (
-        <LessonLinkConfigFields block={block} patch={patch} />
+        <LessonLinkConfigFields block={block} patch={patch} onChange={onChange} />
       )}
 
       {block.type === "CUSTOM_NOTE" && (
@@ -415,7 +484,9 @@ export function LessonBlockConfigPanel({
         </>
       )}
 
-      {block.type === "WRITING" && <LessonWritingConfigFields block={block} patch={patch} />}
+      {block.type === "WRITING" && (
+        <LessonWritingConfigFields block={block} patch={patch} onChange={onChange} />
+      )}
 
       {block.type === "HANGMAN_WORDS" && (
         <p className="text-xs text-[var(--color-muted)]">
