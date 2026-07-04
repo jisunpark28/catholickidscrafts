@@ -15,6 +15,10 @@ type Props = {
   onChange: (assetUrl: string | undefined, meta?: UploadMeta) => void;
   label?: string;
   hint?: string;
+  /** When set, restricts the file picker (e.g. image/* only). */
+  accept?: string;
+  /** Show an image preview when the uploaded asset is a picture. */
+  imagePreviewUrl?: string;
 };
 
 export function LessonMediaUpload({
@@ -24,6 +28,8 @@ export function LessonMediaUpload({
   onChange,
   label = "Upload file",
   hint = "Images, PDF, or PowerPoint · max 10MB",
+  accept = "image/*,.pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  imagePreviewUrl,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -79,7 +85,18 @@ export function LessonMediaUpload({
       </div>
       {hint ? <p className="mt-0.5 text-xs text-[var(--color-muted)]">{hint}</p> : null}
 
-      {assetUrl ? (
+      {imagePreviewUrl ? (
+        <div className="mt-2 overflow-hidden rounded border border-[var(--color-border)] bg-white p-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imagePreviewUrl}
+            alt=""
+            className="mx-auto max-h-48 w-auto max-w-full object-contain"
+          />
+        </div>
+      ) : null}
+
+      {assetUrl && !imagePreviewUrl ? (
         <div className="mt-2 rounded border border-[var(--color-border)] bg-white px-3 py-2 text-sm">
           <a
             href={assetUrl}
@@ -99,7 +116,7 @@ export function LessonMediaUpload({
         <input
           ref={inputRef}
           type="file"
-          accept="image/*,.pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+          accept={accept}
           className="sr-only"
           disabled={uploading}
           onChange={(e) => {

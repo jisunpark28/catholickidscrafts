@@ -53,6 +53,11 @@ export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
     description: "Links, images, slides, and site activities",
     blocks: [
       {
+        type: "IMAGE",
+        paletteLabel: "Image",
+        description: "Upload or link a picture with optional caption",
+      },
+      {
         type: "LINK",
         paletteLabel: "External link",
         description: "Prayer, video, Google Doc, or any web page",
@@ -122,6 +127,13 @@ export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["confi
         url: "",
         buttonLabel: "Opening prayer",
         openInNewTab: true,
+      };
+    case "IMAGE":
+      return {
+        imageUrl: "",
+        alt: "",
+        caption: "",
+        imageSource: "upload",
       };
     case "MASS_TODAY":
       return {};

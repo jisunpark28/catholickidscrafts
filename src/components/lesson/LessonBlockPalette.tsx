@@ -23,7 +23,7 @@ export function LessonBlockPalette({ onPick, onCancel }: Props) {
       <div className="lesson-block-palette__header">
         <h3 className="text-sm font-bold text-[var(--color-ink)]">Add a puzzle piece</h3>
         <p className="mt-0.5 text-xs text-[var(--color-muted)]">
-          Build your lesson step by step. Image and slide blocks arrive in upcoming updates.
+          Build your lesson step by step. Slide blocks arrive in upcoming updates.
         </p>
       </div>
 

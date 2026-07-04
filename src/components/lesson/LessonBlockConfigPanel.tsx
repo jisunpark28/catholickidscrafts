@@ -12,6 +12,13 @@ import {
   familyIncludeHint,
 } from "@/lib/lesson-kit/family-blocks";
 import {
+  lessonImageAlt,
+  lessonImageCaption,
+  lessonImageSource,
+  lessonImageSrc,
+  validateLessonImageUrl,
+} from "@/lib/lesson-kit/image-block";
+import {
   lessonLinkButtonLabel,
   lessonLinkHref,
   validateLessonLinkUrl,
@@ -175,6 +182,145 @@ function LessonLinkConfigFields({
         label="Or upload a file"
         hint="PDF, image, or PowerPoint — opens from a button when no URL is set"
       />
+    </>
+  );
+}
+
+function LessonImageConfigFields({
+  block,
+  patch,
+  onChange,
+}: {
+  block: LessonBlockDto;
+  patch: (partial: Partial<LessonBlockDto["config"]>) => void;
+  onChange: (next: LessonBlockDto) => void;
+}) {
+  const source = lessonImageSource(block);
+  const previewSrc = lessonImageSrc(block);
+  const urlInput = block.config.imageUrl ?? "";
+  const urlValidation =
+    source === "url" && urlInput.trim() ? validateLessonImageUrl(urlInput) : null;
+
+  return (
+    <>
+      <fieldset className="lesson-block-config__field">
+        <legend className="text-sm font-semibold text-[var(--color-ink)]">Image source</legend>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {(
+            [
+              { value: "upload" as const, label: "Upload" },
+              { value: "url" as const, label: "Image URL" },
+            ] as const
+          ).map((opt) => (
+            <label
+              key={opt.value}
+              className={`cursor-pointer rounded border px-3 py-2 text-xs font-semibold ${
+                source === opt.value
+                  ? "border-[var(--color-accent)] bg-white text-[var(--color-ink)]"
+                  : "border-[var(--color-border)] text-[var(--color-muted)]"
+              }`}
+            >
+              <input
+                type="radio"
+                name={`image-source-${block.id}`}
+                className="sr-only"
+                checked={source === opt.value}
+                onChange={() => patch({ imageSource: opt.value })}
+              />
+              {opt.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      {source === "upload" ? (
+        <LessonMediaUpload
+          assetUrl={block.config.imageUrl}
+          filename={block.config.assetFilename}
+          mimeType={block.config.assetMimeType}
+          accept="image/*"
+          label="Upload image"
+          hint="PNG, JPG, GIF, WebP · max 10MB"
+          imagePreviewUrl={previewSrc ?? undefined}
+          onChange={(url, meta) => {
+            if (!url) {
+              onChange({
+                ...block,
+                config: {
+                  ...block.config,
+                  imageUrl: "",
+                  imageSource: "upload",
+                  assetUrl: undefined,
+                  assetFilename: undefined,
+                  assetMimeType: undefined,
+                },
+              });
+              return;
+            }
+            patch({
+              imageUrl: url,
+              imageSource: "upload",
+              assetUrl: url,
+              assetFilename: meta?.filename,
+              assetMimeType: meta?.mimeType ?? undefined,
+            });
+          }}
+        />
+      ) : (
+        <label className="lesson-block-config__field">
+          <span>Image URL</span>
+          <input
+            type="url"
+            value={urlInput}
+            placeholder="https://…/photo.jpg"
+            onChange={(e) => patch({ imageUrl: e.target.value, imageSource: "url" })}
+          />
+          {urlValidation && !urlValidation.valid ? (
+            <p className="mt-1 text-xs font-semibold text-red-600">{urlValidation.error}</p>
+          ) : null}
+        </label>
+      )}
+
+      <label className="lesson-block-config__field">
+        <span>Alt text (accessibility)</span>
+        <input
+          type="text"
+          value={block.config.alt ?? ""}
+          placeholder="Describe the image for screen readers"
+          onChange={(e) => patch({ alt: e.target.value })}
+        />
+      </label>
+
+      <label className="lesson-block-config__field">
+        <span>Caption (optional)</span>
+        <input
+          type="text"
+          value={block.config.caption ?? ""}
+          placeholder="Short caption shown below the image"
+          onChange={(e) => patch({ caption: e.target.value })}
+        />
+      </label>
+
+      {previewSrc ? (
+        <div className="lesson-block-config__field mt-2 border-t border-[var(--color-border)] pt-3">
+          <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+            Preview
+          </span>
+          <figure className="lesson-image-figure mt-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={previewSrc}
+              alt={lessonImageAlt(block)}
+              className="lesson-image-figure__img"
+            />
+            {lessonImageCaption(block) ? (
+              <figcaption className="lesson-image-figure__caption">
+                {lessonImageCaption(block)}
+              </figcaption>
+            ) : null}
+          </figure>
+        </div>
+      ) : null}
     </>
   );
 }
@@ -466,6 +612,10 @@ export function LessonBlockConfigPanel({
 
       {block.type === "LINK" && (
         <LessonLinkConfigFields block={block} patch={patch} onChange={onChange} />
+      )}
+
+      {block.type === "IMAGE" && (
+        <LessonImageConfigFields block={block} patch={patch} onChange={onChange} />
       )}
 
       {block.type === "CUSTOM_NOTE" && (
