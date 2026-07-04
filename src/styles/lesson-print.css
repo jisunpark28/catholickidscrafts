@@ -37,6 +37,13 @@
   font-size: 0.9375rem;
 }
 
+.lesson-print__link {
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  word-break: break-all;
+  color: #333;
+}
+
 .lesson-print__hint {
   margin-top: 0.25rem;
   font-size: 0.75rem;

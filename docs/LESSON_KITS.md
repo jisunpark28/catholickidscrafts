@@ -25,14 +25,15 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 | `MASS_TODAY` | `{}` |
 | `CUSTOM_NOTE` | `{ html, familyInclude? }` |
 | `RESOURCE` | `{ resourceSlug, familyInclude? }` |
+| `LINK` | `{ url, buttonLabel?, openInNewTab? }` |
 | `BIBLE_CHAPTER` | `{ bookSlug, chapter, maxChars?, familyInclude? }` |
 | `HANGMAN_WORDS` | `{ gameSlug: "hangman" }` |
 
-### Editor palette (PR-1)
+### Editor palette (PR-1) & LINK block (PR-2)
 
 Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/block-palette.ts`).  
 `MASS_TODAY`, `GOSPEL_TYPING`, and `BIBLE_CHAPTER` stay in the schema for existing kits but are **hidden from the add palette**.  
-`LessonBlockConfig` also accepts forward-compatible fields (`url`, `prompt`, `imageUrl`, …) for upcoming link/slides blocks.
+`LINK` blocks use `url`, `buttonLabel`, and `openInNewTab` (`src/lib/lesson-kit/link-block.ts`).
 
 ## Routes
 

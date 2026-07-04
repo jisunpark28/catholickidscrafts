@@ -6,6 +6,7 @@ export const LENT_WK1_SHOWCASE_SLUG = "lent-wk1-g3";
 export const LESSON_BLOCK_DEFAULT_LABEL: Record<LessonBlockType, string> = {
   CUSTOM_NOTE: "Note",
   RESOURCE: "Craft",
+  LINK: "Link",
   PLAY_GAME: "Game",
   TYPING_WORDS: "Words",
   HANGMAN_WORDS: "Hangman",

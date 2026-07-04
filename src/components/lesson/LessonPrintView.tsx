@@ -1,4 +1,5 @@
 import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
+import { lessonLinkHref } from "@/lib/lesson-kit/link-block";
 import type { LessonKitDto } from "@/lib/lesson-kit/types";
 import { LESSON_BLOCK_DEFAULT_LABEL } from "@/lib/lesson-kit/constants";
 import "@/styles/lesson-kit.css";
@@ -30,6 +31,11 @@ export function LessonPrintView({ kit }: Props) {
                 className="lesson-print__note rich-content"
                 dangerouslySetInnerHTML={{ __html: block.config.html }}
               />
+            ) : null}
+            {block.type === "LINK" ? (
+              <p className="lesson-print__link">
+                {lessonLinkHref(block) ?? block.config.url?.trim() ?? "(no URL)"}
+              </p>
             ) : null}
             {block.config.familyInclude === false ? (
               <p className="lesson-print__hint">Classroom only (hidden at home)</p>

@@ -12,6 +12,7 @@ export function defaultFamilyIncludedByType(type: LessonBlockType): boolean {
   switch (type) {
     case "CUSTOM_NOTE":
     case "RESOURCE":
+    case "LINK":
     case "BIBLE_CHAPTER":
       return false;
     default:
