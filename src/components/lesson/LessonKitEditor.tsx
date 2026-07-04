@@ -16,8 +16,6 @@ import {
   type LessonKitNavItem,
   teacherEditNavItems,
 } from "@/components/lesson/LessonKitNav";
-import { LessonKitDocxDownloadLink } from "@/components/lesson/LessonKitDocxDownloadLink";
-import { LessonKitPdfDownloadLink } from "@/components/lesson/LessonKitPdfDownloadLink";
 import {
   LESSON_GAME_SLUGS,
   LESSON_WORD_PRESETS,
@@ -420,8 +418,6 @@ export function LessonKitEditor({
               Print
             </Link>
           ) : null}
-          <LessonKitDocxDownloadLink kitId={kit.id} />
-          <LessonKitPdfDownloadLink kitId={kit.id} />
         </div>
       </div>
 
@@ -609,7 +605,7 @@ export function LessonKitEditor({
         {saving ? "Saving…" : "Save now"}
       </LessonBigButton>
 
-      <LessonShareSheet shareSlug={kit.shareSlug} title={kit.title} />
+      <LessonShareSheet shareSlug={kit.shareSlug} title={kit.title} kitId={kit.id} />
 
       {!adminMeta && kit.scope === "PERSONAL" ? (
         <button
