@@ -1,16 +1,39 @@
 import type { LessonBlockType, LessonKitScope } from "@prisma/client";
 
+/** Per-block JSON config. Extra keys are allowed for forward-compatible PRs (link, slides, …). */
 export type LessonBlockConfig = {
   gameSlug?: string;
   wordIds?: string[];
   wordPreset?: string;
   readingKind?: string;
   maxChars?: number;
+  minChars?: number;
   bookSlug?: string;
   chapter?: number;
   resourceSlug?: string;
   html?: string;
   familyInclude?: boolean;
+  /** PR-2+ external link blocks */
+  url?: string;
+  buttonLabel?: string;
+  openInNewTab?: boolean;
+  /** PR-3+ writing blocks */
+  prompt?: string;
+  placeholder?: string;
+  writingMode?: "display" | "student";
+  /** PR-5+ image blocks */
+  imageUrl?: string;
+  alt?: string;
+  caption?: string;
+  imageSource?: "upload" | "url";
+  /** PR-6+ slides blocks */
+  embedUrl?: string;
+  assetUrl?: string;
+  slidesSource?: "embed" | "upload";
+  /** PR-7+ unified game data */
+  gameFormat?: string;
+  words?: string[];
+  [key: string]: unknown;
 };
 
 export type FamilyModeConfig = {

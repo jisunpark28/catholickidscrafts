@@ -28,6 +28,12 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 | `BIBLE_CHAPTER` | `{ bookSlug, chapter, maxChars?, familyInclude? }` |
 | `HANGMAN_WORDS` | `{ gameSlug: "hangman" }` |
 
+### Editor palette (PR-1)
+
+Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/block-palette.ts`).  
+`MASS_TODAY`, `GOSPEL_TYPING`, and `BIBLE_CHAPTER` stay in the schema for existing kits but are **hidden from the add palette**.  
+`LessonBlockConfig` also accepts forward-compatible fields (`url`, `prompt`, `imageUrl`, …) for upcoming link/slides blocks.
+
 ## Routes
 
 - `/program` — templates and teacher’s Lesson Kits (server-loaded)
