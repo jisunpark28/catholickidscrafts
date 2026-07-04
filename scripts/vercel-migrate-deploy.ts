@@ -3,6 +3,7 @@ import { execSync } from "node:child_process";
 const PRISMA = "pnpm exec prisma";
 const DISCUSSION_MIGRATION = "20260622120000_bible_chapter_discussion";
 const RECOVERY_MIGRATION = "20260623150000_bible_discussion_tables_recovery";
+const LESSON_KIT_COMMENTS_MIGRATION = "20260709120000_lesson_kit_comments";
 
 function run(command: string): { output: string; code: number } {
   try {
@@ -57,6 +58,13 @@ function bootstrapDiscussionSchema(): boolean {
   return result.code === 0;
 }
 
+function bootstrapLessonKitCommentsSchema(): boolean {
+  console.log("Bootstrapping lesson kit comments table via direct DB connection...");
+  const result = run("pnpm exec tsx scripts/ensure-lesson-kit-comments-schema.ts");
+  log(result.output);
+  return result.code === 0;
+}
+
 function markDiscussionMigrationsApplied(): void {
   for (const migration of [DISCUSSION_MIGRATION, RECOVERY_MIGRATION]) {
     const { output, code } = run(`${PRISMA} migrate resolve --applied ${migration}`);
@@ -102,6 +110,59 @@ function recoverDiscussionMigration(output: string): boolean {
   return false;
 }
 
+function isLessonKitCommentsIssue(output: string): boolean {
+  return (
+    output.includes(LESSON_KIT_COMMENTS_MIGRATION) ||
+    output.includes("LessonKitComment")
+  );
+}
+
+function markLessonKitCommentsMigrationApplied(): void {
+  const { output, code } = run(
+    `${PRISMA} migrate resolve --applied ${LESSON_KIT_COMMENTS_MIGRATION}`,
+  );
+  log(output);
+  if (code !== 0 && !output.includes("is already recorded as applied")) {
+    console.warn(`Could not mark ${LESSON_KIT_COMMENTS_MIGRATION} as applied (may already be applied).`);
+  }
+}
+
+function recoverLessonKitCommentsMigration(output: string): boolean {
+  if (!isLessonKitCommentsIssue(output)) return false;
+
+  if (output.includes("P3009") || output.includes("failed migrations")) {
+    console.log("Recovering failed lesson kit comments migration...");
+    const rolled = run(`${PRISMA} migrate resolve --rolled-back ${LESSON_KIT_COMMENTS_MIGRATION}`);
+    log(rolled.output);
+    return true;
+  }
+
+  if (
+    output.includes("already exists") ||
+    output.includes("42701") ||
+    output.includes("42P07") ||
+    output.includes("P3018")
+  ) {
+    console.log("Lesson kit comments table already exists; bootstrapping and marking migration applied...");
+    if (!bootstrapLessonKitCommentsSchema()) return false;
+    markLessonKitCommentsMigrationApplied();
+    return true;
+  }
+
+  if (
+    output.includes("P3008") ||
+    output.includes("was modified after it was applied") ||
+    output.includes("checksum")
+  ) {
+    console.log("Lesson kit comments migration checksum drift; bootstrapping schema directly...");
+    if (!bootstrapLessonKitCommentsSchema()) return false;
+    markLessonKitCommentsMigrationApplied();
+    return true;
+  }
+
+  return false;
+}
+
 for (let attempt = 1; attempt <= 4; attempt += 1) {
   const { output, code } = run(`${PRISMA} migrate deploy`);
   log(output);
@@ -110,6 +171,10 @@ for (let attempt = 1; attempt <= 4; attempt += 1) {
   }
 
   if (recoverDiscussionMigration(output)) {
+    continue;
+  }
+
+  if (recoverLessonKitCommentsMigration(output)) {
     continue;
   }
 
@@ -133,6 +198,13 @@ log(final.output);
 if (final.code !== 0 && isDiscussionIssue(final.output)) {
   console.warn("Discussion migrations remain unresolved, but schema bootstrap ran. Continuing build.");
   process.exit(0);
+}
+if (final.code !== 0 && isLessonKitCommentsIssue(final.output)) {
+  if (bootstrapLessonKitCommentsSchema()) {
+    markLessonKitCommentsMigrationApplied();
+    console.warn("Lesson kit comments migration unresolved, but schema bootstrap ran. Continuing build.");
+    process.exit(0);
+  }
 }
 
 process.exit(final.code);
