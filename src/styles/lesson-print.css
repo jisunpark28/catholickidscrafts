@@ -73,6 +73,10 @@
   max-height: 14rem;
 }
 
+.lesson-print__slides {
+  margin-top: 0.5rem;
+}
+
 .lesson-print__hint {
   margin-top: 0.25rem;
   font-size: 0.75rem;

@@ -1,6 +1,10 @@
 import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
 import { LessonImageFigure } from "@/components/lesson/LessonImageFigure";
 import { lessonImageSrc } from "@/lib/lesson-kit/image-block";
+import {
+  lessonSlidesAssetUrl,
+  lessonSlidesEmbedSrc,
+} from "@/lib/lesson-kit/slides-block";
 import { lessonLinkHref } from "@/lib/lesson-kit/link-block";
 import {
   lessonWritingPrintBlankLines,
@@ -61,6 +65,19 @@ export function LessonPrintView({ kit }: Props) {
             {block.type === "IMAGE" && lessonImageSrc(block) ? (
               <div className="lesson-print__image">
                 <LessonImageFigure block={block} />
+              </div>
+            ) : null}
+            {block.type === "SLIDES" ? (
+              <div className="lesson-print__slides">
+                {lessonSlidesEmbedSrc(block) ? (
+                  <p className="lesson-print__link">{lessonSlidesEmbedSrc(block)}</p>
+                ) : null}
+                {lessonSlidesAssetUrl(block) ? (
+                  <p className="lesson-print__link">{lessonSlidesAssetUrl(block)}</p>
+                ) : null}
+                {!lessonSlidesEmbedSrc(block) && !lessonSlidesAssetUrl(block) ? (
+                  <p className="lesson-print__hint">(slides not configured)</p>
+                ) : null}
               </div>
             ) : null}
             {block.config.familyInclude === false ? (

@@ -24,6 +24,13 @@ import {
   validateLessonLinkUrl,
 } from "@/lib/lesson-kit/link-block";
 import {
+  googleSlidesShareToEmbedUrl,
+  lessonSlidesAssetUrl,
+  lessonSlidesEmbedSrc,
+  lessonSlidesOpenLabel,
+  lessonSlidesSource,
+} from "@/lib/lesson-kit/slides-block";
+import {
   lessonWritingMaxChars,
   lessonWritingMinChars,
   lessonWritingMode,
@@ -325,6 +332,151 @@ function LessonImageConfigFields({
   );
 }
 
+function LessonSlidesConfigFields({
+  block,
+  patch,
+  onChange,
+}: {
+  block: LessonBlockDto;
+  patch: (partial: Partial<LessonBlockDto["config"]>) => void;
+  onChange: (next: LessonBlockDto) => void;
+}) {
+  const source = lessonSlidesSource(block);
+  const embedInput = block.config.embedUrl ?? "";
+  const embedConversion =
+    source === "embed" && embedInput.trim() ? googleSlidesShareToEmbedUrl(embedInput) : null;
+  const previewEmbed = lessonSlidesEmbedSrc(block);
+  const assetUrl = lessonSlidesAssetUrl(block);
+
+  return (
+    <>
+      <fieldset className="lesson-block-config__field">
+        <legend className="text-sm font-semibold text-[var(--color-ink)]">Slides source</legend>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {(
+            [
+              {
+                value: "embed" as const,
+                label: "Google Slides / Drive",
+                hint: "Paste a share link — we convert it for embed",
+              },
+              {
+                value: "upload" as const,
+                label: "Upload file",
+                hint: "PDF recommended; PPTX opens as download",
+              },
+            ] as const
+          ).map((opt) => (
+            <label
+              key={opt.value}
+              className={`cursor-pointer rounded border px-3 py-2 text-xs ${
+                source === opt.value
+                  ? "border-[var(--color-accent)] bg-white font-semibold text-[var(--color-ink)]"
+                  : "border-[var(--color-border)] text-[var(--color-muted)]"
+              }`}
+            >
+              <input
+                type="radio"
+                name={`slides-source-${block.id}`}
+                className="sr-only"
+                checked={source === opt.value}
+                onChange={() => patch({ slidesSource: opt.value })}
+              />
+              <span className="block">{opt.label}</span>
+              <span className="mt-0.5 block font-normal opacity-80">{opt.hint}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      {source === "embed" ? (
+        <label className="lesson-block-config__field">
+          <span>Google share link</span>
+          <input
+            type="url"
+            value={embedInput}
+            placeholder="https://docs.google.com/presentation/d/…/edit"
+            onChange={(e) => patch({ embedUrl: e.target.value, slidesSource: "embed" })}
+          />
+          {embedConversion && !embedConversion.ok ? (
+            <p className="mt-1 text-xs font-semibold text-red-600">{embedConversion.error}</p>
+          ) : null}
+          <p className="mt-1 text-xs text-[var(--color-muted)]">
+            Use a link anyone with the link can view. Google Slides and Drive file links work.
+          </p>
+        </label>
+      ) : (
+        <>
+          <LessonMediaUpload
+            assetUrl={block.config.assetUrl}
+            filename={block.config.assetFilename}
+            mimeType={block.config.assetMimeType}
+            accept="application/pdf,.pdf,.ppt,.pptx,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            label="Upload slides"
+            hint="PDF plays inline in class. PowerPoint downloads only — export to PDF for projector view."
+            onChange={(url, meta) => {
+              if (!url) {
+                onChange({
+                  ...block,
+                  config: {
+                    ...block.config,
+                    slidesSource: "upload",
+                    assetUrl: undefined,
+                    assetFilename: undefined,
+                    assetMimeType: undefined,
+                  },
+                });
+                return;
+              }
+              patch({
+                slidesSource: "upload",
+                assetUrl: url,
+                assetFilename: meta?.filename,
+                assetMimeType: meta?.mimeType ?? undefined,
+              });
+            }}
+          />
+        </>
+      )}
+
+      <label className="lesson-block-config__field">
+        <span>Open button label (upload / fallback)</span>
+        <input
+          type="text"
+          value={block.config.buttonLabel ?? ""}
+          placeholder="Open slides"
+          onChange={(e) => patch({ buttonLabel: e.target.value })}
+        />
+      </label>
+
+      {previewEmbed ? (
+        <div className="lesson-block-config__field mt-2 border-t border-[var(--color-border)] pt-3">
+          <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+            Embed preview
+          </span>
+          <div className="lesson-slides-embed mt-2">
+            <iframe
+              title={lessonSlidesOpenLabel(block)}
+              src={previewEmbed}
+              className="lesson-slides-embed__frame lesson-slides-embed__frame--editor"
+            />
+          </div>
+          <p className="mt-2 break-all text-xs text-[var(--color-muted)]">{previewEmbed}</p>
+        </div>
+      ) : null}
+
+      {source === "upload" && assetUrl ? (
+        <p className="text-xs text-[var(--color-muted)]">
+          Uploaded:{" "}
+          <a href={assetUrl} target="_blank" rel="noopener noreferrer" className="text-[var(--color-link)]">
+            {block.config.assetFilename ?? "Open file"}
+          </a>
+        </p>
+      ) : null}
+    </>
+  );
+}
+
 function LessonWritingConfigFields({
   block,
   patch,
@@ -616,6 +768,10 @@ export function LessonBlockConfigPanel({
 
       {block.type === "IMAGE" && (
         <LessonImageConfigFields block={block} patch={patch} onChange={onChange} />
+      )}
+
+      {block.type === "SLIDES" && (
+        <LessonSlidesConfigFields block={block} patch={patch} onChange={onChange} />
       )}
 
       {block.type === "CUSTOM_NOTE" && (

@@ -58,6 +58,11 @@ export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
         description: "Upload or link a picture with optional caption",
       },
       {
+        type: "SLIDES",
+        paletteLabel: "Slides",
+        description: "Google Slides embed or uploaded PDF / PowerPoint",
+      },
+      {
         type: "LINK",
         paletteLabel: "External link",
         description: "Prayer, video, Google Doc, or any web page",
@@ -134,6 +139,12 @@ export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["confi
         alt: "",
         caption: "",
         imageSource: "upload",
+      };
+    case "SLIDES":
+      return {
+        embedUrl: "",
+        slidesSource: "embed",
+        buttonLabel: "Open slides",
       };
     case "MASS_TODAY":
       return {};
