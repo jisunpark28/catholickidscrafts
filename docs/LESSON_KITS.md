@@ -48,6 +48,12 @@ Personal kits can be listed on **`/program/community`** when the teacher enables
 `GLOBAL_TEMPLATE` + `published` remains the curated template catalog on `/program/templates`.  
 `GET /api/program/community` — public list; `PATCH /api/program/kits/[id]` accepts `communityVisible` and `authorDisplayName`.
 
+### Community detail + fork (PR-12)
+
+**`/program/community/[shareSlug]`** — public lesson detail (no login): block summaries, author, **Run in class**, **Use this**.  
+**Use this** calls `POST /api/program/kits` with `{ sourceId }` (`duplicateLessonKit`); guests are sent to login with `next` back to the detail page, then redirected to **`/program/kit/[newId]`**.  
+Forked kits store `sourceKitId`; the editor shows “Copied from {author}'s lesson «{title}»” (`LessonForkAttributionBanner`).
+
 ## Routes
 
 - `/program` — templates and teacher’s Lesson Kits (server-loaded)
@@ -58,6 +64,7 @@ Personal kits can be listed on **`/program/community`** when the teacher enables
 - `/account` — teacher dashboard: students + weekly assignments
 - `/program/templates` — curated global templates
 - `/program/community` — teacher-shared personal kits (PR-11)
+- `/program/community/[shareSlug]` — public detail + fork (PR-12)
 
 ## APIs
 
