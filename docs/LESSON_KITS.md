@@ -77,6 +77,13 @@ Use the toolbar **Print** button (browser dialog) or **Download PDF** (server-ge
 - **UI:** Download PDF on the kit editor and print toolbar
 - **Local dev:** set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not in a default path
 
+### Word export (PR-10)
+
+`GET /api/program/kits/[id]/export.docx` — builds a `.docx` with the same cover metadata and per-step content as PR-8 (via `docx` npm).
+
+- **Auth:** same as PDF export (`canExportLessonKit`)
+- **UI:** Download Word on the kit editor and print toolbar
+
 ## Routes
 
 - `/program` — templates and teacher’s Lesson Kits (server-loaded)
@@ -93,6 +100,7 @@ Use the toolbar **Print** button (browser dialog) or **Download PDF** (server-ge
 - `POST /api/program/uploads` — teacher media (images, PDF, PPT) → `assetUrl`
 - `GET|PATCH|DELETE /api/program/kits/[id]` — kit meta
 - `GET /api/program/kits/[id]/export.pdf` — Letter PDF download (PR-9)
+- `GET /api/program/kits/[id]/export.docx` — Word document download (PR-10)
 - `GET|POST /api/admin/lesson-templates` — admin global template CRUD (create)
 - `GET|PATCH|DELETE /api/admin/lesson-templates/[id]` — admin template meta
 - `PUT /api/admin/lesson-templates/[id]/blocks` — admin template steps

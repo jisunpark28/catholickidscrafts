@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ["@prisma/client", "prisma", "puppeteer-core", "@sparticuz/chromium"],
+  serverExternalPackages: ["@prisma/client", "prisma", "puppeteer-core", "@sparticuz/chromium", "docx"],
   async redirects() {
     return [
       {

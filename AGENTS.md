@@ -53,6 +53,11 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - Local dev: set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not at `/usr/local/bin/google-chrome`.
 - Auth: kit owner (family session) or published `GLOBAL_TEMPLATE` without sign-in.
 
+### Lesson kit Word export (PR-10)
+
+- `GET /api/program/kits/[id]/export.docx` — `docx` npm; same content structure as PR-8 print.
+- Auth: `canExportLessonKit` (same as PDF).
+
 ### Home learn hub & Bible (2026-06)
 
 - Home (`/`) uses `HomeLearnHub`: **Daily Mass** pill toggles liturgical calendar; sections/pills from `HomeSection` / `HomeSectionItem` (admin: `/admin/home-sections`).
