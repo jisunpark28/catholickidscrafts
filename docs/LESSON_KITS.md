@@ -59,11 +59,21 @@ Unified teacher-configured games (`src/lib/lesson-kit/game-block.ts`, `LessonGam
 Print view shows a format summary plus optional teacher answer key (`printAnswerKey`, default on).  
 Legacy `TYPING_WORDS`, `HANGMAN_WORDS`, and `PLAY_GAME` blocks still run in older kits; the editor palette offers `GAME` + site `PLAY_GAME`.
 
+### Print (PR-8)
+
+`/program/kit/[id]/print` renders a **US Letter** plan (`@page { size: letter }` in `src/styles/lesson-print.css`):
+
+- Cover: title, description, grade, liturgical season, week, step count, estimated minutes, runner URLs
+- Each step: number, label, block type badge, per-step time estimate
+- Block sections: teacher notes, links, writing lines, images, slides URLs, game summaries (+ optional answer key)
+
+Use the toolbar **Print / Save PDF** button; choose Letter paper in the browser print dialog.
+
 ## Routes
 
 - `/program` — templates and teacher’s Lesson Kits (server-loaded)
 - `/program/kit/[id]` — edit steps
-- `/program/kit/[id]/print` — print / save PDF
+- `/program/kit/[id]/print` — print / save PDF (US Letter layout, PR-8)
 - `/lesson/[shareSlug]` — classroom runner
 - `/lesson/[shareSlug]/family` — student / at-home runner
 - `/account` — teacher dashboard: students + weekly assignments
