@@ -1,5 +1,4 @@
-import { LessonRunHeader } from "@/components/lesson/LessonRunHeader";
-import { LessonRunner } from "@/components/lesson/LessonRunner";
+import { LessonRunClient } from "@/components/lesson/LessonRunClient";
 import { getLessonKitByShareSlug } from "@/lib/lesson-kit/db";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -21,10 +20,5 @@ export default async function LessonFamilyPage({ params }: Props) {
   const kit = await getLessonKitByShareSlug(shareSlug);
   if (!kit) notFound();
 
-  return (
-    <>
-      <LessonRunHeader title={kit.title} subtitle="At home" />
-      <LessonRunner kit={kit} mode="family" />
-    </>
-  );
+  return <LessonRunClient kit={kit} mode="family" subtitle="At home" />;
 }

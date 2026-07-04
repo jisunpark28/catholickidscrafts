@@ -4,6 +4,7 @@ import { LessonBlockContent } from "@/components/lesson/LessonBlockContent";
 import { LessonBigButton, LessonProgressBar, LessonStepTitle } from "@/components/lesson/LessonUi";
 import { LessonIcon } from "@/components/icons/lesson/LessonIcon";
 import { blockDisplayLabel, filterFamilyBlocks } from "@/lib/lesson-kit/family-blocks";
+import { saveLessonKitOffline } from "@/lib/lesson-kit/offline-cache";
 import type { LessonKitDto } from "@/lib/lesson-kit/types";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -34,11 +35,7 @@ export function LessonRunner({
   }, [kit.shareSlug, onOpenRecorded]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(`lesson-offline:${kit.shareSlug}`, JSON.stringify(kit));
-    } catch {
-      /* ignore quota */
-    }
+    saveLessonKitOffline(kit);
   }, [kit]);
 
   const current = blocks[step];

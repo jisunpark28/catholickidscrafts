@@ -1,15 +1,37 @@
 import type { LessonBlockDto, LessonBlockConfig } from "@/lib/lesson-kit/types";
 
-export const LESSON_GAME_FORMATS = [
-  { id: "hangman", label: "Hangman" },
-  { id: "typing", label: "Typing" },
-  { id: "picture_match", label: "Picture match" },
-  { id: "fill_blank", label: "Fill in the blank" },
+export const LESSON_GAME_QUIZ_FORMATS = [
   { id: "true_false", label: "True / False" },
   { id: "multiple_choice", label: "Multiple choice" },
 ] as const;
 
+/** Kept for older kits; hidden from the add palette (PR-16). */
+export const LESSON_GAME_LEGACY_FORMATS = [
+  { id: "hangman", label: "Hangman (legacy)" },
+  { id: "typing", label: "Typing (legacy)" },
+  { id: "picture_match", label: "Picture match (legacy)" },
+  { id: "fill_blank", label: "Fill in the blank (legacy)" },
+] as const;
+
+export const LESSON_GAME_FORMATS = [
+  ...LESSON_GAME_QUIZ_FORMATS,
+  ...LESSON_GAME_LEGACY_FORMATS,
+] as const;
+
 export type LessonGameFormat = (typeof LESSON_GAME_FORMATS)[number]["id"];
+
+export function isLegacyGameFormat(format: LessonGameFormat): boolean {
+  return LESSON_GAME_LEGACY_FORMATS.some((f) => f.id === format);
+}
+
+/** Quiz formats for new blocks; legacy formats stay selectable when already in use. */
+export function lessonGameFormatOptionsForEditor(block: LessonBlockDto) {
+  const current = lessonGameFormat(block);
+  if (isLegacyGameFormat(current)) {
+    return LESSON_GAME_FORMATS;
+  }
+  return LESSON_GAME_QUIZ_FORMATS;
+}
 
 export type PictureMatchPair = { imageUrl: string; word: string };
 export type TrueFalseItem = { statement: string; answer: boolean };
@@ -24,7 +46,7 @@ export function lessonGameFormat(block: LessonBlockDto): LessonGameFormat {
   if (LESSON_GAME_FORMATS.some((f) => f.id === raw)) {
     return raw as LessonGameFormat;
   }
-  return "hangman";
+  return "multiple_choice";
 }
 
 export function parseWordList(raw: string): string[] {

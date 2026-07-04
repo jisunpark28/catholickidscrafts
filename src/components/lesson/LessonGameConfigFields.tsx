@@ -2,10 +2,10 @@
 
 import {
   defaultGameConfig,
-  LESSON_GAME_FORMATS,
   lessonFillBlankAnswers,
   lessonFillBlankText,
   lessonGameFormat,
+  lessonGameFormatOptionsForEditor,
   lessonGameHint,
   lessonGamePassage,
   lessonGameWords,
@@ -32,6 +32,7 @@ function wordsTextareaValue(words: string[]): string {
 
 export function LessonGameConfigFields({ block, patch }: Props) {
   const format = lessonGameFormat(block);
+  const formatOptions = lessonGameFormatOptionsForEditor(block);
 
   const setFormat = (next: LessonGameFormat) => {
     patch(defaultGameConfig(next));
@@ -45,7 +46,7 @@ export function LessonGameConfigFields({ block, patch }: Props) {
           value={format}
           onChange={(e) => setFormat(e.target.value as LessonGameFormat)}
         >
-          {LESSON_GAME_FORMATS.map((f) => (
+          {formatOptions.map((f) => (
             <option key={f.id} value={f.id}>
               {f.label}
             </option>

@@ -1,5 +1,4 @@
-import { LessonRunHeader } from "@/components/lesson/LessonRunHeader";
-import { LessonRunner } from "@/components/lesson/LessonRunner";
+import { LessonRunClient } from "@/components/lesson/LessonRunClient";
 import { getLessonKitByShareSlug } from "@/lib/lesson-kit/db";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -21,10 +20,5 @@ export default async function LessonRunPage({ params }: Props) {
   const kit = await getLessonKitByShareSlug(shareSlug);
   if (!kit) notFound();
 
-  return (
-    <>
-      <LessonRunHeader title={kit.title} />
-      <LessonRunner kit={kit} mode="classroom" />
-    </>
-  );
+  return <LessonRunClient kit={kit} mode="classroom" />;
 }

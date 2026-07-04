@@ -84,8 +84,8 @@ export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
     blocks: [
       {
         type: "GAME",
-        paletteLabel: "Custom game",
-        description: "Hangman, typing, quizzes — you supply words and data",
+        paletteLabel: "Quiz",
+        description: "True/false or multiple choice — you write the questions",
       },
       {
         type: "PLAY_GAME",
@@ -143,7 +143,7 @@ export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["confi
         buttonLabel: "Open slides",
       };
     case "GAME":
-      return defaultGameConfig("hangman");
+      return defaultGameConfig("multiple_choice");
     case "MASS_TODAY":
       return {};
     default:

@@ -43,21 +43,27 @@ Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/l
 `IMAGE` blocks use upload or external URL (`src/lib/lesson-kit/image-block.ts`, `LessonImageFigure`).  
 `SLIDES` blocks embed Google Slides/Drive or uploaded PDF/PPTX (`src/lib/lesson-kit/slides-block.ts`). PPTX uploads show a download button — export to PDF for inline class view.
 
-### `GAME` block (PR-7)
+### `GAME` block (PR-7, PR-16)
 
 Unified teacher-configured games (`src/lib/lesson-kit/game-block.ts`, `LessonGamePlayer`).
 
+**Palette (PR-16):** new blocks are **quiz only** — `true_false` and `multiple_choice`. Legacy formats (`hangman`, `typing`, `picture_match`, `fill_blank`) still run in older kits and remain editable when already in use.
+
 | `gameFormat` | Config fields | Runner |
 |--------------|---------------|--------|
-| `hangman` | `gameWords[]`, `gameHint?` | `LessonHangmanGame` |
-| `typing` | `typingMode`: `words` \| `passage`; `gameWords[]` or `gamePassage` | `WordFallTypingGame` / `PassageTypingGame` |
-| `picture_match` | `pictureMatch: { imageUrl, word }[]` | `LessonPictureMatchGame` |
-| `fill_blank` | `fillBlankText` (use `___`), `fillBlankAnswers[]` | `LessonFillBlankGame` |
 | `true_false` | `trueFalseItems: { statement, answer }[]` | `LessonTrueFalseGame` |
 | `multiple_choice` | `multipleChoiceItems: { question, choices, correctIndex }[]` | `LessonMultipleChoiceGame` |
+| `hangman` (legacy) | `gameWords[]`, `gameHint?` | `LessonHangmanGame` |
+| `typing` (legacy) | `typingMode`, `gameWords[]` or `gamePassage` | `LessonGameTyping` |
+| `picture_match` (legacy) | `pictureMatch: { imageUrl, word }[]` | `LessonPictureMatchGame` |
+| `fill_blank` (legacy) | `fillBlankText`, `fillBlankAnswers[]` | `LessonFillBlankGame` |
 
 Print view shows a format summary plus optional teacher answer key (`printAnswerKey`, default on).  
-Legacy `TYPING_WORDS`, `HANGMAN_WORDS`, and `PLAY_GAME` blocks still run in older kits; the editor palette offers `GAME` + site `PLAY_GAME`.
+Legacy `TYPING_WORDS`, `HANGMAN_WORDS`, and `PLAY_GAME` blocks still run in older kits; the editor palette offers **Quiz** + site `PLAY_GAME`.
+
+### Lesson runner offline cache (PR-16)
+
+On `/lesson/[shareSlug]` (classroom + family), the runner saves the kit JSON to `localStorage` and precaches game assets (hangman bundle, typing/hangman word APIs, quiz images) in Cache Storage (`ckc-lesson-games-v1`) so steps keep working on a flaky connection after at least one online visit.
 
 ### Print (PR-8)
 
