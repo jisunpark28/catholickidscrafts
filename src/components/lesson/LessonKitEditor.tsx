@@ -1,6 +1,7 @@
 "use client";
 
 import { LessonBlockConfigPanel } from "@/components/lesson/LessonBlockConfigPanel";
+import { LessonBlockPalette } from "@/components/lesson/LessonBlockPalette";
 import {
   LessonFamilyModePanel,
   type FamilyPickMode,
@@ -16,10 +17,10 @@ import {
   teacherEditNavItems,
 } from "@/components/lesson/LessonKitNav";
 import {
-  LESSON_BLOCK_DEFAULT_LABEL,
   LESSON_GAME_SLUGS,
   LESSON_WORD_PRESETS,
 } from "@/lib/lesson-kit/constants";
+import { defaultBlockConfig } from "@/lib/lesson-kit/block-palette";
 import {
   blockDisplayLabel,
   buildFamilyModeConfig,
@@ -32,17 +33,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const ADD_TYPES: LessonBlockType[] = [
-  "PLAY_GAME",
-  "TYPING_WORDS",
-  "GOSPEL_TYPING",
-  "BIBLE_CHAPTER",
-  "HANGMAN_WORDS",
-  "MASS_TODAY",
-  "CUSTOM_NOTE",
-  "RESOURCE",
-];
-
 const AUTOSAVE_MS = 1200;
 
 type Props = {
@@ -53,29 +43,6 @@ type Props = {
   /** Override default breadcrumb trail. */
   navItems?: LessonKitNavItem[];
 };
-
-function defaultConfig(type: LessonBlockType): LessonBlockDto["config"] {
-  switch (type) {
-    case "PLAY_GAME":
-      return { gameSlug: "liturgical-vestments" };
-    case "TYPING_WORDS":
-      return { wordPreset: "advent" };
-    case "GOSPEL_TYPING":
-      return { readingKind: "gospel", maxChars: 400 };
-    case "BIBLE_CHAPTER":
-      return { bookSlug: "matthew", chapter: 1, maxChars: 400 };
-    case "HANGMAN_WORDS":
-      return { gameSlug: "hangman" };
-    case "CUSTOM_NOTE":
-      return { html: "<p>Ask the children a question about today's Mass.</p>" };
-    case "RESOURCE":
-      return { resourceSlug: "advent-wreath-craft" };
-    case "MASS_TODAY":
-      return {};
-    default:
-      return {};
-  }
-}
 
 function remapIndexesOnRemove(indexes: number[], removed: number): number[] {
   return indexes.filter((i) => i !== removed).map((i) => (i > removed ? i - 1 : i));
@@ -351,7 +318,7 @@ export function LessonKitEditor({
         sortOrder: prev.length,
         type,
         label: null,
-        config: defaultConfig(type),
+        config: defaultBlockConfig(type),
       },
     ]);
     setShowAdd(false);
@@ -625,33 +592,12 @@ export function LessonKitEditor({
         onClick={() => setShowAdd(true)}
         className="w-full border border-dashed border-[var(--color-border)] py-3 text-sm font-bold text-[var(--color-muted)] hover:border-[var(--color-accent)]"
       >
-        + Add step
+        + Add puzzle piece
       </button>
 
-      {showAdd && (
-        <div className="border border-[var(--color-border)] bg-white p-4">
-          <div className="lesson-add-grid">
-            {ADD_TYPES.map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => addBlock(type)}
-                className="lesson-add-cell"
-              >
-                <LessonBlockIcon type={type} size="lg" />
-                {LESSON_BLOCK_DEFAULT_LABEL[type]}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowAdd(false)}
-            className="mt-3 text-sm font-semibold text-[var(--color-muted)]"
-          >
-            Cancel
-          </button>
-        </div>
-      )}
+      {showAdd ? (
+        <LessonBlockPalette onPick={addBlock} onCancel={() => setShowAdd(false)} />
+      ) : null}
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 

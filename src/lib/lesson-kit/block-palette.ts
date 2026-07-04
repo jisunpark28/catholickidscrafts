@@ -1,0 +1,112 @@
+import type { LessonBlockDto } from "@/lib/lesson-kit/types";
+import type { LessonBlockType } from "@prisma/client";
+
+/** Palette categories for the lesson-plan editor (lego / puzzle pieces). */
+export type LessonBlockPaletteCategory = "content" | "media" | "games";
+
+export type LessonBlockPaletteEntry = {
+  type: LessonBlockType;
+  /** Short label in the add palette (may differ from run-time block label). */
+  paletteLabel: string;
+  description: string;
+};
+
+export type LessonBlockPaletteGroup = {
+  id: LessonBlockPaletteCategory;
+  label: string;
+  description: string;
+  blocks: LessonBlockPaletteEntry[];
+};
+
+/** Liturgy blocks kept for existing kits; hidden from the add palette. */
+export const LEGACY_HIDDEN_BLOCK_TYPES: readonly LessonBlockType[] = [
+  "MASS_TODAY",
+  "GOSPEL_TYPING",
+  "BIBLE_CHAPTER",
+] as const;
+
+export function isLegacyHiddenBlockType(type: LessonBlockType): boolean {
+  return (LEGACY_HIDDEN_BLOCK_TYPES as readonly string[]).includes(type);
+}
+
+export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
+  {
+    id: "content",
+    label: "Content",
+    description: "Notes, prompts, and teacher script",
+    blocks: [
+      {
+        type: "CUSTOM_NOTE",
+        paletteLabel: "Note / writing",
+        description: "Opening prayer, discussion, or step-by-step script",
+      },
+    ],
+  },
+  {
+    id: "media",
+    label: "Media",
+    description: "Links, images, slides, and site activities",
+    blocks: [
+      {
+        type: "RESOURCE",
+        paletteLabel: "Activity link",
+        description: "Link to a craft or printable on this site",
+      },
+    ],
+  },
+  {
+    id: "games",
+    label: "Games",
+    description: "Game formats — you supply words and settings",
+    blocks: [
+      {
+        type: "PLAY_GAME",
+        paletteLabel: "Site game",
+        description: "Liturgical colors, church builder, and more",
+      },
+      {
+        type: "TYPING_WORDS",
+        paletteLabel: "Typing",
+        description: "Word-list typing practice",
+      },
+      {
+        type: "HANGMAN_WORDS",
+        paletteLabel: "Hangman",
+        description: "Hangman with your word list (coming: custom words)",
+      },
+    ],
+  },
+];
+
+export const DEFAULT_PALETTE_CATEGORY: LessonBlockPaletteCategory = "content";
+
+/** Default config when a block is added from the palette. */
+export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["config"] {
+  switch (type) {
+    case "PLAY_GAME":
+      return { gameSlug: "liturgical-vestments" };
+    case "TYPING_WORDS":
+      return { wordPreset: "sunday" };
+    case "GOSPEL_TYPING":
+      return { readingKind: "gospel", maxChars: 400 };
+    case "BIBLE_CHAPTER":
+      return { bookSlug: "matthew", chapter: 1, maxChars: 400 };
+    case "HANGMAN_WORDS":
+      return { gameSlug: "hangman" };
+    case "CUSTOM_NOTE":
+      return {
+        html: "<p>Welcome the class and share the goal for this step.</p>",
+        prompt: "",
+      };
+    case "RESOURCE":
+      return { resourceSlug: "lent-stations-cross-craft" };
+    case "MASS_TODAY":
+      return {};
+    default:
+      return {};
+  }
+}
+
+export function paletteTypesFlat(): LessonBlockType[] {
+  return LESSON_BLOCK_PALETTE.flatMap((g) => g.blocks.map((b) => b.type));
+}
