@@ -42,6 +42,12 @@ Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/l
 `IMAGE` blocks use upload or external URL (`src/lib/lesson-kit/image-block.ts`, `LessonImageFigure`).  
 `SLIDES` blocks embed Google Slides/Drive or uploaded PDF/PPTX (`src/lib/lesson-kit/slides-block.ts`). PPTX uploads show a download button — export to PDF for inline class view.
 
+### Teacher community (PR-11)
+
+Personal kits can be listed on **`/program/community`** when the teacher enables **Share with other teachers** (`communityVisible`, `publishedAt`, optional `authorDisplayName`).  
+`GLOBAL_TEMPLATE` + `published` remains the curated template catalog on `/program/templates`.  
+`GET /api/program/community` — public list; `PATCH /api/program/kits/[id]` accepts `communityVisible` and `authorDisplayName`.
+
 ## Routes
 
 - `/program` — templates and teacher’s Lesson Kits (server-loaded)
@@ -50,13 +56,15 @@ Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/l
 - `/lesson/[shareSlug]` — classroom runner
 - `/lesson/[shareSlug]/family` — student / at-home runner
 - `/account` — teacher dashboard: students + weekly assignments
-- `/curriculum` — ready-made Lesson Kit cards
+- `/program/templates` — curated global templates
+- `/program/community` — teacher-shared personal kits (PR-11)
 
 ## APIs
 
 - `GET|POST /api/program/kits` — list / duplicate templates
 - `POST /api/program/uploads` — teacher media (images, PDF, PPT) → `assetUrl`
-- `PATCH /api/program/kits/[id]` — title, TPT link, grade band, etc.
+- `PATCH /api/program/kits/[id]` — title, TPT link, grade band, `communityVisible`, etc.
+- `GET /api/program/community` — teacher-shared kits (PR-11)
 - `GET|POST /api/admin/lesson-templates` — admin global template CRUD (create)
 - `GET|PATCH|DELETE /api/admin/lesson-templates/[id]` — admin template meta
 - `PUT /api/admin/lesson-templates/[id]/blocks` — admin template steps

@@ -14,6 +14,7 @@ type Props = {
   onDelete?: () => void;
   deletePending?: boolean;
   gradeBand?: string | null;
+  authorDisplayName?: string | null;
   tptUrl?: string | null;
   isFreeSample?: boolean;
 };
@@ -31,6 +32,7 @@ export function LessonKitCard({
   onDelete,
   deletePending,
   gradeBand,
+  authorDisplayName,
   tptUrl,
   isFreeSample,
 }: Props) {
@@ -39,6 +41,9 @@ export function LessonKitCard({
       <h3 className="text-lg font-bold text-[var(--color-ink)]">{title}</h3>
       {description ? (
         <p className="text-sm leading-relaxed text-[var(--color-muted)]">{description}</p>
+      ) : null}
+      {authorDisplayName ? (
+        <p className="text-xs font-semibold text-[var(--color-muted)]">Shared by {authorDisplayName}</p>
       ) : null}
       <p className="lesson-kit-card__meta">
         {stepCount} steps · ~{estMinutes} min

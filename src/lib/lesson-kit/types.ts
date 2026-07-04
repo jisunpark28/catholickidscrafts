@@ -65,6 +65,9 @@ export type LessonKitDto = {
   isFreeSample: boolean;
   familyMode: FamilyModeConfig | null;
   published: boolean;
+  communityVisible: boolean;
+  publishedAt: string | null;
+  authorDisplayName: string | null;
   sortOrder: number;
   blocks: LessonBlockDto[];
   stepCount: number;
