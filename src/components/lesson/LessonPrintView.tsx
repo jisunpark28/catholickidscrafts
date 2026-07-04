@@ -1,8 +1,6 @@
 import { LessonPrintBlock } from "@/components/lesson/LessonPrintBlock";
 import { lessonPrintMetaRows } from "@/lib/lesson-kit/print-block";
 import type { LessonKitDto } from "@/lib/lesson-kit/types";
-import "@/styles/lesson-kit.css";
-import "@/styles/lesson-print.css";
 
 type Props = {
   kit: LessonKitDto;
