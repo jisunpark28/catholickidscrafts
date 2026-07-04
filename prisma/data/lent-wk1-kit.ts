@@ -29,13 +29,12 @@ export function lentWk1TemplateSeed(tptStoreUrl: string): GlobalTemplateSeed {
     shareSlug: LENT_WK1_SHARE_SLUG,
     title: "Lent Week 1 — Sunday (Grade 3)",
     description:
-      "First Sunday of Lent: purple, prayer, Gospel, Stations craft, and a short at-home mission. Classroom ~35 min; at-home ~10 min.",
+      "First Sunday of Lent: purple, prayer, readings link, short writing, games, Stations craft, and a short at-home mission. Classroom ~35 min; at-home ~10 min.",
     liturgicalPeriod: "lent",
     gradeBand: "Grade 3",
     sortOrder: 0,
     tptUrl: tptStoreUrl,
     isFreeSample: true,
-    familyMode: { gospelMaxChars: 150 },
     blocks: [
       {
         sortOrder: 0,
@@ -53,17 +52,25 @@ export function lentWk1TemplateSeed(tptStoreUrl: string): GlobalTemplateSeed {
       },
       {
         sortOrder: 1,
-        type: "MASS_TODAY",
-        label: "Today in the Church",
-        config: {},
+        type: "LINK",
+        label: "Sunday readings",
+        config: {
+          url: "https://bible.usccb.org/",
+          buttonLabel: "Open today’s readings (USCCB)",
+          openInNewTab: true,
+          familyInclude: true,
+        },
       },
       {
         sortOrder: 2,
-        type: "GOSPEL_TYPING",
-        label: "Today's Gospel",
+        type: "WRITING",
+        label: "Gospel reflection",
         config: {
-          readingKind: "gospel",
-          maxChars: 400,
+          prompt:
+            "After reading today’s Gospel (use the link above), write one sentence: How does Jesus ask us to change our hearts during Lent?",
+          writingMode: "student",
+          maxChars: 200,
+          placeholder: "I learned that…",
           familyInclude: true,
         },
       },
@@ -123,7 +130,7 @@ export function lentWk1TemplateSeed(tptStoreUrl: string): GlobalTemplateSeed {
           html: `<p><strong>This week at home (~10 min)</strong></p>
 <ol>
 <li>At dinner, share one Lent promise (what we will give up or do extra for Jesus).</li>
-<li>Finish the Gospel step on this page.</li>
+<li>Complete the short writing step on this page.</li>
 <li>Pray together: <em>Jesus, help our family during Lent. Amen.</em></li>
 </ol>`,
         },
