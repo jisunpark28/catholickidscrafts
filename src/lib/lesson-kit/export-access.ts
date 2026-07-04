@@ -7,8 +7,12 @@ export function lessonKitPdfExportUrl(kitId: string): string {
   return `/api/program/kits/${kitId}/export.pdf`;
 }
 
+export function lessonKitDocxExportUrl(kitId: string): string {
+  return `/api/program/kits/${kitId}/export.docx`;
+}
+
 /** Owner, or any visitor when the kit is a published global template. */
-export function canExportLessonKitPdf(kit: LessonKitDto, session: FamilySession): boolean {
+export function canExportLessonKit(kit: LessonKitDto, session: FamilySession): boolean {
   if (session?.familyAccountId && kit.familyAccountId === session.familyAccountId) {
     return true;
   }
@@ -18,7 +22,17 @@ export function canExportLessonKitPdf(kit: LessonKitDto, session: FamilySession)
   return false;
 }
 
+/** @deprecated Use {@link canExportLessonKit}. */
+export const canExportLessonKitPdf = canExportLessonKit;
+
+export function lessonKitExportBasename(kit: LessonKitDto): string {
+  return slugify(kit.title) || kit.shareSlug || "lesson";
+}
+
 export function lessonKitPdfFilename(kit: LessonKitDto): string {
-  const base = slugify(kit.title) || kit.shareSlug || "lesson";
-  return `${base}.pdf`;
+  return `${lessonKitExportBasename(kit)}.pdf`;
+}
+
+export function lessonKitDocxFilename(kit: LessonKitDto): string {
+  return `${lessonKitExportBasename(kit)}.docx`;
 }

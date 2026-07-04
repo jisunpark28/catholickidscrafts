@@ -1,15 +1,14 @@
 import { getFamilySession } from "@/lib/family-auth";
 import {
   canExportLessonKit,
-  lessonKitPdfFilename,
+  lessonKitDocxFilename,
 } from "@/lib/lesson-kit/export-access";
-import { generateLessonKitPdf } from "@/lib/lesson-kit/export-pdf";
+import { generateLessonKitDocx } from "@/lib/lesson-kit/export-docx";
 import { getLessonKitById } from "@/lib/lesson-kit/db";
-import { renderLessonKitPrintHtml } from "@/lib/lesson-kit/render-print-html";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 30;
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -26,20 +25,20 @@ export async function GET(_request: Request, { params }: Params) {
   }
 
   try {
-    const html = await renderLessonKitPrintHtml(kit);
-    const pdf = await generateLessonKitPdf(html);
-    const filename = lessonKitPdfFilename(kit);
+    const docx = await generateLessonKitDocx(kit);
+    const filename = lessonKitDocxFilename(kit);
 
-    return new NextResponse(new Uint8Array(pdf), {
+    return new NextResponse(new Uint8Array(docx), {
       status: 200,
       headers: {
-        "Content-Type": "application/pdf",
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "Content-Disposition": `attachment; filename="${filename}"`,
         "Cache-Control": "private, no-store",
       },
     });
   } catch (error) {
-    console.error("lesson kit pdf export failed", error);
-    return NextResponse.json({ error: "PDF export failed" }, { status: 500 });
+    console.error("lesson kit docx export failed", error);
+    return NextResponse.json({ error: "Word export failed" }, { status: 500 });
   }
 }
