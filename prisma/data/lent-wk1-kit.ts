@@ -56,7 +56,7 @@ export function lentWk1TemplateSeed(tptStoreUrl: string): GlobalTemplateSeed {
         label: "Sunday readings",
         config: {
           url: "https://bible.usccb.org/",
-          buttonLabel: "Open today’s readings (USCCB)",
+          buttonLabel: "Open today's readings (USCCB)",
           openInNewTab: true,
           familyInclude: true,
         },
@@ -67,7 +67,7 @@ export function lentWk1TemplateSeed(tptStoreUrl: string): GlobalTemplateSeed {
         label: "Gospel reflection",
         config: {
           prompt:
-            "After reading today’s Gospel (use the link above), write one sentence: How does Jesus ask us to change our hearts during Lent?",
+            "After reading today's Gospel (use the link above), write one sentence: How does Jesus ask us to change our hearts during Lent?",
           writingMode: "student",
           maxChars: 200,
           placeholder: "I learned that…",

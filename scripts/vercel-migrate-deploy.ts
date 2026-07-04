@@ -42,6 +42,30 @@ function recoverParishRemovalMigration(output: string): boolean {
   return false;
 }
 
+/** Clear failed migration rows left by other preview branches on the shared Neon DB. */
+function recoverGenericFailedMigration(output: string): boolean {
+  if (!output.includes("P3009") && !output.includes("failed migrations")) {
+    return false;
+  }
+
+  const match = output.match(/`(\d{14}_[\w_]+)` migration/);
+  if (!match) return false;
+
+  const migrationName = match[1];
+  if (
+    migrationName === DISCUSSION_MIGRATION ||
+    migrationName === RECOVERY_MIGRATION ||
+    migrationName === "20260704120000_remove_parish_teacher_kits"
+  ) {
+    return false;
+  }
+
+  console.log(`Recovering orphaned failed migration ${migrationName} (rolled back, will retry)...`);
+  const rolled = run(`${PRISMA} migrate resolve --rolled-back ${migrationName}`);
+  log(rolled.output);
+  return rolled.code === 0 || rolled.output.includes("is already recorded");
+}
+
 function isDiscussionIssue(output: string): boolean {
   return (
     output.includes(DISCUSSION_MIGRATION) ||
@@ -114,6 +138,10 @@ for (let attempt = 1; attempt <= 4; attempt += 1) {
   }
 
   if (recoverParishRemovalMigration(output)) {
+    continue;
+  }
+
+  if (recoverGenericFailedMigration(output)) {
     continue;
   }
 
