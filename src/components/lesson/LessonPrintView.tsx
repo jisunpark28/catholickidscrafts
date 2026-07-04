@@ -1,18 +1,6 @@
-import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
-import { LessonGamePrintSummary } from "@/components/lesson/LessonGamePrintSummary";
-import { LessonImageFigure } from "@/components/lesson/LessonImageFigure";
-import { lessonImageSrc } from "@/lib/lesson-kit/image-block";
-import {
-  lessonSlidesAssetUrl,
-  lessonSlidesEmbedSrc,
-} from "@/lib/lesson-kit/slides-block";
-import { lessonLinkHref } from "@/lib/lesson-kit/link-block";
-import {
-  lessonWritingPrintBlankLines,
-  lessonWritingPrompt,
-} from "@/lib/lesson-kit/writing-block";
+import { LessonPrintBlock } from "@/components/lesson/LessonPrintBlock";
+import { lessonPrintMetaRows } from "@/lib/lesson-kit/print-block";
 import type { LessonKitDto } from "@/lib/lesson-kit/types";
-import { LESSON_BLOCK_DEFAULT_LABEL } from "@/lib/lesson-kit/constants";
 import "@/styles/lesson-kit.css";
 import "@/styles/lesson-print.css";
 
@@ -21,74 +9,38 @@ type Props = {
 };
 
 export function LessonPrintView({ kit }: Props) {
+  const metaRows = lessonPrintMetaRows(kit);
+
   return (
     <div className="lesson-print">
-      <header className="lesson-print__header">
-        <h1>{kit.title}</h1>
-        {kit.description ? <p>{kit.description}</p> : null}
-        <p className="lesson-print__meta">
-          {kit.stepCount} steps · Classroom: /lesson/{kit.shareSlug} · At home: /lesson/{kit.shareSlug}/family
+      <header className="lesson-print__cover">
+        <p className="lesson-print__brand">Catholic Kids Crafts · Class lesson plan</p>
+        <h1 className="lesson-print__title">{kit.title}</h1>
+        {kit.description ? <p className="lesson-print__description">{kit.description}</p> : null}
+        <dl className="lesson-print__meta-grid">
+          {metaRows.map((row) => (
+            <div key={row.label} className="lesson-print__meta-item">
+              <dt>{row.label}</dt>
+              <dd>{row.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="lesson-print__run-links">
+          Classroom: <span className="lesson-print__mono">/lesson/{kit.shareSlug}</span>
+          {" · "}
+          At home: <span className="lesson-print__mono">/lesson/{kit.shareSlug}/family</span>
         </p>
       </header>
-      <ol className="lesson-print__steps">
+
+      <div className="lesson-print__steps">
         {kit.blocks.map((block, i) => (
-          <li key={block.id}>
-            <strong>
-              {i + 1}. {blockDisplayLabel(block)}
-            </strong>
-            <span className="lesson-print__type"> ({LESSON_BLOCK_DEFAULT_LABEL[block.type]})</span>
-            {block.type === "CUSTOM_NOTE" && block.config.html ? (
-              <div
-                className="lesson-print__note rich-content"
-                dangerouslySetInnerHTML={{ __html: block.config.html }}
-              />
-            ) : null}
-            {block.type === "LINK" ? (
-              <>
-                {lessonLinkHref(block) ? (
-                  <p className="lesson-print__link">{lessonLinkHref(block)}</p>
-                ) : null}
-                {block.config.assetUrl?.trim() ? (
-                  <p className="lesson-print__link">{block.config.assetUrl.trim()}</p>
-                ) : null}
-              </>
-            ) : null}
-            {block.type === "WRITING" && lessonWritingPrompt(block) ? (
-              <div className="lesson-print__writing">
-                <p className="lesson-print__writing-prompt">{lessonWritingPrompt(block)}</p>
-                <div className="lesson-print__writing-lines" aria-hidden>
-                  {Array.from({ length: lessonWritingPrintBlankLines(block) }).map((_, line) => (
-                    <div key={line} className="lesson-print__writing-line" />
-                  ))}
-                </div>
-              </div>
-            ) : null}
-            {block.type === "IMAGE" && lessonImageSrc(block) ? (
-              <div className="lesson-print__image">
-                <LessonImageFigure block={block} />
-              </div>
-            ) : null}
-            {block.type === "SLIDES" ? (
-              <div className="lesson-print__slides">
-                {lessonSlidesEmbedSrc(block) ? (
-                  <p className="lesson-print__link">{lessonSlidesEmbedSrc(block)}</p>
-                ) : null}
-                {lessonSlidesAssetUrl(block) ? (
-                  <p className="lesson-print__link">{lessonSlidesAssetUrl(block)}</p>
-                ) : null}
-                {!lessonSlidesEmbedSrc(block) && !lessonSlidesAssetUrl(block) ? (
-                  <p className="lesson-print__hint">(slides not configured)</p>
-                ) : null}
-              </div>
-            ) : null}
-            {block.type === "GAME" ? <LessonGamePrintSummary block={block} /> : null}
-            {block.config.familyInclude === false ? (
-              <p className="lesson-print__hint">Classroom only (hidden at home)</p>
-            ) : null}
-          </li>
+          <LessonPrintBlock key={block.id} block={block} stepNumber={i + 1} />
         ))}
-      </ol>
-      <p className="lesson-print__footer">Catholic Kids Crafts — Class lessons</p>
+      </div>
+
+      <footer className="lesson-print__footer">
+        Printed from Catholic Kids Crafts · {kit.title}
+      </footer>
     </div>
   );
 }
