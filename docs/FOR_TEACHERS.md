@@ -18,7 +18,7 @@ Create students from **Teacher dashboard** (`/account`) → **Add student**. Cop
 ## Lesson Kits (`/program`)
 
 1. **My Sunday** — pin the kit you will run this Sunday (`/program` top card). **Run classroom**, **Copy at-home link**, or **Edit** your personal copy.
-2. **Run** a starter template in class (links, games, writing prompts, crafts). Try the showcase kit: [`/lesson/lent-wk1-g3`](/lesson/lent-wk1-g3) (Lent Week 1, Grade 3).
+2. **Run** a starter template in class (links, games, writing prompts, crafts). Try [`/lesson/lent-wk1-g3`](/lesson/lent-wk1-g3) (Lent Week 1, Grade 3) or [`/lesson/mass-etiquette-lower`](/lesson/mass-etiquette-lower) (Mass etiquette, Grades K–2).
 3. **Use this** to copy a template into your account and edit steps. Delete unwanted copies from **My Lesson Kits** or the editor.
 4. Optional **TPT pack link** on your kit — free sample on this site, full worksheets on [Teachers Pay Teachers](https://www.teacherspayteachers.com/store/catholic-kids-crafts).
 

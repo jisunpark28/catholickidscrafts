@@ -1,10 +1,15 @@
 import { LENT_WK1_SHARE_SLUG, lentWk1TemplateSeed } from "./data/lent-wk1-kit";
+import {
+  MASS_ETIQUETTE_LOWER_SLUG,
+  massEtiquetteLowerTemplateSeed,
+} from "./data/mass-etiquette-lower-kit";
 import { upsertGlobalTemplate } from "@/lib/lesson-kit/db";
 import { getTptStoreUrl } from "@/lib/tpt";
 import type { PrismaClient } from "@prisma/client";
 
 const GLOBAL_TEMPLATE_SEEDS = [
   () => lentWk1TemplateSeed(getTptStoreUrl()),
+  () => massEtiquetteLowerTemplateSeed(getTptStoreUrl()),
   () => ({
     shareSlug: "advent-warmup",
     title: "Advent warm-up",
@@ -89,5 +94,7 @@ export async function seedLessonKits(_prisma: PrismaClient) {
     console.log(`Lesson template: ${data.shareSlug}`);
   }
 
-  console.log(`Upserted ${GLOBAL_TEMPLATE_SEEDS.length} global lesson templates (showcase: /lesson/${LENT_WK1_SHARE_SLUG})`);
+  console.log(
+    `Upserted ${GLOBAL_TEMPLATE_SEEDS.length} global lesson templates (showcase: /lesson/${LENT_WK1_SHARE_SLUG}, /lesson/${MASS_ETIQUETTE_LOWER_SLUG})`,
+  );
 }
