@@ -1,4 +1,6 @@
 import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
+import { LessonImageFigure } from "@/components/lesson/LessonImageFigure";
+import { lessonImageSrc } from "@/lib/lesson-kit/image-block";
 import { lessonLinkHref } from "@/lib/lesson-kit/link-block";
 import {
   lessonWritingPrintBlankLines,
@@ -54,6 +56,11 @@ export function LessonPrintView({ kit }: Props) {
                     <div key={line} className="lesson-print__writing-line" />
                   ))}
                 </div>
+              </div>
+            ) : null}
+            {block.type === "IMAGE" && lessonImageSrc(block) ? (
+              <div className="lesson-print__image">
+                <LessonImageFigure block={block} />
               </div>
             ) : null}
             {block.config.familyInclude === false ? (

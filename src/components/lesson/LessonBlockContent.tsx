@@ -1,5 +1,6 @@
 "use client";
 
+import { LessonImageFigure } from "@/components/lesson/LessonImageFigure";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { WordFallTypingGame } from "@/components/WordFallTypingGame";
@@ -328,6 +329,8 @@ export function LessonBlockContent({ block, kit, mode }: Props) {
       return <LessonResourceBlock block={block} />;
     case "LINK":
       return <LessonLinkBlock block={block} />;
+    case "IMAGE":
+      return <LessonImageFigure block={block} />;
     case "MASS_TODAY":
       return <LessonMassTodayBlock />;
     default:

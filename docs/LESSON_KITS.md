@@ -27,6 +27,7 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 | `WRITING` | `{ prompt, placeholder?, minChars?, maxChars?, writingMode?: "display" \| "student" }` |
 | `RESOURCE` | `{ resourceSlug, familyInclude? }` |
 | `LINK` | `{ url, buttonLabel?, openInNewTab? }` |
+| `IMAGE` | `{ imageUrl, alt?, caption?, imageSource?: "upload" \| "url" }` |
 | `BIBLE_CHAPTER` | `{ bookSlug, chapter, maxChars?, familyInclude? }` |
 | `HANGMAN_WORDS` | `{ gameSlug: "hangman" }` |
 
@@ -36,7 +37,8 @@ Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/b
 `MASS_TODAY`, `GOSPEL_TYPING`, and `BIBLE_CHAPTER` stay in the schema for existing kits but are **hidden from the add palette**.  
 `LINK` blocks use `url`, `buttonLabel`, and `openInNewTab` (`src/lib/lesson-kit/link-block.ts`).  
 `WRITING` is for student prompts/responses; `CUSTOM_NOTE` remains teacher-only (`src/lib/lesson-kit/writing-block.ts`).  
-Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/lib/lesson-kit/media-upload.ts`, `LessonMediaUpload`).
+Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/lib/lesson-kit/media-upload.ts`, `LessonMediaUpload`).  
+`IMAGE` blocks use upload or external URL (`src/lib/lesson-kit/image-block.ts`, `LessonImageFigure`).
 
 ## Routes
 

@@ -65,6 +65,14 @@
   min-height: 1.25rem;
 }
 
+.lesson-print__image {
+  margin-top: 0.5rem;
+}
+
+.lesson-print__image .lesson-image-figure__img {
+  max-height: 14rem;
+}
+
 .lesson-print__hint {
   margin-top: 0.25rem;
   font-size: 0.75rem;

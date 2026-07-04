@@ -8,6 +8,7 @@ export const LESSON_BLOCK_DEFAULT_LABEL: Record<LessonBlockType, string> = {
   WRITING: "Writing",
   RESOURCE: "Craft",
   LINK: "Link",
+  IMAGE: "Image",
   PLAY_GAME: "Game",
   TYPING_WORDS: "Words",
   HANGMAN_WORDS: "Hangman",

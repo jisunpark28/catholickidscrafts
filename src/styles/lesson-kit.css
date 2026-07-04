@@ -238,6 +238,28 @@
   outline-offset: 2px;
 }
 
+.lesson-image-figure {
+  margin: 0;
+  text-align: center;
+}
+
+.lesson-image-figure__img {
+  display: block;
+  max-width: 100%;
+  max-height: min(420px, 60vh);
+  margin: 0 auto;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  object-fit: contain;
+}
+
+.lesson-image-figure__caption {
+  margin-top: 0.65rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
 .lesson-runner-shell {
   min-height: 100dvh;
   background: #fffaf5;
