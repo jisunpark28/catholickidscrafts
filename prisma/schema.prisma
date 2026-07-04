@@ -290,6 +290,7 @@ model FamilyAccount {
   lessonKits         LessonKit[]
   lessonAssignments  LessonAssignment[]
   lessonProgress     LessonKitProgress[]
+  lessonKitComments  LessonKitComment[]
   /// Kit pinned for this Sunday on /program (My Sunday).
   sundayLessonKitId  String?
   sundayWeekStart    String?
@@ -452,6 +453,7 @@ model LessonKit {
   opens            LessonKitOpen[]
   assignments      LessonAssignment[]
   progress         LessonKitProgress[]
+  comments         LessonKitComment[]
   familyAccount    FamilyAccount?  @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
   sundayPinnedBy   FamilyAccount[] @relation("TeacherSundayKit")
 
@@ -542,5 +544,24 @@ model BibleChapterComment {
   @@index([threadId, createdAt])
   @@index([familyAccountId])
   @@index([subProfileId])
+}
+
+/// Feedback or question on a teacher-shared lesson (community detail).
+model LessonKitComment {
+  id              String             @id @default(cuid())
+  kitId           String
+  familyAccountId String?
+  authorName      String?
+  body            String             @db.Text
+  parentId        String?
+  createdAt       DateTime           @default(now())
+  kit             LessonKit          @relation(fields: [kitId], references: [id], onDelete: Cascade)
+  familyAccount   FamilyAccount?     @relation(fields: [familyAccountId], references: [id], onDelete: SetNull)
+  parent          LessonKitComment?  @relation("LessonKitCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies         LessonKitComment[] @relation("LessonKitCommentReplies")
+
+  @@index([kitId, createdAt])
+  @@index([parentId])
+  @@index([familyAccountId])
 }
 

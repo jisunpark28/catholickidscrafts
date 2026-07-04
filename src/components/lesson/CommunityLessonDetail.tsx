@@ -1,5 +1,6 @@
 import { LessonBlockIcon } from "@/components/icons/lesson/LessonIcon";
 import { CommunityForkButton } from "@/components/lesson/CommunityForkButton";
+import { CommunityLessonComments } from "@/components/lesson/CommunityLessonComments";
 import { lessonBlockSummaryLine } from "@/lib/lesson-kit/block-summary";
 import { LESSON_BLOCK_DEFAULT_LABEL } from "@/lib/lesson-kit/constants";
 import { blockDisplayLabel } from "@/lib/lesson-kit/family-blocks";
@@ -72,6 +73,8 @@ export function CommunityLessonDetail({ kit, signedIn }: Props) {
           ))}
         </ol>
       </section>
+
+      <CommunityLessonComments kitId={kit.id} shareSlug={kit.shareSlug} signedIn={signedIn} />
     </div>
   );
 }
