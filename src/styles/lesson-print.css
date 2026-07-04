@@ -84,6 +84,21 @@
   font-style: italic;
 }
 
+.lesson-print__game {
+  margin-top: 0.5rem;
+}
+
+.lesson-print__game-summary {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.lesson-print__game-answers {
+  margin: 0.35rem 0 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+}
+
 .lesson-print__footer {
   margin-top: 2rem;
   font-size: 0.75rem;

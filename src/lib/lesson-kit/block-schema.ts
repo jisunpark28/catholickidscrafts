@@ -30,6 +30,28 @@ const baseConfig = z
     assetMimeType: z.string().optional(),
     slidesSource: z.enum(["embed", "upload"]).optional(),
     gameFormat: z.string().optional(),
+    gameWords: z.array(z.string()).optional(),
+    gameHint: z.string().optional(),
+    gamePassage: z.string().optional(),
+    typingMode: z.enum(["words", "passage"]).optional(),
+    pictureMatch: z
+      .array(z.object({ imageUrl: z.string(), word: z.string() }))
+      .optional(),
+    fillBlankText: z.string().optional(),
+    fillBlankAnswers: z.array(z.string()).optional(),
+    trueFalseItems: z
+      .array(z.object({ statement: z.string(), answer: z.boolean() }))
+      .optional(),
+    multipleChoiceItems: z
+      .array(
+        z.object({
+          question: z.string(),
+          choices: z.array(z.string()),
+          correctIndex: z.number().int().min(0),
+        }),
+      )
+      .optional(),
+    printAnswerKey: z.boolean().optional(),
     words: z.array(z.string()).optional(),
   })
   .passthrough();

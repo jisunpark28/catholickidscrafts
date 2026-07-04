@@ -1,5 +1,6 @@
 "use client";
 
+import { LessonGameConfigFields } from "@/components/lesson/LessonGameConfigFields";
 import { LessonMediaUpload } from "@/components/lesson/LessonMediaUpload";
 import {
   LESSON_BLOCK_DEFAULT_LABEL,
@@ -773,6 +774,8 @@ export function LessonBlockConfigPanel({
       {block.type === "SLIDES" && (
         <LessonSlidesConfigFields block={block} patch={patch} onChange={onChange} />
       )}
+
+      {block.type === "GAME" && <LessonGameConfigFields block={block} patch={patch} />}
 
       {block.type === "CUSTOM_NOTE" && (
         <>

@@ -174,6 +174,7 @@ const BLOCK_ICONS: Record<LessonBlockType, typeof SvgPuzzle> = {
   LINK: SvgLink,
   IMAGE: SvgImage,
   SLIDES: SvgSlides,
+  GAME: SvgPuzzle,
   PLAY_GAME: SvgPuzzle,
   TYPING_WORDS: SvgKeyboard,
   HANGMAN_WORDS: SvgHangman,
