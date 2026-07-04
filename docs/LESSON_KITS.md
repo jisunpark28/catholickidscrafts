@@ -74,7 +74,7 @@ Use the toolbar **Print** button (browser dialog) or **Download PDF** (server-ge
 `GET /api/program/kits/[id]/export.pdf` — Puppeteer renders the PR-8 print HTML to a Letter PDF.
 
 - **Auth:** kit owner (family session) or **published** `GLOBAL_TEMPLATE` kits (no sign-in)
-- **UI:** Download PDF on the kit editor and print toolbar
+- **UI:** Download PDF on the print toolbar; PDF + Word also in **Share** sheet (PR-15)
 - **Local dev:** set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not in a default path
 
 ### Word export (PR-10)
@@ -82,7 +82,11 @@ Use the toolbar **Print** button (browser dialog) or **Download PDF** (server-ge
 `GET /api/program/kits/[id]/export.docx` — builds a `.docx` with the same cover metadata and per-step content as PR-8 (via `docx` npm).
 
 - **Auth:** same as PDF export (`canExportLessonKit`)
-- **UI:** Download Word on the kit editor and print toolbar
+- **UI:** Download Word on the print toolbar; PDF + Word also in **Share** sheet (PR-15)
+
+### Share sheet (PR-15)
+
+`LessonShareSheet` on the kit editor: classroom / at-home **links** (copy + QR), **copy message** for email or text (`lessonKitShareMessage`), and **PDF / Word** downloads when `kitId` is set.
 
 ## Routes
 
