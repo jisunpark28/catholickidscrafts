@@ -7,6 +7,7 @@ type Props = {
   stepCount: number;
   estMinutes: number;
   runHref: string;
+  detailHref?: string;
   secondaryHref?: string;
   secondaryLabel?: string;
   onSecondaryClick?: () => void;
@@ -25,6 +26,7 @@ export function LessonKitCard({
   stepCount,
   estMinutes,
   runHref,
+  detailHref,
   secondaryHref,
   secondaryLabel,
   onSecondaryClick,
@@ -38,7 +40,13 @@ export function LessonKitCard({
 }: Props) {
   return (
     <article className="lesson-kit-card">
-      <h3 className="text-lg font-bold text-[var(--color-ink)]">{title}</h3>
+      {detailHref ? (
+        <Link href={detailHref} className="no-underline hover:underline">
+          <h3 className="text-lg font-bold text-[var(--color-ink)]">{title}</h3>
+        </Link>
+      ) : (
+        <h3 className="text-lg font-bold text-[var(--color-ink)]">{title}</h3>
+      )}
       {description ? (
         <p className="text-sm leading-relaxed text-[var(--color-muted)]">{description}</p>
       ) : null}

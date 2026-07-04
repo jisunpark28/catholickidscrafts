@@ -16,6 +16,8 @@ import {
   type LessonKitNavItem,
   teacherEditNavItems,
 } from "@/components/lesson/LessonKitNav";
+import { LessonForkAttributionBanner } from "@/components/lesson/LessonForkAttributionBanner";
+import type { LessonKitForkAttribution } from "@/lib/lesson-kit/community";
 import {
   LESSON_GAME_SLUGS,
   LESSON_WORD_PRESETS,
@@ -40,6 +42,8 @@ type Props = {
   apiBase?: string;
   printHref?: string | null;
   adminMeta?: boolean;
+  /** When this kit was duplicated from a community lesson. */
+  forkAttribution?: LessonKitForkAttribution | null;
   /** Override default breadcrumb trail. */
   navItems?: LessonKitNavItem[];
 };
@@ -81,6 +85,7 @@ export function LessonKitEditor({
   apiBase = "/api/program/kits",
   printHref,
   adminMeta = false,
+  forkAttribution = null,
   navItems,
 }: Props) {
   const router = useRouter();
@@ -440,6 +445,8 @@ export function LessonKitEditor({
         </div>
       </div>
 
+      {forkAttribution ? <LessonForkAttributionBanner attribution={forkAttribution} /> : null}
+
       {adminMeta ? (
         <div className="flex flex-wrap items-center gap-4 rounded border border-[var(--color-border)] bg-[#fffaf5] px-4 py-3 text-sm">
           <label className="flex items-center gap-2 font-semibold text-[var(--color-ink)]">
@@ -507,9 +514,9 @@ export function LessonKitEditor({
               Share with other teachers
               <span className="mt-1 block text-xs font-normal text-[var(--color-muted)]">
                 List this lesson on{" "}
-                <a href="/program/community" className="font-semibold text-[var(--color-link)]">
+                <Link href="/program/community" className="font-semibold text-[var(--color-link)]">
                   /program/community
-                </a>
+                </Link>
                 . Add a short description and grade band so others can find it. Your at-home family
                 link settings are unchanged.
               </span>

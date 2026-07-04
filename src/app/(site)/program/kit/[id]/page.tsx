@@ -1,5 +1,6 @@
 import { LessonKitEditor } from "@/components/lesson/LessonKitEditor";
 import { getLessonKitById } from "@/lib/lesson-kit/db";
+import { getLessonKitForkAttribution } from "@/lib/lesson-kit/community";
 import { requireFamilySession } from "@/lib/family-auth";
 import { PageShell } from "@/components/PageShell";
 import { redirect, notFound } from "next/navigation";
@@ -18,9 +19,13 @@ export default async function ProgramKitEditPage({ params }: Props) {
     notFound();
   }
 
+  const forkAttribution = kit.sourceKitId
+    ? await getLessonKitForkAttribution(kit.sourceKitId)
+    : null;
+
   return (
     <PageShell>
-      <LessonKitEditor initialKit={kit} />
+      <LessonKitEditor initialKit={kit} forkAttribution={forkAttribution} />
     </PageShell>
   );
 }

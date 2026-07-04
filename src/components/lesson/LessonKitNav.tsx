@@ -61,6 +61,15 @@ export function teacherCommunityNavItems(): LessonKitNavItem[] {
   ];
 }
 
+export function teacherCommunityDetailNavItems(title: string): LessonKitNavItem[] {
+  return [
+    { href: "/", label: "Home" },
+    { href: "/program", label: LESSON_KIT_PRODUCT_NAME_PLURAL },
+    { href: "/program/community", label: "Community" },
+    { label: title },
+  ];
+}
+
 export function teacherEditNavItems(): LessonKitNavItem[] {
   return [
     { href: "/", label: "Home" },
