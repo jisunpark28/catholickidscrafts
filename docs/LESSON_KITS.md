@@ -67,7 +67,15 @@ Legacy `TYPING_WORDS`, `HANGMAN_WORDS`, and `PLAY_GAME` blocks still run in olde
 - Each step: number, label, block type badge, per-step time estimate
 - Block sections: teacher notes, links, writing lines, images, slides URLs, game summaries (+ optional answer key)
 
-Use the toolbar **Print / Save PDF** button; choose Letter paper in the browser print dialog.
+Use the toolbar **Print** button (browser dialog) or **Download PDF** (server-generated Letter PDF).
+
+### PDF export (PR-9)
+
+`GET /api/program/kits/[id]/export.pdf` — Puppeteer renders the PR-8 print HTML to a Letter PDF.
+
+- **Auth:** kit owner (family session) or **published** `GLOBAL_TEMPLATE` kits (no sign-in)
+- **UI:** Download PDF on the kit editor and print toolbar
+- **Local dev:** set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not in a default path
 
 ## Routes
 
@@ -83,7 +91,8 @@ Use the toolbar **Print / Save PDF** button; choose Letter paper in the browser 
 
 - `GET|POST /api/program/kits` — list / duplicate templates
 - `POST /api/program/uploads` — teacher media (images, PDF, PPT) → `assetUrl`
-- `PATCH /api/program/kits/[id]` — title, TPT link, grade band, etc.
+- `GET|PATCH|DELETE /api/program/kits/[id]` — kit meta
+- `GET /api/program/kits/[id]/export.pdf` — Letter PDF download (PR-9)
 - `GET|POST /api/admin/lesson-templates` — admin global template CRUD (create)
 - `GET|PATCH|DELETE /api/admin/lesson-templates/[id]` — admin template meta
 - `PUT /api/admin/lesson-templates/[id]/blocks` — admin template steps

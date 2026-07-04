@@ -47,6 +47,12 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - One-time prod seed: GitHub → Actions → **Seed production database** (see `docs/GITHUB_PROD_SEED.md`). Requires repo secrets `DATABASE_URL`, `DIRECT_URL`.
 - Local equivalent: `pnpm run db:seed-production-once` (idempotent).
 
+### Lesson kit PDF export (PR-9)
+
+- `GET /api/program/kits/[id]/export.pdf` — Puppeteer + `@sparticuz/chromium` (Vercel) or local Chrome.
+- Local dev: set `PUPPETEER_EXECUTABLE_PATH` if Chrome is not at `/usr/local/bin/google-chrome`.
+- Auth: kit owner (family session) or published `GLOBAL_TEMPLATE` without sign-in.
+
 ### Home learn hub & Bible (2026-06)
 
 - Home (`/`) uses `HomeLearnHub`: **Daily Mass** pill toggles liturgical calendar; sections/pills from `HomeSection` / `HomeSectionItem` (admin: `/admin/home-sections`).

@@ -16,6 +16,7 @@ import {
   type LessonKitNavItem,
   teacherEditNavItems,
 } from "@/components/lesson/LessonKitNav";
+import { LessonKitPdfDownloadLink } from "@/components/lesson/LessonKitPdfDownloadLink";
 import {
   LESSON_GAME_SLUGS,
   LESSON_WORD_PRESETS,
@@ -418,6 +419,7 @@ export function LessonKitEditor({
               Print
             </Link>
           ) : null}
+          <LessonKitPdfDownloadLink kitId={kit.id} />
         </div>
       </div>
 
