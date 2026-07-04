@@ -15,6 +15,12 @@ import {
   lessonLinkHref,
   validateLessonLinkUrl,
 } from "@/lib/lesson-kit/link-block";
+import {
+  lessonWritingMaxChars,
+  lessonWritingMinChars,
+  lessonWritingMode,
+  lessonWritingPlaceholder,
+} from "@/lib/lesson-kit/writing-block";
 import type { LessonBlockDto } from "@/lib/lesson-kit/types";
 import type { FamilyPickMode } from "@/components/lesson/LessonFamilyModePanel";
 import type { LessonBlockType } from "@prisma/client";
@@ -108,6 +114,133 @@ function LessonLinkConfigFields({
             </a>
           </div>
           <p className="mt-2 break-all text-xs text-[var(--color-muted)]">{previewHref}</p>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function LessonWritingConfigFields({
+  block,
+  patch,
+}: {
+  block: LessonBlockDto;
+  patch: (partial: Partial<LessonBlockDto["config"]>) => void;
+}) {
+  const mode = lessonWritingMode(block);
+  const prompt = block.config.prompt ?? "";
+  const minChars = lessonWritingMinChars(block);
+  const maxChars = lessonWritingMaxChars(block);
+
+  return (
+    <>
+      <fieldset className="lesson-block-config__field">
+        <legend className="text-sm font-semibold text-[var(--color-ink)]">Mode</legend>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {(
+            [
+              {
+                value: "student" as const,
+                label: "Student writes",
+                hint: "Shows a text box during Run",
+              },
+              {
+                value: "display" as const,
+                label: "Display only",
+                hint: "Prompt for class discussion (no text box)",
+              },
+            ] as const
+          ).map((opt) => (
+            <label
+              key={opt.value}
+              className={`cursor-pointer rounded border px-3 py-2 text-xs ${
+                mode === opt.value
+                  ? "border-[var(--color-accent)] bg-white font-semibold text-[var(--color-ink)]"
+                  : "border-[var(--color-border)] text-[var(--color-muted)]"
+              }`}
+            >
+              <input
+                type="radio"
+                name={`writing-mode-${block.id}`}
+                className="sr-only"
+                checked={mode === opt.value}
+                onChange={() => patch({ writingMode: opt.value })}
+              />
+              <span className="block">{opt.label}</span>
+              <span className="mt-0.5 block font-normal opacity-80">{opt.hint}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <label className="lesson-block-config__field">
+        <span>Prompt / question</span>
+        <textarea
+          rows={4}
+          value={prompt}
+          placeholder="What should students think or write about?"
+          onChange={(e) => patch({ prompt: e.target.value })}
+        />
+        <p className="mt-1 text-xs text-[var(--color-muted)]">
+          Plain text for now. Rich text formatting may come later.
+        </p>
+      </label>
+
+      {mode === "student" ? (
+        <>
+          <label className="lesson-block-config__field">
+            <span>Placeholder (optional)</span>
+            <input
+              type="text"
+              value={block.config.placeholder ?? ""}
+              onChange={(e) => patch({ placeholder: e.target.value })}
+            />
+          </label>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="lesson-block-config__field">
+              <span>Minimum characters</span>
+              <input
+                type="number"
+                min={0}
+                max={maxChars}
+                value={minChars}
+                onChange={(e) =>
+                  patch({ minChars: Math.max(0, Number(e.target.value) || 0) })
+                }
+              />
+            </label>
+            <label className="lesson-block-config__field">
+              <span>Maximum characters</span>
+              <input
+                type="number"
+                min={20}
+                max={2000}
+                value={maxChars}
+                onChange={(e) =>
+                  patch({ maxChars: Math.min(2000, Math.max(20, Number(e.target.value) || 200)) })
+                }
+              />
+            </label>
+          </div>
+        </>
+      ) : null}
+
+      {prompt.trim() ? (
+        <div className="lesson-block-config__field mt-2 border-t border-[var(--color-border)] pt-3">
+          <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+            Preview
+          </span>
+          <div className="lesson-note mt-2 whitespace-pre-wrap">{prompt.trim()}</div>
+          {mode === "student" ? (
+            <textarea
+              className="lesson-writing-field mt-3"
+              rows={4}
+              readOnly
+              placeholder={lessonWritingPlaceholder(block)}
+              aria-hidden
+              tabIndex={-1}
+            />
+          ) : null}
         </div>
       ) : null}
     </>
@@ -267,15 +400,22 @@ export function LessonBlockConfigPanel({
       )}
 
       {block.type === "CUSTOM_NOTE" && (
-        <label className="lesson-block-config__field">
-          <span>Note HTML</span>
-          <textarea
-            rows={4}
-            value={block.config.html ?? ""}
-            onChange={(e) => patch({ html: e.target.value })}
-          />
-        </label>
+        <>
+          <p className="text-xs text-[var(--color-muted)]">
+            Teacher-only notes for the classroom. Hidden from the at-home link by default.
+          </p>
+          <label className="lesson-block-config__field">
+            <span>Teacher note (HTML)</span>
+            <textarea
+              rows={4}
+              value={block.config.html ?? ""}
+              onChange={(e) => patch({ html: e.target.value })}
+            />
+          </label>
+        </>
       )}
+
+      {block.type === "WRITING" && <LessonWritingConfigFields block={block} patch={patch} />}
 
       {block.type === "HANGMAN_WORDS" && (
         <p className="text-xs text-[var(--color-muted)]">

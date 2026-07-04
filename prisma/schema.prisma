@@ -410,6 +410,7 @@ enum LessonKitScope {
 
 enum LessonBlockType {
   CUSTOM_NOTE
+  WRITING
   RESOURCE
   LINK
   PLAY_GAME

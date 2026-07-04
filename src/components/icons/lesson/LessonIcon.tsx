@@ -105,6 +105,15 @@ function SvgHome({ className, ...rest }: IconProps) {
   );
 }
 
+function SvgPencil({ className, ...rest }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden {...rest}>
+      <path d="M4 20h4l9.5-9.5a2.1 2.1 0 0 0-3-3L5 17v3z" {...stroke} />
+      <path d="m13.5 6.5 3 3" {...stroke} />
+    </svg>
+  );
+}
+
 function SvgLink({ className, ...rest }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden {...rest}>
@@ -140,6 +149,7 @@ function SvgCheck({ className, ...rest }: IconProps) {
 
 const BLOCK_ICONS: Record<LessonBlockType, typeof SvgPuzzle> = {
   CUSTOM_NOTE: SvgClipboard,
+  WRITING: SvgPencil,
   RESOURCE: SvgScissors,
   LINK: SvgLink,
   PLAY_GAME: SvgPuzzle,

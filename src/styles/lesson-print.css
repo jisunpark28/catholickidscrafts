@@ -44,6 +44,27 @@
   color: #333;
 }
 
+.lesson-print__writing {
+  margin-top: 0.5rem;
+}
+
+.lesson-print__writing-prompt {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  white-space: pre-wrap;
+}
+
+.lesson-print__writing-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.lesson-print__writing-line {
+  border-bottom: 1px solid #bbb;
+  min-height: 1.25rem;
+}
+
 .lesson-print__hint {
   margin-top: 0.25rem;
   font-size: 0.75rem;

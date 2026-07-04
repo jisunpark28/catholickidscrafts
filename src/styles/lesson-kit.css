@@ -221,6 +221,23 @@
   color: var(--color-ink);
 }
 
+.lesson-writing-field {
+  width: 100%;
+  border: 2px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: #fff;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-ink);
+  resize: vertical;
+}
+
+.lesson-writing-field:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .lesson-runner-shell {
   min-height: 100dvh;
   background: #fffaf5;

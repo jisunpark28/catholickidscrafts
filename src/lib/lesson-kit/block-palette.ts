@@ -37,8 +37,13 @@ export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
     blocks: [
       {
         type: "CUSTOM_NOTE",
-        paletteLabel: "Note / writing",
-        description: "Opening prayer, discussion, or step-by-step script",
+        paletteLabel: "Teacher note",
+        description: "Class-only script or reminders (not a student worksheet)",
+      },
+      {
+        type: "WRITING",
+        paletteLabel: "Short writing",
+        description: "Prompt for discussion or a student written response",
       },
     ],
   },
@@ -101,7 +106,14 @@ export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["confi
     case "CUSTOM_NOTE":
       return {
         html: "<p>Welcome the class and share the goal for this step.</p>",
-        prompt: "",
+      };
+    case "WRITING":
+      return {
+        prompt: "What is one kind thing you can do for someone this week?",
+        placeholder: "Write your answer here…",
+        minChars: 0,
+        maxChars: 200,
+        writingMode: "student",
       };
     case "RESOURCE":
       return { resourceSlug: "lent-stations-cross-craft" };
