@@ -3,7 +3,7 @@ import {
   listChapterDiscussion,
   normalizeDiscussionBody,
 } from "@/lib/bible/discussion";
-import { ensureDiscussionSchema } from "@/lib/bible/discussion-schema";
+import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
 import { getAuthorLabelForPost, getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
 import {
   canManageDiscussionPost,
@@ -86,15 +86,24 @@ export async function GET(request: Request) {
   }
 
   try {
-    await ensureDiscussionSchema();
+    const payload = await withDiscussionSchemaReady(async () => {
+      const readerKey = await getSignedInDiscussionReader();
+      let canModerate = false;
+      try {
+        canModerate = await isDiscussionModerator();
+      } catch (moderatorError) {
+        console.error("discussion moderator check", moderatorError);
+      }
+      const viewer = await buildViewer(readerKey, canModerate);
+      const threads = await listChapterDiscussion(bookSlug, chapter);
+      return { readerKey, canModerate, viewer, threads };
+    });
 
-    const readerKey = await getSignedInDiscussionReader();
-    const canModerate = await isDiscussionModerator();
-    const viewer = await buildViewer(readerKey, canModerate);
-    const threads = await listChapterDiscussion(bookSlug, chapter);
     return NextResponse.json({
-      viewer,
-      threads: threads.map((thread) => serializeThread(thread, readerKey, canModerate)),
+      viewer: payload.viewer,
+      threads: payload.threads.map((thread) =>
+        serializeThread(thread, payload.readerKey, payload.canModerate),
+      ),
     });
   } catch (e) {
     console.error("discussion list", e);
@@ -147,14 +156,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
     }
 
-    await ensureDiscussionSchema();
-    const authorLabel = await getAuthorLabelForPost(readerKey);
-    const thread = await createChapterThread(bookSlug, chapter, {
-      body: text,
-      isAnonymous: false,
-      authorLabel,
-      readerKey,
-    });
+    const authorLabel = await withDiscussionSchemaReady(() =>
+      getAuthorLabelForPost(readerKey),
+    );
+    const thread = await withDiscussionSchemaReady(() =>
+      createChapterThread(bookSlug, chapter, {
+        body: text,
+        isAnonymous: false,
+        authorLabel,
+        readerKey,
+      }),
+    );
 
     const res = NextResponse.json({
       thread: {

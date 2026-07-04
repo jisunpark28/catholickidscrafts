@@ -113,6 +113,7 @@ export function BibleChapterDiscussion({
     readerType: null,
   });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [newThreadBody, setNewThreadBody] = useState("");
   const [replyBodies, setReplyBodies] = useState<Record<string, string>>({});
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
@@ -135,6 +136,7 @@ export function BibleChapterDiscussion({
   const loadDiscussion = useCallback(async () => {
     const generation = ++loadGeneration.current;
     setLoading(true);
+    setLoadError(null);
     try {
       const [sessionRes, discussionRes] = await Promise.all([
         fetch("/api/auth/session", { cache: "no-store", credentials: "include" }),
@@ -154,9 +156,15 @@ export function BibleChapterDiscussion({
       const data = await readJson<{
         threads?: DiscussionThread[];
         viewer?: DiscussionViewer;
+        error?: string;
       }>(discussionRes);
 
       if (generation !== loadGeneration.current) return;
+
+      if (!discussionRes.ok) {
+        setLoadError(data.error ?? "Could not load comments. Please try again.");
+        return;
+      }
 
       if (data.viewer) {
         setViewer((prev) => ({
@@ -166,7 +174,7 @@ export function BibleChapterDiscussion({
       }
       if (discussionRes.ok) setThreads(data.threads ?? []);
     } catch {
-      // Keep existing comments; no user-facing error.
+      setLoadError("Could not load comments. Please try again.");
     } finally {
       if (generation === loadGeneration.current) {
         setLoading(false);
@@ -444,6 +452,19 @@ export function BibleChapterDiscussion({
           to comment.
         </p>
       )}
+
+      {loadError ? (
+        <p className="text-sm text-red-700" role="alert">
+          {loadError}{" "}
+          <button
+            type="button"
+            className="font-semibold underline"
+            onClick={() => void loadDiscussion()}
+          >
+            Retry
+          </button>
+        </p>
+      ) : null}
 
       {loading ? <p className="text-sm text-[var(--color-muted)]">Loading…</p> : null}
 

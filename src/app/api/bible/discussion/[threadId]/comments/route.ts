@@ -3,7 +3,7 @@ import {
   getChapterThread,
   normalizeDiscussionBody,
 } from "@/lib/bible/discussion";
-import { ensureDiscussionSchema } from "@/lib/bible/discussion-schema";
+import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
 import { getAuthorLabelForPost } from "@/lib/bible/discussion-pen-name";
 import { publicAuthorDisplay } from "@/lib/bible/discussion-permissions";
 import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
@@ -24,9 +24,7 @@ export async function POST(request: Request, context: RouteContext) {
       );
     }
 
-    await ensureDiscussionSchema();
-
-    const thread = await getChapterThread(threadId);
+    const thread = await withDiscussionSchemaReady(() => getChapterThread(threadId));
     if (!thread) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
@@ -43,13 +41,17 @@ export async function POST(request: Request, context: RouteContext) {
       return NextResponse.json({ error: "body is required (max 2000 characters)" }, { status: 400 });
     }
 
-    const authorLabel = await getAuthorLabelForPost(readerKey);
-    const comment = await createChapterComment(threadId, {
-      body: text,
-      isAnonymous: false,
-      authorLabel,
-      readerKey,
-    });
+    const authorLabel = await withDiscussionSchemaReady(() =>
+      getAuthorLabelForPost(readerKey),
+    );
+    const comment = await withDiscussionSchemaReady(() =>
+      createChapterComment(threadId, {
+        body: text,
+        isAnonymous: false,
+        authorLabel,
+        readerKey,
+      }),
+    );
 
     const res = NextResponse.json({
       comment: {

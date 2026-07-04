@@ -39,6 +39,23 @@ async function tableExists(table: string): Promise<boolean> {
   return Boolean(rows[0]?.exists);
 }
 
+async function columnExists(table: string, column: string): Promise<boolean> {
+  const rows = await prisma.$queryRaw<{ exists: boolean }[]>`
+    SELECT EXISTS (
+      SELECT 1
+      FROM pg_catalog.pg_attribute a
+      JOIN pg_catalog.pg_class c ON c.oid = a.attrelid
+      JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+      WHERE n.nspname = 'public'
+        AND c.relname = ${table}
+        AND a.attname = ${column}
+        AND a.attnum > 0
+        AND NOT a.attisdropped
+    ) AS "exists"
+  `;
+  return Boolean(rows[0]?.exists);
+}
+
 async function exec(sql: string): Promise<void> {
   await getDdlPrisma().$executeRawUnsafe(sql);
 }
@@ -146,16 +163,22 @@ async function ensureIndexesAndConstraints(): Promise<void> {
 }
 
 async function applyDiscussionSchema(): Promise<void> {
-  await exec(`ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
-  await exec(`ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
-
   const hasThread = await tableExists("BibleChapterThread");
   const hasComment = await tableExists("BibleChapterComment");
+  const hasOwnerPenName = await columnExists("FamilyAccount", "discussionPenName");
+  const hasSubPenName = await columnExists("SubProfile", "discussionPenName");
 
-  if (hasThread && hasComment) {
+  // Typical production path after migrate deploy: skip direct DDL entirely.
+  if (hasThread && hasComment && hasOwnerPenName && hasSubPenName) {
     return;
   }
 
+  if (!hasOwnerPenName) {
+    await exec(`ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
+  }
+  if (!hasSubPenName) {
+    await exec(`ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
+  }
   if (!hasThread) {
     await ensureThreadTable();
   }
