@@ -28,6 +28,7 @@ Assembled classroom lessons: games, typing, Gospel, and resources in one `/lesso
 | `RESOURCE` | `{ resourceSlug, familyInclude? }` |
 | `LINK` | `{ url, buttonLabel?, openInNewTab? }` |
 | `IMAGE` | `{ imageUrl, alt?, caption?, imageSource?: "upload" \| "url" }` |
+| `SLIDES` | `{ embedUrl?, assetUrl?, slidesSource?: "embed" \| "upload", buttonLabel? }` |
 | `BIBLE_CHAPTER` | `{ bookSlug, chapter, maxChars?, familyInclude? }` |
 | `HANGMAN_WORDS` | `{ gameSlug: "hangman" }` |
 
@@ -38,7 +39,8 @@ Teachers add blocks from **Content / Media / Games** tabs (`src/lib/lesson-kit/b
 `LINK` blocks use `url`, `buttonLabel`, and `openInNewTab` (`src/lib/lesson-kit/link-block.ts`).  
 `WRITING` is for student prompts/responses; `CUSTOM_NOTE` remains teacher-only (`src/lib/lesson-kit/writing-block.ts`).  
 Teacher media uploads: `POST /api/program/uploads` → `config.assetUrl` (`src/lib/lesson-kit/media-upload.ts`, `LessonMediaUpload`).  
-`IMAGE` blocks use upload or external URL (`src/lib/lesson-kit/image-block.ts`, `LessonImageFigure`).
+`IMAGE` blocks use upload or external URL (`src/lib/lesson-kit/image-block.ts`, `LessonImageFigure`).  
+`SLIDES` blocks embed Google Slides/Drive or uploaded PDF/PPTX (`src/lib/lesson-kit/slides-block.ts`). PPTX uploads show a download button — export to PDF for inline class view.
 
 ## Routes
 
