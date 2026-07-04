@@ -81,6 +81,9 @@ export function ProgramHub({ initialData }: Props) {
             <Link href="/program/templates" className="text-sm font-semibold text-[var(--color-link)]">
               Browse templates
             </Link>
+            <Link href="/program/community" className="text-sm font-semibold text-[var(--color-link)]">
+              Teacher community
+            </Link>
           </div>
           {data.personal.length === 0 ? (
             <p className="text-sm text-[var(--color-muted)]">

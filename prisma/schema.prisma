@@ -441,6 +441,10 @@ model LessonKit {
   /// JSON: { gospelMaxChars?, includedBlockIds? } for /family route
   familyMode       Json?
   published        Boolean         @default(false)
+  /// Listed on /program/community for other teachers (personal kits).
+  communityVisible Boolean         @default(false)
+  publishedAt      DateTime?
+  authorDisplayName String?
   sortOrder        Int             @default(0)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
@@ -452,6 +456,7 @@ model LessonKit {
   sundayPinnedBy   FamilyAccount[] @relation("TeacherSundayKit")
 
   @@index([scope, published, sortOrder])
+  @@index([communityVisible, publishedAt])
   @@index([familyAccountId])
 }
 

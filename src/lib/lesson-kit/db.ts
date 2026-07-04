@@ -108,20 +108,42 @@ export async function updateLessonKitMeta(
     title?: string;
     description?: string;
     published?: boolean;
+    communityVisible?: boolean;
+    authorDisplayName?: string | null;
     familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig;
     tptUrl?: string | null;
     isFreeSample?: boolean;
     gradeBand?: string | null;
+    liturgicalPeriod?: string | null;
+    sortOrder?: number;
   },
 ) {
   const kit = await prisma.lessonKit.findFirst({
     where: { id, familyAccountId },
   });
   if (!kit) return null;
+
+  const publishedAt =
+    data.communityVisible === true && !kit.communityVisible
+      ? new Date()
+      : data.communityVisible === false
+        ? kit.publishedAt
+        : undefined;
+
   const updated = await prisma.lessonKit.update({
     where: { id },
     data: {
-      ...data,
+      title: data.title,
+      description: data.description,
+      published: data.published,
+      communityVisible: data.communityVisible,
+      authorDisplayName: data.authorDisplayName,
+      publishedAt,
+      gradeBand: data.gradeBand,
+      liturgicalPeriod: data.liturgicalPeriod,
+      sortOrder: data.sortOrder,
+      tptUrl: data.tptUrl,
+      isFreeSample: data.isFreeSample,
       familyMode: data.familyMode ? (data.familyMode as Prisma.InputJsonValue) : undefined,
     },
     include: kitInclude,

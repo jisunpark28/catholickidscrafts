@@ -64,6 +64,8 @@ function snapshotKey(input: {
   tptUrl: string;
   isFreeSample: boolean;
   published: boolean;
+  communityVisible: boolean;
+  authorDisplayName: string;
   sortOrder: number;
   liturgicalPeriod: string;
   gospelMaxChars: number;
@@ -89,6 +91,8 @@ export function LessonKitEditor({
   const [tptUrl, setTptUrl] = useState(kit.tptUrl ?? "");
   const [isFreeSample, setIsFreeSample] = useState(kit.isFreeSample);
   const [published, setPublished] = useState(kit.published);
+  const [communityVisible, setCommunityVisible] = useState(kit.communityVisible);
+  const [authorDisplayName, setAuthorDisplayName] = useState(kit.authorDisplayName ?? "");
   const [sortOrder, setSortOrder] = useState(kit.sortOrder);
   const [liturgicalPeriod, setLiturgicalPeriod] = useState(kit.liturgicalPeriod ?? "");
   const [gospelMaxChars, setGospelMaxChars] = useState(kit.familyMode?.gospelMaxChars ?? 150);
@@ -114,6 +118,8 @@ export function LessonKitEditor({
       tptUrl: initialKit.tptUrl ?? "",
       isFreeSample: initialKit.isFreeSample,
       published: initialKit.published,
+      communityVisible: initialKit.communityVisible,
+      authorDisplayName: initialKit.authorDisplayName ?? "",
       sortOrder: initialKit.sortOrder,
       liturgicalPeriod: initialKit.liturgicalPeriod ?? "",
       gospelMaxChars: initialKit.familyMode?.gospelMaxChars ?? 150,
@@ -182,7 +188,10 @@ export function LessonKitEditor({
                 sortOrder,
                 liturgicalPeriod: liturgicalPeriod.trim() || null,
               }
-            : {}),
+            : {
+                communityVisible,
+                authorDisplayName: authorDisplayName.trim() || null,
+              }),
         }),
       });
       if (!res.ok) throw new Error("Could not save lesson details");
@@ -191,6 +200,8 @@ export function LessonKitEditor({
       setKit(meta.kit);
       setBlocks(meta.kit.blocks);
       setPublished(meta.kit.published);
+      setCommunityVisible(meta.kit.communityVisible);
+      setAuthorDisplayName(meta.kit.authorDisplayName ?? "");
       setSortOrder(meta.kit.sortOrder);
       setLiturgicalPeriod(meta.kit.liturgicalPeriod ?? "");
       setGospelMaxChars(meta.kit.familyMode?.gospelMaxChars ?? gospelMaxChars);
@@ -210,6 +221,8 @@ export function LessonKitEditor({
         tptUrl: tptUrl.trim() || "",
         isFreeSample,
         published: meta.kit.published,
+        communityVisible: meta.kit.communityVisible,
+        authorDisplayName: meta.kit.authorDisplayName ?? "",
         sortOrder: meta.kit.sortOrder,
         liturgicalPeriod: liturgicalPeriod.trim() || "",
         gospelMaxChars: meta.kit.familyMode?.gospelMaxChars ?? gospelMaxChars,
@@ -234,6 +247,8 @@ export function LessonKitEditor({
     tptUrl,
     isFreeSample,
     published,
+    communityVisible,
+    authorDisplayName,
     sortOrder,
     liturgicalPeriod,
     gospelMaxChars,
@@ -250,6 +265,8 @@ export function LessonKitEditor({
       tptUrl: tptUrl.trim() || "",
       isFreeSample,
       published,
+      communityVisible,
+      authorDisplayName: authorDisplayName.trim() || "",
       sortOrder,
       liturgicalPeriod: liturgicalPeriod.trim() || "",
       gospelMaxChars,
@@ -275,6 +292,8 @@ export function LessonKitEditor({
     tptUrl,
     isFreeSample,
     published,
+    communityVisible,
+    authorDisplayName,
     sortOrder,
     liturgicalPeriod,
     gospelMaxChars,
@@ -474,6 +493,42 @@ export function LessonKitEditor({
           placeholder="What your class will do this week"
         />
       </label>
+
+      {!adminMeta ? (
+        <div className="rounded border border-[var(--color-border)] bg-[#fffaf5] px-4 py-3 space-y-3">
+          <label className="flex items-start gap-2 text-sm font-semibold text-[var(--color-ink)]">
+            <input
+              type="checkbox"
+              className="mt-1"
+              checked={communityVisible}
+              onChange={(e) => setCommunityVisible(e.target.checked)}
+            />
+            <span>
+              Share with other teachers
+              <span className="mt-1 block text-xs font-normal text-[var(--color-muted)]">
+                List this lesson on{" "}
+                <a href="/program/community" className="font-semibold text-[var(--color-link)]">
+                  /program/community
+                </a>
+                . Add a short description and grade band so others can find it. Your at-home family
+                link settings are unchanged.
+              </span>
+            </span>
+          </label>
+          {communityVisible ? (
+            <label className="block text-sm text-[var(--color-ink)]">
+              <span className="font-semibold">Display name (optional)</span>
+              <input
+                type="text"
+                value={authorDisplayName}
+                onChange={(e) => setAuthorDisplayName(e.target.value)}
+                className="mt-1 w-full border border-[var(--color-border)] px-3 py-2 text-sm"
+                placeholder="e.g. Mrs. Lopez, St. Mary’s Grade 3"
+              />
+            </label>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">

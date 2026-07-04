@@ -27,10 +27,14 @@ export async function PATCH(req: Request, { params }: Params) {
     title?: string;
     description?: string;
     published?: boolean;
+    communityVisible?: boolean;
+    authorDisplayName?: string | null;
     familyMode?: import("@/lib/lesson-kit/types").FamilyModeConfig;
     tptUrl?: string | null;
     isFreeSample?: boolean;
     gradeBand?: string | null;
+    liturgicalPeriod?: string | null;
+    sortOrder?: number;
   };
 
   const kit = await updateLessonKitMeta(id, session.familyAccountId, body);

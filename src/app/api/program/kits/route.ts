@@ -1,3 +1,4 @@
+import { canDuplicateLessonKitSource } from "@/lib/lesson-kit/community";
 import {
   duplicateLessonKit,
   listGlobalTemplates,
@@ -35,6 +36,11 @@ export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as { sourceId?: string };
   if (!body.sourceId) {
     return NextResponse.json({ error: "sourceId required" }, { status: 400 });
+  }
+
+  const allowed = await canDuplicateLessonKitSource(body.sourceId, session.familyAccountId);
+  if (!allowed) {
+    return NextResponse.json({ error: "Source not found" }, { status: 404 });
   }
 
   const kit = await duplicateLessonKit({
