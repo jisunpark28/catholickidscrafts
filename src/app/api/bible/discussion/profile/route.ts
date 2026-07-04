@@ -3,6 +3,7 @@ import {
   normalizeDiscussionPenName,
   saveDiscussionPenName,
 } from "@/lib/bible/discussion-pen-name";
+import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
 import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
 import { NextResponse } from "next/server";
 
@@ -12,7 +13,9 @@ export async function GET() {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
   }
 
-  const { penName, needsPenName } = await getDiscussionPenNameForReader(readerKey);
+  const { penName, needsPenName } = await withDiscussionSchemaReady(() =>
+    getDiscussionPenNameForReader(readerKey),
+  );
   return NextResponse.json({
     penName,
     needsPenName,
@@ -42,7 +45,7 @@ export async function PUT(request: Request) {
   }
 
   try {
-    await saveDiscussionPenName(readerKey, penName);
+    await withDiscussionSchemaReady(() => saveDiscussionPenName(readerKey, penName));
     return NextResponse.json({ penName, needsPenName: false });
   } catch (e) {
     console.error("discussion pen name save", e);
