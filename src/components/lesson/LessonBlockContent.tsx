@@ -5,6 +5,11 @@ import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { WordFallTypingGame } from "@/components/WordFallTypingGame";
 import { LESSON_WORD_PRESETS } from "@/lib/lesson-kit/constants";
 import { gospelMaxCharsForBlock } from "@/lib/lesson-kit/family-blocks";
+import {
+  lessonLinkButtonLabel,
+  lessonLinkHref,
+  lessonLinkOpensInNewTab,
+} from "@/lib/lesson-kit/link-block";
 import type { LessonBlockDto, LessonKitDto } from "@/lib/lesson-kit/types";
 import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
 import { todayUniversalis, toDateKey } from "@/lib/dates";
@@ -202,6 +207,32 @@ function LessonNoteBlock({ block }: { block: LessonBlockDto }) {
   return <div className="lesson-note rich-content" dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
+function LessonLinkBlock({ block }: { block: LessonBlockDto }) {
+  const href = lessonLinkHref(block);
+  if (!href) {
+    return (
+      <p className="text-sm text-[var(--color-muted)]">
+        Link not configured. Add a valid URL in the lesson editor.
+      </p>
+    );
+  }
+
+  const newTab = lessonLinkOpensInNewTab(block);
+  return (
+    <div className="flex justify-center py-4">
+      <a
+        href={href}
+        className="lesson-big-button inline-flex no-underline"
+        {...(newTab
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
+      >
+        {lessonLinkButtonLabel(block)}
+      </a>
+    </div>
+  );
+}
+
 export function LessonBlockContent({ block, kit, mode }: Props) {
   switch (block.type) {
     case "CUSTOM_NOTE":
@@ -218,6 +249,8 @@ export function LessonBlockContent({ block, kit, mode }: Props) {
       return <LessonBibleBlock block={block} kit={kit} mode={mode} />;
     case "RESOURCE":
       return <LessonResourceBlock block={block} />;
+    case "LINK":
+      return <LessonLinkBlock block={block} />;
     case "MASS_TODAY":
       return <LessonMassTodayBlock />;
     default:

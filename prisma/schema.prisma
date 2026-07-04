@@ -411,6 +411,7 @@ enum LessonKitScope {
 enum LessonBlockType {
   CUSTOM_NOTE
   RESOURCE
+  LINK
   PLAY_GAME
   TYPING_WORDS
   HANGMAN_WORDS

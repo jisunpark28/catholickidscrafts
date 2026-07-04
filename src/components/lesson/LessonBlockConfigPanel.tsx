@@ -10,6 +10,11 @@ import {
   defaultFamilyIncludedByType,
   familyIncludeHint,
 } from "@/lib/lesson-kit/family-blocks";
+import {
+  lessonLinkButtonLabel,
+  lessonLinkHref,
+  validateLessonLinkUrl,
+} from "@/lib/lesson-kit/link-block";
 import type { LessonBlockDto } from "@/lib/lesson-kit/types";
 import type { FamilyPickMode } from "@/components/lesson/LessonFamilyModePanel";
 import type { LessonBlockType } from "@prisma/client";
@@ -40,6 +45,73 @@ function triStateFamilyInclude(block: LessonBlockDto): "on" | "off" | "default" 
   if (block.config.familyInclude === true) return "on";
   if (block.config.familyInclude === false) return "off";
   return "default";
+}
+
+function LessonLinkConfigFields({
+  block,
+  patch,
+}: {
+  block: LessonBlockDto;
+  patch: (partial: Partial<LessonBlockDto["config"]>) => void;
+}) {
+  const urlInput = block.config.url ?? "";
+  const validation = urlInput.trim() ? validateLessonLinkUrl(urlInput) : null;
+  const previewHref = lessonLinkHref(block);
+
+  return (
+    <>
+      <label className="lesson-block-config__field">
+        <span>URL</span>
+        <input
+          type="url"
+          value={urlInput}
+          placeholder="https://..."
+          onChange={(e) => patch({ url: e.target.value })}
+        />
+        {validation && !validation.valid ? (
+          <p className="mt-1 text-xs font-semibold text-red-600">{validation.error}</p>
+        ) : null}
+      </label>
+
+      <label className="lesson-block-config__field">
+        <span>Button label</span>
+        <input
+          type="text"
+          value={block.config.buttonLabel ?? ""}
+          placeholder="e.g. Opening prayer"
+          onChange={(e) => patch({ buttonLabel: e.target.value })}
+        />
+      </label>
+
+      <label className="flex items-center gap-2 text-sm text-[var(--color-ink)]">
+        <input
+          type="checkbox"
+          checked={block.config.openInNewTab !== false}
+          onChange={(e) => patch({ openInNewTab: e.target.checked })}
+        />
+        Open in new tab
+      </label>
+
+      {previewHref ? (
+        <div className="lesson-block-config__field mt-2 border-t border-[var(--color-border)] pt-3">
+          <span className="text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+            Preview
+          </span>
+          <div className="mt-2 flex justify-center rounded border border-dashed border-[var(--color-border)] bg-white p-4">
+            <a
+              href={previewHref}
+              className="lesson-big-button inline-flex no-underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {lessonLinkButtonLabel(block)}
+            </a>
+          </div>
+          <p className="mt-2 break-all text-xs text-[var(--color-muted)]">{previewHref}</p>
+        </div>
+      ) : null}
+    </>
+  );
 }
 
 export function LessonBlockConfigPanel({
@@ -188,6 +260,10 @@ export function LessonBlockConfigPanel({
             ))}
           </select>
         </label>
+      )}
+
+      {block.type === "LINK" && (
+        <LessonLinkConfigFields block={block} patch={patch} />
       )}
 
       {block.type === "CUSTOM_NOTE" && (

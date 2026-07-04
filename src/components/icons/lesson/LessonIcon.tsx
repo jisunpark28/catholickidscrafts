@@ -105,6 +105,15 @@ function SvgHome({ className, ...rest }: IconProps) {
   );
 }
 
+function SvgLink({ className, ...rest }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden {...rest}>
+      <path d="M10 13a4.5 4.5 0 0 0 6.36 0l2.12-2.12a4.5 4.5 0 0 0-6.36-6.36L11 5.5" {...stroke} />
+      <path d="M14 11a4.5 4.5 0 0 0-6.36 0L5.52 13.12a4.5 4.5 0 0 0 6.36 6.36L13 18.5" {...stroke} />
+    </svg>
+  );
+}
+
 function SvgGrip({ className, ...rest }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden {...rest}>
@@ -131,12 +140,13 @@ function SvgCheck({ className, ...rest }: IconProps) {
 
 const BLOCK_ICONS: Record<LessonBlockType, typeof SvgPuzzle> = {
   CUSTOM_NOTE: SvgClipboard,
+  RESOURCE: SvgScissors,
+  LINK: SvgLink,
   PLAY_GAME: SvgPuzzle,
   TYPING_WORDS: SvgKeyboard,
   HANGMAN_WORDS: SvgHangman,
   GOSPEL_TYPING: SvgCross,
   BIBLE_CHAPTER: SvgBookOpen,
-  RESOURCE: SvgScissors,
   MASS_TODAY: SvgCalendar,
 };
 

@@ -48,6 +48,11 @@ export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
     description: "Links, images, slides, and site activities",
     blocks: [
       {
+        type: "LINK",
+        paletteLabel: "External link",
+        description: "Prayer, video, Google Doc, or any web page",
+      },
+      {
         type: "RESOURCE",
         paletteLabel: "Activity link",
         description: "Link to a craft or printable on this site",
@@ -100,6 +105,12 @@ export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["confi
       };
     case "RESOURCE":
       return { resourceSlug: "lent-stations-cross-craft" };
+    case "LINK":
+      return {
+        url: "",
+        buttonLabel: "Opening prayer",
+        openInNewTab: true,
+      };
     case "MASS_TODAY":
       return {};
     default:
