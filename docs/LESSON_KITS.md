@@ -54,6 +54,12 @@ Personal kits can be listed on **`/program/community`** when the teacher enables
 **Use this** calls `POST /api/program/kits` with `{ sourceId }` (`duplicateLessonKit`); guests are sent to login with `next` back to the detail page, then redirected to **`/program/kit/[newId]`**.  
 Forked kits store `sourceKitId`; the editor shows “Copied from {author}'s lesson «{title}»” (`LessonForkAttributionBanner`).
 
+### Community comments (PR-13)
+
+**`LessonKitComment`** — `kitId`, optional `familyAccountId`, optional `authorName`, `body`, optional `parentId` (replies), `createdAt`.  
+**`GET|POST /api/program/kits/[id]/comments`** — public read for community-visible kits; POST requires sign-in.  
+Community detail shows a **Feedback & questions** thread at the bottom (list + post; owner notifications deferred).
+
 ## Routes
 
 - `/program` — templates and teacher’s Lesson Kits (server-loaded)
@@ -72,6 +78,7 @@ Forked kits store `sourceKitId`; the editor shows “Copied from {author}'s less
 - `POST /api/program/uploads` — teacher media (images, PDF, PPT) → `assetUrl`
 - `PATCH /api/program/kits/[id]` — title, TPT link, grade band, `communityVisible`, etc.
 - `GET /api/program/community` — teacher-shared kits (PR-11)
+- `GET|POST /api/program/kits/[id]/comments` — community lesson feedback (PR-13)
 - `GET|POST /api/admin/lesson-templates` — admin global template CRUD (create)
 - `GET|PATCH|DELETE /api/admin/lesson-templates/[id]` — admin template meta
 - `PUT /api/admin/lesson-templates/[id]/blocks` — admin template steps
