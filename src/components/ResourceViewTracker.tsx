@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { recordResourceView } from "@/lib/record-resource-view";
 
 type Props = { slug: string };
 
@@ -11,10 +12,7 @@ export function ResourceViewTracker({ slug }: Props) {
   useEffect(() => {
     if (recorded.current) return;
     recorded.current = true;
-    void fetch(`/api/resources/${encodeURIComponent(slug)}/view`, {
-      method: "POST",
-      keepalive: true,
-    });
+    void recordResourceView(slug);
   }, [slug]);
 
   return null;
