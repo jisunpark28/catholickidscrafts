@@ -3,6 +3,7 @@
 import { LessonBlockContent } from "@/components/lesson/LessonBlockContent";
 import { LessonBigButton, LessonProgressBar, LessonStepTitle } from "@/components/lesson/LessonUi";
 import { LessonIcon } from "@/components/icons/lesson/LessonIcon";
+import { isClassroomHeroBlock } from "@/lib/lesson-kit/classroom-blocks";
 import { blockDisplayLabel, filterFamilyBlocks } from "@/lib/lesson-kit/family-blocks";
 import type { LessonKitDto } from "@/lib/lesson-kit/types";
 import Link from "next/link";
@@ -44,6 +45,7 @@ export function LessonRunner({
   const current = blocks[step];
   const isLast = step >= blocks.length - 1;
   const canGoBack = step > 0 && !finished;
+  const heroStep = mode === "classroom" && current ? isClassroomHeroBlock(current) : false;
 
   const goNext = useCallback(() => {
     if (isLast) {
@@ -94,20 +96,29 @@ export function LessonRunner({
     );
   }
 
+  const shellClass =
+    mode === "classroom"
+      ? `lesson-runner lesson-runner--classroom${heroStep ? " lesson-runner--hero" : ""}`
+      : "lesson-runner";
+
   return (
-    <div className="mx-auto flex min-h-[70dvh] max-w-3xl flex-col px-4 py-6 sm:px-6">
-      <LessonProgressBar total={blocks.length} current={step} />
+    <div className={shellClass}>
+      <LessonProgressBar total={blocks.length} current={step} compact={mode === "classroom"} />
       {current && (
         <>
-          <div className="mt-4 mb-6">
-            <LessonStepTitle blockType={current.type} label={blockDisplayLabel(current)} />
-          </div>
-          <div className="flex-1">
+          {!heroStep ? (
+            <div className="lesson-runner__title">
+              <LessonStepTitle blockType={current.type} label={blockDisplayLabel(current)} />
+            </div>
+          ) : (
+            <p className="lesson-runner__hero-label sr-only">{blockDisplayLabel(current)}</p>
+          )}
+          <div className="lesson-runner__content">
             <LessonBlockContent block={current} kit={kit} mode={mode} />
           </div>
         </>
       )}
-      <div className="mt-8 flex flex-col gap-3 pb-8 sm:flex-row">
+      <div className="lesson-runner__nav">
         {canGoBack ? (
           <LessonBigButton variant="secondary" className="sm:flex-1" onClick={goBack}>
             Previous

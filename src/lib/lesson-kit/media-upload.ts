@@ -20,6 +20,9 @@ const ALLOWED_EXTENSIONS = new Set([
   "bmp",
   "heic",
   "heif",
+  "mp4",
+  "webm",
+  "mov",
 ]);
 
 export type LessonMediaValidation =
@@ -36,6 +39,7 @@ export function isAllowedLessonMediaMime(mime: string): boolean {
   const type = mime.trim().toLowerCase();
   if (!type) return false;
   if (type.startsWith("image/")) return true;
+  if (type.startsWith("video/")) return true;
   if (type === "application/pdf") return true;
   if (PPT_MIMES.has(type)) return true;
   if (type.includes("powerpoint") || type.includes("presentation")) return true;
@@ -65,7 +69,7 @@ export function validateLessonMediaFile(file: File): LessonMediaValidation {
   if (!isAllowedLessonMediaFile(file)) {
     return {
       ok: false,
-      error: "Allowed: images, PDF, and PowerPoint (.ppt, .pptx)",
+      error: "Allowed: images, video (MP4/WebM), PDF, and PowerPoint (.ppt, .pptx)",
     };
   }
   return { ok: true };

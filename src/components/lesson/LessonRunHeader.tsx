@@ -5,6 +5,7 @@ type Props = {
   subtitle?: string;
   backHref?: string;
   backLabel?: string;
+  variant?: "default" | "classroom";
 };
 
 export function LessonRunHeader({
@@ -12,9 +13,10 @@ export function LessonRunHeader({
   subtitle,
   backHref = "/program",
   backLabel = "Lesson Kits",
+  variant = "default",
 }: Props) {
   return (
-    <header className="lesson-run-header">
+    <header className={`lesson-run-header${variant === "classroom" ? " lesson-run-header--classroom" : ""}`}>
       <div className="lesson-run-header__inner">
         <Link href={backHref} className="lesson-run-header__back">
           ← {backLabel}

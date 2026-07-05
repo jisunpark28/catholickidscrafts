@@ -31,6 +31,15 @@ const baseConfig = z
     slidesSource: z.enum(["embed", "upload"]).optional(),
     gameFormat: z.string().optional(),
     words: z.array(z.string()).optional(),
+    kitWords: z
+      .array(
+        z.object({
+          word: z.string(),
+          hint: z.string().optional(),
+        }),
+      )
+      .optional(),
+    classroomEmbed: z.enum(["video", "link"]).optional(),
   })
   .passthrough();
 
