@@ -31,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/mass", { changeFrequency: "daily", priority: 0.95 }),
     entry("/curriculum", { changeFrequency: "weekly", priority: 0.85 }),
     entry("/resources", { changeFrequency: "weekly", priority: 0.85 }),
+    entry("/gallery", { changeFrequency: "weekly", priority: 0.7 }),
     entry("/recommendations", { changeFrequency: "weekly", priority: 0.8 }),
     entry("/play", { changeFrequency: "weekly", priority: 0.75 }),
     entry("/play/typing", { changeFrequency: "weekly", priority: 0.7 }),

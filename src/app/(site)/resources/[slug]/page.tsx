@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContentBody } from "@/components/ContentBody";
 import { PageShell } from "@/components/PageShell";
+import { ResourceDownloadButton } from "@/components/ResourceDownloadButton";
 import { ResourceViewTracker } from "@/components/ResourceViewTracker";
 import { TptCta } from "@/components/TptCta";
 import { resolveAssetUrl } from "@/lib/asset-url";
@@ -69,6 +70,19 @@ export default async function ResourcePage({ params }: Props) {
       )}
 
       {post.tptUrl && <TptCta tptUrl={post.tptUrl} isFreeSample={post.isFreeSample} />}
+
+      {post.downloadUrl?.trim() ? (
+        <div className="mt-6 flex items-center gap-3">
+          <ResourceDownloadButton
+            slug={slug}
+            href={post.downloadUrl.trim()}
+            label={post.downloadLabel?.trim() || `Download ${post.title}`}
+          />
+          <span className="text-sm font-semibold text-[var(--color-ink)]">
+            {post.downloadLabel?.trim() || "Download PDF"}
+          </span>
+        </div>
+      ) : null}
 
       <ContentBody
         content={post.content}

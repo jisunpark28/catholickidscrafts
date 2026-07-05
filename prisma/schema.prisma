@@ -20,6 +20,8 @@ model AdminUser {
   passwordHash String
   role         AdminRole @default(OPERATOR)
   createdAt    DateTime  @default(now())
+
+  moderatedGallerySubmissions CraftGallerySubmission[] @relation("GalleryModerator")
 }
 
 model CurriculumTrack {
@@ -77,7 +79,32 @@ model Resource {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  trackLinks CurriculumTrackResource[]
+  trackLinks           CurriculumTrackResource[]
+  gallerySubmissions   CraftGallerySubmission[]
+}
+
+/// User-submitted craft photo; operator approves before public gallery.
+model CraftGallerySubmission {
+  id              String    @id @default(cuid())
+  imageUrl        String
+  authorName      String
+  caption         String?
+  resourceId      String?
+  familyAccountId String?
+  isApproved      Boolean   @default(false)
+  rejectedAt      DateTime?
+  moderatedById   String?
+  moderatedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  resource      Resource?      @relation(fields: [resourceId], references: [id], onDelete: SetNull)
+  familyAccount FamilyAccount? @relation(fields: [familyAccountId], references: [id], onDelete: SetNull)
+  moderatedBy   AdminUser?     @relation("GalleryModerator", fields: [moderatedById], references: [id], onDelete: SetNull)
+
+  @@index([isApproved, createdAt])
+  @@index([resourceId])
+  @@index([familyAccountId])
 }
 
 model UploadedFile {
@@ -294,6 +321,7 @@ model FamilyAccount {
   sundayLessonKitId  String?
   sundayWeekStart    String?
   sundayLessonKit    LessonKit?             @relation("TeacherSundayKit", fields: [sundayLessonKitId], references: [id], onDelete: SetNull)
+  gallerySubmissions CraftGallerySubmission[]
 }
 
 /// Student profile under a teacher account (Access ID login); max per account in access-code config.

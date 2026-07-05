@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
-import { ResourceCard } from "@/components/ResourceCard";
+import { ResourceCard, ResourceCardGrid } from "@/components/ResourceCard";
 import { ResourcesToolbar } from "@/components/ResourcesToolbar";
 import {
   getAllResources,
@@ -58,11 +58,11 @@ export default async function ResourcesPage({ searchParams }: Props) {
         </p>
 
         {results.length > 0 ? (
-          <div className="mt-6 border border-[var(--color-border)]">
+          <ResourceCardGrid>
             {results.map((post) => (
               <ResourceCard key={post.slug} post={post} />
             ))}
-          </div>
+          </ResourceCardGrid>
         ) : (
           <p className="mt-10 border border-[var(--color-border)] bg-white p-8 text-center text-[var(--color-muted)]">
             No resources found. Try another word or season.
@@ -96,12 +96,12 @@ export default async function ResourcesPage({ searchParams }: Props) {
         <ResourcesToolbar />
       </Suspense>
 
-      <nav className="mb-12 flex flex-wrap gap-2 border-b border-[var(--color-border)] pb-6">
+      <nav className="mb-10 flex flex-wrap gap-2">
         {periodCounts.map(({ period: p, count }) => (
           <a
             key={p.id}
             href={`#${p.id}`}
-            className="border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            className="rounded-full bg-[var(--color-surface)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
           >
             {p.title}
             {count > 0 && (
@@ -114,20 +114,20 @@ export default async function ResourcesPage({ searchParams }: Props) {
       <div className="space-y-16">
         {periodPosts.map(({ period: p, posts }) => {
           return (
-            <section key={p.id} id={p.id} className="scroll-mt-24">
-              <div className="border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5 sm:px-8">
+            <section key={p.id} id={p.id} className="scroll-mt-24 space-y-6">
+              <div className="rounded-2xl bg-[var(--color-surface)] px-6 py-5 sm:px-8">
                 <h2 className="text-2xl font-bold text-[var(--color-ink)]">{p.title}</h2>
                 <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{p.description}</p>
               </div>
 
               {posts.length > 0 ? (
-                <div className="border border-t-0 border-[var(--color-border)]">
+                <ResourceCardGrid>
                   {posts.map((post) => (
                     <ResourceCard key={post.slug} post={post} />
                   ))}
-                </div>
+                </ResourceCardGrid>
               ) : (
-                <p className="border border-t-0 border-[var(--color-border)] bg-white px-6 py-8 text-sm text-[var(--color-muted)]">
+                <p className="rounded-2xl bg-white px-6 py-8 text-sm text-[var(--color-muted)] shadow-sm">
                   No resources in this season yet. Check back soon.
                 </p>
               )}
