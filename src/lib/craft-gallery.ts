@@ -83,6 +83,66 @@ export async function listApprovedGallerySubmissions(opts?: {
   return rows;
 }
 
+export async function listApprovedGalleryForResourceSlug(slug: string, limit = 24) {
+  const resource = await prisma.resource.findFirst({
+    where: { slug, published: true },
+    select: { id: true },
+  });
+  if (!resource) return [];
+  return listApprovedGallerySubmissions({ resourceId: resource.id, limit });
+}
+
+const MAX_PENDING_PER_FAMILY = 3;
+const MAX_SUBMISSIONS_PER_DAY = 10;
+
+export async function assertGallerySubmissionAllowed(familyAccountId: string): Promise<void> {
+  const pending = await prisma.craftGallerySubmission.count({
+    where: { familyAccountId, isApproved: false, rejectedAt: null },
+  });
+  if (pending >= MAX_PENDING_PER_FAMILY) {
+    throw new GalleryRateLimitError(
+      "You already have photos waiting for review. Please wait for approval before submitting more.",
+    );
+  }
+
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const recent = await prisma.craftGallerySubmission.count({
+    where: { familyAccountId, createdAt: { gte: since } },
+  });
+  if (recent >= MAX_SUBMISSIONS_PER_DAY) {
+    throw new GalleryRateLimitError("Daily upload limit reached. Try again tomorrow.");
+  }
+}
+
+export class GalleryRateLimitError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "GalleryRateLimitError";
+  }
+}
+
+export async function createGallerySubmission(input: {
+  imageUrl: string;
+  authorName: string;
+  caption: string | null;
+  familyAccountId: string;
+  resourceId?: string | null;
+}) {
+  await assertGallerySubmissionAllowed(input.familyAccountId);
+
+  return prisma.craftGallerySubmission.create({
+    data: {
+      imageUrl: input.imageUrl,
+      authorName: input.authorName,
+      caption: input.caption,
+      familyAccountId: input.familyAccountId,
+      resourceId: input.resourceId ?? null,
+      isApproved: false,
+      rejectedAt: null,
+    },
+  });
+}
+
 export async function moderateGallerySubmission(opts: {
   id: string;
   action: "approve" | "reject";
