@@ -1,16 +1,18 @@
 "use client";
 
+import { LessonKitWordsEditor } from "@/components/lesson/LessonKitWordsEditor";
 import { LessonMediaUpload } from "@/components/lesson/LessonMediaUpload";
 import {
   LESSON_BLOCK_DEFAULT_LABEL,
   LESSON_GAME_SLUGS,
   LESSON_RESOURCE_SLUGS,
-  LESSON_WORD_PRESETS,
 } from "@/lib/lesson-kit/constants";
 import {
   defaultFamilyIncludedByType,
   familyIncludeHint,
 } from "@/lib/lesson-kit/family-blocks";
+import type { LessonKitWordEntry } from "@/lib/lesson-kit/kit-words";
+import { videoEmbedUrlFromLink } from "@/lib/lesson-kit/video-embed";
 import {
   lessonImageAlt,
   lessonImageCaption,
@@ -128,6 +130,7 @@ function LessonLinkConfigFields({
   const urlInput = block.config.url ?? "";
   const validation = urlInput.trim() ? validateLessonLinkUrl(urlInput) : null;
   const previewHref = lessonLinkHref(block);
+  const videoPreview = urlInput.trim() ? videoEmbedUrlFromLink(urlInput) : null;
 
   return (
     <>
@@ -141,6 +144,11 @@ function LessonLinkConfigFields({
         />
         {validation && !validation.valid ? (
           <p className="mt-1 text-xs font-semibold text-red-600">{validation.error}</p>
+        ) : null}
+        {videoPreview ? (
+          <p className="mt-1 text-xs text-[var(--color-muted)]">
+            YouTube / Vimeo links play full-screen during <strong>Run in class</strong>.
+          </p>
         ) : null}
       </label>
 
@@ -187,7 +195,7 @@ function LessonLinkConfigFields({
         patch={patch}
         onChange={onChange}
         label="Or upload a file"
-        hint="PDF, image, or PowerPoint — opens from a button when no URL is set"
+        hint="Image, video (MP4), PDF, or PowerPoint — images and videos show on screen in class"
       />
     </>
   );
@@ -657,35 +665,38 @@ export function LessonBlockConfigPanel({
       </label>
 
       {block.type === "PLAY_GAME" && (
-        <label className="lesson-block-config__field">
-          <span>Game</span>
-          <select
-            value={block.config.gameSlug ?? LESSON_GAME_SLUGS[0]!.slug}
-            onChange={(e) => patch({ gameSlug: e.target.value })}
-          >
-            {LESSON_GAME_SLUGS.map((g) => (
-              <option key={g.slug} value={g.slug}>
-                {g.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <>
+          <label className="lesson-block-config__field">
+            <span>Game</span>
+            <select
+              value={block.config.gameSlug ?? LESSON_GAME_SLUGS[0]!.slug}
+              onChange={(e) => patch({ gameSlug: e.target.value })}
+            >
+              {LESSON_GAME_SLUGS.map((g) => (
+                <option key={g.slug} value={g.slug}>
+                  {g.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          {block.config.gameSlug === "hangman" || block.config.gameSlug === "typing" ? (
+            <LessonKitWordsEditor
+              block={block}
+              onChange={(entries: LessonKitWordEntry[]) =>
+                patch({ kitWords: entries, wordPreset: undefined, wordIds: undefined })
+              }
+            />
+          ) : null}
+        </>
       )}
 
       {block.type === "TYPING_WORDS" && (
-        <label className="lesson-block-config__field">
-          <span>Word list</span>
-          <select
-            value={block.config.wordPreset ?? "advent"}
-            onChange={(e) => patch({ wordPreset: e.target.value, wordIds: undefined })}
-          >
-            {Object.entries(LESSON_WORD_PRESETS).map(([key, preset]) => (
-              <option key={key} value={key}>
-                {preset.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <LessonKitWordsEditor
+          block={block}
+          onChange={(entries: LessonKitWordEntry[]) =>
+            patch({ kitWords: entries, wordPreset: undefined, wordIds: undefined })
+          }
+        />
       )}
 
       {block.type === "GOSPEL_TYPING" && (
@@ -795,9 +806,12 @@ export function LessonBlockConfigPanel({
       )}
 
       {block.type === "HANGMAN_WORDS" && (
-        <p className="text-xs text-[var(--color-muted)]">
-          Uses the site hangman word list. No extra settings needed.
-        </p>
+        <LessonKitWordsEditor
+          block={block}
+          onChange={(entries: LessonKitWordEntry[]) =>
+            patch({ kitWords: entries, gameSlug: "hangman" })
+          }
+        />
       )}
 
       {block.type === "MASS_TODAY" && (

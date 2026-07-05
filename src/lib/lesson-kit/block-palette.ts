@@ -87,12 +87,12 @@ export const LESSON_BLOCK_PALETTE: LessonBlockPaletteGroup[] = [
       {
         type: "TYPING_WORDS",
         paletteLabel: "Typing",
-        description: "Word-list typing practice",
+        description: "Typing game with words you enter for this lesson",
       },
       {
         type: "HANGMAN_WORDS",
         paletteLabel: "Hangman",
-        description: "Hangman with your word list (coming: custom words)",
+        description: "Hangman with words you enter for this lesson",
       },
     ],
   },
@@ -106,13 +106,13 @@ export function defaultBlockConfig(type: LessonBlockType): LessonBlockDto["confi
     case "PLAY_GAME":
       return { gameSlug: "liturgical-vestments" };
     case "TYPING_WORDS":
-      return { wordPreset: "sunday" };
+      return { kitWords: [] };
     case "GOSPEL_TYPING":
       return { readingKind: "gospel", maxChars: 400 };
     case "BIBLE_CHAPTER":
       return { bookSlug: "matthew", chapter: 1, maxChars: 400 };
     case "HANGMAN_WORDS":
-      return { gameSlug: "hangman" };
+      return { gameSlug: "hangman", kitWords: [] };
     case "CUSTOM_NOTE":
       return {
         html: "<p>Welcome the class and share the goal for this step.</p>",

@@ -35,6 +35,10 @@ export type LessonBlockConfig = {
   /** PR-7+ unified game data */
   gameFormat?: string;
   words?: string[];
+  /** Per-lesson word list (typing / hangman in class) */
+  kitWords?: { word: string; hint?: string }[];
+  /** Classroom: show uploaded / linked video inline */
+  classroomEmbed?: "video" | "link";
   [key: string]: unknown;
 };
 

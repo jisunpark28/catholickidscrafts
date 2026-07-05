@@ -12,9 +12,10 @@ import type { LessonBlockDto } from "@/lib/lesson-kit/types";
 
 type Props = {
   block: LessonBlockDto;
+  variant?: "default" | "classroom";
 };
 
-export function LessonSlidesPlayer({ block }: Props) {
+export function LessonSlidesPlayer({ block, variant = "default" }: Props) {
   if (!lessonSlidesConfigured(block)) {
     return (
       <p className="text-sm text-[var(--color-muted)]">
@@ -24,19 +25,28 @@ export function LessonSlidesPlayer({ block }: Props) {
   }
 
   const embedSrc = lessonSlidesEmbedSrc(block);
+  const frameClass =
+    variant === "classroom"
+      ? "lesson-slides-embed__frame lesson-slides-embed__frame--classroom"
+      : "lesson-slides-embed__frame";
+
   if (embedSrc) {
     return (
-      <div className="lesson-slides-embed">
+      <div
+        className={`lesson-slides-embed${variant === "classroom" ? " lesson-slides-embed--classroom" : ""}`}
+      >
         <iframe
           title={lessonSlidesOpenLabel(block)}
           src={embedSrc}
-          className="lesson-slides-embed__frame"
+          className={frameClass}
           allow="autoplay; fullscreen"
           allowFullScreen
         />
-        <p className="lesson-slides-embed__hint text-xs text-[var(--color-muted)]">
-          Google Slides / Drive preview. Use full screen on the projector if needed.
-        </p>
+        {variant === "default" ? (
+          <p className="lesson-slides-embed__hint text-xs text-[var(--color-muted)]">
+            Google Slides / Drive preview. Use full screen on the projector if needed.
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -48,19 +58,23 @@ export function LessonSlidesPlayer({ block }: Props) {
 
   if (lessonSlidesAssetIsPdf(block)) {
     return (
-      <div className="lesson-slides-embed">
-        <iframe title={lessonSlidesOpenLabel(block)} src={assetUrl} className="lesson-slides-embed__frame" />
-        <p className="lesson-slides-embed__hint text-xs text-[var(--color-muted)]">
-          PDF slides.{" "}
-          <a
-            href={assetUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-[var(--color-link)]"
-          >
-            Open in new tab
-          </a>
-        </p>
+      <div
+        className={`lesson-slides-embed${variant === "classroom" ? " lesson-slides-embed--classroom" : ""}`}
+      >
+        <iframe title={lessonSlidesOpenLabel(block)} src={assetUrl} className={frameClass} />
+        {variant === "default" ? (
+          <p className="lesson-slides-embed__hint text-xs text-[var(--color-muted)]">
+            PDF slides.{" "}
+            <a
+              href={assetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[var(--color-link)]"
+            >
+              Open in new tab
+            </a>
+          </p>
+        ) : null}
       </div>
     );
   }

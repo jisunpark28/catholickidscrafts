@@ -7,9 +7,10 @@ import type { LessonBlockDto } from "@/lib/lesson-kit/types";
 
 type Props = {
   block: LessonBlockDto;
+  variant?: "default" | "classroom";
 };
 
-export function LessonImageFigure({ block }: Props) {
+export function LessonImageFigure({ block, variant = "default" }: Props) {
   const src = lessonImageSrc(block);
   if (!src) {
     return (
@@ -22,7 +23,9 @@ export function LessonImageFigure({ block }: Props) {
   const caption = lessonImageCaption(block);
 
   return (
-    <figure className="lesson-image-figure">
+    <figure
+      className={`lesson-image-figure${variant === "classroom" ? " lesson-image-figure--classroom" : ""}`}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={lessonImageAlt(block)} className="lesson-image-figure__img" />
       {caption ? <figcaption className="lesson-image-figure__caption">{caption}</figcaption> : null}

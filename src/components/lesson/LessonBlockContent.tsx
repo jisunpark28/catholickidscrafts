@@ -1,12 +1,18 @@
 "use client";
 
 import { LessonImageFigure } from "@/components/lesson/LessonImageFigure";
+import { LessonKitHangmanGame } from "@/components/lesson/LessonKitHangmanGame";
 import { LessonSlidesPlayer } from "@/components/lesson/LessonSlidesPlayer";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { WordFallTypingGame } from "@/components/WordFallTypingGame";
-import { LESSON_WORD_PRESETS } from "@/lib/lesson-kit/constants";
+import {
+  isMediaPrimaryBlock,
+  linkUploadedVideoUrl,
+  linkVideoEmbedUrl,
+} from "@/lib/lesson-kit/classroom-blocks";
 import { gospelMaxCharsForBlock } from "@/lib/lesson-kit/family-blocks";
+import { lessonKitWords, lessonKitWordsForTyping } from "@/lib/lesson-kit/kit-words";
 import {
   lessonLinkButtonLabel,
   lessonLinkHref,
@@ -31,6 +37,13 @@ type Props = {
   kit: LessonKitDto;
   mode: "classroom" | "family";
 };
+
+export type LessonBlockVariant = "default" | "classroom";
+
+function blockVariant(mode: "classroom" | "family", block: LessonBlockDto): LessonBlockVariant {
+  if (mode === "classroom" && isMediaPrimaryBlock(block)) return "classroom";
+  return "default";
+}
 
 function LessonGospelBlock({ block, kit, mode }: Props) {
   const today = useMemo(() => toDateKey(todayUniversalis()), []);
@@ -142,11 +155,31 @@ function LessonBibleBlock({ block, kit, mode }: Props) {
   );
 }
 
-function LessonPlayGameBlock({ block }: { block: LessonBlockDto }) {
+function LessonPlayGameBlock({
+  block,
+  mode,
+}: {
+  block: LessonBlockDto;
+  mode: "classroom" | "family";
+}) {
   const slug = block.config.gameSlug ?? "liturgical-vestments";
 
   if (slug === "liturgical-vestments") {
     return <LiturgicalVestmentsGame />;
+  }
+
+  if (slug === "hangman" && mode === "classroom") {
+    return <LessonKitHangmanGame block={block} compact />;
+  }
+
+  if (slug === "typing" && mode === "classroom") {
+    const kitWords = lessonKitWords(block);
+    return (
+      <WordFallTypingGame
+        customWords={lessonKitWordsForTyping(kitWords)}
+        compact
+      />
+    );
   }
 
   const href =
@@ -175,13 +208,41 @@ function LessonPlayGameBlock({ block }: { block: LessonBlockDto }) {
   );
 }
 
-function LessonTypingWordsBlock({ block }: { block: LessonBlockDto }) {
-  const preset = block.config.wordPreset
-    ? LESSON_WORD_PRESETS[block.config.wordPreset]
-    : undefined;
-  const wordFilter = preset?.words ?? block.config.wordIds;
+function LessonTypingWordsBlock({
+  block,
+  mode,
+}: {
+  block: LessonBlockDto;
+  mode: "classroom" | "family";
+}) {
+  const kitWords = lessonKitWords(block);
 
-  return <WordFallTypingGame wordFilter={wordFilter} compact />;
+  if (mode === "classroom") {
+    if (kitWords.length === 0) {
+      return (
+        <p className="text-sm text-[var(--color-muted)]">
+          Add words in the lesson editor before running the typing game in class.
+        </p>
+      );
+    }
+    return (
+      <WordFallTypingGame
+        customWords={lessonKitWordsForTyping(kitWords)}
+        compact
+      />
+    );
+  }
+
+  return (
+    <WordFallTypingGame
+      customWords={kitWords.length > 0 ? lessonKitWordsForTyping(kitWords) : undefined}
+      compact
+    />
+  );
+}
+
+function LessonHangmanWordsBlock({ block }: { block: LessonBlockDto }) {
+  return <LessonKitHangmanGame block={block} />;
 }
 
 function LessonResourceBlock({ block }: { block: LessonBlockDto }) {
@@ -216,12 +277,67 @@ function LessonNoteBlock({ block }: { block: LessonBlockDto }) {
   return <div className="lesson-note rich-content" dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
-function LessonLinkBlock({ block }: { block: LessonBlockDto }) {
+function LessonLinkBlock({
+  block,
+  variant,
+}: {
+  block: LessonBlockDto;
+  variant: LessonBlockVariant;
+}) {
   const href = lessonLinkHref(block);
   const assetUrl = block.config.assetUrl?.trim();
   const newTab = lessonLinkOpensInNewTab(block);
   const label = lessonLinkButtonLabel(block);
   const fileLabel = block.config.assetFilename?.trim() || "Open file";
+  const videoEmbed = variant === "classroom" ? linkVideoEmbedUrl(block) : null;
+  const uploadedVideo = variant === "classroom" ? linkUploadedVideoUrl(block) : null;
+  const uploadedImage =
+    variant === "classroom" &&
+    block.config.assetMimeType?.startsWith("image/") &&
+    assetUrl
+      ? assetUrl
+      : null;
+
+  if (variant === "classroom" && (videoEmbed || uploadedVideo)) {
+    return (
+      <div className="lesson-classroom-video">
+        {videoEmbed ? (
+          <iframe
+            title={label}
+            src={videoEmbed}
+            className="lesson-classroom-video__frame"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <video
+            className="lesson-classroom-video__native"
+            src={uploadedVideo!}
+            controls
+            playsInline
+            preload="metadata"
+          >
+            <track kind="captions" />
+          </video>
+        )}
+        {label && label !== "Open link" ? (
+          <p className="lesson-classroom-video__caption">{label}</p>
+        ) : null}
+      </div>
+    );
+  }
+
+  if (uploadedImage) {
+    return (
+      <figure className="lesson-image-figure lesson-image-figure--classroom">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={uploadedImage} alt={label} className="lesson-image-figure__img" />
+        {label && label !== "Open link" ? (
+          <figcaption className="lesson-image-figure__caption">{label}</figcaption>
+        ) : null}
+      </figure>
+    );
+  }
 
   if (!href && !assetUrl) {
     return (
@@ -311,17 +427,19 @@ function LessonWritingBlock({ block }: { block: LessonBlockDto }) {
 }
 
 export function LessonBlockContent({ block, kit, mode }: Props) {
+  const variant = blockVariant(mode, block);
+
   switch (block.type) {
     case "CUSTOM_NOTE":
       return <LessonNoteBlock block={block} />;
     case "WRITING":
       return <LessonWritingBlock block={block} />;
     case "PLAY_GAME":
-      return <LessonPlayGameBlock block={block} />;
+      return <LessonPlayGameBlock block={block} mode={mode} />;
     case "TYPING_WORDS":
-      return <LessonTypingWordsBlock block={block} />;
+      return <LessonTypingWordsBlock block={block} mode={mode} />;
     case "HANGMAN_WORDS":
-      return <LessonPlayGameBlock block={{ ...block, config: { gameSlug: "hangman" } }} />;
+      return <LessonHangmanWordsBlock block={block} />;
     case "GOSPEL_TYPING":
       return <LessonGospelBlock block={block} kit={kit} mode={mode} />;
     case "BIBLE_CHAPTER":
@@ -329,11 +447,11 @@ export function LessonBlockContent({ block, kit, mode }: Props) {
     case "RESOURCE":
       return <LessonResourceBlock block={block} />;
     case "LINK":
-      return <LessonLinkBlock block={block} />;
+      return <LessonLinkBlock block={block} variant={variant} />;
     case "IMAGE":
-      return <LessonImageFigure block={block} />;
+      return <LessonImageFigure block={block} variant={variant} />;
     case "SLIDES":
-      return <LessonSlidesPlayer block={block} />;
+      return <LessonSlidesPlayer block={block} variant={variant} />;
     case "MASS_TODAY":
       return <LessonMassTodayBlock />;
     default:

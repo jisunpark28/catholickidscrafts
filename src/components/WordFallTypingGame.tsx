@@ -98,12 +98,14 @@ function filterPool(all: TypingWordItem[], difficulty: WordFallDifficulty): Typi
 type Props = {
   /** Limit pool to these words (lowercase match). */
   wordFilter?: string[];
+  /** Lesson kit words — skips global /api/typing-words when set. */
+  customWords?: TypingWordItem[];
   /** Hide difficulty controls (lesson embed). */
   compact?: boolean;
 };
 
-export function WordFallTypingGame({ wordFilter, compact = false }: Props) {
-  const [allWords, setAllWords] = useState<TypingWordItem[]>([]);
+export function WordFallTypingGame({ wordFilter, customWords, compact = false }: Props) {
+  const [allWords, setAllWords] = useState<TypingWordItem[]>(customWords ?? []);
   const [difficulty, setDifficulty] = useState<WordFallDifficulty>("medium");
   const [falling, setFalling] = useState<FallingWord[]>([]);
   const [draft, setDraft] = useState("");
@@ -135,6 +137,10 @@ export function WordFallTypingGame({ wordFilter, compact = false }: Props) {
   }, [allWords, difficulty, wordFilter]);
 
   useEffect(() => {
+    if (customWords?.length) {
+      setAllWords(customWords);
+      return;
+    }
     fetch("/api/typing-words")
       .then((r) => r.json())
       .then((items: TypingWordItem[]) => {
@@ -142,7 +148,7 @@ export function WordFallTypingGame({ wordFilter, compact = false }: Props) {
         else setAllWords(DEFAULT_WORDS);
       })
       .catch(() => setAllWords(DEFAULT_WORDS));
-  }, []);
+  }, [customWords]);
 
   const resetGame = useCallback(
     (nextDifficulty?: WordFallDifficulty) => {

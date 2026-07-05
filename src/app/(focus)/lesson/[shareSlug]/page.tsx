@@ -23,7 +23,7 @@ export default async function LessonRunPage({ params }: Props) {
 
   return (
     <>
-      <LessonRunHeader title={kit.title} />
+      <LessonRunHeader title={kit.title} variant="classroom" />
       <LessonRunner kit={kit} mode="classroom" />
     </>
   );

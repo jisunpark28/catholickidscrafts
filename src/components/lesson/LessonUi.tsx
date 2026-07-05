@@ -5,9 +5,10 @@ import { LessonIcon } from "@/components/icons/lesson/LessonIcon";
 type Props = {
   total: number;
   current: number;
+  compact?: boolean;
 };
 
-export function LessonProgressBar({ total, current }: Props) {
+export function LessonProgressBar({ total, current, compact = false }: Props) {
   if (total <= 0) return null;
 
   const items: React.ReactNode[] = [];
@@ -31,7 +32,10 @@ export function LessonProgressBar({ total, current }: Props) {
   }
 
   return (
-    <div className="lesson-progress" aria-label={`Step ${current + 1} of ${total}`}>
+    <div
+      className={`lesson-progress${compact ? " lesson-progress--compact" : ""}`}
+      aria-label={`Step ${current + 1} of ${total}`}
+    >
       {items}
       <span className="ml-2 text-xs font-semibold text-[var(--color-muted)]">
         {current + 1} / {total}
