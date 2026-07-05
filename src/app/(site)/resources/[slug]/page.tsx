@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ContentBody } from "@/components/ContentBody";
+import { CraftGalleryGrid } from "@/components/CraftGalleryGrid";
+import { CraftGallerySubmitForm } from "@/components/CraftGallerySubmitForm";
 import { PageShell } from "@/components/PageShell";
 import { ResourceDownloadButton } from "@/components/ResourceDownloadButton";
 import { ResourceViewTracker } from "@/components/ResourceViewTracker";
 import { TptCta } from "@/components/TptCta";
 import { resolveAssetUrl } from "@/lib/asset-url";
 import { getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
+import { listApprovedGalleryForResourceSlug } from "@/lib/craft-gallery";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
@@ -34,6 +37,7 @@ export default async function ResourcePage({ params }: Props) {
   if (!post) notFound();
 
   const period = getLiturgicalPeriod(post.liturgicalPeriod);
+  const galleryItems = await listApprovedGalleryForResourceSlug(slug, 24);
 
   return (
     <PageShell>
@@ -90,6 +94,28 @@ export default async function ResourcePage({ params }: Props) {
         noDownloadLinks
         className="mt-10 border border-[var(--color-border)] bg-white px-6 py-8 sm:px-10"
       />
+
+      <section className="mt-14 border-t border-[var(--color-border)] pt-10">
+        <h2 className="text-xl font-bold text-[var(--color-ink)]">Family gallery</h2>
+        <p className="mt-1 text-sm text-[var(--color-muted)]">
+          See what other families made—and share yours after you finish this craft.
+        </p>
+
+        <div className="mt-6 max-w-xl">
+          <CraftGallerySubmitForm resourceSlug={slug} resourceTitle={post.title} />
+        </div>
+
+        {galleryItems.length > 0 ? (
+          <div className="mt-10">
+            <CraftGalleryGrid items={galleryItems} />
+            <p className="mt-6 text-center text-sm">
+              <Link href="/gallery" className="font-semibold text-[var(--color-link)]">
+                View full gallery →
+              </Link>
+            </p>
+          </div>
+        ) : null}
+      </section>
     </PageShell>
   );
 }

@@ -3,6 +3,7 @@ import { execSync } from "node:child_process";
 const PRISMA = "pnpm exec prisma";
 const DISCUSSION_MIGRATION = "20260622120000_bible_chapter_discussion";
 const RECOVERY_MIGRATION = "20260623150000_bible_discussion_tables_recovery";
+const CRAFT_GALLERY_MIGRATION = "20260710120000_craft_gallery_submissions";
 
 function run(command: string): { output: string; code: number } {
   try {
@@ -55,6 +56,7 @@ function recoverGenericFailedMigration(output: string): boolean {
   if (
     migrationName === DISCUSSION_MIGRATION ||
     migrationName === RECOVERY_MIGRATION ||
+    migrationName === CRAFT_GALLERY_MIGRATION ||
     migrationName === "20260704120000_remove_parish_teacher_kits"
   ) {
     return false;
@@ -126,6 +128,62 @@ function recoverDiscussionMigration(output: string): boolean {
   return false;
 }
 
+function isCraftGalleryIssue(output: string): boolean {
+  return (
+    output.includes(CRAFT_GALLERY_MIGRATION) || output.includes("CraftGallerySubmission")
+  );
+}
+
+function bootstrapCraftGallerySchema(): boolean {
+  console.log("Bootstrapping craft gallery table via direct DB connection...");
+  const result = run("pnpm exec tsx scripts/ensure-craft-gallery-schema.ts");
+  log(result.output);
+  return result.code === 0;
+}
+
+function markCraftGalleryMigrationApplied(): void {
+  const { output, code } = run(`${PRISMA} migrate resolve --applied ${CRAFT_GALLERY_MIGRATION}`);
+  log(output);
+  if (code !== 0 && !output.includes("is already recorded as applied")) {
+    console.warn(`Could not mark ${CRAFT_GALLERY_MIGRATION} as applied (may already be applied).`);
+  }
+}
+
+function recoverCraftGalleryMigration(output: string): boolean {
+  if (!isCraftGalleryIssue(output)) return false;
+
+  if (output.includes("P3009") || output.includes("failed migrations")) {
+    console.log("Recovering failed craft gallery migration...");
+    const rolled = run(`${PRISMA} migrate resolve --rolled-back ${CRAFT_GALLERY_MIGRATION}`);
+    log(rolled.output);
+    return rolled.code === 0 || rolled.output.includes("is already recorded");
+  }
+
+  if (
+    output.includes("already exists") ||
+    output.includes("42701") ||
+    output.includes("P3018")
+  ) {
+    console.log("Craft gallery table already exists; bootstrapping and marking migration applied...");
+    if (!bootstrapCraftGallerySchema()) return false;
+    markCraftGalleryMigrationApplied();
+    return true;
+  }
+
+  if (
+    output.includes("P3008") ||
+    output.includes("was modified after it was applied") ||
+    output.includes("checksum")
+  ) {
+    console.log("Craft gallery migration checksum drift; bootstrapping table directly...");
+    if (!bootstrapCraftGallerySchema()) return false;
+    markCraftGalleryMigrationApplied();
+    return true;
+  }
+
+  return false;
+}
+
 for (let attempt = 1; attempt <= 4; attempt += 1) {
   const { output, code } = run(`${PRISMA} migrate deploy`);
   log(output);
@@ -134,6 +192,10 @@ for (let attempt = 1; attempt <= 4; attempt += 1) {
   }
 
   if (recoverDiscussionMigration(output)) {
+    continue;
+  }
+
+  if (recoverCraftGalleryMigration(output)) {
     continue;
   }
 
@@ -149,17 +211,22 @@ for (let attempt = 1; attempt <= 4; attempt += 1) {
   process.exit(code);
 }
 
-console.log("Migrate deploy still failing after discussion recovery; bootstrapping schema as last resort...");
-if (!bootstrapDiscussionSchema()) {
-  console.error("Could not bootstrap Bible discussion schema.");
+console.log("Migrate deploy still failing after recovery; bootstrapping schemas as last resort...");
+const discussionOk = bootstrapDiscussionSchema();
+const craftGalleryOk = bootstrapCraftGallerySchema();
+if (!discussionOk && !craftGalleryOk) {
+  console.error("Could not bootstrap discussion or craft gallery schema.");
   process.exit(1);
 }
 markDiscussionMigrationsApplied();
+markCraftGalleryMigrationApplied();
 
 const final = run(`${PRISMA} migrate deploy`);
 log(final.output);
-if (final.code !== 0 && isDiscussionIssue(final.output)) {
-  console.warn("Discussion migrations remain unresolved, but schema bootstrap ran. Continuing build.");
+if (final.code !== 0 && (isDiscussionIssue(final.output) || isCraftGalleryIssue(final.output))) {
+  console.warn(
+    "Discussion or craft gallery migrations remain unresolved, but schema bootstrap ran. Continuing build.",
+  );
   process.exit(0);
 }
 
