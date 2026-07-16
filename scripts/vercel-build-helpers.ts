@@ -2,7 +2,10 @@ import { execSync } from "node:child_process";
 
 /** Vercel sets VERCEL_ENV to production | preview | development. */
 export function isVercelPreviewDeploy(): boolean {
-  return process.env.VERCEL_ENV === "preview";
+  if (process.env.VERCEL_ENV === "preview") return true;
+  const ref = process.env.VERCEL_GIT_COMMIT_REF?.trim();
+  // PR / feature branches on Vercel share Neon with production — treat as preview.
+  return Boolean(ref && ref !== "main");
 }
 
 export function isVercelProductionDeploy(): boolean {
