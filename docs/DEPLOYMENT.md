@@ -74,22 +74,42 @@ You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Seed production data
 
 ### Neon + Vercel: avoid “Branch limit exceeded”
 
-If Vercel preview checks stay **pending** or fail with **Provisioning integrations failed** / **Neon branching: Branch limit exceeded**, the Vercel–Neon integration is trying to create a new database branch per preview deployment and your Neon plan limit (Free: **10 branches**) is full.
+If Vercel preview checks fail with **Provisioning integrations failed** or **Neon branching: Branch limit exceeded**, the Vercel–Neon integration is creating a new `preview/<git-branch>` database branch per PR and your Neon plan limit (Free: **10 branches**) is full.
 
-**Recommended (this repo):**
+**Important:** While the Neon integration is connected, Preview `DATABASE_URL` values injected at deploy time **override** manual Preview env vars. Turning off preview branching requires disconnecting or reconnecting without Preview — not only copying Production URLs.
 
-1. **Disable per-preview Neon branching** (use one shared DB for previews):
-   - Vercel → **Storage** → your Neon database → **Settings** → **Deployments Configuration**
-   - Turn **off** automatic branching for **Preview** (keep Production as-is).
-   - In the Vercel project → **Settings** → **Environment Variables**, set **Preview** `DATABASE_URL` and `DIRECT_URL` to the **same values as Production** (pooled + direct from Neon `main` branch).
+**Step 1 — Free branch slots (Neon Console)**
 
-2. **Delete stale branches** (one-time if already at the limit):
-   - Neon Console → **Branches** → delete `preview/*` branches (never delete `main`).
-   - Or GitHub → **Actions** → **Cleanup stale Neon preview branches** → Run workflow (`dry_run: false`) after setting `NEON_API_KEY` and `NEON_PROJECT_ID` (see below).
+1. [console.neon.tech](https://console.neon.tech) → your project → **Branches**
+2. Delete branches named `preview/...` (never delete `main`)
+3. If you use **Neon-Managed** integration: **Integrations** → **Vercel** → **Manage** → **Branches** → delete stale preview branches
 
-3. **Auto-cleanup on PR merge/close** (optional): add repo **Secret** `NEON_API_KEY` and **Variable** `NEON_PROJECT_ID`; workflow `.github/workflows/neon-preview-branch-cleanup.yml` deletes `preview/<branch>` when a PR closes.
+**Step 2 — Stop creating a Neon branch per PR**
 
-4. **Shorten Vercel preview retention** (optional): Vercel → **Settings** → **Security** → **Deployment Retention Policy** → reduce **Pre-Production** from 180 days.
+*Vercel-Managed (Neon from Vercel **Storage**):*
+
+1. [vercel.com](https://vercel.com) → team → **Storage** → your Neon database (or project **catholickidscrafts28** → **Storage** tab)
+2. **Projects** tab → **catholickidscrafts28** → **⋯** → **Remove project connection**
+3. **Connect project** again → enable **Production** only; leave **Preview** unchecked (and **Deployments configuration → Preview** off if shown)
+4. Set env vars manually (Step 3 below)
+
+*Neon-Managed (linked from Neon Console):*
+
+1. Neon → **Integrations** → **Vercel** → **Manage** → **Disconnect**
+2. Set env vars manually (Step 3 below)
+
+**Step 3 — Manual DB env vars (shared production DB for previews)**
+
+From Neon **main** branch → **Connection details**:
+
+| Vercel variable | Neon string |
+|-----------------|-------------|
+| `DATABASE_URL` | **Pooled** (host contains `-pooler`) |
+| `DIRECT_URL` | **Direct** (no pooler) |
+
+Vercel project → **Settings** → **Environment Variables** → set both for **Production** and **Preview** → **Redeploy** the PR preview.
+
+**Optional:** GitHub **Secret** `NEON_API_KEY` + **Variable** `NEON_PROJECT_ID` enables `.github/workflows/neon-preview-branch-cleanup.yml` (deletes `preview/<branch>` when a PR closes) and **Cleanup stale Neon preview branches** (Actions tab).
 
 See [Neon: Managing Vercel preview branch cleanup](https://neon.com/docs/guides/vercel-branch-cleanup).
 
