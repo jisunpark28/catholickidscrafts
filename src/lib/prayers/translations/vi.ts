@@ -1,3 +1,5 @@
+// Vietnamese texts aligned with Hội đồng Giám mục Việt Nam / TGP Sài Gòn Sách Kinh
+// https://hdgmvietnam.com
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const VI_PRAYERS: PrayerTranslationMap = {
@@ -93,7 +95,7 @@ Xin cho các linh hồn người công chính đã khuất, nhờ lòng thương
   },
   "guardian-angel": {
     title: "Kinh Cầu Thiên Thần Hộ Vệ",
-    text: "Lạy Thiên Thần hộ vệ, nhờ tình yêu Thiên Chúa, Ngài được giao phó bảo vệ con. Xin soi sáng, che chở, dẫn dắt và quản trị con trong ngày hôm nay. Amen.",
+    text: "Lạy Thiên Thần hộ vệ, nhờ tình yêu Thiên Chúa, Ngài được giao phó bảo vệ con. Xin soi sáng, che chở, dẫn dắt và quản trị con. Amen.",
   },
   "come-holy-spirit": {
     title: "Kinh Xin Thánh Thần",
@@ -126,14 +128,14 @@ muôn đời muôn kiếp. Amen.`,
   },
   "prayer-before-communion": {
     title: "Kinh Trước Rước Lễ",
-    text: "Lạy Chúa, con không xứng đáng Ngài vào nhà con, nhưng xin Chúa chỉ nói một lời, linh hồn con sẽ được lành.",
+    text: "Lạy Chúa, con không xứng đáng để Ngài vào lòng con, nhưng xin Chúa chỉ nói một lời, thì linh hồn con sẽ được lành.",
   },
   "prayer-after-communion": {
     title: "Kinh Sau Rước Lễ",
     text: "Lạy Chúa Giêsu Kitô, con cảm tạ Ngài đã đến với con trong Bí Tích Thánh này. Xin ở lại với con và giúp con yêu mến Ngài hơn nữa. Amen.",
   },
   memorare: {
-    title: "Memorare",
+    title: "Kinh Cầu Xin Đức Bà Phù Hộ",
     text: "Hãy nhớ lấy, lạy Đức Trinh Nữ Maria, xưa nay chưa nghe thấy ai cả, kẻ trông cậy, cầu xin, van xin Đức Bà, mà Đức Bà bỏ rơi. Cậy vì thế, lạy Đức Nữ Đồng Trinh, Mẹ con, con xin chạy đến cùng Đức Bà; trước thánh nhan Đức Bà, con quỳ xuống, đầy tội lỗi và buồn phiền. Lạy Mẹ Lời Nhập Thể, xin đừng khinh con cầu xin, nhưng lòng thương xót mà nghe và nhậm lời. Amen.",
   },
   "hail-holy-queen": {
@@ -161,7 +163,6 @@ Lạy Thầy thánh thiện, xin cho con không tìm được an ủi hơn là a
   },
   "eternal-rest": {
     title: "Kinh Xin Ơn Cứu Độ",
-    subtitle: "Cầu nguyện cho các linh hồn phần công",
     text: `Lạy Chúa, xin ban cho các linh hồn ấy được nghỉ ngơi muôn đời, và ánh sáng vĩnh cửu chiếu soi trên họ. Xin cho họ được an nghỉ. Amen.
 
 Xin cho các linh hồn người công chính đã khuất và mọi linh hồn phần công, nhờ lòng thương xót của Thiên Chúa, được an nghỉ. Amen.`,

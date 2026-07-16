@@ -1,3 +1,5 @@
+// English texts aligned with USCCB basic prayers and Roman Missal (ICEL)
+// https://www.usccb.org/prayer-and-worship/prayers-and-devotions/prayers
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const EN_PRAYERS: PrayerTranslationMap = {
@@ -124,7 +126,7 @@ forever and ever. Amen.`,
   },
   "prayer-after-communion": {
     title: "Prayer After Communion",
-    text: "Lord Jesus Christ, I thank you for coming to me in this holy Sacrament. Stay with me and help me to love you more and more. Amen.",
+    text: "Lord, may I receive these gifts in purity of heart. May they bring me healing and wholeness of mind and body. Amen.",
   },
   "memorare": {
     title: "Memorare",
