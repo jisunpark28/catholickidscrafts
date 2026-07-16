@@ -1,5 +1,6 @@
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { fetchBibleBooks } from "@/lib/bible/latinprayer";
+import { CATHOLIC_PRAYERS } from "@/lib/prayers/catholic-prayers";
 import { getPlayGamesFromCopy } from "@/lib/play-games-copy";
 import { prisma } from "@/lib/prisma";
 import { getSiteCopyMap } from "@/lib/site-copy";
@@ -10,7 +11,8 @@ export type LearnSearchKind =
   | "curriculum"
   | "game"
   | "bible"
-  | "home";
+  | "home"
+  | "prayer";
 
 export type LearnSearchResult = {
   id: string;
@@ -134,6 +136,20 @@ export async function searchLearnCatalog(query: string): Promise<LearnSearchResu
       excerpt: game.description,
       href: playGameHref(game.slug),
       badge: "Play",
+      score,
+    });
+  }
+
+  for (const prayer of CATHOLIC_PRAYERS) {
+    const score = scoreMatch(q, prayer.title, prayer.subtitle ?? "", prayer.text.slice(0, 120));
+    if (score <= 0) continue;
+    results.push({
+      id: `prayer-${prayer.slug}`,
+      kind: "prayer",
+      title: prayer.title,
+      excerpt: prayer.subtitle ?? "Catholic prayer",
+      href: `/prayers?p=${prayer.slug}`,
+      badge: "Prayer",
       score,
     });
   }

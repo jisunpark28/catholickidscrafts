@@ -1,0 +1,139 @@
+.prayers-reader {
+  display: grid;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .prayers-reader {
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+    gap: 2rem;
+  }
+}
+
+.prayers-reader__sidebar {
+  max-height: none;
+  overflow: visible;
+  border: 1px solid var(--color-border);
+  background: #fffaf5;
+  padding: 0.75rem 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .prayers-reader__sidebar {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+  }
+}
+
+.prayers-reader__group + .prayers-reader__group {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.prayers-reader__group-title {
+  margin: 0 0.5rem 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.prayers-reader__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.prayers-reader__item {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 0.35rem;
+  background: transparent;
+  padding: 0.45rem 0.65rem;
+  text-align: left;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.prayers-reader__item:hover {
+  background: #fff;
+  color: var(--color-link);
+}
+
+.prayers-reader__item--active {
+  background: #fff;
+  border-left: 3px solid var(--color-accent);
+  padding-left: calc(0.65rem - 3px);
+  color: var(--color-ink);
+}
+
+.prayers-reader__panel {
+  border: 1px solid var(--color-border);
+  background: #fff;
+  padding: 1.5rem 1.25rem;
+  min-height: 16rem;
+}
+
+@media (min-width: 640px) {
+  .prayers-reader__panel {
+    padding: 2rem 2.25rem;
+  }
+}
+
+.prayers-reader__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+@media (min-width: 640px) {
+  .prayers-reader__title {
+    font-size: 1.75rem;
+  }
+}
+
+.prayers-reader__subtitle {
+  margin-top: 0.35rem;
+  font-size: 0.9375rem;
+  color: var(--color-muted);
+}
+
+.prayers-reader__body {
+  margin-top: 1.25rem;
+}
+
+.prayers-reader__paragraph {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-ink);
+  white-space: pre-wrap;
+}
+
+.prayers-reader__paragraph + .prayers-reader__paragraph {
+  margin-top: 1rem;
+}
+
+.prayers-reader__count {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.prayers-reader__mobile-hint {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1024px) {
+  .prayers-reader__mobile-hint {
+    display: none;
+  }
+}
