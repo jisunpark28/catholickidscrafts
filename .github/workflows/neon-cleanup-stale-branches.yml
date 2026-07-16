@@ -1,0 +1,77 @@
+name: Cleanup stale Neon preview branches
+
+# One-time / periodic cleanup when Neon hits the branch limit (Free: 10 branches).
+# Deletes all `preview/*` branches except an optional keep list.
+#
+# Requires repo secrets/variables (same as neon-preview-branch-cleanup.yml):
+#   NEON_API_KEY, NEON_PROJECT_ID
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: List branches only (do not delete)
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List and delete stale preview branches
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ -z "${NEON_API_KEY:-}" ] || [ -z "${NEON_PROJECT_ID:-}" ]; then
+            echo "Set NEON_API_KEY (secret) and NEON_PROJECT_ID (variable) in GitHub repo settings."
+            exit 1
+          fi
+          node <<'NODE'
+          const projectId = process.env.NEON_PROJECT_ID;
+          const apiKey = process.env.NEON_API_KEY;
+          const dryRun = process.env.DRY_RUN === 'true';
+          const keep = new Set(['main', 'production']);
+
+          async function api(path, options = {}) {
+            const res = await fetch(`https://console.neon.tech/api/v2${path}`, {
+              ...options,
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                ...(options.headers || {}),
+              },
+            });
+            const text = await res.text();
+            if (!res.ok) throw new Error(`${res.status} ${path}: ${text}`);
+            return text ? JSON.parse(text) : null;
+          }
+
+          (async () => {
+            const { branches } = await api(`/projects/${projectId}/branches`);
+            const preview = branches.filter((b) => b.name.startsWith('preview/'));
+            console.log(`Found ${preview.length} preview/* branch(es). dry_run=${dryRun}`);
+            for (const branch of preview) {
+              const root = branch.name.replace(/^preview\//, '');
+              if (keep.has(branch.name) || keep.has(root)) {
+                console.log(`keep: ${branch.name}`);
+                continue;
+              }
+              if (dryRun) {
+                console.log(`would delete: ${branch.name} (${branch.id})`);
+                continue;
+              }
+              await api(`/projects/${projectId}/branches/${branch.id}`, { method: 'DELETE' });
+              console.log(`deleted: ${branch.name}`);
+            }
+          })().catch((err) => {
+            console.error(err);
+            process.exit(1);
+          });
+          NODE
