@@ -113,6 +113,23 @@ Vercel project → **Settings** → **Environment Variables** → set both for *
 
 See [Neon: Managing Vercel preview branch cleanup](https://neon.com/docs/guides/vercel-branch-cleanup).
 
+### 3b. GitHub Actions production deploy (when the live site stays on an old build)
+
+If `main` is merged but **www.catholickidscrafts.com** still serves an old UI (e.g. Daily Mass calendar missing **GoodNews ↗**), Vercel Git auto-deploy may not be promoting new builds. Use the **Deploy production** workflow (`.github/workflows/deploy-production.yml`).
+
+**GitHub repo → Settings → Secrets and variables → Actions** — add:
+
+| Secret | Where to get it |
+|--------|-----------------|
+| `VERCEL_TOKEN` | [vercel.com/account/tokens](https://vercel.com/account/tokens) → Create |
+| `VERCEL_ORG_ID` | Vercel project → **Settings** → **General** → **Project ID** section (Team / User ID) |
+| `VERCEL_PROJECT_ID` | Same page → **Project ID** |
+| `DATABASE_URL` / `DIRECT_URL` / `AUTH_SECRET` | Same values as Vercel Production (likely already set for **Seed production database**) |
+
+**Simpler fallback:** Vercel project → **Settings** → **Git** → **Deploy Hooks** → create hook for branch `main` → add URL as secret `VERCEL_DEPLOY_HOOK`.
+
+Then **Actions** → **Deploy production** → **Run workflow**, or push to `main`. The workflow verifies that `/mass` HTML contains `GoodNews`.
+
 ---
 
 ## 4. Vercel Blob (admin uploads — required in production)

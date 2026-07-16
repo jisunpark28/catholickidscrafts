@@ -1,0 +1,132 @@
+# Deploy www.catholickidscrafts.com when Vercel Git auto-deploy is stuck or failing.
+#
+# Required GitHub Actions secrets (Settings → Secrets → Actions):
+#   VERCEL_TOKEN        — Vercel account token (Account Settings → Tokens)
+#   VERCEL_ORG_ID       — Team/user id from Vercel project → Settings → General
+#   VERCEL_PROJECT_ID   — Project id from the same page
+#   DATABASE_URL        — Neon pooled URL (same as seed workflow)
+#   DIRECT_URL          — Neon direct URL
+#   AUTH_SECRET         — Same as Vercel Production env
+#
+# Optional fallback (if you prefer not to add VERCEL_TOKEN yet):
+#   VERCEL_DEPLOY_HOOK  — Vercel project → Settings → Git → Deploy Hooks (branch: main)
+
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect deploy method
+        id: method
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -n "$VERCEL_TOKEN" ] && [ -n "$VERCEL_ORG_ID" ] && [ -n "$VERCEL_PROJECT_ID" ]; then
+            echo "mode=cli" >> "$GITHUB_OUTPUT"
+          elif [ -n "$VERCEL_DEPLOY_HOOK" ]; then
+            echo "mode=hook" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=missing" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Missing deploy credentials
+        if: steps.method.outputs.mode == 'missing'
+        run: |
+          echo "::error::Production deploy skipped. Add GitHub secrets VERCEL_TOKEN + VERCEL_ORG_ID + VERCEL_PROJECT_ID (recommended), or VERCEL_DEPLOY_HOOK. See docs/DEPLOYMENT.md §3b."
+          exit 1
+
+      - name: Setup pnpm
+        if: steps.method.outputs.mode == 'cli'
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        if: steps.method.outputs.mode == 'cli'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        if: steps.method.outputs.mode == 'cli'
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Vercel CLI
+        if: steps.method.outputs.mode == 'cli'
+        run: pnpm add -g vercel@41.4.0
+
+      - name: Pull Vercel project settings
+        if: steps.method.outputs.mode == 'cli'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          vercel pull --yes --environment=production \
+            --token="$VERCEL_TOKEN" \
+            --scope="$VERCEL_ORG_ID"
+
+      - name: Build (vercel-build.sh via vercel build)
+        if: steps.method.outputs.mode == 'cli'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          NEXT_PUBLIC_SITE_URL: https://www.catholickidscrafts.com
+          VERCEL_ENV: production
+          VERCEL_GIT_COMMIT_REF: main
+        run: vercel build --prod --token="$VERCEL_TOKEN" --scope="$VERCEL_ORG_ID"
+
+      - name: Deploy prebuilt to production
+        if: steps.method.outputs.mode == 'cli'
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN" --scope="$VERCEL_ORG_ID"
+
+      - name: Trigger Vercel deploy hook
+        if: steps.method.outputs.mode == 'hook'
+        env:
+          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          curl -sf -X POST "$VERCEL_DEPLOY_HOOK"
+          echo "Deploy hook triggered."
+
+  verify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wait for CDN
+        run: sleep 90
+
+      - name: Check GoodNews links on /mass
+        run: |
+          count=$(curl -sfL "https://www.catholickidscrafts.com/mass" | grep -c "GoodNews" || true)
+          echo "GoodNews link count: $count"
+          if [ "$count" -lt 1 ]; then
+            echo "::warning::GoodNews still missing on production. Open Vercel Deployments for the latest build log (Neon integration may still be blocking)."
+            exit 1
+          fi

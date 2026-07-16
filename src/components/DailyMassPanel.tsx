@@ -13,7 +13,7 @@ type Props = {
 };
 
 export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Props) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <section className="mb-10">
