@@ -7,6 +7,7 @@ import {
   sortedPrayerCategories,
   type CatholicPrayer,
 } from "@/lib/prayers/catholic-prayers";
+import { formatPrayerLineBreaks } from "@/lib/prayers/prayer-format";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -23,6 +24,11 @@ export function PrayersReader() {
     }
     return getDefaultPrayer();
   }, [slugParam]);
+
+  const displayText = useMemo(
+    () => formatPrayerLineBreaks(active.text),
+    [active.text],
+  );
 
   const selectPrayer = useCallback(
     (slug: string) => {
@@ -76,7 +82,7 @@ export function PrayersReader() {
           ) : null}
         </header>
         <div className="prayers-reader__body">
-          <div className="prayers-reader__text">{active.text.trim()}</div>
+          <div className="prayers-reader__text">{displayText}</div>
         </div>
       </article>
 
