@@ -17,6 +17,10 @@ function runStep(label: string, scriptPath: string): void {
  * Preview: skip DB steps — PR previews share the Neon DB already migrated by production.
  */
 function main(): void {
+  console.log(
+    `vercel-build-prelude: VERCEL_ENV=${process.env.VERCEL_ENV ?? "(unset)"} ref=${process.env.VERCEL_GIT_COMMIT_REF ?? "(unset)"}`,
+  );
+
   if (isVercelPreviewDeploy()) {
     console.log(
       "vercel-build: preview deploy — skipping DB migrate/ensure steps (shared Neon DB).",
