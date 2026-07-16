@@ -1,4 +1,5 @@
 import { DEFAULT_HOME_SECTIONS, sortHomeSectionsByTitle } from "@/lib/home-sections-defaults";
+import { mergeHomeSectionsWithDefaults } from "@/lib/home-sections-merge";
 import { normalizeHubHref } from "@/lib/hub-href";
 import { prisma } from "@/lib/prisma";
 
@@ -36,7 +37,11 @@ export async function getPublishedHomeSections(): Promise<HomeSectionWithItems[]
           href: normalizeHubHref(item.href),
         })),
       }));
-    if (published.length > 0) return sortHomeSectionsByTitle(published);
+    if (published.length > 0) {
+      return sortHomeSectionsByTitle(
+        mergeHomeSectionsWithDefaults(published, DEFAULT_HOME_SECTIONS),
+      );
+    }
     return DEFAULT_HOME_SECTIONS;
   } catch {
     return DEFAULT_HOME_SECTIONS;
