@@ -20,7 +20,7 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 ### Lint / build
 
 - `pnpm lint` / `pnpm build` (build needs valid Postgres URLs if prerender touches DB; most CMS routes use `force-dynamic`)
-- Vercel: `bash scripts/vercel-build.sh` — **production** (`main` / `VERCEL_ENV=production`) runs migrate + ensure scripts; **preview** PR builds skip DB steps and run `prisma generate && next build` only. GitHub Actions **CI** workflow mirrors preview build on every PR.
+- Vercel: `bash scripts/vercel-build.sh` — **production** (`main`) runs migrate + ensure scripts; **preview** skips DB steps (shared Neon). Disable Vercel **Preview Neon branching** to avoid branch-limit provisioning failures (see `docs/DEPLOYMENT.md` §3). Workflows: `ci.yml`, `neon-preview-branch-cleanup.yml`.
 
 ### Admin
 
