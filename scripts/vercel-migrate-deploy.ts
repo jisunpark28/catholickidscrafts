@@ -1,6 +1,12 @@
 import { execSync } from "node:child_process";
+import {
+  isVercelPreviewDeploy,
+  runWithTimeout,
+  shouldContinuePreviewBuildAfterDbStep,
+} from "./vercel-build-helpers";
 
 const PRISMA = "pnpm exec prisma";
+const MIGRATE_TIMEOUT_MS = isVercelPreviewDeploy() ? 90_000 : 600_000;
 const DISCUSSION_MIGRATION = "20260622120000_bible_chapter_discussion";
 const RECOVERY_MIGRATION = "20260623150000_bible_discussion_tables_recovery";
 const CRAFT_GALLERY_MIGRATION = "20260710120000_craft_gallery_submissions";
@@ -185,9 +191,16 @@ function recoverCraftGalleryMigration(output: string): boolean {
 }
 
 for (let attempt = 1; attempt <= 4; attempt += 1) {
-  const { output, code } = run(`${PRISMA} migrate deploy`);
+  const { output, code, timedOut } = runWithTimeout(
+    `${PRISMA} migrate deploy`,
+    MIGRATE_TIMEOUT_MS,
+  );
   log(output);
   if (code === 0) {
+    process.exit(0);
+  }
+
+  if (shouldContinuePreviewBuildAfterDbStep("prisma migrate deploy", output, timedOut)) {
     process.exit(0);
   }
 
@@ -221,12 +234,19 @@ if (!discussionOk && !craftGalleryOk) {
 markDiscussionMigrationsApplied();
 markCraftGalleryMigrationApplied();
 
-const final = run(`${PRISMA} migrate deploy`);
+const final = runWithTimeout(`${PRISMA} migrate deploy`, MIGRATE_TIMEOUT_MS);
 log(final.output);
 if (final.code !== 0 && (isDiscussionIssue(final.output) || isCraftGalleryIssue(final.output))) {
   console.warn(
     "Discussion or craft gallery migrations remain unresolved, but schema bootstrap ran. Continuing build.",
   );
+  process.exit(0);
+}
+
+if (
+  final.code !== 0 &&
+  shouldContinuePreviewBuildAfterDbStep("prisma migrate deploy (final)", final.output, final.timedOut)
+) {
   process.exit(0);
 }
 
