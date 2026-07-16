@@ -178,7 +178,7 @@ The `/mass` page uses Evangelizo for liturgical **titles** on the calendar and l
 
 | Issue | Check |
 |-------|--------|
-| Vercel preview **pending** / **Provisioning integrations failed** / **Neon branch limit exceeded** | Disable Vercel **Preview** Neon branching; use shared `DATABASE_URL` for Preview; delete stale `preview/*` branches in Neon (see §3 above) |
+| Vercel preview **pending** / **Provisioning integrations failed** / **Neon branch limit exceeded** | Delete `preview/*` in Neon; disconnect Vercel–Neon project connection and reconnect **without Preview**, or Disconnect in Neon Integrations; set `DATABASE_URL` + `DIRECT_URL` manually for Preview (see §3) |
 | Vercel build fails on `DIRECT_URL` | Neon direct URL is set |
 | Cannot log in | Ran `npm run db:seed`; `AUTH_SECRET` matches on Vercel |
 | PDF / frame upload fails (`ENOENT … /var/task/public`) | Create **Blob** store, connect project, set `BLOB_READ_WRITE_TOKEN`, redeploy |
