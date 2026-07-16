@@ -178,6 +178,7 @@ The `/mass` page uses Evangelizo for liturgical **titles** on the calendar and l
 
 | Issue | Check |
 |-------|--------|
+| Production site missing recent UI (e.g. GoodNews links) after merge to `main` | Vercel **Deployments** — latest `main` build may have **Failed** (often Neon migrate lock). Fix Neon (§3), then **Redeploy** production. GitHub Actions CI passing does not deploy the site. |
 | Vercel preview **pending** / **Provisioning integrations failed** / **Neon branch limit exceeded** | Delete `preview/*` in Neon; disconnect Vercel–Neon project connection and reconnect **without Preview**, or Disconnect in Neon Integrations; set `DATABASE_URL` + `DIRECT_URL` manually for Preview (see §3) |
 | Vercel build fails on `DIRECT_URL` | Neon direct URL is set |
 | Cannot log in | Ran `npm run db:seed`; `AUTH_SECRET` matches on Vercel |
