@@ -1,6 +1,6 @@
 {
   "framework": "nextjs",
-  "buildCommand": "pnpm run vercel-build",
+  "buildCommand": "bash scripts/vercel-build.sh",
   "headers": [
     {
       "source": "/games/tiny-priest/(.*)",

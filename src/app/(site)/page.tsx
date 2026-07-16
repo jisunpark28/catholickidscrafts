@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   ...canonicalForPath("/"),
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const today = todayUtc();
   const dateKey = toDateKey(today);
