@@ -2,6 +2,7 @@
   "name": "catholickidscrafts",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.9",
   "scripts": {
     "predev": "prisma generate",
     "dev": "next dev",
@@ -14,7 +15,7 @@
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && tsx scripts/vercel-migrate-deploy.ts && tsx scripts/ensure-home-section-items.ts && tsx scripts/ensure-bible-discussion-schema.ts && next build",
+    "vercel-build": "bash scripts/vercel-build.sh",
     "db:seed-typing": "tsx prisma/seed-typing-words.ts",
     "db:seed-hangman": "tsx prisma/seed-hangman-words.ts",
     "db:seed-mass-order": "tsx prisma/seed-mass-order-steps.ts",

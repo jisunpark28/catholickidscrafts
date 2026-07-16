@@ -1,7 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { livingWithChristReadingUrl } from "@/lib/scripture-links";
+import {
+  goodNewsDailyMissaUrl,
+  livingWithChristReadingUrl,
+} from "@/lib/scripture-links";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import { parseDateParam } from "@/lib/dates";
 import type { MassDaySummary, MonthCalendar } from "@/types/mass";
@@ -115,6 +118,7 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
           const isSelected = day.date === selectedDate;
           const isToday = day.date === todayDate;
           const lwcUrl = livingWithChristReadingUrl(day.date);
+          const goodNewsUrl = goodNewsDailyMissaUrl(day.date);
           const dayDate = parseDateParam(day.date);
           const usccbUrl = dayDate ? usccbReadingsPageUrl(dayDate) : null;
           return (
@@ -156,6 +160,15 @@ export function MassCalendar({ initial, selectedDate, todayDate }: Props) {
                   title={`${day.liturgicalTitle} — Living with Christ`}
                 >
                   Living with Christ ↗
+                </a>
+                <a
+                  href={goodNewsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[10px] font-semibold text-[var(--color-link)] hover:underline"
+                  title={`${day.liturgicalTitle} — GoodNews`}
+                >
+                  GoodNews ↗
                 </a>
               </div>
             </div>

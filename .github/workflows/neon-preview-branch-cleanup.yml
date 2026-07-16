@@ -1,0 +1,31 @@
+name: Cleanup Neon preview branch
+
+# Deletes the Neon `preview/<git-branch>` created by the Vercel–Neon integration
+# when a PR closes. Prevents "Branch limit exceeded" on the Neon free tier.
+#
+# Setup (GitHub repo → Settings):
+#   Secrets:  NEON_API_KEY  — Neon Console → Account → API Keys
+#   Variables: NEON_PROJECT_ID — Neon Console → Project Settings → Project ID
+#
+# Also disable per-PR Neon branching in Vercel (see docs/DEPLOYMENT.md §3).
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  delete-preview-branch:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Delete Neon preview branch
+        if: ${{ vars.NEON_PROJECT_ID != '' }}
+        uses: neondatabase/delete-branch-action@v3
+        continue-on-error: true
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          branch: preview/${{ github.head_ref }}
+          api_key: ${{ secrets.NEON_API_KEY }}

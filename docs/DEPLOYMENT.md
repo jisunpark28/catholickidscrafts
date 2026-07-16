@@ -70,7 +70,48 @@ You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Seed production data
 - **GitHub Actions** (recommended): see [`docs/GITHUB_PROD_SEED.md`](GITHUB_PROD_SEED.md) — Actions → **Seed production database** → Run workflow (idempotent; safe to click once after deploy).
 - **Local CLI**: `npm run db:seed-production-once` with Neon URLs in `.env` (or full `npm run db:seed` with admin env vars).
 
-3. **Deploy** — the build runs `prisma migrate deploy` automatically (`vercel-build` script). **Seed is not part of the Vercel build**; run the GitHub Action or CLI above once.
+3. **Deploy** — production builds run `bash scripts/vercel-build.sh` (`prisma migrate deploy` on `main` only). Preview PR builds skip DB migrate and use the shared production Neon database. **Seed is not part of the Vercel build**; run the GitHub Action or CLI above once.
+
+### Neon + Vercel: avoid “Branch limit exceeded”
+
+If Vercel preview checks fail with **Provisioning integrations failed** or **Neon branching: Branch limit exceeded**, the Vercel–Neon integration is creating a new `preview/<git-branch>` database branch per PR and your Neon plan limit (Free: **10 branches**) is full.
+
+**Important:** While the Neon integration is connected, Preview `DATABASE_URL` values injected at deploy time **override** manual Preview env vars. Turning off preview branching requires disconnecting or reconnecting without Preview — not only copying Production URLs.
+
+**Step 1 — Free branch slots (Neon Console)**
+
+1. [console.neon.tech](https://console.neon.tech) → your project → **Branches**
+2. Delete branches named `preview/...` (never delete `main`)
+3. If you use **Neon-Managed** integration: **Integrations** → **Vercel** → **Manage** → **Branches** → delete stale preview branches
+
+**Step 2 — Stop creating a Neon branch per PR**
+
+*Vercel-Managed (Neon from Vercel **Storage**):*
+
+1. [vercel.com](https://vercel.com) → team → **Storage** → your Neon database (or project **catholickidscrafts28** → **Storage** tab)
+2. **Projects** tab → **catholickidscrafts28** → **⋯** → **Remove project connection**
+3. **Connect project** again → enable **Production** only; leave **Preview** unchecked (and **Deployments configuration → Preview** off if shown)
+4. Set env vars manually (Step 3 below)
+
+*Neon-Managed (linked from Neon Console):*
+
+1. Neon → **Integrations** → **Vercel** → **Manage** → **Disconnect**
+2. Set env vars manually (Step 3 below)
+
+**Step 3 — Manual DB env vars (shared production DB for previews)**
+
+From Neon **main** branch → **Connection details**:
+
+| Vercel variable | Neon string |
+|-----------------|-------------|
+| `DATABASE_URL` | **Pooled** (host contains `-pooler`) |
+| `DIRECT_URL` | **Direct** (no pooler) |
+
+Vercel project → **Settings** → **Environment Variables** → set both for **Production** and **Preview** → **Redeploy** the PR preview.
+
+**Optional:** GitHub **Secret** `NEON_API_KEY` + **Variable** `NEON_PROJECT_ID` enables `.github/workflows/neon-preview-branch-cleanup.yml` (deletes `preview/<branch>` when a PR closes) and **Cleanup stale Neon preview branches** (Actions tab).
+
+See [Neon: Managing Vercel preview branch cleanup](https://neon.com/docs/guides/vercel-branch-cleanup).
 
 ---
 
@@ -129,7 +170,7 @@ The first super admin is created only via `npm run db:seed`. Add further account
 
 ## 8. Daily Mass (not editable)
 
-The `/mass` page uses Evangelizo for liturgical **titles** on the calendar and links out to **USCCB** and **Living with Christ** for full reading texts (not republished in public HTML). Optional `GET /api/mass/[date]` still aggregates USCCB RSS for programmatic use. See `docs/MASS_READINGS.md`. Not editable in admin.
+The `/mass` page uses Evangelizo for liturgical **titles** on the calendar and links out to **USCCB**, **Living with Christ**, and **GoodNews** for full reading texts (not republished in public HTML). Optional `GET /api/mass/[date]` still aggregates USCCB RSS for programmatic use. See `docs/MASS_READINGS.md`. Not editable in admin.
 
 ---
 
@@ -137,6 +178,7 @@ The `/mass` page uses Evangelizo for liturgical **titles** on the calendar and l
 
 | Issue | Check |
 |-------|--------|
+| Vercel preview **pending** / **Provisioning integrations failed** / **Neon branch limit exceeded** | Delete `preview/*` in Neon; disconnect Vercel–Neon project connection and reconnect **without Preview**, or Disconnect in Neon Integrations; set `DATABASE_URL` + `DIRECT_URL` manually for Preview (see §3) |
 | Vercel build fails on `DIRECT_URL` | Neon direct URL is set |
 | Cannot log in | Ran `npm run db:seed`; `AUTH_SECRET` matches on Vercel |
 | PDF / frame upload fails (`ENOENT … /var/task/public`) | Create **Blob** store, connect project, set `BLOB_READ_WRITE_TOKEN`, redeploy |

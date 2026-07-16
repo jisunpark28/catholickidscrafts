@@ -11,7 +11,7 @@ Guidance for AI agents working in this repository.
 | Next.js dev | Yes | `pnpm dev` or `npm run dev` | 3000 |
 | Neon Postgres | Yes (content + admin) | Connection via `DATABASE_URL` / `DIRECT_URL` in `.env` | — |
 
-Mass readings are **not** in the DB. Public `/mass` shows Evangelizo calendar titles + outbound USCCB/LWC links only. `GET /api/mass/[date]` can return USCCB RSS JSON (unused by current UI). Typing **Today’s Bible** uses Universalis JSONP (today only). See `docs/MASS_READINGS.md`.
+Mass readings are **not** in the DB. Public `/mass` shows Evangelizo calendar titles + outbound USCCB/LWC/GoodNews links only. `GET /api/mass/[date]` can return USCCB RSS JSON (unused by current UI). Typing **Today’s Bible** uses Universalis JSONP (today only). See `docs/MASS_READINGS.md`.
 
 ### Environment
 
@@ -20,7 +20,7 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 ### Lint / build
 
 - `pnpm lint` / `pnpm build` (build needs valid Postgres URLs if prerender touches DB; most CMS routes use `force-dynamic`)
-- Vercel: `pnpm run vercel-build` runs `tsx scripts/vercel-migrate-deploy.ts` (recovers failed Bible discussion migrations, bootstraps tables if needed) then `next build`
+- Vercel: `bash scripts/vercel-build.sh` — **production** (`main`) runs migrate + ensure scripts; **preview** skips DB steps (shared Neon). Disable Vercel **Preview Neon branching** to avoid branch-limit provisioning failures (see `docs/DEPLOYMENT.md` §3). Workflows: `ci.yml`, `neon-preview-branch-cleanup.yml`.
 
 ### Admin
 

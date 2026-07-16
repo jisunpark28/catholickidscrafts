@@ -53,6 +53,7 @@ async function fetchEvangelizo(params: Record<string, string>): Promise<string> 
   const response = await fetch(url.toString(), {
     next: { revalidate: 3600 },
     headers: { Accept: "text/html, */*" },
+    signal: AbortSignal.timeout(15_000),
   });
 
   const text = await response.text();

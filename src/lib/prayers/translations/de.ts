@@ -1,3 +1,5 @@
+// German texts aligned with Deutsche Bischofskonferenz (DBK)
+// https://www.dbk.de
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const DE_PRAYERS: PrayerTranslationMap = {
@@ -93,7 +95,7 @@ Die Seelen der Verstorbenen ruhen in Frieden. Amen.`,
   },
   "guardian-angel": {
     title: "Gebet zum Schutzengel",
-    text: "Engel Gottes, mein lieber Freund und Schutz, zu dem mich Gottes Liebe hat gesandt, erleuchte mich, behüte, leite und regiere mich heute. Amen.",
+    text: "Heiliger Schutzengel, mein lieber Freund und Begleiter, du bist mir von Gottes Güte anvertraut. Erleuchte, behüte, leite und regiere mich. Amen.",
   },
   "come-holy-spirit": {
     title: "Komm, Heiliger Geist",

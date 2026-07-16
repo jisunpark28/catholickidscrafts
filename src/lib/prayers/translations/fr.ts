@@ -1,3 +1,5 @@
+// French texts aligned with Conférence des évêques de France (liturgie 2017+)
+// https://eglise.catholique.fr/approfondir-sa-foi/prier/prieres
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const FR_PRAYERS: PrayerTranslationMap = {
@@ -7,8 +9,7 @@ export const FR_PRAYERS: PrayerTranslationMap = {
   },
   "our-father": {
     title: "Notre Père",
-    subtitle: "La prière du Seigneur",
-    text: "Notre Père, qui es aux cieux, que ton nom soit sanctifié, que ton règne vienne, que ta volonté soit faite sur la terre comme au ciel. Donne-nous aujourd'hui notre pain de ce jour. Pardonne-nous nos offenses, comme nous pardonnons aussi à ceux qui nous ont offensés. Et ne nous laisse pas entrer en tentation, mais délivre-nous du mal. Amen.",
+    text: "Notre Père, qui es aux cieux, que ton nom soit sanctifié, que ton règne vienne, que ta volonté soit faite sur la terre comme au ciel. Donne-nous aujourd'hui notre pain de ce jour. Pardonne-nous nos offenses, comme nous pardonnons aussi à ceux qui nous ont offensés. Et ne nous laisse pas entrer en tentation, mais délivre-nous du Mal. Amen.",
   },
   "hail-mary": {
     title: "Je vous salue, Marie",
@@ -83,7 +84,7 @@ Prions : Ô Dieu, qui avez donné au monde la joie par la résurrection de votre
   },
   "grace-before-meals": {
     title: "Bénédiction Avant le Repas",
-    text: "Bénissez-nous, Seigneur, et ces dons que nous recevons de votre bonté, par Jésus-Christ notre Seigneur. Amen.",
+    text: "Bénissez-nous, Seigneur, et ces dons que nous allons recevoir de votre bonté, par Jésus-Christ notre Seigneur. Amen.",
   },
   "grace-after-meals": {
     title: "Action de Grâces Après le Repas",

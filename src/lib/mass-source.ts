@@ -31,7 +31,7 @@ export const MASS_CALENDAR_SOURCE =
 
 /** Public-site footer: how Daily Mass and related pages source liturgical data. */
 export const SITE_LITURGY_FOOTER =
-  "Liturgical calendar: Evangelizo.org · Mass readings: USCCB & Living with Christ (external links only)";
+  "Liturgical calendar: Evangelizo.org · Mass readings: USCCB, Living with Christ & GoodNews (external links only)";
 
 async function readingsWithUsccbFirst(date: Date): Promise<{
   readings: MassReading[];

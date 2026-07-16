@@ -132,6 +132,11 @@ export default async function PrivacyPage() {
           <code>readings.livingwithchrist.ca</code>. We do not host or scrape their reading text.
         </li>
         <li>
+          <strong>GoodNews (서울대교구)</strong> — Optional outbound links from Daily Mass to{" "}
+          <code>maria.catholic.or.kr</code> for Korean daily Mass texts. We do not host or scrape
+          their reading text.
+        </li>
+        <li>
           <strong>Universalis (universalis.com)</strong> — The Play → Typing → &quot;Today&apos;s
           Bible&quot; mode loads <strong>today&apos;s</strong> Mass readings via Universalis&apos;s
           JSONP service for webmasters. Reading text appears on that game page with

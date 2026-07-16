@@ -1,3 +1,5 @@
+// Italian texts aligned with CEI (Conferenza Episcopale Italiana) liturgy
+// http://www.educat.it/catechismo_degli_adulti
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const IT_PRAYERS: PrayerTranslationMap = {
@@ -7,8 +9,7 @@ export const IT_PRAYERS: PrayerTranslationMap = {
   },
   "our-father": {
     title: "Padre Nostro",
-    subtitle: "La preghiera del Signore",
-    text: "Padre nostro, che sei nei cieli, sia santificato il tuo nome, venga il tuo regno, sia fatta la tua volontà, come in cielo così in terra. Dacci oggi il nostro pane quotidiano, e rimetti a noi i nostri debiti come noi li rimettiamo ai nostri debitori, e non ci indurre in tentazione, ma liberaci dal male. Amen.",
+    text: "Padre nostro che sei nei cieli, sia santificato il tuo nome, venga il tuo regno, sia fatta la tua volontà come in cielo così in terra. Dacci oggi il nostro pane quotidiano, e rimetti a noi i nostri debiti come anche noi li rimettiamo ai nostri debitori, e non abbandonarci alla tentazione, ma liberaci dal male. Amen.",
   },
   "hail-mary": {
     title: "Ave Maria",
@@ -105,7 +106,7 @@ Preghiamo: O Dio, che hai illuminato i cuori dei fedeli con la luce dello Spirit
   },
   "act-of-contrition": {
     title: "Atto di Contrizione",
-    text: "Signore mio Gesù Cristo, Dio e uomo vero, Creatore, Padre e Redentore mio, per la tua infinita bontà e perché ti amo sopra ogni cosa, mi pento di tutto cuore di averti offeso; con l'aiuto della tua grazia propongo fermamente di non peccare più e di fuggire le occasioni prossime di peccato. Amen.",
+    text: "Signore Gesù Cristo, Dio e uomo vero, Creatore, Padre e Redentore mio, per la tua infinita bontà e perché ti amo sopra ogni cosa, mi pento di tutto cuore di averti offeso; con l'aiuto della tua grazia propongo fermamente di non peccare più e di fuggire le occasioni prossime di peccato. Amen.",
   },
   "anima-christi": {
     title: "Anima Christi",
@@ -126,7 +127,7 @@ nei secoli dei secoli. Amen.`,
   },
   "prayer-before-communion": {
     title: "Preghiera Prima della Comunione",
-    text: "Signore, non sono degno che tu entri sotto il mio tetto, ma dì soltanto una parola e la mia anima sarà guarita.",
+    text: "Signore, non sono degno che tu venga sotto il mio tetto, ma di' solo una parola e la mia anima sarà sanata.",
   },
   "prayer-after-communion": {
     title: "Preghiera Dopo la Comunione",
