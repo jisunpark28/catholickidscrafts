@@ -8,7 +8,7 @@ import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { execSync } from "node:child_process";
 import { seedLessonKits } from "../prisma/seed-lesson-kits";
-import { seedHomeSections } from "../prisma/seed-home-sections-lib";
+import { seedHomeSections, ensureMissingHomeItems } from "../prisma/seed-home-sections-lib";
 
 type CountDelegate = { count: () => Promise<number> };
 
@@ -54,7 +54,8 @@ async function main() {
         await seedHomeSections(prisma);
         console.log("Home sections seeded.");
       } else {
-        console.log("Home sections already exist — skip (set FORCE_PROD_SEED=true to re-run).");
+        await ensureMissingHomeItems(prisma);
+        console.log("Home sections already exist — ensured missing default pills.");
       }
     }
 
