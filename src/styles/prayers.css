@@ -111,21 +111,21 @@
   margin-top: 1.25rem;
 }
 
-.prayers-reader__paragraph {
-  font-size: 1.0625rem;
-  line-height: 1.75;
+.prayers-reader__text {
+  max-width: 42rem;
+  font-size: 1.125rem;
+  line-height: 2;
+  letter-spacing: 0.02em;
   color: var(--color-ink);
-  white-space: pre-wrap;
+  white-space: pre-line;
 }
 
-.prayers-reader__paragraph + .prayers-reader__paragraph {
-  margin-top: 1rem;
-}
-
-.prayers-reader__count {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
+@media (min-width: 640px) {
+  .prayers-reader__text {
+    font-size: 1.1875rem;
+    line-height: 2.05;
+    letter-spacing: 0.025em;
+  }
 }
 
 .prayers-reader__mobile-hint {

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CATHOLIC_PRAYERS,
   getDefaultPrayer,
   getPrayerBySlug,
   prayersByCategory,
@@ -11,13 +10,6 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-
-function prayerParagraphs(text: string): string[] {
-  return text
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-}
 
 export function PrayersReader() {
   const searchParams = useSearchParams();
@@ -84,15 +76,8 @@ export function PrayersReader() {
           ) : null}
         </header>
         <div className="prayers-reader__body">
-          {prayerParagraphs(active.text).map((paragraph, i) => (
-            <p key={`${active.slug}-${i}`} className="prayers-reader__paragraph">
-              {paragraph}
-            </p>
-          ))}
+          <div className="prayers-reader__text">{active.text.trim()}</div>
         </div>
-        <p className="prayers-reader__count text-xs text-[var(--color-muted)]">
-          {CATHOLIC_PRAYERS.length} prayers in this collection
-        </p>
       </article>
 
       <p className="prayers-reader__mobile-hint text-sm text-[var(--color-muted)] lg:hidden">
