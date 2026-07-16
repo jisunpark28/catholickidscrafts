@@ -1,3 +1,5 @@
+// Tagalog texts aligned with CBCP / Sambuhay Filipino Roman Missal
+// https://cbcpnews.net
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const TL_PRAYERS: PrayerTranslationMap = {
@@ -83,7 +85,7 @@ Manalangin tayo: O Diyos, na sa pamamagitan ng Pagkabuhay na mag-uli ng Iyong An
   },
   "grace-before-meals": {
     title: "Basbas Bago Kumain",
-    text: "Basbasan Mo kami, Panginoon, at ang mga kaloob na ito na aming tatanggapin mula sa Iyong kasaganaan, sa pamamagitan ni Kristong Panginoon namin. Amen.",
+    text: "Basbasan Mo kami, Panginoon, at ang pagkaing ito na aming tatanggapin, sa pamamagitan ni Kristo, Panginoon namin. Amen.",
   },
   "grace-after-meals": {
     title: "Pasasalamat Pagkatapos Kumain",
@@ -93,7 +95,7 @@ Ang mga kaluluwa ng mga tapat na yumao, sa awa ng Diyos, ay magpahinga sa kapaya
   },
   "guardian-angel": {
     title: "Dasal sa Anghel Tagapag-alaga",
-    text: "Anghel ng Diyos, aking tagapag-alaga, na pinagkatiwalaan sa akin ng pag-ibig ng Diyos, ilaw at ingatan mo ako ngayong araw, patnubayan at pamahalaan mo ako. Amen.",
+    text: "Anghel ng Diyos, aking tagapag-alaga, sa iyo ako ipinagkatiwala ng pag-ibig ng Diyos. Ilaw at ingatan mo ako, patnubayan at pamahalaan mo ako. Amen.",
   },
   "come-holy-spirit": {
     title: "Halika, Espiritu Santo",
@@ -105,7 +107,7 @@ Manalangin tayo: O Diyos, na tinuruan Mo ang mga puso ng mga tapat sa liwanag ng
   },
   "act-of-contrition": {
     title: "Aktong Pagsisisi",
-    text: "Diyos ko, buong puso akong nagsisisi sa pagkakasala laban sa Iyo, at kinasusuklaman ko ang lahat ng aking mga kasalanan, hindi lamang dahil sa Iyong makatarungang parusa, kundi lalo na dahil nilapastangan nila ang Iyo, aking Diyos, na lubos na mabuti at karapat-dapat sa lahat ng aking pag-ibig. Matatag kong pinasasiya, sa tulong ng Iyong biyaya, na hindi na muling magkasala at iwasan ang malapit na okasyon ng kasalanan. Amen.",
+    text: "Diyos ko, buong puso akong nagsisisi sa pagkakasala laban sa Iyo, at kinasusuklaman ko ang lahat ng aking mga kasalanan, lalo na dahil nilapastangan Kita, aking Diyos, na lubos na mabuti at karapat-dapat sa lahat ng aking pag-ibig. Matatag kong pinasasiya, sa tulong ng Iyong biyaya, na hindi na muling magkasala at iwasan ang malapit na okasyon ng kasalanan. Amen.",
   },
   "anima-christi": {
     title: "Anima Christi",

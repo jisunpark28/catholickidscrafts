@@ -1,3 +1,5 @@
+// Polish texts aligned with Polska Konferencja Episkopatu (Ujednolicone modlitwy 2020)
+// https://episkopat.pl
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const PL_PRAYERS: PrayerTranslationMap = {
@@ -126,15 +128,15 @@ na wieki wieków. Amen.`,
   },
   "prayer-before-communion": {
     title: "Modlitwa Przed Komunią",
-    text: "Panie, nie jestem godzien, abyś wszedł pod dach mój, lecz powiedz tylko słowo, a będzie uzdrowiona dusza moja.",
+    text: "Panie, nie jestem godzien, abyś przyszedł pod dach mojego domu, ale powiedz tylko słowo, a będzie uzdrowiona dusza moja.",
   },
   "prayer-after-communion": {
     title: "Modlitwa Po Komunii",
     text: "Panie Jezu Chryste, dziękuję Ci, że przyszedłeś do mnie w tym Świętym Sakramencie. Zostań ze mną i pomóż mi Cię coraz bardziej kochać. Amen.",
   },
   memorare: {
-    title: "Memorare",
-    text: "Pamiętaj, o najłaskawsza Maryjo, że nigdy nie słyszano, abyś opuściła kogokolwiek, kto się do Ciebie uciekał, wzywał Twojej pomocy i wstawiennictwa. Ufając temu, do Ciebie, o Dziewico nad dziewicami, Matko moja, przybiegam; przed Tobą stoję, grzeszny i smutny. O Matko Słowa, które stało się Ciałem, nie gardź prośbami moimi, lecz wysłuchaj miłosiernie i wysłuchaj. Amen.",
+    title: "Pomnij",
+    text: "Pomnij, o Najświętsza Panno Maryjo, że nigdy nie słyszano, abyś opuściła kogokolwiek, kto się do Ciebie uciekał, wzywał Twojej pomocy i wstawiennictwa. Ufając temu, do Ciebie, o Dziewico nad dziewicami, Matko moja, przybiegam; przed Tobą stoję, grzeszny i smutny. O Matko Słowa, które stało się Ciałem, nie gardź prośbami moimi, lecz wysłuchaj miłosiernie i wysłuchaj. Amen.",
   },
   "hail-holy-queen": {
     title: "Salve Regina",
@@ -161,8 +163,7 @@ O Mistrzu, spraw, abym bardziej pragnął pocieszać niż być pocieszanym, rozu
   },
   "eternal-rest": {
     title: "Wieczny Odpoczynek",
-    subtitle: "Modlitwa za zmarłych",
-    text: `Wieczny odpoczynek racz im dać, Panie, a światłość wiekuista niech im świeci. Niech odpoczywają w pokoju. Amen.
+    text: `Wieczny odpoczynek racz im dać, Panie, a światłość wiekuista niechaj świeci na nich. Niech odpoczywają w pokoju. Amen.
 
 Niech dusze wiernych zmarłych i wszystkich zmarłych wiernych, przez miłosierdzie Boże, odpoczywają w pokoju. Amen.`,
   },

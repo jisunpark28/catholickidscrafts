@@ -1,3 +1,5 @@
+// Spanish texts aligned with Conferencia Episcopal Española (Manual de indulgencias / liturgia)
+// https://www.conferenciaepiscopal.es
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const ES_PRAYERS: PrayerTranslationMap = {
@@ -7,7 +9,6 @@ export const ES_PRAYERS: PrayerTranslationMap = {
   },
   "our-father": {
     title: "Padre Nuestro",
-    subtitle: "La oración del Señor",
     text: "Padre nuestro, que estás en el cielo, santificado sea tu Nombre; venga a nosotros tu reino; hágase tu voluntad en la tierra como en el cielo. Danos hoy nuestro pan de cada día; perdona nuestras ofensas, como también nosotros perdonamos a los que nos ofenden; no nos dejes caer en la tentación, y líbranos del mal. Amén.",
   },
   "hail-mary": {
@@ -83,7 +84,7 @@ Oremos: Oh Dios, que por la Resurrección de tu Hijo, nuestro Señor Jesucristo,
   },
   "grace-before-meals": {
     title: "Bendición Antes de las Comidas",
-    text: "Bendícenos, Señor, y estos tus dones que vamos a recibir de tu generosidad, por Cristo nuestro Señor. Amén.",
+    text: "Bendícenos, Señor, y éstos tus dones que de tu bondad vamos a recibir, por Jesucristo, nuestro Señor. Amén.",
   },
   "grace-after-meals": {
     title: "Acción de Gracias Después de las Comidas",
@@ -105,11 +106,10 @@ Oremos: Oh Dios, que has instruido los corazones de los fieles con la luz del Es
   },
   "act-of-contrition": {
     title: "Acto de Contrición",
-    text: "Señor mío, Jesucristo, Dios y Hombre verdadero, Creador, Padre y Redentor mío; por ser tú quien eres, Bondad infinita, y porque te amo sobre todas las cosas, me pesa de todo corazón haberte ofendido; también me pesa porque puedes castigarme con el castigo de los infiernos. Ayudado de tu gracia, propongo firmemente no pecar más, confesarme y cumplir la penitencia que me fuere impuesta. Amén.",
+    text: "Señor mío, Jesucristo, Dios y Hombre verdadero: por ser Vos quien sois, y porque os amo sobre todas las cosas, me pesa de todo corazón haberos ofendido; propongo, con vuestra gracia, no pecar más y apartarme de todas las ocasiones de pecado. Amén.",
   },
   "anima-christi": {
     title: "Anima Christi",
-    subtitle: "Alma de Cristo",
     text: `Alma de Cristo, santifícame.
 Cuerpo de Cristo, sálvame.
 Sangre de Cristo, embriágame.
@@ -118,7 +118,7 @@ Pasión de Cristo, confórtame.
 Oh buen Jesús, óyeme.
 Dentro de tus llagas, escóndeme.
 No permitas que me aparte de ti.
-Del enemigo malo, defiéndeme.
+Del maligno enemigo, defiéndeme.
 En la hora de mi muerte, llámame
 y mándame ir a ti,
 para que con tus santos te alabe
@@ -126,7 +126,7 @@ por los siglos de los siglos. Amén.`,
   },
   "prayer-before-communion": {
     title: "Oración Antes de la Comunión",
-    text: "Señor, no soy digno de que entres en mi casa, pero una sola palabra tuya bastará para sanar mi alma.",
+    text: "Señor, no soy digno de que entréis en mi casa, pero una sola palabra vuestra bastará para sanar mi alma.",
   },
   "prayer-after-communion": {
     title: "Oración Después de la Comunión",

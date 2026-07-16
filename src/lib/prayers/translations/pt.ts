@@ -1,3 +1,5 @@
+// Portuguese texts aligned with CNBB Missal Romano (edição típica brasileira)
+// https://www.cnbb.org.br
 import type { PrayerTranslationMap } from "@/lib/prayers/prayer-types";
 
 export const PT_PRAYERS: PrayerTranslationMap = {
@@ -16,7 +18,7 @@ export const PT_PRAYERS: PrayerTranslationMap = {
   },
   "glory-be": {
     title: "Glória",
-    text: "Glória ao Pai, e ao Filho, e ao Espírito Santo. Como era no princípio, agora e sempre. Amém.",
+    text: "Glória ao Pai, e ao Filho, e ao Espírito Santo. Como era no princípio, agora e sempre, pelos séculos dos séculos. Amém.",
   },
   "fatima-prayer": {
     title: "Oração de Fátima",
@@ -126,7 +128,7 @@ por todos os séculos dos séculos. Amém.`,
   },
   "prayer-before-communion": {
     title: "Oração Antes da Comunhão",
-    text: "Senhor, eu não sou digno de que entreis na minha morada, mas dizei apenas uma palavra e a minha alma será salva.",
+    text: "Senhor, não sou digno de que entreis debaixo do meu telhado, mas dizei apenas uma palavra e a minha alma ficará salva.",
   },
   "prayer-after-communion": {
     title: "Oração Depois da Comunhão",
