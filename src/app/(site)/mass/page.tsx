@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   ...canonicalForPath("/mass"),
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function DailyMassPage() {
   const today = todayUtc();
   const dateKey = toDateKey(today);
