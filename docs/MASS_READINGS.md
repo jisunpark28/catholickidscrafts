@@ -7,7 +7,7 @@ Operator reference for **catholickidscrafts.com** `/mass` and related APIs.
 | 방식 | 저작권·합법성 | **공개 사이트 동작 (현재)** |
 |------|----------------|---------------------------|
 | **Evangelizo Reader API** | 메타데이터·인용; 전문 재게시는 USCCB/CCD 허가 필요 | **`/mass` 달력**: 전례일 **제목**만 표시. API는 서버에서 호출. |
-| **USCCB / Living with Christ** | 본문은 각 공식 사이트 저작권 | **`/mass`**: 외부 링크만 (본문 HTML에 표시 안 함). |
+| **USCCB / Living with Christ / GoodNews** | 본문은 각 공식 사이트 저작권 | **`/mass`**: 외부 링크만 (본문 HTML에 표시 안 함). |
 | **USCCB RSS** | 비유료 사이트 RSS 표시 허용 ([RSS 안내](https://www.usccb.org/subscribe/rss)) | 공개 HTML에는 미표시. `GET /api/mass/[date]`가 RSS 본문을 JSON으로 줄 수 있음(프론트 미사용). |
 | **Evangelizo 전문 재게시** | 운영자 책임 | `MASS_REPUBLISH_EVANGELIZO=true` 일 때만 (`fetchMassDay`). 기본 **off**. |
 | **Universalis JSONP** | [Webmasters terms](https://universalis.com/n-web.htm) | **Typing → Today’s Bible**만: **오늘** 본문 on-site + 저작권 문구 + Universalis 링크. USCCB와 다른 역본/역. |
@@ -17,7 +17,7 @@ Operator reference for **catholickidscrafts.com** `/mass` and related APIs.
 ## Public `/mass` page
 
 1. Month calendar with **liturgical titles** (Evangelizo, ~30-day window around today).
-2. Buttons to **Living with Christ** and **USCCB** for full reading texts (new tabs).
+2. Buttons to **USCCB**, **Living with Christ**, and **GoodNews** (서울대교구 `maria.catholic.or.kr`) for full reading texts (new tabs).
 3. No lectionary body copy in the public HTML.
 
 Site copy (editable in admin **Site text**): *“Text stays on their site—we link you there.”*
@@ -32,12 +32,13 @@ Site copy (editable in admin **Site text**): *“Text stays on their site—we l
 | **Vatican News 위젯** | [vaticannews.va/widget/embed.html](https://www.vaticannews.va/widget/embed.html) | 위젯 = **교황·교회 뉴스** | 일일 복음 텍스트 아님. 교구 파트너용 embed |
 | **USCCB (미국 주교회의)** | [bible.usccb.org](https://bible.usccb.org/) · RSS: [readings.rss](https://bible.usccb.org/readings.rss) | **RSS로만** 무료 비유료 사이트 표시 허가 ([RSS 안내](https://www.usccb.org/subscribe/rss)) | 미국 전례집 공식 영문. HTML 스크래핑·앱 배포는 별도 CCD 허가 |
 | **CBCK (한국천주교주교회의)** | [missa.cbck.or.kr](https://missa.cbck.or.kr/) | **링크만** (전재는 서면 승인) | RSS/공개 API 없음. 스크래핑·봇 금지 ([저작권](https://www.cbck.or.kr/Copyright), mano@cbck.or.kr) |
+| **GoodNews (서울대교구)** | [maria.catholic.or.kr/mi_pr/missa](https://maria.catholic.or.kr/mi_pr/missa/missa.asp) | **링크만** | 한국어 매일미사. `mode=day&goDay=YYYY-MM-DD` 일별 URL |
 | **Universalis JSONP** | [n-web.htm](https://universalis.com/n-web.htm) | **오늘** 타이핑용 (약관 준수) | US 전례와 역본·달력이 다를 수 있음 |
 | **Evangelizo** | feed.evangelizo.org | 기본 **제목만** | 전문 재게시는 USCCB/CCD 책임 (`MASS_REPUBLISH_EVANGELIZO=off`) |
 
 ### 권장 운영 (미국 중심 사이트 + 한국 확장 대비)
 
-1. **`/mass`**: Evangelizo 전례일 제목 + **USCCB·Living with Christ 외부 링크** (현재 방식 유지).
+1. **`/mass`**: Evangelizo 전례일 제목 + **USCCB·Living with Christ·GoodNews 외부 링크** (현재 방식 유지).
 2. **`/bible/gospel` 타이핑**: **Universalis JSONP** (웹마스터 약관) 또는 CCD 확인 후 **USCCB RSS** (미국 공식 전례와 동일 텍스트 필요 시).
 3. **한국어**: [missa.cbck.or.kr](https://missa.cbck.or.kr/) **링크** + 주교회의 **저작권 사용 승인** 신청 후에만 on-site 한국어 본문.
 4. **바티칸**: 일일 복음 데이터 소스로 사용하지 않음. 필요 시 Vatican News **위젯**만 별도 페이지에 embed 검토.
@@ -92,7 +93,7 @@ The **Play → Typing → Today's Bible** mode loads **today only** via Universa
 
 Default calendar: `Europe.England` (ICEL / ESV-CE texts on Universalis). Override with `UNIVERSALIS_CALENDAR_PATH` (same path segment as in the JSONP URL).
 
-**Not the same as USCCB:** Universalis texts follow the calendar/translation configured on Universalis (e.g. England), not the U.S. Lectionary on bible.usccb.org. Mass hub (`/mass`) uses USCCB + Living with Christ **links only**.
+**Not the same as USCCB:** Universalis texts follow the calendar/translation configured on Universalis (e.g. England), not the U.S. Lectionary on bible.usccb.org. Mass hub (`/mass`) uses USCCB, Living with Christ & GoodNews **links only**.
 
 | File | Role |
 |------|------|
@@ -106,7 +107,7 @@ Default calendar: `Europe.England` (ICEL / ESV-CE texts on Universalis). Overrid
 | `src/lib/usccb-rss.ts` | Parse USCCB RSS (used by `fetchMassDay` / API, not public `/mass` HTML) |
 | `src/lib/mass-source.ts` | `fetchMassDay`, calendar summaries, footer attribution |
 | `src/lib/evangelizo.ts` | Calendar titles; optional republish when env flag set |
-| `src/lib/scripture-links.ts` | Living with Christ outbound URLs |
+| `src/lib/scripture-links.ts` | Living with Christ & GoodNews outbound URLs |
 | `src/lib/living-with-christ.ts` | Legacy fetch helpers (not used on live `/mass` UI) |
 
 ### Environment
@@ -125,6 +126,6 @@ Mass pages are **not** an official USCCB or parish missal. Typing **Today’s Bi
 ## Next steps for operators
 
 1. Keep `MASS_REPUBLISH_EVANGELIZO` **off** in production unless licensed.  
-2. Point catechists to **USCCB** or **Living with Christ** from `/mass` for official reading texts.  
+2. Point catechists to **USCCB**, **Living with Christ**, or **GoodNews** from `/mass` for official reading texts.  
 3. Do not promise USCCB-identical texts in Typing mode (Universalis calendar).  
 4. For full-month on-site U.S. lectionary text, request a **USCCB digital license** (CCD Permissions, 202-541-3098).

@@ -70,6 +70,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("mass.page.program_note", "In class: show today on the calendar, then open the official readings site your community uses. Text stays on their site—we link you there.", "mass"),
   sc("mass.page.cta.usccb", "Today's readings (USCCB) ↗", "mass"),
   sc("mass.page.cta.lwc", "Today's readings (Living with Christ) ↗", "mass"),
+  sc("mass.page.cta.goodnews", "Today's readings (GoodNews) ↗", "mass"),
   sc("mass.page.link_hint", "Pick the link your parish or diocese normally uses for daily Mass texts.", "mass"),
 
   sc("resources.page.title", "Kids Resources", "resources"),

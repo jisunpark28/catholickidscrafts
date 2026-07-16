@@ -1,4 +1,5 @@
 import { toDateKey } from "@/lib/dates";
+import { goodNewsDailyMissaUrl } from "@/lib/scripture-links";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import { universalisMassPageUrlClient } from "@/lib/universalis-client";
 
@@ -43,6 +44,14 @@ export function officialReadingLinksForDate(date: Date): OfficialReadingLink[] {
       authority: "Catholic Bishops' Conference of Korea",
       note:
         "Official Korean daily Mass text on missa.cbck.or.kr. Republication requires written CBCK approval.",
+    },
+    {
+      id: "goodnews",
+      label: "GoodNews 매일미사 (Korean, Seoul)",
+      href: goodNewsDailyMissaUrl(date),
+      authority: "Archdiocese of Seoul (GoodNews)",
+      note:
+        "Korean daily Mass text on maria.catholic.or.kr. Outbound link only; republication requires publisher permission.",
     },
     {
       id: "universalis",

@@ -11,7 +11,7 @@ Daily Mass (English) + Catholic kids catechism resources.
 | Kids Resources (by liturgical season) | `/resources` |
 | Play (games, typing) | `/play` |
 
-**Daily Mass** (`/mass`): liturgical calendar titles via [Evangelizo](http://feed.evangelizo.org/) (`lang=AM`); full reading texts open on **USCCB** and **Living with Christ** (external links, not republished on this site). **Typing → Today’s Bible** uses [Universalis](https://universalis.com/) JSONP for today only (see `docs/MASS_READINGS.md`). Legacy `/mass/YYYY-MM-DD` URLs redirect to `/mass`.
+**Daily Mass** (`/mass`): liturgical calendar titles via [Evangelizo](http://feed.evangelizo.org/) (`lang=AM`); full reading texts open on **USCCB**, **Living with Christ**, and **GoodNews** (서울대교구 `maria.catholic.or.kr`, external links, not republished on this site). **Typing → Today’s Bible** uses [Universalis](https://universalis.com/) JSONP for today only (see `docs/MASS_READINGS.md`). Legacy `/mass/YYYY-MM-DD` URLs redirect to `/mass`.
 
 ## Operator admin (Curriculum & Resources)
 

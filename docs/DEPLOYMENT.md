@@ -129,7 +129,7 @@ The first super admin is created only via `npm run db:seed`. Add further account
 
 ## 8. Daily Mass (not editable)
 
-The `/mass` page uses Evangelizo for liturgical **titles** on the calendar and links out to **USCCB** and **Living with Christ** for full reading texts (not republished in public HTML). Optional `GET /api/mass/[date]` still aggregates USCCB RSS for programmatic use. See `docs/MASS_READINGS.md`. Not editable in admin.
+The `/mass` page uses Evangelizo for liturgical **titles** on the calendar and links out to **USCCB**, **Living with Christ**, and **GoodNews** for full reading texts (not republished in public HTML). Optional `GET /api/mass/[date]` still aggregates USCCB RSS for programmatic use. See `docs/MASS_READINGS.md`. Not editable in admin.
 
 ---
 
