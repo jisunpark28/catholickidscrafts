@@ -20,7 +20,7 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 ### Lint / build
 
 - `pnpm lint` / `pnpm build` (build needs valid Postgres URLs if prerender touches DB; most CMS routes use `force-dynamic`)
-- Vercel: `pnpm run vercel-build` runs `tsx scripts/vercel-migrate-deploy.ts` (recovers failed Bible discussion migrations, bootstraps tables if needed) then `next build`. **Preview** deploys (`VERCEL_ENV=preview`) use short DB step timeouts so concurrent PR builds do not hang on shared Neon advisory locks.
+- Vercel: `pnpm run vercel-build` runs `scripts/vercel-build-prelude.ts` (production only: migrate + ensure scripts) then `next build`. **Preview** deploys skip DB steps to avoid hanging on shared Neon advisory locks.
 
 ### Admin
 
