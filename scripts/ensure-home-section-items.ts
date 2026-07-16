@@ -5,7 +5,7 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { ensureMissingHomeItems } from "../prisma/seed-home-sections-lib";
-import { shouldContinuePreviewBuildAfterDbStep } from "./vercel-build-helpers";
+import { shouldContinueBuildAfterDbStep } from "./vercel-build-helpers";
 
 const HOME_ITEMS_TIMEOUT_MS = 45_000;
 
@@ -16,7 +16,7 @@ async function main() {
     timedOut = true;
     console.error("ensure-home-section-items timed out");
     void prisma.$disconnect().finally(() => {
-      if (shouldContinuePreviewBuildAfterDbStep("ensure-home-section-items", "timed out", true)) {
+      if (shouldContinueBuildAfterDbStep("ensure-home-section-items", "timed out", true)) {
         process.exit(0);
       }
       process.exit(1);
@@ -36,7 +36,7 @@ async function main() {
 main().catch((e) => {
   console.error(e);
   const message = e instanceof Error ? e.message : String(e);
-  if (shouldContinuePreviewBuildAfterDbStep("ensure-home-section-items", message, false)) {
+  if (shouldContinueBuildAfterDbStep("ensure-home-section-items", message, false)) {
     process.exit(0);
   }
   process.exit(1);

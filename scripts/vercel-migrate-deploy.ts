@@ -2,7 +2,7 @@ import { execSync } from "node:child_process";
 import {
   isVercelPreviewDeploy,
   runWithTimeout,
-  shouldContinuePreviewBuildAfterDbStep,
+  shouldContinueBuildAfterDbStep,
 } from "./vercel-build-helpers";
 
 const PRISMA = "pnpm exec prisma";
@@ -200,7 +200,7 @@ for (let attempt = 1; attempt <= 4; attempt += 1) {
     process.exit(0);
   }
 
-  if (shouldContinuePreviewBuildAfterDbStep("prisma migrate deploy", output, timedOut)) {
+  if (shouldContinueBuildAfterDbStep("prisma migrate deploy", output, timedOut)) {
     process.exit(0);
   }
 
@@ -245,7 +245,7 @@ if (final.code !== 0 && (isDiscussionIssue(final.output) || isCraftGalleryIssue(
 
 if (
   final.code !== 0 &&
-  shouldContinuePreviewBuildAfterDbStep("prisma migrate deploy (final)", final.output, final.timedOut)
+  shouldContinueBuildAfterDbStep("prisma migrate deploy (final)", final.output, final.timedOut)
 ) {
   process.exit(0);
 }

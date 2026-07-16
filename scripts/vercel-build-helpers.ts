@@ -54,19 +54,49 @@ export function isMigrationLockOrTimeout(output: string): boolean {
   );
 }
 
-/** Preview builds should not fail when the shared DB is busy or already migrated on production. */
+function shouldContinueAfterDbLockOrTimeout(
+  scope: "preview" | "production",
+  label: string,
+  output: string,
+  timedOut: boolean,
+): boolean {
+  if (!timedOut && !isMigrationLockOrTimeout(output)) return false;
+  const reason = timedOut ? "timeout" : "connection/lock issue";
+  if (scope === "preview") {
+    console.warn(
+      `Preview deploy: ${label} did not complete (${reason}). Continuing build — shared Neon DB is migrated by production deploys.`,
+    );
+  } else {
+    console.warn(
+      `Production deploy: ${label} did not complete (${reason}). Continuing build — schema is likely already current on Neon.`,
+    );
+  }
+  if (output.trim()) {
+    console.warn(output.trim());
+  }
+  return true;
+}
+
+/** Preview/production builds should not fail when the shared Neon DB is busy or locked. */
+export function shouldContinueBuildAfterDbStep(
+  label: string,
+  output: string,
+  timedOut: boolean,
+): boolean {
+  if (isVercelPreviewDeploy()) {
+    return shouldContinueAfterDbLockOrTimeout("preview", label, output, timedOut);
+  }
+  if (isVercelProductionDeploy()) {
+    return shouldContinueAfterDbLockOrTimeout("production", label, output, timedOut);
+  }
+  return false;
+}
+
+/** @deprecated Use {@link shouldContinueBuildAfterDbStep}. */
 export function shouldContinuePreviewBuildAfterDbStep(
   label: string,
   output: string,
   timedOut: boolean,
 ): boolean {
-  if (!isVercelPreviewDeploy()) return false;
-  if (!timedOut && !isMigrationLockOrTimeout(output)) return false;
-  console.warn(
-    `Preview deploy: ${label} did not complete (${timedOut ? "timeout" : "connection/lock issue"}). Continuing build — shared Neon DB is migrated by production deploys.`,
-  );
-  if (output.trim()) {
-    console.warn(output.trim());
-  }
-  return true;
+  return shouldContinueBuildAfterDbStep(label, output, timedOut);
 }
