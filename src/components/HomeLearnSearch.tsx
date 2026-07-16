@@ -11,6 +11,7 @@ const KIND_LABEL: Record<LearnSearchKind, string> = {
   game: "Game",
   bible: "Bible",
   home: "Home",
+  prayer: "Prayer",
 };
 
 type PanelProps = {
