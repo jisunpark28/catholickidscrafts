@@ -98,7 +98,33 @@ export function PrayersReader() {
         </select>
       </div>
 
-      <nav className="prayers-reader__sidebar" aria-label="Prayer list">
+      <div className="prayers-reader__mobile-picker lg:hidden">
+        <label htmlFor="prayer-picker" className="prayers-reader__picker-label">
+          Prayer
+        </label>
+        <select
+          id="prayer-picker"
+          className="prayers-reader__prayer-select"
+          value={active.slug}
+          onChange={(e) => selectPrayer(e.target.value)}
+        >
+          {categories.map((category) => {
+            const prayers = localizedPrayersByCategory(category.id, language);
+            if (prayers.length === 0) return null;
+            return (
+              <optgroup key={category.id} label={category.label}>
+                {prayers.map((prayer) => (
+                  <option key={prayer.slug} value={prayer.slug}>
+                    {prayer.title}
+                  </option>
+                ))}
+              </optgroup>
+            );
+          })}
+        </select>
+      </div>
+
+      <nav className="prayers-reader__sidebar hidden lg:block" aria-label="Prayer list">
         {categories.map((category) => {
           const prayers = localizedPrayersByCategory(category.id, language);
           if (prayers.length === 0) return null;
@@ -143,11 +169,7 @@ export function PrayersReader() {
         </div>
       </article>
 
-      <p className="prayers-reader__mobile-hint text-sm text-[var(--color-muted)] lg:hidden">
-        Tap a prayer name above to read it here.
-      </p>
-
-      <p className="mt-8 text-sm text-[var(--color-muted)]">
+      <p className="mt-8 text-sm text-[var(--color-muted)] lg:col-span-2">
         <Link href="/" className="font-semibold text-[var(--color-link)]">
           ← Home
         </Link>
