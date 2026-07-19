@@ -43,13 +43,17 @@ export default async function BibleReadPage({ params }: Props) {
     <BibleHubShell
       backHref={`/bible/${bookSlug}`}
       backLabel={`← ${data.meta.book.name}`}
+      compact
     >
-      <HubTypingWidth className="space-y-4">
+      <HubTypingWidth
+        className="space-y-4"
+        style={{ width: "100%", maxWidth: "min(72rem, 100%)" }}
+      >
         <div>
-          <h1 className="text-xl font-semibold text-[var(--color-ink)] sm:text-2xl">
+          <h1 className="text-xl font-bold text-[var(--color-ink)] sm:text-2xl">
             {data.meta.book.name} — Chapter {data.meta.chapter}
           </h1>
-          <p className="mt-1 text-xs text-[var(--color-muted)]">{data.citation}</p>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">{data.citation}</p>
         </div>
         <BibleChapterTyping
           bookSlug={bookSlug}

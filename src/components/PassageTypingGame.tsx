@@ -8,7 +8,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "@/styles/gospel-typing.css";
 
-type Appearance = "default" | "gospel";
+type Appearance = "default" | "gospel" | "bible";
 
 type Props = {
   text: string;
@@ -29,6 +29,8 @@ type Props = {
   showSaveButton?: boolean;
   /** Hide the default typing instructions under the title. */
   hideInstructions?: boolean;
+  /** Hide the card title row (page supplies its own heading). */
+  hideTitle?: boolean;
   /** Gospel hub styling — Nanum YeonJiCe, larger type, warm card. */
   appearance?: Appearance;
   /** Shorter passage for lesson / family mode. */
@@ -38,6 +40,10 @@ type Props = {
   /** Called when user reaches maxChars or completes (lesson flow). */
   onLessonStepReady?: () => void;
 };
+
+function usesGospelCharStyles(appearance: Appearance): boolean {
+  return appearance === "gospel" || appearance === "bible";
+}
 
 function charClassName(
   appearance: Appearance,
@@ -49,7 +55,7 @@ function charClassName(
   const char = target[i]!;
   if (i < typedNorm.length) {
     const correct = typedNorm[i] === char;
-    if (appearance === "gospel") {
+    if (usesGospelCharStyles(appearance)) {
       return correct ? "gospel-typing-char--correct" : "gospel-typing-char--wrong";
     }
     return correct
@@ -57,12 +63,12 @@ function charClassName(
       : "bg-red-50 font-semibold text-red-600";
   }
   if (i === nextIndex) {
-    if (appearance === "gospel") {
+    if (usesGospelCharStyles(appearance)) {
       return "gospel-typing-char--next";
     }
     return "underline decoration-2 underline-offset-2 decoration-[var(--color-accent)] opacity-100";
   }
-  return appearance === "gospel" ? "gospel-typing-char--pending" : "opacity-40";
+  return usesGospelCharStyles(appearance) ? "gospel-typing-char--pending" : "opacity-40";
 }
 
 /** Type-along UI for a passage (Today's Bible mode). */
@@ -77,12 +83,14 @@ export function PassageTypingGame({
   celebrateOnComplete = false,
   showSaveButton,
   hideInstructions = false,
+  hideTitle = false,
   appearance = "default",
   maxChars,
   embedded = false,
   onLessonStepReady,
 }: Props) {
-  const isGospel = appearance === "gospel";
+  const isBible = appearance === "bible";
+  const isGospel = appearance === "gospel" || isBible;
   const unlockSticker = onStickerUnlock ?? onComplete;
   const canSaveDraft = (showSaveButton ?? Boolean(draftKey)) && !embedded;
   const fullTarget = useMemo(() => normalizePassageText(text), [text]);
@@ -246,29 +254,39 @@ export function PassageTypingGame({
 
   const sectionClass = embedded
     ? "gospel-typing"
-    : isGospel
-      ? "gospel-typing overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
-      : "border border-[var(--color-border)] bg-white";
+    : isBible
+      ? "gospel-typing gospel-typing--bible overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
+      : isGospel
+        ? "gospel-typing overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
+        : "border border-[var(--color-border)] bg-white";
 
   const headerClass = embedded
     ? "hidden"
-    : isGospel
-      ? "border-b border-[#e8e0d6] bg-[#f5ebe0]/70 px-5 py-4 sm:px-8"
-      : "border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4";
+    : hideTitle
+      ? "hidden"
+      : isGospel
+        ? "border-b border-[#e8e0d6] bg-[#f5ebe0]/70 px-5 py-4 sm:px-8"
+        : "border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4";
 
   const bodyClass = embedded
     ? "space-y-4"
+    : isBible
+      ? "gospel-typing__body px-4 py-5 sm:px-6 sm:py-6"
+      : isGospel
+        ? "space-y-5 px-5 py-6 sm:px-8 sm:py-8"
+        : "px-6 py-6";
+
+  const passageClass = isBible
+    ? "gospel-typing-passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-4 text-[var(--color-ink)] sm:p-6"
     : isGospel
-      ? "space-y-5 px-5 py-6 sm:px-8 sm:py-8"
-      : "px-6 py-6";
+      ? "gospel-typing-passage mb-0 max-h-64 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:max-h-80 sm:p-6"
+      : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
 
-  const passageClass = isGospel
-    ? "gospel-typing-passage mb-0 max-h-64 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:max-h-80 sm:p-6"
-    : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
-
-  const textareaClass = isGospel
-    ? "gospel-typing-input w-full min-h-[11rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[12rem]"
-    : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
+  const textareaClass = isBible
+    ? "gospel-typing-input w-full rounded-xl border border-[#e8e0d6] bg-white px-4 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:px-6 sm:py-5"
+    : isGospel
+      ? "gospel-typing-input w-full min-h-[11rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[12rem]"
+      : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
 
   const statsClass = isGospel
     ? "flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-[var(--color-muted)]"
@@ -360,7 +378,7 @@ export function PassageTypingGame({
             setTyped(e.target.value);
           }}
           onPaste={(e) => e.preventDefault()}
-          rows={isGospel ? 7 : 6}
+          rows={isBible ? 10 : isGospel ? 7 : 6}
           className={textareaClass}
           placeholder="Start typing here…"
           spellCheck={false}
