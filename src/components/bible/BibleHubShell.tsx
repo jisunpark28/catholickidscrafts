@@ -5,6 +5,8 @@ type Props = {
   backHref?: string;
   backLabel?: string;
   showBack?: boolean;
+  /** Tighter vertical padding for typing-heavy pages. */
+  compact?: boolean;
 };
 
 /** Shared hub layout for Bible Reading sub-pages (Gospel, OT, NT, chapters). */
@@ -13,11 +15,16 @@ export function BibleHubShell({
   backHref = "/",
   backLabel = "← Home",
   showBack = true,
+  compact = false,
 }: Props) {
   return (
-    <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-8 sm:py-10">
+    <div
+      className={`mx-auto w-full max-w-[1600px] px-4 sm:px-8 ${
+        compact ? "py-4 sm:py-6" : "py-8 sm:py-10"
+      }`}
+    >
       {showBack && (
-        <div className="mb-8">
+        <div className={compact ? "mb-4" : "mb-8"}>
           <HomeHubButtonLink
             href={backHref}
             variant="outline"

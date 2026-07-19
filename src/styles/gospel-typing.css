@@ -62,3 +62,41 @@
 .gospel-typing .gospel-typing-char--pending {
   opacity: 0.35;
 }
+
+/* Bible chapter typing — large type, fills the viewport */
+.gospel-typing--bible {
+  display: flex;
+  flex-direction: column;
+  min-height: min(72rem, calc(100dvh - 9rem));
+}
+
+.gospel-typing--bible .gospel-typing__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
+.gospel-typing--bible .gospel-typing-passage {
+  flex: 1 1 auto;
+  min-height: 12rem;
+  max-height: none;
+  overflow-y: auto;
+  font-size: clamp(1.375rem, 2.2vw + 0.75rem, 2.125rem);
+  line-height: 1.85;
+  letter-spacing: 0.015em;
+}
+
+.gospel-typing--bible .gospel-typing-input {
+  flex: 1 1 auto;
+  min-height: 10rem;
+  resize: none;
+  font-size: clamp(1.25rem, 2vw + 0.65rem, 1.875rem);
+  line-height: 1.85;
+}
+
+.gospel-typing--bible .gospel-typing-char--pending {
+  opacity: 0.5;
+  color: var(--color-ink);
+}
