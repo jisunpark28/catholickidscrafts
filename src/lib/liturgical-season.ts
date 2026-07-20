@@ -108,7 +108,7 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeasonInfo {
       return {
         name: "Ordinary Time",
         color: "green",
-        description: "The Church’s ordered rhythm of discipleship and mission.",
+        description: "",
         periodLabel: "Ordinary Time",
       };
     }
@@ -118,7 +118,7 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeasonInfo {
     return {
       name: "Ordinary Time",
       color: "green",
-      description: "The Church’s ordered rhythm of discipleship and mission.",
+      description: "",
       periodLabel: "Ordinary Time",
     };
   }
@@ -126,7 +126,7 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeasonInfo {
   return {
     name: "Ordinary Time",
     color: "green",
-    description: "The Church’s ordered rhythm of discipleship and mission.",
+    description: "",
     periodLabel: "Ordinary Time",
   };
 }
