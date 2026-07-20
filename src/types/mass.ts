@@ -14,6 +14,10 @@ export type MassDaySummary = {
   date: string;
   liturgicalTitle: string;
   rank: "solemnity" | "feast" | "memorial" | "sunday" | "ferial";
+  /** General Roman Calendar saint(s) from Evangelizo (type=saint). */
+  saint?: string;
+  /** Optional feast label from Evangelizo (type=feast). */
+  feast?: string;
 };
 
 export type MassDay = MassDaySummary & {

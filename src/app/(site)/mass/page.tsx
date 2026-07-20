@@ -8,7 +8,8 @@ import {
   goodNewsDailyMissaUrl,
   livingWithChristReadingUrl,
 } from "@/lib/scripture-links";
-import { fetchMassDaySummary, fetchMonthCalendar } from "@/lib/mass-source";
+import { formatRomanCalendarCelebration } from "@/lib/liturgical-calendar";
+import { fetchMassDaySummaryWithCalendar, fetchMonthCalendar } from "@/lib/mass-source";
 import { canonicalForPath } from "@/lib/site-metadata";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import type { Metadata } from "next";
@@ -29,8 +30,16 @@ export default async function DailyMassPage() {
 
   const [calendar, todaySummary] = await Promise.all([
     fetchMonthCalendar(year, month),
-    fetchMassDaySummary(today).catch(() => null),
+    fetchMassDaySummaryWithCalendar(today).catch(() => null),
   ]);
+
+  const calendarCelebration =
+    todaySummary &&
+    formatRomanCalendarCelebration(
+      todaySummary.liturgicalTitle,
+      todaySummary.saint,
+      todaySummary.feast,
+    );
 
   const lwcToday = livingWithChristReadingUrl(dateKey);
   const goodNewsToday = goodNewsDailyMissaUrl(dateKey);
@@ -79,6 +88,7 @@ export default async function DailyMassPage() {
         <LiturgicalSeasonBanner
           season={calendar.season}
           todayTitle={todaySummary?.liturgicalTitle}
+          calendarCelebration={calendarCelebration ?? undefined}
         />
         <MassCalendar
           initial={calendar}

@@ -2,8 +2,6 @@ import { toDateKey } from "@/lib/dates";
 import type { MassDay, MassReading } from "@/types/mass";
 import {
   fetchLiturgicalTitle,
-  fetchMassDaySummary,
-  fetchMonthCalendar,
   fetchOptionalField,
   fetchReading,
   rankFromTitle,
@@ -16,7 +14,7 @@ import {
 } from "@/lib/usccb-rss";
 
 export { USCCB_COPYRIGHT_NOTICE };
-export { fetchMonthCalendar, fetchMassDaySummary };
+export { fetchMonthCalendar, fetchMassDaySummary, fetchMassDaySummaryWithCalendar } from "@/lib/evangelizo";
 
 const EVANGELIZO_REPUBLISH =
   process.env.MASS_REPUBLISH_EVANGELIZO === "true" ||

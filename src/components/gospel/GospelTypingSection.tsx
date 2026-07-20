@@ -121,7 +121,10 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   ) : null;
 
   return (
-    <HubTypingWidth className="space-y-4">
+    <HubTypingWidth
+      className="space-y-4"
+      style={{ width: "100%", maxWidth: "min(72rem, 100%)" }}
+    >
       <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
         Today&apos;s Readings
       </h2>
