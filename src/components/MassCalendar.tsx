@@ -23,7 +23,7 @@ type Props = {
   initial: MonthCalendar;
   selectedDate: string;
   todayDate: string;
-  /** Home Daily Mass panel — 2× calendar text. */
+  /** Home Daily Mass panel — enlarged calendar text (between compact and 2×). */
   large?: boolean;
 };
 
@@ -74,32 +74,32 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
   }
 
   const headerMonthClass = large
-    ? "text-4xl font-bold text-[var(--color-ink)]"
+    ? "text-3xl font-bold text-[var(--color-ink)]"
     : "text-lg font-bold text-[var(--color-ink)]";
   const navBtnClass = large
-    ? "border border-[var(--color-border)] px-6 py-3 text-2xl font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]"
+    ? "border border-[var(--color-border)] px-5 py-2.5 text-lg font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]"
     : "border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]";
-  const loadingClass = large ? "text-2xl text-[var(--color-muted)]" : "text-sm text-[var(--color-muted)]";
+  const loadingClass = large ? "text-lg text-[var(--color-muted)]" : "text-sm text-[var(--color-muted)]";
   const weekdayRowClass = large
-    ? "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-2xl font-bold uppercase tracking-wide text-[var(--color-muted)]"
+    ? "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-lg font-bold uppercase tracking-wide text-[var(--color-muted)]"
     : "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]";
   const weekdayCellClass = large
-    ? "border-r border-[var(--color-border)] py-6 last:border-r-0"
+    ? "border-r border-[var(--color-border)] py-4 last:border-r-0"
     : "border-r border-[var(--color-border)] py-3 last:border-r-0";
   const padCellClass = large
-    ? "min-h-[18rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[22rem] lg:min-h-[24rem]"
+    ? "min-h-[14rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[17rem] lg:min-h-[18rem]"
     : "min-h-[9rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[11rem] lg:min-h-[12rem]";
   const dayCellBase = large
-    ? "flex min-h-[18rem] flex-col border-b border-r border-[var(--color-border)] p-4 sm:min-h-[22rem] sm:p-6 lg:min-h-[24rem]"
+    ? "flex min-h-[14rem] flex-col border-b border-r border-[var(--color-border)] p-3 sm:min-h-[17rem] sm:p-4 lg:min-h-[18rem]"
     : "flex min-h-[9rem] flex-col border-b border-r border-[var(--color-border)] p-2 sm:min-h-[11rem] sm:p-3 lg:min-h-[12rem]";
-  const dayNumClass = large ? "text-2xl font-bold sm:text-[2rem]" : "text-sm font-bold sm:text-base";
+  const dayNumClass = large ? "text-lg font-bold sm:text-xl" : "text-sm font-bold sm:text-base";
   const dayTitleClass = large
-    ? "mt-2 flex-1 text-[20px] leading-snug text-[var(--color-muted)] sm:text-[22px] sm:leading-tight"
+    ? "mt-1.5 flex-1 text-sm leading-snug text-[var(--color-muted)] sm:text-base sm:leading-tight"
     : "mt-1 flex-1 text-[10px] leading-snug text-[var(--color-muted)] sm:text-[11px] sm:leading-tight";
   const linkClass = large
-    ? "text-[20px] font-semibold text-[var(--color-link)] hover:underline"
+    ? "text-sm font-semibold text-[var(--color-link)] hover:underline sm:text-base"
     : "text-[10px] font-semibold text-[var(--color-link)] hover:underline";
-  const linksWrapClass = large ? "mt-4 flex flex-col gap-2" : "mt-2 flex flex-col gap-1";
+  const linksWrapClass = large ? "mt-3 flex flex-col gap-1.5" : "mt-2 flex flex-col gap-1";
 
   return (
     <section className="w-full border border-[var(--color-border)] bg-white">

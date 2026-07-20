@@ -2,6 +2,7 @@
 
 import { DailyMassCalendarBlock } from "@/components/DailyMassCalendarBlock";
 import { HomeHubButton } from "@/components/HomeHubButton";
+import { HubTypingWidth } from "@/components/HubTypingWidth";
 import type { MonthCalendar } from "@/types/mass";
 import { useState } from "react";
 
@@ -33,7 +34,7 @@ export function DailyMassPanel({
           </span>
       </HomeHubButton>
       {open && (
-        <div className="relative z-10 mt-6 w-full">
+        <HubTypingWidth wide className="relative z-10 mt-6">
           <DailyMassCalendarBlock
             calendar={calendar}
             selectedDate={selectedDate}
@@ -42,7 +43,7 @@ export function DailyMassPanel({
             calendarCelebration={calendarCelebration}
             large
           />
-        </div>
+        </HubTypingWidth>
       )}
     </section>
   );
