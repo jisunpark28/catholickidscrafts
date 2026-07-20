@@ -69,12 +69,27 @@
   flex-direction: column;
 }
 
+.gospel-typing--hub .gospel-typing__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
 .gospel-typing--hub .gospel-typing-passage {
   max-height: min(52vh, 36rem);
   min-height: 14rem;
   font-size: clamp(1.5rem, 2.5vw + 0.9rem, 2.125rem);
   line-height: 1.85;
   letter-spacing: 0.015em;
+}
+
+@media (min-width: 1024px) {
+  .gospel-typing--hub .gospel-typing__passage-pane .gospel-typing-passage {
+    max-height: none;
+    min-height: 0;
+  }
 }
 
 .gospel-typing--hub .gospel-typing-input {
@@ -112,6 +127,12 @@
   letter-spacing: 0.015em;
 }
 
+@media (min-width: 1024px) {
+  .gospel-typing--bible .gospel-typing__passage-pane .gospel-typing-passage {
+    min-height: 0;
+  }
+}
+
 .gospel-typing--bible .gospel-typing-input {
   flex: 1 1 auto;
   min-height: 10rem;
@@ -123,4 +144,78 @@
 .gospel-typing--bible .gospel-typing-char--pending {
   opacity: 0.5;
   color: var(--color-ink);
+}
+
+/* Side-by-side: passage left, typing right (desktop); stacked on mobile */
+.gospel-typing__columns {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .gospel-typing__columns {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1.5rem;
+    min-height: min(65vh, 42rem);
+  }
+
+  .gospel-typing--bible .gospel-typing__columns {
+    flex: 1 1 auto;
+    min-height: min(calc(100dvh - 16rem), 56rem);
+  }
+}
+
+.gospel-typing__passage-pane,
+.gospel-typing__input-pane {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 0;
+}
+
+@media (min-width: 1024px) {
+  .gospel-typing__passage-pane,
+  .gospel-typing__input-pane {
+    flex: 1 1 0;
+  }
+}
+
+.gospel-typing__pane-label {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.gospel-typing__passage-pane .gospel-typing-passage {
+  flex: 1 1 auto;
+  min-height: 12rem;
+  max-height: min(48vh, 32rem);
+  overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+  .gospel-typing__passage-pane .gospel-typing-passage {
+    max-height: none;
+    min-height: 0;
+  }
+
+  .gospel-typing__input-pane .gospel-typing-input {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    resize: none;
+  }
+}
+
+.gospel-typing__footer {
+  flex-shrink: 0;
 }
