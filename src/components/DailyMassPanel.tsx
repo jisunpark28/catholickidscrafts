@@ -1,7 +1,7 @@
 "use client";
 
+import { DailyMassCalendarBlock } from "@/components/DailyMassCalendarBlock";
 import { HomeHubButton } from "@/components/HomeHubButton";
-import { MassCalendar } from "@/components/MassCalendar";
 import type { MonthCalendar } from "@/types/mass";
 import { useState } from "react";
 
@@ -10,9 +10,18 @@ type Props = {
   calendar: MonthCalendar;
   selectedDate: string;
   todayDate: string;
+  todayTitle?: string;
+  calendarCelebration?: string;
 };
 
-export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Props) {
+export function DailyMassPanel({
+  label,
+  calendar,
+  selectedDate,
+  todayDate,
+  todayTitle,
+  calendarCelebration,
+}: Props) {
   const [open, setOpen] = useState(true);
 
   return (
@@ -25,7 +34,13 @@ export function DailyMassPanel({ label, calendar, selectedDate, todayDate }: Pro
       </HomeHubButton>
       {open && (
         <div className="relative z-10 mt-6 w-full">
-          <MassCalendar initial={calendar} selectedDate={selectedDate} todayDate={todayDate} />
+          <DailyMassCalendarBlock
+            calendar={calendar}
+            selectedDate={selectedDate}
+            todayDate={todayDate}
+            todayTitle={todayTitle}
+            calendarCelebration={calendarCelebration}
+          />
         </div>
       )}
     </section>
