@@ -11,6 +11,8 @@ type Props = {
   calendar: MonthCalendar;
   selectedDate: string;
   todayDate: string;
+  todayTitle?: string;
+  calendarCelebration?: string;
   sections: HomeSectionWithItems[];
 };
 
@@ -19,6 +21,8 @@ export function HomeLearnHub({
   calendar,
   selectedDate,
   todayDate,
+  todayTitle,
+  calendarCelebration,
   sections,
 }: Props) {
   return (
@@ -28,6 +32,8 @@ export function HomeLearnHub({
         calendar={calendar}
         selectedDate={selectedDate}
         todayDate={todayDate}
+        todayTitle={todayTitle}
+        calendarCelebration={calendarCelebration}
       />
 
       <HubPillWidth>

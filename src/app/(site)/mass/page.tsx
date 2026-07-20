@@ -1,5 +1,4 @@
-import { LiturgicalSeasonBanner } from "@/components/LiturgicalSeasonBanner";
-import { MassCalendar } from "@/components/MassCalendar";
+import { DailyMassCalendarBlock } from "@/components/DailyMassCalendarBlock";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { todayUtc, toDateKey } from "@/lib/dates";
@@ -85,15 +84,12 @@ export default async function DailyMassPage() {
       </PageHeader>
 
       <div className="space-y-8">
-        <LiturgicalSeasonBanner
-          season={calendar.season}
-          todayTitle={todaySummary?.liturgicalTitle}
-          calendarCelebration={calendarCelebration ?? undefined}
-        />
-        <MassCalendar
-          initial={calendar}
+        <DailyMassCalendarBlock
+          calendar={calendar}
           selectedDate={dateKey}
           todayDate={dateKey}
+          todayTitle={todaySummary?.liturgicalTitle}
+          calendarCelebration={calendarCelebration ?? undefined}
         />
       </div>
     </PageShell>
