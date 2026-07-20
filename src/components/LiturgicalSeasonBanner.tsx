@@ -26,7 +26,9 @@ export function LiturgicalSeasonBanner({ season, todayTitle, calendarCelebration
         <h2 className="mt-2 text-2xl font-bold text-[var(--color-ink)] sm:text-3xl">
           {season.name}
         </h2>
-        <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{season.description}</p>
+        {season.description ? (
+          <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{season.description}</p>
+        ) : null}
         {todayTitle && (
           <p className="mt-5 border-t border-[var(--color-border)] pt-5 text-sm">
             <span className="font-semibold text-[var(--color-ink)]">Today: </span>
