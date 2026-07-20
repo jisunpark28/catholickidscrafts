@@ -273,8 +273,8 @@ export function PassageTypingGame({
     : isBible
       ? "gospel-typing__body px-4 py-5 sm:px-6 sm:py-6"
       : isGospel
-        ? "gospel-typing__body space-y-5 px-5 py-6 sm:px-8 sm:py-8"
-        : "px-6 py-6";
+        ? "gospel-typing__body px-5 py-6 sm:px-8 sm:py-8"
+        : "space-y-5 px-6 py-6";
 
   const passageClass = isBible
     ? "gospel-typing-passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-4 text-[var(--color-ink)] sm:p-6"
@@ -304,35 +304,96 @@ export function PassageTypingGame({
     ? "mt-4 rounded-xl border border-[#dfc9b0] bg-[#fdf8f3] px-5 py-4 text-base text-[var(--color-ink)]"
     : "mt-4 border border-[var(--color-accent)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)]";
 
+  const sideBySide = isGospel;
+
+  const passagePanel = (
+    <p className={passageClass}>
+      {target.split("").map((char, i) => (
+        <span
+          key={i}
+          ref={i === nextIndex ? nextCharRef : undefined}
+          className={charClassName(appearance, i, typedNorm, target, nextIndex)}
+        >
+          {char}
+        </span>
+      ))}
+    </p>
+  );
+
+  const typingInput = (
+    <textarea
+      value={typed}
+      onChange={(e) => {
+        beginTyping();
+        setTyped(e.target.value);
+      }}
+      onPaste={(e) => e.preventDefault()}
+      rows={isBible ? 10 : isGospel ? 7 : 6}
+      className={textareaClass}
+      placeholder="Start typing here…"
+      spellCheck={false}
+      autoComplete="off"
+      autoCorrect="off"
+      aria-label="Type the passage"
+    />
+  );
+
+  const controlsPanel = (
+    <>
+      <div className="space-y-3">
+        <div className={statsClass}>
+          <span>
+            Accuracy: {Math.min(100, Math.round(accuracy * 100))}%
+            {started && typedNorm.length > 0 && !done && (
+              <span className={isGospel ? "text-sm opacity-70" : "text-xs opacity-70"}>
+                {" "}
+                ({countMatchingChars(typedNorm, target)}/{target.length} chars)
+              </span>
+            )}
+          </span>
+          {started && <span>Time: {elapsedSec}s</span>}
+          {passedThreshold && (
+            <span className="font-bold text-[var(--color-accent)]">Praise sticker unlocked!</span>
+          )}
+          {done && !passedThreshold && (
+            <span className="font-semibold text-amber-700">
+              Finish with at least {Math.round(accuracyThreshold * 100)}% accuracy to unlock the
+              sticker. Reset and try again.
+            </span>
+          )}
+          {draftSaved && (
+            <span className="font-semibold text-green-700">Draft saved — you can continue later.</span>
+          )}
+        </div>
+        {draftError && <p className="text-sm text-red-600">{draftError}</p>}
+        <div className="flex flex-wrap gap-2">
+          {canSaveDraft && draftKey && (
+            <button
+              type="button"
+              onClick={() => void saveDraft()}
+              disabled={draftSavePending}
+              className={saveBtnClass}
+            >
+              {draftSavePending ? "Saving…" : "Save"}
+            </button>
+          )}
+          <button type="button" onClick={() => void reset()} className={resetBtnClass}>
+            Reset
+          </button>
+        </div>
+      </div>
+      {unlocked && completionMessage && (
+        <div className={completionBoxClass}>{completionMessage}</div>
+      )}
+    </>
+  );
+
   if (embedded) {
     return (
       <section className={sectionClass}>
         <div className={bodyClass}>
-          <p className={passageClass}>
-            {target.split("").map((char, i) => (
-              <span
-                key={i}
-                ref={i === nextIndex ? nextCharRef : undefined}
-                className={charClassName(appearance, i, typedNorm, target, nextIndex)}
-              >
-                {char}
-              </span>
-            ))}
-          </p>
-          <textarea
-            value={typed}
-            onChange={(e) => {
-              beginTyping();
-              setTyped(e.target.value);
-            }}
-            onPaste={(e) => e.preventDefault()}
-            rows={5}
-            className={textareaClass}
-            placeholder="Start typing here…"
-            spellCheck={false}
-            autoComplete="off"
-            autoCorrect="off"
-          />
+          {passagePanel}
+          {typingInput}
         </div>
       </section>
     );
@@ -352,84 +413,34 @@ export function PassageTypingGame({
         </h2>
         {!hideInstructions && (
           <p className="mt-1 text-sm text-[var(--color-muted)]">
-            Type the passage below. Correct letters turn green. Use Save to pause and continue
-            later.
+            {sideBySide
+              ? "Type the passage on the right. Correct letters turn green. Use Save to pause and continue later."
+              : "Type the passage below. Correct letters turn green. Use Save to pause and continue later."}
           </p>
         )}
       </div>
 
       <div className={bodyClass}>
-        <p className={passageClass}>
-          {target.split("").map((char, i) => (
-            <span
-              key={i}
-              ref={i === nextIndex ? nextCharRef : undefined}
-              className={charClassName(appearance, i, typedNorm, target, nextIndex)}
-            >
-              {char}
-            </span>
-          ))}
-        </p>
-
-        <textarea
-          value={typed}
-          onChange={(e) => {
-            beginTyping();
-            setTyped(e.target.value);
-          }}
-          onPaste={(e) => e.preventDefault()}
-          rows={isBible ? 10 : isGospel ? 7 : 6}
-          className={textareaClass}
-          placeholder="Start typing here…"
-          spellCheck={false}
-          autoComplete="off"
-          autoCorrect="off"
-        />
-
-        <div className="space-y-3">
-          <div className={statsClass}>
-            <span>
-              Accuracy: {Math.min(100, Math.round(accuracy * 100))}%
-              {started && typedNorm.length > 0 && !done && (
-                <span className={isGospel ? "text-sm opacity-70" : "text-xs opacity-70"}>
-                  {" "}
-                  ({countMatchingChars(typedNorm, target)}/{target.length} chars)
-                </span>
-              )}
-            </span>
-            {started && <span>Time: {elapsedSec}s</span>}
-            {passedThreshold && (
-              <span className="font-bold text-[var(--color-accent)]">Praise sticker unlocked!</span>
-            )}
-            {done && !passedThreshold && (
-              <span className="font-semibold text-amber-700">
-                Finish with at least {Math.round(accuracyThreshold * 100)}% accuracy to unlock the
-                sticker. Reset and try again.
-              </span>
-            )}
-            {draftSaved && (
-              <span className="font-semibold text-green-700">Draft saved — you can continue later.</span>
-            )}
-          </div>
-          {draftError && <p className="text-sm text-red-600">{draftError}</p>}
-          <div className="flex flex-wrap gap-2">
-            {canSaveDraft && draftKey && (
-              <button
-                type="button"
-                onClick={() => void saveDraft()}
-                disabled={draftSavePending}
-                className={saveBtnClass}
-              >
-                {draftSavePending ? "Saving…" : "Save"}
-              </button>
-            )}
-            <button type="button" onClick={() => void reset()} className={resetBtnClass}>
-              Reset
-            </button>
-          </div>
-        </div>
-        {unlocked && completionMessage && (
-          <div className={completionBoxClass}>{completionMessage}</div>
+        {sideBySide ? (
+          <>
+            <div className="gospel-typing__columns">
+              <div className="gospel-typing__passage-pane">
+                <p className="gospel-typing__pane-label">Passage</p>
+                {passagePanel}
+              </div>
+              <div className="gospel-typing__input-pane">
+                <p className="gospel-typing__pane-label">Your typing</p>
+                {typingInput}
+              </div>
+            </div>
+            <div className="gospel-typing__footer">{controlsPanel}</div>
+          </>
+        ) : (
+          <>
+            {passagePanel}
+            {typingInput}
+            {controlsPanel}
+          </>
         )}
       </div>
     </section>
