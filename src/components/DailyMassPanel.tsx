@@ -40,6 +40,7 @@ export function DailyMassPanel({
             todayDate={todayDate}
             todayTitle={todayTitle}
             calendarCelebration={calendarCelebration}
+            large
           />
         </div>
       )}

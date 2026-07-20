@@ -13,30 +13,43 @@ type Props = {
   todayTitle?: string;
   /** Saints / feasts from the General Roman Calendar (Evangelizo). */
   calendarCelebration?: string;
+  /** Home Daily Mass panel — 2× banner text. */
+  large?: boolean;
 };
 
-export function LiturgicalSeasonBanner({ season, todayTitle, calendarCelebration }: Props) {
+export function LiturgicalSeasonBanner({
+  season,
+  todayTitle,
+  calendarCelebration,
+  large = false,
+}: Props) {
+  const labelClass = large
+    ? "text-2xl font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]"
+    : "text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]";
+  const titleClass = large
+    ? "mt-2 text-4xl font-bold text-[var(--color-ink)] sm:text-6xl"
+    : "mt-2 text-2xl font-bold text-[var(--color-ink)] sm:text-3xl";
+  const descriptionClass = large
+    ? "mt-2 max-w-3xl text-2xl text-[var(--color-muted)]"
+    : "mt-2 max-w-3xl text-[var(--color-muted)]";
+  const todayClass = large ? "mt-5 border-t border-[var(--color-border)] pt-5 text-2xl" : "mt-5 border-t border-[var(--color-border)] pt-5 text-sm";
+  const celebrationClass = large ? "mt-4 text-2xl leading-relaxed" : "mt-4 text-sm leading-relaxed";
+
   return (
     <div className="border border-[var(--color-border)] bg-[var(--color-surface)]">
       <div className={`h-1 ${accentBar[season.color]}`} />
       <div className="px-6 py-6 sm:px-8 sm:py-8">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
-          Liturgical season
-        </p>
-        <h2 className="mt-2 text-2xl font-bold text-[var(--color-ink)] sm:text-3xl">
-          {season.name}
-        </h2>
-        {season.description ? (
-          <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{season.description}</p>
-        ) : null}
+        <p className={labelClass}>Liturgical season</p>
+        <h2 className={titleClass}>{season.name}</h2>
+        {season.description ? <p className={descriptionClass}>{season.description}</p> : null}
         {todayTitle && (
-          <p className="mt-5 border-t border-[var(--color-border)] pt-5 text-sm">
+          <p className={todayClass}>
             <span className="font-semibold text-[var(--color-ink)]">Today: </span>
             {todayTitle}
           </p>
         )}
         {calendarCelebration && (
-          <p className="mt-4 text-sm leading-relaxed">
+          <p className={celebrationClass}>
             <span className="font-semibold text-[var(--color-ink)]">
               General Roman Calendar:{" "}
             </span>
