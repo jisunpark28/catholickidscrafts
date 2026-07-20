@@ -8,6 +8,8 @@ type Props = {
   todayDate: string;
   todayTitle?: string;
   calendarCelebration?: string;
+  /** Home Daily Mass panel — 2× text in calendar and season banner. */
+  large?: boolean;
 };
 
 /** Liturgical season banner + month calendar (shared by /mass and home Daily Mass panel). */
@@ -17,6 +19,7 @@ export function DailyMassCalendarBlock({
   todayDate,
   todayTitle,
   calendarCelebration,
+  large = false,
 }: Props) {
   return (
     <div className="space-y-8">
@@ -24,11 +27,13 @@ export function DailyMassCalendarBlock({
         season={calendar.season}
         todayTitle={todayTitle}
         calendarCelebration={calendarCelebration}
+        large={large}
       />
       <MassCalendar
         initial={calendar}
         selectedDate={selectedDate}
         todayDate={todayDate}
+        large={large}
       />
     </div>
   );
