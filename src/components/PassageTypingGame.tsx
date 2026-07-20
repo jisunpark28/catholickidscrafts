@@ -257,7 +257,7 @@ export function PassageTypingGame({
     : isBible
       ? "gospel-typing gospel-typing--bible overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
       : isGospel
-        ? "gospel-typing overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
+        ? "gospel-typing gospel-typing--hub overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm"
         : "border border-[var(--color-border)] bg-white";
 
   const headerClass = embedded
@@ -273,19 +273,19 @@ export function PassageTypingGame({
     : isBible
       ? "gospel-typing__body px-4 py-5 sm:px-6 sm:py-6"
       : isGospel
-        ? "space-y-5 px-5 py-6 sm:px-8 sm:py-8"
+        ? "gospel-typing__body space-y-5 px-5 py-6 sm:px-8 sm:py-8"
         : "px-6 py-6";
 
   const passageClass = isBible
     ? "gospel-typing-passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-4 text-[var(--color-ink)] sm:p-6"
     : isGospel
-      ? "gospel-typing-passage mb-0 max-h-64 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:max-h-80 sm:p-6"
+      ? "gospel-typing-passage mb-0 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:p-6"
       : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
 
   const textareaClass = isBible
     ? "gospel-typing-input w-full rounded-xl border border-[#e8e0d6] bg-white px-4 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:px-6 sm:py-5"
     : isGospel
-      ? "gospel-typing-input w-full min-h-[11rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[12rem]"
+      ? "gospel-typing-input w-full min-h-[13rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[14rem] sm:px-6 sm:py-5"
       : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
 
   const statsClass = isGospel

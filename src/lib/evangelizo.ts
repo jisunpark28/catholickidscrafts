@@ -187,6 +187,33 @@ export async function fetchMassDaySummary(date: Date): Promise<MassDaySummary> {
   };
 }
 
+/** Like {@link fetchMassDaySummary} plus General Roman Calendar saint/feast (for today banner). */
+export async function fetchMassDaySummaryWithCalendar(
+  date: Date,
+): Promise<MassDaySummary> {
+  if (!isWithinEvangelizoWindow(date)) {
+    const key = toDateKey(date);
+    return {
+      date: key,
+      liturgicalTitle: "Readings unavailable (outside feed window)",
+      rank: "ferial",
+    };
+  }
+
+  const [liturgicalTitle, saint, feast] = await Promise.all([
+    fetchLiturgicalTitle(date),
+    fetchOptionalField(date, "saint"),
+    fetchOptionalField(date, "feast"),
+  ]);
+  return {
+    date: toDateKey(date),
+    liturgicalTitle,
+    rank: rankFromTitle(liturgicalTitle),
+    saint,
+    feast,
+  };
+}
+
 export async function fetchMonthCalendar(
   year: number,
   month: number,

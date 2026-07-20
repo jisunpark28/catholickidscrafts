@@ -11,9 +11,11 @@ const accentBar: Record<LiturgicalSeasonInfo["color"], string> = {
 type Props = {
   season: LiturgicalSeasonInfo;
   todayTitle?: string;
+  /** Saints / feasts from the General Roman Calendar (Evangelizo). */
+  calendarCelebration?: string;
 };
 
-export function LiturgicalSeasonBanner({ season, todayTitle }: Props) {
+export function LiturgicalSeasonBanner({ season, todayTitle, calendarCelebration }: Props) {
   return (
     <div className="border border-[var(--color-border)] bg-[var(--color-surface)]">
       <div className={`h-1 ${accentBar[season.color]}`} />
@@ -29,6 +31,14 @@ export function LiturgicalSeasonBanner({ season, todayTitle }: Props) {
           <p className="mt-5 border-t border-[var(--color-border)] pt-5 text-sm">
             <span className="font-semibold text-[var(--color-ink)]">Today: </span>
             {todayTitle}
+          </p>
+        )}
+        {calendarCelebration && (
+          <p className="mt-4 text-sm leading-relaxed">
+            <span className="font-semibold text-[var(--color-ink)]">
+              General Roman Calendar:{" "}
+            </span>
+            <span className="text-[var(--color-ink)]">{calendarCelebration}</span>
           </p>
         )}
       </div>
