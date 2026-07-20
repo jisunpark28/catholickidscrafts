@@ -44,11 +44,9 @@ export default async function BibleReadPage({ params }: Props) {
       backHref={`/bible/${bookSlug}`}
       backLabel={`← ${data.meta.book.name}`}
       compact
+      wide
     >
-      <HubTypingWidth
-        className="space-y-4"
-        style={{ width: "100%", maxWidth: "min(72rem, 100%)" }}
-      >
+      <HubTypingWidth wide className="space-y-4">
         <div>
           <h1 className="text-xl font-bold text-[var(--color-ink)] sm:text-2xl">
             {data.meta.book.name} — Chapter {data.meta.chapter}

@@ -45,7 +45,7 @@ export function GospelHub({ signedIn: initialSignedIn, initialCompleted, todayDa
   }
 
   return (
-    <BibleHubShell showBack={false}>
+    <BibleHubShell showBack={false} wide>
       <MyReadingCalendarPanel
         signedIn={signedIn}
         initialCompleted={completed}
