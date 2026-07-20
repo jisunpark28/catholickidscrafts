@@ -79,8 +79,8 @@
 
 .gospel-typing--hub .gospel-typing-passage {
   max-height: min(52vh, 36rem);
-  min-height: 18rem;
-  font-size: clamp(3rem, 5vw + 1.8rem, 4.25rem);
+  min-height: 14rem;
+  font-size: clamp(1.5rem, 2.5vw + 0.9rem, 2.125rem);
   line-height: 1.85;
   letter-spacing: 0.015em;
 }
@@ -93,7 +93,7 @@
 }
 
 .gospel-typing--hub .gospel-typing-input {
-  font-size: clamp(2.75rem, 4.4vw + 1.5rem, 3.75rem);
+  font-size: clamp(1.375rem, 2.2vw + 0.75rem, 1.875rem);
   line-height: 1.85;
 }
 
@@ -119,10 +119,10 @@
 
 .gospel-typing--bible .gospel-typing-passage {
   flex: 1 1 auto;
-  min-height: 24rem;
+  min-height: 12rem;
   max-height: none;
   overflow-y: auto;
-  font-size: clamp(2.75rem, 4.4vw + 1.5rem, 4.25rem);
+  font-size: clamp(1.375rem, 2.2vw + 0.75rem, 2.125rem);
   line-height: 1.85;
   letter-spacing: 0.015em;
 }
@@ -135,9 +135,9 @@
 
 .gospel-typing--bible .gospel-typing-input {
   flex: 1 1 auto;
-  min-height: 20rem;
+  min-height: 10rem;
   resize: none;
-  font-size: clamp(2.5rem, 4vw + 1.3rem, 3.75rem);
+  font-size: clamp(1.25rem, 2vw + 0.65rem, 1.875rem);
   line-height: 1.85;
 }
 
@@ -160,12 +160,12 @@
     flex-direction: row;
     align-items: stretch;
     gap: 1.5rem;
-    min-height: min(75vh, 56rem);
+    min-height: min(65vh, 42rem);
   }
 
   .gospel-typing--bible .gospel-typing__columns {
     flex: 1 1 auto;
-    min-height: min(calc(100dvh - 12rem), 64rem);
+    min-height: min(calc(100dvh - 16rem), 56rem);
   }
 }
 
@@ -197,7 +197,7 @@
 
 .gospel-typing__passage-pane .gospel-typing-passage {
   flex: 1 1 auto;
-  min-height: 24rem;
+  min-height: 12rem;
   max-height: min(48vh, 32rem);
   overflow-y: auto;
 }
