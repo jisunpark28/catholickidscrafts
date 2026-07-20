@@ -8,7 +8,7 @@ type Props = {
   todayDate: string;
   todayTitle?: string;
   calendarCelebration?: string;
-  /** Home Daily Mass panel — 2× text in calendar and season banner. */
+  /** Home Daily Mass panel — wide layout with enlarged text. */
   large?: boolean;
 };
 

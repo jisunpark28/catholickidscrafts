@@ -26,7 +26,7 @@ export function HomeLearnHub({
   sections,
 }: Props) {
   return (
-    <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-8 sm:py-10">
+    <div className="mx-auto w-full max-w-[144rem] px-4 py-8 sm:px-8 sm:py-10">
       <DailyMassPanel
         label={dailyMassLabel}
         calendar={calendar}
