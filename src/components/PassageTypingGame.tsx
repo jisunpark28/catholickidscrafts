@@ -71,6 +71,15 @@ function charClassName(
   return usesGospelCharStyles(appearance) ? "gospel-typing-char--pending" : "opacity-40";
 }
 
+function mirrorCharClassName(
+  i: number,
+  typedNorm: string,
+  target: string,
+): string {
+  const correct = typedNorm[i] === target[i];
+  return correct ? "gospel-typing-char--typed" : "gospel-typing-char--wrong";
+}
+
 /** Type-along UI for a passage (Today's Bible mode). */
 export function PassageTypingGame({
   text,
@@ -113,6 +122,7 @@ export function PassageTypingGame({
   const startTimeRef = useRef<number | null>(null);
   const nextCharRef = useRef<HTMLSpanElement>(null);
   const passageScrollRef = useRef<HTMLParagraphElement>(null);
+  const inputMirrorRef = useRef<HTMLParagraphElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollSyncLock = useRef(false);
 
@@ -252,7 +262,7 @@ export function PassageTypingGame({
   const syncPaneScroll = useCallback((source: "passage" | "input") => {
     if (scrollSyncLock.current) return;
     const passageEl = passageScrollRef.current;
-    const inputEl = textareaRef.current;
+    const inputEl = inputMirrorRef.current;
     if (!passageEl || !inputEl) return;
     scrollSyncLock.current = true;
     if (source === "passage") {
@@ -351,17 +361,59 @@ export function PassageTypingGame({
     </p>
   );
 
-  const typingInput = (
+  const typingInput = alignedColumns ? (
+    <div
+      className="gospel-typing__input-mirror"
+      onClick={() => textareaRef.current?.focus()}
+      onKeyDown={(e) => {
+        if (e.key === "Tab") return;
+        textareaRef.current?.focus();
+      }}
+      role="presentation"
+    >
+      <p
+        ref={inputMirrorRef}
+        onScroll={() => syncPaneScroll("input")}
+        className={`${textareaClass} mb-0 overflow-y-auto`}
+        aria-hidden
+      >
+        {target.split("").map((char, i) => {
+          const hasTyped = i < typed.length;
+          const displayChar = hasTyped ? typed[i]! : char;
+          return (
+            <span
+              key={i}
+              className={hasTyped ? mirrorCharClassName(i, typedNorm, target) : "gospel-typing-char--mirror"}
+            >
+              {displayChar}
+            </span>
+          );
+        })}
+      </p>
+      <textarea
+        ref={textareaRef}
+        value={typed}
+        onChange={(e) => {
+          beginTyping();
+          setTyped(e.target.value);
+        }}
+        onPaste={(e) => e.preventDefault()}
+        className="gospel-typing__input-capture"
+        spellCheck={false}
+        autoComplete="off"
+        autoCorrect="off"
+        aria-label="Type the passage"
+      />
+    </div>
+  ) : (
     <textarea
-      ref={alignedColumns ? textareaRef : undefined}
       value={typed}
       onChange={(e) => {
         beginTyping();
         setTyped(e.target.value);
       }}
       onPaste={(e) => e.preventDefault()}
-      onScroll={alignedColumns ? () => syncPaneScroll("input") : undefined}
-      rows={alignedColumns ? 1 : isBible ? 10 : isGospel ? 7 : 6}
+      rows={isBible ? 10 : isGospel ? 7 : 6}
       className={textareaClass}
       placeholder="Start typing here…"
       spellCheck={false}
