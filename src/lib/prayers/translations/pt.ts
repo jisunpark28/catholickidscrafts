@@ -147,6 +147,7 @@ Rogai por nós, santa Mãe de Deus, para que sejamos dignos das promessas de Cri
   },
   "prayer-to-st-michael": {
     title: "Oração a São Miguel Arcanjo",
+    subtitle: "Proteção contra o mal",
     text: "São Miguel Arcanjo, defendei-nos no combate. Sede o nosso refúgio contra as maldades e ciladas do demônio. Ordene-lhe Deus, instantemente o pedimos, e vós, príncipe da milícia celeste, pelo poder divino, precipitai no inferno a Satanás e aos outros espíritos malignos que andam pelo mundo para perder as almas. Amém.",
   },
   "prayer-of-st-francis": {

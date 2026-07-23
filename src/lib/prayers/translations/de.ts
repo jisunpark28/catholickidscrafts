@@ -147,6 +147,7 @@ Bitte für uns, heilige Gottesmutter, dass wir würdig werden der Verheißungen 
   },
   "prayer-to-st-michael": {
     title: "Gebet an den Erzengel Michael",
+    subtitle: "Schutz gegen das Böse",
     text: "Heiliger Michael, Erzengel, verteidige uns im Kampfe, sei uns Beistand gegen die Bosheit und die Nachstellungen des Teufels. Wir bitten inständig, Gott möge ihn zur Rede stellen, und du, Fürst der himmlischen Heerscharen, stürze den Satan und die anderen bösen Geister, die zum Verderben der Seelen umherziehen, mit göttlicher Macht in die Hölle. Amen.",
   },
   "prayer-of-st-francis": {
