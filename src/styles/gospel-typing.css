@@ -39,7 +39,6 @@
 
 .gospel-typing .gospel-typing-char--correct {
   color: var(--gospel-typing-correct);
-  font-weight: 700;
   opacity: 1;
 }
 
@@ -47,7 +46,6 @@
   color: var(--gospel-typing-wrong);
   background-color: #fde8e8;
   border-radius: 0.2rem;
-  font-weight: 700;
 }
 
 .gospel-typing .gospel-typing-char--next {
@@ -67,6 +65,9 @@
 .gospel-typing--hub {
   display: flex;
   flex-direction: column;
+  --gospel-typing-pane-font-size: clamp(1.5rem, 2.5vw + 0.9rem, 2.125rem);
+  --gospel-typing-pane-line-height: 1.85;
+  --gospel-typing-pane-letter-spacing: 0.015em;
 }
 
 .gospel-typing--hub .gospel-typing__body {
@@ -80,9 +81,14 @@
 .gospel-typing--hub .gospel-typing-passage {
   max-height: min(52vh, 36rem);
   min-height: 14rem;
-  font-size: clamp(1.5rem, 2.5vw + 0.9rem, 2.125rem);
-  line-height: 1.85;
-  letter-spacing: 0.015em;
+  font-size: var(--gospel-typing-pane-font-size);
+  line-height: var(--gospel-typing-pane-line-height);
+  letter-spacing: var(--gospel-typing-pane-letter-spacing);
+}
+
+.gospel-typing--hub .gospel-typing-input {
+  font-size: var(--gospel-typing-pane-font-size);
+  line-height: var(--gospel-typing-pane-line-height);
 }
 
 @media (min-width: 1024px) {
@@ -90,11 +96,6 @@
     max-height: none;
     min-height: 0;
   }
-}
-
-.gospel-typing--hub .gospel-typing-input {
-  font-size: clamp(1.375rem, 2.2vw + 0.75rem, 1.875rem);
-  line-height: 1.85;
 }
 
 .gospel-typing--hub .gospel-typing-char--pending {
@@ -107,6 +108,9 @@
   display: flex;
   flex-direction: column;
   min-height: min(72rem, calc(100dvh - 9rem));
+  --gospel-typing-pane-font-size: clamp(1.375rem, 2.2vw + 0.75rem, 2.125rem);
+  --gospel-typing-pane-line-height: 1.85;
+  --gospel-typing-pane-letter-spacing: 0.015em;
 }
 
 .gospel-typing--bible .gospel-typing__body {
@@ -122,9 +126,9 @@
   min-height: 12rem;
   max-height: none;
   overflow-y: auto;
-  font-size: clamp(1.375rem, 2.2vw + 0.75rem, 2.125rem);
-  line-height: 1.85;
-  letter-spacing: 0.015em;
+  font-size: var(--gospel-typing-pane-font-size);
+  line-height: var(--gospel-typing-pane-line-height);
+  letter-spacing: var(--gospel-typing-pane-letter-spacing);
 }
 
 @media (min-width: 1024px) {
@@ -137,13 +141,45 @@
   flex: 1 1 auto;
   min-height: 10rem;
   resize: none;
-  font-size: clamp(1.25rem, 2vw + 0.65rem, 1.875rem);
-  line-height: 1.85;
+  font-size: var(--gospel-typing-pane-font-size);
+  line-height: var(--gospel-typing-pane-line-height);
 }
 
 .gospel-typing--bible .gospel-typing-char--pending {
   opacity: 0.5;
   color: var(--color-ink);
+}
+
+/* Matched typography in side-by-side panes — same wrap points left & right */
+.gospel-typing--hub .gospel-typing__columns .gospel-typing-passage,
+.gospel-typing--hub .gospel-typing__columns .gospel-typing-input,
+.gospel-typing--bible .gospel-typing__columns .gospel-typing-passage,
+.gospel-typing--bible .gospel-typing__columns .gospel-typing-input {
+  font-family: var(--gospel-typing-font);
+  font-size: var(--gospel-typing-pane-font-size);
+  line-height: var(--gospel-typing-pane-line-height);
+  letter-spacing: var(--gospel-typing-pane-letter-spacing);
+  font-weight: 400;
+  font-synthesis: none;
+}
+
+.gospel-typing__pane-content {
+  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.gospel-typing__columns .gospel-typing__pane-content {
+  padding: 1.25rem;
+  scrollbar-gutter: stable;
+}
+
+@media (min-width: 640px) {
+  .gospel-typing__columns .gospel-typing__pane-content {
+    padding: 1.5rem;
+  }
 }
 
 /* Side-by-side: passage left, typing right (desktop); stacked on mobile */

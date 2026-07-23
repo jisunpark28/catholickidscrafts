@@ -112,6 +112,9 @@ export function PassageTypingGame({
   const reportedRef = useRef(false);
   const startTimeRef = useRef<number | null>(null);
   const nextCharRef = useRef<HTMLSpanElement>(null);
+  const passageScrollRef = useRef<HTMLParagraphElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const scrollSyncLock = useRef(false);
 
   const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
   const nextIndex = typedNorm.length;
@@ -246,6 +249,22 @@ export function PassageTypingGame({
     setDraftSaved(false);
   }, []);
 
+  const syncPaneScroll = useCallback((source: "passage" | "input") => {
+    if (scrollSyncLock.current) return;
+    const passageEl = passageScrollRef.current;
+    const inputEl = textareaRef.current;
+    if (!passageEl || !inputEl) return;
+    scrollSyncLock.current = true;
+    if (source === "passage") {
+      inputEl.scrollTop = passageEl.scrollTop;
+    } else {
+      passageEl.scrollTop = inputEl.scrollTop;
+    }
+    requestAnimationFrame(() => {
+      scrollSyncLock.current = false;
+    });
+  }, []);
+
   if (!target) {
     return (
       <p className="text-sm text-[var(--color-muted)]">No text available for this reading.</p>
@@ -276,17 +295,25 @@ export function PassageTypingGame({
         ? "gospel-typing__body px-5 py-6 sm:px-8 sm:py-8"
         : "space-y-5 px-6 py-6";
 
-  const passageClass = isBible
-    ? "gospel-typing-passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-4 text-[var(--color-ink)] sm:p-6"
-    : isGospel
-      ? "gospel-typing-passage mb-0 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:p-6"
-      : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
+  const alignedColumns = isGospel && !embedded;
+  const sidePaneSurface =
+    "gospel-typing__pane-content rounded-xl border border-[#e8e0d6] text-[var(--color-ink)]";
 
-  const textareaClass = isBible
-    ? "gospel-typing-input w-full rounded-xl border border-[#e8e0d6] bg-white px-4 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:px-6 sm:py-5"
-    : isGospel
-      ? "gospel-typing-input w-full min-h-[13rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[14rem] sm:px-6 sm:py-5"
-      : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
+  const passageClass = alignedColumns
+    ? `gospel-typing-passage mb-0 overflow-y-auto ${sidePaneSurface} bg-[#fdf8f3]`
+    : isBible
+      ? "gospel-typing-passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-4 text-[var(--color-ink)] sm:p-6"
+      : isGospel
+        ? "gospel-typing-passage mb-0 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:p-6"
+        : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
+
+  const textareaClass = alignedColumns
+    ? `gospel-typing-input w-full resize-none ${sidePaneSurface} bg-white shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50`
+    : isBible
+      ? "gospel-typing-input w-full rounded-xl border border-[#e8e0d6] bg-white px-4 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:px-6 sm:py-5"
+      : isGospel
+        ? "gospel-typing-input w-full min-h-[13rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[14rem] sm:px-6 sm:py-5"
+        : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
 
   const statsClass = isGospel
     ? "flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-[var(--color-muted)]"
@@ -304,10 +331,14 @@ export function PassageTypingGame({
     ? "mt-4 rounded-xl border border-[#dfc9b0] bg-[#fdf8f3] px-5 py-4 text-base text-[var(--color-ink)]"
     : "mt-4 border border-[var(--color-accent)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)]";
 
-  const sideBySide = isGospel;
+  const sideBySide = alignedColumns;
 
   const passagePanel = (
-    <p className={passageClass}>
+    <p
+      ref={alignedColumns ? passageScrollRef : undefined}
+      onScroll={alignedColumns ? () => syncPaneScroll("passage") : undefined}
+      className={passageClass}
+    >
       {target.split("").map((char, i) => (
         <span
           key={i}
@@ -322,13 +353,15 @@ export function PassageTypingGame({
 
   const typingInput = (
     <textarea
+      ref={alignedColumns ? textareaRef : undefined}
       value={typed}
       onChange={(e) => {
         beginTyping();
         setTyped(e.target.value);
       }}
       onPaste={(e) => e.preventDefault()}
-      rows={isBible ? 10 : isGospel ? 7 : 6}
+      onScroll={alignedColumns ? () => syncPaneScroll("input") : undefined}
+      rows={alignedColumns ? 1 : isBible ? 10 : isGospel ? 7 : 6}
       className={textareaClass}
       placeholder="Start typing here…"
       spellCheck={false}
