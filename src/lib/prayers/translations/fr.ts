@@ -146,6 +146,7 @@ Priez pour nous, sainte Mère de Dieu, afin que nous soyons rendus dignes des pr
   },
   "prayer-to-st-michael": {
     title: "Prière à Saint Michel Archange",
+    subtitle: "Contre les puissances du mal",
     text: "Saint Michel Archange, défendez-nous dans le combat. Soyez notre secours contre la méchanceté et les embûches du démon. Que Dieu lui fasse violence, nous vous en prions, et vous, prince de la milice céleste, par la vertu divine, repoussez en enfer Satan et les autres esprits mauvais qui rôdent dans le monde pour la perte des âmes. Amen.",
   },
   "prayer-of-st-francis": {

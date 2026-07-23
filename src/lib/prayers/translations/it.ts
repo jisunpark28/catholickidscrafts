@@ -146,6 +146,7 @@ Prega per noi, santa Madre di Dio, affinché siamo resi degni delle promesse di 
   },
   "prayer-to-st-michael": {
     title: "Preghiera a San Michele Arcangelo",
+    subtitle: "Contro le potenze del male",
     text: "San Michele Arcangelo, difendici nella battaglia; sii nostro aiuto contro la malizia e le insidie del demonio. Ti supplichiamo, fa' che Dio lo svergogni, e tu, principe della milizia celeste, con la potenza divina, ricaccia nell'inferno Satana e gli altri spiriti maligni che si aggirano per il mondo per perdere le anime. Amen.",
   },
   "prayer-of-st-francis": {

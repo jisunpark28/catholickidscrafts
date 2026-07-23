@@ -147,6 +147,7 @@ Xin cầu cho chúng con, Đức Nữ Vương Thiên Chúa, để chúng con đ�
   },
   "prayer-to-st-michael": {
     title: "Kinh Cầu Thánh Mi-ca-en",
+    subtitle: "Cầu xin chống lại quỷ dữ",
     text: "Lạy Thánh Mi-ca-en, Thiên Thần trưởng, xin bảo vệ chúng con trong cuộc chiến. Xin làm khiên che cho chúng con trước gian xảo và cạm bẫy của quỷ dữ. Chúng con tha thiết cầu xin Thiên Chúa quở trách nó; và ngài, tướng trưởng thiên quân, nhờ quyền năng Thiên Chúa, hãy trừng phạt Sa-tan và các thần hồn dữ lang thang trên thế gian để hại các linh hồn, quăng xuống hỏa ngục. Amen.",
   },
   "prayer-of-st-francis": {

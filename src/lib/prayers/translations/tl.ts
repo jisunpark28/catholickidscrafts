@@ -147,6 +147,7 @@ Ipanalangin mo kami, O banal na Ina ng Diyos, upang kami'y maging karapat-dapat 
   },
   "prayer-to-st-michael": {
     title: "Dasal kay San Miguel Arkanghel",
+    subtitle: "Pananggalang laban sa kasamaan",
     text: "San Miguel Arkanghel, ipagtanggol mo kami sa labanan. Maging aming kalasag laban sa kasamaan at mga patibong ng diyablo. Humihingi kami na sawayin siya ng Diyos, at ikaw, prinsipe ng mga hukbong kalangitan, sa pamamagitan ng kapangyarihan ng Diyos, itapon sa impiyerno si Satanas at ang lahat ng masasamang espiritu na gumagala sa sanlibutan upang wasakin ang mga kaluluwa. Amen.",
   },
   "prayer-of-st-francis": {

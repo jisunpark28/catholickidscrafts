@@ -145,6 +145,7 @@ Ruega por nosotros, santa Madre de Dios, para que seamos dignos de alcanzar las 
   },
   "prayer-to-st-michael": {
     title: "Oración a San Miguel Arcángel",
+    subtitle: "Ampáranos contra el mal",
     text: "San Miguel Arcángel, defiéndenos en la batalla. Sé nuestro amparo contra la perversidad y asechanzas del demonio. Que Dios lo reprenda, humildemente lo pedimos, y tú, Príncipe de la milicia celestial, con el poder de Dios, arroja al infierno a Satanás y a los demás espíritus malignos que vagan por el mundo para la perdición de las almas. Amén.",
   },
   "prayer-of-st-francis": {

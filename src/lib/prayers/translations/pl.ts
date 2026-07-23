@@ -147,6 +147,7 @@ Módl się za nami, święta Boża Rodzicielko, abyśmy się stali godnymi obiet
   },
   "prayer-to-st-michael": {
     title: "Modlitwa do Świętego Michała Archanioła",
+    subtitle: "Ochrona przed złem",
     text: "Święty Michale Archaniele, broń nas w walce, bądź naszą pomocą przeciw złości i zasadzkom złego ducha. Niech go Bóg potępi, pokornie o to prosimy, a Ty, wodzu wojsk niebieskich, mocą Bożą wtrąc do piekła szatana i inne złe duchy, które na zgubę dusz ludzkich po tym świecie krążą. Amen.",
   },
   "prayer-of-st-francis": {
