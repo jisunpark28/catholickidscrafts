@@ -238,15 +238,58 @@
   overflow-y: auto;
 }
 
+.gospel-typing-char--mirror {
+  color: transparent;
+}
+
+.gospel-typing-char--typed {
+  color: var(--color-ink);
+}
+
+.gospel-typing__input-mirror {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.gospel-typing__input-mirror .gospel-typing-input {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.gospel-typing__input-capture {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: text;
+  resize: none;
+  border: none;
+  opacity: 0;
+  background: transparent;
+}
+
+.gospel-typing__input-capture:focus {
+  outline: none;
+}
+
 @media (min-width: 1024px) {
   .gospel-typing__passage-pane .gospel-typing-passage {
     max-height: none;
     min-height: 0;
   }
 
-  .gospel-typing__input-pane .gospel-typing-input {
+  .gospel-typing__input-pane .gospel-typing__input-mirror {
     flex: 1 1 auto;
     min-height: 0;
+    height: 100%;
+  }
+
+  .gospel-typing__input-pane .gospel-typing__input-mirror .gospel-typing-input {
     height: 100%;
     resize: none;
   }
