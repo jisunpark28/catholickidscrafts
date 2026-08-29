@@ -5,6 +5,7 @@ import {
   normalizeDiscussionBody,
   updateChapterThread,
 } from "@/lib/bible/discussion";
+import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
 import { isDiscussionAuthor } from "@/lib/bible/discussion-permissions";
 import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
 import { NextResponse } from "next/server";
@@ -12,7 +13,7 @@ import { NextResponse } from "next/server";
 type RouteContext = { params: Promise<{ threadId: string }> };
 
 async function authorizeThreadWrite(threadId: string) {
-  const thread = await getChapterThread(threadId);
+  const thread = await withDiscussionSchemaReady(() => getChapterThread(threadId));
   if (!thread) {
     return { error: NextResponse.json({ error: "Not found" }, { status: 404 }) };
   }
@@ -47,7 +48,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 
   try {
-    const updated = await updateChapterThread(threadId, text);
+    const updated = await withDiscussionSchemaReady(() => updateChapterThread(threadId, text));
     return NextResponse.json({
       thread: {
         id: updated.id,
@@ -67,7 +68,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
   if (auth.error) return auth.error;
 
   try {
-    await deleteChapterThread(threadId);
+    await withDiscussionSchemaReady(() => deleteChapterThread(threadId));
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error("discussion delete thread", e);
