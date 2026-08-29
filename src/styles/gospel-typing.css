@@ -238,6 +238,16 @@
   overflow-y: auto;
 }
 
+.gospel-typing__columns .gospel-typing__mirror-text {
+  padding: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .gospel-typing__columns .gospel-typing__mirror-text {
+    padding: 1.5rem;
+  }
+}
+
 .gospel-typing-char--mirror {
   color: transparent;
 }
@@ -254,17 +264,56 @@
   flex-direction: column;
 }
 
+.gospel-typing__mirror-text {
+  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
 .gospel-typing__input-mirror-display {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow-y: auto;
   pointer-events: none;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  scrollbar-gutter: auto;
   scrollbar-width: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 .gospel-typing__input-mirror-display::-webkit-scrollbar {
   display: none;
+}
+
+.gospel-typing__input-mirror-display span {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.gospel-typing__input-mirror-display .gospel-typing-char--wrong {
+  background: none;
+  color: var(--gospel-typing-wrong);
+}
+
+.gospel-typing__custom-caret {
+  position: absolute;
+  z-index: 2;
+  width: 2px;
+  background: var(--color-ink);
+  pointer-events: none;
+  animation: gospel-typing-caret-blink 1s step-end infinite;
+}
+
+@keyframes gospel-typing-caret-blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 .gospel-typing__input-mirror .gospel-typing-input {
@@ -284,7 +333,7 @@
   overflow-y: auto;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  caret-color: var(--color-ink);
+  caret-color: transparent;
   background: transparent;
 }
 
@@ -304,7 +353,8 @@
     height: 100%;
   }
 
-  .gospel-typing__input-pane .gospel-typing__input-mirror .gospel-typing-input {
+  .gospel-typing__input-pane .gospel-typing__input-mirror .gospel-typing-input,
+  .gospel-typing__input-pane .gospel-typing__input-capture {
     height: 100%;
     resize: none;
   }
