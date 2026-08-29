@@ -254,22 +254,37 @@
   flex-direction: column;
 }
 
+.gospel-typing__input-mirror-display {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow-y: auto;
+  pointer-events: none;
+  scrollbar-width: none;
+}
+
+.gospel-typing__input-mirror-display::-webkit-scrollbar {
+  display: none;
+}
+
 .gospel-typing__input-mirror .gospel-typing-input {
   flex: 1 1 auto;
   min-height: 0;
 }
 
 .gospel-typing__input-capture {
-  position: absolute;
-  inset: 0;
-  height: 100%;
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
   margin: 0;
-  padding: 0;
   cursor: text;
   resize: none;
-  border: none;
-  opacity: 0;
+  overflow-y: auto;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  caret-color: var(--color-ink);
   background: transparent;
 }
 
