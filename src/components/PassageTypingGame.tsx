@@ -80,17 +80,70 @@ function mirrorCharClassName(
   return correct ? "gospel-typing-char--typed" : "gospel-typing-char--wrong";
 }
 
-/** Strip ghost suffix (unchanged target tail) from the composed textarea value. */
-function extractTypedFromComposed(value: string, target: string): string {
-  let typedLen = value.length;
-  while (typedLen > 0 && value.slice(typedLen) === target.slice(typedLen)) {
-    typedLen--;
+type ScrollSnapshot = {
+  inputTop: number;
+};
+
+function readInputScroll(textarea: HTMLTextAreaElement | null): ScrollSnapshot {
+  return { inputTop: textarea?.scrollTop ?? 0 };
+}
+
+/** Map a click in the mirror pane to a character index in the passage. */
+function caretIndexFromMirrorPoint(mirror: HTMLElement, clientX: number, clientY: number): number {
+  if (typeof document.caretRangeFromPoint === "function") {
+    const range = document.caretRangeFromPoint(clientX, clientY);
+    if (range && mirror.contains(range.startContainer)) {
+      const pre = document.createRange();
+      pre.selectNodeContents(mirror);
+      pre.setEnd(range.startContainer, range.startOffset);
+      return pre.toString().length;
+    }
   }
-  return value.slice(0, typedLen);
+
+  const spans = mirror.querySelectorAll<HTMLElement>("[data-char-index]");
+  for (const span of spans) {
+    const rect = span.getBoundingClientRect();
+    if (
+      clientY >= rect.top &&
+      clientY <= rect.bottom &&
+      clientX >= rect.left &&
+      clientX <= rect.right
+    ) {
+      return Number(span.dataset.charIndex ?? 0);
+    }
+  }
+  return 0;
 }
 
 function composedTypingValue(typed: string, target: string): string {
   return typed + target.slice(typed.length);
+}
+
+function applyComposedDiff(
+  prevTyped: string,
+  target: string,
+  prevComposed: string,
+  nextComposed: string,
+): string {
+  const capped =
+    nextComposed.length > target.length ? nextComposed.slice(0, target.length) : nextComposed;
+  if (capped === prevComposed) return prevTyped;
+
+  let start = 0;
+  const minLen = Math.min(prevComposed.length, capped.length);
+  while (start < minLen && prevComposed[start] === capped[start]) start++;
+
+  let prevEnd = prevComposed.length;
+  let nextEnd = capped.length;
+  while (prevEnd > start && nextEnd > start && prevComposed[prevEnd - 1] === capped[nextEnd - 1]) {
+    prevEnd--;
+    nextEnd--;
+  }
+
+  const inserted = capped.slice(start, nextEnd);
+  const typedStart = Math.min(start, prevTyped.length);
+  const typedEnd = Math.min(prevEnd, prevTyped.length);
+  return prevTyped.slice(0, typedStart) + inserted + prevTyped.slice(typedEnd);
 }
 
 /** Type-along UI for a passage (Today's Bible mode). */
@@ -136,12 +189,20 @@ export function PassageTypingGame({
   const passageScrollRef = useRef<HTMLParagraphElement>(null);
   const inputMirrorRef = useRef<HTMLParagraphElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const scrollSyncLock = useRef(false);
-  const selectionRestoreRef = useRef<{ start: number; end: number } | null>(null);
+  const selectionRestoreRef = useRef<{
+    start: number;
+    end: number;
+    scroll?: ScrollSnapshot;
+  } | null>(null);
+  const typedRef = useRef("");
+  const composedRef = useRef("");
+  const userPassageScrollRef = useRef(0);
 
   const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
   const nextIndex = typedNorm.length;
   const composedValue = useMemo(() => composedTypingValue(typed, target), [typed, target]);
+  typedRef.current = typed;
+  composedRef.current = composedValue;
 
   const resetLocal = useCallback(() => {
     setTyped("");
@@ -276,29 +337,35 @@ export function PassageTypingGame({
     mirrorEl.scrollTop = inputEl.scrollTop;
   }, []);
 
-  const syncPaneScroll = useCallback(
-    (source: "passage" | "input") => {
-      if (scrollSyncLock.current) return;
-      const passageEl = passageScrollRef.current;
+  const restoreInputScroll = useCallback(
+    (snapshot: ScrollSnapshot) => {
       const inputEl = textareaRef.current;
-      if (!passageEl || !inputEl) return;
-      scrollSyncLock.current = true;
-      if (source === "passage") {
-        inputEl.scrollTop = passageEl.scrollTop;
-        syncInputMirrorScroll();
-      } else {
-        passageEl.scrollTop = inputEl.scrollTop;
-      }
-      requestAnimationFrame(() => {
-        scrollSyncLock.current = false;
-      });
+      if (inputEl) inputEl.scrollTop = snapshot.inputTop;
+      syncInputMirrorScroll();
     },
     [syncInputMirrorScroll],
   );
 
-  useEffect(() => {
-    syncInputMirrorScroll();
-  }, [typed, target, syncInputMirrorScroll]);
+  const updateTyped = useCallback(
+    (nextTyped: string, selection: { start: number; end: number }, scroll: ScrollSnapshot) => {
+      selectionRestoreRef.current = { ...selection, scroll };
+      setTyped(nextTyped);
+    },
+    [],
+  );
+
+  const applyInputScroll = useCallback(
+    (snapshot: ScrollSnapshot) => {
+      restoreInputScroll(snapshot);
+      requestAnimationFrame(() => restoreInputScroll(snapshot));
+    },
+    [restoreInputScroll],
+  );
+
+  const preservePassageScroll = useCallback(() => {
+    const passageEl = passageScrollRef.current;
+    if (passageEl) passageEl.scrollTop = userPassageScrollRef.current;
+  }, []);
 
   useLayoutEffect(() => {
     const restore = selectionRestoreRef.current;
@@ -307,8 +374,10 @@ export function PassageTypingGame({
     const pos = Math.min(restore.start, el.value.length);
     const end = Math.min(restore.end, el.value.length);
     el.setSelectionRange(pos, end);
+    if (restore.scroll) applyInputScroll(restore.scroll);
+    preservePassageScroll();
     selectionRestoreRef.current = null;
-  }, [typed, target]);
+  }, [typed, target, applyInputScroll, preservePassageScroll]);
 
   if (!target) {
     return (
@@ -381,7 +450,15 @@ export function PassageTypingGame({
   const passagePanel = (
     <p
       ref={alignedColumns ? passageScrollRef : undefined}
-      onScroll={alignedColumns ? () => syncPaneScroll("passage") : undefined}
+      onScroll={
+        alignedColumns
+          ? () => {
+              if (passageScrollRef.current) {
+                userPassageScrollRef.current = passageScrollRef.current.scrollTop;
+              }
+            }
+          : undefined
+      }
       className={passageClass}
     >
       {target.split("").map((char, i) => (
@@ -405,6 +482,7 @@ export function PassageTypingGame({
           return (
             <span
               key={i}
+              data-char-index={i}
               className={hasTyped ? mirrorCharClassName(i, typedNorm, target) : "gospel-typing-char--mirror"}
             >
               {displayChar}
@@ -415,19 +493,75 @@ export function PassageTypingGame({
       <textarea
         ref={textareaRef}
         value={composedValue}
+        onMouseDown={(e) => {
+          if (e.button !== 0) return;
+          const mirror = inputMirrorRef.current;
+          if (!mirror) return;
+          const scroll = readInputScroll(e.currentTarget);
+          const index = caretIndexFromMirrorPoint(mirror, e.clientX, e.clientY);
+          const pos = Math.min(index, typedRef.current.length);
+          e.preventDefault();
+          const textarea = e.currentTarget;
+          textarea.focus();
+          textarea.setSelectionRange(pos, pos);
+          applyInputScroll(scroll);
+          preservePassageScroll();
+          requestAnimationFrame(preservePassageScroll);
+        }}
+        onKeyDown={(e) => {
+          if (e.nativeEvent.isComposing) return;
+          const el = e.currentTarget;
+          const pos = el.selectionStart;
+          const end = el.selectionEnd;
+          const currentTyped = typedRef.current;
+          const scroll = readInputScroll(el);
+
+          if (e.key === "Backspace" && pos === end && pos > 0 && pos <= currentTyped.length) {
+            e.preventDefault();
+            beginTyping();
+            const next = currentTyped.slice(0, pos - 1) + currentTyped.slice(pos);
+            updateTyped(next, { start: pos - 1, end: pos - 1 }, scroll);
+            return;
+          }
+
+          if (e.key === "Delete" && pos === end && pos < currentTyped.length) {
+            e.preventDefault();
+            beginTyping();
+            const next = currentTyped.slice(0, pos) + currentTyped.slice(pos + 1);
+            updateTyped(next, { start: pos, end: pos }, scroll);
+            return;
+          }
+
+          if (
+            e.key.length === 1 &&
+            !e.ctrlKey &&
+            !e.metaKey &&
+            !e.altKey &&
+            pos === end &&
+            pos === currentTyped.length &&
+            currentTyped.length < target.length
+          ) {
+            e.preventDefault();
+            beginTyping();
+            const next = currentTyped + e.key;
+            updateTyped(next, { start: pos + 1, end: pos + 1 }, scroll);
+          }
+        }}
         onChange={(e) => {
-          beginTyping();
           const raw = e.target.value;
           if (raw.length > target.length) return;
-          selectionRestoreRef.current = {
+          const currentTyped = typedRef.current;
+          const nextTyped = applyComposedDiff(currentTyped, target, composedRef.current, raw);
+          if (nextTyped === currentTyped) return;
+          beginTyping();
+          const scroll = readInputScroll(e.currentTarget);
+          updateTyped(nextTyped, {
             start: e.target.selectionStart,
             end: e.target.selectionEnd,
-          };
-          setTyped(extractTypedFromComposed(raw, target));
+          }, scroll);
         }}
         onScroll={() => {
           syncInputMirrorScroll();
-          syncPaneScroll("input");
         }}
         onPaste={(e) => e.preventDefault()}
         className={`gospel-typing__input-capture ${textareaClass}`}
