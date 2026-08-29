@@ -5,7 +5,7 @@ import {
   normalizePassageText,
   typingAccuracy,
 } from "@/lib/typing-accuracy";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "@/styles/gospel-typing.css";
 
 type Appearance = "default" | "gospel" | "bible";
@@ -80,6 +80,19 @@ function mirrorCharClassName(
   return correct ? "gospel-typing-char--typed" : "gospel-typing-char--wrong";
 }
 
+/** Strip ghost suffix (unchanged target tail) from the composed textarea value. */
+function extractTypedFromComposed(value: string, target: string): string {
+  let typedLen = value.length;
+  while (typedLen > 0 && value.slice(typedLen) === target.slice(typedLen)) {
+    typedLen--;
+  }
+  return value.slice(0, typedLen);
+}
+
+function composedTypingValue(typed: string, target: string): string {
+  return typed + target.slice(typed.length);
+}
+
 /** Type-along UI for a passage (Today's Bible mode). */
 export function PassageTypingGame({
   text,
@@ -120,14 +133,15 @@ export function PassageTypingGame({
   const [draftLoaded, setDraftLoaded] = useState(false);
   const reportedRef = useRef(false);
   const startTimeRef = useRef<number | null>(null);
-  const nextCharRef = useRef<HTMLSpanElement>(null);
   const passageScrollRef = useRef<HTMLParagraphElement>(null);
   const inputMirrorRef = useRef<HTMLParagraphElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollSyncLock = useRef(false);
+  const selectionRestoreRef = useRef<{ start: number; end: number } | null>(null);
 
   const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
   const nextIndex = typedNorm.length;
+  const composedValue = useMemo(() => composedTypingValue(typed, target), [typed, target]);
 
   const resetLocal = useCallback(() => {
     setTyped("");
@@ -237,10 +251,6 @@ export function PassageTypingGame({
     onLessonStepReady,
   ]);
 
-  useEffect(() => {
-    nextCharRef.current?.scrollIntoView({ block: "nearest", inline: "nearest" });
-  }, [nextIndex]);
-
   const reset = useCallback(async () => {
     if (draftKey) {
       await fetch(`/api/typing/draft?draftKey=${encodeURIComponent(draftKey)}`, {
@@ -259,21 +269,46 @@ export function PassageTypingGame({
     setDraftSaved(false);
   }, []);
 
-  const syncPaneScroll = useCallback((source: "passage" | "input") => {
-    if (scrollSyncLock.current) return;
-    const passageEl = passageScrollRef.current;
-    const inputEl = inputMirrorRef.current;
-    if (!passageEl || !inputEl) return;
-    scrollSyncLock.current = true;
-    if (source === "passage") {
-      inputEl.scrollTop = passageEl.scrollTop;
-    } else {
-      passageEl.scrollTop = inputEl.scrollTop;
-    }
-    requestAnimationFrame(() => {
-      scrollSyncLock.current = false;
-    });
+  const syncInputMirrorScroll = useCallback(() => {
+    const mirrorEl = inputMirrorRef.current;
+    const inputEl = textareaRef.current;
+    if (!mirrorEl || !inputEl) return;
+    mirrorEl.scrollTop = inputEl.scrollTop;
   }, []);
+
+  const syncPaneScroll = useCallback(
+    (source: "passage" | "input") => {
+      if (scrollSyncLock.current) return;
+      const passageEl = passageScrollRef.current;
+      const inputEl = textareaRef.current;
+      if (!passageEl || !inputEl) return;
+      scrollSyncLock.current = true;
+      if (source === "passage") {
+        inputEl.scrollTop = passageEl.scrollTop;
+        syncInputMirrorScroll();
+      } else {
+        passageEl.scrollTop = inputEl.scrollTop;
+      }
+      requestAnimationFrame(() => {
+        scrollSyncLock.current = false;
+      });
+    },
+    [syncInputMirrorScroll],
+  );
+
+  useEffect(() => {
+    syncInputMirrorScroll();
+  }, [typed, target, syncInputMirrorScroll]);
+
+  useLayoutEffect(() => {
+    const restore = selectionRestoreRef.current;
+    const el = textareaRef.current;
+    if (!restore || !el) return;
+    const pos = Math.min(restore.start, el.value.length);
+    const end = Math.min(restore.end, el.value.length);
+    el.setSelectionRange(pos, end);
+    selectionRestoreRef.current = null;
+  }, [typed, target]);
 
   if (!target) {
     return (
@@ -350,11 +385,7 @@ export function PassageTypingGame({
       className={passageClass}
     >
       {target.split("").map((char, i) => (
-        <span
-          key={i}
-          ref={i === nextIndex ? nextCharRef : undefined}
-          className={charClassName(appearance, i, typedNorm, target, nextIndex)}
-        >
+        <span key={i} className={charClassName(appearance, i, typedNorm, target, nextIndex)}>
           {char}
         </span>
       ))}
@@ -362,19 +393,10 @@ export function PassageTypingGame({
   );
 
   const typingInput = alignedColumns ? (
-    <div
-      className="gospel-typing__input-mirror"
-      onClick={() => textareaRef.current?.focus()}
-      onKeyDown={(e) => {
-        if (e.key === "Tab") return;
-        textareaRef.current?.focus();
-      }}
-      role="presentation"
-    >
+    <div className="gospel-typing__input-mirror">
       <p
         ref={inputMirrorRef}
-        onScroll={() => syncPaneScroll("input")}
-        className={`${textareaClass} mb-0 overflow-y-auto`}
+        className={`gospel-typing__input-mirror-display ${textareaClass} mb-0`}
         aria-hidden
       >
         {target.split("").map((char, i) => {
@@ -392,13 +414,23 @@ export function PassageTypingGame({
       </p>
       <textarea
         ref={textareaRef}
-        value={typed}
+        value={composedValue}
         onChange={(e) => {
           beginTyping();
-          setTyped(e.target.value);
+          const raw = e.target.value;
+          if (raw.length > target.length) return;
+          selectionRestoreRef.current = {
+            start: e.target.selectionStart,
+            end: e.target.selectionEnd,
+          };
+          setTyped(extractTypedFromComposed(raw, target));
+        }}
+        onScroll={() => {
+          syncInputMirrorScroll();
+          syncPaneScroll("input");
         }}
         onPaste={(e) => e.preventDefault()}
-        className="gospel-typing__input-capture"
+        className={`gospel-typing__input-capture ${textareaClass}`}
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"
