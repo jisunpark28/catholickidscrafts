@@ -5,6 +5,7 @@ import {
   normalizeDiscussionBody,
   updateChapterComment,
 } from "@/lib/bible/discussion";
+import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
 import { isDiscussionAuthor } from "@/lib/bible/discussion-permissions";
 import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
 import { NextResponse } from "next/server";
@@ -12,7 +13,7 @@ import { NextResponse } from "next/server";
 type RouteContext = { params: Promise<{ commentId: string }> };
 
 async function authorizeCommentWrite(commentId: string) {
-  const comment = await getChapterComment(commentId);
+  const comment = await withDiscussionSchemaReady(() => getChapterComment(commentId));
   if (!comment) {
     return { error: NextResponse.json({ error: "Not found" }, { status: 404 }) };
   }
@@ -47,7 +48,7 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 
   try {
-    const updated = await updateChapterComment(commentId, text);
+    const updated = await withDiscussionSchemaReady(() => updateChapterComment(commentId, text));
     return NextResponse.json({
       comment: {
         id: updated.id,
@@ -67,7 +68,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
   if (auth.error) return auth.error;
 
   try {
-    await deleteChapterComment(commentId);
+    await withDiscussionSchemaReady(() => deleteChapterComment(commentId));
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error("discussion delete comment", e);
