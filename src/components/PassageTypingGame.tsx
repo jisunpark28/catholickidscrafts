@@ -5,6 +5,13 @@ import {
   normalizePassageText,
   typingAccuracy,
 } from "@/lib/typing-accuracy";
+import {
+  caretIndexFromMirrorPoint,
+  caretPointInMirror,
+  clampCaretIndex,
+  scrollTypingPaneToCaret,
+  type CaretPoint,
+} from "@/lib/passage-typing-caret";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "@/styles/gospel-typing.css";
 
@@ -86,33 +93,6 @@ type ScrollSnapshot = {
 
 function readInputScroll(textarea: HTMLTextAreaElement | null): ScrollSnapshot {
   return { inputTop: textarea?.scrollTop ?? 0 };
-}
-
-/** Map a click in the mirror pane to a character index in the passage. */
-function caretIndexFromMirrorPoint(mirror: HTMLElement, clientX: number, clientY: number): number {
-  if (typeof document.caretRangeFromPoint === "function") {
-    const range = document.caretRangeFromPoint(clientX, clientY);
-    if (range && mirror.contains(range.startContainer)) {
-      const pre = document.createRange();
-      pre.selectNodeContents(mirror);
-      pre.setEnd(range.startContainer, range.startOffset);
-      return pre.toString().length;
-    }
-  }
-
-  const spans = mirror.querySelectorAll<HTMLElement>("[data-char-index]");
-  for (const span of spans) {
-    const rect = span.getBoundingClientRect();
-    if (
-      clientY >= rect.top &&
-      clientY <= rect.bottom &&
-      clientX >= rect.left &&
-      clientX <= rect.right
-    ) {
-      return Number(span.dataset.charIndex ?? 0);
-    }
-  }
-  return 0;
 }
 
 function composedTypingValue(typed: string, target: string): string {
@@ -197,6 +177,12 @@ export function PassageTypingGame({
   const typedRef = useRef("");
   const composedRef = useRef("");
   const userPassageScrollRef = useRef(0);
+  const composingRef = useRef(false);
+  const skipChangeRef = useRef(false);
+  const draftScrollAppliedRef = useRef(false);
+  const mirrorContainerRef = useRef<HTMLDivElement>(null);
+  const [caretPoint, setCaretPoint] = useState<CaretPoint | null>(null);
+  const [inputFocused, setInputFocused] = useState(false);
 
   const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
   const nextIndex = typedNorm.length;
@@ -219,6 +205,7 @@ export function PassageTypingGame({
   useEffect(() => {
     resetLocal();
     setDraftLoaded(false);
+    draftScrollAppliedRef.current = false;
   }, [target, draftKey, resetLocal]);
 
   useEffect(() => {
@@ -367,17 +354,58 @@ export function PassageTypingGame({
     if (passageEl) passageEl.scrollTop = userPassageScrollRef.current;
   }, []);
 
+  const syncCaretOverlay = useCallback(() => {
+    const mirror = inputMirrorRef.current;
+    const container = mirrorContainerRef.current;
+    const textarea = textareaRef.current;
+    if (!mirror || !container || !textarea) return;
+    const pos = clampCaretIndex(textarea.selectionStart, typedRef.current.length);
+    setCaretPoint(caretPointInMirror(mirror, container, pos));
+  }, []);
+
+  const clampTextareaSelection = useCallback(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    const max = typedRef.current.length;
+    const start = clampCaretIndex(el.selectionStart, max);
+    const end = clampCaretIndex(el.selectionEnd, max);
+    if (start !== el.selectionStart || end !== el.selectionEnd) {
+      el.setSelectionRange(start, end);
+    }
+  }, []);
+
   useLayoutEffect(() => {
     const restore = selectionRestoreRef.current;
     const el = textareaRef.current;
     if (!restore || !el) return;
     const pos = Math.min(restore.start, el.value.length);
     const end = Math.min(restore.end, el.value.length);
-    el.setSelectionRange(pos, end);
+    const clampedStart = clampCaretIndex(pos, typed.length);
+    const clampedEnd = clampCaretIndex(end, typed.length);
+    el.setSelectionRange(clampedStart, clampedEnd);
     if (restore.scroll) applyInputScroll(restore.scroll);
     preservePassageScroll();
+    syncCaretOverlay();
     selectionRestoreRef.current = null;
-  }, [typed, target, applyInputScroll, preservePassageScroll]);
+  }, [typed, target, applyInputScroll, preservePassageScroll, syncCaretOverlay]);
+
+  useLayoutEffect(() => {
+    clampTextareaSelection();
+    syncCaretOverlay();
+  }, [typed, clampTextareaSelection, syncCaretOverlay]);
+
+  useLayoutEffect(() => {
+    if (!draftLoaded || draftScrollAppliedRef.current || typed.length === 0) return;
+    const textarea = textareaRef.current;
+    const mirror = inputMirrorRef.current;
+    if (!textarea || !mirror) return;
+    draftScrollAppliedRef.current = true;
+    const pos = typed.length;
+    textarea.setSelectionRange(pos, pos);
+    scrollTypingPaneToCaret(textarea, mirror, pos);
+    syncInputMirrorScroll();
+    syncCaretOverlay();
+  }, [draftLoaded, typed.length, syncInputMirrorScroll, syncCaretOverlay]);
 
   if (!target) {
     return (
@@ -470,10 +498,10 @@ export function PassageTypingGame({
   );
 
   const typingInput = alignedColumns ? (
-    <div className="gospel-typing__input-mirror">
+    <div ref={mirrorContainerRef} className="gospel-typing__input-mirror">
       <p
         ref={inputMirrorRef}
-        className={`gospel-typing__input-mirror-display ${textareaClass} mb-0`}
+        className="gospel-typing__input-mirror-display gospel-typing-input gospel-typing__mirror-text mb-0"
         aria-hidden
       >
         {target.split("").map((char, i) => {
@@ -483,40 +511,106 @@ export function PassageTypingGame({
             <span
               key={i}
               data-char-index={i}
-              className={hasTyped ? mirrorCharClassName(i, typedNorm, target) : "gospel-typing-char--mirror"}
+              className={
+                hasTyped
+                  ? mirrorCharClassName(i, typedNorm, target)
+                  : "gospel-typing-char--mirror"
+              }
             >
               {displayChar}
             </span>
           );
         })}
       </p>
+      {inputFocused && caretPoint ? (
+        <span
+          className="gospel-typing__custom-caret"
+          style={{
+            left: caretPoint.left,
+            top: caretPoint.top,
+            height: caretPoint.height,
+          }}
+          aria-hidden
+        />
+      ) : null}
       <textarea
         ref={textareaRef}
         value={composedValue}
+        lang="en"
+        inputMode="text"
+        onFocus={() => {
+          setInputFocused(true);
+          syncCaretOverlay();
+        }}
+        onBlur={() => setInputFocused(false)}
+        onSelect={() => {
+          clampTextareaSelection();
+          syncCaretOverlay();
+        }}
         onMouseDown={(e) => {
           if (e.button !== 0) return;
           const mirror = inputMirrorRef.current;
           if (!mirror) return;
           const scroll = readInputScroll(e.currentTarget);
           const index = caretIndexFromMirrorPoint(mirror, e.clientX, e.clientY);
-          const pos = Math.min(index, typedRef.current.length);
+          const pos = clampCaretIndex(index, typedRef.current.length);
           e.preventDefault();
           const textarea = e.currentTarget;
           textarea.focus();
           textarea.setSelectionRange(pos, pos);
           applyInputScroll(scroll);
           preservePassageScroll();
-          requestAnimationFrame(preservePassageScroll);
+          requestAnimationFrame(() => {
+            preservePassageScroll();
+            syncCaretOverlay();
+          });
+        }}
+        onCompositionStart={() => {
+          composingRef.current = true;
+        }}
+        onCompositionEnd={(e) => {
+          const data = e.data;
+          composingRef.current = false;
+          if (!data) return;
+          const el = e.currentTarget;
+          const currentTyped = typedRef.current;
+          const pos = clampCaretIndex(el.selectionStart, currentTyped.length);
+          const scroll = readInputScroll(el);
+          if (pos === currentTyped.length && currentTyped.length < target.length) {
+            beginTyping();
+            skipChangeRef.current = true;
+            const next = currentTyped + data;
+            updateTyped(next, { start: pos + data.length, end: pos + data.length }, scroll);
+            queueMicrotask(() => {
+              skipChangeRef.current = false;
+            });
+          }
         }}
         onKeyDown={(e) => {
-          if (e.nativeEvent.isComposing) return;
+          if (composingRef.current || e.nativeEvent.isComposing) return;
           const el = e.currentTarget;
           const pos = el.selectionStart;
           const end = el.selectionEnd;
           const currentTyped = typedRef.current;
+          const typedLen = currentTyped.length;
           const scroll = readInputScroll(el);
 
-          if (e.key === "Backspace" && pos === end && pos > 0 && pos <= currentTyped.length) {
+          if (e.key === "ArrowRight" && pos >= typedLen) {
+            e.preventDefault();
+            return;
+          }
+          if (e.key === "ArrowDown" && pos >= typedLen) {
+            e.preventDefault();
+            return;
+          }
+          if (e.key === "End") {
+            e.preventDefault();
+            el.setSelectionRange(typedLen, typedLen);
+            syncCaretOverlay();
+            return;
+          }
+
+          if (e.key === "Backspace" && pos === end && pos > 0 && pos <= typedLen) {
             e.preventDefault();
             beginTyping();
             const next = currentTyped.slice(0, pos - 1) + currentTyped.slice(pos);
@@ -524,7 +618,7 @@ export function PassageTypingGame({
             return;
           }
 
-          if (e.key === "Delete" && pos === end && pos < currentTyped.length) {
+          if (e.key === "Delete" && pos === end && pos < typedLen) {
             e.preventDefault();
             beginTyping();
             const next = currentTyped.slice(0, pos) + currentTyped.slice(pos + 1);
@@ -538,8 +632,8 @@ export function PassageTypingGame({
             !e.metaKey &&
             !e.altKey &&
             pos === end &&
-            pos === currentTyped.length &&
-            currentTyped.length < target.length
+            pos === typedLen &&
+            typedLen < target.length
           ) {
             e.preventDefault();
             beginTyping();
@@ -548,6 +642,7 @@ export function PassageTypingGame({
           }
         }}
         onChange={(e) => {
+          if (composingRef.current || skipChangeRef.current) return;
           const raw = e.target.value;
           if (raw.length > target.length) return;
           const currentTyped = typedRef.current;
@@ -555,19 +650,20 @@ export function PassageTypingGame({
           if (nextTyped === currentTyped) return;
           beginTyping();
           const scroll = readInputScroll(e.currentTarget);
-          updateTyped(nextTyped, {
-            start: e.target.selectionStart,
-            end: e.target.selectionEnd,
-          }, scroll);
+          const start = clampCaretIndex(e.target.selectionStart, nextTyped.length);
+          const end = clampCaretIndex(e.target.selectionEnd, nextTyped.length);
+          updateTyped(nextTyped, { start, end }, scroll);
         }}
         onScroll={() => {
           syncInputMirrorScroll();
+          syncCaretOverlay();
         }}
         onPaste={(e) => e.preventDefault()}
-        className={`gospel-typing__input-capture ${textareaClass}`}
+        className="gospel-typing__input-capture gospel-typing-input gospel-typing__pane-content w-full resize-none bg-white shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50"
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"
+        autoCapitalize="off"
         aria-label="Type the passage"
       />
     </div>
