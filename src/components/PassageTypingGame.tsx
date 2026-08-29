@@ -603,7 +603,9 @@ export function PassageTypingGame({
         }}
         onBeforeInput={(e) => {
           if (composingRef.current || e.nativeEvent.isComposing) return;
-          if (e.inputType !== "insertText" || !e.data) return;
+          const native = e.nativeEvent;
+          if (native.inputType !== "insertText" || !native.data) return;
+          const insertText = native.data;
           const el = e.currentTarget;
           const currentTyped = typedRef.current;
           const typedLen = currentTyped.length;
@@ -615,7 +617,11 @@ export function PassageTypingGame({
           beginTyping();
           skipChangeRef.current = true;
           const scroll = readInputScroll(el);
-          updateTyped(currentTyped + e.data, { start: pos + e.data.length, end: pos + e.data.length }, scroll);
+          updateTyped(
+            currentTyped + insertText,
+            { start: pos + insertText.length, end: pos + insertText.length },
+            scroll,
+          );
           queueMicrotask(() => {
             skipChangeRef.current = false;
           });
