@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import {
   BIBLE_GUEST_COOKIE,
   getGuestIdFromCookies,
@@ -118,7 +119,7 @@ export async function mergeGuestProgressIntoReader(
       key,
       row.bookSlug,
       row.chapter,
-      row.typingAccuracy ?? 0.9,
+      row.typingAccuracy ?? BIBLE_STICKER_ACCURACY_THRESHOLD,
     );
   }
 

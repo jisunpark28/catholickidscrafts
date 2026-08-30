@@ -16,7 +16,7 @@ export default async function NewTestamentPage() {
   return (
     <BibleTestamentHub
       title="New Testament"
-      description="Choose a book to read chapter by chapter. Type with 90% accuracy to earn praise stickers."
+      description="Choose a book to read chapter by chapter. Type with 80% accuracy to earn praise stickers."
       books={ntBooks}
     />
   );
