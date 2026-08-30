@@ -1,7 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { ordinaryTimeWeekLabel } from "@/lib/liturgical-calendar";
+import {
+  formatLiturgicalTitleDisplay,
+  isOrdinaryTimeWeekdayTitle,
+  ordinaryTimeSundayLabel,
+} from "@/lib/liturgical-calendar";
+import { parseDateParam } from "@/lib/dates";
+import {
+  goodNewsDailyMissaUrl,
+  livingWithChristReadingUrl,
+} from "@/lib/scripture-links";
+import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import type { MassDaySummary, MonthCalendar } from "@/types/mass";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -24,6 +34,36 @@ type Props = {
   /** Home Daily Mass panel — enlarged calendar text (between compact and 2×). */
   large?: boolean;
 };
+
+function MassCalendarMobileReadings({ dateKey }: { dateKey: string }) {
+  const date = parseDateParam(dateKey);
+  if (!date) return null;
+
+  const usccbUrl = usccbReadingsPageUrl(date);
+  const lwcUrl = livingWithChristReadingUrl(dateKey);
+  const goodNewsUrl = goodNewsDailyMissaUrl(dateKey);
+  const linkClass =
+    "text-sm font-semibold text-[var(--color-link)] hover:underline";
+
+  return (
+    <div className="border-t border-[var(--color-border)] px-4 py-3 md:hidden">
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+        Readings
+      </p>
+      <div className="flex flex-wrap gap-x-4 gap-y-2">
+        <a href={usccbUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          USCCB ↗
+        </a>
+        <a href={lwcUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          Living with Christ ↗
+        </a>
+        <a href={goodNewsUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          GoodNews ↗
+        </a>
+      </div>
+    </div>
+  );
+}
 
 export function MassCalendar({ initial, selectedDate, todayDate, large = false }: Props) {
   const [calendar, setCalendar] = useState(initial);
@@ -143,7 +183,14 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
               const dayNum = Number(day.date.slice(8, 10));
               const isSelected = day.date === selectedDate;
               const isToday = day.date === todayDate;
-              const weekLabel = ordinaryTimeWeekLabel(day.liturgicalTitle);
+              const isSunday = new Date(`${day.date}T12:00:00Z`).getUTCDay() === 0;
+              const displayTitle = formatLiturgicalTitleDisplay(day.liturgicalTitle);
+              const sundayLabel =
+                isSunday ? ordinaryTimeSundayLabel(day.liturgicalTitle) : undefined;
+              const showTitle =
+                displayTitle.length > 0 &&
+                !(sundayLabel && /Sunday in Ordinary Time$/i.test(displayTitle)) &&
+                !isOrdinaryTimeWeekdayTitle(day.liturgicalTitle);
               return (
                 <div
                   key={day.date}
@@ -158,20 +205,24 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
                   >
                     {dayNum}
                   </span>
-                  {weekLabel && (
-                    <p className={dayWeekClass} title={weekLabel}>
-                      {weekLabel}
+                  {sundayLabel && (
+                    <p className={dayWeekClass} title={sundayLabel}>
+                      {sundayLabel}
                     </p>
                   )}
-                  <p className={dayTitleClass} title={day.liturgicalTitle}>
-                    {day.liturgicalTitle}
-                  </p>
+                  {showTitle && (
+                    <p className={dayTitleClass} title={displayTitle}>
+                      {displayTitle}
+                    </p>
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
       </div>
+
+      <MassCalendarMobileReadings dateKey={selectedDate} />
     </section>
   );
 }

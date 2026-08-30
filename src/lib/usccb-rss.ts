@@ -177,3 +177,15 @@ export async function fetchUsccbReadingsForDate(
   const index = await loadRssIndex();
   return index.get(toDateKey(date)) ?? null;
 }
+
+/** Liturgical titles from the USCCB RSS feed, keyed by YYYY-MM-DD. */
+export async function loadUsccbLiturgicalTitleIndex(): Promise<Map<string, string>> {
+  try {
+    const index = await loadRssIndex();
+    return new Map(
+      [...index.entries()].map(([dateKey, day]) => [dateKey, day.liturgicalTitle]),
+    );
+  } catch {
+    return new Map();
+  }
+}
