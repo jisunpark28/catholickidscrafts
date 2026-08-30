@@ -1,3 +1,4 @@
+import { listChapterDiscussion } from "@/lib/bible/discussion";
 import { neonDatabaseHostLabel } from "@/lib/neon-database-host";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
@@ -17,12 +18,23 @@ export async function GET() {
       prisma.bibleChapterComment.count(),
     ]);
 
+    let listOk = true;
+    let listError: string | null = null;
+    try {
+      await listChapterDiscussion("mark", 2);
+    } catch (error) {
+      listOk = false;
+      listError = error instanceof Error ? error.message : String(error);
+    }
+
     return NextResponse.json({
       ok: true,
       databaseHost,
       directHost,
       threadCount,
       commentCount,
+      listOk,
+      listError,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
