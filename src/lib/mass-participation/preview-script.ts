@@ -353,7 +353,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "thanks-1b",
     section: "thanksgiving",
     role: "rubric",
-    text: "All kneel or stand for the Eucharistic Prayer.",
+    text: "All kneel for the Eucharistic Prayer.",
   },
   {
     id: "thanks-2",
@@ -443,7 +443,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "comm-6b",
     section: "communion",
     role: "rubric",
-    text: "All kneel or stand as Holy Communion is prepared.",
+    text: "All kneel as Holy Communion is prepared.",
   },
   {
     id: "comm-7",
