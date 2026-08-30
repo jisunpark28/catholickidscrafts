@@ -1,7 +1,36 @@
 import { Pool, neonConfig } from "@neondatabase/serverless";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { getDirectDatabaseUrl } from "@/lib/neon-database-url";
 import { prisma } from "@/lib/prisma";
+
+/** Prisma / Postgres errors that mean discussion tables or columns are not ready yet. */
+export function isDiscussionSchemaError(error: unknown): boolean {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2021" || error.code === "P2022") return true;
+  }
+
+  if (error instanceof Error) {
+    const message = error.message;
+    if (
+      message.includes("BibleChapterThread") ||
+      message.includes("BibleChapterComment") ||
+      message.includes("discussionPenName")
+    ) {
+      return true;
+    }
+    if (message.includes("does not exist") && message.includes("column")) {
+      return true;
+    }
+    if (/relation .* does not exist/i.test(message)) {
+      return true;
+    }
+    if (message.includes("not queryable")) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 let ready: Promise<void> | null = null;
 let ddlClient: PrismaClient | undefined;
@@ -51,7 +80,8 @@ async function discussionTablesQueryable(): Promise<boolean> {
     await prisma.bibleChapterThread.findFirst({ select: { id: true } });
     await prisma.bibleChapterComment.findFirst({ select: { id: true } });
     return true;
-  } catch {
+  } catch (error) {
+    if (!isDiscussionSchemaError(error)) throw error;
     return false;
   }
 }
@@ -61,7 +91,8 @@ async function penNameColumnsQueryable(): Promise<boolean> {
     await prisma.familyAccount.findFirst({ select: { discussionPenName: true } });
     await prisma.subProfile.findFirst({ select: { discussionPenName: true } });
     return true;
-  } catch {
+  } catch (error) {
+    if (!isDiscussionSchemaError(error)) throw error;
     return false;
   }
 }
@@ -215,13 +246,20 @@ async function applyDiscussionSchema(): Promise<void> {
   const penNamesReady = await penNameColumnsQueryable();
 
   if (!tablesReady || !penNamesReady) {
-    if (!penNamesReady) {
-      await ensurePenNameColumns();
-    }
-    if (!tablesReady) {
-      await ensureThreadTable();
-      await ensureCommentTable();
-      await ensureIndexesAndConstraints();
+    try {
+      if (!penNamesReady) {
+        await ensurePenNameColumns();
+      }
+      if (!tablesReady) {
+        await ensureThreadTable();
+        await ensureCommentTable();
+        await ensureIndexesAndConstraints();
+      }
+    } catch (bootstrapError) {
+      const recovered =
+        (await discussionTablesQueryable()) && (await penNameColumnsQueryable());
+      if (!recovered) throw bootstrapError;
+      console.warn("discussion bootstrap DDL failed but schema is queryable", bootstrapError);
     }
   }
 
