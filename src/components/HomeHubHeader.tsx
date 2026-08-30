@@ -39,7 +39,7 @@ export function HomeHubHeader({ initialSession }: Props) {
             />
           </div>
 
-          <div className="col-start-2 row-start-1 flex shrink-0 justify-center scale-[0.88] sm:scale-100">
+          <div className="col-start-2 row-start-1 flex shrink-0 justify-center scale-[0.94] sm:scale-100">
             <SiteLogo size="header" showWordmark={false} linkToHome />
           </div>
 

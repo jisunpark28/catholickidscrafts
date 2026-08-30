@@ -10,7 +10,7 @@ type Props = {
   linkToHome?: boolean;
 };
 
-const heights = { header: 72, hero: 140 } as const;
+const heights = { header: 80, hero: 140 } as const;
 
 /** Canonical site home (header logo links here). */
 const SITE_HOME_URL = "https://www.catholickidscrafts.com/";
