@@ -1,8 +1,5 @@
 "use client";
 
-import {
-  type HeaderSessionResponse,
-} from "@/lib/header-session";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -87,28 +84,18 @@ function formatWhen(iso: string): string {
   }
 }
 
-function avatarInitial(label: string): string {
-  const ch = label.trim().charAt(0);
-  return ch ? ch.toUpperCase() : "?";
-}
-
-function Avatar({ label }: { label: string }) {
+function Avatar() {
   return (
     <div
       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dfc9b0] text-sm font-bold text-[var(--color-ink)]"
       aria-hidden
     >
-      {avatarInitial(label)}
+      <span className="sr-only">Comment</span>
+      <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current opacity-70" aria-hidden>
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+      </svg>
     </div>
   );
-}
-
-function readerLabelFromSession(session: HeaderSessionResponse | null): string {
-  if (!session) return "?";
-  if (session.reader?.displayName) return session.reader.displayName;
-  if (session.family?.displayName?.trim()) return session.family.displayName.trim();
-  if (session.family?.email) return session.family.email.split("@")[0] ?? "?";
-  return "?";
 }
 
 export function BibleChapterDiscussion({
@@ -117,7 +104,6 @@ export function BibleChapterDiscussion({
   initialSignedIn,
   initialReaderLabel,
 }: Props) {
-  const [session, setSession] = useState<HeaderSessionResponse | null>(null);
   const [threads, setThreads] = useState<DiscussionThread[]>([]);
   const [viewer, setViewer] = useState<DiscussionViewer>({
     canWrite: initialSignedIn,
@@ -140,7 +126,6 @@ export function BibleChapterDiscussion({
   const [submitting, setSubmitting] = useState(false);
   const loadGeneration = useRef(0);
 
-  const readerLabel = session ? readerLabelFromSession(session) : initialReaderLabel;
   const canCompose = viewerReady ? viewer.canWrite : initialSignedIn;
 
   const commentCount = useMemo(
@@ -153,20 +138,12 @@ export function BibleChapterDiscussion({
     setLoading(true);
     setLoadError(null);
     try {
-      const [sessionRes, discussionRes] = await Promise.all([
-        fetch("/api/auth/session", { cache: "no-store", credentials: "include" }),
-        fetch(
-          `/api/bible/discussion?bookSlug=${encodeURIComponent(bookSlug)}&chapter=${chapter}`,
-          { cache: "no-store", credentials: "include" },
-        ),
-      ]);
+      const discussionRes = await fetch(
+        `/api/bible/discussion?bookSlug=${encodeURIComponent(bookSlug)}&chapter=${chapter}`,
+        { cache: "no-store", credentials: "include" },
+      );
 
       if (generation !== loadGeneration.current) return;
-
-      if (sessionRes.ok) {
-        const sessionData = await readJson<HeaderSessionResponse>(sessionRes);
-        setSession(sessionData);
-      }
 
       const data = await readJson<{
         threads?: DiscussionThread[];
@@ -207,7 +184,7 @@ export function BibleChapterDiscussion({
     const optimisticThread: DiscussionThread = {
       id: optimisticId,
       body,
-      authorDisplay: viewer.penName ?? readerLabel,
+      authorDisplay: "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       canEdit: false,
@@ -453,7 +430,7 @@ export function BibleChapterDiscussion({
 
       {canCompose ? (
         <div className="flex gap-3">
-          <Avatar label={viewer.penName ?? readerLabel} />
+          <Avatar />
           <div className="min-w-0 flex-1 space-y-2">
             <textarea
               rows={2}
@@ -528,13 +505,10 @@ export function BibleChapterDiscussion({
           return (
             <li key={thread.id}>
               <div className="flex gap-3">
-                <Avatar label={thread.authorDisplay} />
+                <Avatar />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm">
-                    <span className="font-semibold text-[var(--color-ink)]">
-                      {thread.authorDisplay}
-                    </span>
-                    <span className="ml-2 text-xs text-[var(--color-muted)]">
+                    <span className="text-xs text-[var(--color-muted)]">
                       {formatWhen(thread.createdAt)}
                     </span>
                     {thread.canEdit || thread.canDelete
@@ -618,7 +592,7 @@ export function BibleChapterDiscussion({
 
                   {replyingTo === thread.id && canCompose ? (
                     <div className="mt-3 flex gap-3">
-                      <Avatar label={viewer.penName ?? readerLabel} />
+                      <Avatar />
                       <div className="min-w-0 flex-1 space-y-2">
                         <textarea
                           rows={2}
@@ -656,11 +630,10 @@ export function BibleChapterDiscussion({
                     <ul className="mt-3 space-y-4 pl-3 sm:pl-6">
                       {thread.comments.map((comment) => (
                         <li key={comment.id} className="flex gap-3">
-                          <Avatar label={comment.authorDisplay} />
+                          <Avatar />
                           <div className="min-w-0 flex-1">
                             <p className="text-sm">
-                              <span className="font-semibold">{comment.authorDisplay}</span>
-                              <span className="ml-2 text-xs text-[var(--color-muted)]">
+                              <span className="text-xs text-[var(--color-muted)]">
                                 {formatWhen(comment.createdAt)}
                               </span>
                               {comment.canEdit || comment.canDelete
