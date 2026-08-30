@@ -1162,6 +1162,8 @@ function createVoxelChurch(container) {
 
     for (let row = 0; row < 7; row += 1) {
         addWallPictureFrame("left", row);
+    }
+    for (let row = 0; row < 7; row += 1) {
         addWallPictureFrame("right", row);
     }
 
@@ -2054,53 +2056,46 @@ function createVoxelChurch(container) {
         }
     }
 
-    async function loadChurchDecorations() {
-        try {
-            const response = await fetch("/api/church-decorations");
-            const items = await response.json();
-            if (!Array.isArray(items)) return;
+    function loadChurchDecorations() {
+        const stations = typeof STATIONS_OF_THE_CROSS !== "undefined" ? STATIONS_OF_THE_CROSS : [];
+        if (!Array.isArray(stations) || stations.length === 0) return;
 
-            items.forEach((item, listIndex) => {
-                const slotIndex = Number.isInteger(item.sortOrder) ? item.sortOrder : listIndex;
-                const slot = wallPictureSlots[slotIndex];
-                const width = slot?.width ?? item.width ?? 1.12;
-                const height = slot?.height ?? item.height ?? 1.48;
+        stations.forEach((station) => {
+            const slotIndex = Number.isInteger(station.sortOrder) ? station.sortOrder : -1;
+            const slot = wallPictureSlots[slotIndex];
+            if (!slot) return;
 
-                const tex = textureLoader.load(item.imageUrl);
-                if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
-                tex.magFilter = THREE.LinearFilter;
-                tex.minFilter = THREE.LinearMipmapLinearFilter;
+            const width = slot.width ?? 1.12;
+            const height = slot.height ?? 1.48;
+            const imagePath = station.image || "";
 
-                const mat = new THREE.MeshBasicMaterial({
-                    map: tex,
-                    transparent: true,
-                    alphaTest: 0.05,
-                    side: THREE.DoubleSide,
-                    depthWrite: false,
-                });
-                const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
-                if (slot) {
-                    mesh.position.set(slot.x, slot.y, slot.z);
-                    mesh.rotation.y = slot.rotationY;
-                } else {
-                    mesh.position.set(item.posX || 0, item.posY || 2.2, item.posZ || -6);
-                    mesh.rotation.y = item.rotationY || 0;
-                }
-                mesh.renderOrder = 2;
-                mesh.userData.hotspot = {
-                    title: item.title,
-                    description: item.description,
-                };
-                root.add(mesh);
-                decorationMeshes.push(mesh);
-                interactiveMeshes.push(mesh);
+            const tex = textureLoader.load(imagePath);
+            if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
+            tex.magFilter = THREE.LinearFilter;
+            tex.minFilter = THREE.LinearMipmapLinearFilter;
+
+            const mat = new THREE.MeshBasicMaterial({
+                map: tex,
+                transparent: true,
+                alphaTest: 0.05,
+                side: THREE.DoubleSide,
+                depthWrite: false,
             });
-        } catch (error) {
-            console.warn("Church decorations could not load:", error);
-        }
+            const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
+            mesh.position.set(slot.x, slot.y, slot.z);
+            mesh.rotation.y = slot.rotationY;
+            mesh.renderOrder = 2;
+            mesh.userData.hotspot = {
+                title: station.title || `Station ${station.number}`,
+                description: station.description || "",
+            };
+            root.add(mesh);
+            decorationMeshes.push(mesh);
+            interactiveMeshes.push(mesh);
+        });
     }
 
-    void loadChurchDecorations();
+    loadChurchDecorations();
 
     function onPointerDown(event) {
         const bounds = renderer.domElement.getBoundingClientRect();

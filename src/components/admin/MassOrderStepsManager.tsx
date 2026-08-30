@@ -1,7 +1,6 @@
 "use client";
 
 import { MASS_ORDER_GESTURES } from "@/lib/mass-order-gestures";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -186,12 +185,6 @@ export function MassOrderStepsManager({ initialSteps }: Props) {
         >
           {saving ? "Saving…" : "Save all steps"}
         </button>
-        <Link
-          href="/admin/church-decorations"
-          className="text-sm font-semibold text-[var(--color-link)]"
-        >
-          Church wall pictures
-        </Link>
       </div>
     </div>
   );

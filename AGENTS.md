@@ -38,7 +38,7 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - Amazon links: set **Amazon Associate** in admin Recommendations, or use amazon.com URLs (auto disclosure + `rel=sponsored`).
 - Legal pages: `/about`, `/privacy`, `/affiliate-disclosure`. Operator notes: `docs/AFFILIATE_LINKS.md`.
 
-- Church game hotspots: `/admin/church-decorations`, API `/api/church-decorations`.
+- Church game wall stations: bundled in `public/games/tiny-priest/stations.js` (no admin UI)
 - Photo booth frames: `/admin/photo-booth-frames`. Admin uploads need `BLOB_READ_WRITE_TOKEN` on Vercel (`src/lib/upload.ts`).
 
 ### Production database seed (GitHub Actions)
