@@ -37,6 +37,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     text: "Entrance hymn — sing while the priest and ministers enter.",
   },
   {
+    id: "intro-1b",
+    section: "intro",
+    role: "rubric",
+    text: "All stand for the Opening Rites.",
+  },
+  {
     id: "intro-2",
     section: "intro",
     role: "priest",
@@ -61,6 +67,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "And with your spirit.",
     revealable: true,
+  },
+  {
+    id: "intro-5b",
+    section: "intro",
+    role: "rubric",
+    text: "There is a brief silence. Then everyone prays the Penitential Act together.",
   },
   {
     id: "intro-6",
@@ -103,6 +115,13 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
+    id: "intro-11b",
+    section: "intro",
+    role: "rubric",
+    text: "On Sundays outside Advent and Lent, all sing the Gloria.",
+    skipWhen: "advent-lent",
+  },
+  {
     id: "intro-12",
     section: "intro",
     role: "assembly",
@@ -127,6 +146,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     skipWhen: "advent-lent",
   },
   {
+    id: "intro-14b",
+    section: "intro",
+    role: "rubric",
+    text: "All stand. The priest prays the Opening Prayer (Collect).",
+  },
+  {
     id: "intro-15",
     section: "intro",
     role: "priest",
@@ -138,6 +163,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "Amen.",
     revealable: true,
+  },
+  {
+    id: "word-0",
+    section: "word",
+    role: "rubric",
+    text: "Everyone sits for the Scripture readings.",
   },
   {
     id: "word-1",
@@ -159,6 +190,18 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
+    id: "word-3b",
+    section: "word",
+    role: "rubric",
+    text: "The responsorial psalm is sung or said.",
+  },
+  {
+    id: "word-3c",
+    section: "word",
+    role: "rubric",
+    text: "After the second reading:",
+  },
+  {
     id: "word-4",
     section: "word",
     role: "priest",
@@ -172,10 +215,22 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
+    id: "word-5b",
+    section: "word",
+    role: "rubric",
+    text: "The priest reads the Gospel for today's Mass.",
+  },
+  {
     id: "word-6",
     section: "word",
     role: "priest",
     text: "A reading from the holy Gospel according to N.",
+  },
+  {
+    id: "word-6b",
+    section: "word",
+    role: "rubric",
+    text: "Make the Sign of the Cross on your forehead, lips, and heart.",
   },
   {
     id: "word-7",
@@ -198,6 +253,18 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
+    id: "word-9b",
+    section: "word",
+    role: "rubric",
+    text: "The priest preaches the homily. Everyone sits and listens.",
+  },
+  {
+    id: "word-9c",
+    section: "word",
+    role: "rubric",
+    text: "Prayer of the Faithful — respond to each petition.",
+  },
+  {
     id: "word-10",
     section: "word",
     role: "assembly",
@@ -209,6 +276,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     section: "eucharist",
     role: "rubric",
     text: "Offertory hymn — bread and wine are brought to the altar.",
+  },
+  {
+    id: "euch-1b",
+    section: "eucharist",
+    role: "rubric",
+    text: "All stand. The priest prepares the gifts and prays over the offerings.",
   },
   {
     id: "euch-2",
@@ -270,6 +343,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
+    id: "thanks-0",
+    section: "thanksgiving",
+    role: "rubric",
+    text: "All kneel or stand for the Eucharistic Prayer.",
+  },
+  {
     id: "thanks-1",
     section: "thanksgiving",
     role: "assembly",
@@ -280,7 +359,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "thanks-2",
     section: "thanksgiving",
     role: "rubric",
-    text: "The priest prays the Eucharistic Prayer (not projected).",
+    text: "The priest continues the Eucharistic Prayer (the long prayer is not projected).",
   },
   {
     id: "thanks-3",
@@ -307,6 +386,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "Amen.",
     revealable: true,
+  },
+  {
+    id: "comm-0",
+    section: "communion",
+    role: "rubric",
+    text: "All stand for the Lord's Prayer and Holy Communion.",
   },
   {
     id: "comm-1",
@@ -342,11 +427,23 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
+    id: "comm-5b",
+    section: "communion",
+    role: "rubric",
+    text: "Offer the Sign of Peace to those around you.",
+  },
+  {
     id: "comm-6",
     section: "communion",
     role: "assembly",
     text: "Lamb of God, you take away the sins of the world, have mercy on us. Lamb of God, you take away the sins of the world, have mercy on us. Lamb of God, you take away the sins of the world, grant us peace.",
     revealable: true,
+  },
+  {
+    id: "comm-6b",
+    section: "communion",
+    role: "rubric",
+    text: "All kneel or stand as Holy Communion is prepared.",
   },
   {
     id: "comm-7",
@@ -368,6 +465,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     text: "Communion hymn — Holy Communion is distributed.",
   },
   {
+    id: "end-0",
+    section: "concluding",
+    role: "rubric",
+    text: "When Holy Communion is finished, all stand for the concluding prayers.",
+  },
+  {
     id: "end-1",
     section: "concluding",
     role: "priest",
@@ -379,6 +482,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "Amen.",
     revealable: true,
+  },
+  {
+    id: "end-2b",
+    section: "concluding",
+    role: "rubric",
+    text: "All stand for the final blessing.",
   },
   {
     id: "end-3",
@@ -405,6 +514,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "Amen.",
     revealable: true,
+  },
+  {
+    id: "end-6b",
+    section: "concluding",
+    role: "rubric",
+    text: "Listen for the dismissal. Leave reverently when the Mass ends.",
   },
   {
     id: "end-7",
