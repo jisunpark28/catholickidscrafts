@@ -236,12 +236,6 @@ export function MassParticipationPreview() {
       </div>
 
       <div className="mass-participation__body">
-        {season === "advent-lent" && (
-          <p className="mass-participation__season-note text-sm text-[var(--color-muted)]">
-            Gloria is omitted in Advent and Lent, matching your Sunday School projector decks.
-          </p>
-        )}
-
         {liturgyPart !== "all" && sectionsWithLines.length === 0 && (
           <p className="text-sm text-[var(--color-muted)]">
             No lines for {liturgyPartLabel(liturgyPart)} in this season.

@@ -58,11 +58,6 @@
   padding-top: 0.25rem;
 }
 
-.mass-participation__season-note {
-  margin: 0;
-  padding: 0 0.15rem;
-}
-
 .mass-participation__toolbar {
   display: flex;
   flex-wrap: wrap;
