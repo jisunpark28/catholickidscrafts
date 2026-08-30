@@ -11,6 +11,9 @@ import type { MassDaySummary, MonthCalendar } from "@/types/mass";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+/** Minimum column width when the month grid scrolls horizontally on narrow screens. */
+const MOBILE_GRID_MIN_WIDTH = "min-w-[34rem]";
+
 const rankStyles: Record<MassDaySummary["rank"], string> = {
   solemnity: "border-l-4 border-l-amber-500 bg-amber-50/80",
   feast: "border-l-4 border-l-sky-500 bg-sky-50/50",
@@ -26,6 +29,29 @@ type Props = {
   /** Home Daily Mass panel — enlarged calendar text (between compact and 2×). */
   large?: boolean;
 };
+
+type ReadingLinkProps = {
+  href: string;
+  title: string;
+  shortLabel: string;
+  longLabel: string;
+  className: string;
+};
+
+function ReadingLink({ href, title, shortLabel, longLabel, className }: ReadingLinkProps) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={className}
+      title={title}
+    >
+      <span className="md:hidden">{shortLabel}</span>
+      <span className="hidden md:inline">{longLabel}</span>
+    </a>
+  );
+}
 
 export function MassCalendar({ initial, selectedDate, todayDate, large = false }: Props) {
   const [calendar, setCalendar] = useState(initial);
@@ -74,32 +100,36 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
   }
 
   const headerMonthClass = large
-    ? "text-3xl font-bold text-[var(--color-ink)]"
+    ? "text-2xl font-bold text-[var(--color-ink)] sm:text-3xl"
     : "text-lg font-bold text-[var(--color-ink)]";
   const navBtnClass = large
-    ? "border border-[var(--color-border)] px-5 py-2.5 text-lg font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]"
+    ? "border border-[var(--color-border)] px-4 py-2 text-base font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)] sm:px-5 sm:py-2.5 sm:text-lg"
     : "border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]";
-  const loadingClass = large ? "text-lg text-[var(--color-muted)]" : "text-sm text-[var(--color-muted)]";
+  const loadingClass = large ? "text-base text-[var(--color-muted)] sm:text-lg" : "text-sm text-[var(--color-muted)]";
   const weekdayRowClass = large
-    ? "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-lg font-bold uppercase tracking-wide text-[var(--color-muted)]"
-    : "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]";
+    ? "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-xs font-bold uppercase tracking-wide text-[var(--color-muted)] sm:text-lg"
+    : "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-[10px] font-bold uppercase tracking-wide text-[var(--color-muted)] sm:text-xs";
   const weekdayCellClass = large
-    ? "border-r border-[var(--color-border)] py-4 last:border-r-0"
-    : "border-r border-[var(--color-border)] py-3 last:border-r-0";
+    ? "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-4"
+    : "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-3";
   const padCellClass = large
-    ? "min-h-[14rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[17rem] lg:min-h-[18rem]"
-    : "min-h-[9rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[11rem] lg:min-h-[12rem]";
+    ? "min-h-[6.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[11rem] md:min-h-[17rem] lg:min-h-[18rem]"
+    : "min-h-[6.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[9rem] md:min-h-[11rem] lg:min-h-[12rem]";
   const dayCellBase = large
-    ? "flex min-h-[14rem] flex-col border-b border-r border-[var(--color-border)] p-3 sm:min-h-[17rem] sm:p-4 lg:min-h-[18rem]"
-    : "flex min-h-[9rem] flex-col border-b border-r border-[var(--color-border)] p-2 sm:min-h-[11rem] sm:p-3 lg:min-h-[12rem]";
-  const dayNumClass = large ? "text-lg font-bold sm:text-xl" : "text-sm font-bold sm:text-base";
+    ? "flex min-h-[6.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[11rem] sm:p-3 md:min-h-[14rem] md:p-4 lg:min-h-[18rem]"
+    : "flex min-h-[6.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[9rem] sm:p-2 md:min-h-[11rem] md:p-3 lg:min-h-[12rem]";
+  const dayNumClass = large
+    ? "shrink-0 text-sm font-bold sm:text-lg md:text-xl"
+    : "shrink-0 text-xs font-bold sm:text-sm md:text-base";
   const dayTitleClass = large
-    ? "mt-1.5 flex-1 text-sm leading-snug text-[var(--color-muted)] sm:text-base sm:leading-tight"
-    : "mt-1 flex-1 text-[10px] leading-snug text-[var(--color-muted)] sm:text-[11px] sm:leading-tight";
+    ? "mt-1 w-full truncate text-[11px] leading-tight text-[var(--color-muted)] sm:mt-1.5 sm:text-sm md:text-base"
+    : "mt-0.5 w-full truncate text-[10px] leading-tight text-[var(--color-muted)] sm:mt-1 sm:text-[11px] md:text-xs";
   const linkClass = large
-    ? "text-sm font-semibold text-[var(--color-link)] hover:underline sm:text-base"
-    : "text-[10px] font-semibold text-[var(--color-link)] hover:underline";
-  const linksWrapClass = large ? "mt-3 flex flex-col gap-1.5" : "mt-2 flex flex-col gap-1";
+    ? "block w-full truncate text-[10px] font-semibold leading-tight text-[var(--color-link)] hover:underline sm:text-sm md:text-base"
+    : "block w-full truncate text-[9px] font-semibold leading-tight text-[var(--color-link)] hover:underline sm:text-[10px] md:text-xs";
+  const linksWrapClass = large
+    ? "mt-1.5 flex min-w-0 flex-col gap-0.5 sm:mt-2 sm:gap-1 md:mt-3 md:gap-1.5"
+    : "mt-1 flex min-w-0 flex-col gap-0.5 sm:mt-2 sm:gap-1";
 
   return (
     <section className="w-full border border-[var(--color-border)] bg-white">
@@ -126,77 +156,75 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
         </div>
       </div>
 
-      <div className={weekdayRowClass}>
-        {WEEKDAYS.map((d) => (
-          <div key={d} className={weekdayCellClass}>
-            {d}
+      <div className="overflow-x-auto overscroll-x-contain md:overflow-visible">
+        <div className={`${MOBILE_GRID_MIN_WIDTH} md:min-w-0`}>
+          <div className={weekdayRowClass}>
+            {WEEKDAYS.map((d) => (
+              <div key={d} className={weekdayCellClass}>
+                {d}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="grid grid-cols-7">
-        {Array.from({ length: firstDow }).map((_, i) => (
-          <div key={`pad-${i}`} className={padCellClass} />
-        ))}
-        {calendar.days.map((day) => {
-          const dayNum = Number(day.date.slice(8, 10));
-          const isSelected = day.date === selectedDate;
-          const isToday = day.date === todayDate;
-          const lwcUrl = livingWithChristReadingUrl(day.date);
-          const goodNewsUrl = goodNewsDailyMissaUrl(day.date);
-          const dayDate = parseDateParam(day.date);
-          const usccbUrl = dayDate ? usccbReadingsPageUrl(dayDate) : null;
-          return (
-            <div
-              key={day.date}
-              className={`${dayCellBase} ${rankStyles[day.rank]} ${
-                isSelected ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
-              }`}
-            >
-              <div className="flex flex-1 flex-col">
-                <span
-                  className={`${dayNumClass} ${
-                    isToday ? "text-[var(--color-accent)]" : "text-[var(--color-ink)]"
+          <div className="grid grid-cols-7">
+            {Array.from({ length: firstDow }).map((_, i) => (
+              <div key={`pad-${i}`} className={padCellClass} />
+            ))}
+            {calendar.days.map((day) => {
+              const dayNum = Number(day.date.slice(8, 10));
+              const isSelected = day.date === selectedDate;
+              const isToday = day.date === todayDate;
+              const lwcUrl = livingWithChristReadingUrl(day.date);
+              const goodNewsUrl = goodNewsDailyMissaUrl(day.date);
+              const dayDate = parseDateParam(day.date);
+              const usccbUrl = dayDate ? usccbReadingsPageUrl(dayDate) : null;
+              return (
+                <div
+                  key={day.date}
+                  className={`${dayCellBase} ${rankStyles[day.rank]} ${
+                    isSelected ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
                   }`}
                 >
-                  {dayNum}
-                </span>
-                <span className={dayTitleClass}>{day.liturgicalTitle}</span>
-              </div>
-              <div className={linksWrapClass}>
-                {usccbUrl && (
-                  <a
-                    href={usccbUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={linkClass}
-                    title={`${day.liturgicalTitle} — USCCB`}
+                  <span
+                    className={`${dayNumClass} ${
+                      isToday ? "text-[var(--color-accent)]" : "text-[var(--color-ink)]"
+                    }`}
                   >
-                    USCCB ↗
-                  </a>
-                )}
-                <a
-                  href={lwcUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={linkClass}
-                  title={`${day.liturgicalTitle} — Living with Christ`}
-                >
-                  Living with Christ ↗
-                </a>
-                <a
-                  href={goodNewsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={linkClass}
-                  title={`${day.liturgicalTitle} — GoodNews`}
-                >
-                  GoodNews ↗
-                </a>
-              </div>
-            </div>
-          );
-        })}
+                    {dayNum}
+                  </span>
+                  <p className={dayTitleClass} title={day.liturgicalTitle}>
+                    {day.liturgicalTitle}
+                  </p>
+                  <div className={linksWrapClass}>
+                    {usccbUrl && (
+                      <ReadingLink
+                        href={usccbUrl}
+                        title={`${day.liturgicalTitle} — USCCB`}
+                        shortLabel="USCCB ↗"
+                        longLabel="USCCB ↗"
+                        className={linkClass}
+                      />
+                    )}
+                    <ReadingLink
+                      href={lwcUrl}
+                      title={`${day.liturgicalTitle} — Living with Christ`}
+                      shortLabel="LWC ↗"
+                      longLabel="Living with Christ ↗"
+                      className={linkClass}
+                    />
+                    <ReadingLink
+                      href={goodNewsUrl}
+                      title={`${day.liturgicalTitle} — GoodNews`}
+                      shortLabel="GoodNews ↗"
+                      longLabel="GoodNews ↗"
+                      className={linkClass}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );
