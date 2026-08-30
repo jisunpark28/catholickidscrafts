@@ -78,10 +78,31 @@ export function resetDiscussionSchemaCache(): void {
 async function discussionTablesQueryable(): Promise<boolean> {
   try {
     await prisma.bibleChapterThread.findFirst({
-      select: { id: true, isAnonymous: true, authorLabel: true, bookSlug: true, chapter: true },
+      select: {
+        id: true,
+        bookSlug: true,
+        chapter: true,
+        body: true,
+        isAnonymous: true,
+        authorLabel: true,
+        familyAccountId: true,
+        subProfileId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
     await prisma.bibleChapterComment.findFirst({
-      select: { id: true, isAnonymous: true, authorLabel: true, threadId: true },
+      select: {
+        id: true,
+        threadId: true,
+        body: true,
+        isAnonymous: true,
+        authorLabel: true,
+        familyAccountId: true,
+        subProfileId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
     return true;
   } catch (error) {
@@ -170,20 +191,40 @@ async function ensureCommentTable(): Promise<void> {
   `);
 }
 
-/** Backfill columns when an older partial table exists without isAnonymous/authorLabel. */
+/** Backfill columns when an older partial table exists. */
 async function ensureDiscussionPostColumns(): Promise<void> {
-  await exec(
-    `ALTER TABLE "BibleChapterThread" ADD COLUMN IF NOT EXISTS "isAnonymous" BOOLEAN NOT NULL DEFAULT false`,
-  );
-  await exec(
-    `ALTER TABLE "BibleChapterThread" ADD COLUMN IF NOT EXISTS "authorLabel" TEXT NOT NULL DEFAULT ''`,
-  );
-  await exec(
-    `ALTER TABLE "BibleChapterComment" ADD COLUMN IF NOT EXISTS "isAnonymous" BOOLEAN NOT NULL DEFAULT false`,
-  );
-  await exec(
-    `ALTER TABLE "BibleChapterComment" ADD COLUMN IF NOT EXISTS "authorLabel" TEXT NOT NULL DEFAULT ''`,
-  );
+  const threadColumns: Array<[string, string]> = [
+    ["bookSlug", "TEXT"],
+    ["chapter", "INTEGER"],
+    ["body", "TEXT"],
+    ["isAnonymous", "BOOLEAN NOT NULL DEFAULT false"],
+    ["authorLabel", "TEXT NOT NULL DEFAULT ''"],
+    ["familyAccountId", "TEXT"],
+    ["subProfileId", "TEXT"],
+    ["createdAt", "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP"],
+    ["updatedAt", "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP"],
+  ];
+  for (const [name, type] of threadColumns) {
+    await exec(
+      `ALTER TABLE "BibleChapterThread" ADD COLUMN IF NOT EXISTS "${name}" ${type}`,
+    );
+  }
+
+  const commentColumns: Array<[string, string]> = [
+    ["threadId", "TEXT"],
+    ["body", "TEXT"],
+    ["isAnonymous", "BOOLEAN NOT NULL DEFAULT false"],
+    ["authorLabel", "TEXT NOT NULL DEFAULT ''"],
+    ["familyAccountId", "TEXT"],
+    ["subProfileId", "TEXT"],
+    ["createdAt", "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP"],
+    ["updatedAt", "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP"],
+  ];
+  for (const [name, type] of commentColumns) {
+    await exec(
+      `ALTER TABLE "BibleChapterComment" ADD COLUMN IF NOT EXISTS "${name}" ${type}`,
+    );
+  }
 }
 
 async function execOptional(sql: string): Promise<void> {
