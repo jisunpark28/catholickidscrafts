@@ -267,4 +267,18 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("bible.discussion.reply_label", "Reply to post", "bible"),
   sc("bible.discussion.reply_placeholder", "Write a reply…", "bible"),
   sc("bible.discussion.reply", "Reply", "bible"),
+
+  // Bible reading (modernized pilot + chapter notes)
+  sc(
+    "bible.reading.modernized_notice",
+    "Douay-Rheims text with spelling and wording lightly updated for easier reading. Meaning is unchanged.",
+    "bible",
+  ),
+  sc("bible.notes.title", "Chapter notes", "bible"),
+  sc("bible.notes.lang_group", "Notes language", "bible"),
+  sc(
+    "bible.notes.disclaimer",
+    "Notes help understanding; they are not part of the Bible text you type.",
+    "bible",
+  ),
 ];

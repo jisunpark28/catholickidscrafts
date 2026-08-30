@@ -1,0 +1,123 @@
+"use client";
+
+import {
+  BIBLE_NOTES_LANG_STORAGE_KEY,
+  CHAPTER_NOTE_LOCALE_LABELS,
+  CHAPTER_NOTE_LOCALES,
+  getChapterNote,
+  hasChapterNotes,
+  type ChapterNoteLocale,
+} from "@/lib/bible/chapter-notes";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
+import { usesModernizedReading } from "@/lib/bible/modernize-for-reading";
+import { useEffect, useMemo, useState } from "react";
+
+type Props = {
+  bookSlug: string;
+  chapter: number;
+};
+
+function readStoredLocale(): ChapterNoteLocale {
+  if (typeof window === "undefined") return "en";
+  const stored = window.localStorage.getItem(BIBLE_NOTES_LANG_STORAGE_KEY);
+  return stored === "ko" ? "ko" : "en";
+}
+
+export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
+  const copy = useSiteCopy();
+  const [open, setOpen] = useState(false);
+  const [locale, setLocale] = useState<ChapterNoteLocale>("en");
+
+  useEffect(() => {
+    setLocale(readStoredLocale());
+  }, []);
+
+  const note = useMemo(
+    () => getChapterNote(bookSlug, chapter, locale),
+    [bookSlug, chapter, locale],
+  );
+
+  if (!usesModernizedReading(bookSlug) || !hasChapterNotes(bookSlug, chapter) || !note) {
+    return null;
+  }
+
+  const onLocaleChange = (next: ChapterNoteLocale) => {
+    setLocale(next);
+    window.localStorage.setItem(BIBLE_NOTES_LANG_STORAGE_KEY, next);
+  };
+
+  return (
+    <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          className="text-left text-sm font-semibold text-[var(--color-ink)]"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+        >
+          {textFromCopy(copy, "bible.notes.title", "Chapter notes")}{" "}
+          <span className="font-normal text-[var(--color-muted)]">{open ? "▾" : "▸"}</span>
+        </button>
+        <div
+          className="inline-flex rounded-lg border border-[var(--color-border)] p-0.5 text-xs"
+          role="group"
+          aria-label={textFromCopy(copy, "bible.notes.lang_group", "Notes language")}
+        >
+          {CHAPTER_NOTE_LOCALES.map((code) => (
+            <button
+              key={code}
+              type="button"
+              className={`rounded-md px-2.5 py-1 transition ${
+                locale === code
+                  ? "bg-[var(--color-accent-soft)] font-semibold text-[var(--color-ink)]"
+                  : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+              }`}
+              onClick={() => onLocaleChange(code)}
+              aria-pressed={locale === code}
+            >
+              {CHAPTER_NOTE_LOCALE_LABELS[code]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {open && (
+        <div className="mt-3 space-y-3 text-sm text-[var(--color-ink)]">
+          <p className="leading-relaxed text-[var(--color-muted)]">{note.summary}</p>
+          {note.words && note.words.length > 0 && (
+            <ul className="space-y-2">
+              {note.words.map((item) => (
+                <li key={item.term}>
+                  <span className="font-semibold text-[var(--color-ink)]">{item.term}</span>
+                  <span className="text-[var(--color-muted)]"> — {item.gloss}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="text-xs text-[var(--color-muted)]">
+            {textFromCopy(
+              copy,
+              "bible.notes.disclaimer",
+              "Notes help understanding; they are not part of the Bible text you type.",
+            )}
+          </p>
+        </div>
+      )}
+    </section>
+  );
+}
+
+export function BibleModernizedReadingNotice({ bookSlug }: { bookSlug: string }) {
+  const copy = useSiteCopy();
+  if (!usesModernizedReading(bookSlug)) return null;
+
+  return (
+    <p className="rounded-lg border border-amber-200/80 bg-amber-50/80 px-3 py-2 text-xs leading-relaxed text-amber-950">
+      {textFromCopy(
+        copy,
+        "bible.reading.modernized_notice",
+        "Douay-Rheims text with spelling and wording lightly updated for easier reading. Meaning is unchanged.",
+      )}
+    </p>
+  );
+}

@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  BibleChapterReadingNotes,
+  BibleModernizedReadingNotice,
+} from "@/components/bible/BibleChapterReadingNotes";
 import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
@@ -50,6 +54,8 @@ export function BibleChapterTyping({
 
   return (
     <div className="space-y-4">
+      <BibleModernizedReadingNotice bookSlug={bookSlug} />
+      <BibleChapterReadingNotes bookSlug={bookSlug} chapter={chapter} />
       <PassageTypingGame
         text={text}
         title={`${bookName} — Chapter ${chapter}`}

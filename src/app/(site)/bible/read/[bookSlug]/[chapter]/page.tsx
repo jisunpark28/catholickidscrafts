@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { BibleChapterTyping } from "@/components/BibleChapterTyping";
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
-import { chapterPlainText, fetchBibleChapter } from "@/lib/bible/latinprayer";
+import { fetchBibleChapter } from "@/lib/bible/latinprayer";
+import { chapterPlainTextForReading } from "@/lib/bible/reading-text";
 import { getHeaderSession } from "@/lib/get-header-session";
 import { isHeaderSignedIn } from "@/lib/header-session";
 import { canonicalForPath } from "@/lib/site-metadata";
@@ -30,7 +31,7 @@ export default async function BibleReadPage({ params }: Props) {
     notFound();
   }
 
-  const text = chapterPlainText(data);
+  const text = chapterPlainTextForReading(data, bookSlug);
   const headerSession = await getHeaderSession();
   const signedIn = isHeaderSignedIn(headerSession);
   const readerLabel =
