@@ -4,6 +4,7 @@ import {
   MassSpeakerChildrenIcon,
   MassSpeakerLegend,
   MassSpeakerPriestIcon,
+  MassSpeakerRubricIcon,
 } from "@/components/mass/MassSpeakerIcons";
 import {
   MASS_PREVIEW_LINES,
@@ -46,9 +47,7 @@ function MassLineRow({
         ) : line.role === "assembly" ? (
           <MassSpeakerChildrenIcon size={44} />
         ) : (
-          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-dashed border-[var(--color-border)] bg-white text-lg">
-            📋
-          </span>
+          <MassSpeakerRubricIcon size={44} title="Direction" />
         )}
       </div>
       <div className="mass-line__body">
