@@ -23,7 +23,7 @@ export function DailyMassPanel({
   todayTitle,
   calendarCelebration,
 }: Props) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <section className="mb-10">
