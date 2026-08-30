@@ -4,8 +4,9 @@ name: Seed production database
 # Safe to re-run: skips when templates + home sections already exist (unless force=true).
 #
 # Setup (GitHub repo → Settings → Secrets and variables → Actions):
-#   DATABASE_URL   — Neon pooled URL
-#   DIRECT_URL     — Neon direct URL (migrations)
+#   DATABASE_URL   — Neon pooled URL (Vercel Production → DATABASE_URL)
+#   DIRECT_URL     — Neon direct URL (Vercel Production → DATABASE_URL_UNPOOLED)
+#   Or use secret DATABASE_URL_UNPOOLED instead of DIRECT_URL (same value).
 # Optional for "full seed":
 #   ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME
 
@@ -51,12 +52,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate secrets
+      - name: Resolve database secrets
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
         run: |
-          if [ -z "${{ secrets.DATABASE_URL }}" ] || [ -z "${{ secrets.DIRECT_URL }}" ]; then
-            echo "::error::Add DATABASE_URL and DIRECT_URL to GitHub Actions secrets."
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Missing repository secret DATABASE_URL (Neon pooled URL from Vercel)."
             exit 1
           fi
+          RESOLVED_DIRECT="${DIRECT_URL:-$DATABASE_URL_UNPOOLED}"
+          if [ -z "$RESOLVED_DIRECT" ]; then
+            echo "::error::Missing DIRECT_URL. Add repository secret DIRECT_URL (or DATABASE_URL_UNPOOLED) with the Neon direct URL from Vercel — same value as Vercel env DATABASE_URL_UNPOOLED."
+            exit 1
+          fi
+          echo "DATABASE_URL=$DATABASE_URL" >> "$GITHUB_ENV"
+          echo "DIRECT_URL=$RESOLVED_DIRECT" >> "$GITHUB_ENV"
 
       - name: Wait for Vercel deploy
         if: github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && github.event.inputs.wait_for_vercel_seconds != '0')
@@ -70,15 +82,10 @@ jobs:
           sleep "$SECONDS"
 
       - name: Apply Prisma migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: pnpm run db:migrate-deploy
 
       - name: Seed once (lesson kits + home hub)
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
           FORCE_PROD_SEED: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.force == true && 'true' || 'false' }}
           RUN_FULL_SEED: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.full == true && 'true' || 'false' }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}

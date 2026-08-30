@@ -30,21 +30,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate secrets
-        run: |
-          if [ -z "${{ secrets.DATABASE_URL }}" ] || [ -z "${{ secrets.DIRECT_URL }}" ]; then
-            echo "::error::Add DATABASE_URL and DIRECT_URL to GitHub Actions secrets."
-            exit 1
-          fi
-
-      - name: Apply Prisma migrations
+      - name: Resolve database secrets
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Missing repository secret DATABASE_URL (Neon pooled URL from Vercel)."
+            exit 1
+          fi
+          RESOLVED_DIRECT="${DIRECT_URL:-$DATABASE_URL_UNPOOLED}"
+          if [ -z "$RESOLVED_DIRECT" ]; then
+            echo "::error::Missing DIRECT_URL. Add repository secret DIRECT_URL (or DATABASE_URL_UNPOOLED) with the Neon direct URL from Vercel — same value as Vercel env DATABASE_URL_UNPOOLED."
+            exit 1
+          fi
+          echo "DATABASE_URL=$DATABASE_URL" >> "$GITHUB_ENV"
+          echo "DIRECT_URL=$RESOLVED_DIRECT" >> "$GITHUB_ENV"
+
+      - name: Apply Prisma migrations
         run: pnpm run db:migrate-deploy
 
       - name: Ensure Bible discussion schema
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: pnpm exec tsx scripts/ensure-bible-discussion-schema.ts

@@ -10,8 +10,9 @@ Repo → **Settings** → **Secrets and variables** → **Actions**:
 
 | Secret | Required |
 |--------|----------|
-| `DATABASE_URL` | Yes (Neon pooled) |
-| `DIRECT_URL` | Yes (Neon direct) |
+| `DATABASE_URL` | Yes — copy from Vercel **Production** → `DATABASE_URL` (Neon pooled) |
+| `DIRECT_URL` | Yes — copy from Vercel **Production** → `DATABASE_URL_UNPOOLED` (Neon direct, no `-pooler`) |
+| `DATABASE_URL_UNPOOLED` | Optional alias for `DIRECT_URL` if you prefer the Vercel variable name |
 | `ADMIN_EMAIL` | Only if workflow **full seed** is checked |
 | `ADMIN_PASSWORD` | Only if workflow **full seed** is checked |
 | `ADMIN_NAME` | Optional |
