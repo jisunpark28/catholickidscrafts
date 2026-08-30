@@ -1,3 +1,5 @@
+import type { MassDaySummary } from "@/types/mass";
+
 function normalizeLiturgicalName(value: string): string {
   return value
     .toLowerCase()
@@ -80,6 +82,23 @@ const UNAVAILABLE_TITLE_RE = /readings unavailable|outside feed window/i;
 export function isLiturgicalTitleUnavailable(title: string): boolean {
   const trimmed = title.trim();
   return trimmed.length === 0 || UNAVAILABLE_TITLE_RE.test(trimmed);
+}
+
+/** Align Romcal/USCCB title phrasing with Evangelizo-style calendar copy. */
+export function normalizeLiturgicalTitleStyle(title: string): string {
+  return title
+    .replace(/\bSunday of Ordinary Time\b/gi, "Sunday in Ordinary Time")
+    .replace(/\bweek of Ordinary Time\b/gi, "week in Ordinary Time")
+    .trim();
+}
+
+export function rankFromTitle(title: string): MassDaySummary["rank"] {
+  const t = title.toLowerCase();
+  if (t.includes("solemnity")) return "solemnity";
+  if (t.includes("feast")) return "feast";
+  if (t.includes("memorial")) return "memorial";
+  if (t.includes("sunday")) return "sunday";
+  return "ferial";
 }
 
 /** Replace word ordinals with numeric forms (e.g. Twenty-third → 23rd). */
