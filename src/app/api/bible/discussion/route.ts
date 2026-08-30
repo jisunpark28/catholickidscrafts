@@ -86,24 +86,20 @@ export async function GET(request: Request) {
   }
 
   try {
-    const payload = await withDiscussionSchemaReady(async () => {
-      const readerKey = await getSignedInDiscussionReader();
-      let canModerate = false;
-      try {
-        canModerate = await isDiscussionModerator();
-      } catch (moderatorError) {
-        console.error("discussion moderator check", moderatorError);
-      }
-      const viewer = await buildViewer(readerKey, canModerate);
-      const threads = await listChapterDiscussion(bookSlug, chapter);
-      return { readerKey, canModerate, viewer, threads };
-    });
+    const readerKey = await getSignedInDiscussionReader();
+    let canModerate = false;
+    try {
+      canModerate = await isDiscussionModerator();
+    } catch (moderatorError) {
+      console.error("discussion moderator check", moderatorError);
+    }
+
+    const threads = await withDiscussionSchemaReady(() => listChapterDiscussion(bookSlug, chapter));
+    const viewer = await withDiscussionSchemaReady(() => buildViewer(readerKey, canModerate));
 
     return NextResponse.json({
-      viewer: payload.viewer,
-      threads: payload.threads.map((thread) =>
-        serializeThread(thread, payload.readerKey, payload.canModerate),
-      ),
+      viewer,
+      threads: threads.map((thread) => serializeThread(thread, readerKey, canModerate)),
     });
   } catch (e) {
     console.error("discussion list", e);

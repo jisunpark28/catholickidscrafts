@@ -1,5 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { ensureDiscussionSchema } from "@/lib/bible/discussion-schema";
+import {
+  ensureDiscussionSchema,
+  resetDiscussionSchemaCache,
+} from "@/lib/bible/discussion-schema";
 
 /** Prisma / Postgres errors that mean discussion tables or columns are not ready yet. */
 export function isDiscussionSchemaError(error: unknown): boolean {
@@ -19,6 +22,12 @@ export function isDiscussionSchemaError(error: unknown): boolean {
     if (message.includes("does not exist") && message.includes("column")) {
       return true;
     }
+    if (/relation .* does not exist/i.test(message)) {
+      return true;
+    }
+    if (message.includes("not queryable")) {
+      return true;
+    }
   }
 
   return false;
@@ -31,6 +40,13 @@ export async function withDiscussionSchemaReady<T>(fn: () => Promise<T>): Promis
   } catch (error) {
     if (!isDiscussionSchemaError(error)) throw error;
     await ensureDiscussionSchema();
-    return await fn();
+    try {
+      return await fn();
+    } catch (retryError) {
+      if (!isDiscussionSchemaError(retryError)) throw retryError;
+      resetDiscussionSchemaCache();
+      await ensureDiscussionSchema();
+      return await fn();
+    }
   }
 }
