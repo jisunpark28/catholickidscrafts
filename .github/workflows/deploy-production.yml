@@ -49,11 +49,12 @@ jobs:
             echo "mode=missing" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Missing deploy credentials
+      - name: Skip deploy (no Vercel credentials in GitHub)
         if: steps.method.outputs.mode == 'missing'
         run: |
-          echo "::error::Production deploy skipped. Add GitHub secrets VERCEL_TOKEN + VERCEL_ORG_ID + VERCEL_PROJECT_ID (recommended), or VERCEL_DEPLOY_HOOK. See docs/DEPLOYMENT.md §3b."
-          exit 1
+          echo "::notice::GitHub Actions deploy skipped — no VERCEL_TOKEN / VERCEL_DEPLOY_HOOK secrets."
+          echo "::notice::This is OK if Vercel Git auto-deploy is connected (check vercel.com → Deployments)."
+          echo "::notice::To deploy from Actions, add VERCEL_TOKEN + VERCEL_ORG_ID + VERCEL_PROJECT_ID, or VERCEL_DEPLOY_HOOK. See docs/DEPLOYMENT.md §3b."
 
       - name: Setup pnpm
         if: steps.method.outputs.mode == 'cli'
@@ -116,6 +117,7 @@ jobs:
 
   verify:
     needs: deploy
+    if: needs.deploy.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
