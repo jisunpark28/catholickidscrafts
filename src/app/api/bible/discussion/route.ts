@@ -100,7 +100,9 @@ export async function GET(request: Request) {
       console.error("discussion moderator check", moderatorError);
     }
 
-    const threads = await listChapterDiscussion(bookSlug, chapter);
+    const threads = await withDiscussionSchemaReady(() =>
+      listChapterDiscussion(bookSlug, chapter),
+    );
     const viewer = await buildViewer(readerKey, canModerate);
 
     return NextResponse.json({

@@ -77,8 +77,12 @@ export function resetDiscussionSchemaCache(): void {
 
 async function discussionTablesQueryable(): Promise<boolean> {
   try {
-    await prisma.bibleChapterThread.findFirst({ select: { id: true } });
-    await prisma.bibleChapterComment.findFirst({ select: { id: true } });
+    await prisma.bibleChapterThread.findFirst({
+      select: { id: true, isAnonymous: true, authorLabel: true, bookSlug: true, chapter: true },
+    });
+    await prisma.bibleChapterComment.findFirst({
+      select: { id: true, isAnonymous: true, authorLabel: true, threadId: true },
+    });
     return true;
   } catch (error) {
     if (!isDiscussionSchemaError(error)) throw error;
@@ -166,6 +170,22 @@ async function ensureCommentTable(): Promise<void> {
   `);
 }
 
+/** Backfill columns when an older partial table exists without isAnonymous/authorLabel. */
+async function ensureDiscussionPostColumns(): Promise<void> {
+  await exec(
+    `ALTER TABLE "BibleChapterThread" ADD COLUMN IF NOT EXISTS "isAnonymous" BOOLEAN NOT NULL DEFAULT false`,
+  );
+  await exec(
+    `ALTER TABLE "BibleChapterThread" ADD COLUMN IF NOT EXISTS "authorLabel" TEXT NOT NULL DEFAULT ''`,
+  );
+  await exec(
+    `ALTER TABLE "BibleChapterComment" ADD COLUMN IF NOT EXISTS "isAnonymous" BOOLEAN NOT NULL DEFAULT false`,
+  );
+  await exec(
+    `ALTER TABLE "BibleChapterComment" ADD COLUMN IF NOT EXISTS "authorLabel" TEXT NOT NULL DEFAULT ''`,
+  );
+}
+
 async function execOptional(sql: string): Promise<void> {
   try {
     await exec(sql);
@@ -245,22 +265,21 @@ async function applyDiscussionSchema(): Promise<void> {
   const tablesReady = await discussionTablesQueryable();
   const penNamesReady = await penNameColumnsQueryable();
 
-  if (!tablesReady || !penNamesReady) {
-    try {
-      if (!penNamesReady) {
-        await ensurePenNameColumns();
-      }
-      if (!tablesReady) {
-        await ensureThreadTable();
-        await ensureCommentTable();
-        await ensureIndexesAndConstraints();
-      }
-    } catch (bootstrapError) {
-      const recovered =
-        (await discussionTablesQueryable()) && (await penNameColumnsQueryable());
-      if (!recovered) throw bootstrapError;
-      console.warn("discussion bootstrap DDL failed but schema is queryable", bootstrapError);
+  try {
+    if (!penNamesReady) {
+      await ensurePenNameColumns();
     }
+    if (!tablesReady) {
+      await ensureThreadTable();
+      await ensureCommentTable();
+      await ensureIndexesAndConstraints();
+    }
+    await ensureDiscussionPostColumns();
+  } catch (bootstrapError) {
+    const recovered =
+      (await discussionTablesQueryable()) && (await penNameColumnsQueryable());
+    if (!recovered) throw bootstrapError;
+    console.warn("discussion bootstrap DDL failed but schema is queryable", bootstrapError);
   }
 
   if (!(await discussionTablesQueryable())) {
