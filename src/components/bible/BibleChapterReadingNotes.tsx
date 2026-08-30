@@ -12,6 +12,10 @@ import {
   catholicGospelLabel,
   getCatholicBookName,
 } from "@/lib/bible/catholic-book-names";
+import {
+  PRAYER_LANGUAGES,
+  normalizePrayerLanguage,
+} from "@/lib/prayers/prayer-languages";
 import { useMemo, useState } from "react";
 
 type NotesProps = {
@@ -19,6 +23,7 @@ type NotesProps = {
   apiBookName: string;
   chapter: number;
   locale: ChapterNoteLocale;
+  onLocaleChange: (locale: ChapterNoteLocale) => void;
 };
 
 export function BibleChapterReadingNotes({
@@ -26,6 +31,7 @@ export function BibleChapterReadingNotes({
   apiBookName,
   chapter,
   locale,
+  onLocaleChange,
 }: NotesProps) {
   const [open, setOpen] = useState(false);
   const labels = bibleUiLabels(locale);
@@ -45,15 +51,29 @@ export function BibleChapterReadingNotes({
 
   return (
     <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-      <button
-        type="button"
-        className="text-left text-sm font-semibold text-[var(--color-ink)]"
-        onClick={() => setOpen((value) => !value)}
-        aria-expanded={open}
-      >
-        {notesTitle || labels.chapterNotesTitle(book, chapter)}{" "}
-        <span className="font-normal text-[var(--color-muted)]">{open ? "▾" : "▸"}</span>
-      </button>
+      <div className="flex items-center justify-between gap-3">
+        <button
+          type="button"
+          className="min-w-0 flex-1 text-left text-sm font-semibold text-[var(--color-ink)]"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+        >
+          {notesTitle || labels.chapterNotesTitle(book, chapter)}{" "}
+          <span className="font-normal text-[var(--color-muted)]">{open ? "▾" : "▸"}</span>
+        </button>
+        <select
+          aria-label={labels.language}
+          className="shrink-0 rounded-lg border border-[var(--color-border)] bg-white px-2 py-1 text-sm text-[var(--color-ink)]"
+          value={locale}
+          onChange={(e) => onLocaleChange(normalizePrayerLanguage(e.target.value))}
+        >
+          {PRAYER_LANGUAGES.map((opt) => (
+            <option key={opt.code} value={opt.code}>
+              {opt.nativeName}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {open && (
         <div className="mt-3 space-y-3 text-sm text-[var(--color-ink)]" lang={locale}>
