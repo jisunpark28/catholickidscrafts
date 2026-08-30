@@ -29,13 +29,6 @@ export const MASS_LITURGY_PARTS: { id: MassLiturgyPartId; label: string }[] = [
   { id: "concluding", label: "Concluding Rites" },
 ];
 
-const KNEEL_FOR_EUCHARISTIC_PRAYER: MassParticipationLine = {
-  id: "thanks-0",
-  section: "thanksgiving",
-  role: "rubric",
-  text: "All kneel or stand for the Eucharistic Prayer.",
-};
-
 export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
   {
     id: "intro-1",
@@ -350,17 +343,17 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
-    id: "euch-10b",
-    section: "eucharist",
-    role: "rubric",
-    text: "All kneel or stand for the Eucharistic Prayer.",
-  },
-  {
     id: "thanks-1",
     section: "thanksgiving",
     role: "assembly",
     text: "Holy, Holy, Holy Lord God of hosts. Heaven and earth are full of your glory. Hosanna in the highest. Blessed is he who comes in the name of the Lord. Hosanna in the highest.",
     revealable: true,
+  },
+  {
+    id: "thanks-1b",
+    section: "thanksgiving",
+    role: "rubric",
+    text: "All kneel or stand for the Eucharistic Prayer.",
   },
   {
     id: "thanks-2",
@@ -553,9 +546,6 @@ export function filterPreviewLines(
   let filtered = season === "advent-lent" ? lines.filter((l) => l.skipWhen !== "advent-lent") : lines;
   if (part !== "all") {
     filtered = filtered.filter((l) => l.section === part);
-    if (part === "thanksgiving" && !filtered.some((l) => l.id === "euch-10b")) {
-      filtered = [KNEEL_FOR_EUCHARISTIC_PRAYER, ...filtered];
-    }
   }
   return filtered;
 }
