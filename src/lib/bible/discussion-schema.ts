@@ -27,37 +27,31 @@ export function ensureDiscussionSchema(): Promise<void> {
   return ready;
 }
 
-async function tableExists(table: string): Promise<boolean> {
-  const rows = await prisma.$queryRaw<{ exists: boolean }[]>`
-    SELECT EXISTS (
-      SELECT 1
-      FROM pg_catalog.pg_class c
-      JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-      WHERE n.nspname = 'public' AND c.relname = ${table}
-    ) AS "exists"
-  `;
-  return Boolean(rows[0]?.exists);
+/** Clear cached bootstrap so a later request can retry DDL (tests / recovery). */
+export function resetDiscussionSchemaCache(): void {
+  ready = null;
 }
 
-async function columnExists(table: string, column: string): Promise<boolean> {
-  const rows = await prisma.$queryRaw<{ exists: boolean }[]>`
-    SELECT EXISTS (
-      SELECT 1
-      FROM pg_catalog.pg_attribute a
-      JOIN pg_catalog.pg_class c ON c.oid = a.attrelid
-      JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-      WHERE n.nspname = 'public'
-        AND c.relname = ${table}
-        AND a.attname = ${column}
-        AND a.attnum > 0
-        AND NOT a.attisdropped
-    ) AS "exists"
-  `;
-  return Boolean(rows[0]?.exists);
+async function discussionSchemaIsQueryable(): Promise<boolean> {
+  try {
+    await prisma.bibleChapterThread.findFirst({ select: { id: true } });
+    await prisma.bibleChapterComment.findFirst({ select: { id: true } });
+    await prisma.familyAccount.findFirst({ select: { discussionPenName: true } });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function exec(sql: string): Promise<void> {
-  await getDdlPrisma().$executeRawUnsafe(sql);
+  try {
+    await getDdlPrisma().$executeRawUnsafe(sql);
+    return;
+  } catch (directError) {
+    console.warn("discussion DDL via direct URL failed; retrying on pooled connection", directError);
+  }
+
+  await prisma.$executeRawUnsafe(sql);
 }
 
 async function ensureThreadTable(): Promise<void> {
@@ -163,28 +157,17 @@ async function ensureIndexesAndConstraints(): Promise<void> {
 }
 
 async function applyDiscussionSchema(): Promise<void> {
-  const hasThread = await tableExists("BibleChapterThread");
-  const hasComment = await tableExists("BibleChapterComment");
-  const hasOwnerPenName = await columnExists("FamilyAccount", "discussionPenName");
-  const hasSubPenName = await columnExists("SubProfile", "discussionPenName");
-
-  // Typical production path after migrate deploy: skip direct DDL entirely.
-  if (hasThread && hasComment && hasOwnerPenName && hasSubPenName) {
+  if (await discussionSchemaIsQueryable()) {
     return;
   }
 
-  if (!hasOwnerPenName) {
-    await exec(`ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
-  }
-  if (!hasSubPenName) {
-    await exec(`ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
-  }
-  if (!hasThread) {
-    await ensureThreadTable();
-  }
-  if (!hasComment) {
-    await ensureCommentTable();
-  }
-
+  await exec(`ALTER TABLE "FamilyAccount" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
+  await exec(`ALTER TABLE "SubProfile" ADD COLUMN IF NOT EXISTS "discussionPenName" TEXT`);
+  await ensureThreadTable();
+  await ensureCommentTable();
   await ensureIndexesAndConstraints();
+
+  if (!(await discussionSchemaIsQueryable())) {
+    throw new Error("Bible discussion schema bootstrap finished but tables are still not queryable");
+  }
 }
