@@ -4,6 +4,7 @@ import {
   getChapterNote,
   hasChapterNotes,
   type ChapterNoteLocale,
+  type ChapterNote,
 } from "@/lib/bible/chapter-notes";
 import { bibleUiLabels } from "@/lib/bible/bible-ui-labels";
 import {
@@ -30,8 +31,8 @@ export function BibleChapterReadingNotes({
   const labels = bibleUiLabels(locale);
 
   const note = useMemo(
-    () => getChapterNote(bookSlug, chapter, locale),
-    [bookSlug, chapter, locale],
+    () => getChapterNote(bookSlug, chapter, locale, apiBookName),
+    [bookSlug, chapter, locale, apiBookName],
   );
 
   if (!hasChapterNotes(bookSlug, chapter) || !note) {
@@ -62,7 +63,7 @@ export function BibleChapterReadingNotes({
           <p className="leading-relaxed text-[var(--color-muted)]">{note.summary}</p>
           {note.words && note.words.length > 0 && (
             <ul className="space-y-2">
-              {note.words.map((item) => (
+              {note.words.map((item: NonNullable<ChapterNote["words"]>[number]) => (
                 <li key={item.term}>
                   <span className="font-semibold text-[var(--color-ink)]">{item.term}</span>
                   <span className="text-[var(--color-muted)]"> — {item.gloss}</span>

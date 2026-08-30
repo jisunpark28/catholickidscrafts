@@ -27,6 +27,6 @@ assert(pronouns.includes("your sins"), "thy → your");
 assert(getCatholicBookName("mark", "ko") === "마르코", "Korean Catholic name for Mark");
 assert(getCatholicBookName("mark", "ko") !== "마가", "never use Protestant 마가");
 assert(catholicGospelLabel("mark", "ko") === "마르코가 전한 복음", "Gospel label KO");
-assert(catholicGospelLabel("mark", "es")?.includes("Marcos"), "Gospel label ES");
+assert((catholicGospelLabel("mark", "es") ?? "").includes("Marcos"), "Gospel label ES");
 
 console.log("test-modernize-for-reading: ok");

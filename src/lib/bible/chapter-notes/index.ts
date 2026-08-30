@@ -1,6 +1,11 @@
 import { getMarkChapterNote } from "@/lib/bible/chapter-notes/mark";
 import type { ChapterNote, ChapterNoteLocale } from "@/lib/bible/chapter-notes/types";
 import {
+  getBibleBookCatalogEntry,
+  isValidBibleChapter,
+} from "@/lib/bible/chapter-notes/catalog";
+import { buildTemplateChapterNote } from "@/lib/bible/chapter-notes/template-note";
+import {
   DEFAULT_PRAYER_LANGUAGE,
   isPrayerLanguageCode,
 } from "@/lib/prayers/prayer-languages";
@@ -24,11 +29,22 @@ export function getChapterNote(
   bookSlug: string,
   chapter: number,
   locale: ChapterNoteLocale,
+  apiBookName: string,
 ): ChapterNote | null {
-  if (bookSlug === "mark") return getMarkChapterNote(chapter, locale);
-  return null;
+  if (!isValidBibleChapter(bookSlug, chapter)) return null;
+
+  if (bookSlug === "mark") {
+    const manual = getMarkChapterNote(chapter, locale);
+    if (manual) return manual;
+  }
+
+  return buildTemplateChapterNote(bookSlug, chapter, locale, apiBookName);
 }
 
 export function hasChapterNotes(bookSlug: string, chapter: number): boolean {
-  return getChapterNote(bookSlug, chapter, DEFAULT_PRAYER_LANGUAGE) !== null;
+  return isValidBibleChapter(bookSlug, chapter);
+}
+
+export function getBookChapterCount(bookSlug: string): number {
+  return getBibleBookCatalogEntry(bookSlug)?.totalChapters ?? 0;
 }
