@@ -25,7 +25,7 @@ export const MASS_DATA_SOURCE = EVANGELIZO_REPUBLISH
   : MASS_READINGS_PRIMARY_SOURCE;
 
 export const MASS_CALENDAR_SOURCE =
-  "Evangelizo.org Reader API (liturgical titles) + USCCB (readings when in RSS)";
+  "Evangelizo.org (±30 days) · USCCB RSS · Romcal General Roman Calendar (full year)";
 
 /** Public-site footer: how Daily Mass and related pages source liturgical data. */
 export const SITE_LITURGY_FOOTER =
