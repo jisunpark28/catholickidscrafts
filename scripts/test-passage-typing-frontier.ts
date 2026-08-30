@@ -1,4 +1,4 @@
-import { normalizePassageText } from "../src/lib/typing-accuracy";
+import { normalizePassageText, normalizeTypingInput } from "../src/lib/typing-accuracy";
 import {
   tryAppendMatchingFrontier,
   tryConfirmGhostSuffixAtSelection,
@@ -24,11 +24,13 @@ assert(
 );
 
 const withTrailingSpace = `${typed} `;
-const normLen = normalizePassageText(withTrailingSpace).length;
-assert(normLen === typed.length, "trailing space normalizes away");
 assert(
-  tryAppendMatchingFrontier(normalizePassageText(withTrailingSpace), target, ".") === target,
-  "append period using normalized frontier length",
+  normalizeTypingInput(withTrailingSpace).length === typed.length + 1,
+  "trailing space counts while typing",
+);
+assert(
+  tryAppendMatchingFrontier(typed, target, ".") === target,
+  "append period at frontier",
 );
 
 console.log("passage-typing-frontier tests passed");

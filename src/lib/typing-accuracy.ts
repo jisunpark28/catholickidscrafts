@@ -3,6 +3,14 @@ const DASH_LIKE = /[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]/g;
 
 /** Normalize passage text for fair typing comparison. */
 export function normalizePassageText(text: string): string {
+  return normalizeTypingInput(text).trim();
+}
+
+/**
+ * Normalize in-progress typing without trimming the end — trailing spaces and
+ * punctuation at the frontier must count while the user is still typing.
+ */
+export function normalizeTypingInput(text: string): string {
   return text
     .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, " ")
     .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035`´ʹʻʼʽ′]/g, "'")
@@ -11,7 +19,7 @@ export function normalizePassageText(text: string): string {
     .replace(/\u00AD/g, "") // soft hyphen — invisible, not typed
     .replace(/\u2026/g, "...")
     .replace(/\s+/g, " ")
-    .trim();
+    .trimStart();
 }
 
 /** Count characters that match at each index (not prefix-only). */

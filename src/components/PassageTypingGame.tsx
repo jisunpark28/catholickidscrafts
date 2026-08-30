@@ -3,6 +3,7 @@
 import {
   countMatchingChars,
   normalizePassageText,
+  normalizeTypingInput,
   typingAccuracy,
 } from "@/lib/typing-accuracy";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
@@ -190,7 +191,7 @@ export function PassageTypingGame({
   const [caretPoint, setCaretPoint] = useState<CaretPoint | null>(null);
   const [inputFocused, setInputFocused] = useState(false);
 
-  const typedNorm = useMemo(() => normalizePassageText(typed), [typed]);
+  const typedNorm = useMemo(() => normalizeTypingInput(typed), [typed]);
   const nextIndex = typedNorm.length;
   const composedValue = useMemo(() => composedTypingValue(typed, target), [typed, target]);
   typedRef.current = typed;
@@ -358,7 +359,7 @@ export function PassageTypingGame({
   const commitFrontierInsert = useCallback(
     (insertText: string, el: HTMLTextAreaElement, allowMismatch = true): boolean => {
       const currentTyped = typedRef.current;
-      const normTyped = normalizePassageText(currentTyped);
+      const normTyped = normalizeTypingInput(currentTyped);
       const frontierLen = normTyped.length;
       if (frontierLen >= target.length || !insertText) return false;
 
@@ -642,7 +643,7 @@ export function PassageTypingGame({
           if (composingRef.current || e.nativeEvent.isComposing) return;
           const el = e.currentTarget;
           const currentTyped = typedRef.current;
-          const typedLen = normalizePassageText(currentTyped).length;
+          const typedLen = normalizeTypingInput(currentTyped).length;
           const pos = clampCaretIndex(el.selectionStart, typedLen);
           const end = clampCaretIndex(el.selectionEnd, typedLen);
           if (pos !== el.selectionStart || end !== el.selectionEnd) {
@@ -682,7 +683,7 @@ export function PassageTypingGame({
           }
 
           if (
-            e.key.length === 1 &&
+            (e.key.length === 1 || e.key === "Space") &&
             !e.ctrlKey &&
             !e.metaKey &&
             !e.altKey &&
@@ -691,8 +692,9 @@ export function PassageTypingGame({
             typedLen < target.length
           ) {
             e.preventDefault();
-            pendingInsertRef.current = e.key;
-            commitFrontierInsert(e.key, el);
+            const insertKey = e.key === "Space" ? " " : e.key;
+            pendingInsertRef.current = insertKey;
+            commitFrontierInsert(insertKey, el);
           }
         }}
         onChange={(e) => {
@@ -700,7 +702,7 @@ export function PassageTypingGame({
           const raw = e.target.value;
           if (raw.length > target.length) return;
           const currentTyped = typedRef.current;
-          const normTyped = normalizePassageText(currentTyped);
+          const normTyped = normalizeTypingInput(currentTyped);
           const nextTyped = applyComposedDiff(normTyped, target, composedRef.current, raw);
           if (nextTyped === normTyped) {
             const insertText = pendingInsertRef.current;
