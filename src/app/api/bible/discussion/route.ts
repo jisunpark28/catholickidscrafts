@@ -86,7 +86,13 @@ export async function GET(request: Request) {
   }
 
   try {
-    const readerKey = await getSignedInDiscussionReader();
+    let readerKey: SignedInReaderKey | null = null;
+    try {
+      readerKey = await getSignedInDiscussionReader();
+    } catch (readerError) {
+      console.error("discussion reader key", readerError);
+    }
+
     let canModerate = false;
     try {
       canModerate = await isDiscussionModerator();
@@ -94,9 +100,7 @@ export async function GET(request: Request) {
       console.error("discussion moderator check", moderatorError);
     }
 
-    const threads = await withDiscussionSchemaReady(() =>
-      listChapterDiscussion(bookSlug, chapter),
-    );
+    const threads = await listChapterDiscussion(bookSlug, chapter);
     const viewer = await buildViewer(readerKey, canModerate);
 
     return NextResponse.json({
