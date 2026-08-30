@@ -269,11 +269,6 @@ export function MassParticipationPreview() {
           </section>
         ))}
 
-        <p className="mass-participation__copyright">
-          Preview based on St. Andrew Kim Catholic Church Sunday School projector flow (2025–2026).
-          Excerpts from the English translation of The Roman Missal © 2010, International
-          Commission on English in the Liturgy Corporation. All rights reserved.
-        </p>
       </div>
     </div>
   );
