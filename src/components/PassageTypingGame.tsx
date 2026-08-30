@@ -99,6 +99,21 @@ function composedTypingValue(typed: string, target: string): string {
   return typed + target.slice(typed.length);
 }
 
+/** When the caret sits on a ghost suffix char matching the next target char, composed value does not change. */
+function appendAtFrontierIfGhostMatch(
+  currentTyped: string,
+  target: string,
+  selectionStart: number,
+  selectionEnd: number,
+): string | null {
+  if (currentTyped.length >= target.length) return null;
+  if (selectionStart !== selectionEnd) return null;
+  if (selectionStart <= currentTyped.length) return null;
+  const frontier = target[currentTyped.length]!;
+  if (composedTypingValue(currentTyped, target)[currentTyped.length] !== frontier) return null;
+  return currentTyped + frontier;
+}
+
 function applyComposedDiff(
   prevTyped: string,
   target: string,
@@ -586,13 +601,41 @@ export function PassageTypingGame({
             });
           }
         }}
+        onBeforeInput={(e) => {
+          if (composingRef.current || e.nativeEvent.isComposing) return;
+          const native = e.nativeEvent;
+          if (native.inputType !== "insertText" || !native.data) return;
+          const insertText = native.data;
+          const el = e.currentTarget;
+          const currentTyped = typedRef.current;
+          const typedLen = currentTyped.length;
+          if (typedLen >= target.length) return;
+          const pos = clampCaretIndex(el.selectionStart, typedLen);
+          const end = clampCaretIndex(el.selectionEnd, typedLen);
+          if (pos !== end || pos !== typedLen) return;
+          e.preventDefault();
+          beginTyping();
+          skipChangeRef.current = true;
+          const scroll = readInputScroll(el);
+          updateTyped(
+            currentTyped + insertText,
+            { start: pos + insertText.length, end: pos + insertText.length },
+            scroll,
+          );
+          queueMicrotask(() => {
+            skipChangeRef.current = false;
+          });
+        }}
         onKeyDown={(e) => {
           if (composingRef.current || e.nativeEvent.isComposing) return;
           const el = e.currentTarget;
-          const pos = el.selectionStart;
-          const end = el.selectionEnd;
           const currentTyped = typedRef.current;
           const typedLen = currentTyped.length;
+          const pos = clampCaretIndex(el.selectionStart, typedLen);
+          const end = clampCaretIndex(el.selectionEnd, typedLen);
+          if (pos !== el.selectionStart || end !== el.selectionEnd) {
+            el.setSelectionRange(pos, end);
+          }
           const scroll = readInputScroll(el);
 
           if (e.key === "ArrowRight" && pos >= typedLen) {
@@ -647,7 +690,20 @@ export function PassageTypingGame({
           if (raw.length > target.length) return;
           const currentTyped = typedRef.current;
           const nextTyped = applyComposedDiff(currentTyped, target, composedRef.current, raw);
-          if (nextTyped === currentTyped) return;
+          if (nextTyped === currentTyped) {
+            const ghostAppend = appendAtFrontierIfGhostMatch(
+              currentTyped,
+              target,
+              e.target.selectionStart,
+              e.target.selectionEnd,
+            );
+            if (ghostAppend) {
+              beginTyping();
+              const scroll = readInputScroll(e.currentTarget);
+              updateTyped(ghostAppend, { start: ghostAppend.length, end: ghostAppend.length }, scroll);
+            }
+            return;
+          }
           beginTyping();
           const scroll = readInputScroll(e.currentTarget);
           const start = clampCaretIndex(e.target.selectionStart, nextTyped.length);
