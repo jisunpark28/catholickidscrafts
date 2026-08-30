@@ -5,6 +5,7 @@ import {
   normalizePassageText,
   typingAccuracy,
 } from "@/lib/typing-accuracy";
+import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import {
   caretIndexFromMirrorPoint,
   caretPointInMirror,
@@ -12,6 +13,10 @@ import {
   scrollTypingPaneToCaret,
   type CaretPoint,
 } from "@/lib/passage-typing-caret";
+import {
+  tryAppendMatchingFrontier,
+  tryConfirmGhostSuffixAtSelection,
+} from "@/lib/passage-typing-frontier";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "@/styles/gospel-typing.css";
 
@@ -22,11 +27,11 @@ type Props = {
   title?: string;
   /** Unique key for draft save/load (e.g. bible:genesis:1). */
   draftKey?: string;
-  /** Sticker unlock only — called automatically at 90%+ completion. */
+  /** Sticker unlock only — called automatically at 80%+ completion. */
   onStickerUnlock?: (accuracy: number) => void | Promise<void>;
   /** @deprecated Use onStickerUnlock */
   onComplete?: (accuracy: number) => void | Promise<void>;
-  /** Fraction 0–1 required to unlock sticker (default 0.9). */
+  /** Fraction 0–1 required to unlock sticker (default 80%). */
   accuracyThreshold?: number;
   /** Shown after sticker unlock. */
   completionMessage?: React.ReactNode;
@@ -84,7 +89,7 @@ function mirrorCharClassName(
   target: string,
 ): string {
   const correct = typedNorm[i] === target[i];
-  return correct ? "gospel-typing-char--typed" : "gospel-typing-char--wrong";
+  return correct ? "gospel-typing-char--correct" : "gospel-typing-char--wrong";
 }
 
 type ScrollSnapshot = {
@@ -97,21 +102,6 @@ function readInputScroll(textarea: HTMLTextAreaElement | null): ScrollSnapshot {
 
 function composedTypingValue(typed: string, target: string): string {
   return typed + target.slice(typed.length);
-}
-
-/** When the caret sits on a ghost suffix char matching the next target char, composed value does not change. */
-function appendAtFrontierIfGhostMatch(
-  currentTyped: string,
-  target: string,
-  selectionStart: number,
-  selectionEnd: number,
-): string | null {
-  if (currentTyped.length >= target.length) return null;
-  if (selectionStart !== selectionEnd) return null;
-  if (selectionStart <= currentTyped.length) return null;
-  const frontier = target[currentTyped.length]!;
-  if (composedTypingValue(currentTyped, target)[currentTyped.length] !== frontier) return null;
-  return currentTyped + frontier;
 }
 
 function applyComposedDiff(
@@ -148,7 +138,7 @@ export function PassageTypingGame({
   draftKey,
   onStickerUnlock,
   onComplete,
-  accuracyThreshold = 0.9,
+  accuracyThreshold = BIBLE_STICKER_ACCURACY_THRESHOLD,
   completionMessage,
   celebrateOnComplete = false,
   showSaveButton,
@@ -194,6 +184,7 @@ export function PassageTypingGame({
   const userPassageScrollRef = useRef(0);
   const composingRef = useRef(false);
   const skipChangeRef = useRef(false);
+  const pendingInsertRef = useRef<string | null>(null);
   const draftScrollAppliedRef = useRef(false);
   const mirrorContainerRef = useRef<HTMLDivElement>(null);
   const [caretPoint, setCaretPoint] = useState<CaretPoint | null>(null);
@@ -362,6 +353,34 @@ export function PassageTypingGame({
       requestAnimationFrame(() => restoreInputScroll(snapshot));
     },
     [restoreInputScroll],
+  );
+
+  const commitFrontierInsert = useCallback(
+    (insertText: string, el: HTMLTextAreaElement, allowMismatch = true): boolean => {
+      const currentTyped = typedRef.current;
+      const normTyped = normalizePassageText(currentTyped);
+      const frontierLen = normTyped.length;
+      if (frontierLen >= target.length || !insertText) return false;
+
+      const pos = clampCaretIndex(el.selectionStart, frontierLen);
+      const end = clampCaretIndex(el.selectionEnd, frontierLen);
+      if (pos !== end || pos !== frontierLen) return false;
+
+      const matched = tryAppendMatchingFrontier(normTyped, target, insertText);
+      const next = matched ?? (allowMismatch ? normTyped + insertText : null);
+      if (!next || next === normTyped) return false;
+
+      pendingInsertRef.current = null;
+      beginTyping();
+      skipChangeRef.current = true;
+      const scroll = readInputScroll(el);
+      updateTyped(next, { start: next.length, end: next.length }, scroll);
+      queueMicrotask(() => {
+        skipChangeRef.current = false;
+      });
+      return true;
+    },
+    [target, beginTyping, updateTyped],
   );
 
   const preservePassageScroll = useCallback(() => {
@@ -605,32 +624,25 @@ export function PassageTypingGame({
           if (composingRef.current || e.nativeEvent.isComposing) return;
           const native = e.nativeEvent;
           if (native.inputType !== "insertText" || !native.data) return;
-          const insertText = native.data;
+          pendingInsertRef.current = native.data;
           const el = e.currentTarget;
-          const currentTyped = typedRef.current;
-          const typedLen = currentTyped.length;
-          if (typedLen >= target.length) return;
-          const pos = clampCaretIndex(el.selectionStart, typedLen);
-          const end = clampCaretIndex(el.selectionEnd, typedLen);
-          if (pos !== end || pos !== typedLen) return;
-          e.preventDefault();
-          beginTyping();
-          skipChangeRef.current = true;
-          const scroll = readInputScroll(el);
-          updateTyped(
-            currentTyped + insertText,
-            { start: pos + insertText.length, end: pos + insertText.length },
-            scroll,
-          );
-          queueMicrotask(() => {
-            skipChangeRef.current = false;
-          });
+          if (commitFrontierInsert(native.data, el)) {
+            e.preventDefault();
+          }
+        }}
+        onInput={(e) => {
+          if (composingRef.current || skipChangeRef.current) return;
+          const inputEvent = e.nativeEvent as InputEvent;
+          const data = inputEvent.data;
+          if (!data || inputEvent.inputType?.startsWith("delete")) return;
+          pendingInsertRef.current = data;
+          commitFrontierInsert(data, e.currentTarget);
         }}
         onKeyDown={(e) => {
           if (composingRef.current || e.nativeEvent.isComposing) return;
           const el = e.currentTarget;
           const currentTyped = typedRef.current;
-          const typedLen = currentTyped.length;
+          const typedLen = normalizePassageText(currentTyped).length;
           const pos = clampCaretIndex(el.selectionStart, typedLen);
           const end = clampCaretIndex(el.selectionEnd, typedLen);
           if (pos !== el.selectionStart || end !== el.selectionEnd) {
@@ -679,9 +691,8 @@ export function PassageTypingGame({
             typedLen < target.length
           ) {
             e.preventDefault();
-            beginTyping();
-            const next = currentTyped + e.key;
-            updateTyped(next, { start: pos + 1, end: pos + 1 }, scroll);
+            pendingInsertRef.current = e.key;
+            commitFrontierInsert(e.key, el);
           }
         }}
         onChange={(e) => {
@@ -689,14 +700,19 @@ export function PassageTypingGame({
           const raw = e.target.value;
           if (raw.length > target.length) return;
           const currentTyped = typedRef.current;
-          const nextTyped = applyComposedDiff(currentTyped, target, composedRef.current, raw);
-          if (nextTyped === currentTyped) {
-            const ghostAppend = appendAtFrontierIfGhostMatch(
-              currentTyped,
-              target,
-              e.target.selectionStart,
-              e.target.selectionEnd,
-            );
+          const normTyped = normalizePassageText(currentTyped);
+          const nextTyped = applyComposedDiff(normTyped, target, composedRef.current, raw);
+          if (nextTyped === normTyped) {
+            const insertText = pendingInsertRef.current;
+            pendingInsertRef.current = null;
+            const ghostAppend =
+              (insertText ? tryAppendMatchingFrontier(normTyped, target, insertText) : null) ??
+              tryConfirmGhostSuffixAtSelection(
+                normTyped,
+                target,
+                e.target.selectionStart,
+                e.target.selectionEnd,
+              );
             if (ghostAppend) {
               beginTyping();
               const scroll = readInputScroll(e.currentTarget);

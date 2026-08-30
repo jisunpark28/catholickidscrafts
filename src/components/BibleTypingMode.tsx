@@ -2,14 +2,16 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
+import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
 import { universalisMassPageUrlClient } from "@/lib/universalis-client";
 import type { UniversalisMassDay } from "@/lib/universalis-parse";
+import { typingDraftKey } from "@/lib/typing-draft-keys";
 
 const DEFAULT_UNIVERSALIS_MASS_URL = universalisMassPageUrlClient();
 import { todayUniversalis, toDateKey } from "@/lib/dates";
-import { typingDraftKey } from "@/lib/typing-draft-keys";
 import type { ReadingKind } from "@/types/mass";
+import Link from "next/link";
 
 const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
   { kind: "first_reading", label: "First Reading" },
@@ -25,6 +27,9 @@ export function BibleTypingMode() {
   const massPageUrl = day?.pageUrl ?? DEFAULT_UNIVERSALIS_MASS_URL;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [stickerError, setStickerError] = useState("");
+  const [stickerSaved, setStickerSaved] = useState(false);
+  const [needsSignIn, setNeedsSignIn] = useState(false);
 
   const loadToday = useCallback(async () => {
     setLoading(true);
@@ -42,6 +47,51 @@ export function BibleTypingMode() {
   useEffect(() => {
     void loadToday();
   }, [loadToday]);
+
+  useEffect(() => {
+    setStickerSaved(false);
+    setNeedsSignIn(false);
+    setStickerError("");
+  }, [today, readingKind]);
+
+  const unlockSticker = useCallback(
+    async (accuracy: number) => {
+      setStickerError("");
+      setNeedsSignIn(false);
+      const res = await fetch("/api/gospel/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dateKey: today, typingAccuracy: accuracy }),
+      });
+      if (res.status === 401) {
+        setNeedsSignIn(true);
+        throw new Error("Sign in required");
+      }
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        const message = data.error ?? "Could not save sticker";
+        setStickerError(message);
+        throw new Error(message);
+      }
+      setStickerSaved(true);
+    },
+    [today],
+  );
+
+  const completionMessage = stickerSaved ? (
+    <p>Your praise sticker for today was added to My Reading Calendar.</p>
+  ) : needsSignIn ? (
+    <p>
+      <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
+        Sign in
+      </Link>{" "}
+      or{" "}
+      <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
+        Access ID
+      </Link>{" "}
+      to save this sticker on your calendar.
+    </p>
+  ) : null;
 
   const reading = day?.readings.find((r) => r.kind === readingKind);
   const readingText = reading?.text?.trim() ?? "";
@@ -148,7 +198,12 @@ export function BibleTypingMode() {
             title={reading.label}
             text={readingText}
             draftKey={typingDraftKey.massReading(today, reading.kind)}
+            accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
+            onStickerUnlock={unlockSticker}
+            completionMessage={completionMessage}
+            appearance="bible"
           />
+          {stickerError && <p className="text-sm text-red-600">{stickerError}</p>}
           {copyrightNotice.length > 0 && (
             <p className="text-xs leading-relaxed text-[var(--color-muted)]">
               {copyrightNotice}
