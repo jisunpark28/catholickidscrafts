@@ -120,6 +120,15 @@ export function ordinaryTimeSundayLabel(liturgicalTitle: string): string | undef
   return `${formatOrdinalNumber(week)} Sunday`;
 }
 
+const ORDINARY_TIME_WEEKDAY_TITLE_RE =
+  /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\s+of\s+the\s+.+?\s+week\s+in\s+Ordinary\s+Time$/i;
+
+/** True for generic OT weekday titles (e.g. Monday of the 23rd Week in Ordinary Time). */
+export function isOrdinaryTimeWeekdayTitle(liturgicalTitle: string): boolean {
+  if (isLiturgicalTitleUnavailable(liturgicalTitle)) return false;
+  return ORDINARY_TIME_WEEKDAY_TITLE_RE.test(liturgicalTitle.trim());
+}
+
 /** @deprecated Use {@link ordinaryTimeSundayLabel}. */
 export function ordinaryTimeWeekLabel(liturgicalTitle: string): string | undefined {
   return ordinaryTimeSundayLabel(liturgicalTitle);

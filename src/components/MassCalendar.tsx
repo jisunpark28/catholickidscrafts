@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   formatLiturgicalTitleDisplay,
+  isOrdinaryTimeWeekdayTitle,
   ordinaryTimeSundayLabel,
 } from "@/lib/liturgical-calendar";
 import { parseDateParam } from "@/lib/dates";
@@ -188,7 +189,8 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
                 isSunday ? ordinaryTimeSundayLabel(day.liturgicalTitle) : undefined;
               const showTitle =
                 displayTitle.length > 0 &&
-                !(sundayLabel && /Sunday in Ordinary Time$/i.test(displayTitle));
+                !(sundayLabel && /Sunday in Ordinary Time$/i.test(displayTitle)) &&
+                !isOrdinaryTimeWeekdayTitle(day.liturgicalTitle);
               return (
                 <div
                   key={day.date}
