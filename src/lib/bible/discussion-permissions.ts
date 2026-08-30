@@ -34,9 +34,9 @@ export function canManageDiscussionPost(
   return { canEdit: allowed, canDelete: allowed };
 }
 
-export function publicAuthorDisplay(
-  isAnonymous: boolean,
-  authorLabel: string,
-): string {
-  return isAnonymous ? "Anonymous" : authorLabel;
+/** Public API/UI label for discussion posts — names are stored server-side only. */
+export function publicAuthorDisplay(isAnonymous: boolean, authorLabel: string): string {
+  void isAnonymous;
+  void authorLabel;
+  return "";
 }
