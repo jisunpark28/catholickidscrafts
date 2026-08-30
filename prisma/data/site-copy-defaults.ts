@@ -274,11 +274,21 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
     "Douay-Rheims text with spelling and wording lightly updated for easier reading. Meaning is unchanged.",
     "bible",
   ),
+  sc(
+    "bible.reading.modernized_notice.ko",
+    "두아이-랭스 본문을 읽기 쉽게 맞춤법·어휘만 가볍게 다듬었습니다. 뜻은 바꾸지 않았습니다.",
+    "bible",
+  ),
   sc("bible.notes.title", "Chapter notes", "bible"),
   sc("bible.notes.lang_group", "Notes language", "bible"),
   sc(
     "bible.notes.disclaimer",
     "Notes help understanding; they are not part of the Bible text you type.",
+    "bible",
+  ),
+  sc(
+    "bible.notes.disclaimer.ko",
+    "이 설명은 이해를 돕기 위한 것이며, 타이핑하는 성경 본문이 아닙니다.",
     "bible",
   ),
 ];

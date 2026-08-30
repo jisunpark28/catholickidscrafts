@@ -13,6 +13,16 @@ export const CHAPTER_NOTE_LOCALE_LABELS: Record<ChapterNoteLocale, string> = {
 
 export const BIBLE_NOTES_LANG_STORAGE_KEY = "ckc_bible_notes_lang";
 
+export function readChapterNotesLocale(): ChapterNoteLocale {
+  if (typeof window === "undefined") return "en";
+  const stored = window.localStorage.getItem(BIBLE_NOTES_LANG_STORAGE_KEY);
+  return stored === "ko" ? "ko" : "en";
+}
+
+export function writeChapterNotesLocale(locale: ChapterNoteLocale): void {
+  window.localStorage.setItem(BIBLE_NOTES_LANG_STORAGE_KEY, locale);
+}
+
 export function getChapterNote(
   bookSlug: string,
   chapter: number,

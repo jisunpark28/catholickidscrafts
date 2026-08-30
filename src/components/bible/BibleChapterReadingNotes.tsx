@@ -1,36 +1,36 @@
 "use client";
 
 import {
-  BIBLE_NOTES_LANG_STORAGE_KEY,
   CHAPTER_NOTE_LOCALE_LABELS,
   CHAPTER_NOTE_LOCALES,
   getChapterNote,
   hasChapterNotes,
+  writeChapterNotesLocale,
   type ChapterNoteLocale,
 } from "@/lib/bible/chapter-notes";
+import {
+  catholicChapterNotesTitle,
+  catholicGospelLabelKo,
+} from "@/lib/bible/catholic-book-names";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { usesModernizedReading } from "@/lib/bible/modernize-for-reading";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-type Props = {
+type NotesProps = {
   bookSlug: string;
   chapter: number;
+  locale: ChapterNoteLocale;
+  onLocaleChange: (locale: ChapterNoteLocale) => void;
 };
 
-function readStoredLocale(): ChapterNoteLocale {
-  if (typeof window === "undefined") return "en";
-  const stored = window.localStorage.getItem(BIBLE_NOTES_LANG_STORAGE_KEY);
-  return stored === "ko" ? "ko" : "en";
-}
-
-export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
+export function BibleChapterReadingNotes({
+  bookSlug,
+  chapter,
+  locale,
+  onLocaleChange,
+}: NotesProps) {
   const copy = useSiteCopy();
   const [open, setOpen] = useState(false);
-  const [locale, setLocale] = useState<ChapterNoteLocale>("en");
-
-  useEffect(() => {
-    setLocale(readStoredLocale());
-  }, []);
 
   const note = useMemo(
     () => getChapterNote(bookSlug, chapter, locale),
@@ -41,10 +41,18 @@ export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
     return null;
   }
 
-  const onLocaleChange = (next: ChapterNoteLocale) => {
-    setLocale(next);
-    window.localStorage.setItem(BIBLE_NOTES_LANG_STORAGE_KEY, next);
+  const handleLocaleChange = (next: ChapterNoteLocale) => {
+    onLocaleChange(next);
+    writeChapterNotesLocale(next);
   };
+
+  const notesTitle = catholicChapterNotesTitle(
+    bookSlug,
+    chapter,
+    locale,
+    textFromCopy(copy, "bible.notes.title", "Chapter notes"),
+  );
+  const gospelLabelKo = locale === "ko" ? catholicGospelLabelKo(bookSlug) : null;
 
   return (
     <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
@@ -55,7 +63,7 @@ export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
         >
-          {textFromCopy(copy, "bible.notes.title", "Chapter notes")}{" "}
+          {notesTitle}{" "}
           <span className="font-normal text-[var(--color-muted)]">{open ? "▾" : "▸"}</span>
         </button>
         <div
@@ -72,7 +80,7 @@ export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
                   ? "bg-[var(--color-accent-soft)] font-semibold text-[var(--color-ink)]"
                   : "text-[var(--color-muted)] hover:text-[var(--color-ink)]"
               }`}
-              onClick={() => onLocaleChange(code)}
+              onClick={() => handleLocaleChange(code)}
               aria-pressed={locale === code}
             >
               {CHAPTER_NOTE_LOCALE_LABELS[code]}
@@ -83,6 +91,9 @@ export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
 
       {open && (
         <div className="mt-3 space-y-3 text-sm text-[var(--color-ink)]">
+          {gospelLabelKo && (
+            <p className="text-xs font-medium text-[var(--color-muted)]">{gospelLabelKo}</p>
+          )}
           <p className="leading-relaxed text-[var(--color-muted)]">{note.summary}</p>
           {note.words && note.words.length > 0 && (
             <ul className="space-y-2">
@@ -97,8 +108,10 @@ export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
           <p className="text-xs text-[var(--color-muted)]">
             {textFromCopy(
               copy,
-              "bible.notes.disclaimer",
-              "Notes help understanding; they are not part of the Bible text you type.",
+              locale === "ko" ? "bible.notes.disclaimer.ko" : "bible.notes.disclaimer",
+              locale === "ko"
+                ? "이 설명은 이해를 돕기 위한 것이며, 타이핑하는 성경 본문이 아닙니다."
+                : "Notes help understanding; they are not part of the Bible text you type.",
             )}
           </p>
         </div>
@@ -107,16 +120,26 @@ export function BibleChapterReadingNotes({ bookSlug, chapter }: Props) {
   );
 }
 
-export function BibleModernizedReadingNotice({ bookSlug }: { bookSlug: string }) {
+export function BibleModernizedReadingNotice({
+  bookSlug,
+  locale,
+}: {
+  bookSlug: string;
+  locale: ChapterNoteLocale;
+}) {
   const copy = useSiteCopy();
   if (!usesModernizedReading(bookSlug)) return null;
+
+  const isKo = locale === "ko";
 
   return (
     <p className="rounded-lg border border-amber-200/80 bg-amber-50/80 px-3 py-2 text-xs leading-relaxed text-amber-950">
       {textFromCopy(
         copy,
-        "bible.reading.modernized_notice",
-        "Douay-Rheims text with spelling and wording lightly updated for easier reading. Meaning is unchanged.",
+        isKo ? "bible.reading.modernized_notice.ko" : "bible.reading.modernized_notice",
+        isKo
+          ? "두아이-랭스 본문을 읽기 쉽게 맞춤법·어휘만 가볍게 다듬었습니다. 뜻은 바꾸지 않았습니다."
+          : "Douay-Rheims text with spelling and wording lightly updated for easier reading. Meaning is unchanged.",
       )}
     </p>
   );
