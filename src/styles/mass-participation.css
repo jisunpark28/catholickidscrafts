@@ -1,0 +1,235 @@
+.mass-participation {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mass-participation__pin-sentinel {
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.mass-participation__toolbar-spacer {
+  flex-shrink: 0;
+}
+
+.mass-participation__sticky {
+  --mass-sticky-top: 4rem;
+  z-index: 40;
+  margin-bottom: 0.5rem;
+}
+
+.mass-participation__sticky--pinned {
+  position: fixed;
+  top: var(--mass-sticky-top);
+  left: 0;
+  right: 0;
+  margin-bottom: 0;
+  padding: 0 1rem 0.5rem;
+  background: var(--color-page);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 6px 16px rgba(31, 41, 55, 0.08);
+}
+
+@media (min-width: 640px) {
+  .mass-participation__sticky--pinned {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mass-participation__sticky--pinned {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.mass-participation__sticky--pinned .mass-participation__toolbar {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.mass-participation__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.25rem;
+}
+
+.mass-participation__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+}
+
+.mass-participation__legend {
+  flex-shrink: 0;
+  padding-right: 0.35rem;
+  border-right: 1px solid var(--color-border);
+  margin-right: 0.15rem;
+}
+
+.mass-participation__toolbar-controls {
+  display: flex;
+  flex: 1 1 16rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+  min-width: 0;
+}
+
+.mass-participation__toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mass-participation__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.mass-participation__select {
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  max-width: 100%;
+}
+
+.mass-participation__select--part {
+  min-width: 11rem;
+}
+
+.mass-participation__btn {
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.mass-participation__btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.mass-participation__btn--active {
+  border-color: var(--color-accent);
+  background: #fff7ed;
+  color: var(--color-accent);
+}
+
+.mass-speaker-legend {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.mass-speaker-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mass-participation__section-title {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+}
+
+.mass-line {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.mass-line--rubric {
+  background: #fafafa;
+  border-style: dashed;
+}
+
+.mass-line--priest {
+  background: #faf5ff;
+}
+
+.mass-line--assembly {
+  background: #fffaf5;
+}
+
+.mass-line__icon {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.mass-line__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.mass-line__role {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  margin-bottom: 0.25rem;
+}
+
+.mass-line__text {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--color-ink);
+}
+
+.mass-line__text--hidden {
+  filter: blur(6px);
+  user-select: none;
+  color: transparent;
+  text-shadow: 0 0 12px rgba(31, 41, 55, 0.45);
+}
+
+.mass-line__reveal {
+  margin-top: 0.5rem;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-link);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media (min-width: 640px) {
+  .mass-line__text {
+    font-size: 1.125rem;
+  }
+}
