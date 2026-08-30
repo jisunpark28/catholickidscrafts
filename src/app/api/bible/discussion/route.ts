@@ -4,6 +4,7 @@ import {
   normalizeDiscussionBody,
 } from "@/lib/bible/discussion";
 import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
+import { ensureDiscussionSchema } from "@/lib/bible/discussion-schema";
 import { getAuthorLabelForPost, getDiscussionPenNameForReader } from "@/lib/bible/discussion-pen-name";
 import {
   canManageDiscussionPost,
@@ -94,8 +95,10 @@ export async function GET(request: Request) {
       console.error("discussion moderator check", moderatorError);
     }
 
-    const threads = await withDiscussionSchemaReady(() => listChapterDiscussion(bookSlug, chapter));
-    const viewer = await withDiscussionSchemaReady(() => buildViewer(readerKey, canModerate));
+    await ensureDiscussionSchema();
+
+    const threads = await listChapterDiscussion(bookSlug, chapter);
+    const viewer = await buildViewer(readerKey, canModerate);
 
     return NextResponse.json({
       viewer,

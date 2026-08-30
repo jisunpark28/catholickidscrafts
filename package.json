@@ -29,6 +29,7 @@
     "favicon:generate": "python3 scripts/generate-favicon-ico.py"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@prisma/client": "5.22.0",
     "@tiptap/extension-link": "^3.24.0",
     "@tiptap/extension-placeholder": "^3.24.0",
