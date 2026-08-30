@@ -1,11 +1,17 @@
 "use client";
 
+import {
+  BibleChapterReadingNotes,
+  BibleModernizedReadingNotice,
+} from "@/components/bible/BibleChapterReadingNotes";
 import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
+import type { ChapterNoteLocale } from "@/lib/bible/chapter-notes";
+import { readChapterNotesLocale } from "@/lib/bible/chapter-notes";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Props = {
   bookSlug: string;
@@ -25,6 +31,11 @@ export function BibleChapterTyping({
   discussionReaderLabel,
 }: Props) {
   const [stickerError, setStickerError] = useState("");
+  const [notesLocale, setNotesLocale] = useState<ChapterNoteLocale>("en");
+
+  useEffect(() => {
+    setNotesLocale(readChapterNotesLocale());
+  }, []);
 
   const unlockSticker = useCallback(
     async (accuracy: number) => {
@@ -50,6 +61,13 @@ export function BibleChapterTyping({
 
   return (
     <div className="space-y-4">
+      <BibleModernizedReadingNotice bookSlug={bookSlug} locale={notesLocale} />
+      <BibleChapterReadingNotes
+        bookSlug={bookSlug}
+        chapter={chapter}
+        locale={notesLocale}
+        onLocaleChange={setNotesLocale}
+      />
       <PassageTypingGame
         text={text}
         title={`${bookName} — Chapter ${chapter}`}
