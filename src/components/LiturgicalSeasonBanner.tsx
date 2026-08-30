@@ -1,3 +1,4 @@
+import { MassReadingShortcutLinks } from "@/components/MassReadingShortcutLinks";
 import { formatLiturgicalTitleDisplay } from "@/lib/liturgical-calendar";
 import type { LiturgicalSeasonInfo } from "@/types/mass";
 
@@ -9,11 +10,17 @@ const accentBar: Record<LiturgicalSeasonInfo["color"], string> = {
   rose: "bg-pink-500",
 };
 
+type ReadingLink = { href: string; label: string };
+
 type Props = {
   season: LiturgicalSeasonInfo;
   todayTitle?: string;
   /** Saints / feasts from the General Roman Calendar (Evangelizo). */
   calendarCelebration?: string;
+  /** Official reading sites for today (below General Roman Calendar). */
+  readingLinks?: ReadingLink[];
+  /** Optional hint below reading shortcut buttons. */
+  readingLinkHint?: string;
   /** Home Daily Mass panel — enlarged banner text. */
   large?: boolean;
 };
@@ -22,6 +29,8 @@ export function LiturgicalSeasonBanner({
   season,
   todayTitle,
   calendarCelebration,
+  readingLinks,
+  readingLinkHint,
   large = false,
 }: Props) {
   const labelClass = large
@@ -60,6 +69,14 @@ export function LiturgicalSeasonBanner({
             </span>
             <span className="text-[var(--color-ink)]">{calendarCelebration}</span>
           </p>
+        )}
+        {readingLinks && readingLinks.length > 0 && (
+          <div className={calendarCelebration || formattedTodayTitle ? "mt-4" : "mt-5"}>
+            <MassReadingShortcutLinks links={readingLinks} />
+            {readingLinkHint ? (
+              <p className="mt-2.5 text-sm text-[var(--color-muted)]">{readingLinkHint}</p>
+            ) : null}
+          </div>
         )}
       </div>
     </div>
