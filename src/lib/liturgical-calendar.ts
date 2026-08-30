@@ -65,26 +65,64 @@ function ordinalSuffix(n: number): string {
   }
 }
 
+function formatOrdinalNumber(n: number): string {
+  return `${n}${ordinalSuffix(n)}`;
+}
+
+function parseOrdinalFromToken(token: string): number | undefined {
+  const numeric = token.match(/^(\d{1,2})(?:st|nd|rd|th)?$/i);
+  if (numeric) return Number(numeric[1]);
+  return parseEnglishOrdinalWord(token);
+}
+
+const UNAVAILABLE_TITLE_RE = /readings unavailable|outside feed window/i;
+
+export function isLiturgicalTitleUnavailable(title: string): boolean {
+  const trimmed = title.trim();
+  return trimmed.length === 0 || UNAVAILABLE_TITLE_RE.test(trimmed);
+}
+
+/** Replace word ordinals with numeric forms (e.g. Twenty-third → 23rd). */
+export function formatLiturgicalTitleDisplay(title: string): string {
+  if (isLiturgicalTitleUnavailable(title)) return "";
+
+  let formatted = title.replace(
+    /^([\w-]+)\s+(Sunday\b.*)$/i,
+    (_, ordinalToken: string, rest: string) => {
+      const week = parseOrdinalFromToken(ordinalToken);
+      return week !== undefined ? `${formatOrdinalNumber(week)} ${rest}` : `${ordinalToken} ${rest}`;
+    },
+  );
+
+  formatted = formatted.replace(
+    /\bof the ([\w-]+) week\b/gi,
+    (_, ordinalToken: string) => {
+      const week = parseOrdinalFromToken(ordinalToken);
+      return week !== undefined
+        ? `of the ${formatOrdinalNumber(week)} Week`
+        : `of the ${ordinalToken} week`;
+    },
+  );
+
+  return formatted;
+}
+
 /**
- * Compact Ordinary Time week label for calendar cells, e.g. "18th Sunday" or "Week 18".
- * Returns undefined when the day is not in Ordinary Time.
+ * Compact Ordinary Time Sunday label for calendar cells, e.g. "18th Sunday".
+ * Weekday "Week N" labels are omitted. Returns undefined for non-OT Sundays.
  */
-export function ordinaryTimeWeekLabel(liturgicalTitle: string): string | undefined {
+export function ordinaryTimeSundayLabel(liturgicalTitle: string): string | undefined {
   const sundayMatch = liturgicalTitle.match(/^(.+?)\s+Sunday\s+in\s+Ordinary\s+Time$/i);
-  if (sundayMatch) {
-    const week = parseEnglishOrdinalWord(sundayMatch[1]);
-    if (week !== undefined) return `${week}${ordinalSuffix(week)} Sunday`;
-    return `${sundayMatch[1].trim()} Sunday`;
-  }
+  if (!sundayMatch) return undefined;
 
-  const weekdayMatch = liturgicalTitle.match(/\bof\s+the\s+(.+?)\s+week\s+in\s+Ordinary\s+Time\b/i);
-  if (weekdayMatch) {
-    const week = parseEnglishOrdinalWord(weekdayMatch[1]);
-    if (week !== undefined) return `Week ${week}`;
-    return `Week ${weekdayMatch[1].trim()}`;
-  }
+  const week = parseOrdinalFromToken(sundayMatch[1]);
+  if (week === undefined) return undefined;
+  return `${formatOrdinalNumber(week)} Sunday`;
+}
 
-  return undefined;
+/** @deprecated Use {@link ordinaryTimeSundayLabel}. */
+export function ordinaryTimeWeekLabel(liturgicalTitle: string): string | undefined {
+  return ordinaryTimeSundayLabel(liturgicalTitle);
 }
 
 /** Format Evangelizo saint/feast lines for the General Roman Calendar (when not already in the weekday title). */

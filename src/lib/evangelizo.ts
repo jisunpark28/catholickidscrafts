@@ -12,6 +12,7 @@ import type {
   ReadingKind,
 } from "@/types/mass";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
+import { fetchUsccbReadingsForDate, loadUsccbLiturgicalTitleIndex } from "@/lib/usccb-rss";
 
 const EVANGELIZO_BASE = "http://feed.evangelizo.org/v2/reader.php";
 export const MASS_DATA_SOURCE =
@@ -169,49 +170,66 @@ export async function fetchMassDay(date: Date): Promise<MassDay> {
   };
 }
 
-export async function fetchMassDaySummary(date: Date): Promise<MassDaySummary> {
-  if (!isWithinEvangelizoWindow(date)) {
-    const key = toDateKey(date);
-    return {
-      date: key,
-      liturgicalTitle: "Readings unavailable (outside feed window)",
-      rank: "ferial",
-    };
-  }
-
-  const liturgicalTitle = await fetchLiturgicalTitle(date);
+export async function fetchMassDaySummary(
+  date: Date,
+  usccbTitlesByDate?: Map<string, string>,
+): Promise<MassDaySummary> {
+  const key = toDateKey(date);
+  const liturgicalTitle = await resolveLiturgicalTitle(date, usccbTitlesByDate);
   return {
-    date: toDateKey(date),
+    date: key,
     liturgicalTitle,
-    rank: rankFromTitle(liturgicalTitle),
+    rank: liturgicalTitle ? rankFromTitle(liturgicalTitle) : "ferial",
   };
 }
 
 /** Like {@link fetchMassDaySummary} plus General Roman Calendar saint/feast (for today banner). */
 export async function fetchMassDaySummaryWithCalendar(
   date: Date,
+  usccbTitlesByDate?: Map<string, string>,
 ): Promise<MassDaySummary> {
-  if (!isWithinEvangelizoWindow(date)) {
-    const key = toDateKey(date);
+  const key = toDateKey(date);
+  const liturgicalTitle = await resolveLiturgicalTitle(date, usccbTitlesByDate);
+
+  if (!liturgicalTitle || !isWithinEvangelizoWindow(date)) {
     return {
       date: key,
-      liturgicalTitle: "Readings unavailable (outside feed window)",
-      rank: "ferial",
+      liturgicalTitle,
+      rank: liturgicalTitle ? rankFromTitle(liturgicalTitle) : "ferial",
     };
   }
 
-  const [liturgicalTitle, saint, feast] = await Promise.all([
-    fetchLiturgicalTitle(date),
+  const [saint, feast] = await Promise.all([
     fetchOptionalField(date, "saint"),
     fetchOptionalField(date, "feast"),
   ]);
   return {
-    date: toDateKey(date),
+    date: key,
     liturgicalTitle,
     rank: rankFromTitle(liturgicalTitle),
     saint,
     feast,
   };
+}
+
+async function resolveLiturgicalTitle(
+  date: Date,
+  usccbTitlesByDate?: Map<string, string>,
+): Promise<string> {
+  if (isWithinEvangelizoWindow(date)) {
+    try {
+      return await fetchLiturgicalTitle(date);
+    } catch {
+      /* fall through to USCCB / empty */
+    }
+  }
+
+  const key = toDateKey(date);
+  const fromIndex = usccbTitlesByDate?.get(key);
+  if (fromIndex) return fromIndex;
+
+  const usccb = await fetchUsccbReadingsForDate(date).catch(() => null);
+  return usccb?.liturgicalTitle ?? "";
 }
 
 export async function fetchMonthCalendar(
@@ -221,9 +239,10 @@ export async function fetchMonthCalendar(
   const days = daysInMonth(year, month);
   const midMonth = new Date(Date.UTC(year, month - 1, 15));
   const season = getLiturgicalSeason(midMonth);
+  const usccbTitles = await loadUsccbLiturgicalTitleIndex();
 
   const summaries = await Promise.all(
-    days.map((day) => fetchMassDaySummary(day)),
+    days.map((day) => fetchMassDaySummary(day, usccbTitles)),
   );
 
   return {

@@ -1,3 +1,4 @@
+import { formatLiturgicalTitleDisplay } from "@/lib/liturgical-calendar";
 import type { LiturgicalSeasonInfo } from "@/types/mass";
 
 const accentBar: Record<LiturgicalSeasonInfo["color"], string> = {
@@ -37,6 +38,8 @@ export function LiturgicalSeasonBanner({
     : "mt-5 border-t border-[var(--color-border)] pt-5 text-sm";
   const celebrationClass = large ? "mt-4 text-lg leading-relaxed" : "mt-4 text-sm leading-relaxed";
 
+  const formattedTodayTitle = todayTitle ? formatLiturgicalTitleDisplay(todayTitle) : undefined;
+
   return (
     <div className="border border-[var(--color-border)] bg-[var(--color-surface)]">
       <div className={`h-1 ${accentBar[season.color]}`} />
@@ -44,10 +47,10 @@ export function LiturgicalSeasonBanner({
         <p className={labelClass}>Liturgical season</p>
         <h2 className={titleClass}>{season.name}</h2>
         {season.description ? <p className={descriptionClass}>{season.description}</p> : null}
-        {todayTitle && (
+        {formattedTodayTitle && (
           <p className={todayClass}>
             <span className="font-semibold text-[var(--color-ink)]">Today: </span>
-            {todayTitle}
+            {formattedTodayTitle}
           </p>
         )}
         {calendarCelebration && (
