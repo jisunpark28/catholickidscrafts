@@ -135,27 +135,35 @@ async function ensureCommentTable(): Promise<void> {
   `);
 }
 
+async function execOptional(sql: string): Promise<void> {
+  try {
+    await exec(sql);
+  } catch (error) {
+    console.warn("discussion optional DDL skipped", error);
+  }
+}
+
 async function ensureIndexesAndConstraints(): Promise<void> {
-  await exec(
+  await execOptional(
     `CREATE INDEX IF NOT EXISTS "BibleChapterThread_bookSlug_chapter_createdAt_idx" ON "BibleChapterThread"("bookSlug", "chapter", "createdAt")`,
   );
-  await exec(
+  await execOptional(
     `CREATE INDEX IF NOT EXISTS "BibleChapterThread_familyAccountId_idx" ON "BibleChapterThread"("familyAccountId")`,
   );
-  await exec(
+  await execOptional(
     `CREATE INDEX IF NOT EXISTS "BibleChapterThread_subProfileId_idx" ON "BibleChapterThread"("subProfileId")`,
   );
-  await exec(
+  await execOptional(
     `CREATE INDEX IF NOT EXISTS "BibleChapterComment_threadId_createdAt_idx" ON "BibleChapterComment"("threadId", "createdAt")`,
   );
-  await exec(
+  await execOptional(
     `CREATE INDEX IF NOT EXISTS "BibleChapterComment_familyAccountId_idx" ON "BibleChapterComment"("familyAccountId")`,
   );
-  await exec(
+  await execOptional(
     `CREATE INDEX IF NOT EXISTS "BibleChapterComment_subProfileId_idx" ON "BibleChapterComment"("subProfileId")`,
   );
 
-  await exec(`
+  await execOptional(`
     DO $$ BEGIN
       ALTER TABLE "BibleChapterThread"
         ADD CONSTRAINT "BibleChapterThread_familyAccountId_fkey"
@@ -164,7 +172,7 @@ async function ensureIndexesAndConstraints(): Promise<void> {
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$
   `);
-  await exec(`
+  await execOptional(`
     DO $$ BEGIN
       ALTER TABLE "BibleChapterThread"
         ADD CONSTRAINT "BibleChapterThread_subProfileId_fkey"
@@ -173,7 +181,7 @@ async function ensureIndexesAndConstraints(): Promise<void> {
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$
   `);
-  await exec(`
+  await execOptional(`
     DO $$ BEGIN
       ALTER TABLE "BibleChapterComment"
         ADD CONSTRAINT "BibleChapterComment_threadId_fkey"
@@ -182,7 +190,7 @@ async function ensureIndexesAndConstraints(): Promise<void> {
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$
   `);
-  await exec(`
+  await execOptional(`
     DO $$ BEGIN
       ALTER TABLE "BibleChapterComment"
         ADD CONSTRAINT "BibleChapterComment_familyAccountId_fkey"
@@ -191,7 +199,7 @@ async function ensureIndexesAndConstraints(): Promise<void> {
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$
   `);
-  await exec(`
+  await execOptional(`
     DO $$ BEGIN
       ALTER TABLE "BibleChapterComment"
         ADD CONSTRAINT "BibleChapterComment_subProfileId_fkey"
