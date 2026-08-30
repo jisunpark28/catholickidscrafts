@@ -1,12 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import {
-  goodNewsDailyMissaUrl,
-  livingWithChristReadingUrl,
-} from "@/lib/scripture-links";
-import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
-import { parseDateParam } from "@/lib/dates";
+import { ordinaryTimeWeekLabel } from "@/lib/liturgical-calendar";
 import type { MassDaySummary, MonthCalendar } from "@/types/mass";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -29,29 +24,6 @@ type Props = {
   /** Home Daily Mass panel — enlarged calendar text (between compact and 2×). */
   large?: boolean;
 };
-
-type ReadingLinkProps = {
-  href: string;
-  title: string;
-  shortLabel: string;
-  longLabel: string;
-  className: string;
-};
-
-function ReadingLink({ href, title, shortLabel, longLabel, className }: ReadingLinkProps) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={className}
-      title={title}
-    >
-      <span className="md:hidden">{shortLabel}</span>
-      <span className="hidden md:inline">{longLabel}</span>
-    </a>
-  );
-}
 
 export function MassCalendar({ initial, selectedDate, todayDate, large = false }: Props) {
   const [calendar, setCalendar] = useState(initial);
@@ -113,23 +85,20 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
     ? "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-4"
     : "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-3";
   const padCellClass = large
-    ? "min-h-[6.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[11rem] md:min-h-[17rem] lg:min-h-[18rem]"
-    : "min-h-[6.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[9rem] md:min-h-[11rem] lg:min-h-[12rem]";
+    ? "min-h-[4.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[7rem] md:min-h-[10rem] lg:min-h-[11rem]"
+    : "min-h-[4.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[6rem] md:min-h-[7rem] lg:min-h-[8rem]";
   const dayCellBase = large
-    ? "flex min-h-[6.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[11rem] sm:p-3 md:min-h-[14rem] md:p-4 lg:min-h-[18rem]"
-    : "flex min-h-[6.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[9rem] sm:p-2 md:min-h-[11rem] md:p-3 lg:min-h-[12rem]";
+    ? "flex min-h-[4.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[7rem] sm:p-3 md:min-h-[9rem] md:p-4 lg:min-h-[11rem]"
+    : "flex min-h-[4.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[6rem] sm:p-2 md:min-h-[7rem] md:p-3 lg:min-h-[8rem]";
   const dayNumClass = large
     ? "shrink-0 text-sm font-bold sm:text-lg md:text-xl"
     : "shrink-0 text-xs font-bold sm:text-sm md:text-base";
+  const dayWeekClass = large
+    ? "mt-0.5 w-full truncate text-[10px] font-semibold leading-tight text-[var(--color-ink)] sm:text-xs md:text-sm"
+    : "mt-0.5 w-full truncate text-[9px] font-semibold leading-tight text-[var(--color-ink)] sm:text-[10px] md:text-xs";
   const dayTitleClass = large
-    ? "mt-1 w-full truncate text-[11px] leading-tight text-[var(--color-muted)] sm:mt-1.5 sm:text-sm md:text-base"
-    : "mt-0.5 w-full truncate text-[10px] leading-tight text-[var(--color-muted)] sm:mt-1 sm:text-[11px] md:text-xs";
-  const linkClass = large
-    ? "block w-full truncate text-[10px] font-semibold leading-tight text-[var(--color-link)] hover:underline sm:text-sm md:text-base"
-    : "block w-full truncate text-[9px] font-semibold leading-tight text-[var(--color-link)] hover:underline sm:text-[10px] md:text-xs";
-  const linksWrapClass = large
-    ? "mt-1.5 flex min-w-0 flex-col gap-0.5 sm:mt-2 sm:gap-1 md:mt-3 md:gap-1.5"
-    : "mt-1 flex min-w-0 flex-col gap-0.5 sm:mt-2 sm:gap-1";
+    ? "mt-0.5 w-full truncate text-[10px] leading-tight text-[var(--color-muted)] sm:mt-1 sm:text-xs md:text-sm"
+    : "mt-0.5 w-full truncate text-[9px] leading-tight text-[var(--color-muted)] sm:text-[10px] md:text-xs";
 
   return (
     <section className="w-full border border-[var(--color-border)] bg-white">
@@ -174,10 +143,7 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
               const dayNum = Number(day.date.slice(8, 10));
               const isSelected = day.date === selectedDate;
               const isToday = day.date === todayDate;
-              const lwcUrl = livingWithChristReadingUrl(day.date);
-              const goodNewsUrl = goodNewsDailyMissaUrl(day.date);
-              const dayDate = parseDateParam(day.date);
-              const usccbUrl = dayDate ? usccbReadingsPageUrl(dayDate) : null;
+              const weekLabel = ordinaryTimeWeekLabel(day.liturgicalTitle);
               return (
                 <div
                   key={day.date}
@@ -192,34 +158,14 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
                   >
                     {dayNum}
                   </span>
+                  {weekLabel && (
+                    <p className={dayWeekClass} title={weekLabel}>
+                      {weekLabel}
+                    </p>
+                  )}
                   <p className={dayTitleClass} title={day.liturgicalTitle}>
                     {day.liturgicalTitle}
                   </p>
-                  <div className={linksWrapClass}>
-                    {usccbUrl && (
-                      <ReadingLink
-                        href={usccbUrl}
-                        title={`${day.liturgicalTitle} — USCCB`}
-                        shortLabel="USCCB ↗"
-                        longLabel="USCCB ↗"
-                        className={linkClass}
-                      />
-                    )}
-                    <ReadingLink
-                      href={lwcUrl}
-                      title={`${day.liturgicalTitle} — Living with Christ`}
-                      shortLabel="LWC ↗"
-                      longLabel="Living with Christ ↗"
-                      className={linkClass}
-                    />
-                    <ReadingLink
-                      href={goodNewsUrl}
-                      title={`${day.liturgicalTitle} — GoodNews`}
-                      shortLabel="GoodNews ↗"
-                      longLabel="GoodNews ↗"
-                      className={linkClass}
-                    />
-                  </div>
                 </div>
               );
             })}
