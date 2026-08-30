@@ -1,22 +1,33 @@
-/** Preview subset — St. Andrew Kim Sunday School projector flow (Introductory Rites). */
+/** Preview subset — St. Andrew Kim Sunday School projector flow. */
 
 export type MassSpeakerRole = "priest" | "assembly" | "rubric";
 
+export type MassLiturgyPartId =
+  | "intro"
+  | "word"
+  | "eucharist"
+  | "thanksgiving"
+  | "communion"
+  | "concluding";
+
 export type MassParticipationLine = {
   id: string;
-  section: string;
+  section: MassLiturgyPartId;
   role: MassSpeakerRole;
   text: string;
-  /** Assembly lines can be hidden for practice. */
   revealable?: boolean;
-  /** Omit when season is advent-lent (no Gloria). */
   skipWhen?: "advent-lent";
 };
 
-export const MASS_PREVIEW_SECTIONS = [
+/** Liturgical parts (Korean projector names → English UI labels). */
+export const MASS_LITURGY_PARTS: { id: MassLiturgyPartId; label: string }[] = [
   { id: "intro", label: "Introductory Rites" },
-  { id: "word", label: "Liturgy of the Word (sample)" },
-] as const;
+  { id: "word", label: "Liturgy of the Word" },
+  { id: "eucharist", label: "Liturgy of the Eucharist" },
+  { id: "thanksgiving", label: "Eucharistic Prayer" },
+  { id: "communion", label: "Communion Rite" },
+  { id: "concluding", label: "Concluding Rites" },
+];
 
 export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
   {
@@ -186,14 +197,248 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     text: "Praise to you, Lord Jesus Christ.",
     revealable: true,
   },
+  {
+    id: "word-10",
+    section: "word",
+    role: "assembly",
+    text: "Lord, hear our prayer.",
+    revealable: true,
+  },
+  {
+    id: "euch-1",
+    section: "eucharist",
+    role: "rubric",
+    text: "Offertory hymn — bread and wine are brought to the altar.",
+  },
+  {
+    id: "euch-2",
+    section: "eucharist",
+    role: "priest",
+    text: "Pray, brothers and sisters, that my sacrifice and yours may be acceptable to God, the almighty Father.",
+  },
+  {
+    id: "euch-3",
+    section: "eucharist",
+    role: "assembly",
+    text: "May the Lord accept the sacrifice at your hands for the praise and glory of his name, for our good and the good of all his holy Church.",
+    revealable: true,
+  },
+  {
+    id: "euch-4",
+    section: "eucharist",
+    role: "assembly",
+    text: "Amen.",
+    revealable: true,
+  },
+  {
+    id: "euch-5",
+    section: "eucharist",
+    role: "priest",
+    text: "The Lord be with you.",
+  },
+  {
+    id: "euch-6",
+    section: "eucharist",
+    role: "assembly",
+    text: "And with your spirit.",
+    revealable: true,
+  },
+  {
+    id: "euch-7",
+    section: "eucharist",
+    role: "priest",
+    text: "Lift up your hearts.",
+  },
+  {
+    id: "euch-8",
+    section: "eucharist",
+    role: "assembly",
+    text: "We lift them up to the Lord.",
+    revealable: true,
+  },
+  {
+    id: "euch-9",
+    section: "eucharist",
+    role: "priest",
+    text: "Let us give thanks to the Lord our God.",
+  },
+  {
+    id: "euch-10",
+    section: "eucharist",
+    role: "assembly",
+    text: "It is right and just.",
+    revealable: true,
+  },
+  {
+    id: "thanks-1",
+    section: "thanksgiving",
+    role: "assembly",
+    text: "Holy, Holy, Holy Lord God of hosts. Heaven and earth are full of your glory. Hosanna in the highest. Blessed is he who comes in the name of the Lord. Hosanna in the highest.",
+    revealable: true,
+  },
+  {
+    id: "thanks-2",
+    section: "thanksgiving",
+    role: "rubric",
+    text: "The priest prays the Eucharistic Prayer (not projected).",
+  },
+  {
+    id: "thanks-3",
+    section: "thanksgiving",
+    role: "priest",
+    text: "The mystery of faith.",
+  },
+  {
+    id: "thanks-4",
+    section: "thanksgiving",
+    role: "assembly",
+    text: "We proclaim your Death, O Lord, and profess your Resurrection until you come again.",
+    revealable: true,
+  },
+  {
+    id: "thanks-5",
+    section: "thanksgiving",
+    role: "priest",
+    text: "Through him, and with him, and in him, O God, almighty Father, in the unity of the Holy Spirit, all glory and honour is yours, forever and ever.",
+  },
+  {
+    id: "thanks-6",
+    section: "thanksgiving",
+    role: "assembly",
+    text: "Amen.",
+    revealable: true,
+  },
+  {
+    id: "comm-1",
+    section: "communion",
+    role: "priest",
+    text: "At the Saviour's command and formed by divine teaching, we dare to say:",
+  },
+  {
+    id: "comm-2",
+    section: "communion",
+    role: "assembly",
+    text: "Our Father, who art in heaven, hallowed be thy name; thy kingdom come, thy will be done on earth as it is in heaven. Give us this day our daily bread, and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil.",
+    revealable: true,
+  },
+  {
+    id: "comm-3",
+    section: "communion",
+    role: "assembly",
+    text: "For the kingdom, the power, and the glory are yours, now and for ever.",
+    revealable: true,
+  },
+  {
+    id: "comm-4",
+    section: "communion",
+    role: "priest",
+    text: "The peace of the Lord be with you always.",
+  },
+  {
+    id: "comm-5",
+    section: "communion",
+    role: "assembly",
+    text: "And with your spirit.",
+    revealable: true,
+  },
+  {
+    id: "comm-6",
+    section: "communion",
+    role: "assembly",
+    text: "Lamb of God, you take away the sins of the world, have mercy on us. Lamb of God, you take away the sins of the world, have mercy on us. Lamb of God, you take away the sins of the world, grant us peace.",
+    revealable: true,
+  },
+  {
+    id: "comm-7",
+    section: "communion",
+    role: "priest",
+    text: "Behold the Lamb of God, behold him who takes away the sins of the world. Blessed are those called to the supper of the Lamb.",
+  },
+  {
+    id: "comm-8",
+    section: "communion",
+    role: "assembly",
+    text: "Lord, I am not worthy that you should enter under my roof, but only say the word and my soul shall be healed.",
+    revealable: true,
+  },
+  {
+    id: "comm-9",
+    section: "communion",
+    role: "rubric",
+    text: "Communion hymn — Holy Communion is distributed.",
+  },
+  {
+    id: "end-1",
+    section: "concluding",
+    role: "priest",
+    text: "Let us pray. …",
+  },
+  {
+    id: "end-2",
+    section: "concluding",
+    role: "assembly",
+    text: "Amen.",
+    revealable: true,
+  },
+  {
+    id: "end-3",
+    section: "concluding",
+    role: "priest",
+    text: "The Lord be with you.",
+  },
+  {
+    id: "end-4",
+    section: "concluding",
+    role: "assembly",
+    text: "And with your spirit.",
+    revealable: true,
+  },
+  {
+    id: "end-5",
+    section: "concluding",
+    role: "priest",
+    text: "May almighty God bless you, the Father, and the Son, and the Holy Spirit.",
+  },
+  {
+    id: "end-6",
+    section: "concluding",
+    role: "assembly",
+    text: "Amen.",
+    revealable: true,
+  },
+  {
+    id: "end-7",
+    section: "concluding",
+    role: "priest",
+    text: "Go forth, the Mass is ended.",
+  },
+  {
+    id: "end-8",
+    section: "concluding",
+    role: "assembly",
+    text: "Thanks be to God.",
+    revealable: true,
+  },
 ];
 
-export type MassSeasonPreset = "ordinary" | "advent-lent" | "easter";
+export type MassSeasonPreset = "ordinary" | "advent-lent";
 
 export function filterPreviewLines(
   lines: MassParticipationLine[],
   season: MassSeasonPreset,
+  part: MassLiturgyPartId | "all",
 ): MassParticipationLine[] {
-  if (season !== "advent-lent") return lines;
-  return lines.filter((line) => line.skipWhen !== "advent-lent");
+  let filtered = season === "advent-lent" ? lines.filter((l) => l.skipWhen !== "advent-lent") : lines;
+  if (part !== "all") {
+    filtered = filtered.filter((l) => l.section === part);
+  }
+  return filtered;
 }
+
+export function liturgyPartLabel(partId: MassLiturgyPartId | "all"): string {
+  if (partId === "all") return "All parts";
+  return MASS_LITURGY_PARTS.find((p) => p.id === partId)?.label ?? partId;
+}
+
+/** @deprecated Use MASS_LITURGY_PARTS */
+export const MASS_PREVIEW_SECTIONS = MASS_LITURGY_PARTS;

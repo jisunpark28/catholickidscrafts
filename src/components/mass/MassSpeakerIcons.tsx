@@ -65,7 +65,7 @@ export function MassSpeakerPriestIcon({ className, size = 40, title = "Priest" }
 export function MassSpeakerChildrenIcon({
   className,
   size = 40,
-  title = "Children & assembly",
+  title = "Children",
 }: IconProps) {
   return (
     <MassSpeakerBadge
@@ -121,16 +121,16 @@ export function MassSpeakerRubricIcon({ className, size = 40, title = "Direction
   );
 }
 
-export function MassSpeakerLegend() {
+export function MassSpeakerLegend({ className = "" }: { className?: string }) {
   return (
-    <div className="mass-speaker-legend" aria-label="Who speaks">
+    <div className={`mass-speaker-legend ${className}`.trim()} aria-label="Who speaks">
       <span className="mass-speaker-legend__item">
         <MassSpeakerPriestIcon size={32} />
         <span>Priest</span>
       </span>
       <span className="mass-speaker-legend__item">
         <MassSpeakerChildrenIcon size={32} />
-        <span>Children &amp; assembly</span>
+        <span>Children</span>
       </span>
     </div>
   );
