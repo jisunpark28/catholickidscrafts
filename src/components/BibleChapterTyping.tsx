@@ -17,6 +17,7 @@ type Props = {
   chapter: number;
   text: string;
   uiLanguage: ChapterNoteLocale;
+  onUiLanguageChange: (locale: ChapterNoteLocale) => void;
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
 };
@@ -28,6 +29,7 @@ export function BibleChapterTyping({
   chapter,
   text,
   uiLanguage,
+  onUiLanguageChange,
   discussionSignedIn,
   discussionReaderLabel,
 }: Props) {
@@ -63,6 +65,7 @@ export function BibleChapterTyping({
         apiBookName={apiBookName}
         chapter={chapter}
         locale={uiLanguage}
+        onLocaleChange={onUiLanguageChange}
       />
       <PassageTypingGame
         text={text}
