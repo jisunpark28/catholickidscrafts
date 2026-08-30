@@ -1,6 +1,7 @@
 import type { ChapterNote, ChapterNoteLocale } from "@/lib/bible/chapter-notes/types";
+import { DEFAULT_PRAYER_LANGUAGE } from "@/lib/prayers/prayer-languages";
 
-const MARK_NOTES: Record<number, Record<ChapterNoteLocale, ChapterNote>> = {
+const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>> = {
   1: {
     en: {
       summary:
@@ -297,5 +298,5 @@ export function getMarkChapterNote(
 ): ChapterNote | null {
   const row = MARK_NOTES[chapter];
   if (!row) return null;
-  return row[locale] ?? row.en ?? null;
+  return row[locale] ?? row[DEFAULT_PRAYER_LANGUAGE] ?? null;
 }

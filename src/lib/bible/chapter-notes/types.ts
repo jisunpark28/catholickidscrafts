@@ -1,4 +1,6 @@
-export type ChapterNoteLocale = "en" | "ko";
+import type { PrayerLanguageCode } from "@/lib/prayers/prayer-languages";
+
+export type ChapterNoteLocale = PrayerLanguageCode;
 
 export type ChapterNoteWord = {
   term: string;

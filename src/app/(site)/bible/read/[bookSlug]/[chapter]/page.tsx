@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { BibleChapterTyping } from "@/components/BibleChapterTyping";
+import { Suspense } from "react";
+import { BibleChapterReadClient } from "@/components/bible/BibleChapterReadClient";
 import { BibleHubShell } from "@/components/bible/BibleHubShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { fetchBibleChapter } from "@/lib/bible/latinprayer";
@@ -31,7 +32,7 @@ export default async function BibleReadPage({ params }: Props) {
     notFound();
   }
 
-  const text = chapterPlainTextForReading(data, bookSlug);
+  const text = chapterPlainTextForReading(data);
   const headerSession = await getHeaderSession();
   const signedIn = isHeaderSignedIn(headerSession);
   const readerLabel =
@@ -48,20 +49,17 @@ export default async function BibleReadPage({ params }: Props) {
       wide
     >
       <HubTypingWidth wide className="space-y-4">
-        <div>
-          <h1 className="text-xl font-bold text-[var(--color-ink)] sm:text-2xl">
-            {data.meta.book.name} — Chapter {data.meta.chapter}
-          </h1>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">{data.citation}</p>
-        </div>
-        <BibleChapterTyping
-          bookSlug={bookSlug}
-          bookName={data.meta.book.name}
-          chapter={data.meta.chapter}
-          text={text}
-          discussionSignedIn={signedIn}
-          discussionReaderLabel={readerLabel}
-        />
+        <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
+          <BibleChapterReadClient
+            bookSlug={bookSlug}
+            apiBookName={data.meta.book.name}
+            chapter={data.meta.chapter}
+            citation={data.citation}
+            text={text}
+            discussionSignedIn={signedIn}
+            discussionReaderLabel={readerLabel}
+          />
+        </Suspense>
       </HubTypingWidth>
     </BibleHubShell>
   );

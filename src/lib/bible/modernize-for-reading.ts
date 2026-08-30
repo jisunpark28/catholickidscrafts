@@ -1,15 +1,8 @@
-/** Books using the reading-modernization pilot (Douay-Rheims wording refresh). */
-export const MODERNIZED_BOOK_SLUGS = new Set(["mark"]);
-
 /** Bump when modernization rules change so typing drafts reset. */
-export const MODERNIZED_TEXT_VERSION = "v1";
+export const MODERNIZED_TEXT_VERSION = "v2";
 
-export function usesModernizedReading(bookSlug: string): boolean {
-  return MODERNIZED_BOOK_SLUGS.has(bookSlug);
-}
-
-/** Longest phrases first — vocabulary and grammar helpers for Mark. */
-const MARK_PHRASES: readonly (readonly [string, string])[] = [
+/** Longest phrases first — Douay-Rheims vocabulary and grammar helpers (all books). */
+const DR_PHRASES: readonly (readonly [string, string])[] = [
   ["man sick of the palsy", "paralyzed man"],
   ["sick of the palsy", "paralyzed"],
   ["baptism of penance", "baptism of repentance"],
@@ -45,7 +38,7 @@ const MARK_PHRASES: readonly (readonly [string, string])[] = [
   ["See thou", "See that you"],
 ];
 
-const MARK_ETH_VERBS: Readonly<Record<string, string>> = {
+const DR_ETH_VERBS: Readonly<Record<string, string>> = {
   ariseth: "arises",
   becometh: "becomes",
   believeth: "believes",
@@ -85,7 +78,7 @@ const MARK_ETH_VERBS: Readonly<Record<string, string>> = {
   taketh: "takes",
 };
 
-const MARK_WORDS: Readonly<Record<string, string>> = {
+const DR_WORDS: Readonly<Record<string, string>> = {
   Isaias: "Isaiah",
   Capharnaum: "Capernaum",
   Gerasens: "Gerasenes",
@@ -133,25 +126,19 @@ function replaceWord(text: string, from: string, to: string): string {
 
 /**
  * Light Douay-Rheims wording refresh for easier reading. Does not change meaning or add text.
- * Pilot: Gospel of Mark only.
+ * Applied to all Bible books for display and typing.
  */
-export function modernizeForReading(
-  text: string,
-  options?: { bookSlug?: string },
-): string {
-  const bookSlug = options?.bookSlug;
-  if (bookSlug && !usesModernizedReading(bookSlug)) return text;
-
+export function modernizeForReading(text: string): string {
   let out = text;
-  for (const [from, to] of MARK_PHRASES) {
+  for (const [from, to] of DR_PHRASES) {
     out = replacePhrase(out, from, to);
   }
 
-  for (const [from, to] of Object.entries(MARK_ETH_VERBS)) {
+  for (const [from, to] of Object.entries(DR_ETH_VERBS)) {
     out = replaceWord(out, from, to);
   }
 
-  for (const [from, to] of Object.entries(MARK_WORDS)) {
+  for (const [from, to] of Object.entries(DR_WORDS)) {
     out = replaceWord(out, from, to);
   }
 
