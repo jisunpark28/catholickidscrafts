@@ -71,7 +71,6 @@ export function BibleChapterReadingNotes({
               ))}
             </ul>
           )}
-          <p className="text-xs text-[var(--color-muted)]">{labels.disclaimer}</p>
         </div>
       )}
     </section>
