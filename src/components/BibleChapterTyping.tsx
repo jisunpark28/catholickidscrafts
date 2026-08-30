@@ -1,23 +1,22 @@
 "use client";
 
-import {
-  BibleChapterReadingNotes,
-  BibleModernizedReadingNotice,
-} from "@/components/bible/BibleChapterReadingNotes";
 import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
+import { BibleChapterReadingNotes } from "@/components/bible/BibleChapterReadingNotes";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
+import { bibleUiLabels } from "@/lib/bible/bible-ui-labels";
+import type { ChapterNoteLocale } from "@/lib/bible/chapter-notes";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
-import type { ChapterNoteLocale } from "@/lib/bible/chapter-notes";
-import { readChapterNotesLocale } from "@/lib/bible/chapter-notes";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 type Props = {
   bookSlug: string;
   bookName: string;
+  apiBookName: string;
   chapter: number;
   text: string;
+  uiLanguage: ChapterNoteLocale;
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
 };
@@ -25,17 +24,15 @@ type Props = {
 export function BibleChapterTyping({
   bookSlug,
   bookName,
+  apiBookName,
   chapter,
   text,
+  uiLanguage,
   discussionSignedIn,
   discussionReaderLabel,
 }: Props) {
   const [stickerError, setStickerError] = useState("");
-  const [notesLocale, setNotesLocale] = useState<ChapterNoteLocale>("en");
-
-  useEffect(() => {
-    setNotesLocale(readChapterNotesLocale());
-  }, []);
+  const labels = bibleUiLabels(uiLanguage);
 
   const unlockSticker = useCallback(
     async (accuracy: number) => {
@@ -61,16 +58,15 @@ export function BibleChapterTyping({
 
   return (
     <div className="space-y-4">
-      <BibleModernizedReadingNotice bookSlug={bookSlug} locale={notesLocale} />
       <BibleChapterReadingNotes
         bookSlug={bookSlug}
+        apiBookName={apiBookName}
         chapter={chapter}
-        locale={notesLocale}
-        onLocaleChange={setNotesLocale}
+        locale={uiLanguage}
       />
       <PassageTypingGame
         text={text}
-        title={`${bookName} — Chapter ${chapter}`}
+        title={`${bookName} — ${labels.chapter} ${chapter}`}
         draftKey={typingDraftKey.bibleChapter(bookSlug, chapter)}
         accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
         onStickerUnlock={unlockSticker}
@@ -79,11 +75,10 @@ export function BibleChapterTyping({
         appearance="bible"
         completionMessage={
           <p>
-            Your praise sticker for chapter {chapter} is saved.{" "}
+            {labels.stickerSaved(chapter, bookName)}{" "}
             <Link href={`/bible/${bookSlug}`} className="font-semibold text-[var(--color-link)]">
-              Back to {bookName}
-            </Link>{" "}
-            to see your collection.
+              {labels.backTo(bookName)}
+            </Link>
           </p>
         }
       />
