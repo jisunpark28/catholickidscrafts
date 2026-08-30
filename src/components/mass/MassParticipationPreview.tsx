@@ -4,7 +4,6 @@ import {
   MassSpeakerChildrenIcon,
   MassSpeakerLegend,
   MassSpeakerPriestIcon,
-  MassSpeakerRubricIcon,
 } from "@/components/mass/MassSpeakerIcons";
 import {
   MASS_LITURGY_PARTS,
@@ -29,28 +28,42 @@ function MassLineRow({
   practiceMode,
   revealed,
   onToggleReveal,
+  childrenFocus,
 }: {
   line: MassParticipationLine;
   practiceMode: boolean;
   revealed: boolean;
   onToggleReveal: (id: string) => void;
+  childrenFocus: boolean;
 }) {
   const isAssembly = line.role === "assembly";
+  const isRubric = line.role === "rubric";
   const hideText = practiceMode && isAssembly && line.revealable !== false && !revealed;
 
+  const lineClass = [
+    "mass-line",
+    `mass-line--${line.role}`,
+    childrenFocus && !isAssembly ? "mass-line--dimmed" : "",
+    childrenFocus && isAssembly ? "mass-line--highlight" : "",
+    isRubric ? "mass-line--rubric-compact" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <li className={`mass-line mass-line--${line.role}`} data-line-id={line.id}>
-      <div className="mass-line__icon" aria-hidden>
-        {line.role === "priest" ? (
-          <MassSpeakerPriestIcon size={44} />
-        ) : line.role === "assembly" ? (
-          <MassSpeakerChildrenIcon size={44} />
-        ) : (
-          <MassSpeakerRubricIcon size={44} title="Direction" />
-        )}
-      </div>
+    <li className={lineClass} data-line-id={line.id}>
+      {!isRubric && (
+        <div className="mass-line__icon" aria-hidden>
+          {line.role === "priest" ? (
+            <MassSpeakerPriestIcon size={44} />
+          ) : (
+            <MassSpeakerChildrenIcon size={44} />
+          )}
+        </div>
+      )}
       <div className="mass-line__body">
-        <div className="mass-line__role">{roleLabel(line.role)}</div>
+        {!isRubric && <div className="mass-line__role">{roleLabel(line.role)}</div>}
+        {isRubric && <div className="mass-line__role mass-line__role--rubric">Direction</div>}
         <p className={`mass-line__text${hideText ? " mass-line__text--hidden" : ""}`}>
           {line.text}
         </p>
@@ -85,6 +98,8 @@ export function MassParticipationPreview() {
   const [season, setSeason] = useState<MassSeasonPreset>("ordinary");
   const [liturgyPart, setLiturgyPart] = useState<MassLiturgyPartId | "all">("all");
   const [practiceMode, setPracticeMode] = useState(true);
+  const [showDirections, setShowDirections] = useState(false);
+  const [childrenFocus, setChildrenFocus] = useState(false);
   const [revealedIds, setRevealedIds] = useState<Set<string>>(() => new Set());
 
   useEffect(() => {
@@ -146,15 +161,31 @@ export function MassParticipationPreview() {
         ? MASS_LITURGY_PARTS
         : MASS_LITURGY_PARTS.filter((p) => p.id === liturgyPart);
     return parts
-      .map((section) => ({
-        ...section,
-        lines: lines.filter((l) => l.section === section.id),
-      }))
+      .map((section) => {
+        const sectionLines = lines.filter((l) => l.section === section.id);
+        const visibleLines = showDirections
+          ? sectionLines
+          : sectionLines.filter((l) => l.role !== "rubric");
+        return {
+          ...section,
+          lines: visibleLines,
+          hiddenDirectionCount: showDirections
+            ? 0
+            : sectionLines.filter((l) => l.role === "rubric").length,
+        };
+      })
       .filter((s) => s.lines.length > 0);
-  }, [lines, liturgyPart]);
+  }, [lines, liturgyPart, showDirections]);
+
+  const hiddenDirectionTotal = useMemo(
+    () => sectionsWithLines.reduce((sum, s) => sum + s.hiddenDirectionCount, 0),
+    [sectionsWithLines],
+  );
 
   return (
-    <div className="mass-participation">
+    <div
+      className={`mass-participation${childrenFocus ? " mass-participation--children-focus" : ""}`}
+    >
       <div ref={pinSentinelRef} className="mass-participation__pin-sentinel" aria-hidden />
       <div
         aria-hidden
@@ -204,6 +235,25 @@ export function MassParticipationPreview() {
           <div className="mass-participation__toolbar-group">
             <button
               type="button"
+              className={`mass-participation__btn${showDirections ? " mass-participation__btn--active" : ""}`}
+              onClick={() => setShowDirections((v) => !v)}
+              aria-pressed={showDirections}
+            >
+              Directions
+            </button>
+            <button
+              type="button"
+              className={`mass-participation__btn${childrenFocus ? " mass-participation__btn--active" : ""}`}
+              onClick={() => setChildrenFocus((v) => !v)}
+              aria-pressed={childrenFocus}
+            >
+              Children focus
+            </button>
+          </div>
+
+          <div className="mass-participation__toolbar-group">
+            <button
+              type="button"
               className={`mass-participation__btn${practiceMode ? " mass-participation__btn--active" : ""}`}
               onClick={() => setPracticeMode(true)}
             >
@@ -243,13 +293,25 @@ export function MassParticipationPreview() {
         )}
 
         {sectionsWithLines.map((section) => (
-          <section key={section.id} aria-labelledby={`mass-section-${section.id}`}>
+          <section
+            key={section.id}
+            className="mass-participation__section"
+            aria-labelledby={`mass-section-${section.id}`}
+          >
             {liturgyPart === "all" && (
-              <h2 id={`mass-section-${section.id}`} className="mass-participation__section-title">
-                {section.label}
-              </h2>
+              <div className="mass-participation__section-banner">
+                <h2 id={`mass-section-${section.id}`} className="mass-participation__section-title">
+                  {section.label}
+                </h2>
+                {!showDirections && section.hiddenDirectionCount > 0 && (
+                  <p className="mass-participation__section-note">
+                    {section.hiddenDirectionCount} direction
+                    {section.hiddenDirectionCount === 1 ? "" : "s"} hidden
+                  </p>
+                )}
+              </div>
             )}
-            <ul className="flex flex-col gap-2">
+            <ul className="mass-participation__lines">
               {section.lines.map((line) => (
                 <MassLineRow
                   key={line.id}
@@ -257,11 +319,19 @@ export function MassParticipationPreview() {
                   practiceMode={practiceMode}
                   revealed={revealedIds.has(line.id)}
                   onToggleReveal={toggleReveal}
+                  childrenFocus={childrenFocus}
                 />
               ))}
             </ul>
           </section>
         ))}
+
+        {!showDirections && hiddenDirectionTotal > 0 && liturgyPart !== "all" && (
+          <p className="mass-participation__directions-hint">
+            {hiddenDirectionTotal} direction{hiddenDirectionTotal === 1 ? "" : "s"} hidden. Turn on{" "}
+            <strong>Directions</strong> in the toolbar to show them.
+          </p>
+        )}
 
       </div>
     </div>
