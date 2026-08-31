@@ -1,20 +1,20 @@
 {
-  "version": 2,
-  "notes": "Hit regions for courtyard_entry_scene.png — invisible click targets aligned to painted objects. Character safe zone: center-bottom (greeters z-index 7).",
+  "version": 3,
+  "notes": "courtyard_entry_scene.png v3 — Mary flower garden (left), bench family (right), ground bulletin, tower bell. No holy water (indoor item).",
   "hits": {
     "bell": {
       "left": 0.635,
-      "top": 0.045,
-      "width": 0.115,
-      "height": 0.105,
-      "label": "Find the church bell in the tower"
+      "top": 0.048,
+      "width": 0.11,
+      "height": 0.1,
+      "label": "Find the bell in the church tower"
     },
     "bulletin": {
-      "left": 0.205,
-      "top": 0.415,
-      "width": 0.095,
-      "height": 0.125,
-      "label": "Find the bulletin board"
+      "left": 0.07,
+      "top": 0.74,
+      "width": 0.11,
+      "height": 0.13,
+      "label": "Find the bulletin board on the ground"
     },
     "welcome_sign": {
       "left": 0.318,
@@ -23,26 +23,19 @@
       "height": 0.088,
       "label": "Find the welcome sign"
     },
-    "holy_water": {
-      "left": 0.548,
-      "top": 0.632,
-      "width": 0.062,
-      "height": 0.085,
-      "label": "Find the holy water font"
-    },
     "parish_bench": {
-      "left": 0.045,
-      "top": 0.745,
-      "width": 0.2,
-      "height": 0.145,
+      "left": 0.56,
+      "top": 0.72,
+      "width": 0.3,
+      "height": 0.17,
       "label": "Find the parish family on the bench"
     },
     "mary_flowers": {
-      "left": 0.01,
-      "top": 0.855,
-      "width": 0.115,
-      "height": 0.11,
-      "label": "Find the flower basket"
+      "left": 0.02,
+      "top": 0.8,
+      "width": 0.16,
+      "height": 0.14,
+      "label": "Find Mary's flower garden"
     }
   },
   "characterSafeZone": {

@@ -2,11 +2,10 @@
  * Courtyard hidden-object scene — integrated art + invisible hit regions.
  */
 (function initCourtyardEvents(global) {
-    const STORAGE_KEY = "tp_courtyard_done_v1";
-    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831i";
+    const STORAGE_KEY = "tp_courtyard_done_v2";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831j";
 
     const EVENT_IDS = [
-        "holy_water",
         "mary_flowers",
         "bell",
         "bulletin",
@@ -202,6 +201,15 @@
         window.setTimeout(() => btn.classList.remove("is-glow-pulse"), 1400);
     }
 
+    function pulseMaryHalo() {
+        const mary = document.getElementById("courtyard-mary");
+        if (!mary) {
+            return;
+        }
+        mary.classList.add("is-glowing");
+        window.setTimeout(() => mary.classList.remove("is-glowing"), 1800);
+    }
+
     function runBellFx(btn) {
         const bell = btn || document.querySelector('[data-courtyard-event="bell"]');
         if (bell) {
@@ -241,6 +249,7 @@
 
     function completeMaryFlowers(colorLabel) {
         hideFlowerPicker();
+        pulseMaryHalo();
         pulseFoundGlow(state.lastFindButton);
         const first = markDone("mary_flowers", state.lastFindButton);
         const line = first
@@ -299,26 +308,12 @@
         state.lastFindButton = btn || null;
 
         try {
-            if (eventId === "holy_water") {
-                runHolyWaterFx();
-                const first = markDone("holy_water", btn);
-                say(
-                    first
-                        ? tp(
-                              "courtyard.holy_water_done",
-                              "You found the holy water font! Dip your finger and make the sign of the cross. Splash — Jesus washes your heart clean and says, 'Welcome back!'",
-                          )
-                        : tp(
-                              "courtyard.holy_water_repeat",
-                              "Holy water is a little hello from Jesus every time you walk in. Try the sign of the cross again!",
-                          ),
-                );
-            } else if (eventId === "mary_flowers") {
+            if (eventId === "mary_flowers") {
                 showFlowerPicker();
                 say(
                     tp(
                         "courtyard.mary_prompt",
-                        "You found the flower basket! Mary loves when children bring flowers. Pick a color to offer her before Mass.",
+                        "You found Mary's flower garden! Pick a blossom to offer her before Mass.",
                     ),
                 );
             } else if (eventId === "bell") {
@@ -342,7 +337,7 @@
                     first
                         ? tp(
                               "courtyard.bulletin_done",
-                              "You found the bulletin board! {detail} Listen closely at Mass — God has a message just for you today.",
+                              "You found the parish bulletin on the ground! {detail} Listen closely at Mass — God has a message just for you today.",
                           ).replace("{detail}", gospelLine)
                         : gospelLine,
                 );
@@ -412,10 +407,7 @@
         const done = getDoneSet();
         const bits = [];
         if (done.has("mary_flowers")) {
-            bits.push(tp("courtyard.encourage_mary", "You brought flowers to Mary ✓"));
-        }
-        if (done.has("holy_water")) {
-            bits.push(tp("courtyard.encourage_water", "You used holy water ✓"));
+            bits.push(tp("courtyard.encourage_mary", "You visited Mary's flower garden ✓"));
         }
         if (done.has("bell")) {
             bits.push(tp("courtyard.encourage_bell", "You found the church bell ✓"));
