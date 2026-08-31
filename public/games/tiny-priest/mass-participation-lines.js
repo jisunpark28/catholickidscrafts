@@ -607,3 +607,29 @@ window.MASS_LITURGY_PARTS = [
     "label": "Concluding Rites"
   }
 ];
+window.MASS_ORDER_QUEST_ANCHORS = [
+  "intro-1",
+  "intro-2",
+  "intro-6",
+  "intro-11",
+  "intro-12",
+  "intro-15",
+  "word-1",
+  "word-3b",
+  "word-3c",
+  "word-3d",
+  "word-6",
+  "word-9b",
+  "word-9b2",
+  "word-9c",
+  "euch-1",
+  "euch-2",
+  "thanks-1",
+  "thanks-2",
+  "comm-1",
+  "comm-4",
+  "comm-6",
+  "comm-7",
+  "end-3",
+  "end-7"
+];
