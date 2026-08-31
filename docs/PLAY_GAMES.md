@@ -20,18 +20,19 @@ Public hub: `/play`
 
 Large static assets in `public/games/tiny-priest/` increase repo and Vercel bundle size. Consider Git LFS or external hosting if pushes fail.
 
-## Church decorations (operator)
+## Church decorations (Stations of the Cross)
 
-- Admin: `/admin/church-decorations` — **Set up all 14 walls** at `/admin/church-decorations/new` (bulk upload per frame)
-- Public API: `GET /api/church-decorations`
-- Click uploaded images inside the 3D church to show title + description.
+- **Bundled in the game:** `public/games/tiny-priest/stations/` + `stations.js` (14 stations, fixed wall order)
+- Wall slots: left wall stations 1→7 (altar to doors), right wall 8→14 (counter-clockwise, ending at altar)
+- Click a station picture in the 3D church for title + description
+- **No admin UI** — edit `stations.js` and image files to change stations
 
 ## Site & game text (operator)
 
 - Admin: `/admin/site-copy` — nav labels, home page, page headers, game UI chrome, season filter names, Tiny Priest/Hangman shell text
 - Public API: `GET /api/site-copy` (optional `?group=…` or `?prefix=…`)
 - Seed: `npm run db:seed-site-copy`
-- **Not** included: Mass readings, typing/hangman word lists, church wall images, Mass Order step bodies (separate admins)
+- **Not** included: Mass readings, typing/hangman word lists, church wall stations (bundled in game), Mass Order step bodies (separate admin)
 
 ## Mass Order (operator)
 

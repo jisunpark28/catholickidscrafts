@@ -947,7 +947,7 @@ function createVoxelChurch(container) {
     scene.background = new THREE.Color(0xf5f5dc);
     scene.fog = new THREE.Fog(0xf5f5dc, 14, 44);
 
-    const camera = new THREE.PerspectiveCamera(54, window.innerWidth / window.innerHeight, 0.1, 52);
+    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 52);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -1162,6 +1162,8 @@ function createVoxelChurch(container) {
 
     for (let row = 0; row < 7; row += 1) {
         addWallPictureFrame("left", row);
+    }
+    for (let row = 0; row < 7; row += 1) {
         addWallPictureFrame("right", row);
     }
 
@@ -1177,7 +1179,7 @@ function createVoxelChurch(container) {
     const SANCTUARY_CENTER_Z = -12.4;
     const SANCTUARY_HALF_WIDTH = 6;
     const SANCTUARY_HALF_DEPTH = 3.5;
-    const interiorCameraBounds = { minX: -12.4, maxX: 12.4, minZ: -13.4, maxZ: 12.6 };
+    const interiorCameraBounds = { minX: -12.4, maxX: 12.4, minZ: -13.4, maxZ: 14.2 };
     const interiorCameraMargin = 0.4;
 
     function resolveGroundHeight(x, z) {
@@ -1270,7 +1272,7 @@ function createVoxelChurch(container) {
     const isPriest = APP_STATE.selectedCharacter === "priest";
 
     const playerRig = new THREE.Group();
-    playerRig.position.set(0, 0, 10.8);
+    playerRig.position.set(0, 0, 7.2);
     root.add(playerRig);
 
     const textureLoader = new THREE.TextureLoader();
@@ -1286,7 +1288,7 @@ function createVoxelChurch(container) {
         depthWrite: false,
     });
 
-    const PLAYER_SPRITE_WORLD_HEIGHT = 2.9;
+    const PLAYER_SPRITE_WORLD_HEIGHT = 2.35;
     let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
     let playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
@@ -2054,53 +2056,46 @@ function createVoxelChurch(container) {
         }
     }
 
-    async function loadChurchDecorations() {
-        try {
-            const response = await fetch("/api/church-decorations");
-            const items = await response.json();
-            if (!Array.isArray(items)) return;
+    function loadChurchDecorations() {
+        const stations = typeof STATIONS_OF_THE_CROSS !== "undefined" ? STATIONS_OF_THE_CROSS : [];
+        if (!Array.isArray(stations) || stations.length === 0) return;
 
-            items.forEach((item, listIndex) => {
-                const slotIndex = Number.isInteger(item.sortOrder) ? item.sortOrder : listIndex;
-                const slot = wallPictureSlots[slotIndex];
-                const width = slot?.width ?? item.width ?? 1.12;
-                const height = slot?.height ?? item.height ?? 1.48;
+        stations.forEach((station) => {
+            const slotIndex = Number.isInteger(station.sortOrder) ? station.sortOrder : -1;
+            const slot = wallPictureSlots[slotIndex];
+            if (!slot) return;
 
-                const tex = textureLoader.load(item.imageUrl);
-                if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
-                tex.magFilter = THREE.LinearFilter;
-                tex.minFilter = THREE.LinearMipmapLinearFilter;
+            const width = slot.width ?? 1.12;
+            const height = slot.height ?? 1.48;
+            const imagePath = station.image || "";
 
-                const mat = new THREE.MeshBasicMaterial({
-                    map: tex,
-                    transparent: true,
-                    alphaTest: 0.05,
-                    side: THREE.DoubleSide,
-                    depthWrite: false,
-                });
-                const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
-                if (slot) {
-                    mesh.position.set(slot.x, slot.y, slot.z);
-                    mesh.rotation.y = slot.rotationY;
-                } else {
-                    mesh.position.set(item.posX || 0, item.posY || 2.2, item.posZ || -6);
-                    mesh.rotation.y = item.rotationY || 0;
-                }
-                mesh.renderOrder = 2;
-                mesh.userData.hotspot = {
-                    title: item.title,
-                    description: item.description,
-                };
-                root.add(mesh);
-                decorationMeshes.push(mesh);
-                interactiveMeshes.push(mesh);
+            const tex = textureLoader.load(imagePath);
+            if ("colorSpace" in tex) tex.colorSpace = THREE.SRGBColorSpace;
+            tex.magFilter = THREE.LinearFilter;
+            tex.minFilter = THREE.LinearMipmapLinearFilter;
+
+            const mat = new THREE.MeshBasicMaterial({
+                map: tex,
+                transparent: true,
+                alphaTest: 0.05,
+                side: THREE.DoubleSide,
+                depthWrite: false,
             });
-        } catch (error) {
-            console.warn("Church decorations could not load:", error);
-        }
+            const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
+            mesh.position.set(slot.x, slot.y, slot.z);
+            mesh.rotation.y = slot.rotationY;
+            mesh.renderOrder = 2;
+            mesh.userData.hotspot = {
+                title: station.title || `Station ${station.number}`,
+                description: station.description || "",
+            };
+            root.add(mesh);
+            decorationMeshes.push(mesh);
+            interactiveMeshes.push(mesh);
+        });
     }
 
-    void loadChurchDecorations();
+    loadChurchDecorations();
 
     function onPointerDown(event) {
         const bounds = renderer.domElement.getBoundingClientRect();
@@ -2146,8 +2141,8 @@ function createVoxelChurch(container) {
         container.innerHTML = "";
     }
 
-    const cameraOffset = new THREE.Vector3(0, 2.85, 8.6);
-    const cameraLookOffset = new THREE.Vector3(0, 1.45, -3.2);
+    const cameraOffset = new THREE.Vector3(0, 3.05, 10.5);
+    const cameraLookOffset = new THREE.Vector3(0, 1.15, -2.8);
     const cameraTarget = new THREE.Vector3();
     const cameraLookTarget = new THREE.Vector3();
     const moveDirection = new THREE.Vector3(0, 0, -1);
@@ -2402,16 +2397,17 @@ function createVoxelChurch(container) {
 function applyRoleCamera(role, camera, playerRig = null) {
     const anchorX = playerRig ? playerRig.position.x : 0;
     const anchorY = playerRig ? playerRig.position.y : 0;
-    const anchorZ = playerRig ? playerRig.position.z : 10.8;
+    const anchorZ = playerRig ? playerRig.position.z : 7.2;
     const spawnGroundY = playerRig ? playerRig.position.y : 0;
-    const maxCamZ = 12.6;
-    const camZ = Math.min(anchorZ + 8.6, maxCamZ);
+    const camOffsetZ = 10.5;
+    const interiorMaxZ = 14.2;
+    const camZ = Math.min(anchorZ + camOffsetZ, interiorMaxZ);
     const camX = THREE.MathUtils.clamp(anchorX, -12.4, 12.4);
-    camera.position.set(camX, anchorY + 2.85, camZ);
+    camera.position.set(camX, anchorY + 3.05, camZ);
     camera.lookAt(
         THREE.MathUtils.clamp(anchorX, -12.4, 12.4),
-        spawnGroundY + 1.45,
-        THREE.MathUtils.clamp(anchorZ - 3.2, -13.4, 12.6),
+        spawnGroundY + 1.15,
+        THREE.MathUtils.clamp(anchorZ - 2.8, -13.4, interiorMaxZ),
     );
 }
 
