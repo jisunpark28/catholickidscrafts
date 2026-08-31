@@ -11,7 +11,7 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
       description: copyText(
         copy,
         "play.game.church.description",
-        "A short church walk-through for new helpers and kids.",
+        "Welcome to Tiny Church!",
       ),
       embedPath: getTinyPriestEmbedPath(),
     },

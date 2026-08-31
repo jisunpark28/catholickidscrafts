@@ -49,7 +49,7 @@ export default async function PlayGamePage({ params }: Props) {
         title={game.title}
         description={game.description || undefined}
         src={src}
-        showTip={slug !== "hangman"}
+        showTip={slug !== "hangman" && slug !== "church"}
         immersive={slug === "church"}
         tall={slug === "hangman"}
       />

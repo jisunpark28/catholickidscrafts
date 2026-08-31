@@ -94,7 +94,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.hub.typing_link", "Typing Game", "play"),
 
   sc("play.game.church.title", "Tiny Priest", "play"),
-  sc("play.game.church.description", "A short church walk-through for new helpers and kids—altar, tabernacle, holy water. Good for a first visit or review week.", "play"),
+  sc("play.game.church.description", "Welcome to Tiny Church!", "play"),
   sc("play.game.vestments.title", "Liturgical vestments", "play"),
   sc("play.game.vestments.description", "Practice Church colors (Advent purple, Easter white, and more). Works well right before you decorate the classroom.", "play"),
   sc("play.game.typing.title", "Typing Game", "play"),
@@ -183,7 +183,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("game.tiny_priest.entry.title", "Welcome to Tiny Church.", "game_tiny_priest"),
   sc(
     "game.tiny_priest.entry.dialogue_default",
-    "You're at church for Sunday Mass. Look closely at the courtyard picture! Six things are hiding in the scene. Can you find them all? Then say hello to Father or Sister.",
+    "You're at church for Sunday Mass. Look closely at the courtyard picture! Five things are hiding in the scene. Can you find them all? Then say hello to Father or Sister.",
     "game_tiny_priest",
   ),
   sc("game.tiny_priest.entry.picker_label", "You are:", "game_tiny_priest"),
@@ -206,7 +206,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   ),
   sc(
     "game.tiny_priest.courtyard.mary_prompt",
-    "You found the flower basket! Mary loves when children bring flowers. Pick a color to offer her before Mass.",
+    "You found Mary's flower garden! Pick a blossom to offer her before Mass.",
     "game_tiny_priest",
   ),
   sc(
@@ -258,7 +258,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   ),
   sc("game.tiny_priest.courtyard.bench_repeat", "Your parish friends wave again. See you inside!", "game_tiny_priest"),
   sc("game.tiny_priest.courtyard.encourage_intro", "Before Mass:", "game_tiny_priest"),
-  sc("game.tiny_priest.courtyard.encourage_mary", "You brought flowers to Mary ✓", "game_tiny_priest"),
+  sc("game.tiny_priest.courtyard.encourage_mary", "You visited Mary's flower garden ✓", "game_tiny_priest"),
   sc("game.tiny_priest.courtyard.encourage_water", "You used holy water ✓", "game_tiny_priest"),
   sc("game.tiny_priest.courtyard.encourage_bell", "You found the church bell ✓", "game_tiny_priest"),
   sc("game.tiny_priest.courtyard.encourage_sign", "You found the welcome sign ✓", "game_tiny_priest"),

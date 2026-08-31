@@ -13,8 +13,7 @@ export const PLAY_GAMES: PlayGame[] = [
   {
     slug: "church",
     title: "Tiny Priest",
-    description:
-      "A short church walk-through for new helpers and kids—altar, tabernacle, holy water. Good for a first visit or review week.",
+    description: "Welcome to Tiny Church!",
     embedPath: getTinyPriestEmbedPath(),
   },
   {
