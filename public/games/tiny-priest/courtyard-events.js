@@ -3,7 +3,7 @@
  */
 (function initCourtyardEvents(global) {
     const STORAGE_KEY = "tp_courtyard_done_v1";
-    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831i";
 
     const EVENT_IDS = [
         "holy_water",
