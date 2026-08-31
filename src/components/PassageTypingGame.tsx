@@ -536,7 +536,7 @@ export function PassageTypingGame({
     <div ref={mirrorContainerRef} className="gospel-typing__input-mirror">
       <p
         ref={inputMirrorRef}
-        className="gospel-typing__input-mirror-display gospel-typing-input gospel-typing__mirror-text mb-0"
+        className="gospel-typing__input-mirror-display gospel-typing-input gospel-typing__mirror-text gospel-typing__pane-content mb-0"
         aria-hidden
       >
         {target.split("").map((char, i) => {
@@ -733,7 +733,7 @@ export function PassageTypingGame({
           syncCaretOverlay();
         }}
         onPaste={(e) => e.preventDefault()}
-        className="gospel-typing__input-capture gospel-typing-input gospel-typing__pane-content w-full resize-none bg-white shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50"
+        className={`gospel-typing__input-capture gospel-typing-input w-full resize-none bg-white shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 ${sidePaneSurface}`}
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"

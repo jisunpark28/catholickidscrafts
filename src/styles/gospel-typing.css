@@ -174,12 +174,31 @@
 .gospel-typing__columns .gospel-typing__pane-content {
   padding: 1.25rem;
   scrollbar-gutter: stable;
+  scrollbar-width: none;
+}
+
+.gospel-typing__columns .gospel-typing__pane-content::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 640px) {
   .gospel-typing__columns .gospel-typing__pane-content {
     padding: 1.5rem;
   }
+}
+
+/* Side-by-side: identical text metrics and content width in both panes */
+.gospel-typing__columns .gospel-typing-passage,
+.gospel-typing__columns .gospel-typing__input-mirror-display {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.gospel-typing__columns .gospel-typing-char--wrong {
+  background: none;
 }
 
 /* Side-by-side: passage left, typing right (desktop); stacked on mobile */
@@ -238,16 +257,6 @@
   overflow-y: auto;
 }
 
-.gospel-typing__columns .gospel-typing__mirror-text {
-  padding: 1.25rem;
-}
-
-@media (min-width: 640px) {
-  .gospel-typing__columns .gospel-typing__mirror-text {
-    padding: 1.5rem;
-  }
-}
-
 .gospel-typing-char--mirror {
   color: transparent;
 }
@@ -280,7 +289,7 @@
   pointer-events: none;
   border: 1px solid transparent;
   box-sizing: border-box;
-  scrollbar-gutter: auto;
+  scrollbar-gutter: stable;
   scrollbar-width: none;
   background: transparent;
   box-shadow: none;
