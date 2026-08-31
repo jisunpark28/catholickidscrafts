@@ -34,7 +34,7 @@ const CHARACTER_CONFIG = {
 };
 
 const DEFAULT_ENTRY_DIALOGUE =
-    "You're at church for Sunday Mass. Tap the courtyard spots for fun, then say hello to Father or Sister!";
+    "You're at church for Sunday Mass. Tap around — see what you discover! Then say hello to Father or Sister.";
 const DEFAULT_WALKING_DIALOGUE = "Walking into the church…";
 const DEFAULT_GREETER_FAREWELL = "See you inside!";
 

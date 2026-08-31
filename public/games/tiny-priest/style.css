@@ -79,13 +79,13 @@ body:fullscreen .main-container {
     display: flex;
     align-items: center;
     gap: 2px;
-    padding: 4px 10px;
+    padding: 2px 6px;
     border-radius: 999px;
-    background: rgba(255, 254, 248, 0.88);
-    border: 1px solid rgba(160, 121, 86, 0.35);
-    font-size: 0.85rem;
+    background: transparent;
+    border: none;
+    font-size: 0.78rem;
     line-height: 1;
-    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.08);
+    opacity: 0.72;
 }
 
 .courtyard-star.is-earned {
@@ -163,7 +163,7 @@ body:fullscreen .main-container {
 }
 
 .statue-mary:hover {
-    transform: translateY(-8px) scale(1.03);
+    transform: translateY(-4px) scale(1.02);
 }
 
 .courtyard-door-glow {
@@ -194,104 +194,81 @@ body:fullscreen .main-container {
     }
 }
 
-.courtyard-hotspots {
+.courtyard-hits {
     position: absolute;
     inset: 0;
-    z-index: 5;
+    z-index: 3;
     pointer-events: none;
 }
 
-.courtyard-hotspot {
+.courtyard-hit {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    min-width: 52px;
-    padding: 6px 8px;
-    border: 2px solid rgba(77, 156, 90, 0.55);
-    border-radius: 12px;
-    background: rgba(255, 254, 248, 0.92);
-    color: #5d4037;
-    font-size: 0.58rem;
-    font-weight: 800;
-    line-height: 1.1;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
     cursor: pointer;
     pointer-events: auto;
-    box-shadow: 0 6px 14px rgba(82, 58, 44, 0.14);
-    transition:
-        transform 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.courtyard-hotspot:hover {
-    transform: translateY(-3px) scale(1.04);
-    background: #fffef8;
+.courtyard-hit:focus-visible {
+    outline: 2px dashed rgba(77, 156, 90, 0.45);
+    outline-offset: 2px;
 }
 
-.courtyard-hotspot:focus-visible {
-    outline: 3px solid rgba(77, 156, 90, 0.9);
-    outline-offset: 3px;
+/* Hidden-object targets — tuned to church.png layout; sit below characters (z-index 7). */
+.courtyard-hit--welcome {
+    left: 26%;
+    top: 6%;
+    width: 48%;
+    height: 58%;
+    z-index: 1;
 }
 
-.courtyard-hotspot.is-done {
-    border-color: rgba(196, 92, 38, 0.55);
-    background: rgba(255, 248, 235, 0.95);
+.courtyard-hit--bell {
+    left: 41%;
+    top: 1%;
+    width: 18%;
+    height: 24%;
+    z-index: 2;
 }
 
-.courtyard-hotspot.is-done::after {
-    content: "✓";
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #4d9c5a;
-    color: #fff;
-    font-size: 0.62rem;
-    line-height: 16px;
-    text-align: center;
-}
-
-.courtyard-hotspot-icon {
-    font-size: 1.15rem;
-    line-height: 1;
-}
-
-.courtyard-hotspot-label {
-    white-space: nowrap;
-}
-
-.courtyard-hotspot--sign {
-    left: 22%;
-    bottom: 22%;
-}
-
-.courtyard-hotspot--bench {
+.courtyard-hit--bulletin {
     left: 28%;
-    bottom: 20%;
+    top: 36%;
+    width: 11%;
+    height: 20%;
+    z-index: 2;
 }
 
-.courtyard-hotspot--bell {
-    right: 8%;
-    top: 8%;
+.courtyard-hit--font {
+    left: 62%;
+    top: 50%;
+    width: 12%;
+    height: 20%;
+    z-index: 2;
 }
 
-.courtyard-hotspot--font {
-    right: 14%;
-    bottom: 16%;
+.courtyard-hit--bench {
+    left: 20%;
+    bottom: 5%;
+    width: 10%;
+    height: 12%;
+    z-index: 2;
 }
 
-.courtyard-hotspot--bulletin {
-    right: 4%;
-    bottom: 34%;
+.courtyard-hit--mary {
+    z-index: 4;
 }
 
-.courtyard-hotspot.is-ringing {
+.courtyard-hit.is-ringing,
+.courtyard-hit--bell.is-ringing {
     animation: bell-ring 0.85s ease-in-out;
+}
+
+.courtyard-hit--welcome.is-ringing {
+    animation: none;
 }
 
 @keyframes bell-ring {
@@ -300,16 +277,16 @@ body:fullscreen .main-container {
         transform: rotate(0deg);
     }
     20% {
-        transform: rotate(-12deg);
+        transform: rotate(-4deg);
     }
     40% {
-        transform: rotate(10deg);
+        transform: rotate(3deg);
     }
     60% {
-        transform: rotate(-8deg);
+        transform: rotate(-3deg);
     }
     80% {
-        transform: rotate(6deg);
+        transform: rotate(2deg);
     }
 }
 
@@ -429,7 +406,7 @@ body:fullscreen .main-container {
     }
 }
 
-#entry-screen.is-entering-zoom .courtyard-hotspots,
+#entry-screen.is-entering-zoom .courtyard-hits,
 #entry-screen.is-entering-zoom .courtyard-door-glow,
 #entry-screen.is-entering-zoom .courtyard-stars,
 #entry-screen.is-entering-zoom .courtyard-flower-picker {
@@ -1217,29 +1194,18 @@ body:fullscreen .mass-navigator.is-active {
         max-height: calc(100dvh - 56px);
     }
 
-    .courtyard-hotspot {
-        min-width: 44px;
-        padding: 4px 6px;
-        font-size: 0.5rem;
+    .courtyard-hit--bench {
+        left: 12%;
+        bottom: 5%;
+        width: 11%;
+        height: 12%;
     }
 
-    .courtyard-hotspot-icon {
-        font-size: 0.95rem;
-    }
-
-    .courtyard-hotspot--sign {
-        left: 18%;
-        bottom: 20%;
-    }
-
-    .courtyard-hotspot--bench {
-        left: 24%;
-        bottom: 18%;
-    }
-
-    .courtyard-hotspot--font {
-        right: 10%;
-        bottom: 14%;
+    .courtyard-hit--font {
+        left: 54%;
+        top: 50%;
+        width: 12%;
+        height: 18%;
     }
 
     .game-fullscreen-btn {

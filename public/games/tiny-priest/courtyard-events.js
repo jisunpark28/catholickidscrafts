@@ -93,11 +93,7 @@
     }
 
     function updateHotspotStates() {
-        const done = getDoneSet();
-        document.querySelectorAll("[data-courtyard-event]").forEach((btn) => {
-            const id = btn.getAttribute("data-courtyard-event");
-            btn.classList.toggle("is-done", Boolean(id && done.has(id)));
-        });
+        /* Easter-egg hits stay invisible — progress shown only in star bar. */
     }
 
     function playBellTone() {
@@ -146,9 +142,13 @@
     }
 
     function runBellFx(btn) {
-        if (btn) {
-            btn.classList.add("is-ringing");
-            window.setTimeout(() => btn.classList.remove("is-ringing"), 900);
+        const bell =
+            btn ||
+            document.querySelector(".courtyard-hit--bell") ||
+            document.querySelector(".courtyard-hit--welcome");
+        if (bell) {
+            bell.classList.add("is-ringing");
+            window.setTimeout(() => bell.classList.remove("is-ringing"), 900);
         }
         playBellTone();
     }
