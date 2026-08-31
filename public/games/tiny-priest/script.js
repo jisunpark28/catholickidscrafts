@@ -1504,6 +1504,51 @@ function createVoxelChurch(container) {
         syncPlayerSpriteFromTexture(backTexture);
     });
 
+    const CELEBRANT_SPRITE_HEIGHT = 2.35;
+    const celebrantRig = new THREE.Group();
+    celebrantRig.position.set(0, FLOOR_SANCTUARY_Y, -14.35);
+    root.add(celebrantRig);
+
+    const celebrantMaterial = new THREE.MeshBasicMaterial({
+        map: null,
+        transparent: true,
+        alphaTest: 0.08,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+    });
+    let celebrantSpriteWidth = CELEBRANT_SPRITE_HEIGHT * 0.773;
+    const celebrantSprite = new THREE.Mesh(
+        new THREE.PlaneGeometry(celebrantSpriteWidth, CELEBRANT_SPRITE_HEIGHT),
+        celebrantMaterial,
+    );
+    celebrantSprite.position.set(0, CELEBRANT_SPRITE_HEIGHT * 0.5, 0);
+    celebrantSprite.renderOrder = 2;
+    celebrantRig.add(celebrantSprite);
+
+    const fitCelebrantSpriteToTexture = (texture) => {
+        const image = texture?.image;
+        if (!image || !image.width || !image.height) {
+            return;
+        }
+        const aspect = image.width / image.height;
+        celebrantSpriteWidth = CELEBRANT_SPRITE_HEIGHT * aspect;
+        celebrantSprite.geometry.dispose();
+        celebrantSprite.geometry = new THREE.PlaneGeometry(celebrantSpriteWidth, CELEBRANT_SPRITE_HEIGHT);
+        celebrantSprite.position.y = CELEBRANT_SPRITE_HEIGHT * 0.5;
+    };
+
+    textureLoader.load(CHARACTER_CONFIG.priest.frontImage, (celebrantTexture) => {
+        if ("colorSpace" in celebrantTexture) {
+            celebrantTexture.colorSpace = THREE.SRGBColorSpace;
+        }
+        celebrantTexture.magFilter = THREE.LinearFilter;
+        celebrantTexture.minFilter = THREE.LinearMipmapLinearFilter;
+        cropTextureToVisibleBounds(celebrantTexture);
+        fitCelebrantSpriteToTexture(celebrantTexture);
+        celebrantMaterial.map = celebrantTexture;
+        celebrantMaterial.needsUpdate = true;
+    });
+
     const itemMaterial = new THREE.MeshLambertMaterial({ color: 0xc6a278 });
     const liturgyItem = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.64, 0.26), itemMaterial);
     liturgyItem.visible = false;
@@ -2389,6 +2434,9 @@ function createVoxelChurch(container) {
 
         updateMassSequence(dt);
         updateSignOfCross(dt);
+
+        celebrantSprite.position.y =
+            CELEBRANT_SPRITE_HEIGHT * 0.5 + Math.sin(performance.now() * 0.0022) * 0.028;
 
         const left = keyState.has("ArrowLeft") || keyState.has("KeyA");
         const right = keyState.has("ArrowRight") || keyState.has("KeyD");
