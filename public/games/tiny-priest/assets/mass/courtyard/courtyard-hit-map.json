@@ -1,6 +1,6 @@
 {
-  "version": 7,
-  "notes": "courtyard_entry_scene.png v7 — full bell tower/cross visible; top-aligned crop.",
+  "version": 8,
+  "notes": "courtyard_entry_scene.png v7 — larger bulletin/welcome hits; bulletin shifted left away from priest.",
   "hits": {
     "bell": {
       "left": 0.72,
@@ -10,17 +10,17 @@
       "label": "Find the bell in the church tower"
     },
     "bulletin": {
-      "left": 0.2,
-      "top": 0.72,
-      "width": 0.1,
-      "height": 0.12,
+      "left": 0.1,
+      "top": 0.66,
+      "width": 0.18,
+      "height": 0.2,
       "label": "Find the bulletin board on the ground"
     },
     "welcome_sign": {
-      "left": 0.34,
-      "top": 0.64,
-      "width": 0.09,
-      "height": 0.1,
+      "left": 0.33,
+      "top": 0.55,
+      "width": 0.13,
+      "height": 0.14,
       "label": "Find the welcome sign"
     },
     "parish_bench": {

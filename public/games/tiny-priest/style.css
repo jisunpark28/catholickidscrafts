@@ -191,16 +191,15 @@ body:fullscreen .main-container {
     pointer-events: auto;
     -webkit-tap-highlight-color: transparent;
     border-radius: 4px;
-}
-
-.courtyard-hit:focus-visible {
-    outline: 2px dashed rgba(77, 156, 90, 0.55);
-    outline-offset: 1px;
-    background: rgba(77, 156, 90, 0.08);
+    z-index: 12;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .courtyard-hit.is-found {
     cursor: default;
+    z-index: 6;
+    pointer-events: none;
 }
 
 .courtyard-hit.is-sparkle,
@@ -422,6 +421,8 @@ body:fullscreen .main-container {
     pointer-events: auto;
     position: relative;
     z-index: 10;
+    /* Keep greet taps on the character, not the wide sprite margins. */
+    clip-path: inset(0 18% 0 18%);
 }
 
 .character-button:focus-visible {

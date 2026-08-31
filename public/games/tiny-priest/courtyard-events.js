@@ -3,7 +3,7 @@
  */
 (function initCourtyardEvents(global) {
     const STORAGE_KEY = "tp_courtyard_done_v2";
-    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831q";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831r";
 
     const EVENT_IDS = [
         "mary_flowers",
@@ -68,9 +68,7 @@
         renderStars();
         updateHotspotStates();
         if (firstTime) {
-            if (eventId !== "bell") {
-                playFoundChime();
-            }
+            playFoundChime();
             if (btn) {
                 btn.classList.add("is-sparkle");
                 window.setTimeout(() => btn.classList.remove("is-sparkle"), 1100);
@@ -162,21 +160,6 @@
         updateHotspotStates();
     }
 
-    function getAudioContext() {
-        const AudioCtx = global.AudioContext || global.webkitAudioContext;
-        if (!AudioCtx) {
-            return null;
-        }
-        if (!getAudioContext._ctx || getAudioContext._ctx.state === "closed") {
-            getAudioContext._ctx = new AudioCtx();
-        }
-        const ctx = getAudioContext._ctx;
-        if (ctx.state === "suspended") {
-            void ctx.resume();
-        }
-        return ctx;
-    }
-
     let foundChimeAudio = null;
 
     function playFoundChime() {
@@ -188,32 +171,6 @@
             }
             foundChimeAudio.currentTime = 0;
             void foundChimeAudio.play();
-        } catch {
-            /* mute is fine */
-        }
-    }
-
-    function playBellTone() {
-        try {
-            const ctx = getAudioContext();
-            if (!ctx) {
-                return;
-            }
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(660, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.45);
-            gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.7);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.75);
-            osc.onended = () => {
-                void ctx.close();
-            };
         } catch {
             /* mute is fine */
         }
@@ -253,7 +210,6 @@
             bell.classList.add("is-ringing");
             window.setTimeout(() => bell.classList.remove("is-ringing"), 900);
         }
-        playBellTone();
     }
 
     function runWaveFx(btn) {
@@ -354,10 +310,13 @@
                     ),
                 );
             } else if (eventId === "bell") {
-                runBellFx(btn);
-                const first = markDone("bell", btn);
+                const first = !getDoneSet().has("bell");
+                if (first) {
+                    runBellFx(btn);
+                }
+                const firstFind = markDone("bell", btn);
                 say(
-                    first
+                    firstFind
                         ? tp(
                               "courtyard.bell_done",
                               "You found the church bell! Ding-dong! That sound means: 'Come in, little friend — God's family is gathering, and we saved you a seat!'",
