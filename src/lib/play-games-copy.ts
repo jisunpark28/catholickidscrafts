@@ -11,7 +11,7 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
       description: copyText(
         copy,
         "play.game.church.description",
-        "A short church walk-through for new helpers and kids.",
+        "Welcome to Tiny Church!",
       ),
       embedPath: getTinyPriestEmbedPath(),
     },
@@ -21,36 +21,36 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
       description: copyText(
         copy,
         "play.game.vestments.description",
-        "Practice Church colors.",
+        "What color vestments does Father wear?",
       ),
       embedPath: "/play/liturgical-vestments",
     },
     {
       slug: "typing",
       title: copyText(copy, "play.game.typing.title", "Typing Game"),
-      description: copyText(copy, "play.game.typing.description", "Word mode or today's readings."),
+      description: copyText(copy, "play.game.typing.description", "Type church words before they land."),
       embedPath: "/play/typing",
     },
     {
       slug: "hangman",
       title: copyText(copy, "play.game.hangman.title", "Hangman"),
-      description: copyText(copy, "play.game.hangman.description", "Classic hangman with Catholic words."),
+      description: copyText(
+        copy,
+        "play.game.hangman.description",
+        "Guess the word before the petals fall.",
+      ),
       embedPath: "/games/hangman/index.html",
     },
     {
       slug: "face-to-emoji",
       title: copyText(copy, "play.game.face-to-emoji.title", "Face to Emoji"),
-      description: copyText(
-        copy,
-        "play.game.face-to-emoji.description",
-        "Upload a photo and replace faces with emoji—automatic detection, edit stickers, download.",
-      ),
+      description: copyText(copy, "play.game.face-to-emoji.description", "Turn faces into emoji fun!"),
       embedPath: "/play/face-to-emoji",
     },
     {
       slug: "emoji",
       title: copyText(copy, "play.game.emoji.title", "4-Cut Photo Booth"),
-      description: copyText(copy, "play.game.emoji.description", "Four-photo strip with stickers."),
+      description: copyText(copy, "play.game.emoji.description", "Make a four-photo strip with stickers!"),
       embedPath: "/play/photo-booth",
     },
   ];

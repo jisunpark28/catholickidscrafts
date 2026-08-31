@@ -295,6 +295,13 @@
             filterLines();
             state.lineIndex = 0;
             render();
+            const encouragement =
+                typeof global.CourtyardEvents?.getEncouragement === "function"
+                    ? global.CourtyardEvents.getEncouragement()
+                    : "";
+            if (encouragement && typeof global.setLiturgySubtitle === "function") {
+                global.setLiturgySubtitle(encouragement);
+            }
         },
         stop() {
             state.active = false;

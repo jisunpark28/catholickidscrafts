@@ -1,0 +1,47 @@
+{
+  "version": 9,
+  "notes": "courtyard v9 — church building replaces bulletin; large church tap target.",
+  "hits": {
+    "bell": {
+      "left": 0.72,
+      "top": 0.05,
+      "width": 0.1,
+      "height": 0.11,
+      "label": "Find the bell in the church tower"
+    },
+    "church_building": {
+      "left": 0.3,
+      "top": 0.12,
+      "width": 0.42,
+      "height": 0.46,
+      "label": "Tap the church building"
+    },
+    "welcome_sign": {
+      "left": 0.33,
+      "top": 0.55,
+      "width": 0.13,
+      "height": 0.14,
+      "label": "Find the welcome sign"
+    },
+    "parish_bench": {
+      "left": 0.78,
+      "top": 0.7,
+      "width": 0.2,
+      "height": 0.18,
+      "label": "Find the parish family on the bench"
+    },
+    "mary_flowers": {
+      "left": 0.02,
+      "top": 0.56,
+      "width": 0.28,
+      "height": 0.34,
+      "label": "Find Mary's flower garden"
+    }
+  },
+  "characterSafeZone": {
+    "left": 0.38,
+    "top": 0.78,
+    "width": 0.24,
+    "height": 0.22
+  }
+}

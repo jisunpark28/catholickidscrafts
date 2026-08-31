@@ -4,21 +4,26 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Tiny Priest - Welcome to Our Church</title>
-        <link rel="stylesheet" href="style.css?v=20260615" />
+        <link rel="stylesheet" href="style.css?v=20260831s" />
         <link rel="icon" type="image/png" href="assets/church.png" />
     </head>
     <body>
         <div id="entry-screen" class="main-container">
-            <h1 class="main-title">Welcome to Tiny Church.</h1>
+            <div class="entry-top-bar">
+                <h1 class="main-title">Welcome to Tiny Church.</h1>
+            </div>
 
             <div id="church-scene" class="church-scene">
+                <div id="courtyard-stars" class="courtyard-stars" aria-label="Courtyard fun"></div>
+                <div class="courtyard-door-glow" aria-hidden="true"></div>
                 <div class="church-building" aria-hidden="true">
-                    <img src="assets/church.png" alt="" />
+                    <img
+                        src="assets/mass/courtyard/courtyard_entry_scene.png"
+                        alt="Church courtyard with hidden pictures to find"
+                    />
                 </div>
 
-                <div class="asset statue-mary">
-                    <img src="assets/mary.png" alt="Statue of Virgin Mary" />
-                </div>
+                <div id="courtyard-hits" class="courtyard-hits" aria-label="Hidden pictures to find"></div>
 
                 <div class="entry-assembly">
                     <button
@@ -55,6 +60,10 @@
                 </div>
             </div>
 
+            <div id="courtyard-fx" class="courtyard-fx" aria-hidden="true">
+                <span class="courtyard-cross">✝</span>
+            </div>
+
             <div class="entry-footer">
                 <div class="player-picker" id="player-picker" role="group" aria-labelledby="player-picker-label">
                     <span class="player-picker-label" id="player-picker-label">You are:</span>
@@ -76,7 +85,19 @@
                     </button>
                 </div>
                 <div id="dialogue-box" class="dialogue-box">
-                    You're at church for Sunday Mass. Choose you below, then tap Father or Sister to say hello!
+                    Look closely at the courtyard picture! Five things are hiding in the scene. Can you find them all? Then say hello to Father or Sister.
+                </div>
+                <div id="courtyard-flower-picker" class="courtyard-flower-picker" hidden>
+                    <span class="courtyard-flower-picker-label">Offer Mary a flower:</span>
+                    <button type="button" class="courtyard-flower-btn" data-flower-color="red" data-flower-label="red">
+                        🌹
+                    </button>
+                    <button type="button" class="courtyard-flower-btn" data-flower-color="white" data-flower-label="white">
+                        🤍
+                    </button>
+                    <button type="button" class="courtyard-flower-btn" data-flower-color="yellow" data-flower-label="yellow">
+                        🌼
+                    </button>
                 </div>
                 <div id="entry-actions" class="entry-actions" hidden>
                 <button type="button" id="entry-confirm-btn" class="entry-action-btn entry-action-btn--yes">
@@ -148,8 +169,9 @@
         <script src="vendor/three.min.js"></script>
         <script src="site-copy.js?v=20260614"></script>
         <script src="stations.js?v=20260830"></script>
-        <script src="mass-participation-lines.js?v=20260831e"></script>
-        <script src="mass-quest.js?v=20260831e"></script>
-        <script src="script.js?v=20260831e"></script>
+        <script src="mass-participation-lines.js?v=20260831s"></script>
+        <script src="mass-quest.js?v=20260831s"></script>
+        <script src="courtyard-events.js?v=20260831s"></script>
+        <script src="script.js?v=20260831s"></script>
     </body>
 </html>

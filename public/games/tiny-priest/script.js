@@ -34,7 +34,7 @@ const CHARACTER_CONFIG = {
 };
 
 const DEFAULT_ENTRY_DIALOGUE =
-    "You're at church for Sunday Mass. Choose you below, then tap Father or Sister to say hello!";
+    "Look closely at the courtyard picture! Five things are hiding in the scene. Can you find them all? Then say hello to Father or Sister.";
 const DEFAULT_WALKING_DIALOGUE = "Walking into the church…";
 const DEFAULT_GREETER_FAREWELL = "See you inside!";
 
@@ -157,6 +157,15 @@ function applyTinyPriestStaticCopy() {
     for (const key of Object.keys(GESTURE_NARRATION)) {
         GESTURE_NARRATION[key] = tpCopy(`gesture.${key}`, GESTURE_NARRATION[key]);
     }
+}
+
+function initCourtyardEvents() {
+    if (typeof window.CourtyardEvents === "undefined") {
+        return;
+    }
+    window.CourtyardEvents.init({
+        onDialogue: (text) => setDialogue(text),
+    });
 }
 
 function getDefaultEntryDialogue() {
@@ -541,6 +550,9 @@ function showEntryScreenFromInterior() {
     updateEntryPlayerSprite();
     setPlayerPickerLocked(false);
     setDialogue(getDefaultEntryDialogue());
+    if (typeof window.CourtyardEvents !== "undefined") {
+        window.CourtyardEvents.refresh();
+    }
     setLiturgySubtitle(
         typeof tpCopy === "function"
             ? tpCopy("liturgy.placeholder", "Mass guidance will appear here.")
@@ -2790,11 +2802,16 @@ void (typeof loadTinyPriestSiteCopy === "function"
           applyTinyPriestStaticCopy();
           updateEntryPlayerSprite();
           setDialogue(getDefaultEntryDialogue());
+          initCourtyardEvents();
       })
-    : Promise.resolve());
+    : Promise.resolve().then(() => {
+          initCourtyardEvents();
+      }));
 
+window.APP_STATE = APP_STATE;
 window.handleCharacterGreeting = handleCharacterGreeting;
 window.confirmEntryToChurch = confirmEntryToChurch;
 window.declineEntry = declineEntry;
 window.getLiturgicalSeason = getLiturgicalSeason;
 window.getMassFlowSteps = getMassFlowSteps;
+window.setLiturgySubtitle = setLiturgySubtitle;

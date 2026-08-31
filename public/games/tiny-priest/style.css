@@ -57,6 +57,46 @@ body:fullscreen .main-container {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
+.entry-top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 14px;
+    width: min(95vw, 1120px);
+    position: relative;
+    z-index: 2;
+}
+
+.entry-top-bar .main-title {
+    flex: 1 1 auto;
+    margin: 0;
+    width: auto;
+    max-width: none;
+}
+
+.courtyard-stars {
+    position: absolute;
+    top: clamp(6px, 1.2vh, 14px);
+    left: clamp(6px, 1.2vw, 14px);
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: transparent;
+    border: none;
+    font-size: 1.56rem;
+    line-height: 1;
+    opacity: 0.88;
+    pointer-events: none;
+}
+
+.courtyard-star.is-earned {
+    transform: scale(1.05);
+}
+
 .church-scene {
     --door-x: 50%;
     --door-y: 73%;
@@ -81,45 +121,258 @@ body:fullscreen .main-container {
 .church-building img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    object-position: center bottom;
+    object-fit: fill;
+    object-position: center center;
     opacity: 0.94;
     user-select: none;
     -webkit-user-drag: none;
 }
 
-.statue-mary {
+.courtyard-hit.is-mary-glow {
+    box-shadow: 0 0 18px 6px rgba(255, 230, 140, 0.75);
+    animation: mary-garden-glow 1.6s ease-out;
+}
+
+@keyframes mary-garden-glow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 230, 140, 0);
+    }
+    35% {
+        box-shadow: 0 0 22px 10px rgba(255, 230, 140, 0.85);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 230, 140, 0);
+    }
+}
+
+.courtyard-door-glow {
     position: absolute;
-    left: 6%;
-    bottom: 10%;
-    z-index: 4;
-    width: var(--mary-size);
-    transition: transform 0.3s ease;
+    left: var(--door-x);
+    top: calc(var(--door-y) - 18%);
+    width: 28%;
+    height: 34%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(245, 230, 184, 0.55) 0%,
+        rgba(245, 230, 184, 0.12) 45%,
+        transparent 72%
+    );
+    animation: door-glow-breathe 4.5s ease-in-out infinite;
 }
 
-.statue-mary img {
+@keyframes door-glow-breathe {
+    0%,
+    100% {
+        opacity: 0.65;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.courtyard-hits {
+    position: absolute;
+    inset: 0;
+    z-index: 9;
+    pointer-events: none;
+}
+
+/* Invisible regions — objects are painted into courtyard_entry_scene.png */
+.courtyard-hit {
+    position: absolute;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 4px;
+    z-index: 12;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.courtyard-hit.is-found {
+    cursor: default;
+    z-index: 6;
+    pointer-events: none;
+}
+
+.courtyard-hit.is-sparkle,
+.courtyard-hit.is-glow-pulse {
+    animation: courtyard-found-glow 1.2s ease-out;
+}
+
+.courtyard-hit.is-ringing {
+    animation: courtyard-bell-shake 0.85s ease-in-out;
+}
+
+@keyframes courtyard-found-glow {
+    0% {
+        box-shadow: inset 0 0 0 0 rgba(255, 214, 102, 0);
+    }
+    35% {
+        box-shadow: inset 0 0 0 3px rgba(255, 214, 102, 0.95);
+    }
+    100% {
+        box-shadow: inset 0 0 0 0 rgba(255, 214, 102, 0);
+    }
+}
+
+@keyframes courtyard-bell-shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-2px);
+    }
+    75% {
+        transform: translateX(2px);
+    }
+}
+
+.courtyard-wave-burst {
+    position: absolute;
+    left: 50%;
+    top: -8px;
+    transform: translateX(-50%);
+    font-size: 1.4rem;
+    animation: wave-float 1s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes wave-float {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(0.8);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -28px) scale(1.15);
+    }
+}
+
+.courtyard-flower-picker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255, 251, 240, 0.95);
+    border: 1px dashed rgba(77, 156, 90, 0.45);
+}
+
+.courtyard-flower-picker[hidden] {
+    display: none !important;
+}
+
+.courtyard-flower-picker-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #6d4c41;
     width: 100%;
-    height: auto;
-    display: block;
-    user-select: none;
-    -webkit-user-drag: none;
+    text-align: center;
 }
 
-.statue-mary:hover {
-    transform: translateY(-8px) scale(1.03);
+.courtyard-flower-btn {
+    border: 2px solid #d2b48c;
+    border-radius: 999px;
+    background: #fffef8;
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.courtyard-flower-btn:hover {
+    transform: scale(1.08);
+}
+
+.courtyard-fx {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 90;
+    opacity: 0;
+}
+
+#entry-screen.is-holy-water .courtyard-fx {
+    animation: holy-water-fx 1.5s ease-out forwards;
+}
+
+.courtyard-cross {
+    font-size: clamp(3rem, 12vw, 5.5rem);
+    color: rgba(77, 156, 90, 0.85);
+    text-shadow: 0 0 24px rgba(245, 230, 184, 0.9);
+    transform: scale(0.4);
+    opacity: 0;
+}
+
+#entry-screen.is-holy-water .courtyard-cross {
+    animation: cross-draw 1.2s ease-out forwards;
+}
+
+@keyframes holy-water-fx {
+    0% {
+        opacity: 0;
+    }
+    15%,
+    85% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes cross-draw {
+    0% {
+        transform: scale(0.35);
+        opacity: 0;
+    }
+    40% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+#entry-screen.is-entering-zoom .courtyard-hits,
+#entry-screen.is-entering-zoom .courtyard-door-glow,
+#entry-screen.is-entering-zoom .courtyard-stars,
+#entry-screen.is-entering-zoom .courtyard-flower-picker {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.34s ease;
 }
 
 .character-group,
 .entry-assembly {
     position: absolute;
     left: 50%;
-    bottom: 10%;
+    bottom: 9%;
     transform: translateX(-50%);
     z-index: 7;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     gap: clamp(2px, 0.8vw, 10px);
+    pointer-events: none;
 }
 
 .entry-player {
@@ -165,6 +418,11 @@ body:fullscreen .main-container {
     border: none;
     background: transparent;
     padding: 0;
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
+    /* Keep greet taps on the character, not the wide sprite margins. */
+    clip-path: inset(0 18% 0 18%);
 }
 
 .character-button:focus-visible {
@@ -814,7 +1072,7 @@ body:fullscreen .mass-navigator.is-active {
 #entry-screen.is-entering-zoom .main-title,
 #entry-screen.is-entering-zoom .entry-footer,
 #entry-screen.is-entering-zoom .dialogue-box,
-#entry-screen.is-entering-zoom .statue-mary {
+#entry-screen.is-entering-zoom .entry-top-bar {
     transition: opacity 0.34s ease;
     opacity: 0;
 }
@@ -841,26 +1099,7 @@ body:fullscreen .mass-navigator.is-active {
 }
 
 @media (max-height: 720px) {
-    
-.entry-top-bar {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    width: min(92vw, 820px);
-    max-width: calc(100% - 7rem);
-    gap: 12px;
-    position: relative;
-    z-index: 2;
-}
-
-.entry-top-bar .main-title {
-    flex: 1 1 auto;
-    width: auto;
-    max-width: none;
-    text-align: center;
-}
-
-.main-title {
+    .main-title {
         font-size: clamp(0.95rem, 1.2vh + 0.45rem, 1.35rem);
     }
 
@@ -882,11 +1121,6 @@ body:fullscreen .mass-navigator.is-active {
         --mary-size: clamp(72px, 18vw, 140px);
         width: min(96vw, calc((100dvh - 10rem) * 16 / 10));
         max-height: min(calc(100dvh - 10rem), 58vh);
-    }
-
-    .statue-mary {
-        left: 2%;
-        bottom: 10%;
     }
 
     .character-group,
