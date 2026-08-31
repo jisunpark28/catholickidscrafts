@@ -100,7 +100,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.game.typing.title", "Typing Game", "play"),
   sc("play.game.typing.description", "Word mode for church vocabulary, or type along with today's readings—quiet focus time or early arrivers.", "play"),
   sc("play.game.hangman.title", "Hangman", "play"),
-  sc("play.game.hangman.description", "Classic hangman with Catholic words—easy filler when you finish early or wait for parents.", "play"),
+  sc("play.game.hangman.description", "", "play"),
   sc("play.game.face-to-emoji.title", "Face to Emoji", "play"),
   sc("play.game.face-to-emoji.description", "Upload a class or family photo and replace faces with emoji—auto-detect, edit stickers, download. All processing stays on the device.", "play"),
   sc("play.game.emoji.title", "4-Cut Photo Booth", "play"),

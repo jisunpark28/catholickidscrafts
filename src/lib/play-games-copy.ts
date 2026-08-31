@@ -34,7 +34,7 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
     {
       slug: "hangman",
       title: copyText(copy, "play.game.hangman.title", "Hangman"),
-      description: copyText(copy, "play.game.hangman.description", "Classic hangman with Catholic words."),
+      description: copyText(copy, "play.game.hangman.description", ""),
       embedPath: "/games/hangman/index.html",
     },
     {

@@ -33,8 +33,7 @@ export const PLAY_GAMES: PlayGame[] = [
   {
     slug: "hangman",
     title: "Hangman",
-    description:
-      "Classic hangman with Catholic words—easy filler when you finish early or wait for parents.",
+    description: "",
     embedPath: "/games/hangman/index.html",
   },
   {

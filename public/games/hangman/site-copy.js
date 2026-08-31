@@ -20,8 +20,6 @@ function hmCopy(suffix, fallback) {
 }
 
 function applyHangmanDomCopy() {
-    const h1 = document.querySelector("header h1");
-    if (h1) h1.textContent = hmCopy("title", h1.textContent);
     const sub = document.querySelector("header p");
     if (sub) sub.textContent = hmCopy("subtitle", sub.textContent);
     const attemptsLabel = document.querySelector(".info p:first-child");
