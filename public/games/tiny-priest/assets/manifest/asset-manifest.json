@@ -24,7 +24,7 @@
         "front": "assets/mass/characters/child_girl_front.png",
         "back": "assets/mass/characters/child_girl_back.png"
       },
-      "status": "pending"
+      "status": "ready"
     },
     {
       "id": "child_boy",

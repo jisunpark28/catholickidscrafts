@@ -5,13 +5,20 @@ const CHARACTER_CONFIG = {
         frontImage: "assets/priest_front.png",
         backImage: "assets/priest_back.png",
         greetingText: "Father: Peace be with you! Welcome to our church.",
-        enterPromptText: "Would you like to go inside?",
+        enterPromptText: "Would you like to come inside and join us for Mass?",
+        isGreeter: true,
     },
     nun: {
         frontImage: "assets/nun_front.png",
         backImage: "assets/nun_back.png",
         greetingText: "Sister: Let us pray together. Welcome to our church.",
-        enterPromptText: "Would you like to go inside?",
+        enterPromptText: "Would you like to come inside and join us for Mass?",
+        isGreeter: true,
+    },
+    child_girl: {
+        frontImage: "assets/mass/characters/child_girl_front.png",
+        backImage: "assets/mass/characters/child_girl_back.png",
+        isGreeter: false,
     },
 };
 
@@ -1268,8 +1275,14 @@ function createVoxelChurch(container) {
         }
     }
 
-    const selected = CHARACTER_CONFIG[APP_STATE.selectedCharacter] || CHARACTER_CONFIG.nun;
-    const isPriest = APP_STATE.selectedCharacter === "priest";
+    const playerKey =
+        APP_STATE.selectedCharacter && CHARACTER_CONFIG[APP_STATE.selectedCharacter]
+            ? APP_STATE.selectedCharacter
+            : "child_girl";
+    const selected = CHARACTER_CONFIG[playerKey];
+    const isChildPlayer = playerKey === "child_girl";
+    const isPriest = playerKey === "priest";
+    const useOverlayArms = isChildPlayer;
 
     const playerRig = new THREE.Group();
     playerRig.position.set(0, 0, 7.2);
@@ -1288,7 +1301,7 @@ function createVoxelChurch(container) {
         depthWrite: false,
     });
 
-    const PLAYER_SPRITE_WORLD_HEIGHT = 2.35;
+    const PLAYER_SPRITE_WORLD_HEIGHT = isChildPlayer ? 2.05 : 2.35;
     let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
     let playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
@@ -1391,7 +1404,14 @@ function createVoxelChurch(container) {
     playerRig.add(liturgyItem);
 
     // Palette values were sampled from the actual PNG sprites to keep visual consistency.
-    const spritePalette = isPriest
+    const spritePalette = isChildPlayer
+        ? {
+            robePrimary: 0x9ec5da,
+            robeSecondary: 0x7aa8c4,
+            trim: 0xf3ede3,
+            skin: 0xd8ad90,
+        }
+        : isPriest
         ? {
             robePrimary: 0x3f3d37,
             robeSecondary: 0x2f2d29,
@@ -1405,7 +1425,24 @@ function createVoxelChurch(container) {
             skin: 0xe8c4a7,
         };
 
-    const armStyle = isPriest
+    const armStyle = isChildPlayer
+        ? {
+            shoulderX: 0.62,
+            shoulderY: 1.78,
+            shoulderZ: 0.2,
+            upperWidth: 0.22,
+            upperLength: 0.62,
+            lowerWidth: 0.2,
+            lowerLength: 0.58,
+            elbowDrop: 0.58,
+            handRadius: 0.088,
+            cuffWidth: 0.18,
+            cuffLength: 0.08,
+            chestCoverRadius: 0.22,
+            chestCoverY: 1.72,
+            handDepthFront: 0.022,
+        }
+        : isPriest
         ? {
             shoulderX: 0.74,
             shoulderY: 2.02,
@@ -1678,7 +1715,28 @@ function createVoxelChurch(container) {
     }
 
     function shouldShowOverlayHands() {
-        return false;
+        return useOverlayArms;
+    }
+
+    function setOverlayArmsVisible(isVisible) {
+        [...leftArm.segments, ...rightArm.segments].forEach((segment) => {
+            segment.visible = isVisible;
+        });
+        leftArm.hand.visible = isVisible;
+        rightArm.hand.visible = isVisible;
+        if (chestCover) {
+            chestCover.visible = isVisible && !isChildPlayer;
+        }
+    }
+
+    function syncOverlayArmsVisibility(gesture, horizontalSpeed = 0) {
+        if (!shouldShowOverlayHands()) {
+            setOverlayArmsVisible(false);
+            return;
+        }
+        const walking = horizontalSpeed > 0.12;
+        const gesturing = gesture !== "idle" || actionState.signCrossActive;
+        setOverlayArmsVisible(walking || gesturing);
     }
 
     function setOverlayHandsVisible(isVisible) {
@@ -1698,14 +1756,14 @@ function createVoxelChurch(container) {
             actionState.signCrossActive = true;
             actionState.signCrossTime = 0;
             setGesturePose("pray");
-            setOverlayHandsVisible(false);
+            syncOverlayArmsVisibility("signCross");
             narrateGesture("signCross", prefix);
             setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
             return;
         }
         actionState.signCrossActive = false;
         setGesturePose(name);
-        setOverlayHandsVisible(false);
+        syncOverlayArmsVisibility(name);
         narrateGesture(name, prefix);
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
@@ -2292,6 +2350,7 @@ function createVoxelChurch(container) {
 
         updateArmPoseSmoothing(dt);
         applyArmSecondaryMotion(horizontalSpeed);
+        syncOverlayArmsVisibility(actionState.currentGesture, horizontalSpeed);
         updateLiturgyItem();
         updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, dt);
 
@@ -2516,7 +2575,7 @@ async function activateThreeScene(role) {
  * @param {string} character
  */
 function handleCharacterGreeting(character) {
-    if (APP_STATE.isTransitioning || !CHARACTER_CONFIG[character]) {
+    if (APP_STATE.isTransitioning || !CHARACTER_CONFIG[character]?.isGreeter) {
         return;
     }
 
@@ -2538,16 +2597,16 @@ function declineEntry() {
  * After the visitor agrees, walk in and open the 3D church interior.
  */
 async function confirmEntryToChurch() {
-    const character = APP_STATE.greetedCharacter;
-    if (APP_STATE.isTransitioning || !character || !CHARACTER_CONFIG[character]) {
+    const greeter = APP_STATE.greetedCharacter;
+    if (APP_STATE.isTransitioning || !greeter || !CHARACTER_CONFIG[greeter]?.isGreeter) {
         return;
     }
 
     APP_STATE.isTransitioning = true;
-    APP_STATE.selectedCharacter = character;
+    APP_STATE.selectedCharacter = "child_girl";
     showEntryActions(false);
 
-    const characterEl = getCharacterElement(character);
+    const characterEl = getCharacterElement(greeter);
     if (!characterEl) {
         APP_STATE.isTransitioning = false;
         resetEntryPromptUi();
@@ -2555,12 +2614,12 @@ async function confirmEntryToChurch() {
     }
 
     lockCharacterSelection();
-    switchToBackSprite(character, characterEl);
+    switchToBackSprite(greeter, characterEl);
     setDialogue("Walking into the church…");
 
     await animateCharacterEntry(characterEl);
     await animateDoorZoomTransition();
-    await activateThreeScene(character);
+    await activateThreeScene("child_girl");
 }
 
 function bindEntryFlow() {
