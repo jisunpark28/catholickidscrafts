@@ -97,8 +97,8 @@ export function MassParticipationPreview() {
   const [toolbarHeight, setToolbarHeight] = useState(0);
   const [season, setSeason] = useState<MassSeasonPreset>("ordinary");
   const [liturgyPart, setLiturgyPart] = useState<MassLiturgyPartId | "all">("all");
-  const [practiceMode, setPracticeMode] = useState(true);
-  const [showDirections, setShowDirections] = useState(false);
+  const [practiceMode, setPracticeMode] = useState(false);
+  const [showDirections, setShowDirections] = useState(true);
   const [childrenFocus, setChildrenFocus] = useState(false);
   const [revealedIds, setRevealedIds] = useState<Set<string>>(() => new Set());
 
@@ -255,7 +255,10 @@ export function MassParticipationPreview() {
             <button
               type="button"
               className={`mass-participation__btn${practiceMode ? " mass-participation__btn--active" : ""}`}
-              onClick={() => setPracticeMode(true)}
+              onClick={() => {
+                setPracticeMode(true);
+                hideAll();
+              }}
             >
               Practice
             </button>
@@ -270,17 +273,6 @@ export function MassParticipationPreview() {
               Show all
             </button>
           </div>
-
-          {practiceMode && (
-            <div className="mass-participation__toolbar-group">
-              <button type="button" className="mass-participation__btn" onClick={showAll}>
-                Reveal all responses
-              </button>
-              <button type="button" className="mass-participation__btn" onClick={hideAll}>
-                Hide all responses
-              </button>
-            </div>
-          )}
           </div>
         </div>
       </div>
