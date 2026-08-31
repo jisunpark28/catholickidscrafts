@@ -20,6 +20,16 @@ assert(!modernized.includes("entered into"), "entered into → entered");
 const genesisSample = modernizeForReading("And the Lord said unto Noe: Make thee an ark.");
 assert(genesisSample.includes("you"), "unto/thee modernized in all books");
 
+const luke4Sample = modernizeForReading(
+  "And Jesus being full of the Holy Ghost, returned from the Jordan and was led the by the spirit into the desert. And the devil said to him: If thou be the Son of God. And Jesus answered him: is written that Man liveth not by bread alone.",
+);
+assert(luke4Sample.includes("Holy Spirit"), "Holy Ghost → Holy Spirit");
+assert(luke4Sample.includes("led by the Spirit"), "fixes upstream led the by typo");
+assert(luke4Sample.includes("It is written"), "fixes upstream missing It");
+assert(luke4Sample.includes("If you are"), "If thou be → If you are");
+assert(luke4Sample.includes("do not live"), "liveth not → does not live");
+assert(!luke4Sample.includes("led the by"), "no led the by typo");
+
 const pronouns = modernizeForReading("Prepare ye the way; thy sins are forgiven thee.");
 assert(pronouns.includes("Prepare the way"), "Prepare ye");
 assert(pronouns.includes("your sins"), "thy → your");
