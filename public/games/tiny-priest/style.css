@@ -127,12 +127,9 @@ body:fullscreen .main-container {
     position: absolute;
     left: 6%;
     bottom: 10%;
-    z-index: 4;
+    z-index: 3;
     width: var(--mary-size);
-    border: none;
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
+    pointer-events: none;
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
@@ -160,10 +157,6 @@ body:fullscreen .main-container {
     display: block;
     user-select: none;
     -webkit-user-drag: none;
-}
-
-.statue-mary:hover {
-    transform: translateY(-4px) scale(1.02);
 }
 
 .courtyard-door-glow {
@@ -194,14 +187,14 @@ body:fullscreen .main-container {
     }
 }
 
-.courtyard-hits {
+.courtyard-finds {
     position: absolute;
     inset: 0;
-    z-index: 3;
+    z-index: 4;
     pointer-events: none;
 }
 
-.courtyard-hit {
+.courtyard-find {
     position: absolute;
     border: none;
     background: transparent;
@@ -210,65 +203,114 @@ body:fullscreen .main-container {
     cursor: pointer;
     pointer-events: auto;
     -webkit-tap-highlight-color: transparent;
+    transform-origin: center bottom;
+    transition:
+        transform 0.25s ease,
+        filter 0.35s ease,
+        opacity 0.35s ease;
+    filter: drop-shadow(0 3px 6px rgba(82, 58, 44, 0.22));
+    animation: courtyard-find-bob 5s ease-in-out infinite;
 }
 
-.courtyard-hit:focus-visible {
-    outline: 2px dashed rgba(77, 156, 90, 0.45);
-    outline-offset: 2px;
+.courtyard-find img {
+    display: block;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
-/* Hidden-object targets — tuned to church.png layout; sit below characters (z-index 7). */
-.courtyard-hit--welcome {
-    left: 26%;
-    top: 6%;
-    width: 48%;
-    height: 58%;
-    z-index: 1;
+.courtyard-find:hover {
+    transform: translateY(-3px) scale(1.04);
+    filter: drop-shadow(0 5px 10px rgba(82, 58, 44, 0.28));
 }
 
-.courtyard-hit--bell {
-    left: 41%;
-    top: 1%;
-    width: 18%;
-    height: 24%;
-    z-index: 2;
+.courtyard-find:focus-visible {
+    outline: 2px dashed rgba(77, 156, 90, 0.55);
+    outline-offset: 3px;
 }
 
-.courtyard-hit--bulletin {
-    left: 28%;
-    top: 36%;
-    width: 11%;
-    height: 20%;
-    z-index: 2;
-}
-
-.courtyard-hit--font {
-    left: 62%;
-    top: 50%;
-    width: 12%;
-    height: 20%;
-    z-index: 2;
-}
-
-.courtyard-hit--bench {
-    left: 20%;
-    bottom: 5%;
-    width: 10%;
-    height: 12%;
-    z-index: 2;
-}
-
-.courtyard-hit--mary {
-    z-index: 4;
-}
-
-.courtyard-hit.is-ringing,
-.courtyard-hit--bell.is-ringing {
-    animation: bell-ring 0.85s ease-in-out;
-}
-
-.courtyard-hit--welcome.is-ringing {
+.courtyard-find.is-found {
+    opacity: 0.92;
+    filter: drop-shadow(0 2px 5px rgba(196, 148, 58, 0.35))
+        saturate(1.05);
     animation: none;
+}
+
+.courtyard-find.is-sparkle {
+    animation: courtyard-sparkle 1.1s ease-out;
+}
+
+@keyframes courtyard-find-bob {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes courtyard-sparkle {
+    0% {
+        filter: drop-shadow(0 0 0 rgba(255, 220, 120, 0));
+    }
+    40% {
+        filter: drop-shadow(0 0 14px rgba(255, 220, 120, 0.95));
+    }
+    100% {
+        filter: drop-shadow(0 3px 6px rgba(82, 58, 44, 0.22));
+    }
+}
+
+/* Blended into church.png — sizes use clamp for responsive scene */
+.courtyard-find--sign {
+    left: 31%;
+    bottom: 15%;
+    width: clamp(52px, 9vw, 118px);
+    animation-delay: 0.2s;
+}
+
+.courtyard-find--flowers {
+    left: 11%;
+    bottom: 9%;
+    width: clamp(44px, 7.5vw, 96px);
+    animation-delay: 0.8s;
+}
+
+.courtyard-find--bench {
+    left: 21%;
+    bottom: 4%;
+    width: clamp(72px, 12vw, 168px);
+    animation-delay: 1.1s;
+}
+
+.courtyard-find--bulletin {
+    left: 29%;
+    top: 34%;
+    width: clamp(48px, 8vw, 104px);
+    animation-delay: 0.5s;
+}
+
+.courtyard-find--bell {
+    left: 44%;
+    top: 2%;
+    width: clamp(36px, 6vw, 78px);
+    animation-delay: 0.35s;
+}
+
+.courtyard-find--font {
+    left: 55%;
+    bottom: 17%;
+    width: clamp(52px, 8.5vw, 112px);
+    animation-delay: 0.65s;
+    z-index: 5;
+}
+
+.courtyard-find.is-ringing,
+.courtyard-find--bell.is-ringing {
+    animation: bell-ring 0.85s ease-in-out;
 }
 
 @keyframes bell-ring {
@@ -277,16 +319,16 @@ body:fullscreen .main-container {
         transform: rotate(0deg);
     }
     20% {
-        transform: rotate(-4deg);
+        transform: rotate(-8deg);
     }
     40% {
-        transform: rotate(3deg);
+        transform: rotate(7deg);
     }
     60% {
-        transform: rotate(-3deg);
+        transform: rotate(-6deg);
     }
     80% {
-        transform: rotate(2deg);
+        transform: rotate(4deg);
     }
 }
 
@@ -406,7 +448,7 @@ body:fullscreen .main-container {
     }
 }
 
-#entry-screen.is-entering-zoom .courtyard-hits,
+#entry-screen.is-entering-zoom .courtyard-finds,
 #entry-screen.is-entering-zoom .courtyard-door-glow,
 #entry-screen.is-entering-zoom .courtyard-stars,
 #entry-screen.is-entering-zoom .courtyard-flower-picker {
@@ -1194,18 +1236,20 @@ body:fullscreen .mass-navigator.is-active {
         max-height: calc(100dvh - 56px);
     }
 
-    .courtyard-hit--bench {
-        left: 12%;
-        bottom: 5%;
-        width: 11%;
-        height: 12%;
+    .courtyard-find--bench {
+        left: 18%;
+        bottom: 3%;
+        width: clamp(64px, 14vw, 140px);
     }
 
-    .courtyard-hit--font {
-        left: 54%;
-        top: 50%;
-        width: 12%;
-        height: 18%;
+    .courtyard-find--font {
+        left: 58%;
+        bottom: 12%;
+    }
+
+    .courtyard-find--flowers {
+        left: 8%;
+        bottom: 8%;
     }
 
     .game-fullscreen-btn {

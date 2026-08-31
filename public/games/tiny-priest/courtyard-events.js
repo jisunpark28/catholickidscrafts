@@ -58,13 +58,17 @@
         }
     }
 
-    function markDone(eventId) {
+    function markDone(eventId, btn) {
         const done = getDoneSet();
         const firstTime = !done.has(eventId);
         done.add(eventId);
         saveDoneSet(done);
         renderStars();
         updateHotspotStates();
+        if (firstTime && btn) {
+            btn.classList.add("is-sparkle");
+            window.setTimeout(() => btn.classList.remove("is-sparkle"), 1100);
+        }
         return firstTime;
     }
 
@@ -93,7 +97,13 @@
     }
 
     function updateHotspotStates() {
-        /* Easter-egg hits stay invisible — progress shown only in star bar. */
+        const done = getDoneSet();
+        document.querySelectorAll("[data-courtyard-event]").forEach((btn) => {
+            const id = btn.getAttribute("data-courtyard-event");
+            const found = Boolean(id && done.has(id));
+            btn.classList.toggle("is-found", found);
+            btn.setAttribute("aria-pressed", found ? "true" : "false");
+        });
     }
 
     function playBellTone() {
@@ -142,10 +152,7 @@
     }
 
     function runBellFx(btn) {
-        const bell =
-            btn ||
-            document.querySelector(".courtyard-hit--bell") ||
-            document.querySelector(".courtyard-hit--welcome");
+        const bell = btn || document.querySelector(".courtyard-find--bell");
         if (bell) {
             bell.classList.add("is-ringing");
             window.setTimeout(() => bell.classList.remove("is-ringing"), 900);
@@ -184,15 +191,15 @@
     function completeMaryFlowers(colorLabel) {
         hideFlowerPicker();
         pulseMaryHalo();
-        const first = markDone("mary_flowers");
+        const first = markDone("mary_flowers", state.lastFindButton);
         const line = first
             ? tp(
                   "courtyard.mary_done",
-                  "You placed a {color} flower for Mary. She is watching over you with love.",
+                  "Beautiful! You placed a {color} flower for Mary. She is praying for you during Mass — feel her gentle hug in your heart.",
               ).replace("{color}", colorLabel)
             : tp(
                   "courtyard.mary_repeat",
-                  "Mary smiles at your {color} flower. Thank you for visiting her corner!",
+                  "Mary smiles at your {color} flower. She is always happy to see you!",
               ).replace("{color}", colorLabel);
         say(line);
     }
@@ -238,20 +245,21 @@
             return;
         }
         state.isBusy = true;
+        state.lastFindButton = btn || null;
 
         try {
             if (eventId === "holy_water") {
                 runHolyWaterFx();
-                const first = markDone("holy_water");
+                const first = markDone("holy_water", btn);
                 say(
                     first
                         ? tp(
                               "courtyard.holy_water_done",
-                              "In the name of the Father, and of the Son, and of the Holy Spirit. Amen. Open your heart for Mass!",
+                              "You found the holy water font! Dip your finger and make the sign of the cross. Splash — Jesus washes your heart clean and says, 'Welcome back!'",
                           )
                         : tp(
                               "courtyard.holy_water_repeat",
-                              "Holy water reminds us that Jesus welcomes us again. Make the sign of the cross.",
+                              "Holy water is a little hello from Jesus every time you walk in. Try the sign of the cross again!",
                           ),
                 );
             } else if (eventId === "mary_flowers") {
@@ -259,45 +267,55 @@
                 say(
                     tp(
                         "courtyard.mary_prompt",
-                        "Pick a flower for Mary. Which color would you like to offer?",
+                        "You found the flower basket! Mary loves when children bring flowers. Pick a color to offer her before Mass.",
                     ),
                 );
             } else if (eventId === "bell") {
                 runBellFx(btn);
-                const first = markDone("bell");
+                const first = markDone("bell", btn);
                 say(
                     first
                         ? tp(
                               "courtyard.bell_done",
-                              "Ding! The church bell calls us: come, the family of God is gathering!",
+                              "You found the church bell! Ding-dong! That sound means: 'Come in, little friend — God's family is gathering, and we saved you a seat!'",
                           )
-                        : tp("courtyard.bell_repeat", "The bell rings softly again. Mass time is near!"),
+                        : tp(
+                              "courtyard.bell_repeat",
+                              "The bell rings again — a happy reminder that Mass is about to begin!",
+                          ),
                 );
             } else if (eventId === "bulletin") {
-                const line = await fetchBulletinLine();
-                markDone("bulletin");
-                say(line);
+                const gospelLine = await fetchBulletinLine();
+                const first = markDone("bulletin", btn);
+                say(
+                    first
+                        ? tp(
+                              "courtyard.bulletin_done",
+                              "You found the bulletin board! {detail} Listen closely at Mass — God has a message just for you today.",
+                          ).replace("{detail}", gospelLine)
+                        : gospelLine,
+                );
             } else if (eventId === "welcome_sign") {
-                const first = markDone("welcome_sign");
+                const first = markDone("welcome_sign", btn);
                 say(
                     first
                         ? tp(
                               "courtyard.welcome_done",
-                              "Welcome home! This is God's house — and you belong here.",
+                              "You found the welcome sign! It means: this is God's house, and YOU belong here. Heaven is happy you came!",
                           )
                         : tp(
                               "courtyard.welcome_repeat",
-                              "You are always welcome here. Father and Sister are glad you came!",
+                              "The sign still smiles at you: Welcome home, every single time you visit.",
                           ),
                 );
             } else if (eventId === "parish_bench") {
                 runWaveFx(btn);
-                const first = markDone("parish_bench");
+                const first = markDone("parish_bench", btn);
                 say(
                     first
                         ? tp(
                               "courtyard.bench_done",
-                              "A family on the bench waves: 'Hi! Sit with us — we're going to Mass together!'",
+                              "You found the parish bench! A family waves: 'Hi! We're going to Mass too — want to sit with us? Church is better together!'",
                           )
                         : tp(
                               "courtyard.bench_repeat",
@@ -354,8 +372,14 @@
         if (done.has("bell")) {
             bits.push(tp("courtyard.encourage_bell", "You rang the welcome bell ✓"));
         }
+        if (done.has("welcome_sign")) {
+            bits.push(tp("courtyard.encourage_sign", "You found the welcome sign ✓"));
+        }
+        if (done.has("bulletin")) {
+            bits.push(tp("courtyard.encourage_bulletin", "You read the bulletin ✓"));
+        }
         if (done.has("parish_bench")) {
-            bits.push(tp("courtyard.encourage_bench", "You waved to parish friends ✓"));
+            bits.push(tp("courtyard.encourage_bench", "You found the parish family ✓"));
         }
         if (!bits.length) {
             return "";

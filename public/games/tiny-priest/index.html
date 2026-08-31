@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Tiny Priest - Welcome to Our Church</title>
-        <link rel="stylesheet" href="style.css?v=20260831g" />
+        <link rel="stylesheet" href="style.css?v=20260831h" />
         <link rel="icon" type="image/png" href="assets/church.png" />
     </head>
     <body>
@@ -20,48 +20,60 @@
                     <img src="assets/church.png" alt="" />
                 </div>
 
-                <div class="courtyard-hits" aria-label="Courtyard discoveries">
+                <div class="courtyard-finds" aria-label="Hidden pictures to find">
                     <button
                         type="button"
-                        class="courtyard-hit courtyard-hit--welcome"
+                        class="courtyard-find courtyard-find--sign"
                         data-courtyard-event="welcome_sign"
-                        aria-label="Welcome to our church"
-                    ></button>
+                        aria-label="Find the welcome sign"
+                    >
+                        <img src="assets/mass/courtyard/courtyard_sign.png" alt="" />
+                    </button>
                     <button
                         type="button"
-                        class="courtyard-hit courtyard-hit--bell"
-                        data-courtyard-event="bell"
-                        aria-label="Ring the church bell"
-                    ></button>
-                    <button
-                        type="button"
-                        class="courtyard-hit courtyard-hit--font"
+                        class="courtyard-find courtyard-find--font"
                         data-courtyard-event="holy_water"
-                        aria-label="Bless yourself with holy water"
-                    ></button>
+                        aria-label="Find the holy water font"
+                    >
+                        <img src="assets/mass/courtyard/courtyard_font.png" alt="" />
+                    </button>
                     <button
                         type="button"
-                        class="courtyard-hit courtyard-hit--bulletin"
+                        class="courtyard-find courtyard-find--flowers"
+                        data-courtyard-event="mary_flowers"
+                        aria-label="Find the flower basket"
+                    >
+                        <img src="assets/mass/courtyard/courtyard_flowers.png" alt="" />
+                    </button>
+                    <button
+                        type="button"
+                        class="courtyard-find courtyard-find--bell"
+                        data-courtyard-event="bell"
+                        aria-label="Find the church bell"
+                    >
+                        <img src="assets/mass/courtyard/courtyard_bell.png" alt="" />
+                    </button>
+                    <button
+                        type="button"
+                        class="courtyard-find courtyard-find--bulletin"
                         data-courtyard-event="bulletin"
-                        aria-label="Read today's bulletin"
-                    ></button>
+                        aria-label="Find the bulletin board"
+                    >
+                        <img src="assets/mass/courtyard/courtyard_bulletin.png" alt="" />
+                    </button>
                     <button
                         type="button"
-                        class="courtyard-hit courtyard-hit--bench"
+                        class="courtyard-find courtyard-find--bench"
                         data-courtyard-event="parish_bench"
-                        aria-label="Wave to the parish family"
-                    ></button>
+                        aria-label="Find the parish family on the bench"
+                    >
+                        <img src="assets/mass/courtyard/courtyard_bench.png" alt="" />
+                    </button>
                 </div>
 
-                <button
-                    type="button"
-                    id="courtyard-mary"
-                    class="asset statue-mary courtyard-hit courtyard-hit--mary"
-                    data-courtyard-event="mary_flowers"
-                    aria-label="Visit Mary and offer a flower"
-                >
+                <div id="courtyard-mary" class="asset statue-mary" aria-hidden="false">
                     <img src="assets/mary.png" alt="Statue of Virgin Mary" />
-                </button>
+                </div>
 
                 <div class="entry-assembly">
                     <button
@@ -123,7 +135,7 @@
                     </button>
                 </div>
                 <div id="dialogue-box" class="dialogue-box">
-                    You're at church for Sunday Mass. Tap around — see what you discover! Then say hello to Father or Sister.
+                    Look closely! Six little pictures are hiding in the courtyard. Can you find them all? Then say hello to Father or Sister.
                 </div>
                 <div id="courtyard-flower-picker" class="courtyard-flower-picker" hidden>
                     <span class="courtyard-flower-picker-label">Offer Mary a flower:</span>
@@ -207,9 +219,9 @@
         <script src="vendor/three.min.js"></script>
         <script src="site-copy.js?v=20260614"></script>
         <script src="stations.js?v=20260830"></script>
-        <script src="mass-participation-lines.js?v=20260831g"></script>
-        <script src="mass-quest.js?v=20260831g"></script>
-        <script src="courtyard-events.js?v=20260831g"></script>
-        <script src="script.js?v=20260831g"></script>
+        <script src="mass-participation-lines.js?v=20260831h"></script>
+        <script src="mass-quest.js?v=20260831h"></script>
+        <script src="courtyard-events.js?v=20260831h"></script>
+        <script src="script.js?v=20260831h"></script>
     </body>
 </html>

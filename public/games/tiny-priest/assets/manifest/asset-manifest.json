@@ -188,7 +188,7 @@
       "label": "Holy water font",
       "path": "assets/mass/courtyard/courtyard_font.png",
       "eventId": "holy_water",
-      "status": "pending"
+      "status": "ready"
     },
     {
       "id": "courtyard_flowers",
@@ -196,38 +196,39 @@
       "label": "Flower basket",
       "path": "assets/mass/courtyard/courtyard_flowers.png",
       "eventId": "mary_flowers",
-      "status": "pending"
+      "status": "ready"
     },
     {
       "id": "courtyard_sign",
       "phase": "A",
       "label": "Welcome sign",
       "path": "assets/mass/courtyard/courtyard_sign.png",
-      "eventId": "welcome_home",
-      "status": "pending"
+      "eventId": "welcome_sign",
+      "status": "ready"
     },
     {
       "id": "courtyard_bulletin",
       "phase": "B",
       "label": "Bulletin board",
       "path": "assets/mass/courtyard/courtyard_bulletin.png",
-      "eventId": "todays_word",
-      "status": "pending"
+      "eventId": "bulletin",
+      "status": "ready"
     },
     {
       "id": "courtyard_bench",
       "phase": "B",
       "label": "Parish bench",
       "path": "assets/mass/courtyard/courtyard_bench.png",
-      "status": "pending"
+      "eventId": "parish_bench",
+      "status": "ready"
     },
     {
       "id": "courtyard_bell",
       "phase": "B",
       "label": "Church bell",
       "path": "assets/mass/courtyard/courtyard_bell.png",
-      "eventId": "ring_welcome",
-      "status": "pending"
+      "eventId": "bell",
+      "status": "ready"
     }
   ]
 }
