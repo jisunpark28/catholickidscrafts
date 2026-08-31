@@ -57,6 +57,41 @@ body:fullscreen .main-container {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
+.entry-top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 14px;
+    width: min(95vw, 1120px);
+    position: relative;
+    z-index: 2;
+}
+
+.entry-top-bar .main-title {
+    flex: 1 1 auto;
+    margin: 0;
+    width: auto;
+    max-width: none;
+}
+
+.courtyard-stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 254, 248, 0.88);
+    border: 1px solid rgba(160, 121, 86, 0.35);
+    font-size: 0.85rem;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.08);
+}
+
+.courtyard-star.is-earned {
+    transform: scale(1.05);
+}
+
 .church-scene {
     --door-x: 50%;
     --door-y: 73%;
@@ -94,7 +129,29 @@ body:fullscreen .main-container {
     bottom: 10%;
     z-index: 4;
     width: var(--mary-size);
-    transition: transform 0.3s ease;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.statue-mary.is-glowing {
+    filter: drop-shadow(0 0 14px rgba(255, 230, 140, 0.95))
+        drop-shadow(0 0 28px rgba(255, 200, 80, 0.55));
+    animation: mary-halo-pulse 1.6s ease-out;
+}
+
+@keyframes mary-halo-pulse {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+    35% {
+        transform: translateY(-6px) scale(1.04);
+    }
+    100% {
+        transform: translateY(0) scale(1);
+    }
 }
 
 .statue-mary img {
@@ -107,6 +164,278 @@ body:fullscreen .main-container {
 
 .statue-mary:hover {
     transform: translateY(-8px) scale(1.03);
+}
+
+.courtyard-door-glow {
+    position: absolute;
+    left: var(--door-x);
+    top: calc(var(--door-y) - 18%);
+    width: 28%;
+    height: 34%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(245, 230, 184, 0.55) 0%,
+        rgba(245, 230, 184, 0.12) 45%,
+        transparent 72%
+    );
+    animation: door-glow-breathe 4.5s ease-in-out infinite;
+}
+
+@keyframes door-glow-breathe {
+    0%,
+    100% {
+        opacity: 0.65;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.courtyard-hotspots {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.courtyard-hotspot {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 52px;
+    padding: 6px 8px;
+    border: 2px solid rgba(77, 156, 90, 0.55);
+    border-radius: 12px;
+    background: rgba(255, 254, 248, 0.92);
+    color: #5d4037;
+    font-size: 0.58rem;
+    font-weight: 800;
+    line-height: 1.1;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 6px 14px rgba(82, 58, 44, 0.14);
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.courtyard-hotspot:hover {
+    transform: translateY(-3px) scale(1.04);
+    background: #fffef8;
+}
+
+.courtyard-hotspot:focus-visible {
+    outline: 3px solid rgba(77, 156, 90, 0.9);
+    outline-offset: 3px;
+}
+
+.courtyard-hotspot.is-done {
+    border-color: rgba(196, 92, 38, 0.55);
+    background: rgba(255, 248, 235, 0.95);
+}
+
+.courtyard-hotspot.is-done::after {
+    content: "✓";
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #4d9c5a;
+    color: #fff;
+    font-size: 0.62rem;
+    line-height: 16px;
+    text-align: center;
+}
+
+.courtyard-hotspot-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+}
+
+.courtyard-hotspot-label {
+    white-space: nowrap;
+}
+
+.courtyard-hotspot--sign {
+    left: 22%;
+    bottom: 22%;
+}
+
+.courtyard-hotspot--bench {
+    left: 28%;
+    bottom: 20%;
+}
+
+.courtyard-hotspot--bell {
+    right: 8%;
+    top: 8%;
+}
+
+.courtyard-hotspot--font {
+    right: 14%;
+    bottom: 16%;
+}
+
+.courtyard-hotspot--bulletin {
+    right: 4%;
+    bottom: 34%;
+}
+
+.courtyard-hotspot.is-ringing {
+    animation: bell-ring 0.85s ease-in-out;
+}
+
+@keyframes bell-ring {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(-12deg);
+    }
+    40% {
+        transform: rotate(10deg);
+    }
+    60% {
+        transform: rotate(-8deg);
+    }
+    80% {
+        transform: rotate(6deg);
+    }
+}
+
+.courtyard-wave-burst {
+    position: absolute;
+    left: 50%;
+    top: -8px;
+    transform: translateX(-50%);
+    font-size: 1.4rem;
+    animation: wave-float 1s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes wave-float {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(0.8);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -28px) scale(1.15);
+    }
+}
+
+.courtyard-flower-picker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255, 251, 240, 0.95);
+    border: 1px dashed rgba(77, 156, 90, 0.45);
+}
+
+.courtyard-flower-picker[hidden] {
+    display: none !important;
+}
+
+.courtyard-flower-picker-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #6d4c41;
+    width: 100%;
+    text-align: center;
+}
+
+.courtyard-flower-btn {
+    border: 2px solid #d2b48c;
+    border-radius: 999px;
+    background: #fffef8;
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.courtyard-flower-btn:hover {
+    transform: scale(1.08);
+}
+
+.courtyard-fx {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 90;
+    opacity: 0;
+}
+
+#entry-screen.is-holy-water .courtyard-fx {
+    animation: holy-water-fx 1.5s ease-out forwards;
+}
+
+.courtyard-cross {
+    font-size: clamp(3rem, 12vw, 5.5rem);
+    color: rgba(77, 156, 90, 0.85);
+    text-shadow: 0 0 24px rgba(245, 230, 184, 0.9);
+    transform: scale(0.4);
+    opacity: 0;
+}
+
+#entry-screen.is-holy-water .courtyard-cross {
+    animation: cross-draw 1.2s ease-out forwards;
+}
+
+@keyframes holy-water-fx {
+    0% {
+        opacity: 0;
+    }
+    15%,
+    85% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes cross-draw {
+    0% {
+        transform: scale(0.35);
+        opacity: 0;
+    }
+    40% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+#entry-screen.is-entering-zoom .courtyard-hotspots,
+#entry-screen.is-entering-zoom .courtyard-door-glow,
+#entry-screen.is-entering-zoom .courtyard-stars,
+#entry-screen.is-entering-zoom .courtyard-flower-picker {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.34s ease;
 }
 
 .character-group,
@@ -814,7 +1143,8 @@ body:fullscreen .mass-navigator.is-active {
 #entry-screen.is-entering-zoom .main-title,
 #entry-screen.is-entering-zoom .entry-footer,
 #entry-screen.is-entering-zoom .dialogue-box,
-#entry-screen.is-entering-zoom .statue-mary {
+#entry-screen.is-entering-zoom .statue-mary,
+#entry-screen.is-entering-zoom .entry-top-bar {
     transition: opacity 0.34s ease;
     opacity: 0;
 }
@@ -841,26 +1171,7 @@ body:fullscreen .mass-navigator.is-active {
 }
 
 @media (max-height: 720px) {
-    
-.entry-top-bar {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    width: min(92vw, 820px);
-    max-width: calc(100% - 7rem);
-    gap: 12px;
-    position: relative;
-    z-index: 2;
-}
-
-.entry-top-bar .main-title {
-    flex: 1 1 auto;
-    width: auto;
-    max-width: none;
-    text-align: center;
-}
-
-.main-title {
+    .main-title {
         font-size: clamp(0.95rem, 1.2vh + 0.45rem, 1.35rem);
     }
 
@@ -904,6 +1215,31 @@ body:fullscreen .mass-navigator.is-active {
         right: 4px;
         width: min(240px, 86vw);
         max-height: calc(100dvh - 56px);
+    }
+
+    .courtyard-hotspot {
+        min-width: 44px;
+        padding: 4px 6px;
+        font-size: 0.5rem;
+    }
+
+    .courtyard-hotspot-icon {
+        font-size: 0.95rem;
+    }
+
+    .courtyard-hotspot--sign {
+        left: 18%;
+        bottom: 20%;
+    }
+
+    .courtyard-hotspot--bench {
+        left: 24%;
+        bottom: 18%;
+    }
+
+    .courtyard-hotspot--font {
+        right: 10%;
+        bottom: 14%;
     }
 
     .game-fullscreen-btn {

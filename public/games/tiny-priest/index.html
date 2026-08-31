@@ -4,20 +4,78 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Tiny Priest - Welcome to Our Church</title>
-        <link rel="stylesheet" href="style.css?v=20260615" />
+        <link rel="stylesheet" href="style.css?v=20260831f" />
         <link rel="icon" type="image/png" href="assets/church.png" />
     </head>
     <body>
         <div id="entry-screen" class="main-container">
-            <h1 class="main-title">Welcome to Tiny Church.</h1>
+            <div class="entry-top-bar">
+                <h1 class="main-title">Welcome to Tiny Church.</h1>
+                <div id="courtyard-stars" class="courtyard-stars" aria-label="Courtyard fun"></div>
+            </div>
 
             <div id="church-scene" class="church-scene">
+                <div class="courtyard-door-glow" aria-hidden="true"></div>
                 <div class="church-building" aria-hidden="true">
                     <img src="assets/church.png" alt="" />
                 </div>
 
-                <div class="asset statue-mary">
+                <button
+                    type="button"
+                    id="courtyard-mary"
+                    class="asset statue-mary courtyard-hotspot"
+                    data-courtyard-event="mary_flowers"
+                    aria-label="Visit Mary and offer a flower"
+                >
                     <img src="assets/mary.png" alt="Statue of Virgin Mary" />
+                </button>
+
+                <div class="courtyard-hotspots" aria-label="Courtyard activities">
+                    <button
+                        type="button"
+                        class="courtyard-hotspot courtyard-hotspot--sign"
+                        data-courtyard-event="welcome_sign"
+                        aria-label="Read the welcome sign"
+                    >
+                        <span class="courtyard-hotspot-icon" aria-hidden="true">🏠</span>
+                        <span class="courtyard-hotspot-label">Welcome</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="courtyard-hotspot courtyard-hotspot--bench"
+                        data-courtyard-event="parish_bench"
+                        aria-label="Wave to the parish family"
+                    >
+                        <span class="courtyard-hotspot-icon" aria-hidden="true">👨‍👩‍👧</span>
+                        <span class="courtyard-hotspot-label">Family</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="courtyard-hotspot courtyard-hotspot--bell"
+                        data-courtyard-event="bell"
+                        aria-label="Ring the church bell"
+                    >
+                        <span class="courtyard-hotspot-icon" aria-hidden="true">🔔</span>
+                        <span class="courtyard-hotspot-label">Bell</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="courtyard-hotspot courtyard-hotspot--font"
+                        data-courtyard-event="holy_water"
+                        aria-label="Bless yourself with holy water"
+                    >
+                        <span class="courtyard-hotspot-icon" aria-hidden="true">💧</span>
+                        <span class="courtyard-hotspot-label">Holy Water</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="courtyard-hotspot courtyard-hotspot--bulletin"
+                        data-courtyard-event="bulletin"
+                        aria-label="Read today's bulletin"
+                    >
+                        <span class="courtyard-hotspot-icon" aria-hidden="true">📋</span>
+                        <span class="courtyard-hotspot-label">Today</span>
+                    </button>
                 </div>
 
                 <div class="entry-assembly">
@@ -55,6 +113,10 @@
                 </div>
             </div>
 
+            <div id="courtyard-fx" class="courtyard-fx" aria-hidden="true">
+                <span class="courtyard-cross">✝</span>
+            </div>
+
             <div class="entry-footer">
                 <div class="player-picker" id="player-picker" role="group" aria-labelledby="player-picker-label">
                     <span class="player-picker-label" id="player-picker-label">You are:</span>
@@ -76,7 +138,19 @@
                     </button>
                 </div>
                 <div id="dialogue-box" class="dialogue-box">
-                    You're at church for Sunday Mass. Choose you below, then tap Father or Sister to say hello!
+                    You're at church for Sunday Mass. Tap the courtyard spots for fun, then say hello to Father or Sister!
+                </div>
+                <div id="courtyard-flower-picker" class="courtyard-flower-picker" hidden>
+                    <span class="courtyard-flower-picker-label">Offer Mary a flower:</span>
+                    <button type="button" class="courtyard-flower-btn" data-flower-color="red" data-flower-label="red">
+                        🌹
+                    </button>
+                    <button type="button" class="courtyard-flower-btn" data-flower-color="white" data-flower-label="white">
+                        🤍
+                    </button>
+                    <button type="button" class="courtyard-flower-btn" data-flower-color="yellow" data-flower-label="yellow">
+                        🌼
+                    </button>
                 </div>
                 <div id="entry-actions" class="entry-actions" hidden>
                 <button type="button" id="entry-confirm-btn" class="entry-action-btn entry-action-btn--yes">
@@ -148,8 +222,9 @@
         <script src="vendor/three.min.js"></script>
         <script src="site-copy.js?v=20260614"></script>
         <script src="stations.js?v=20260830"></script>
-        <script src="mass-participation-lines.js?v=20260831e"></script>
-        <script src="mass-quest.js?v=20260831e"></script>
-        <script src="script.js?v=20260831e"></script>
+        <script src="mass-participation-lines.js?v=20260831f"></script>
+        <script src="mass-quest.js?v=20260831f"></script>
+        <script src="courtyard-events.js?v=20260831f"></script>
+        <script src="script.js?v=20260831f"></script>
     </body>
 </html>
