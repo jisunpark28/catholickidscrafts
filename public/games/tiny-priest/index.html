@@ -20,7 +20,7 @@
                     <img src="assets/mary.png" alt="Statue of Virgin Mary" />
                 </div>
 
-                <div class="character-group">
+                <div class="entry-assembly">
                     <button
                         type="button"
                         id="character-priest"
@@ -30,6 +30,19 @@
                     >
                         <img src="assets/priest_front.png" alt="Father Priest" />
                     </button>
+
+                    <div
+                        id="entry-player-child"
+                        class="asset entry-player"
+                        data-character="child_girl"
+                        aria-hidden="false"
+                    >
+                        <img
+                            src="assets/mass/characters/child_girl_front.png"
+                            alt="You"
+                        />
+                    </div>
+
                     <button
                         type="button"
                         id="character-nun"
@@ -43,7 +56,28 @@
             </div>
 
             <div class="entry-footer">
-                <div id="dialogue-box" class="dialogue-box">Tap the priest or sister to say hello!</div>
+                <div class="player-picker" id="player-picker" role="group" aria-labelledby="player-picker-label">
+                    <span class="player-picker-label" id="player-picker-label">You are:</span>
+                    <button
+                        type="button"
+                        class="player-picker-btn is-selected"
+                        data-player="child_girl"
+                        aria-pressed="true"
+                    >
+                        Girl
+                    </button>
+                    <button
+                        type="button"
+                        class="player-picker-btn"
+                        data-player="child_boy"
+                        aria-pressed="false"
+                    >
+                        Boy
+                    </button>
+                </div>
+                <div id="dialogue-box" class="dialogue-box">
+                    You're at church for Sunday Mass. Choose you below, then tap Father or Sister to say hello!
+                </div>
                 <div id="entry-actions" class="entry-actions" hidden>
                 <button type="button" id="entry-confirm-btn" class="entry-action-btn entry-action-btn--yes">
                     Yes, let's go in
@@ -90,6 +124,6 @@
         <script src="vendor/three.min.js"></script>
         <script src="site-copy.js?v=20260614"></script>
         <script src="stations.js?v=20260830"></script>
-        <script src="script.js?v=20260831c"></script>
+        <script src="script.js?v=20260831d"></script>
     </body>
 </html>
