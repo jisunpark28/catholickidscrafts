@@ -1296,7 +1296,7 @@ function createVoxelChurch(container) {
     const playerSpriteMaterial = new THREE.MeshBasicMaterial({
         map: null,
         transparent: true,
-        alphaTest: 0.001,
+        alphaTest: 0.08,
         side: THREE.DoubleSide,
         depthWrite: false,
     });

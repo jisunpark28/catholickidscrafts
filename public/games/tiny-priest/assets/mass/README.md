@@ -11,6 +11,12 @@ Place new illustrations here. See repo root **`docs/TINY_PRIEST_MASS_ASSETS.md`*
 | `courtyard/` | Exterior props & background pieces |
 | `icons/` | 360×360 HUD step icons (optional) |
 
+**Transparency:** AI exports often have opaque white backgrounds. Run from game root:
+
+`python3 scripts/key-sprite-background.py assets/priest_front.png …`
+
+Flood-fills light edge-connected pixels to alpha 0 before committing.
+
 ## Manifest
 
 `../manifest/asset-manifest.json` lists every asset ID, target path, Mass step mapping, and `status` (`pending` → `ready`).
