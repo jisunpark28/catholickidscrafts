@@ -39,6 +39,7 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 - Admin: `/admin/mass-order-steps` — edit subtitle text, button labels, and gestures for each step under **Mass Order** in the sanctuary
 - Public API: `GET /api/mass-order-steps`
 - Seed defaults: `npm run db:seed-mass-order`
+- **Mass Quest assets (characters & liturgical items):** `docs/TINY_PRIEST_MASS_ASSETS.md` — art bible, courtyard welcome design, manifest at `public/games/tiny-priest/assets/manifest/asset-manifest.json`
 
 ## 4-Cut Photo Booth frames (operator)
 

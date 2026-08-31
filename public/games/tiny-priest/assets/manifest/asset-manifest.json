@@ -1,0 +1,233 @@
+{
+  "$schema": "./asset-manifest.schema.json",
+  "version": "2026-08-31",
+  "artBible": {
+    "characterCanvas": { "width": 1545, "height": 2000, "aspect": 0.773 },
+    "characterCanvasCelebrant": { "width": 1739, "height": 2250, "aspect": 0.773 },
+    "itemIcon": { "size": 512 },
+    "hudIcon": { "size": 360 },
+    "playerWorldHeight": 2.35,
+    "referenceFiles": [
+      "assets/priest_front.png",
+      "assets/nun_front.png",
+      "assets/mary.png",
+      "assets/church.png",
+      "stations/station-01.png"
+    ]
+  },
+  "characters": [
+    {
+      "id": "child_girl",
+      "phase": "A",
+      "label": "Child (girl)",
+      "paths": {
+        "front": "assets/mass/characters/child_girl_front.png",
+        "back": "assets/mass/characters/child_girl_back.png"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "child_boy",
+      "phase": "A",
+      "label": "Child (boy)",
+      "paths": {
+        "front": "assets/mass/characters/child_boy_front.png",
+        "back": "assets/mass/characters/child_boy_back.png"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "celebrant",
+      "phase": "A",
+      "label": "Celebrant",
+      "paths": {
+        "front": "assets/mass/characters/celebrant_front.png",
+        "back": "assets/mass/characters/celebrant_back.png"
+      },
+      "notes": "Chasuble; season color swap later",
+      "status": "pending"
+    },
+    {
+      "id": "greeter_priest",
+      "phase": "A",
+      "label": "Father (greeter)",
+      "paths": { "front": "assets/mass/characters/priest_welcome_front.png" },
+      "status": "pending"
+    },
+    {
+      "id": "greeter_nun",
+      "phase": "A",
+      "label": "Sister (greeter)",
+      "paths": { "front": "assets/mass/characters/nun_welcome_front.png" },
+      "status": "pending"
+    },
+    {
+      "id": "lector",
+      "phase": "B",
+      "label": "Lector",
+      "paths": {
+        "front": "assets/mass/characters/lector_front.png",
+        "back": "assets/mass/characters/lector_back.png"
+      },
+      "massStepIndexes": [6, 8],
+      "status": "pending"
+    },
+    {
+      "id": "altar_server",
+      "phase": "B",
+      "label": "Altar server",
+      "paths": {
+        "front": "assets/mass/characters/server_front.png",
+        "back": "assets/mass/characters/server_back.png"
+      },
+      "massStepIndexes": [14],
+      "status": "pending"
+    },
+    {
+      "id": "family_adult",
+      "phase": "B",
+      "label": "Parishioner",
+      "paths": { "front": "assets/mass/characters/family_adult_front.png" },
+      "status": "pending"
+    },
+    {
+      "id": "family_toddler",
+      "phase": "B",
+      "label": "Little child",
+      "paths": { "front": "assets/mass/characters/family_toddler_front.png" },
+      "status": "pending"
+    }
+  ],
+  "items": [
+    {
+      "id": "item_chalice",
+      "phase": "A",
+      "label": "Chalice",
+      "path": "assets/mass/items/item_chalice.png",
+      "massStepIndexes": [17, 21],
+      "worldSize": { "height": 0.45 },
+      "status": "pending"
+    },
+    {
+      "id": "item_patten",
+      "phase": "A",
+      "label": "Paten",
+      "path": "assets/mass/items/item_patten.png",
+      "massStepIndexes": [14, 21],
+      "status": "pending"
+    },
+    {
+      "id": "item_bread_loaf",
+      "phase": "A",
+      "label": "Bread (gifts)",
+      "path": "assets/mass/items/item_bread_loaf.png",
+      "massStepIndexes": [14],
+      "status": "pending"
+    },
+    {
+      "id": "item_wine_cruet",
+      "phase": "A",
+      "label": "Wine cruet",
+      "path": "assets/mass/items/item_wine_cruet.png",
+      "massStepIndexes": [14],
+      "status": "pending"
+    },
+    {
+      "id": "item_water_cruet",
+      "phase": "A",
+      "label": "Water cruet",
+      "path": "assets/mass/items/item_water_cruet.png",
+      "massStepIndexes": [14],
+      "status": "pending"
+    },
+    {
+      "id": "item_missal",
+      "phase": "A",
+      "label": "Missal",
+      "path": "assets/mass/items/item_missal.png",
+      "massStepIndexes": [5, 17],
+      "status": "pending"
+    },
+    {
+      "id": "item_lectionary",
+      "phase": "A",
+      "label": "Lectionary",
+      "path": "assets/mass/items/item_lectionary.png",
+      "massStepIndexes": [6, 8, 10],
+      "status": "pending"
+    },
+    {
+      "id": "item_processional_cross",
+      "phase": "A",
+      "label": "Processional cross",
+      "path": "assets/mass/items/item_cross_processional.png",
+      "massStepIndexes": [0],
+      "status": "pending"
+    },
+    {
+      "id": "item_host",
+      "phase": "A",
+      "label": "Host",
+      "path": "assets/mass/items/item_host.png",
+      "massStepIndexes": [17, 21],
+      "status": "pending"
+    },
+    {
+      "id": "item_ciborium",
+      "phase": "A",
+      "label": "Ciborium",
+      "path": "assets/mass/items/item_ciborium.png",
+      "massStepIndexes": [21],
+      "status": "pending"
+    }
+  ],
+  "courtyard": [
+    {
+      "id": "courtyard_font",
+      "phase": "A",
+      "label": "Holy water font",
+      "path": "assets/mass/courtyard/courtyard_font.png",
+      "eventId": "holy_water",
+      "status": "pending"
+    },
+    {
+      "id": "courtyard_flowers",
+      "phase": "A",
+      "label": "Flower basket",
+      "path": "assets/mass/courtyard/courtyard_flowers.png",
+      "eventId": "mary_flowers",
+      "status": "pending"
+    },
+    {
+      "id": "courtyard_sign",
+      "phase": "A",
+      "label": "Welcome sign",
+      "path": "assets/mass/courtyard/courtyard_sign.png",
+      "eventId": "welcome_home",
+      "status": "pending"
+    },
+    {
+      "id": "courtyard_bulletin",
+      "phase": "B",
+      "label": "Bulletin board",
+      "path": "assets/mass/courtyard/courtyard_bulletin.png",
+      "eventId": "todays_word",
+      "status": "pending"
+    },
+    {
+      "id": "courtyard_bench",
+      "phase": "B",
+      "label": "Parish bench",
+      "path": "assets/mass/courtyard/courtyard_bench.png",
+      "status": "pending"
+    },
+    {
+      "id": "courtyard_bell",
+      "phase": "B",
+      "label": "Church bell",
+      "path": "assets/mass/courtyard/courtyard_bell.png",
+      "eventId": "ring_welcome",
+      "status": "pending"
+    }
+  ]
+}
