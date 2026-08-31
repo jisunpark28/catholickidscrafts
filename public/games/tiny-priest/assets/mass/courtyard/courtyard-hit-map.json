@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "notes": "Hit regions for courtyard_entry_scene.png — invisible click targets aligned to painted objects. Character safe zone: center-bottom (greeters z-index 7).",
+  "hits": {
+    "bell": {
+      "left": 0.635,
+      "top": 0.045,
+      "width": 0.115,
+      "height": 0.105,
+      "label": "Find the church bell in the tower"
+    },
+    "bulletin": {
+      "left": 0.205,
+      "top": 0.415,
+      "width": 0.095,
+      "height": 0.125,
+      "label": "Find the bulletin board"
+    },
+    "welcome_sign": {
+      "left": 0.318,
+      "top": 0.628,
+      "width": 0.078,
+      "height": 0.088,
+      "label": "Find the welcome sign"
+    },
+    "holy_water": {
+      "left": 0.548,
+      "top": 0.632,
+      "width": 0.062,
+      "height": 0.085,
+      "label": "Find the holy water font"
+    },
+    "parish_bench": {
+      "left": 0.045,
+      "top": 0.745,
+      "width": 0.2,
+      "height": 0.145,
+      "label": "Find the parish family on the bench"
+    },
+    "mary_flowers": {
+      "left": 0.01,
+      "top": 0.855,
+      "width": 0.115,
+      "height": 0.11,
+      "label": "Find the flower basket"
+    }
+  },
+  "characterSafeZone": {
+    "left": 0.32,
+    "top": 0.78,
+    "width": 0.36,
+    "height": 0.22
+  }
+}

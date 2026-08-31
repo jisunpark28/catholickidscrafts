@@ -1,8 +1,9 @@
 /**
- * Courtyard of Welcome — optional fun events outside the church (entry screen).
+ * Courtyard hidden-object scene — integrated art + invisible hit regions.
  */
 (function initCourtyardEvents(global) {
     const STORAGE_KEY = "tp_courtyard_done_v1";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json";
 
     const EVENT_IDS = [
         "holy_water",
@@ -18,6 +19,8 @@
         onDialogue: null,
         isBusy: false,
         flowerPickerOpen: false,
+        lastFindButton: null,
+        hitMapLoaded: false,
     };
 
     function tp(key, fallback) {
@@ -83,7 +86,7 @@
         bar.innerHTML = "";
         bar.setAttribute(
             "aria-label",
-            tp("courtyard.stars_label", "Courtyard fun: {count} of {total} stars")
+            tp("courtyard.stars_label", "Hidden pictures: {count} of {total} found")
                 .replace("{count}", String(count))
                 .replace("{total}", String(total)),
         );
@@ -104,6 +107,55 @@
             btn.classList.toggle("is-found", found);
             btn.setAttribute("aria-pressed", found ? "true" : "false");
         });
+    }
+
+    function applyHitRegion(btn, region) {
+        btn.style.left = `${region.left * 100}%`;
+        btn.style.top = `${region.top * 100}%`;
+        btn.style.width = `${region.width * 100}%`;
+        btn.style.height = `${region.height * 100}%`;
+        if (region.label) {
+            btn.setAttribute("aria-label", region.label);
+        }
+    }
+
+    async function buildHitRegions() {
+        const container = document.getElementById("courtyard-hits");
+        if (!container || container.dataset.built === "true") {
+            return;
+        }
+
+        let map;
+        try {
+            const res = await fetch(HIT_MAP_URL);
+            if (!res.ok) {
+                throw new Error("hit map missing");
+            }
+            map = await res.json();
+        } catch (error) {
+            console.warn("Courtyard hit map unavailable:", error);
+            return;
+        }
+
+        container.innerHTML = "";
+        const hits = map.hits || {};
+        for (const eventId of EVENT_IDS) {
+            const region = hits[eventId];
+            if (!region) {
+                continue;
+            }
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "courtyard-hit";
+            btn.dataset.courtyardEvent = eventId;
+            applyHitRegion(btn, region);
+            container.appendChild(btn);
+        }
+
+        container.dataset.built = "true";
+        state.hitMapLoaded = true;
+        bindHotspots();
+        updateHotspotStates();
     }
 
     function playBellTone() {
@@ -142,17 +194,16 @@
         window.setTimeout(() => entry.classList.remove("is-holy-water"), 1600);
     }
 
-    function pulseMaryHalo() {
-        const mary = document.getElementById("courtyard-mary");
-        if (!mary) {
+    function pulseFoundGlow(btn) {
+        if (!btn) {
             return;
         }
-        mary.classList.add("is-glowing");
-        window.setTimeout(() => mary.classList.remove("is-glowing"), 1800);
+        btn.classList.add("is-glow-pulse");
+        window.setTimeout(() => btn.classList.remove("is-glow-pulse"), 1400);
     }
 
     function runBellFx(btn) {
-        const bell = btn || document.querySelector(".courtyard-find--bell");
+        const bell = btn || document.querySelector('[data-courtyard-event="bell"]');
         if (bell) {
             bell.classList.add("is-ringing");
             window.setTimeout(() => bell.classList.remove("is-ringing"), 900);
@@ -190,7 +241,7 @@
 
     function completeMaryFlowers(colorLabel) {
         hideFlowerPicker();
-        pulseMaryHalo();
+        pulseFoundGlow(state.lastFindButton);
         const first = markDone("mary_flowers", state.lastFindButton);
         const line = first
             ? tp(
@@ -215,13 +266,13 @@
                     ? data.readings.find((r) => r.kind === "gospel")
                     : null;
                 if (gospel?.title) {
-                    return tp("courtyard.bulletin_gospel", "Today's Gospel: {title}").replace(
+                    return tp("courtyard.bulletin_gospel", "Today's Gospel is {title}.").replace(
                         "{title}",
                         gospel.title,
                     );
                 }
                 if (data.liturgicalTitle) {
-                    return tp("courtyard.bulletin_title", "Today we celebrate: {title}").replace(
+                    return tp("courtyard.bulletin_title", "Today we celebrate {title}.").replace(
                         "{title}",
                         data.liturgicalTitle,
                     );
@@ -234,10 +285,10 @@
             typeof global.getLiturgicalSeason === "function"
                 ? global.getLiturgicalSeason(today)
                 : { season: "Ordinary Time" };
-        return tp(
-            "courtyard.bulletin_season",
-            "It is {season}. God has something special for you at Mass today!",
-        ).replace("{season}", liturgical.season || "Ordinary Time");
+        return tp("courtyard.bulletin_season", "It is {season} in the Church year.").replace(
+            "{season}",
+            liturgical.season || "Ordinary Time",
+        );
     }
 
     async function runEvent(eventId, btn) {
@@ -329,9 +380,6 @@
     }
 
     function bindHotspots() {
-        if (state.bound) {
-            return;
-        }
         document.querySelectorAll("[data-courtyard-event]").forEach((btn) => {
             if (btn.dataset.courtyardBound === "true") {
                 return;
@@ -370,7 +418,7 @@
             bits.push(tp("courtyard.encourage_water", "You used holy water ✓"));
         }
         if (done.has("bell")) {
-            bits.push(tp("courtyard.encourage_bell", "You rang the welcome bell ✓"));
+            bits.push(tp("courtyard.encourage_bell", "You found the church bell ✓"));
         }
         if (done.has("welcome_sign")) {
             bits.push(tp("courtyard.encourage_sign", "You found the welcome sign ✓"));
@@ -390,9 +438,12 @@
     global.CourtyardEvents = {
         init(options = {}) {
             state.onDialogue = options.onDialogue || null;
-            bindHotspots();
-            renderStars();
-            updateHotspotStates();
+            void buildHitRegions().then(() => {
+                if (!state.hitMapLoaded) {
+                    bindHotspots();
+                }
+                renderStars();
+            });
         },
         refresh() {
             renderStars();

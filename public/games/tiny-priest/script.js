@@ -34,7 +34,7 @@ const CHARACTER_CONFIG = {
 };
 
 const DEFAULT_ENTRY_DIALOGUE =
-    "Look closely! Six little pictures are hiding in the courtyard. Can you find them all? Then say hello to Father or Sister.";
+    "Look closely at the courtyard picture! Six things are hiding in the scene. Can you find them all? Then say hello to Father or Sister.";
 const DEFAULT_WALKING_DIALOGUE = "Walking into the church…";
 const DEFAULT_GREETER_FAREWELL = "See you inside!";
 

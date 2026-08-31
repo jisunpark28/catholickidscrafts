@@ -183,6 +183,21 @@
   ],
   "courtyard": [
     {
+      "id": "courtyard_entry_scene",
+      "phase": "A",
+      "label": "Courtyard hidden-object scene (integrated)",
+      "path": "assets/mass/courtyard/courtyard_entry_scene.png",
+      "eventId": "courtyard_scene",
+      "status": "ready"
+    },
+    {
+      "id": "courtyard_hit_map",
+      "phase": "A",
+      "label": "Courtyard hit regions",
+      "path": "assets/mass/courtyard/courtyard-hit-map.json",
+      "status": "ready"
+    },
+    {
       "id": "courtyard_font",
       "phase": "A",
       "label": "Holy water font",

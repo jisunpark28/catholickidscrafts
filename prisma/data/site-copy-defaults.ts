@@ -183,7 +183,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("game.tiny_priest.entry.title", "Welcome to Tiny Church.", "game_tiny_priest"),
   sc(
     "game.tiny_priest.entry.dialogue_default",
-    "You're at church for Sunday Mass. Look closely! Six little pictures are hiding in the courtyard. Can you find them all? Then say hello to Father or Sister!",
+    "You're at church for Sunday Mass. Look closely at the courtyard picture! Six things are hiding in the scene. Can you find them all? Then say hello to Father or Sister.",
     "game_tiny_priest",
   ),
   sc("game.tiny_priest.entry.picker_label", "You are:", "game_tiny_priest"),
