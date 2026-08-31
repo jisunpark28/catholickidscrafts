@@ -100,6 +100,14 @@ function applyTinyPriestStaticCopy() {
     if (massHint) {
         massHint.textContent = tpCopy("mass.hint", massHint.textContent);
     }
+    const questToggle = document.getElementById("mass-quest-toggle");
+    if (questToggle) {
+        questToggle.textContent = tpCopy("mass_quest.toggle_start", "Join Responses");
+    }
+    const questPractice = document.getElementById("mass-quest-practice");
+    if (questPractice) {
+        questPractice.textContent = tpCopy("mass_quest.practice", "Practice");
+    }
     const liturgy = document.getElementById("liturgy-subtitle");
     if (liturgy && !APP_STATE.threeWorld) {
         liturgy.textContent = tpCopy("liturgy.placeholder", liturgy.textContent);
@@ -476,6 +484,9 @@ function showEntryScreenElement() {
 }
 
 function showEntryScreenFromInterior() {
+    if (typeof window.MassQuest !== "undefined") {
+        window.MassQuest.stop();
+    }
     const entryScreen = document.getElementById("entry-screen");
     const flash = document.getElementById("entry-flash");
     const threeContainer = document.getElementById("three-container");
@@ -1867,6 +1878,9 @@ function createVoxelChurch(container) {
         const prefix = `🎼 ${step.part} · ${step.title} (${stepNumber}/${steps.length})`;
         actionState.massIndex += 1;
         triggerGesture(next, `${prefix} ${step.text}`, stepIndex);
+        if (typeof window.MassQuest !== "undefined" && window.MassQuest.isActive()) {
+            window.MassQuest.syncToMassStep(stepIndex);
+        }
         setMassFlowStatus(`▶️ Auto: ${step.part} (${step.partEn}) > ${step.title}`);
     }
 
@@ -1884,6 +1898,9 @@ function createVoxelChurch(container) {
         }
         actionState.massIndex = stepIndex;
         triggerGesture(step.gesture, `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
+        if (typeof window.MassQuest !== "undefined" && window.MassQuest.isActive()) {
+            window.MassQuest.syncToMassStep(stepIndex);
+        }
         setDialogue(`Jumped to ${step.part} (${step.partEn}) - ${step.title}.`);
         setMassFlowStatus(`📌 Current: ${step.part} (${step.partEn}) > ${step.title}`);
     }
@@ -2630,6 +2647,15 @@ async function activateThreeScene(role) {
 
         applyRoleCamera(role, APP_STATE.threeWorld.camera, APP_STATE.threeWorld.playerRig);
         setHudButtonsState(APP_STATE.threeWorld.getCurrentGesture(), APP_STATE.threeWorld.isMassActive());
+        if (typeof window.MassQuest !== "undefined") {
+            window.MassQuest.init({
+                onAssemblySpoke: (gesture) => {
+                    if (APP_STATE.threeWorld?.triggerGesture) {
+                        APP_STATE.threeWorld.triggerGesture(gesture);
+                    }
+                },
+            });
+        }
         const introTemplate =
             typeof tpCopy === "function"
                 ? tpCopy(
@@ -2771,3 +2797,4 @@ window.handleCharacterGreeting = handleCharacterGreeting;
 window.confirmEntryToChurch = confirmEntryToChurch;
 window.declineEntry = declineEntry;
 window.getLiturgicalSeason = getLiturgicalSeason;
+window.getMassFlowSteps = getMassFlowSteps;

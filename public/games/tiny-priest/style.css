@@ -579,6 +579,135 @@ body:fullscreen .mass-navigator.is-active {
     pointer-events: auto;
 }
 
+.mass-nav-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+.mass-nav-quest-btn {
+    border: 1px solid rgba(160, 121, 86, 0.45);
+    border-radius: 6px;
+    background: rgba(255, 254, 248, 0.95);
+    color: #5d4037;
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 4px 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.mass-nav-quest-btn.is-active {
+    background: rgba(228, 248, 220, 0.95);
+    border-color: rgba(97, 149, 91, 0.65);
+    color: #3e5f3a;
+}
+
+.mass-quest-panel {
+    display: none;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 0 8px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 2px solid rgba(77, 156, 90, 0.45);
+    box-shadow: 0 6px 18px rgba(82, 58, 44, 0.12);
+    pointer-events: auto;
+}
+
+.mass-quest-panel.is-active {
+    display: block;
+}
+
+.mass-quest-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: rgba(93, 64, 55, 0.72);
+}
+
+.mass-quest-section {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mass-quest-role {
+    display: inline-block;
+    margin-bottom: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.mass-quest-role--priest {
+    background: rgba(63, 61, 55, 0.12);
+    color: #3f3d37;
+}
+
+.mass-quest-role--assembly {
+    background: rgba(77, 156, 90, 0.18);
+    color: #2f6b3a;
+}
+
+.mass-quest-role--rubric {
+    background: rgba(210, 180, 140, 0.25);
+    color: #6d4c41;
+}
+
+.mass-quest-text {
+    margin: 0 0 10px;
+    font-size: clamp(0.82rem, 1.25vw, 0.98rem);
+    font-weight: 600;
+    line-height: 1.45;
+    color: #5d4037;
+    text-align: left;
+    min-height: 1.4em;
+}
+
+.mass-quest-text--hidden {
+    color: transparent;
+    user-select: none;
+}
+
+.mass-quest-action {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
+}
+
+.mass-quest-action--speak {
+    background: #4d9c5a;
+    color: #fffef8;
+    box-shadow: 0 4px 0 #3a7a45;
+}
+
+.mass-quest-action--speak:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #3a7a45;
+}
+
+.mass-quest-action--continue {
+    background: #fffef8;
+    color: #5d4037;
+    border: 2px solid #d2b48c;
+}
+
 .liturgy-subtitle {
     margin: 0;
     width: 100%;

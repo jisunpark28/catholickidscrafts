@@ -100,7 +100,20 @@
         <aside id="mass-navigator" class="mass-navigator" aria-hidden="true">
             <div class="mass-nav-header">
                 <div class="mass-nav-title">Mass Order</div>
-                <button type="button" id="mass-toggle-btn" class="mass-nav-mass-btn">Start Mass</button>
+                <div class="mass-nav-header-actions">
+                    <button type="button" id="mass-quest-toggle" class="mass-nav-quest-btn" aria-pressed="false">
+                        Join Responses
+                    </button>
+                    <button
+                        type="button"
+                        id="mass-quest-practice"
+                        class="mass-nav-quest-btn is-active"
+                        aria-pressed="true"
+                    >
+                        Practice
+                    </button>
+                    <button type="button" id="mass-toggle-btn" class="mass-nav-mass-btn">Start Mass</button>
+                </div>
             </div>
             <div id="mass-nav-groups" class="mass-nav-groups"></div>
             <p id="mass-nav-status" class="mass-nav-status" aria-live="polite"></p>
@@ -108,6 +121,17 @@
         </aside>
 
         <section id="liturgy-hud" class="liturgy-hud" aria-hidden="true">
+            <section id="mass-quest-panel" class="mass-quest-panel" aria-hidden="true">
+                <div class="mass-quest-meta">
+                    <span id="mass-quest-section" class="mass-quest-section"></span>
+                    <span id="mass-quest-progress" class="mass-quest-progress" aria-live="polite"></span>
+                </div>
+                <div id="mass-quest-role" class="mass-quest-role">Children</div>
+                <p id="mass-quest-text" class="mass-quest-text"></p>
+                <button type="button" id="mass-quest-action" class="mass-quest-action mass-quest-action--speak">
+                    Say response
+                </button>
+            </section>
             <div id="liturgy-subtitle" class="liturgy-subtitle">
                 Mass guidance will appear here.
             </div>
@@ -124,6 +148,8 @@
         <script src="vendor/three.min.js"></script>
         <script src="site-copy.js?v=20260614"></script>
         <script src="stations.js?v=20260830"></script>
-        <script src="script.js?v=20260831d"></script>
+        <script src="mass-participation-lines.js?v=20260831e"></script>
+        <script src="mass-quest.js?v=20260831e"></script>
+        <script src="script.js?v=20260831e"></script>
     </body>
 </html>

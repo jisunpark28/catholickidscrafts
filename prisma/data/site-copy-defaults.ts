@@ -197,7 +197,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("game.tiny_priest.mass.title", "Mass Order", "game_tiny_priest"),
   sc("game.tiny_priest.mass.toggle_start", "Start Mass", "game_tiny_priest"),
   sc("game.tiny_priest.mass.toggle_stop", "Stop Mass", "game_tiny_priest"),
-  sc("game.tiny_priest.mass.hint", "WASD move · Space jump · M auto Mass", "game_tiny_priest"),
+  sc("game.tiny_priest.mass.hint", "WASD move · Join Responses for Mass lines · M auto Mass", "game_tiny_priest"),
   sc("game.tiny_priest.liturgy.placeholder", "Mass guidance will appear here.", "game_tiny_priest"),
   sc("game.tiny_priest.liturgy.placeholder_active", "Mass guidance subtitles will appear here.", "game_tiny_priest"),
   sc(
@@ -234,7 +234,16 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("game.tiny_priest.mass.paused_subtitle", "⏸️ Mass sequence paused. Select any gesture manually.", "game_tiny_priest"),
   sc("game.tiny_priest.mass.paused_dialogue", "Mass sequence paused.", "game_tiny_priest"),
   sc("game.tiny_priest.mass.paused_status", "⏸️ Paused. Click a step to jump there.", "game_tiny_priest"),
-  sc("game.tiny_priest.enter.church_intro", "Today is {season}. Move: arrows/WASD, jump: Space, gestures: 1-7, Mass sequence: M.", "game_tiny_priest", "Use {season} placeholder"),
+  sc("game.tiny_priest.enter.church_intro", "Today is {season}. Move with WASD. Tap Join Responses to practice your lines.", "game_tiny_priest", "Use {season} placeholder"),
+  sc("game.tiny_priest.mass_quest.toggle_start", "Join Responses", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.practice", "Practice", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.role_priest", "Priest", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.role_children", "Children", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.role_direction", "Direction", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.say_prefix", "Say: {text}", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.say_response", "Say response", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.continue", "Continue", "game_tiny_priest"),
+  sc("game.tiny_priest.mass_quest.progress", "{current} / {total}", "game_tiny_priest"),
 
   // Hangman
   sc("game.hangman.title", "Hangman game", "game_hangman"),

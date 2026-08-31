@@ -26,7 +26,7 @@
     "vestments:split": "node scripts/split-vestment-spritesheet.mjs",
     "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs",
     "generate:favicons": "python3 scripts/generate-favicons.py",
-    "favicon:generate": "python3 scripts/generate-favicon-ico.py"
+    "export:mass-participation": "tsx scripts/export-mass-participation-bundle.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
