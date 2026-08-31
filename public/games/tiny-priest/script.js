@@ -4,18 +4,39 @@ const CHARACTER_CONFIG = {
     priest: {
         frontImage: "assets/priest_front.png",
         backImage: "assets/priest_back.png",
-        greetingText: "Father: Peace be with you! Welcome to our church.",
-        enterPromptText: "Would you like to go inside?",
+        greetingText: "Father: Peace be with you! We're glad you came to Mass.",
+        enterPromptText: "Would you like to come inside and join us for Mass?",
+        isGreeter: true,
+        farewellText: "See you inside!",
     },
     nun: {
         frontImage: "assets/nun_front.png",
         backImage: "assets/nun_back.png",
-        greetingText: "Sister: Let us pray together. Welcome to our church.",
-        enterPromptText: "Would you like to go inside?",
+        greetingText: "Sister: Welcome! We're so glad you came to church today.",
+        enterPromptText: "Would you like to come inside and join us for Mass?",
+        isGreeter: true,
+        farewellText: "See you inside!",
+    },
+    child_girl: {
+        frontImage: "assets/mass/characters/child_girl_front.png",
+        backImage: "assets/mass/characters/child_girl_back.png",
+        isGreeter: false,
+        isPlayer: true,
+        pickerLabel: "Girl",
+    },
+    child_boy: {
+        frontImage: "assets/mass/characters/child_boy_front.png",
+        backImage: "assets/mass/characters/child_boy_back.png",
+        isGreeter: false,
+        isPlayer: true,
+        pickerLabel: "Boy",
     },
 };
 
-const DEFAULT_ENTRY_DIALOGUE = "Tap the priest or sister to say hello!";
+const DEFAULT_ENTRY_DIALOGUE =
+    "You're at church for Sunday Mass. Choose you below, then tap Father or Sister to say hello!";
+const DEFAULT_WALKING_DIALOGUE = "Walking into the church…";
+const DEFAULT_GREETER_FAREWELL = "See you inside!";
 
 function showHotspotModal(title, description) {
     const modal = document.getElementById("hotspot-modal");
@@ -79,6 +100,14 @@ function applyTinyPriestStaticCopy() {
     if (massHint) {
         massHint.textContent = tpCopy("mass.hint", massHint.textContent);
     }
+    const questToggle = document.getElementById("mass-quest-toggle");
+    if (questToggle) {
+        questToggle.textContent = tpCopy("mass_quest.toggle_start", "Join Responses");
+    }
+    const questPractice = document.getElementById("mass-quest-practice");
+    if (questPractice) {
+        questPractice.textContent = tpCopy("mass_quest.practice", "Practice");
+    }
     const liturgy = document.getElementById("liturgy-subtitle");
     if (liturgy && !APP_STATE.threeWorld) {
         liturgy.textContent = tpCopy("liturgy.placeholder", liturgy.textContent);
@@ -108,6 +137,23 @@ function applyTinyPriestStaticCopy() {
         "nun.enter_prompt",
         CHARACTER_CONFIG.nun.enterPromptText,
     );
+    CHARACTER_CONFIG.priest.farewellText = tpCopy(
+        "priest.farewell",
+        CHARACTER_CONFIG.priest.farewellText,
+    );
+    CHARACTER_CONFIG.nun.farewellText = tpCopy("nun.farewell", CHARACTER_CONFIG.nun.farewellText);
+    const pickerLabel = document.getElementById("player-picker-label");
+    if (pickerLabel) {
+        pickerLabel.textContent = tpCopy("entry.picker_label", "You are:");
+    }
+    document.querySelectorAll("[data-player]").forEach((btn) => {
+        const key = btn.dataset.player;
+        const config = CHARACTER_CONFIG[key];
+        if (config?.pickerLabel) {
+            const copyKey = key === "child_boy" ? "entry.picker_boy" : "entry.picker_girl";
+            btn.textContent = tpCopy(copyKey, config.pickerLabel);
+        }
+    });
     for (const key of Object.keys(GESTURE_NARRATION)) {
         GESTURE_NARRATION[key] = tpCopy(`gesture.${key}`, GESTURE_NARRATION[key]);
     }
@@ -122,12 +168,52 @@ function getDefaultEntryDialogue() {
 const APP_STATE = {
     isTransitioning: false,
     selectedCharacter: null,
+    playerCharacter: "child_girl",
     greetedCharacter: null,
     threeWorld: null,
     threeLoadPromise: null,
     hudBound: false,
     massNavBound: false,
 };
+
+function isPlayerCharacterKey(key) {
+    return Boolean(CHARACTER_CONFIG[key]?.isPlayer);
+}
+
+function getPlayerCharacterKey() {
+    return isPlayerCharacterKey(APP_STATE.playerCharacter) ? APP_STATE.playerCharacter : "child_girl";
+}
+
+function getPlayerEntryElement() {
+    return document.getElementById("entry-player-child");
+}
+
+function updateEntryPlayerSprite() {
+    const el = getPlayerEntryElement();
+    const key = getPlayerCharacterKey();
+    const config = CHARACTER_CONFIG[key];
+    if (!el || !config) {
+        return;
+    }
+    el.dataset.character = key;
+    const image = el.querySelector("img");
+    if (image) {
+        image.src = config.frontImage;
+        image.alt = config.pickerLabel || "You";
+    }
+    document.querySelectorAll("[data-player]").forEach((btn) => {
+        btn.classList.toggle("is-selected", btn.dataset.player === key);
+        btn.setAttribute("aria-pressed", btn.dataset.player === key ? "true" : "false");
+    });
+}
+
+function setPlayerCharacter(key) {
+    if (!isPlayerCharacterKey(key) || APP_STATE.isTransitioning) {
+        return;
+    }
+    APP_STATE.playerCharacter = key;
+    updateEntryPlayerSprite();
+}
 
 const THREE_CDN_FALLBACKS = [
     "vendor/three.min.js",
@@ -398,6 +484,9 @@ function showEntryScreenElement() {
 }
 
 function showEntryScreenFromInterior() {
+    if (typeof window.MassQuest !== "undefined") {
+        window.MassQuest.stop();
+    }
     const entryScreen = document.getElementById("entry-screen");
     const flash = document.getElementById("entry-flash");
     const threeContainer = document.getElementById("three-container");
@@ -428,6 +517,15 @@ function showEntryScreenFromInterior() {
         }
     });
 
+    const playerEl = getPlayerEntryElement();
+    if (playerEl) {
+        playerEl.style.pointerEvents = "";
+        playerEl.classList.remove("is-entering");
+        playerEl.style.opacity = "1";
+        updateEntryPlayerSprite();
+    }
+    setPlayerPickerLocked(false);
+
     if (flash) {
         flash.classList.remove("is-active");
         flash.removeAttribute("style");
@@ -440,6 +538,8 @@ function showEntryScreenFromInterior() {
     APP_STATE.greetedCharacter = null;
     showEntryActions(false);
     highlightGreetedCharacter(null);
+    updateEntryPlayerSprite();
+    setPlayerPickerLocked(false);
     setDialogue(getDefaultEntryDialogue());
     setLiturgySubtitle(
         typeof tpCopy === "function"
@@ -799,6 +899,7 @@ function resetEntryPromptUi() {
     showEntryActions(false);
     highlightGreetedCharacter(null);
     unlockCharacterSelection();
+    setPlayerPickerLocked(false);
     setDialogue(getDefaultEntryDialogue());
 }
 
@@ -1268,8 +1369,14 @@ function createVoxelChurch(container) {
         }
     }
 
-    const selected = CHARACTER_CONFIG[APP_STATE.selectedCharacter] || CHARACTER_CONFIG.nun;
-    const isPriest = APP_STATE.selectedCharacter === "priest";
+    const playerKey =
+        APP_STATE.selectedCharacter && CHARACTER_CONFIG[APP_STATE.selectedCharacter]
+            ? APP_STATE.selectedCharacter
+            : getPlayerCharacterKey();
+    const selected = CHARACTER_CONFIG[playerKey];
+    const isChildPlayer = isPlayerCharacterKey(playerKey);
+    const isPriest = playerKey === "priest";
+    const useOverlayArms = false;
 
     const playerRig = new THREE.Group();
     playerRig.position.set(0, 0, 7.2);
@@ -1283,12 +1390,12 @@ function createVoxelChurch(container) {
     const playerSpriteMaterial = new THREE.MeshBasicMaterial({
         map: null,
         transparent: true,
-        alphaTest: 0.001,
+        alphaTest: 0.08,
         side: THREE.DoubleSide,
         depthWrite: false,
     });
 
-    const PLAYER_SPRITE_WORLD_HEIGHT = 2.35;
+    const PLAYER_SPRITE_WORLD_HEIGHT = isChildPlayer ? 2.05 : 2.35;
     let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
     let playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
@@ -1391,7 +1498,21 @@ function createVoxelChurch(container) {
     playerRig.add(liturgyItem);
 
     // Palette values were sampled from the actual PNG sprites to keep visual consistency.
-    const spritePalette = isPriest
+    const spritePalette = isChildPlayer
+        ? playerKey === "child_boy"
+            ? {
+                robePrimary: 0x8eb5d4,
+                robeSecondary: 0xc9b48a,
+                trim: 0xe8eef5,
+                skin: 0xd8ad90,
+            }
+            : {
+                robePrimary: 0x9ec5da,
+                robeSecondary: 0x7aa8c4,
+                trim: 0xf3ede3,
+                skin: 0xd8ad90,
+            }
+        : isPriest
         ? {
             robePrimary: 0x3f3d37,
             robeSecondary: 0x2f2d29,
@@ -1405,7 +1526,24 @@ function createVoxelChurch(container) {
             skin: 0xe8c4a7,
         };
 
-    const armStyle = isPriest
+    const armStyle = isChildPlayer
+        ? {
+            shoulderX: 0.62,
+            shoulderY: 1.78,
+            shoulderZ: 0.2,
+            upperWidth: 0.22,
+            upperLength: 0.62,
+            lowerWidth: 0.2,
+            lowerLength: 0.58,
+            elbowDrop: 0.58,
+            handRadius: 0.088,
+            cuffWidth: 0.18,
+            cuffLength: 0.08,
+            chestCoverRadius: 0.22,
+            chestCoverY: 1.72,
+            handDepthFront: 0.022,
+        }
+        : isPriest
         ? {
             shoulderX: 0.74,
             shoulderY: 2.02,
@@ -1678,7 +1816,22 @@ function createVoxelChurch(container) {
     }
 
     function shouldShowOverlayHands() {
-        return false;
+        return useOverlayArms;
+    }
+
+    function setOverlayArmsVisible(isVisible) {
+        [...leftArm.segments, ...rightArm.segments].forEach((segment) => {
+            segment.visible = isVisible;
+        });
+        leftArm.hand.visible = isVisible;
+        rightArm.hand.visible = isVisible;
+        if (chestCover) {
+            chestCover.visible = isVisible && !isChildPlayer;
+        }
+    }
+
+    function syncOverlayArmsVisibility(gesture, horizontalSpeed = 0) {
+        setOverlayArmsVisible(false);
     }
 
     function setOverlayHandsVisible(isVisible) {
@@ -1698,14 +1851,14 @@ function createVoxelChurch(container) {
             actionState.signCrossActive = true;
             actionState.signCrossTime = 0;
             setGesturePose("pray");
-            setOverlayHandsVisible(false);
+            syncOverlayArmsVisibility("signCross");
             narrateGesture("signCross", prefix);
             setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
             return;
         }
         actionState.signCrossActive = false;
         setGesturePose(name);
-        setOverlayHandsVisible(false);
+        syncOverlayArmsVisibility(name);
         narrateGesture(name, prefix);
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
@@ -1725,6 +1878,9 @@ function createVoxelChurch(container) {
         const prefix = `🎼 ${step.part} · ${step.title} (${stepNumber}/${steps.length})`;
         actionState.massIndex += 1;
         triggerGesture(next, `${prefix} ${step.text}`, stepIndex);
+        if (typeof window.MassQuest !== "undefined" && window.MassQuest.isActive()) {
+            window.MassQuest.syncToMassStep(stepIndex);
+        }
         setMassFlowStatus(`▶️ Auto: ${step.part} (${step.partEn}) > ${step.title}`);
     }
 
@@ -1742,6 +1898,9 @@ function createVoxelChurch(container) {
         }
         actionState.massIndex = stepIndex;
         triggerGesture(step.gesture, `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
+        if (typeof window.MassQuest !== "undefined" && window.MassQuest.isActive()) {
+            window.MassQuest.syncToMassStep(stepIndex);
+        }
         setDialogue(`Jumped to ${step.part} (${step.partEn}) - ${step.title}.`);
         setMassFlowStatus(`📌 Current: ${step.part} (${step.partEn}) > ${step.title}`);
     }
@@ -2207,15 +2366,7 @@ function createVoxelChurch(container) {
     }
 
     function applyArmSecondaryMotion(speed) {
-        if (speed < 0.1 || !playerMotion.onGround) {
-            return;
-        }
-        const energy = Math.min(speed / playerMotion.speed, 1);
-        const sway = Math.sin(spriteFacingState.walkPhase * 1.1) * 0.08 * energy;
-        leftArm.shoulder.rotation.z += sway * 0.55;
-        rightArm.shoulder.rotation.z -= sway * 0.55;
-        leftArm.elbow.rotation.x += Math.abs(sway) * 0.18;
-        rightArm.elbow.rotation.x += Math.abs(sway) * 0.18;
+        return;
     }
 
     function animate() {
@@ -2292,6 +2443,7 @@ function createVoxelChurch(container) {
 
         updateArmPoseSmoothing(dt);
         applyArmSecondaryMotion(horizontalSpeed);
+        syncOverlayArmsVisibility(actionState.currentGesture, horizontalSpeed);
         updateLiturgyItem();
         updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, dt);
 
@@ -2495,6 +2647,15 @@ async function activateThreeScene(role) {
 
         applyRoleCamera(role, APP_STATE.threeWorld.camera, APP_STATE.threeWorld.playerRig);
         setHudButtonsState(APP_STATE.threeWorld.getCurrentGesture(), APP_STATE.threeWorld.isMassActive());
+        if (typeof window.MassQuest !== "undefined") {
+            window.MassQuest.init({
+                onAssemblySpoke: (gesture) => {
+                    if (APP_STATE.threeWorld?.triggerGesture) {
+                        APP_STATE.threeWorld.triggerGesture(gesture);
+                    }
+                },
+            });
+        }
         const introTemplate =
             typeof tpCopy === "function"
                 ? tpCopy(
@@ -2516,7 +2677,7 @@ async function activateThreeScene(role) {
  * @param {string} character
  */
 function handleCharacterGreeting(character) {
-    if (APP_STATE.isTransitioning || !CHARACTER_CONFIG[character]) {
+    if (APP_STATE.isTransitioning || !CHARACTER_CONFIG[character]?.isGreeter) {
         return;
     }
 
@@ -2538,29 +2699,59 @@ function declineEntry() {
  * After the visitor agrees, walk in and open the 3D church interior.
  */
 async function confirmEntryToChurch() {
-    const character = APP_STATE.greetedCharacter;
-    if (APP_STATE.isTransitioning || !character || !CHARACTER_CONFIG[character]) {
+    const greeter = APP_STATE.greetedCharacter;
+    if (APP_STATE.isTransitioning || !greeter || !CHARACTER_CONFIG[greeter]?.isGreeter) {
+        return;
+    }
+
+    const playerKey = getPlayerCharacterKey();
+    const playerEl = getPlayerEntryElement();
+    const greeterConfig = CHARACTER_CONFIG[greeter];
+    if (!playerEl) {
         return;
     }
 
     APP_STATE.isTransitioning = true;
-    APP_STATE.selectedCharacter = character;
+    APP_STATE.selectedCharacter = playerKey;
     showEntryActions(false);
-
-    const characterEl = getCharacterElement(character);
-    if (!characterEl) {
-        APP_STATE.isTransitioning = false;
-        resetEntryPromptUi();
-        return;
-    }
-
     lockCharacterSelection();
-    switchToBackSprite(character, characterEl);
-    setDialogue("Walking into the church…");
+    setPlayerPickerLocked(true);
 
-    await animateCharacterEntry(characterEl);
+    switchToBackSprite(playerKey, playerEl);
+    const walkingLine =
+        typeof tpCopy === "function"
+            ? tpCopy("entry.walking", DEFAULT_WALKING_DIALOGUE)
+            : DEFAULT_WALKING_DIALOGUE;
+    const farewell =
+        greeterConfig.farewellText ||
+        (typeof tpCopy === "function"
+            ? tpCopy("entry.greeter_farewell", DEFAULT_GREETER_FAREWELL)
+            : DEFAULT_GREETER_FAREWELL);
+    const greeterName = greeter === "priest" ? "Father" : "Sister";
+    setDialogue(`${walkingLine}\n\n${greeterName}: ${farewell}`);
+
+    await animateCharacterEntry(playerEl);
     await animateDoorZoomTransition();
-    await activateThreeScene(character);
+    await activateThreeScene(playerKey);
+}
+
+function setPlayerPickerLocked(isLocked) {
+    document.querySelectorAll("[data-player]").forEach((btn) => {
+        btn.disabled = isLocked;
+    });
+}
+
+function bindPlayerPicker() {
+    document.querySelectorAll("[data-player]").forEach((btn) => {
+        if (btn.dataset.pickerBound === "true") {
+            return;
+        }
+        btn.dataset.pickerBound = "true";
+        btn.addEventListener("click", () => {
+            setPlayerCharacter(btn.dataset.player);
+        });
+    });
+    updateEntryPlayerSprite();
 }
 
 function bindEntryFlow() {
@@ -2591,11 +2782,13 @@ function bindEntryFlow() {
 console.info(`Tiny Priest build ${TINY_PRIEST_BUILD}`);
 
 bindEntryFlow();
+bindPlayerPicker();
 bindGameFullscreen();
 
 void (typeof loadTinyPriestSiteCopy === "function"
     ? loadTinyPriestSiteCopy().then(() => {
           applyTinyPriestStaticCopy();
+          updateEntryPlayerSprite();
           setDialogue(getDefaultEntryDialogue());
       })
     : Promise.resolve());
@@ -2604,3 +2797,4 @@ window.handleCharacterGreeting = handleCharacterGreeting;
 window.confirmEntryToChurch = confirmEntryToChurch;
 window.declineEntry = declineEntry;
 window.getLiturgicalSeason = getLiturgicalSeason;
+window.getMassFlowSteps = getMassFlowSteps;
