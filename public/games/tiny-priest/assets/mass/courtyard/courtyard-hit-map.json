@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "notes": "courtyard_entry_scene.png v3 — Mary flower garden (left), bench family (right), ground bulletin, tower bell. No holy water (indoor item).",
+  "version": 4,
+  "notes": "courtyard_entry_scene.png v4 — wide left lawn, lavish Mary flower garden, bench right, ground bulletin, tower bell.",
   "hits": {
     "bell": {
       "left": 0.635,
@@ -10,10 +10,10 @@
       "label": "Find the bell in the church tower"
     },
     "bulletin": {
-      "left": 0.07,
-      "top": 0.74,
-      "width": 0.11,
-      "height": 0.13,
+      "left": 0.12,
+      "top": 0.71,
+      "width": 0.1,
+      "height": 0.12,
       "label": "Find the bulletin board on the ground"
     },
     "welcome_sign": {
@@ -31,10 +31,10 @@
       "label": "Find the parish family on the bench"
     },
     "mary_flowers": {
-      "left": 0.02,
-      "top": 0.8,
-      "width": 0.16,
-      "height": 0.14,
+      "left": 0.01,
+      "top": 0.76,
+      "width": 0.26,
+      "height": 0.17,
       "label": "Find Mary's flower garden"
     }
   },

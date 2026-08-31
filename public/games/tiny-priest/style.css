@@ -125,10 +125,10 @@ body:fullscreen .main-container {
 
 .statue-mary {
     position: absolute;
-    left: 4%;
-    bottom: 9%;
+    left: 3%;
+    bottom: 11%;
     z-index: 4;
-    width: var(--mary-size);
+    width: calc(var(--mary-size) * 0.95);
     pointer-events: none;
     transition: transform 0.3s ease, filter 0.3s ease;
 }
