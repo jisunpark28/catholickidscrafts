@@ -1,47 +1,47 @@
 {
-  "version": 4,
-  "notes": "courtyard_entry_scene.png v4 — wide left lawn, lavish Mary flower garden, bench right, ground bulletin, tower bell.",
+  "version": 5,
+  "notes": "courtyard_entry_scene.png v5 — 16:10 full-bleed wide scene; Mary garden painted in.",
   "hits": {
     "bell": {
-      "left": 0.635,
-      "top": 0.048,
-      "width": 0.11,
-      "height": 0.1,
+      "left": 0.72,
+      "top": 0.05,
+      "width": 0.1,
+      "height": 0.11,
       "label": "Find the bell in the church tower"
     },
     "bulletin": {
-      "left": 0.12,
-      "top": 0.71,
+      "left": 0.2,
+      "top": 0.72,
       "width": 0.1,
       "height": 0.12,
       "label": "Find the bulletin board on the ground"
     },
     "welcome_sign": {
-      "left": 0.318,
-      "top": 0.628,
-      "width": 0.078,
-      "height": 0.088,
+      "left": 0.39,
+      "top": 0.63,
+      "width": 0.08,
+      "height": 0.09,
       "label": "Find the welcome sign"
     },
     "parish_bench": {
-      "left": 0.56,
-      "top": 0.72,
-      "width": 0.3,
-      "height": 0.17,
+      "left": 0.78,
+      "top": 0.7,
+      "width": 0.2,
+      "height": 0.18,
       "label": "Find the parish family on the bench"
     },
     "mary_flowers": {
-      "left": 0.01,
-      "top": 0.76,
-      "width": 0.26,
-      "height": 0.17,
+      "left": 0.02,
+      "top": 0.56,
+      "width": 0.28,
+      "height": 0.34,
       "label": "Find Mary's flower garden"
     }
   },
   "characterSafeZone": {
-    "left": 0.32,
+    "left": 0.38,
     "top": 0.78,
-    "width": 0.36,
+    "width": 0.24,
     "height": 0.22
   }
 }

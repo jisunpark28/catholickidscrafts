@@ -3,7 +3,7 @@
  */
 (function initCourtyardEvents(global) {
     const STORAGE_KEY = "tp_courtyard_done_v2";
-    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831k";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831l";
 
     const EVENT_IDS = [
         "mary_flowers",
@@ -202,12 +202,14 @@
     }
 
     function pulseMaryHalo() {
-        const mary = document.getElementById("courtyard-mary");
-        if (!mary) {
+        const garden =
+            state.lastFindButton ||
+            document.querySelector('[data-courtyard-event="mary_flowers"]');
+        if (!garden) {
             return;
         }
-        mary.classList.add("is-glowing");
-        window.setTimeout(() => mary.classList.remove("is-glowing"), 1800);
+        garden.classList.add("is-mary-glow");
+        window.setTimeout(() => garden.classList.remove("is-mary-glow"), 1800);
     }
 
     function runBellFx(btn) {
