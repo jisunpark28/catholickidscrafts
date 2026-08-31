@@ -3,7 +3,7 @@
  */
 (function initCourtyardEvents(global) {
     const STORAGE_KEY = "tp_courtyard_done_v2";
-    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831p";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831q";
 
     const EVENT_IDS = [
         "mary_flowers",
@@ -67,9 +67,14 @@
         saveDoneSet(done);
         renderStars();
         updateHotspotStates();
-        if (firstTime && btn) {
-            btn.classList.add("is-sparkle");
-            window.setTimeout(() => btn.classList.remove("is-sparkle"), 1100);
+        if (firstTime) {
+            if (eventId !== "bell") {
+                playFoundChime();
+            }
+            if (btn) {
+                btn.classList.add("is-sparkle");
+                window.setTimeout(() => btn.classList.remove("is-sparkle"), 1100);
+            }
         }
         return firstTime;
     }
@@ -157,13 +162,43 @@
         updateHotspotStates();
     }
 
+    function getAudioContext() {
+        const AudioCtx = global.AudioContext || global.webkitAudioContext;
+        if (!AudioCtx) {
+            return null;
+        }
+        if (!getAudioContext._ctx || getAudioContext._ctx.state === "closed") {
+            getAudioContext._ctx = new AudioCtx();
+        }
+        const ctx = getAudioContext._ctx;
+        if (ctx.state === "suspended") {
+            void ctx.resume();
+        }
+        return ctx;
+    }
+
+    let foundChimeAudio = null;
+
+    function playFoundChime() {
+        try {
+            if (!foundChimeAudio) {
+                foundChimeAudio = new Audio("assets/mass/courtyard/found-chime.wav");
+                foundChimeAudio.preload = "auto";
+                foundChimeAudio.volume = 0.72;
+            }
+            foundChimeAudio.currentTime = 0;
+            void foundChimeAudio.play();
+        } catch {
+            /* mute is fine */
+        }
+    }
+
     function playBellTone() {
         try {
-            const AudioCtx = global.AudioContext || global.webkitAudioContext;
-            if (!AudioCtx) {
+            const ctx = getAudioContext();
+            if (!ctx) {
                 return;
             }
-            const ctx = new AudioCtx();
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = "sine";
