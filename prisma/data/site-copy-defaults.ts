@@ -90,8 +90,8 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.hub.subtitle", "Plug-and-play activities when you need something that works in the room.", "play"),
   sc("play.hub.program_note", "No student accounts. Open on one screen or let kids take turns. Pair with Daily Mass or a resource from the same season.", "play"),
   sc("play.hub.play_link", "Play →", "play"),
-  sc("play.hub.typing_footer", "For typing practice (church words or today's readings), go to Typing Game.", "play"),
-  sc("play.hub.typing_link", "Typing Game", "play"),
+  sc("play.hub.typing_footer", "", "play"),
+  sc("play.hub.typing_link", "", "play"),
 
   sc("play.game.church.title", "Tiny Priest", "play"),
   sc("play.game.church.description", "Welcome to Tiny Church!", "play"),

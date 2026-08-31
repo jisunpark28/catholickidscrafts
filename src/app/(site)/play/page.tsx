@@ -40,14 +40,6 @@ export default async function PlayHubPage() {
           </article>
         ))}
       </div>
-
-      <p className="mt-10 text-sm text-[var(--color-muted)]">
-        {copyText(copy, "play.hub.typing_footer", "For typing practice, go to")}{" "}
-        <Link href="/play/typing" className="font-semibold text-[var(--color-link)]">
-          {copyText(copy, "play.hub.typing_link", "Typing Game")}
-        </Link>
-        .
-      </p>
     </PageShell>
   );
 }
