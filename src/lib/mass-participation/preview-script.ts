@@ -202,6 +202,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     text: "After the second reading:",
   },
   {
+    id: "word-3d",
+    section: "word",
+    role: "rubric",
+    text: "Sing the Gospel Acclamation.",
+  },
+  {
     id: "word-4",
     section: "word",
     role: "priest",
@@ -259,6 +265,33 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     text: "The priest preaches the homily. Everyone sits and listens.",
   },
   {
+    id: "word-9b2",
+    section: "word",
+    role: "rubric",
+    text: "All stand. Pray the Apostles' Creed together.",
+  },
+  {
+    id: "word-9b3",
+    section: "word",
+    role: "assembly",
+    text: "I believe in God, the Father almighty, Creator of heaven and earth, and in Jesus Christ, his only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate,",
+    revealable: true,
+  },
+  {
+    id: "word-9b4",
+    section: "word",
+    role: "assembly",
+    text: "was crucified, died and was buried; he descended into hell; on the third day he rose again from the dead; he ascended into heaven, and is seated at the right hand of God the Father almighty; from there he will come to judge the living and the dead.",
+    revealable: true,
+  },
+  {
+    id: "word-9b5",
+    section: "word",
+    role: "assembly",
+    text: "I believe in the Holy Spirit, the holy catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.",
+    revealable: true,
+  },
+  {
     id: "word-9c",
     section: "word",
     role: "rubric",
@@ -295,6 +328,18 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "May the Lord accept the sacrifice at your hands for the praise and glory of his name, for our good and the good of all his holy Church.",
     revealable: true,
+  },
+  {
+    id: "euch-3b",
+    section: "eucharist",
+    role: "rubric",
+    text: "The priest prays quietly over the gifts.",
+  },
+  {
+    id: "euch-3c",
+    section: "eucharist",
+    role: "priest",
+    text: "… Through Christ our Lord.",
   },
   {
     id: "euch-4",
@@ -407,10 +452,29 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     revealable: true,
   },
   {
+    id: "comm-2b",
+    section: "communion",
+    role: "priest",
+    text: "Deliver us, Lord, we pray, from every evil, graciously grant peace in our day, that, by the help of your mercy, we may be always free from sin and safe from all distress, as we wait the blessed hope and the coming of our Saviour, Jesus Christ.",
+  },
+  {
     id: "comm-3",
     section: "communion",
     role: "assembly",
     text: "For the kingdom, the power, and the glory are yours, now and for ever.",
+    revealable: true,
+  },
+  {
+    id: "comm-3b",
+    section: "communion",
+    role: "priest",
+    text: "Lord Jesus Christ, who said to your Apostles: Peace I leave you; my peace I give you. Look not on our sins, but on the faith of your Church, and graciously grant her peace and unity in accordance with your will. Who live and reign for ever and ever.",
+  },
+  {
+    id: "comm-3c",
+    section: "communion",
+    role: "assembly",
+    text: "Amen.",
     revealable: true,
   },
   {
@@ -425,6 +489,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "And with your spirit.",
     revealable: true,
+  },
+  {
+    id: "comm-5a",
+    section: "communion",
+    role: "priest",
+    text: "Let us offer each other the sign of peace.",
   },
   {
     id: "comm-5b",
@@ -533,6 +603,12 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     role: "assembly",
     text: "Thanks be to God.",
     revealable: true,
+  },
+  {
+    id: "end-9",
+    section: "concluding",
+    role: "rubric",
+    text: "Recessional hymn — sing as you go forth.",
   },
 ];
 
