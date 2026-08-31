@@ -171,7 +171,7 @@ body:fullscreen .main-container {
 .courtyard-hits {
     position: absolute;
     inset: 0;
-    z-index: 5;
+    z-index: 9;
     pointer-events: none;
 }
 
@@ -368,6 +368,7 @@ body:fullscreen .main-container {
     align-items: flex-end;
     justify-content: center;
     gap: clamp(2px, 0.8vw, 10px);
+    pointer-events: none;
 }
 
 .entry-player {
@@ -413,6 +414,9 @@ body:fullscreen .main-container {
     border: none;
     background: transparent;
     padding: 0;
+    pointer-events: auto;
+    position: relative;
+    z-index: 10;
 }
 
 .character-button:focus-visible {

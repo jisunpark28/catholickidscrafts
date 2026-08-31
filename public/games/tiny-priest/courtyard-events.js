@@ -3,7 +3,7 @@
  */
 (function initCourtyardEvents(global) {
     const STORAGE_KEY = "tp_courtyard_done_v2";
-    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831l";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831m";
 
     const EVENT_IDS = [
         "mary_flowers",
