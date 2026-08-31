@@ -1,19 +1,23 @@
 /**
- * Mass Quest — participation lines with tap-to-speak responses in Tiny Priest.
+ * Mass Quest — participation lines aligned to Mass Order (24 steps).
  */
 (function initMassQuest(global) {
     const LINES = global.MASS_PARTICIPATION_LINES || [];
     const PARTS = global.MASS_LITURGY_PARTS || [];
+    const ANCHORS = global.MASS_ORDER_QUEST_ANCHORS || [];
+    const STEP_COUNT = ANCHORS.length || 24;
 
     const state = {
         active: false,
         practiceMode: true,
         showDirections: false,
         lineIndex: 0,
+        massStepIndex: 0,
         revealed: false,
         filteredLines: [],
         bound: false,
         onAssemblySpoke: null,
+        onMassStepChange: null,
     };
 
     function tp(key, fallback) {
@@ -47,35 +51,40 @@
         }
     }
 
-    function getSectionForMassStep(step) {
-        if (!step) {
-            return "intro";
+    function resolveAnchorIndex(anchorId) {
+        const fullIndex = LINES.findIndex((line) => line.id === anchorId);
+        if (fullIndex < 0 || state.filteredLines.length === 0) {
+            return 0;
         }
-        const title = String(step.title || "").toLowerCase();
-        if (step.partEn === "Introductory Rites") {
-            return "intro";
+        for (let i = 0; i < state.filteredLines.length; i++) {
+            const line = state.filteredLines[i];
+            const idx = LINES.findIndex((entry) => entry.id === line.id);
+            if (idx >= fullIndex) {
+                return i;
+            }
         }
-        if (step.partEn === "Liturgy of the Word") {
-            return "word";
+        return state.filteredLines.length - 1;
+    }
+
+    function getStepBounds(stepIndex) {
+        const anchorId = ANCHORS[stepIndex] || ANCHORS[0];
+        const start = resolveAnchorIndex(anchorId);
+        let end = state.filteredLines.length - 1;
+        const nextAnchorId = ANCHORS[stepIndex + 1];
+        if (nextAnchorId) {
+            const nextStart = resolveAnchorIndex(nextAnchorId);
+            if (nextStart > start) {
+                end = nextStart - 1;
+            }
         }
-        if (step.partEn === "Concluding Rites") {
-            return "concluding";
-        }
-        if (title.includes("eucharistic prayer") || title.includes("sanctus")) {
-            return "thanksgiving";
-        }
-        if (
-            title.includes("communion") ||
-            title.includes("lamb of god") ||
-            title.includes("sign of peace") ||
-            title.includes("lord's prayer")
-        ) {
-            return "communion";
-        }
-        if (step.partEn === "Liturgy of the Eucharist") {
-            return "eucharist";
-        }
-        return "intro";
+        return { start, end: Math.max(start, end) };
+    }
+
+    function getMassStepTitle(stepIndex) {
+        const steps =
+            typeof global.getMassFlowSteps === "function" ? global.getMassFlowSteps() : [];
+        const step = steps[stepIndex];
+        return step ? String(step.title || "") : "";
     }
 
     function sectionLabel(sectionId) {
@@ -135,6 +144,25 @@
         panel.setAttribute("aria-hidden", isVisible ? "false" : "true");
     }
 
+    function notifyMassStepChange(stepIndex) {
+        if (typeof state.onMassStepChange === "function") {
+            state.onMassStepChange(stepIndex);
+        }
+    }
+
+    function jumpToMassStep(stepIndex, options = {}) {
+        filterLines();
+        const safeStep = Math.max(0, Math.min(STEP_COUNT - 1, Number(stepIndex) || 0));
+        const bounds = getStepBounds(safeStep);
+        state.massStepIndex = safeStep;
+        state.lineIndex = bounds.start;
+        state.revealed = false;
+        if (options.notify !== false) {
+            notifyMassStepChange(safeStep);
+        }
+        render();
+    }
+
     function render() {
         const panel = document.getElementById("mass-quest-panel");
         if (!panel) {
@@ -161,17 +189,26 @@
             toggleBtn.setAttribute("aria-pressed", "true");
         }
 
+        const stepTitle = getMassStepTitle(state.massStepIndex);
+        const bounds = getStepBounds(state.massStepIndex);
+        const linesInStep = bounds.end - bounds.start + 1;
+        const lineInStep = state.lineIndex - bounds.start + 1;
+
         if (roleEl) {
             roleEl.textContent = roleLabel(line.role);
             roleEl.className = `mass-quest-role mass-quest-role--${line.role}`;
         }
         if (sectionEl) {
-            sectionEl.textContent = sectionLabel(line.section);
+            sectionEl.textContent = stepTitle
+                ? `${stepTitle} · ${sectionLabel(line.section)}`
+                : sectionLabel(line.section);
         }
         if (progressEl) {
-            progressEl.textContent = tp("mass_quest.progress", "{current} / {total}")
-                .replace("{current}", String(state.lineIndex + 1))
-                .replace("{total}", String(state.filteredLines.length));
+            progressEl.textContent = tp("mass_quest.step_progress", "Step {step}/{total} · {line}/{lines}")
+                .replace("{step}", String(state.massStepIndex + 1))
+                .replace("{total}", String(STEP_COUNT))
+                .replace("{line}", String(lineInStep))
+                .replace("{lines}", String(linesInStep));
         }
 
         const isAssembly = line.role === "assembly";
@@ -183,23 +220,39 @@
             textEl.classList.toggle("mass-quest-text--hidden", hideText);
         }
 
+        const atStepEnd = state.lineIndex >= bounds.end;
+        const atMassEnd = state.massStepIndex >= STEP_COUNT - 1 && atStepEnd;
+
         if (actionBtn) {
-            if (isAssembly && line.revealable !== false) {
+            if (atMassEnd) {
+                actionBtn.hidden = false;
+                actionBtn.className = "mass-quest-action mass-quest-action--continue";
+                actionBtn.textContent = tp("mass_quest.finished", "Mass responses complete");
+                actionBtn.disabled = true;
+            } else if (atStepEnd) {
+                actionBtn.hidden = false;
+                actionBtn.className = "mass-quest-action mass-quest-action--continue";
+                actionBtn.textContent = tp("mass_quest.next_step", "Next Mass step");
+                actionBtn.disabled = false;
+            } else if (isAssembly && line.revealable !== false) {
                 actionBtn.hidden = false;
                 actionBtn.className = "mass-quest-action mass-quest-action--speak";
+                actionBtn.disabled = false;
                 actionBtn.textContent = hideText
                     ? responseButtonLabel(line.text)
                     : tp("mass_quest.continue", "Continue");
             } else {
                 actionBtn.hidden = false;
                 actionBtn.className = "mass-quest-action mass-quest-action--continue";
+                actionBtn.disabled = false;
                 actionBtn.textContent = tp("mass_quest.continue", "Continue");
             }
         }
     }
 
     function advanceLine() {
-        if (state.lineIndex < state.filteredLines.length - 1) {
+        const bounds = getStepBounds(state.massStepIndex);
+        if (state.lineIndex < bounds.end) {
             state.lineIndex += 1;
             state.revealed = false;
             render();
@@ -209,9 +262,28 @@
         return false;
     }
 
+    function advanceMassStep() {
+        if (state.massStepIndex >= STEP_COUNT - 1) {
+            render();
+            return false;
+        }
+        jumpToMassStep(state.massStepIndex + 1);
+        return true;
+    }
+
     function handleAction() {
         const line = currentLine();
         if (!line) {
+            return;
+        }
+
+        const bounds = getStepBounds(state.massStepIndex);
+        const atStepEnd = state.lineIndex >= bounds.end;
+
+        if (atStepEnd) {
+            if (state.massStepIndex < STEP_COUNT - 1) {
+                advanceMassStep();
+            }
             return;
         }
 
@@ -230,22 +302,11 @@
         advanceLine();
     }
 
-    function jumpToSection(sectionId) {
-        filterLines();
-        const index = state.filteredLines.findIndex((line) => line.section === sectionId);
-        state.lineIndex = index >= 0 ? index : 0;
-        state.revealed = false;
-        render();
-    }
-
     function syncToMassStep(stepIndex) {
         if (!state.active) {
             return;
         }
-        const steps =
-            typeof global.getMassFlowSteps === "function" ? global.getMassFlowSteps() : [];
-        const step = steps[stepIndex];
-        jumpToSection(getSectionForMassStep(step));
+        jumpToMassStep(stepIndex, { notify: false });
     }
 
     function bindControls() {
@@ -286,6 +347,7 @@
     global.MassQuest = {
         init(options = {}) {
             state.onAssemblySpoke = options.onAssemblySpoke || null;
+            state.onMassStepChange = options.onMassStepChange || null;
             bindControls();
             filterLines();
         },
@@ -293,8 +355,7 @@
             state.active = true;
             state.revealed = false;
             filterLines();
-            state.lineIndex = 0;
-            render();
+            jumpToMassStep(0);
             const encouragement =
                 typeof global.CourtyardEvents?.getEncouragement === "function"
                     ? global.CourtyardEvents.getEncouragement()
@@ -316,8 +377,11 @@
         isActive() {
             return state.active;
         },
+        getMassStepIndex() {
+            return state.massStepIndex;
+        },
         syncToMassStep,
-        jumpToSection,
+        jumpToMassStep,
         render,
         handleAction,
     };
