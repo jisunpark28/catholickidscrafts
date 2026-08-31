@@ -280,15 +280,8 @@ export function WordFallTypingGame({ wordFilter, customWords, compact = false }:
   return (
     <div className="border border-[var(--color-border)] bg-white">
       {!compact && (
-        <>
-          <p className="border-b border-[var(--color-border)] bg-white px-4 py-3 text-sm text-[var(--color-muted)]">
-            <strong className="text-[var(--color-ink)]">Word mode:</strong> church words fall from
-            the top—good for spelling saints, seasons, and Mass vocabulary. Start on Easy for
-            younger grades.
-          </p>
           <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
-            <p className="text-sm font-semibold text-[var(--color-ink)]">Difficulty</p>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               {DIFFICULTY_OPTIONS.map((opt) => (
                 <button
                   key={opt.id}
@@ -305,13 +298,9 @@ export function WordFallTypingGame({ wordFilter, customWords, compact = false }:
               ))}
             </div>
           </div>
-        </>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
-        <p className="text-sm text-[var(--color-muted)]">
-          Type each word before it lands. {pool.length} words in this level.
-        </p>
+      <div className="flex flex-wrap items-center justify-end gap-3 border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3">
         <div className="flex flex-wrap gap-4 text-sm font-semibold">
           <span>Score: {score}</span>
           <span>Lives: {"♥".repeat(lives) || "—"}</span>

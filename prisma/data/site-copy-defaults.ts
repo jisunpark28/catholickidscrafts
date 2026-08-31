@@ -107,8 +107,8 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.game.emoji.description", "Four-photo strip with stickers—fun for feast days, First Communion prep, or end-of-year parties.", "play"),
 
   sc("play.typing.page.title", "Typing Game", "play_typing"),
-  sc("play.typing.page.subtitle", "Quiet practice that still connects to the faith you are teaching this week.", "play_typing"),
-  sc("play.typing.page.program_note", "Word mode: good for grades 2–6 and review. Today's Bible: loads today's Mass readings from Universalis (with copyright notice)—let readers finish early while others join.", "play_typing"),
+  sc("play.typing.page.subtitle", "", "play_typing"),
+  sc("play.typing.page.program_note", "", "play_typing"),
   sc("play.typing.mode.words", "Word mode", "play_typing"),
   sc("play.typing.mode.bible", "Today's Bible", "play_typing"),
 

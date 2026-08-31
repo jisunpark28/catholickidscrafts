@@ -8,8 +8,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Typing Game",
-  description:
-    "Word mode or Today’s Bible with today's Mass readings from Universalis.",
+  description: "Church vocabulary typing game with Easy, Medium, and Hard levels.",
   ...canonicalForPath("/play/typing"),
 };
 
