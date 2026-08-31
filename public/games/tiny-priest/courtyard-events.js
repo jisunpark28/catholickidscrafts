@@ -2,13 +2,13 @@
  * Courtyard hidden-object scene — integrated art + invisible hit regions.
  */
 (function initCourtyardEvents(global) {
-    const STORAGE_KEY = "tp_courtyard_done_v2";
-    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831r";
+    const STORAGE_KEY = "tp_courtyard_done_v3";
+    const HIT_MAP_URL = "assets/mass/courtyard/courtyard-hit-map.json?v=20260831s";
 
     const EVENT_IDS = [
         "mary_flowers",
         "bell",
-        "bulletin",
+        "church_building",
         "welcome_sign",
         "parish_bench",
     ];
@@ -49,6 +49,14 @@
             return new Set(parsed.filter((id) => EVENT_IDS.includes(id)));
         } catch {
             return new Set();
+        }
+    }
+
+    function resetSessionProgress() {
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+        } catch {
+            /* ignore */
         }
     }
 
@@ -257,42 +265,6 @@
         say(line);
     }
 
-    async function fetchBulletinLine() {
-        const today = new Date();
-        const key = today.toISOString().slice(0, 10);
-        try {
-            const res = await fetch(`/api/universalis-readings/${key}`);
-            if (res.ok) {
-                const data = await res.json();
-                const gospel = Array.isArray(data.readings)
-                    ? data.readings.find((r) => r.kind === "gospel")
-                    : null;
-                if (gospel?.title) {
-                    return tp("courtyard.bulletin_gospel", "Today's Gospel is {title}.").replace(
-                        "{title}",
-                        gospel.title,
-                    );
-                }
-                if (data.liturgicalTitle) {
-                    return tp("courtyard.bulletin_title", "Today we celebrate {title}.").replace(
-                        "{title}",
-                        data.liturgicalTitle,
-                    );
-                }
-            }
-        } catch {
-            /* fallback below */
-        }
-        const liturgical =
-            typeof global.getLiturgicalSeason === "function"
-                ? global.getLiturgicalSeason(today)
-                : { season: "Ordinary Time" };
-        return tp("courtyard.bulletin_season", "It is {season} in the Church year.").replace(
-            "{season}",
-            liturgical.season || "Ordinary Time",
-        );
-    }
-
     async function runEvent(eventId, btn) {
         if (state.isBusy || isTransitioning()) {
             return;
@@ -326,16 +298,18 @@
                               "The bell rings again — a happy reminder that Mass is about to begin!",
                           ),
                 );
-            } else if (eventId === "bulletin") {
-                const gospelLine = await fetchBulletinLine();
-                const first = markDone("bulletin", btn);
+            } else if (eventId === "church_building") {
+                const first = markDone("church_building", btn);
                 say(
                     first
                         ? tp(
-                              "courtyard.bulletin_done",
-                              "You found the parish bulletin on the ground! {detail} Listen closely at Mass — God has a message just for you today.",
-                          ).replace("{detail}", gospelLine)
-                        : gospelLine,
+                              "courtyard.church_done",
+                              "You found the church! This is Jesus's house — a special place where we meet God and become one family.",
+                          )
+                        : tp(
+                              "courtyard.church_repeat",
+                              "This church is Jesus's house. You are always welcome here.",
+                          ),
                 );
             } else if (eventId === "welcome_sign") {
                 const first = markDone("welcome_sign", btn);
@@ -411,8 +385,8 @@
         if (done.has("welcome_sign")) {
             bits.push(tp("courtyard.encourage_sign", "You found the welcome sign ✓"));
         }
-        if (done.has("bulletin")) {
-            bits.push(tp("courtyard.encourage_bulletin", "You read the bulletin ✓"));
+        if (done.has("church_building")) {
+            bits.push(tp("courtyard.encourage_church", "You visited Jesus's house ✓"));
         }
         if (done.has("parish_bench")) {
             bits.push(tp("courtyard.encourage_bench", "You found the parish family ✓"));
@@ -426,6 +400,7 @@
     global.CourtyardEvents = {
         init(options = {}) {
             state.onDialogue = options.onDialogue || null;
+            resetSessionProgress();
             void buildHitRegions().then(() => {
                 if (!state.hitMapLoaded) {
                     bindHotspots();

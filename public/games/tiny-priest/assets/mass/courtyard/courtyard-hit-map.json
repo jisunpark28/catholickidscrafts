@@ -1,6 +1,6 @@
 {
-  "version": 8,
-  "notes": "courtyard_entry_scene.png v7 — larger bulletin/welcome hits; bulletin shifted left away from priest.",
+  "version": 9,
+  "notes": "courtyard v9 — church building replaces bulletin; large church tap target.",
   "hits": {
     "bell": {
       "left": 0.72,
@@ -9,12 +9,12 @@
       "height": 0.11,
       "label": "Find the bell in the church tower"
     },
-    "bulletin": {
-      "left": 0.1,
-      "top": 0.66,
-      "width": 0.18,
-      "height": 0.2,
-      "label": "Find the bulletin board on the ground"
+    "church_building": {
+      "left": 0.3,
+      "top": 0.12,
+      "width": 0.42,
+      "height": 0.46,
+      "label": "Tap the church building"
     },
     "welcome_sign": {
       "left": 0.33,
