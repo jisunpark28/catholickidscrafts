@@ -1143,11 +1143,11 @@ function createVoxelChurch(container) {
     sanctuaryCrossGroup.add(sanctuaryCrossBeam);
     root.add(sanctuaryCrossGroup);
 
-    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(32, 0.8, 7), materials.wood);
+    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(33, 0.8, 7), materials.wood);
     sanctuaryStep.position.set(0, 0.4, -12.4);
     root.add(sanctuaryStep);
 
-    const ALTAR_WIDTH = 31.6;
+    const ALTAR_WIDTH = 32;
     const ALTAR_DEPTH = 3.7;
     const ALTAR_CLOTH_WIDTH = ALTAR_WIDTH + 0.2;
     const ALTAR_CLOTH_DEPTH = ALTAR_DEPTH + 0.2;
@@ -1298,7 +1298,7 @@ function createVoxelChurch(container) {
     const NAVE_CENTER_Z = 0.5;
     const NAVE_HALF_DEPTH = 14.5;
     const SANCTUARY_CENTER_Z = -12.4;
-    const SANCTUARY_HALF_WIDTH = 15.8;
+    const SANCTUARY_HALF_WIDTH = 16;
     const SANCTUARY_HALF_DEPTH = 3.5;
     const interiorCameraBounds = { minX: -12.4, maxX: 12.4, minZ: -13.4, maxZ: 14.2 };
     const interiorCameraMargin = 0.4;
