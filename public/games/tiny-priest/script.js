@@ -1308,10 +1308,16 @@ function createVoxelChurch(container) {
     const interiorCameraMargin = 0.4;
 
     function resolveGroundHeight(x, z) {
-        if (
+        const onSanctuaryPlatform =
             Math.abs(x) <= SANCTUARY_HALF_WIDTH &&
-            Math.abs(z - SANCTUARY_CENTER_Z) <= SANCTUARY_HALF_DEPTH
-        ) {
+            Math.abs(z - SANCTUARY_CENTER_Z) <= SANCTUARY_HALF_DEPTH;
+        if (onSanctuaryPlatform) {
+            const platformFrontZ = SANCTUARY_CENTER_Z + SANCTUARY_HALF_DEPTH;
+            const rampDepth = 0.65;
+            if (z > platformFrontZ - rampDepth && Math.abs(x) <= NAVE_HALF_WIDTH + 0.35) {
+                const rampT = THREE.MathUtils.clamp((platformFrontZ - z) / rampDepth, 0, 1);
+                return THREE.MathUtils.lerp(FLOOR_NAVE_Y, FLOOR_SANCTUARY_Y, rampT);
+            }
             return FLOOR_SANCTUARY_Y;
         }
         if (
@@ -1448,7 +1454,7 @@ function createVoxelChurch(container) {
     const useOverlayArms = false;
 
     const playerRig = new THREE.Group();
-    playerRig.position.set(0, 0, 7.2);
+    playerRig.position.set(0, FLOOR_NAVE_Y, 7.2);
     root.add(playerRig);
 
     const textureLoader = new THREE.TextureLoader();
@@ -1561,10 +1567,10 @@ function createVoxelChurch(container) {
         syncPlayerSpriteFromTexture(backTexture);
     });
 
-    const CELEBRANT_SPRITE_HEIGHT = 2.35;
+    const CELEBRANT_SPRITE_HEIGHT = 2.75;
     const celebrantRig = new THREE.Group();
-    celebrantRig.position.set(0, FLOOR_SANCTUARY_Y, -14.95);
-    root.add(celebrantRig);
+    celebrantRig.position.set(0, FLOOR_SANCTUARY_Y - altarGroup.position.y, -1.92);
+    altarGroup.add(celebrantRig);
 
     const celebrantMaterial = new THREE.MeshBasicMaterial({
         map: null,
@@ -1572,6 +1578,7 @@ function createVoxelChurch(container) {
         alphaTest: 0.08,
         side: THREE.DoubleSide,
         depthWrite: false,
+        depthTest: false,
     });
     let celebrantSpriteWidth = CELEBRANT_SPRITE_HEIGHT * 0.773;
     const celebrantSprite = new THREE.Mesh(
@@ -1579,7 +1586,7 @@ function createVoxelChurch(container) {
         celebrantMaterial,
     );
     celebrantSprite.position.set(0, CELEBRANT_SPRITE_HEIGHT * 0.5, 0);
-    celebrantSprite.renderOrder = 3;
+    celebrantSprite.renderOrder = 6;
     celebrantRig.add(celebrantSprite);
 
     const fitCelebrantSpriteToTexture = (texture) => {
@@ -2090,7 +2097,7 @@ function createVoxelChurch(container) {
         jump: 8,
         onGround: true,
         jumpLatch: false,
-        groundY: 0,
+        groundY: FLOOR_NAVE_Y,
     };
     const turnRate = 2.6;
 
@@ -2529,15 +2536,17 @@ function createVoxelChurch(container) {
         if (playerMotion.onGround) {
             const groundDelta = targetGroundY - playerRig.position.y;
             if (Math.abs(groundDelta) > 0.001) {
-                const maxStep = 4.8 * dt;
-                if (Math.abs(groundDelta) <= 0.28) {
-                    playerRig.position.y += THREE.MathUtils.clamp(groundDelta, -maxStep, maxStep);
-                } else if (groundDelta < 0) {
+                const maxStep = 5.2 * dt;
+                if (groundDelta > 0) {
+                    playerRig.position.y += Math.min(groundDelta, maxStep);
+                } else {
                     playerRig.position.y += Math.max(groundDelta, -maxStep);
                 }
                 if (Math.abs(targetGroundY - playerRig.position.y) < 0.02) {
                     playerRig.position.y = targetGroundY;
                 }
+            } else {
+                playerRig.position.y = targetGroundY;
             }
         }
 
