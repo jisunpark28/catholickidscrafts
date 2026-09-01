@@ -1133,14 +1133,7 @@ function createVoxelChurch(container) {
     backWall.visible = true;
 
     const sanctuaryCrossGroup = new THREE.Group();
-    sanctuaryCrossGroup.position.set(0, 6.35, -17.08);
-    const sanctuaryCrossPost = new THREE.Mesh(new THREE.BoxGeometry(0.5, 4.8, 0.42), materials.darkWood);
-    sanctuaryCrossPost.castShadow = true;
-    sanctuaryCrossGroup.add(sanctuaryCrossPost);
-    const sanctuaryCrossBeam = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.65, 0.42), materials.darkWood);
-    sanctuaryCrossBeam.position.set(0, 1.95, 0);
-    sanctuaryCrossBeam.castShadow = true;
-    sanctuaryCrossGroup.add(sanctuaryCrossBeam);
+    sanctuaryCrossGroup.position.set(0, 6.35, -16.94);
     root.add(sanctuaryCrossGroup);
 
     const SANCTUARY_PLATFORM_WIDTH = 33;
@@ -1516,6 +1509,45 @@ function createVoxelChurch(container) {
     textureLoader.load(selected.backImage || selected.frontImage, (backTexture) => {
         playerTextures.back = backTexture;
         syncPlayerSpriteFromTexture(backTexture);
+    });
+
+    const SANCTUARY_CRUCIFIX_HEIGHT = 6.2;
+    const sanctuaryCrucifixMaterial = new THREE.MeshBasicMaterial({
+        map: null,
+        transparent: true,
+        alphaTest: 0.08,
+        side: THREE.DoubleSide,
+        depthTest: true,
+        depthWrite: true,
+    });
+    let sanctuaryCrucifixWidth = SANCTUARY_CRUCIFIX_HEIGHT * 0.62;
+    const sanctuaryCrucifixSprite = new THREE.Mesh(
+        new THREE.PlaneGeometry(sanctuaryCrucifixWidth, SANCTUARY_CRUCIFIX_HEIGHT),
+        sanctuaryCrucifixMaterial,
+    );
+    sanctuaryCrucifixSprite.position.set(0, 0, 0.14);
+    sanctuaryCrucifixSprite.renderOrder = 1;
+    sanctuaryCrossGroup.add(sanctuaryCrucifixSprite);
+
+    textureLoader.load("assets/sanctuary-crucifix.png", (crossTexture) => {
+        if ("colorSpace" in crossTexture) {
+            crossTexture.colorSpace = THREE.SRGBColorSpace;
+        }
+        crossTexture.magFilter = THREE.LinearFilter;
+        crossTexture.minFilter = THREE.LinearMipmapLinearFilter;
+        cropTextureToVisibleBounds(crossTexture);
+        const image = crossTexture.image;
+        if (image?.width && image?.height) {
+            const aspect = image.width / image.height;
+            sanctuaryCrucifixWidth = SANCTUARY_CRUCIFIX_HEIGHT * aspect;
+            sanctuaryCrucifixSprite.geometry.dispose();
+            sanctuaryCrucifixSprite.geometry = new THREE.PlaneGeometry(
+                sanctuaryCrucifixWidth,
+                SANCTUARY_CRUCIFIX_HEIGHT,
+            );
+        }
+        sanctuaryCrucifixMaterial.map = crossTexture;
+        sanctuaryCrucifixMaterial.needsUpdate = true;
     });
 
     const CELEBRANT_SPRITE_HEIGHT = 6.4;
