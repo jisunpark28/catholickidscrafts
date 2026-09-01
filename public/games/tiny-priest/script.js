@@ -1581,6 +1581,7 @@ function createVoxelChurch(container) {
     });
 
     const CELEBRANT_SPRITE_HEIGHT = 6.4;
+    const CELEBRANT_SPRITE_WIDTH = CELEBRANT_SPRITE_HEIGHT * (1024 / 1536);
     const celebrantBehindAltarZ = altarGroup.position.z - ALTAR_TABLE_DEPTH * 0.5 - 0.82;
     const celebrantRig = new THREE.Group();
     celebrantRig.position.set(0, FLOOR_SANCTUARY_Y, celebrantBehindAltarZ);
@@ -1594,7 +1595,7 @@ function createVoxelChurch(container) {
         depthTest: true,
         depthWrite: true,
     });
-    let celebrantSpriteWidth = CELEBRANT_SPRITE_HEIGHT * 0.773;
+    let celebrantSpriteWidth = CELEBRANT_SPRITE_WIDTH;
     const celebrantSprite = new THREE.Mesh(
         new THREE.PlaneGeometry(celebrantSpriteWidth, CELEBRANT_SPRITE_HEIGHT),
         celebrantMaterial,
@@ -1602,18 +1603,6 @@ function createVoxelChurch(container) {
     celebrantSprite.position.set(0, CELEBRANT_SPRITE_HEIGHT * 0.5, 0);
     celebrantSprite.renderOrder = 0;
     celebrantRig.add(celebrantSprite);
-
-    const fitCelebrantSpriteToTexture = (texture) => {
-        const image = texture?.image;
-        if (!image || !image.width || !image.height) {
-            return;
-        }
-        const aspect = image.width / image.height;
-        celebrantSpriteWidth = CELEBRANT_SPRITE_HEIGHT * aspect;
-        celebrantSprite.geometry.dispose();
-        celebrantSprite.geometry = new THREE.PlaneGeometry(celebrantSpriteWidth, CELEBRANT_SPRITE_HEIGHT);
-        celebrantSprite.position.y = CELEBRANT_SPRITE_HEIGHT * 0.5;
-    };
 
     const celebrantState = {
         vestmentKey: "green",
@@ -1624,7 +1613,6 @@ function createVoxelChurch(container) {
     function applyCelebrantTexture(texture) {
         celebrantMaterial.map = texture;
         celebrantMaterial.needsUpdate = true;
-        fitCelebrantSpriteToTexture(texture);
     }
 
     function loadCelebrantPoseTextures(colorKey, onReady) {
@@ -1656,7 +1644,6 @@ function createVoxelChurch(container) {
                     }
                     tex.magFilter = THREE.LinearFilter;
                     tex.minFilter = THREE.LinearMipmapLinearFilter;
-                    cropTextureToVisibleBounds(tex);
                     celebrantState.textures[`${colorKey}/${pose}`] = tex;
                     finish();
                 },
@@ -2870,9 +2857,7 @@ async function activateThreeScene(role) {
         const vestmentKey =
             vestmentOverride && window.CELEBRANT_SPRITES?.VESTMENT_COLORS?.[vestmentOverride]
                 ? vestmentOverride
-                : window.CELEBRANT_SPRITES?.resolveVestmentFromSeason(liturgical) ||
-                  liturgical.vestmentKey ||
-                  "green";
+                : "green";
         if (APP_STATE.threeWorld.setCelebrantVestment) {
             APP_STATE.threeWorld.setCelebrantVestment(vestmentKey);
         }
