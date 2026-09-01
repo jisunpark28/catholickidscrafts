@@ -1567,7 +1567,7 @@ function createVoxelChurch(container) {
         syncPlayerSpriteFromTexture(backTexture);
     });
 
-    const CELEBRANT_SPRITE_HEIGHT = 2.75;
+    const CELEBRANT_SPRITE_HEIGHT = 3.2;
     const celebrantRig = new THREE.Group();
     celebrantRig.position.set(0, FLOOR_SANCTUARY_Y - altarGroup.position.y, -1.92);
     altarGroup.add(celebrantRig);
