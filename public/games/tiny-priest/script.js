@@ -253,16 +253,23 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
-        gesture: "idle",
+        gesture: "genuflect",
         title: "Entrance Song",
-        text: "🎶 The assembly gathers and the entrance procession begins.",
+        text: "🎶 The celebrant approaches the altar and bows in reverence.",
     },
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
         gesture: "signCross",
         title: "Sign of the Cross",
-        text: "✝️ The Mass begins with the Sign of the Cross and liturgical greeting.",
+        text: "✝️ The Mass begins with the Sign of the Cross.",
+    },
+    {
+        part: "1. Introductory Rites",
+        partEn: "Introductory Rites",
+        gesture: "greet",
+        title: "Greeting",
+        text: "🙂 The Lord be with you — the celebrant greets the assembly.",
     },
     {
         part: "1. Introductory Rites",
@@ -288,7 +295,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
-        gesture: "pray",
+        gesture: "orans",
         title: "The Collect",
         text: "🕯️ The opening prayer gathers the intentions of the faithful.",
     },
@@ -323,9 +330,9 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "point",
+        gesture: "signCross",
         title: "Gospel",
-        text: "✝️ The Holy Gospel is proclaimed.",
+        text: "✝️ The Holy Gospel is proclaimed with the Sign of the Cross.",
     },
     {
         part: "2. Liturgy of the Word",
@@ -351,14 +358,14 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "hold",
+        gesture: "lift",
         title: "Preparation of the Gifts",
-        text: "🍞 Bread and wine are brought forward to the altar.",
+        text: "🍞 Bread and wine are raised and offered at the altar.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "pray",
+        gesture: "orans",
         title: "Prayer over the Offerings",
         text: "🙏 The celebrant invites all to pray over the gifts.",
     },
@@ -375,6 +382,20 @@ const DEFAULT_MASS_FLOW_STEPS = [
         gesture: "kneel",
         title: "Eucharistic Prayer",
         text: "✨ The Church gives thanks and praise through the Eucharistic Prayer.",
+    },
+    {
+        part: "3. Liturgy of the Eucharist",
+        partEn: "Liturgy of the Eucharist",
+        gesture: "elevate_host",
+        title: "Elevation of the Host",
+        text: "🍞 Take this, all of you, and eat of it — this is my Body.",
+    },
+    {
+        part: "3. Liturgy of the Eucharist",
+        partEn: "Liturgy of the Eucharist",
+        gesture: "elevate_chalice",
+        title: "Elevation of the Chalice",
+        text: "🍷 Take this, all of you, and drink from it — this is my Blood.",
     },
     {
         part: "3. Liturgy of the Eucharist",
@@ -400,9 +421,9 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "hold",
+        gesture: "genuflect",
         title: "Communion",
-        text: "🍞 The faithful receive Holy Communion with reverence.",
+        text: "🍞 The celebrant and faithful receive Holy Communion with reverence.",
     },
     {
         part: "4. Concluding Rites",
@@ -1601,15 +1622,9 @@ function createVoxelChurch(container) {
     };
 
     function applyCelebrantTexture(texture) {
-        if ("colorSpace" in texture) {
-            texture.colorSpace = THREE.SRGBColorSpace;
-        }
-        texture.magFilter = THREE.LinearFilter;
-        texture.minFilter = THREE.LinearMipmapLinearFilter;
-        cropTextureToVisibleBounds(texture);
-        fitCelebrantSpriteToTexture(texture);
         celebrantMaterial.map = texture;
         celebrantMaterial.needsUpdate = true;
+        fitCelebrantSpriteToTexture(texture);
     }
 
     function loadCelebrantPoseTextures(colorKey, onReady) {
