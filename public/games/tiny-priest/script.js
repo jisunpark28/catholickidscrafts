@@ -1143,21 +1143,29 @@ function createVoxelChurch(container) {
     sanctuaryCrossGroup.add(sanctuaryCrossBeam);
     root.add(sanctuaryCrossGroup);
 
-    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(12, 0.8, 7), materials.wood);
+    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(32, 0.8, 7), materials.wood);
     sanctuaryStep.position.set(0, 0.4, -12.4);
     root.add(sanctuaryStep);
+
+    const ALTAR_WIDTH = 31.6;
+    const ALTAR_DEPTH = 3.7;
+    const ALTAR_CLOTH_WIDTH = ALTAR_WIDTH + 0.2;
+    const ALTAR_CLOTH_DEPTH = ALTAR_DEPTH + 0.2;
 
     const altarGroup = new THREE.Group();
     altarGroup.position.set(0, 0.4, -12.2);
     root.add(altarGroup);
 
-    const altarBase = new THREE.Mesh(new THREE.BoxGeometry(7, 2.3, 3.7), materials.wood);
+    const altarBase = new THREE.Mesh(new THREE.BoxGeometry(ALTAR_WIDTH, 2.3, ALTAR_DEPTH), materials.wood);
     altarBase.position.y = 1.15;
     altarBase.userData.interactive = true;
     altarBase.castShadow = true;
     altarGroup.add(altarBase);
 
-    const altarCloth = new THREE.Mesh(new THREE.BoxGeometry(7.2, 0.42, 3.9), materials.altarCloth);
+    const altarCloth = new THREE.Mesh(
+        new THREE.BoxGeometry(ALTAR_CLOTH_WIDTH, 0.42, ALTAR_CLOTH_DEPTH),
+        materials.altarCloth,
+    );
     altarCloth.position.y = 2.52;
     altarCloth.userData.interactive = true;
     altarCloth.castShadow = true;
@@ -1214,21 +1222,21 @@ function createVoxelChurch(container) {
     altarGroup.add(corpusLight);
 
     const candleL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.2, 0.35), materials.candleWax);
-    candleL.position.set(-2.8, 3.2, 0.7);
+    candleL.position.set(-ALTAR_WIDTH * 0.42, 3.2, 0.7);
     candleL.userData.interactive = true;
     altarGroup.add(candleL);
 
     const candleR = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.2, 0.35), materials.candleWax);
-    candleR.position.set(2.8, 3.2, 0.7);
+    candleR.position.set(ALTAR_WIDTH * 0.42, 3.2, 0.7);
     candleR.userData.interactive = true;
     altarGroup.add(candleR);
 
     const flameL = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.28, 0.22), materials.candleFlame);
-    flameL.position.set(-2.8, 4.0, 0.7);
+    flameL.position.set(-ALTAR_WIDTH * 0.42, 4.0, 0.7);
     altarGroup.add(flameL);
 
     const flameR = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.28, 0.22), materials.candleFlame);
-    flameR.position.set(2.8, 4.0, 0.7);
+    flameR.position.set(ALTAR_WIDTH * 0.42, 4.0, 0.7);
     altarGroup.add(flameR);
 
     const WALL_FRAME_Z = [-12.4, -9.0, -5.6, -2.2, 1.2, 4.6, 8.0];
@@ -1290,7 +1298,7 @@ function createVoxelChurch(container) {
     const NAVE_CENTER_Z = 0.5;
     const NAVE_HALF_DEPTH = 14.5;
     const SANCTUARY_CENTER_Z = -12.4;
-    const SANCTUARY_HALF_WIDTH = 6;
+    const SANCTUARY_HALF_WIDTH = 15.8;
     const SANCTUARY_HALF_DEPTH = 3.5;
     const interiorCameraBounds = { minX: -12.4, maxX: 12.4, minZ: -13.4, maxZ: 14.2 };
     const interiorCameraMargin = 0.4;
@@ -1362,7 +1370,52 @@ function createVoxelChurch(container) {
     }
 
     // Keep distance from the altar table.
-    addCollisionRect(altarGroup.position.x, altarGroup.position.z, 7.2, 4.0, playerCollisionRadius + 0.08);
+    addCollisionRect(
+        altarGroup.position.x,
+        altarGroup.position.z,
+        ALTAR_CLOTH_WIDTH,
+        ALTAR_CLOTH_DEPTH,
+        playerCollisionRadius + 0.08,
+    );
+
+    function addLectern(x, z, scale, label) {
+        const lecternGroup = new THREE.Group();
+        lecternGroup.position.set(x, FLOOR_SANCTUARY_Y, z);
+        lecternGroup.userData.lecternLabel = label;
+
+        const stem = new THREE.Mesh(
+            new THREE.BoxGeometry(0.55 * scale, 1.05 * scale, 0.55 * scale),
+            materials.darkWood,
+        );
+        stem.position.y = 0.52 * scale;
+        stem.castShadow = true;
+        lecternGroup.add(stem);
+
+        const shelf = new THREE.Mesh(
+            new THREE.BoxGeometry(1.35 * scale, 0.14 * scale, 0.95 * scale),
+            materials.wood,
+        );
+        shelf.position.set(0, 1.08 * scale, 0.12 * scale);
+        shelf.rotation.x = -0.28;
+        shelf.castShadow = true;
+        lecternGroup.add(shelf);
+
+        const book = new THREE.Mesh(
+            new THREE.BoxGeometry(0.5 * scale, 0.07 * scale, 0.36 * scale),
+            new THREE.MeshLambertMaterial({ color: label === "ambo" ? 0x8b1a1a : 0x2f4f8a }),
+        );
+        book.position.set(0, 1.14 * scale, 0.28 * scale);
+        book.rotation.x = -0.28;
+        lecternGroup.add(book);
+
+        root.add(lecternGroup);
+        addCollisionRect(x, z, 1.35 * scale, 1.0 * scale, playerCollisionRadius + 0.04);
+        return lecternGroup;
+    }
+
+    // Facing the altar: right = Gospel ambo, left = Universal Prayer lectern.
+    addLectern(14.8, -10.9, 1.28, "ambo");
+    addLectern(-14.8, -10.9, 0.78, "petitions");
 
     for (let row = 0; row < 4; row += 1) {
         for (let side = -1; side <= 1; side += 2) {
@@ -1504,9 +1557,9 @@ function createVoxelChurch(container) {
         syncPlayerSpriteFromTexture(backTexture);
     });
 
-    const CELEBRANT_SPRITE_HEIGHT = 2.85;
+    const CELEBRANT_SPRITE_HEIGHT = 2.35;
     const celebrantRig = new THREE.Group();
-    celebrantRig.position.set(0, FLOOR_SANCTUARY_Y, -13.55);
+    celebrantRig.position.set(0, FLOOR_SANCTUARY_Y, -14.95);
     root.add(celebrantRig);
 
     const celebrantMaterial = new THREE.MeshBasicMaterial({
@@ -1515,7 +1568,6 @@ function createVoxelChurch(container) {
         alphaTest: 0.08,
         side: THREE.DoubleSide,
         depthWrite: false,
-        depthTest: false,
     });
     let celebrantSpriteWidth = CELEBRANT_SPRITE_HEIGHT * 0.773;
     const celebrantSprite = new THREE.Mesh(
@@ -1523,7 +1575,7 @@ function createVoxelChurch(container) {
         celebrantMaterial,
     );
     celebrantSprite.position.set(0, CELEBRANT_SPRITE_HEIGHT * 0.5, 0);
-    celebrantSprite.renderOrder = 8;
+    celebrantSprite.renderOrder = 3;
     celebrantRig.add(celebrantSprite);
 
     const fitCelebrantSpriteToTexture = (texture) => {
