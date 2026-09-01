@@ -302,7 +302,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "point",
+        gesture: "idle",
         title: "1st Reading",
         text: "📖 The first reading is proclaimed from Sacred Scripture.",
     },
@@ -316,7 +316,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "point",
+        gesture: "idle",
         title: "2nd Reading",
         text: "📜 The second reading is proclaimed from the New Testament letters.",
     },
@@ -448,6 +448,16 @@ function getMassFlowSteps() {
         massFlowSteps = DEFAULT_MASS_FLOW_STEPS.map((step) => ({ ...step }));
     }
     return massFlowSteps;
+}
+
+function resolveMassStepGesture(step) {
+    if (!step) {
+        return "idle";
+    }
+    if (step.title === "1st Reading" || step.title === "2nd Reading") {
+        return "idle";
+    }
+    return step.gesture || "idle";
 }
 
 async function loadMassOrderSteps() {
@@ -2074,7 +2084,7 @@ function createVoxelChurch(container) {
         if (!step) {
             return;
         }
-        const next = step.gesture;
+        const next = resolveMassStepGesture(step);
         const stepNumber = stepIndex + 1;
         const prefix = `🎼 ${step.part} · ${step.title} (${stepNumber}/${steps.length})`;
         actionState.massIndex += 1;
@@ -2098,7 +2108,7 @@ function createVoxelChurch(container) {
             return;
         }
         actionState.massIndex = stepIndex;
-        triggerGesture(step.gesture, `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
+        triggerGesture(resolveMassStepGesture(step), `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
         if (typeof window.MassQuest !== "undefined" && window.MassQuest.isActive()) {
             window.MassQuest.syncToMassStep(stepIndex);
         }
@@ -2515,32 +2525,53 @@ function createVoxelChurch(container) {
         xDir: 1,
         walkPhase: 0,
         facingBack: false,
+        idleFaceBack: false,
         motionBlend: 0,
     };
 
     updateDirectionFromYaw();
 
-    function updatePlayerSpriteMotion(velocityX, velocityZ, turnInput, dt) {
+    function updatePlayerSpriteMotion(velocityX, velocityZ, turnInput, throttleInput, downPressed, dt) {
         const speed = Math.hypot(velocityX, velocityZ);
         const signedForwardSpeed = velocityX * moveDirection.x + velocityZ * moveDirection.z;
         const moving = speed > 0.18;
 
-        if (moving) {
-            const shouldFaceBack = signedForwardSpeed >= -0.02;
-            if (spriteFacingState.facingBack !== shouldFaceBack) {
-                spriteFacingState.facingBack = shouldFaceBack;
-                playerSpriteMaterial.map = shouldFaceBack ? playerTextures.back : playerTextures.front;
+        const applySpriteFacing = (faceBack) => {
+            if (spriteFacingState.facingBack !== faceBack) {
+                spriteFacingState.facingBack = faceBack;
+                playerSpriteMaterial.map = faceBack ? playerTextures.back : playerTextures.front;
                 playerSpriteMaterial.needsUpdate = true;
             }
+        };
+
+        if (isChildPlayer) {
+            if (moving) {
+                if (throttleInput > 0 || signedForwardSpeed > 0.08) {
+                    spriteFacingState.idleFaceBack = true;
+                    applySpriteFacing(true);
+                } else if (throttleInput < 0 || signedForwardSpeed < -0.08) {
+                    spriteFacingState.idleFaceBack = false;
+                    applySpriteFacing(false);
+                }
+            } else if (downPressed) {
+                spriteFacingState.idleFaceBack = false;
+                applySpriteFacing(false);
+            } else if (spriteFacingState.idleFaceBack) {
+                applySpriteFacing(true);
+            }
+        } else if (moving) {
+            const shouldFaceBack = signedForwardSpeed >= -0.02;
+            applySpriteFacing(shouldFaceBack);
+        } else if (spriteFacingState.facingBack) {
+            applySpriteFacing(false);
+        }
+
+        if (moving) {
             if (Math.abs(velocityX) > 0.08) {
                 spriteFacingState.xDir = velocityX < 0 ? -1 : 1;
             } else if (Math.abs(turnInput) > 0.05) {
                 spriteFacingState.xDir = turnInput < 0 ? -1 : 1;
             }
-        } else if (spriteFacingState.facingBack) {
-            spriteFacingState.facingBack = false;
-            playerSpriteMaterial.map = playerTextures.front;
-            playerSpriteMaterial.needsUpdate = true;
         } else if (Math.abs(turnInput) > 0.05) {
             spriteFacingState.xDir = turnInput < 0 ? -1 : 1;
         }
@@ -2651,7 +2682,7 @@ function createVoxelChurch(container) {
         applyArmSecondaryMotion(horizontalSpeed);
         syncOverlayArmsVisibility(actionState.currentGesture, horizontalSpeed);
         updateLiturgyItem();
-        updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, dt);
+        updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, throttleInput, down, dt);
 
         playerShadow.position.x = playerRig.position.x;
         playerShadow.position.y = playerMotion.groundY + 0.02;
