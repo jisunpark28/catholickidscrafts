@@ -1417,7 +1417,8 @@ function createVoxelChurch(container) {
         transparent: true,
         alphaTest: 0.08,
         side: THREE.DoubleSide,
-        depthWrite: false,
+        depthTest: true,
+        depthWrite: true,
     });
 
     const PLAYER_SPRITE_WORLD_HEIGHT = isChildPlayer ? 2.05 * 1.7 : 2.35;
@@ -1528,7 +1529,8 @@ function createVoxelChurch(container) {
         transparent: true,
         alphaTest: 0.08,
         side: THREE.DoubleSide,
-        depthWrite: false,
+        depthTest: true,
+        depthWrite: true,
     });
     let celebrantSpriteWidth = CELEBRANT_SPRITE_HEIGHT * 0.773;
     const celebrantSprite = new THREE.Mesh(
@@ -1536,7 +1538,7 @@ function createVoxelChurch(container) {
         celebrantMaterial,
     );
     celebrantSprite.position.set(0, CELEBRANT_SPRITE_HEIGHT * 0.5, 0);
-    celebrantSprite.renderOrder = 4;
+    celebrantSprite.renderOrder = 0;
     celebrantRig.add(celebrantSprite);
 
     const fitCelebrantSpriteToTexture = (texture) => {
