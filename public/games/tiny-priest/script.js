@@ -238,6 +238,15 @@ const GESTURE_NARRATION = {
     pray: "🙏 Hands are joined in prayerful focus and silence.",
     ourFather: "👐 Arms open gently while praying the Lord's Prayer together.",
     signCross: "✝️ In the name of the Father, and of the Son, and of the Holy Spirit.",
+    greet: "🙂 The celebrant greets the assembly in the Lord's peace.",
+    orans: "🙌 Arms are raised in praise and prayer with the assembly.",
+    bless: "✨ The celebrant blesses the people in the name of the Trinity.",
+    peace: "🤝 The celebrant invites the sign of peace.",
+    kneel: "🙇 The celebrant kneels in reverence at the holy mysteries.",
+    elevate_host: "🍞 The host is elevated in consecration.",
+    elevate_chalice: "🍷 The chalice is elevated in consecration.",
+    genuflect: "🙇 A deep reverence before the altar.",
+    dismiss: "⛪ The celebrant sends the assembly forth in mission.",
 };
 
 const DEFAULT_MASS_FLOW_STEPS = [
@@ -272,7 +281,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Gloria",
         text: "✨ Glory to God in the highest is proclaimed in praise.",
     },
@@ -293,7 +302,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Responsorial Psalm",
         text: "🎵 The psalm is prayed in response with the assembly.",
     },
@@ -307,7 +316,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Gospel Acclamation",
         text: "🙌 The assembly rises and acclaims the Gospel.",
     },
@@ -335,7 +344,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Universal Prayer",
         text: "🫶 The community prays for the Church and the world.",
     },
@@ -356,28 +365,28 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Sanctus",
         text: "🎶 Holy, Holy, Holy Lord God of hosts.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "lift",
+        gesture: "kneel",
         title: "Eucharistic Prayer",
         text: "✨ The Church gives thanks and praise through the Eucharistic Prayer.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "The Lord's Prayer",
         text: "👐 The faithful pray the Lord's Prayer together.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "point",
+        gesture: "peace",
         title: "Sign of Peace",
         text: "🤝 The sign of peace is exchanged in charity.",
     },
@@ -398,14 +407,14 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "4. Concluding Rites",
         partEn: "Concluding Rites",
-        gesture: "pray",
+        gesture: "bless",
         title: "Blessing",
         text: "🔔 The celebrant blesses the people before sending forth.",
     },
     {
         part: "4. Concluding Rites",
         partEn: "Concluding Rites",
-        gesture: "point",
+        gesture: "dismiss",
         title: "Dismissal",
         text: "🔔 The people are blessed and sent forth to live the Gospel.",
     },
@@ -1036,19 +1045,19 @@ function getLiturgicalSeason(inputDate = new Date()) {
     const christmasEndCurrentYear = new Date(year, 0, 12);
 
     if ((date >= christmasDay && date <= christmasEnd) || (date >= christmasStartPreviousYear && date <= christmasEndCurrentYear)) {
-        return { season: "Christmas", colorName: "White", colorHex: 0xf7f4e8 };
+        return { season: "Christmas", colorName: "White", colorHex: 0xf7f4e8, vestmentKey: "white" };
     }
     if (date >= adventStart && date < christmasDay) {
-        return { season: "Advent", colorName: "Purple", colorHex: 0x7d5db0 };
+        return { season: "Advent", colorName: "Purple", colorHex: 0x7d5db0, vestmentKey: "purple" };
     }
     if (date >= ashWednesday && date <= holySaturday) {
-        return { season: "Lent", colorName: "Purple", colorHex: 0x6f4fa8 };
+        return { season: "Lent", colorName: "Purple", colorHex: 0x6f4fa8, vestmentKey: "purple" };
     }
     if (date >= easterSunday && date <= pentecost) {
-        return { season: "Easter", colorName: "White", colorHex: 0xffffff };
+        return { season: "Easter", colorName: "White", colorHex: 0xffffff, vestmentKey: "white" };
     }
 
-    return { season: "Ordinary Time", colorName: "Green", colorHex: 0x4d9c5a };
+    return { season: "Ordinary Time", colorName: "Green", colorHex: 0x4d9c5a, vestmentKey: "green" };
 }
 
 function createVoxelChurch(container) {
@@ -1585,16 +1594,99 @@ function createVoxelChurch(container) {
         celebrantSprite.position.y = CELEBRANT_SPRITE_HEIGHT * 0.5;
     };
 
-    textureLoader.load(CHARACTER_CONFIG.priest.frontImage, (celebrantTexture) => {
-        if ("colorSpace" in celebrantTexture) {
-            celebrantTexture.colorSpace = THREE.SRGBColorSpace;
+    const celebrantState = {
+        vestmentKey: "green",
+        poseKey: "idle",
+        textures: {},
+    };
+
+    function applyCelebrantTexture(texture) {
+        if ("colorSpace" in texture) {
+            texture.colorSpace = THREE.SRGBColorSpace;
         }
-        celebrantTexture.magFilter = THREE.LinearFilter;
-        celebrantTexture.minFilter = THREE.LinearMipmapLinearFilter;
-        cropTextureToVisibleBounds(celebrantTexture);
-        fitCelebrantSpriteToTexture(celebrantTexture);
-        celebrantMaterial.map = celebrantTexture;
+        texture.magFilter = THREE.LinearFilter;
+        texture.minFilter = THREE.LinearMipmapLinearFilter;
+        cropTextureToVisibleBounds(texture);
+        fitCelebrantSpriteToTexture(texture);
+        celebrantMaterial.map = texture;
         celebrantMaterial.needsUpdate = true;
+    }
+
+    function loadCelebrantPoseTextures(colorKey, onReady) {
+        const sprites = window.CELEBRANT_SPRITES;
+        if (!sprites) {
+            textureLoader.load(CHARACTER_CONFIG.priest.frontImage, (tex) => {
+                applyCelebrantTexture(tex);
+                if (onReady) {
+                    onReady();
+                }
+            });
+            return;
+        }
+        const poses = sprites.POSES;
+        let pending = poses.length;
+        const finish = () => {
+            pending -= 1;
+            if (pending <= 0 && onReady) {
+                onReady();
+            }
+        };
+        poses.forEach((pose) => {
+            const path = sprites.posePath(colorKey, pose);
+            textureLoader.load(
+                path,
+                (tex) => {
+                    if ("colorSpace" in tex) {
+                        tex.colorSpace = THREE.SRGBColorSpace;
+                    }
+                    tex.magFilter = THREE.LinearFilter;
+                    tex.minFilter = THREE.LinearMipmapLinearFilter;
+                    cropTextureToVisibleBounds(tex);
+                    celebrantState.textures[`${colorKey}/${pose}`] = tex;
+                    finish();
+                },
+                undefined,
+                () => {
+                    finish();
+                },
+            );
+        });
+    }
+
+    function setCelebrantPose(gestureKey) {
+        const sprites = window.CELEBRANT_SPRITES;
+        const pose = sprites ? sprites.resolvePose(gestureKey) : gestureKey || "idle";
+        celebrantState.poseKey = pose;
+        const cacheKey = `${celebrantState.vestmentKey}/${pose}`;
+        const tex =
+            celebrantState.textures[cacheKey] ||
+            celebrantState.textures[`${celebrantState.vestmentKey}/idle`] ||
+            celebrantState.textures[`green/${pose}`] ||
+            celebrantState.textures["green/idle"];
+        if (tex) {
+            applyCelebrantTexture(tex);
+        }
+    }
+
+    function setCelebrantVestment(colorKey) {
+        const sprites = window.CELEBRANT_SPRITES;
+        const key =
+            colorKey && sprites?.VESTMENT_COLORS?.[colorKey]
+                ? colorKey
+                : sprites?.resolveVestmentFromSeason?.({ colorName: "Green", vestmentKey: "green" }) ||
+                  "green";
+        if (celebrantState.vestmentKey === key && celebrantState.textures[`${key}/idle`]) {
+            setCelebrantPose(actionState?.currentGesture || "idle");
+            return;
+        }
+        celebrantState.vestmentKey = key;
+        loadCelebrantPoseTextures(key, () => {
+            setCelebrantPose(actionState?.currentGesture || "idle");
+        });
+    }
+
+    loadCelebrantPoseTextures("green", () => {
+        setCelebrantPose("idle");
     });
 
     const itemMaterial = new THREE.MeshLambertMaterial({ color: 0xc6a278 });
@@ -1958,6 +2050,7 @@ function createVoxelChurch(container) {
             setGesturePose("pray");
             syncOverlayArmsVisibility("signCross");
             narrateGesture("signCross", prefix);
+            setCelebrantPose("signCross");
             setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
             return;
         }
@@ -1965,6 +2058,7 @@ function createVoxelChurch(container) {
         setGesturePose(name);
         syncOverlayArmsVisibility(name);
         narrateGesture(name, prefix);
+        setCelebrantPose(name);
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
 
@@ -2651,6 +2745,8 @@ function createVoxelChurch(container) {
         },
         getCurrentGesture: () => actionState.currentGesture,
         isMassActive: () => actionState.massActive,
+        setCelebrantVestment,
+        setCelebrantPose,
         jumpToMassStep,
         dispose: disposeThreeWorld,
     };
@@ -2754,6 +2850,17 @@ async function activateThreeScene(role) {
 
         APP_STATE.threeWorld.altarCloth.material.color.setHex(liturgical.colorHex);
         APP_STATE.threeWorld.altarCloth.material.needsUpdate = true;
+
+        const vestmentOverride = new URLSearchParams(window.location.search).get("vestment");
+        const vestmentKey =
+            vestmentOverride && window.CELEBRANT_SPRITES?.VESTMENT_COLORS?.[vestmentOverride]
+                ? vestmentOverride
+                : window.CELEBRANT_SPRITES?.resolveVestmentFromSeason(liturgical) ||
+                  liturgical.vestmentKey ||
+                  "green";
+        if (APP_STATE.threeWorld.setCelebrantVestment) {
+            APP_STATE.threeWorld.setCelebrantVestment(vestmentKey);
+        }
 
         applyRoleCamera(role, APP_STATE.threeWorld.camera, APP_STATE.threeWorld.playerRig);
         setHudButtonsState(APP_STATE.threeWorld.getCurrentGesture(), APP_STATE.threeWorld.isMassActive());
