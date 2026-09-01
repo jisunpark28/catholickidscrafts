@@ -1175,56 +1175,6 @@ function createVoxelChurch(container) {
     altarCloth.castShadow = true;
     altarGroup.add(altarCloth);
 
-    const crossStand = new THREE.Mesh(new THREE.BoxGeometry(0.8, 5.2, 0.8), materials.darkWood);
-    crossStand.position.set(0, 6.1, -0.2);
-    crossStand.userData.interactive = true;
-    crossStand.castShadow = true;
-    altarGroup.add(crossStand);
-
-    const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.8, 0.8), materials.darkWood);
-    crossBeam.position.set(0, 7.3, -0.2);
-    crossBeam.userData.interactive = true;
-    crossBeam.castShadow = true;
-    altarGroup.add(crossBeam);
-
-    const corpusGroup = new THREE.Group();
-    corpusGroup.position.set(0, 0, 0.56);
-    altarGroup.add(corpusGroup);
-
-    const corpusTorso = new THREE.Mesh(new THREE.BoxGeometry(0.72, 2.2, 0.35), materials.corpusSkin);
-    corpusTorso.position.set(0, 6.32, 0.24);
-    corpusTorso.castShadow = true;
-    corpusTorso.name = "corpus-torso";
-    corpusGroup.add(corpusTorso);
-
-    const corpusHead = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.62, 0.42), materials.corpusSkin);
-    corpusHead.position.set(0, 7.74, 0.24);
-    corpusHead.castShadow = true;
-    corpusHead.name = "corpus-head";
-    corpusGroup.add(corpusHead);
-
-    const corpusArms = new THREE.Mesh(new THREE.BoxGeometry(2.7, 0.32, 0.3), materials.corpusSkin);
-    corpusArms.position.set(0, 7.3, 0.24);
-    corpusArms.castShadow = true;
-    corpusArms.name = "corpus-arms";
-    corpusGroup.add(corpusArms);
-
-    const corpusLeftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.28, 1.15, 0.26), materials.corpusSkin);
-    corpusLeftLeg.position.set(-0.14, 4.84, 0.24);
-    corpusLeftLeg.castShadow = true;
-    corpusLeftLeg.name = "corpus-left-leg";
-    corpusGroup.add(corpusLeftLeg);
-
-    const corpusRightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.28, 1.15, 0.26), materials.corpusSkin);
-    corpusRightLeg.position.set(0.14, 4.84, 0.24);
-    corpusRightLeg.castShadow = true;
-    corpusRightLeg.name = "corpus-right-leg";
-    corpusGroup.add(corpusRightLeg);
-
-    const corpusLight = new THREE.PointLight(0xffe3bf, 0.62, 11, 2);
-    corpusLight.position.set(0, 6.8, 1.35);
-    altarGroup.add(corpusLight);
-
     const candleL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.2, 0.35), materials.candleWax);
     candleL.position.set(-2.8, 3.2, 0.7);
     candleL.userData.interactive = true;
@@ -1470,7 +1420,7 @@ function createVoxelChurch(container) {
         depthWrite: false,
     });
 
-    const PLAYER_SPRITE_WORLD_HEIGHT = isChildPlayer ? 2.05 : 2.35;
+    const PLAYER_SPRITE_WORLD_HEIGHT = isChildPlayer ? 2.05 * 1.7 : 2.35;
     let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
     let playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
@@ -2297,7 +2247,7 @@ function createVoxelChurch(container) {
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    const interactiveMeshes = [altarBase, altarCloth, crossStand, crossBeam, candleL, candleR];
+    const interactiveMeshes = [altarBase, altarCloth, candleL, candleR];
     const decorationMeshes = [];
     const jumpTweens = [];
     const sparkleParticles = [];
@@ -2653,7 +2603,7 @@ function createVoxelChurch(container) {
         camera,
         renderer,
         altarCloth,
-        crucifixGroup: corpusGroup,
+        crucifixGroup: sanctuaryCrossGroup,
         playerRig,
         triggerGesture: (name) => {
             if (actionState.massActive) setMassMode(false);
