@@ -237,7 +237,11 @@ const GESTURE_NARRATION = {
     lift: "🙌 The gifts are raised high in offering to God.",
     pray: "🙏 Hands are joined in prayerful focus and silence.",
     ourFather: "👐 Arms open gently while praying the Lord's Prayer together.",
-    signCross: "✝️ In the name of the Father, and of the Son, and of the Holy Spirit.",
+    signCross: "✝️ 성부와 성자와 성령의 이름으로. 아멘.",
+    signCross_father: "✝️ 성부와",
+    signCross_son: "성자와",
+    signCross_spirit: "성령의 이름으로",
+    signCross_amen: "아멘.",
     greet: "🙂 The celebrant greets the assembly in the Lord's peace.",
     orans: "🙌 Arms are raised in praise and prayer with the assembly.",
     bless: "✨ The celebrant blesses the people in the name of the Trinity.",
@@ -262,7 +266,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
         partEn: "Introductory Rites",
         gesture: "signCross",
         title: "Sign of the Cross",
-        text: "✝️ The Mass begins with the Sign of the Cross.",
+        text: "✝️ 성부와 성자와 성령의 이름으로. 아멘.",
     },
     {
         part: "1. Introductory Rites",
@@ -2008,10 +2012,15 @@ function createVoxelChurch(container) {
         setArmTargets(pose.left, pose.right);
     }
 
+    const SIGN_CROSS_CELEBRANT_POSES = ["signCross", "signCross_son", "signCross_spirit", "signCross_amen"];
+    const SIGN_CROSS_KO_KEYS = ["signCross_father", "signCross_son", "signCross_spirit", "signCross_amen"];
+
     const actionState = {
         currentGesture: "idle",
         signCrossActive: false,
         signCrossTime: 0,
+        signCrossPhase: -1,
+        signCrossPrefix: "",
         massActive: false,
         massIndex: 0,
         currentMassStepIndex: -1,
@@ -2061,10 +2070,12 @@ function createVoxelChurch(container) {
         if (name === "signCross") {
             actionState.signCrossActive = true;
             actionState.signCrossTime = 0;
+            actionState.signCrossPhase = 0;
+            actionState.signCrossPrefix = prefix;
             setGesturePose("pray");
             syncOverlayArmsVisibility("signCross");
-            narrateGesture("signCross", prefix);
-            setCelebrantPose("signCross");
+            setCelebrantPose(SIGN_CROSS_CELEBRANT_POSES[0]);
+            narrateGesture(SIGN_CROSS_KO_KEYS[0], prefix);
             setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
             return;
         }
@@ -2334,6 +2345,13 @@ function createVoxelChurch(container) {
         const normalized = Math.min(actionState.signCrossTime / 2.2, 1);
         const phase = normalized * 4;
 
+        const phaseIndex = phase < 1 ? 0 : phase < 2 ? 1 : phase < 3 ? 2 : 3;
+        if (actionState.signCrossPhase !== phaseIndex) {
+            actionState.signCrossPhase = phaseIndex;
+            setCelebrantPose(SIGN_CROSS_CELEBRANT_POSES[phaseIndex]);
+            narrateGesture(SIGN_CROSS_KO_KEYS[phaseIndex], actionState.signCrossPrefix);
+        }
+
         const signPose =
             phase < 1 ? signCrossPoses[0]
             : phase < 2 ? signCrossPoses[1]
@@ -2343,10 +2361,12 @@ function createVoxelChurch(container) {
 
         if (normalized >= 1) {
             actionState.signCrossActive = false;
+            actionState.signCrossPhase = -1;
             if (actionState.currentGesture === "signCross") {
                 actionState.currentGesture = "pray";
                 setGesturePose("pray");
-                narrateGesture("pray", "✝️ After completing the Sign of the Cross,");
+                setCelebrantPose("pray");
+                narrateGesture("pray", "✝️ 성호를 마친 뒤,");
             }
         }
     }

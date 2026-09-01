@@ -6,6 +6,9 @@
     const POSES = [
         "idle",
         "signCross",
+        "signCross_son",
+        "signCross_spirit",
+        "signCross_amen",
         "greet",
         "pray",
         "orans",
@@ -33,6 +36,9 @@
     const GESTURE_TO_POSE = {
         idle: "idle",
         signCross: "signCross",
+        signCross_son: "signCross_son",
+        signCross_spirit: "signCross_spirit",
+        signCross_amen: "signCross_amen",
         greet: "greet",
         pray: "pray",
         ourFather: "orans",
