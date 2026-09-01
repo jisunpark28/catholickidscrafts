@@ -1407,8 +1407,10 @@ function createVoxelChurch(container) {
     }
 
     // Facing the altar: right = Gospel ambo, left = Universal Prayer lectern.
-    addLectern(14.8, -10.9, 1.28, "ambo");
-    addLectern(-14.8, -10.9, 0.78, "petitions");
+    // Between the back wall and the altar (deeper in the sanctuary).
+    const LECTERN_Z = -15.35;
+    addLectern(12.2, LECTERN_Z, 1.28, "ambo");
+    addLectern(-12.2, LECTERN_Z, 0.78, "petitions");
 
     for (let row = 0; row < 4; row += 1) {
         for (let side = -1; side <= 1; side += 2) {
