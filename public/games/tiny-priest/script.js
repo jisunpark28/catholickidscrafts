@@ -1143,20 +1143,24 @@ function createVoxelChurch(container) {
     sanctuaryCrossGroup.add(sanctuaryCrossBeam);
     root.add(sanctuaryCrossGroup);
 
-    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(33, 0.8, 7), materials.wood);
+    const SANCTUARY_PLATFORM_WIDTH = 33;
+    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(SANCTUARY_PLATFORM_WIDTH, 0.8, 7), materials.wood);
     sanctuaryStep.position.set(0, 0.4, -12.4);
     root.add(sanctuaryStep);
 
-    const ALTAR_WIDTH = 32;
-    const ALTAR_DEPTH = 3.7;
-    const ALTAR_CLOTH_WIDTH = ALTAR_WIDTH + 0.2;
-    const ALTAR_CLOTH_DEPTH = ALTAR_DEPTH + 0.2;
+    const ALTAR_TABLE_WIDTH = 7;
+    const ALTAR_TABLE_DEPTH = 3.7;
+    const ALTAR_CLOTH_WIDTH = 7.2;
+    const ALTAR_CLOTH_DEPTH = 3.9;
 
     const altarGroup = new THREE.Group();
     altarGroup.position.set(0, 0.4, -12.2);
     root.add(altarGroup);
 
-    const altarBase = new THREE.Mesh(new THREE.BoxGeometry(ALTAR_WIDTH, 2.3, ALTAR_DEPTH), materials.wood);
+    const altarBase = new THREE.Mesh(
+        new THREE.BoxGeometry(ALTAR_TABLE_WIDTH, 2.3, ALTAR_TABLE_DEPTH),
+        materials.wood,
+    );
     altarBase.position.y = 1.15;
     altarBase.userData.interactive = true;
     altarBase.castShadow = true;
@@ -1222,21 +1226,21 @@ function createVoxelChurch(container) {
     altarGroup.add(corpusLight);
 
     const candleL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.2, 0.35), materials.candleWax);
-    candleL.position.set(-ALTAR_WIDTH * 0.42, 3.2, 0.7);
+    candleL.position.set(-2.8, 3.2, 0.7);
     candleL.userData.interactive = true;
     altarGroup.add(candleL);
 
     const candleR = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.2, 0.35), materials.candleWax);
-    candleR.position.set(ALTAR_WIDTH * 0.42, 3.2, 0.7);
+    candleR.position.set(2.8, 3.2, 0.7);
     candleR.userData.interactive = true;
     altarGroup.add(candleR);
 
     const flameL = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.28, 0.22), materials.candleFlame);
-    flameL.position.set(-ALTAR_WIDTH * 0.42, 4.0, 0.7);
+    flameL.position.set(-2.8, 4.0, 0.7);
     altarGroup.add(flameL);
 
     const flameR = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.28, 0.22), materials.candleFlame);
-    flameR.position.set(ALTAR_WIDTH * 0.42, 4.0, 0.7);
+    flameR.position.set(2.8, 4.0, 0.7);
     altarGroup.add(flameR);
 
     const WALL_FRAME_Z = [-12.4, -9.0, -5.6, -2.2, 1.2, 4.6, 8.0];
