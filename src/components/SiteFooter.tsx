@@ -4,7 +4,7 @@ import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/Logo.png";
-import { SITE_LITURGY_FOOTER } from "@/lib/mass-source";
+import { SITE_LITURGY_FOOTER } from "@/lib/site-liturgy-footer";
 import { getTptStoreUrl } from "@/lib/tpt";
 
 export function SiteFooter() {

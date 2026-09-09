@@ -25,6 +25,8 @@ report-uri /api/csp-report; report-to csp-endpoint
 
 Development also allows `'unsafe-eval'` on `script-src` and `ws:` / `wss:` on `connect-src` for Next.js HMR.
 
+Production does **not** allow `'unsafe-eval'`. `romcal` compiles lodash templates with `new Function()`, so it must stay server-only. Do not import `@/lib/mass-source`, `@/lib/evangelizo`, or `@/lib/romcal-liturgical` from Client Components (the home footer copy lives in `@/lib/site-liturgy-footer` for that reason). If `romcal` is bundled into client JS, Chrome throws `EvalError` and Next.js shows “Application error: a client-side exception has occurred”.
+
 ## Residual `'unsafe-inline'`
 
 `script-src` and `style-src` still include `'unsafe-inline'` because Next 15 inlines hydration / Flight and `next/font` `<style>` tags. This app does not set CSP nonces (`x-nonce` in middleware). A nonce without covering static `/games/*` HTML would break those iframes (browsers ignore `'unsafe-inline'` when a nonce is present).

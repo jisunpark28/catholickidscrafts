@@ -24,6 +24,29 @@ assert.match(prod, /report-uri \/api\/csp-report/);
 assert.match(prod, /'wasm-unsafe-eval'/);
 assert.doesNotMatch(prod, /script-src [^;]*'unsafe-eval'/);
 
+/** Client UI must not import romcal (lodash templates → `new Function()` / EvalError under CSP). */
+function walkTsFiles(dir: string): string[] {
+  const out: string[] = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const rel = `${dir}/${entry.name}`;
+    if (entry.isDirectory()) out.push(...walkTsFiles(rel));
+    else if (/\.(tsx?|jsx?)$/.test(entry.name)) out.push(rel);
+  }
+  return out;
+}
+
+const clientUnsafeImports =
+  /\bfrom\s+["'](?:romcal|@\/lib\/(?:romcal-liturgical|evangelizo|mass-source))["']/;
+for (const rel of walkTsFiles("src")) {
+  const src = fs.readFileSync(rel, "utf8");
+  if (!src.includes('"use client"')) continue;
+  assert.doesNotMatch(
+    src,
+    clientUnsafeImports,
+    `${rel} would pull romcal into the client bundle`,
+  );
+}
+
 const withChurch = buildCspValue({
   isDev: false,
   churchGameUrl: "https://tiny-priest.example.com/index.html",
