@@ -1,15 +1,14 @@
 /**
- * Phase 3 — Content-Security-Policy-Report-Only (not enforcing).
+ * Phase 3b — enforcing Content-Security-Policy.
  *
- * Do not emit `Content-Security-Policy` from here. Flip to enforcing only after
- * an explicit follow-up once Report-Only violations look clean. Concatenate with
- * Phase 1 headers in next.config.ts (`...cspReportOnlyHeaders()`).
+ * Report-Only on home, /play, /gospel, account/admin login showed no critical
+ * violations. This module emits the same allowlist as enforcing CSP.
  *
- * Nonces: this app does not wire Next.js CSP nonces (middleware → root layout
- * `<script nonce>` / `Script nonce`). Next still inlines hydration + Flight
- * payloads, `next/font` injects style tags, JSON-LD is inline, Hangman/Tiny
- * Priest HTML uses inline script/style. `'unsafe-inline'` is therefore required
- * on script-src and style-src until a nonce/`strict-dynamic` follow-up.
+ * Residual `'unsafe-inline'` on script-src / style-src: Next 15 still inlines
+ * hydration + Flight and `next/font` style tags. This app does not wire CSP
+ * nonces (`x-nonce` in middleware). Adding a nonce without covering static
+ * `/games/*` HTML would break those iframes (nonce ignores `'unsafe-inline'`).
+ * Game boot scripts that were inline are now external files (`'self'`).
  */
 
 export const CSP_REPORT_PATH = "/api/csp-report";
@@ -42,8 +41,8 @@ function serializeCsp(directives: Array<[string, string[]]>): string {
     .join("; ");
 }
 
-/** Production-shaped Report-Only policy (dev extras are opt-in). */
-export function buildCspReportOnlyValue(options: CspBuildOptions = {}): string {
+/** Production-shaped enforcing CSP (dev extras are opt-in). */
+export function buildCspValue(options: CspBuildOptions = {}): string {
   const isDev = options.isDev ?? false;
   const churchGameUrl =
     options.churchGameUrl ?? process.env.NEXT_PUBLIC_CHURCH_GAME_URL ?? null;
@@ -129,7 +128,7 @@ export function buildCspReportOnlyValue(options: CspBuildOptions = {}): string {
   ]);
 }
 
-export function cspReportOnlyHeaders(
+export function cspHeaders(
   options: CspBuildOptions = {},
 ): { key: string; value: string }[] {
   const isDev = options.isDev ?? process.env.NODE_ENV !== "production";
@@ -139,8 +138,8 @@ export function cspReportOnlyHeaders(
       value: `${CSP_REPORTING_GROUP}="${CSP_REPORT_PATH}"`,
     },
     {
-      key: "Content-Security-Policy-Report-Only",
-      value: buildCspReportOnlyValue({ ...options, isDev }),
+      key: "Content-Security-Policy",
+      value: buildCspValue({ ...options, isDev }),
     },
   ];
 }

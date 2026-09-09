@@ -36,6 +36,7 @@
     <link rel="preconnect" href="https://justadudewhohacks.github.io" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
+    <script src="./embed-mode.js"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -97,11 +98,6 @@
     </script>
   </head>
   <body>
-    <script>
-      if (new URLSearchParams(window.location.search).get("embed") === "1") {
-        document.documentElement.classList.add("embed-mode");
-      }
-    </script>
     <div class="app-shell">
       <header class="hero">
         <h1>

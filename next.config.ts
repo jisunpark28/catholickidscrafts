@@ -1,14 +1,13 @@
 import type { NextConfig } from "next";
-import { cspReportOnlyHeaders } from "./src/lib/csp";
+import { cspHeaders } from "./src/lib/csp";
 
 /**
  * Phase 1 baseline (nosniff, referrer, SAMEORIGIN, Permissions-Policy) plus
- * Phase 3 Content-Security-Policy-Report-Only. Do not add an enforcing
- * `Content-Security-Policy` header here.
+ * Phase 3b enforcing Content-Security-Policy. No report-only header.
  *
  * X-Frame-Options is SAMEORIGIN, not DENY: /play/church, /play/hangman, and
  * /play/face-to-emoji iframe same-origin `/games/*`. `frame-ancestors 'self'`
- * in Report-Only matches that intent.
+ * matches that intent.
  *
  * Permissions-Policy: Gospel reading recorder uses microphone; photo booth
  * uses camera. Both stay (self) only. Other powerful features are disabled.
@@ -22,7 +21,7 @@ const securityHeaders = [
     value:
       "camera=(self), microphone=(self), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), midi=(), display-capture=(), xr-spatial-tracking=()",
   },
-  ...cspReportOnlyHeaders({
+  ...cspHeaders({
     isDev: process.env.NODE_ENV !== "production",
   }),
 ];
