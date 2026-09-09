@@ -2,7 +2,8 @@
  * Phase 3 — Content-Security-Policy-Report-Only (not enforcing).
  *
  * Do not emit `Content-Security-Policy` from here. Flip to enforcing only after
- * an explicit follow-up once Report-Only violations look clean.
+ * an explicit follow-up once Report-Only violations look clean. Concatenate with
+ * Phase 1 headers in next.config.ts (`...cspReportOnlyHeaders()`).
  *
  * Nonces: this app does not wire Next.js CSP nonces (middleware → root layout
  * `<script nonce>` / `Script nonce`). Next still inlines hydration + Flight

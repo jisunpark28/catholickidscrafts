@@ -36,6 +36,7 @@ assert.match(withChurch, /https:\/\/tiny-priest\.example\.com/);
 
 const nextConfig = fs.readFileSync("next.config.ts", "utf8");
 assert.match(nextConfig, /cspReportOnlyHeaders/);
+assert.match(nextConfig, /X-Frame-Options/);
 assert.doesNotMatch(
   nextConfig,
   /key:\s*["']Content-Security-Policy["']/,
