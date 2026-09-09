@@ -19,7 +19,7 @@ export default async function PrivacyPage() {
   return (
     <LegalPage
       title={copyText(copy, "legal.privacy.title", "Privacy Policy")}
-      subtitle={copyText(copy, "legal.privacy.subtitle", "Last updated: June 2026")}
+      subtitle={copyText(copy, "legal.privacy.subtitle", "Last updated: September 2026")}
     >
       <p>
         Catholic Kids Crafts operates{" "}
@@ -175,6 +175,14 @@ export default async function PrivacyPage() {
         collect personal information directly from children under 13. If you believe a child provided
         personal data to us, contact us below and we will delete it where appropriate.
       </p>
+      <p>
+        Optional Play &amp; Learn games and Gospel typing may be used with children on a shared
+        device. Those pages can still set the same <code>ckc_vid</code> visitor cookie (not a child
+        account and not used for ads). Some activities ask the browser for a camera or microphone
+        (for example photo booth or Gospel reading practice); that media stays in the browser unless
+        you save or share it yourself. Children who keep Bible stickers still sign in with an Access
+        ID only—no child email.
+      </p>
 
       <h2 className="pt-4 text-xl font-bold">Your choices</h2>
       <p>
@@ -203,8 +211,12 @@ export default async function PrivacyPage() {
         See also{" "}
         <Link href="/about" className="text-[var(--color-link)]">
           About
-        </Link>{" "}
-        and{" "}
+        </Link>
+        {", "}
+        <Link href="/terms" className="text-[var(--color-link)]">
+          Terms of Use
+        </Link>
+        {", and "}
         <Link href="/affiliate-disclosure" className="text-[var(--color-link)]">
           Affiliate disclosure
         </Link>

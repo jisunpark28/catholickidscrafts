@@ -41,6 +41,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("global.footer.link.recommendations", "Recommendations", "global"),
   sc("global.footer.link.about", "About", "global"),
   sc("global.footer.link.privacy", "Privacy", "global"),
+  sc("global.footer.link.terms", "Terms", "global"),
   sc("global.footer.link.contact", "Contact", "global"),
   sc("global.footer.link.affiliate", "Affiliate disclosure", "global"),
   sc("global.footer.disclosure", "Some links may earn a commission (see disclosure).", "global"),
@@ -203,7 +204,9 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("legal.about.title", "Why Catholic Kids Crafts?", "legal"),
   sc("legal.about.subtitle", "Built to share—so more parishes can run children's programs with confidence.", "legal"),
   sc("legal.privacy.title", "Privacy Policy", "legal"),
-  sc("legal.privacy.subtitle", "Last updated: June 2026", "legal"),
+  sc("legal.privacy.subtitle", "Last updated: September 2026", "legal"),
+  sc("legal.terms.title", "Terms of Use", "legal"),
+  sc("legal.terms.subtitle", "Last updated: September 2026", "legal"),
   sc("legal.affiliate.title", "Affiliate disclosure", "legal"),
 
   // Tiny Priest
