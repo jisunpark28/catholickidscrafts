@@ -6,7 +6,7 @@ const BOOK_BLURBS: Partial<
 > = {
   "genesis": {
     "en": "God creates the heavens and the earth and begins his covenant with Abraham.",
-    "ko": "하나님께서 천지를 창조하시고 아브라함과 언약을 시작하십니다.",
+    "ko": "하느님께서 천지를 창조하시고 아브라함과 계약을 시작하십니다.",
     "es": "Dios crea el cielo y la tierra e inicia su alianza con Abraham.",
     "fr": "Dieu crée les cieux et la terre et commence son alliance avec Abraham.",
     "pt": "Dios crea el cielo y la tierra e inicia su alianza con Abraham.",
@@ -18,7 +18,7 @@ const BOOK_BLURBS: Partial<
   },
   "exodus": {
     "en": "God frees Israel from Egypt and gives the Ten Commandments at Sinai.",
-    "ko": "하나님께서 이스라엘을 이집트에서 해방하시고 시나이에서 십계명을 주십니다.",
+    "ko": "하느님께서 이스라엘을 이집트에서 해방하시고 시나이에서 십계명을 주십니다.",
     "es": "Dios libera a Israel de Egipto y entrega los Diez Mandamientos.",
     "fr": "Dieu libère Israël d'Égypte et donne les Dix Commandements.",
     "pt": "Dios libera a Israel de Egipto y entrega los Diez Mandamientos.",
@@ -30,7 +30,7 @@ const BOOK_BLURBS: Partial<
   },
   "leviticus": {
     "en": "God teaches Israel how to worship and live as his holy people.",
-    "ko": "이스라엘이 거룩한 백성으로 예배하고 살 길을 배웁니다.",
+    "ko": "이스라엘이 거룩한 백성으로 하느님을 섬기며 살 길을 배웁니다.",
     "es": "God teaches Israel how to worship and live as his holy people.",
     "fr": "God teaches Israel how to worship and live as his holy people.",
     "pt": "God teaches Israel how to worship and live as his holy people.",
@@ -89,16 +89,16 @@ const BOOK_BLURBS: Partial<
     "tl": "Judges deliver Israel when the people turn back to God."
   },
   "ruth": {
-    "en": "Ruth's faithful love leads her into the family of David.",
-    "ko": "룻의 충실한 사랑이 다윗 가문으로 이어집니다.",
-    "es": "Ruth's faithful love leads her into the family of David.",
-    "fr": "Ruth's faithful love leads her into the family of David.",
-    "pt": "Ruth's faithful love leads her into the family of David.",
-    "it": "Ruth's faithful love leads her into the family of David.",
-    "de": "Ruth's faithful love leads her into the family of David.",
-    "pl": "Ruth's faithful love leads her into the family of David.",
-    "vi": "Ruth's faithful love leads her into the family of David.",
-    "tl": "Ruth's faithful love leads her into the family of David."
+    "en": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "ko": "룻은 나오미를 떠나지 않고, 나중에 다윗의 조상이 됩니다.",
+    "es": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "fr": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "pt": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "it": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "de": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "pl": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "vi": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "tl": "Ruth stays loyal to Naomi and later becomes an ancestor of David."
   },
   "1-kings-samuel": {
     "en": "Samuel anoints Saul and David as kings of Israel.",
@@ -149,16 +149,16 @@ const BOOK_BLURBS: Partial<
     "tl": "Israel and Judah face prophets, exile, and God's mercy."
   },
   "1-paralipomenon": {
-    "en": "Genealogies and David's reign in worship and prayer.",
-    "ko": "족보와 다윗 왕의 예배와 기도가 기록됩니다.",
-    "es": "Genealogies and David's reign in worship and prayer.",
-    "fr": "Genealogies and David's reign in worship and prayer.",
-    "pt": "Genealogies and David's reign in worship and prayer.",
-    "it": "Genealogies and David's reign in worship and prayer.",
-    "de": "Genealogies and David's reign in worship and prayer.",
-    "pl": "Genealogies and David's reign in worship and prayer.",
-    "vi": "Genealogies and David's reign in worship and prayer.",
-    "tl": "Genealogies and David's reign in worship and prayer."
+    "en": "Genealogies and David's Temple worship and prayer.",
+    "ko": "족보와 다윗 왕의 전례와 기도가 기록됩니다.",
+    "es": "Genealogies and David's Temple worship and prayer.",
+    "fr": "Genealogies and David's Temple worship and prayer.",
+    "pt": "Genealogies and David's Temple worship and prayer.",
+    "it": "Genealogies and David's Temple worship and prayer.",
+    "de": "Genealogies and David's Temple worship and prayer.",
+    "pl": "Genealogies and David's Temple worship and prayer.",
+    "vi": "Genealogies and David's Temple worship and prayer.",
+    "tl": "Genealogies and David's Temple worship and prayer."
   },
   "2-paralipomenon": {
     "en": "Solomon's Temple and the faith of Judah's kings.",
@@ -174,7 +174,7 @@ const BOOK_BLURBS: Partial<
   },
   "1-esdras": {
     "en": "Exiles return and rebuild the Temple in Jerusalem.",
-    "ko": "포로 귀환자들이 예루살렘 성전을 재건합니다.",
+    "ko": "유배에서 돌아온 이들이 예루살렘 성전을 재건합니다.",
     "es": "Exiles return and rebuild the Temple in Jerusalem.",
     "fr": "Exiles return and rebuild the Temple in Jerusalem.",
     "pt": "Exiles return and rebuild the Temple in Jerusalem.",
@@ -186,7 +186,7 @@ const BOOK_BLURBS: Partial<
   },
   "2-esdras-nehemias": {
     "en": "Nehemiah rebuilds Jerusalem's walls and renews the covenant.",
-    "ko": "느헤미야가 성벽을 재건하고 언약을 새롭게 합니다.",
+    "ko": "느헤미야가 성벽을 재건하고 계약을 새롭게 합니다.",
     "es": "Nehemiah rebuilds Jerusalem's walls and renews the covenant.",
     "fr": "Nehemiah rebuilds Jerusalem's walls and renews the covenant.",
     "pt": "Nehemiah rebuilds Jerusalem's walls and renews the covenant.",
@@ -198,7 +198,7 @@ const BOOK_BLURBS: Partial<
   },
   "tobias": {
     "en": "Tobit and Tobias show faith, family love, and God's guidance.",
-    "ko": "토빗과 토비아는 믿음과 가족 사랑으로 하느님의 인도를 경험합니다.",
+    "ko": "토빗과 토비아는 신앙과 가족 사랑으로 하느님의 인도를 경험합니다.",
     "es": "Tobit and Tobias show faith, family love, and God's guidance.",
     "fr": "Tobit and Tobias show faith, family love, and God's guidance.",
     "pt": "Tobit and Tobias show faith, family love, and God's guidance.",
@@ -246,7 +246,7 @@ const BOOK_BLURBS: Partial<
   },
   "psalms": {
     "en": "Prayers and songs of praise, lament, and trust in God.",
-    "ko": "찬양과 탄원, 신뢰의 기도와 노래 모음입니다.",
+    "ko": "찬미와 탄원, 신뢰의 기도와 노래 모음입니다.",
     "es": "Oraciones y cantos de alabanza, lamento y confianza en Dios.",
     "fr": "Prières et cantiques de louange, de lamentation et de confiance.",
     "pt": "Oraciones y cantos de alabanza, lamento y confianza en Dios.",
@@ -258,7 +258,7 @@ const BOOK_BLURBS: Partial<
   },
   "proverbs": {
     "en": "Practical wisdom for living with fear of the Lord.",
-    "ko": "주를 경외하며 사는 실천적 지혜를 가르칩니다.",
+    "ko": "주님을 경외하며 사는 실천적 지혜를 가르칩니다.",
     "es": "Practical wisdom for living with fear of the Lord.",
     "fr": "Practical wisdom for living with fear of the Lord.",
     "pt": "Practical wisdom for living with fear of the Lord.",
@@ -305,16 +305,16 @@ const BOOK_BLURBS: Partial<
     "tl": "Wisdom leads to life and friendship with God."
   },
   "ecclesiasticus": {
-    "en": "Sirach teaches wisdom for family, worship, and daily life.",
-    "ko": "집회서는 가정, 예배, 일상의 지혜를 가르칩니다.",
-    "es": "Sirach teaches wisdom for family, worship, and daily life.",
-    "fr": "Sirach teaches wisdom for family, worship, and daily life.",
-    "pt": "Sirach teaches wisdom for family, worship, and daily life.",
-    "it": "Sirach teaches wisdom for family, worship, and daily life.",
-    "de": "Sirach teaches wisdom for family, worship, and daily life.",
-    "pl": "Sirach teaches wisdom for family, worship, and daily life.",
-    "vi": "Sirach teaches wisdom for family, worship, and daily life.",
-    "tl": "Sirach teaches wisdom for family, worship, and daily life."
+    "en": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "ko": "집회서는 가정, 전례, 일상의 지혜를 가르칩니다.",
+    "es": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "fr": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "pt": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "it": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "de": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "pl": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "vi": "Sirach teaches wisdom for family, liturgy, and daily life.",
+    "tl": "Sirach teaches wisdom for family, liturgy, and daily life."
   },
   "isaias": {
     "en": "Isaiah proclaims the Messiah and the hope of a new creation.",
@@ -330,7 +330,7 @@ const BOOK_BLURBS: Partial<
   },
   "jeremias": {
     "en": "Jeremiah calls for repentance and promises a new covenant.",
-    "ko": "예레미야는 회개를 촉구하고 새 언약을 약속합니다.",
+    "ko": "예레미야는 회개를 촉구하고 새 계약을 약속합니다.",
     "es": "Jeremiah calls for repentance and promises a new covenant.",
     "fr": "Jeremiah calls for repentance and promises a new covenant.",
     "pt": "Jeremiah calls for repentance and promises a new covenant.",
@@ -426,7 +426,7 @@ const BOOK_BLURBS: Partial<
   },
   "abdias": {
     "en": "Obadiah announces judgment and hope for God's people.",
-    "ko": "오바디야는 심판과 하느님 백성의 희망을 선포합니다.",
+    "ko": "오바드야는 심판과 하느님 백성의 희망을 선포합니다.",
     "es": "Obadiah announces judgment and hope for God's people.",
     "fr": "Obadiah announces judgment and hope for God's people.",
     "pt": "Obadiah announces judgment and hope for God's people.",
@@ -474,7 +474,7 @@ const BOOK_BLURBS: Partial<
   },
   "habacuc": {
     "en": "Habakkuk learns to live by faith while awaiting God's justice.",
-    "ko": "하바쿡은 믿음으로 살며 정의를 기다립니다.",
+    "ko": "하바쿡은 신앙으로 살며 정의를 기다립니다.",
     "es": "Habakkuk learns to live by faith while awaiting God's justice.",
     "fr": "Habakkuk learns to live by faith while awaiting God's justice.",
     "pt": "Habakkuk learns to live by faith while awaiting God's justice.",
@@ -510,7 +510,7 @@ const BOOK_BLURBS: Partial<
   },
   "zacharias": {
     "en": "Zechariah encourages the returned exiles and foretells the Messiah.",
-    "ko": "즈카리야는 귀환 백성을 격려하고 메시아를 예고합니다.",
+    "ko": "즈카르야는 귀환 백성을 격려하고 메시아를 예고합니다.",
     "es": "Zechariah encourages the returned exiles and foretells the Messiah.",
     "fr": "Zechariah encourages the returned exiles and foretells the Messiah.",
     "pt": "Zechariah encourages the returned exiles and foretells the Messiah.",
@@ -617,28 +617,28 @@ const BOOK_BLURBS: Partial<
     "tl": "The Holy Spirit empowers the apostles to spread the Gospel."
   },
   "romans": {
-    "en": "Paul explains justification by faith and life in the Spirit.",
-    "ko": "바오로는 믿음으로 의롭게 됨과 성령 안의 삶을 설명합니다.",
+    "en": "Paul explains how we are made righteous in Christ and live in the Holy Spirit.",
+    "ko": "바오로는 신앙으로 의롭게 됨과 성령 안의 삶을 설명합니다.",
     "es": "Pablo explica la justificación por la fe y la vida en el Espíritu.",
     "fr": "Paul explique la justification par la foi et la vie dans l'Esprit.",
     "pt": "Pablo explica la justificación por la fe y la vida en el Espíritu.",
-    "it": "Paul explains justification by faith and life in the Spirit.",
-    "de": "Paul explains justification by faith and life in the Spirit.",
-    "pl": "Paul explains justification by faith and life in the Spirit.",
-    "vi": "Paul explains justification by faith and life in the Spirit.",
-    "tl": "Paul explains justification by faith and life in the Spirit."
+    "it": "Paul explains how we are made righteous in Christ and live in the Holy Spirit.",
+    "de": "Paul explains how we are made righteous in Christ and live in the Holy Spirit.",
+    "pl": "Paul explains how we are made righteous in Christ and live in the Holy Spirit.",
+    "vi": "Paul explains how we are made righteous in Christ and live in the Holy Spirit.",
+    "tl": "Paul explains how we are made righteous in Christ and live in the Holy Spirit."
   },
   "1-corinthians": {
-    "en": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "ko": "바오로는 일치, 사랑, 거룩한 성체 예배를 가르칩니다.",
-    "es": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "fr": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "pt": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "it": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "de": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "pl": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "vi": "Paul teaches unity, love, and worthy Eucharistic worship.",
-    "tl": "Paul teaches unity, love, and worthy Eucharistic worship."
+    "en": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "ko": "바오로는 일치, 사랑, 합당한 성찬례를 가르칩니다.",
+    "es": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "fr": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "pt": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "it": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "de": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "pl": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "vi": "Paul teaches unity, love, and worthy celebration of the Eucharist.",
+    "tl": "Paul teaches unity, love, and worthy celebration of the Eucharist."
   },
   "2-corinthians": {
     "en": "Paul defends his ministry and God's power in weakness.",
@@ -653,16 +653,16 @@ const BOOK_BLURBS: Partial<
     "tl": "Paul defends his ministry and God's power in weakness."
   },
   "galatians": {
-    "en": "Paul proclaims freedom in Christ against false gospel.",
+    "en": "Paul proclaims freedom in Christ against a distorted gospel.",
     "ko": "바오로는 그리스도 안의 자유를 선포합니다.",
-    "es": "Paul proclaims freedom in Christ against false gospel.",
-    "fr": "Paul proclaims freedom in Christ against false gospel.",
-    "pt": "Paul proclaims freedom in Christ against false gospel.",
-    "it": "Paul proclaims freedom in Christ against false gospel.",
-    "de": "Paul proclaims freedom in Christ against false gospel.",
-    "pl": "Paul proclaims freedom in Christ against false gospel.",
-    "vi": "Paul proclaims freedom in Christ against false gospel.",
-    "tl": "Paul proclaims freedom in Christ against false gospel."
+    "es": "Paul proclaims freedom in Christ against a distorted gospel.",
+    "fr": "Paul proclaims freedom in Christ against a distorted gospel.",
+    "pt": "Paul proclaims freedom in Christ against a distorted gospel.",
+    "it": "Paul proclaims freedom in Christ against a distorted gospel.",
+    "de": "Paul proclaims freedom in Christ against a distorted gospel.",
+    "pl": "Paul proclaims freedom in Christ against a distorted gospel.",
+    "vi": "Paul proclaims freedom in Christ against a distorted gospel.",
+    "tl": "Paul proclaims freedom in Christ against a distorted gospel."
   },
   "ephesians": {
     "en": "Paul describes the Church as Christ's body and calls for unity.",
@@ -689,28 +689,28 @@ const BOOK_BLURBS: Partial<
     "tl": "Paul rejoices in Christ from prison and urges humble love."
   },
   "colossians": {
-    "en": "Christ is supreme; believers are called to holy living.",
-    "ko": "그리스도는 최고이시며 거룩한 삶이 요청됩니다.",
-    "es": "Christ is supreme; believers are called to holy living.",
-    "fr": "Christ is supreme; believers are called to holy living.",
-    "pt": "Christ is supreme; believers are called to holy living.",
-    "it": "Christ is supreme; believers are called to holy living.",
-    "de": "Christ is supreme; believers are called to holy living.",
-    "pl": "Christ is supreme; believers are called to holy living.",
-    "vi": "Christ is supreme; believers are called to holy living.",
-    "tl": "Christ is supreme; believers are called to holy living."
+    "en": "Christ is first in all things; the faithful are called to holy living.",
+    "ko": "그리스도께서는 만물의 으뜸이시며 거룩한 삶이 요청됩니다.",
+    "es": "Christ is first in all things; the faithful are called to holy living.",
+    "fr": "Christ is first in all things; the faithful are called to holy living.",
+    "pt": "Christ is first in all things; the faithful are called to holy living.",
+    "it": "Christ is first in all things; the faithful are called to holy living.",
+    "de": "Christ is first in all things; the faithful are called to holy living.",
+    "pl": "Christ is first in all things; the faithful are called to holy living.",
+    "vi": "Christ is first in all things; the faithful are called to holy living.",
+    "tl": "Christ is first in all things; the faithful are called to holy living."
   },
   "1-thessalonians": {
-    "en": "Paul encourages hope in Christ's return and holy living.",
-    "ko": "주님 재림의 희망과 거룩한 삶을 격려합니다.",
-    "es": "Paul encourages hope in Christ's return and holy living.",
-    "fr": "Paul encourages hope in Christ's return and holy living.",
-    "pt": "Paul encourages hope in Christ's return and holy living.",
-    "it": "Paul encourages hope in Christ's return and holy living.",
-    "de": "Paul encourages hope in Christ's return and holy living.",
-    "pl": "Paul encourages hope in Christ's return and holy living.",
-    "vi": "Paul encourages hope in Christ's return and holy living.",
-    "tl": "Paul encourages hope in Christ's return and holy living."
+    "en": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "ko": "주님께서 다시 오심의 희망과 거룩한 삶을 격려합니다.",
+    "es": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "fr": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "pt": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "it": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "de": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "pl": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "vi": "Paul encourages hope in Christ's Second Coming and holy living.",
+    "tl": "Paul encourages hope in Christ's Second Coming and holy living."
   },
   "2-thessalonians": {
     "en": "Paul corrects confusion about the Lord's coming.",
@@ -737,16 +737,16 @@ const BOOK_BLURBS: Partial<
     "tl": "Paul guides Timothy in leading the Church faithfully."
   },
   "2-timothy": {
-    "en": "Paul charges Timothy to preach the word with courage.",
+    "en": "Paul charges Timothy to proclaim the word with courage.",
     "ko": "바오로는 말씀을 담대히 전하라고 명합니다.",
-    "es": "Paul charges Timothy to preach the word with courage.",
-    "fr": "Paul charges Timothy to preach the word with courage.",
-    "pt": "Paul charges Timothy to preach the word with courage.",
-    "it": "Paul charges Timothy to preach the word with courage.",
-    "de": "Paul charges Timothy to preach the word with courage.",
-    "pl": "Paul charges Timothy to preach the word with courage.",
-    "vi": "Paul charges Timothy to preach the word with courage.",
-    "tl": "Paul charges Timothy to preach the word with courage."
+    "es": "Paul charges Timothy to proclaim the word with courage.",
+    "fr": "Paul charges Timothy to proclaim the word with courage.",
+    "pt": "Paul charges Timothy to proclaim the word with courage.",
+    "it": "Paul charges Timothy to proclaim the word with courage.",
+    "de": "Paul charges Timothy to proclaim the word with courage.",
+    "pl": "Paul charges Timothy to proclaim the word with courage.",
+    "vi": "Paul charges Timothy to proclaim the word with courage.",
+    "tl": "Paul charges Timothy to proclaim the word with courage."
   },
   "titus": {
     "en": "Paul instructs Titus to appoint leaders and teach sound doctrine.",
@@ -774,7 +774,7 @@ const BOOK_BLURBS: Partial<
   },
   "hebrews": {
     "en": "Jesus is the perfect high priest of the new covenant.",
-    "ko": "예수님은 새 언약의 완전한 대제사장이십니다.",
+    "ko": "예수님은 새 계약의 완전한 대사제이십니다.",
     "es": "Jesus is the perfect high priest of the new covenant.",
     "fr": "Jesus is the perfect high priest of the new covenant.",
     "pt": "Jesus is the perfect high priest of the new covenant.",
@@ -786,7 +786,7 @@ const BOOK_BLURBS: Partial<
   },
   "james": {
     "en": "Faith must show itself in works of mercy and self-control.",
-    "ko": "믿음은 자비와 절제의 행동으로 드러나야 합니다.",
+    "ko": "신앙은 자비와 절제의 행동으로 드러나야 합니다.",
     "es": "Faith must show itself in works of mercy and self-control.",
     "fr": "Faith must show itself in works of mercy and self-control.",
     "pt": "Faith must show itself in works of mercy and self-control.",
@@ -809,28 +809,28 @@ const BOOK_BLURBS: Partial<
     "tl": "Peter encourages suffering Christians to hope in Christ."
   },
   "2-peter": {
-    "en": "Peter warns against false teachers and affirms Christ's return.",
+    "en": "Peter warns against false teachers and affirms Christ's Second Coming.",
     "ko": "베드로는 거짓 교사를 경고하고 주님 오심을 확신합니다.",
-    "es": "Peter warns against false teachers and affirms Christ's return.",
-    "fr": "Peter warns against false teachers and affirms Christ's return.",
-    "pt": "Peter warns against false teachers and affirms Christ's return.",
-    "it": "Peter warns against false teachers and affirms Christ's return.",
-    "de": "Peter warns against false teachers and affirms Christ's return.",
-    "pl": "Peter warns against false teachers and affirms Christ's return.",
-    "vi": "Peter warns against false teachers and affirms Christ's return.",
-    "tl": "Peter warns against false teachers and affirms Christ's return."
+    "es": "Peter warns against false teachers and affirms Christ's Second Coming.",
+    "fr": "Peter warns against false teachers and affirms Christ's Second Coming.",
+    "pt": "Peter warns against false teachers and affirms Christ's Second Coming.",
+    "it": "Peter warns against false teachers and affirms Christ's Second Coming.",
+    "de": "Peter warns against false teachers and affirms Christ's Second Coming.",
+    "pl": "Peter warns against false teachers and affirms Christ's Second Coming.",
+    "vi": "Peter warns against false teachers and affirms Christ's Second Coming.",
+    "tl": "Peter warns against false teachers and affirms Christ's Second Coming."
   },
   "1-john": {
-    "en": "John teaches that God is love and calls believers to fellowship.",
+    "en": "John teaches that God is love and calls the faithful to communion.",
     "ko": "요한은 하느님이 사랑이심을 가르칩니다.",
-    "es": "John teaches that God is love and calls believers to fellowship.",
-    "fr": "John teaches that God is love and calls believers to fellowship.",
-    "pt": "John teaches that God is love and calls believers to fellowship.",
-    "it": "John teaches that God is love and calls believers to fellowship.",
-    "de": "John teaches that God is love and calls believers to fellowship.",
-    "pl": "John teaches that God is love and calls believers to fellowship.",
-    "vi": "John teaches that God is love and calls believers to fellowship.",
-    "tl": "John teaches that God is love and calls believers to fellowship."
+    "es": "John teaches that God is love and calls the faithful to communion.",
+    "fr": "John teaches that God is love and calls the faithful to communion.",
+    "pt": "John teaches that God is love and calls the faithful to communion.",
+    "it": "John teaches that God is love and calls the faithful to communion.",
+    "de": "John teaches that God is love and calls the faithful to communion.",
+    "pl": "John teaches that God is love and calls the faithful to communion.",
+    "vi": "John teaches that God is love and calls the faithful to communion.",
+    "tl": "John teaches that God is love and calls the faithful to communion."
   },
   "2-john": {
     "en": "John urges truth and love in the Christian community.",
@@ -857,16 +857,16 @@ const BOOK_BLURBS: Partial<
     "tl": "John praises hospitality and faithful leadership in the Church."
   },
   "jude": {
-    "en": "Jude exhorts believers to contend for the faith once delivered.",
+    "en": "Jude exhorts the faithful to hold fast to the faith once delivered.",
     "ko": "유다는 전해진 신앙을 지키라고 권합니다.",
-    "es": "Jude exhorts believers to contend for the faith once delivered.",
-    "fr": "Jude exhorts believers to contend for the faith once delivered.",
-    "pt": "Jude exhorts believers to contend for the faith once delivered.",
-    "it": "Jude exhorts believers to contend for the faith once delivered.",
-    "de": "Jude exhorts believers to contend for the faith once delivered.",
-    "pl": "Jude exhorts believers to contend for the faith once delivered.",
-    "vi": "Jude exhorts believers to contend for the faith once delivered.",
-    "tl": "Jude exhorts believers to contend for the faith once delivered."
+    "es": "Jude exhorts the faithful to hold fast to the faith once delivered.",
+    "fr": "Jude exhorts the faithful to hold fast to the faith once delivered.",
+    "pt": "Jude exhorts the faithful to hold fast to the faith once delivered.",
+    "it": "Jude exhorts the faithful to hold fast to the faith once delivered.",
+    "de": "Jude exhorts the faithful to hold fast to the faith once delivered.",
+    "pl": "Jude exhorts the faithful to hold fast to the faith once delivered.",
+    "vi": "Jude exhorts the faithful to hold fast to the faith once delivered.",
+    "tl": "Jude exhorts the faithful to hold fast to the faith once delivered."
   },
   "apocalypse": {
     "en": "John sees Christ's victory and the wedding feast of the Lamb.",

@@ -13,10 +13,10 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "마르코가 전한 복음이 시작됩니다. 세례 요한이 광야에서 길을 준비하고, 예수님께서 세례를 받으시고 시험을 이기신 뒤, 제자들을 부르시며 갈릴리에서 치유 사역을 시작하십니다.",
+        "마르코가 전한 복음이 시작됩니다. 세례자 요한이 광야에서 길을 준비하고, 예수님께서 세례를 받으시고 시험을 이기신 뒤, 제자들을 부르시며 갈릴래아에서 치유를 시작하십니다.",
       words: [
-        { term: "세례", gloss: "하나님께 돌아섬을 표시하는 거룩한 의식입니다." },
-        { term: "갈릴리", gloss: "예수님께서 많이 가르치신 이스라엘 북부 지역입니다." },
+        { term: "세례", gloss: "하느님께 돌아섬을 표시하는 거룩한 예식입니다." },
+        { term: "갈릴래아", gloss: "예수님께서 많이 가르치신 이스라엘 북부 지역입니다." },
       ],
     },
   },
@@ -41,7 +41,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
   3: {
     en: {
       summary:
-        "Jesus heals on the Sabbath, chooses the Twelve apostles, and warns about blaming the Holy Spirit for his good works.",
+        "Jesus heals on the Sabbath, chooses the Twelve, and warns that calling his good works the devil's power blasphemes the Holy Spirit.",
       words: [
         { term: "Sabbath", gloss: "Saturday, God's holy day of rest for the Jewish people." },
         { term: "apostles", gloss: "The twelve men Jesus sent to spread the Gospel." },
@@ -49,7 +49,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "예수님께서 안식일에 병자를 고치시고, 열두 사도를 세우시며, 선한 일을 성령 탓으로 돌리지 말라고 경고하십니다.",
+        "예수님께서 안식일에 병자를 고치시고, 열두 사도를 세우시며, 당신의 일을 악마의 힘으로 돌리는 것은 성령을 모독하는 것이라고 경고하십니다.",
       words: [
         { term: "안식일", gloss: "유대인에게 거룩한 쉼의 날인 토요일입니다." },
         { term: "사도", gloss: "복음을 전하도록 보내신 열두 제자입니다." },
@@ -69,7 +69,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
       summary:
         "예수님께서 씨와 땅에 대한 비유로 가르치시고, 바다의 폭풍을 잠잠히 하시며 자연에 대한 권능을 보여 주십니다.",
       words: [
-        { term: "비유", gloss: "하나님에 대한 교훈을 담은 짧은 이야기입니다." },
+        { term: "비유", gloss: "하느님에 대한 교훈을 담은 짧은 이야기입니다." },
         { term: "제자", gloss: "예수님을 따르며 매일 배운 사람들입니다." },
       ],
     },
@@ -85,10 +85,10 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "예수님께서 귀신 들린 사람을 해방시키시고, 옷자락을 만진 여인을 고치시며, 야이로의 딸을 살리십니다.",
+        "예수님께서 악령 들린 사람을 해방시키시고, 옷자락을 만진 여인을 고치시며, 야이로의 딸을 살리십니다.",
       words: [
-        { term: "귀신", gloss: "하나님께 반대하는 악한 영입니다." },
-        { term: "믿음", gloss: "예수님을 신뢰하고 의지하는 것입니다." },
+        { term: "악령", gloss: "하느님께 반대하는 악한 영입니다." },
+        { term: "신앙", gloss: "예수님을 신뢰하고 의지하는 것입니다." },
       ],
     },
   },
@@ -106,7 +106,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
         "예수님께서 나자렛에서 배척당하시고, 열두 제자를 보내시며, 오천 명을 먹이시고 물 위를 걸으십니다.",
       words: [
         { term: "나자렛", gloss: "예수님이 자라신 고향 동네입니다." },
-        { term: "기적", gloss: "하나님의 능력을 보여 주는 큰 표징입니다." },
+        { term: "기적", gloss: "하느님의 권능을 보여 주는 큰 표징입니다." },
       ],
     },
   },
@@ -124,14 +124,14 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
         "예수님께서 참된 정결은 마음에서 온다고 가르치시고, 이방 여인의 딸과 귀먹은 사람을 고치십니다.",
       words: [
         { term: "이방인", gloss: "유대인이 아닌 사람을 뜻합니다." },
-        { term: "전통", gloss: "내려온 관습; 예수님은 사람의 규칙과 하나님의 계명을 대조하십니다." },
+        { term: "전통", gloss: "내려온 관습; 예수님은 사람의 규칙과 하느님의 계명을 대조하십니다." },
       ],
     },
   },
   8: {
     en: {
       summary:
-        "Jesus feeds four thousand, warns against pride, heals a blind man, and asks Peter who people say he is.",
+        "Jesus feeds four thousand, heals a blind man, and Peter confesses him as the Christ.",
       words: [
         { term: "Messiah", gloss: "God's anointed Savior—the Christ." },
         { term: "cross", gloss: "Jesus foretells he will suffer and die, then rise." },
@@ -139,9 +139,9 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "예수님께서 사천 명을 먹이시고 교만을 경고하시며, 맹인을 고치시고 베드로에게 자신이 누구인지 물으십니다.",
+        "예수님께서 사천 명을 먹이시고 맹인을 고치시며, 베드로가 예수님을 그리스도로 고백합니다.",
       words: [
-        { term: "메시아", gloss: "하나님이 기름 부으신 구원자, 그리스도입니다." },
+        { term: "메시아", gloss: "하느님께서 기름 부으신 구원자, 그리스도입니다." },
         { term: "십자가", gloss: "예수님께서 고난과 죽음, 그리고 부활을 예고하십니다." },
       ],
     },
@@ -157,7 +157,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "예수님께서 영광 가운데 변모하시고, 귀신 들린 아이를 고치시며, 가장 큰 사람은 섬겨야 한다고 가르치십니다.",
+        "예수님께서 영광 가운데 변모하시고, 악령 들린 아이를 고치시며, 가장 큰 사람은 섬겨야 한다고 가르치십니다.",
       words: [
         { term: "변모", gloss: "산에서 예수님의 얼굴과 옷이 하늘 영광으로 빛난 사건입니다." },
         { term: "섬김", gloss: "예수님은 참된 위대함은 남을 돕는 것이라고 하십니다." },
@@ -177,7 +177,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
       summary:
         "예수님께서 결혼에 대해 가르치시고, 어린이를 품으시며, 부자 청년을 도전하시고, 다시 고난을 예고하십니다.",
       words: [
-        { term: "하나님 나라", gloss: "우리 마음과 세상에서 하나님의 사랑의 통치입니다." },
+        { term: "하느님 나라", gloss: "우리 마음과 세상에서 하느님의 사랑의 통치입니다." },
         { term: "수난", gloss: "예루살렘에서 겪으실 예수님의 고통과 죽음입니다." },
       ],
     },
@@ -195,8 +195,8 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
       summary:
         "예수님께서 당나귀를 타고 예루살렘에 입성하시고, 성전을 정화하시며, 기도와 용서에 대해 가르치십니다.",
       words: [
-        { term: "호산나", gloss: "'주님, 구원하소서!'라는 찬양의 외침입니다." },
-        { term: "성전", gloss: "예루살렘에서 하나님께 예배드리던 거룩한 곳입니다." },
+        { term: "호산나", gloss: "'주님, 구원하소서!'라는 찬미의 외침입니다." },
+        { term: "성전", gloss: "예루살렘에서 하느님께 예배드리던 거룩한 곳입니다." },
       ],
     },
   },
@@ -213,7 +213,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
       summary:
         "종교 지도자들이 예수님을 캐묻고, 예수님께서 비유로 가르치시며 가장 큰 계명은 사랑임을 말씀하십니다.",
       words: [
-        { term: "포도원", gloss: "포도 농장; 비유에서 종종 하나님의 백성을 뜻합니다." },
+        { term: "포도원", gloss: "포도 농장; 비유에서 종종 하느님의 백성을 뜻합니다." },
         { term: "과부의 헌금", gloss: "가난한 과부의 작은 헌물이 큰 신뢰를 보여 줍니다." },
       ],
     },
@@ -224,15 +224,15 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
         "Jesus foretells troubles, the destruction of the Temple, and calls disciples to stay watchful and faithful.",
       words: [
         { term: "watch", gloss: "Stay awake spiritually—ready to follow Jesus." },
-        { term: "end times", gloss: "Jesus warns of trials before God fully renews the world." },
+        { term: "last days", gloss: "Jesus warns of trials before God fully renews the world." },
       ],
     },
     ko: {
       summary:
-        "예수님께서 환난과 성전 파괴를 예고하시며, 제자들에게 깨어 믿음을 지키라고 말씀하십니다.",
+        "예수님께서 환난과 성전 파괴를 예고하시며, 제자들에게 깨어 신앙을 지키라고 말씀하십니다.",
       words: [
         { term: "깨어 있음", gloss: "영적으로 잠들지 않고 예수님을 따를 준비를 하는 것입니다." },
-        { term: "말세", gloss: "하나님께서 세상을 새롭게 하시기 전의 시련을 가리킵니다." },
+        { term: "종말", gloss: "하느님께서 세상을 새롭게 하시기 전의 시련을 가리킵니다." },
       ],
     },
   },
@@ -247,7 +247,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "한 여인이 예수님께 향유를 부으시고, 최후의 만찬에서 성체성사를 제정하시며, 겟세마니에서 기도하신 뒤 체포되십니다.",
+        "한 여인이 예수님께 향유를 붓고, 예수님께서는 최후의 만찬에서 성체성사를 제정하시며, 겟세마니에서 기도하신 뒤 체포되십니다.",
       words: [
         { term: "성체성사", gloss: "미사에서 예수님의 몸과 피를 나누는 거룩한 성사입니다." },
         { term: "겟세마니", gloss: "체포되시기 전 예수님께서 기도하신 동산입니다." },
@@ -265,10 +265,10 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "예수님께서 정죄당하시고 십자가에 못 박히신 뒤 묻히십니다. 백부장은 '이분은 참으로 하느님의 아들'이라 고백합니다.",
+        "예수님께서 사형 선고를 받으시고 십자가에 못 박히신 뒤 묻히십니다. 백인대장은 '이분은 참으로 하느님의 아들'이라 고백합니다.",
       words: [
         { term: "십자가형", gloss: "십자가에서 죽으심—우리를 구원하신 방법입니다." },
-        { term: "백부장", gloss: "예수님의 임종을 본 로마 군 지휘관입니다." },
+        { term: "백인대장", gloss: "예수님의 임종을 본 로마 군 지휘관입니다." },
       ],
     },
   },

@@ -7,6 +7,7 @@ import {
 } from "@/lib/bible/chapter-notes/category-blurbs";
 import type { ChapterNote } from "@/lib/bible/chapter-notes/types";
 import { getBookSpecificBlurb } from "@/lib/bible/chapter-notes/book-blurbs";
+import { getChapterRangeBlurb } from "@/lib/bible/chapter-notes/chapter-range-blurbs";
 import type { PrayerLanguageCode } from "@/lib/prayers/prayer-languages";
 import { DEFAULT_PRAYER_LANGUAGE } from "@/lib/prayers/prayer-languages";
 
@@ -21,16 +22,25 @@ export function buildTemplateChapterNote(
 
   const bookName = getCatholicBookName(bookSlug, locale, apiBookName);
   const category = BOOK_NOTE_CATEGORY[bookSlug];
-  const blurb =
+  const bookOrCategoryBlurb =
     getBookSpecificBlurb(bookSlug, locale) ??
     getBookSpecificBlurb(bookSlug, DEFAULT_PRAYER_LANGUAGE) ??
     (category ? CATEGORY_NOTE_BLURBS[category][locale] : "") ??
     CATEGORY_NOTE_BLURBS.historical[locale];
+  const rangeBlurb = getChapterRangeBlurb(bookSlug, chapter, locale);
+  const blurb = rangeBlurb ?? bookLevelStory(locale, bookOrCategoryBlurb);
 
   return {
     summary: chapterNoteSummary(locale, bookName, chapter, meta.totalChapters, blurb),
     words: getBookGlossary(bookSlug, locale),
   };
+}
+
+/** Book-wide plot must not read as if it happened in this chapter. */
+function bookLevelStory(locale: PrayerLanguageCode, blurb: string): string {
+  if (locale === "en") return `This book: ${blurb}`;
+  if (locale === "ko") return `이 책의 이야기: ${blurb}`;
+  return blurb;
 }
 
 /** Optional per-book glossary terms (localized). */
@@ -52,8 +62,8 @@ const BOOK_GLOSSARY: Partial<
       { term: "creation", gloss: "God made the world good at the beginning." },
     ],
     ko: [
-      { term: "언약", gloss: "하나님과 백성 사이의 거룩한 약속입니다." },
-      { term: "창조", gloss: "하나님께서 처음에 세상을 선하게 만드셨습니다." },
+      { term: "계약", gloss: "하느님과 백성 사이의 거룩한 약속입니다." },
+      { term: "창조", gloss: "하느님께서 처음에 세상을 선하게 만드셨습니다." },
     ],
     es: [
       { term: "alianza", gloss: "La promesa sagrada de Dios con su pueblo." },
