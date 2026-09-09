@@ -50,7 +50,7 @@ for (const book of BIBLE_BOOK_CATALOG) {
 for (let chapter = 1; chapter <= 16; chapter += 1) {
   const note = getChapterNote("mark", chapter, "ko", "Mark");
   assert(note !== null, `mark ch${chapter} ko note`);
-  const text = koreanNoteText(note);
+  const text = koreanNoteText(note!);
   for (const term of PROTESTANT_KO_TERMS) {
     assert(!text.includes(term), `mark ch${chapter} ko still has Protestant term: ${term}`);
   }
