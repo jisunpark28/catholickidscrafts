@@ -41,7 +41,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
   3: {
     en: {
       summary:
-        "Jesus heals on the Sabbath, chooses the Twelve apostles, and warns about blaming the Holy Spirit for his good works.",
+        "Jesus heals on the Sabbath, chooses the Twelve, and warns that calling his good works the devil's power blasphemes the Holy Spirit.",
       words: [
         { term: "Sabbath", gloss: "Saturday, God's holy day of rest for the Jewish people." },
         { term: "apostles", gloss: "The twelve men Jesus sent to spread the Gospel." },
@@ -49,7 +49,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "예수님께서 안식일에 병자를 고치시고, 열두 사도를 세우시며, 선한 일을 성령 탓으로 돌리지 말라고 경고하십니다.",
+        "예수님께서 안식일에 병자를 고치시고, 열두 사도를 세우시며, 당신의 일을 악마의 힘으로 돌리는 것은 성령을 모독하는 것이라고 경고하십니다.",
       words: [
         { term: "안식일", gloss: "유대인에게 거룩한 쉼의 날인 토요일입니다." },
         { term: "사도", gloss: "복음을 전하도록 보내신 열두 제자입니다." },
@@ -131,7 +131,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
   8: {
     en: {
       summary:
-        "Jesus feeds four thousand, warns against pride, heals a blind man, and asks Peter who people say he is.",
+        "Jesus feeds four thousand, heals a blind man, and Peter confesses him as the Christ.",
       words: [
         { term: "Messiah", gloss: "God's anointed Savior—the Christ." },
         { term: "cross", gloss: "Jesus foretells he will suffer and die, then rise." },
@@ -139,7 +139,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "예수님께서 사천 명을 먹이시고 교만을 경고하시며, 맹인을 고치시고 베드로에게 자신이 누구인지 물으십니다.",
+        "예수님께서 사천 명을 먹이시고 맹인을 고치시며, 베드로가 예수님을 그리스도로 고백합니다.",
       words: [
         { term: "메시아", gloss: "하느님께서 기름 부으신 구원자, 그리스도입니다." },
         { term: "십자가", gloss: "예수님께서 고난과 죽음, 그리고 부활을 예고하십니다." },
@@ -247,7 +247,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
     },
     ko: {
       summary:
-        "한 여인이 예수님께 향유를 부으시고, 최후의 만찬에서 성체성사를 제정하시며, 겟세마니에서 기도하신 뒤 체포되십니다.",
+        "한 여인이 예수님께 향유를 붓고, 예수님께서는 최후의 만찬에서 성체성사를 제정하시며, 겟세마니에서 기도하신 뒤 체포되십니다.",
       words: [
         { term: "성체성사", gloss: "미사에서 예수님의 몸과 피를 나누는 거룩한 성사입니다." },
         { term: "겟세마니", gloss: "체포되시기 전 예수님께서 기도하신 동산입니다." },

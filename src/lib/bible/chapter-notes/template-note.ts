@@ -7,6 +7,7 @@ import {
 } from "@/lib/bible/chapter-notes/category-blurbs";
 import type { ChapterNote } from "@/lib/bible/chapter-notes/types";
 import { getBookSpecificBlurb } from "@/lib/bible/chapter-notes/book-blurbs";
+import { getChapterRangeBlurb } from "@/lib/bible/chapter-notes/chapter-range-blurbs";
 import type { PrayerLanguageCode } from "@/lib/prayers/prayer-languages";
 import { DEFAULT_PRAYER_LANGUAGE } from "@/lib/prayers/prayer-languages";
 
@@ -21,16 +22,25 @@ export function buildTemplateChapterNote(
 
   const bookName = getCatholicBookName(bookSlug, locale, apiBookName);
   const category = BOOK_NOTE_CATEGORY[bookSlug];
-  const blurb =
+  const bookOrCategoryBlurb =
     getBookSpecificBlurb(bookSlug, locale) ??
     getBookSpecificBlurb(bookSlug, DEFAULT_PRAYER_LANGUAGE) ??
     (category ? CATEGORY_NOTE_BLURBS[category][locale] : "") ??
     CATEGORY_NOTE_BLURBS.historical[locale];
+  const rangeBlurb = getChapterRangeBlurb(bookSlug, chapter, locale);
+  const blurb = rangeBlurb ?? bookLevelStory(locale, bookOrCategoryBlurb);
 
   return {
     summary: chapterNoteSummary(locale, bookName, chapter, meta.totalChapters, blurb),
     words: getBookGlossary(bookSlug, locale),
   };
+}
+
+/** Book-wide plot must not read as if it happened in this chapter. */
+function bookLevelStory(locale: PrayerLanguageCode, blurb: string): string {
+  if (locale === "en") return `This book: ${blurb}`;
+  if (locale === "ko") return `이 책의 이야기: ${blurb}`;
+  return blurb;
 }
 
 /** Optional per-book glossary terms (localized). */

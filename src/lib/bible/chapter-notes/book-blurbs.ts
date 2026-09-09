@@ -89,16 +89,16 @@ const BOOK_BLURBS: Partial<
     "tl": "Judges deliver Israel when the people turn back to God."
   },
   "ruth": {
-    "en": "Ruth's faithful love leads her into the family of David.",
-    "ko": "룻의 충실한 사랑이 다윗 가문으로 이어집니다.",
-    "es": "Ruth's faithful love leads her into the family of David.",
-    "fr": "Ruth's faithful love leads her into the family of David.",
-    "pt": "Ruth's faithful love leads her into the family of David.",
-    "it": "Ruth's faithful love leads her into the family of David.",
-    "de": "Ruth's faithful love leads her into the family of David.",
-    "pl": "Ruth's faithful love leads her into the family of David.",
-    "vi": "Ruth's faithful love leads her into the family of David.",
-    "tl": "Ruth's faithful love leads her into the family of David."
+    "en": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "ko": "룻은 나오미를 떠나지 않고, 나중에 다윗의 조상이 됩니다.",
+    "es": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "fr": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "pt": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "it": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "de": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "pl": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "vi": "Ruth stays loyal to Naomi and later becomes an ancestor of David.",
+    "tl": "Ruth stays loyal to Naomi and later becomes an ancestor of David."
   },
   "1-kings-samuel": {
     "en": "Samuel anoints Saul and David as kings of Israel.",
