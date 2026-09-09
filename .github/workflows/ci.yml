@@ -46,3 +46,6 @@ jobs:
           DIRECT_URL: postgresql://ci:ci@127.0.0.1:5432/ci?connect_timeout=2
           AUTH_SECRET: ci-placeholder-auth-secret-32chars-minimum
           NEXT_PUBLIC_SITE_URL: https://www.catholickidscrafts.com
+
+      - name: Client bundle must not include romcal
+        run: pnpm exec tsx scripts/test-client-no-romcal.ts
