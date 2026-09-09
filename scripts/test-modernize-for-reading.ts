@@ -3,6 +3,7 @@ import {
   catholicGospelLabel,
   getCatholicBookName,
 } from "../src/lib/bible/catholic-book-names";
+import { catholicEnglishCitation } from "../src/lib/bible/latinprayer";
 
 function assert(condition: boolean, message: string) {
   if (!condition) throw new Error(message);
@@ -52,6 +53,8 @@ assert(getCatholicBookName("ecclesiasticus", "en") === "Sirach", "NAB Sirach");
 assert(getCatholicBookName("canticle-of-canticles", "en") === "Song of Songs", "NAB Song of Songs");
 assert(getCatholicBookName("apocalypse", "en") === "Revelation", "NAB Revelation, not Apocalypse");
 assert(getCatholicBookName("isaias", "en") === "Isaiah", "NAB Isaiah");
+assert(catholicEnglishCitation("josue", "Josue 1 (Douay-Rheims)", "Josue") === "Joshua 1 (Douay-Rheims)", "citation Josue → Joshua");
+assert(catholicEnglishCitation("apocalypse", "Apocalypse 1 (Douay-Rheims)", "Apocalypse") === "Revelation 1 (Douay-Rheims)", "citation Apocalypse → Revelation");
 assert(catholicGospelLabel("mark", "ko") === "마르코가 전한 복음", "Gospel label KO");
 assert((catholicGospelLabel("mark", "es") ?? "").includes("Marcos"), "Gospel label ES");
 

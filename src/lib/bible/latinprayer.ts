@@ -7,6 +7,16 @@ function withCatholicEnglishName<T extends { slug: string; name: string }>(book:
   return { ...book, name: getCatholicBookName(book.slug, "en", book.name) };
 }
 
+/** Keep Douay-Rheims attribution, but use NAB book names in the citation line. */
+export function catholicEnglishCitation(slug: string, citation: string, apiName: string): string {
+  const catholic = getCatholicBookName(slug, "en", apiName);
+  if (!apiName || catholic === apiName) return citation;
+  if (citation.startsWith(`${apiName} `) || citation === apiName) {
+    return catholic + citation.slice(apiName.length);
+  }
+  return citation;
+}
+
 export type BibleBookMeta = {
   order: number;
   name: string;
@@ -65,7 +75,7 @@ export async function fetchBibleChapter(
     };
   };
   return {
-    citation: data.citation,
+    citation: catholicEnglishCitation(bookSlug, data.citation, data._meta.book.name),
     verses: data.verses,
     meta: {
       book: withCatholicEnglishName(data._meta.book),
