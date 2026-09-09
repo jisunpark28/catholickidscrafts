@@ -2,6 +2,7 @@
 
 import { HUB_PILL_STYLE } from "@/lib/hub-pill-style";
 import { normalizeHubHref } from "@/lib/hub-href";
+import Link from "next/link";
 
 type BaseProps = {
   children: React.ReactNode;
@@ -78,6 +79,16 @@ export function HomeHubButton({
 }
 
 /** Header account control — not hub pill width. */
+const menuButtonClass = (
+  authLabel: boolean,
+  className: string,
+) =>
+  `inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-3 py-2 min-h-[2.5rem] shadow-sm transition hover:border-[#d9cfc3] hover:bg-white sm:min-h-[3rem] sm:px-5 sm:py-3 ${
+    authLabel
+      ? "text-sm font-semibold normal-case tracking-normal text-[var(--color-ink)]"
+      : "text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] sm:text-sm"
+  } ${className}`;
+
 export function HomeHubMenuButton({
   children,
   onClick,
@@ -100,14 +111,34 @@ export function HomeHubMenuButton({
       aria-expanded={ariaExpanded}
       aria-controls={ariaControls}
       suppressHydrationWarning
-      className={`inline-flex shrink-0 items-center justify-center rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-3 min-h-[2.75rem] shadow-sm transition hover:border-[#d9cfc3] hover:bg-white sm:min-h-[3rem] sm:px-6 ${
-        authLabel
-          ? "text-sm font-semibold normal-case tracking-normal text-[var(--color-ink)]"
-          : "text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] sm:text-sm"
-      } ${className}`}
+      className={menuButtonClass(authLabel, className)}
     >
       {children}
     </button>
+  );
+}
+
+export function HomeHubMenuLink({
+  href,
+  children,
+  authLabel = false,
+  className = "",
+  ariaLabel,
+}: {
+  href: string;
+  children: React.ReactNode;
+  authLabel?: boolean;
+  className?: string;
+  ariaLabel?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      aria-label={ariaLabel}
+      className={`no-underline ${menuButtonClass(authLabel, className)}`}
+    >
+      {children}
+    </Link>
   );
 }
 

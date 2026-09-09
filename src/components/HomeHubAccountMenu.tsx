@@ -1,6 +1,6 @@
 "use client";
 
-import { HomeHubMenuButton } from "@/components/HomeHubButton";
+import { HomeHubMenuButton, HomeHubMenuLink } from "@/components/HomeHubButton";
 import {
   headerButtonLabel,
   isHeaderSignedIn,
@@ -47,11 +47,11 @@ function MenuButton({ children, onClick }: MenuButtonProps) {
 }
 
 type Props = {
-  siteNav: { href: string; label: string }[];
   initialSession: HeaderSessionResponse;
+  signInLabel: string;
 };
 
-export function HomeHubAccountMenu({ siteNav, initialSession }: Props) {
+export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
   const pathname = usePathname() ?? "";
   const menuId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -112,14 +112,26 @@ export function HomeHubAccountMenu({ siteNav, initialSession }: Props) {
     window.location.reload();
   }
 
+  if (!signedIn) {
+    return (
+      <HomeHubMenuLink
+        href="/account/login"
+        authLabel
+        ariaLabel="Family account sign in"
+      >
+        {signInLabel}
+      </HomeHubMenuLink>
+    );
+  }
+
   return (
     <div ref={rootRef} className="relative flex justify-end">
       <HomeHubMenuButton
         onClick={() => setOpen((v) => !v)}
         ariaExpanded={open}
+        ariaControls={menuId}
         authLabel
-        className={signedIn ? "max-w-[10.5rem] truncate sm:max-w-[12rem]" : undefined}
-        aria-controls={menuId}
+        className="max-w-[10.5rem] truncate sm:max-w-[12rem]"
       >
         {label}
       </HomeHubMenuButton>
@@ -127,7 +139,7 @@ export function HomeHubAccountMenu({ siteNav, initialSession }: Props) {
       {open && (
         <nav
           id={menuId}
-          aria-label="Account and site menu"
+          aria-label="Account menu"
           className="absolute right-0 top-[calc(100%+0.5rem)] z-[60] min-w-[12rem] max-w-[18rem] rounded-2xl border border-[#e8e0d6] bg-white/95 py-2 pl-4 pr-3 shadow-lg backdrop-blur-sm"
         >
           <div className="text-right">
@@ -176,41 +188,6 @@ export function HomeHubAccountMenu({ siteNav, initialSession }: Props) {
                   </li>
                 </>
               )}
-
-              {!signedIn && (
-                <>
-                  <li className="w-full">
-                    <MenuLink href="/account/login" onNavigate={close}>
-                      Family sign in
-                    </MenuLink>
-                  </li>
-                  <li className="w-full">
-                    <MenuLink href="/account/signup" onNavigate={close}>
-                      Create family account
-                    </MenuLink>
-                  </li>
-                  <li className="w-full">
-                    <MenuLink href="/reader/login" onNavigate={close}>
-                      Reader sign in
-                    </MenuLink>
-                  </li>
-                </>
-              )}
-            </ul>
-
-            <div className="my-2 border-t border-[#e8e0d6]" />
-
-            <p className="px-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted)]">
-              Browse
-            </p>
-            <ul className="flex flex-col items-end">
-              {siteNav.map((item) => (
-                <li key={item.href} className="w-full">
-                  <MenuLink href={item.href} onNavigate={close}>
-                    {item.label}
-                  </MenuLink>
-                </li>
-              ))}
             </ul>
           </div>
         </nav>
