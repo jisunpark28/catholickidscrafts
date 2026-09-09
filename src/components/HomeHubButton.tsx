@@ -31,6 +31,7 @@ type ButtonProps = BaseProps & {
   type?: "button";
   onClick?: () => void;
   "aria-expanded"?: boolean;
+  "aria-controls"?: string;
 };
 
 /** Unified home hub pill — same size as Daily Mass on every page (header excluded). */
@@ -59,12 +60,14 @@ export function HomeHubButton({
   className = "",
   onClick,
   "aria-expanded": ariaExpanded,
+  "aria-controls": ariaControls,
 }: ButtonProps) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-expanded={ariaExpanded}
+      aria-controls={ariaControls}
       suppressHydrationWarning
       style={HUB_PILL_STYLE}
       className={classes(variant, className)}

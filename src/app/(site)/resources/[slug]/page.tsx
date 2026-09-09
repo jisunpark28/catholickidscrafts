@@ -10,6 +10,7 @@ import { TptCta } from "@/components/TptCta";
 import { resolveAssetUrl } from "@/lib/asset-url";
 import { getLiturgicalPeriod, getResourceBySlug } from "@/lib/content";
 import { listApprovedGalleryForResourceSlug } from "@/lib/craft-gallery";
+import { resourceDownloadButtonLabel } from "@/lib/resource-download-label";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
@@ -76,15 +77,12 @@ export default async function ResourcePage({ params }: Props) {
       {post.tptUrl && <TptCta tptUrl={post.tptUrl} isFreeSample={post.isFreeSample} />}
 
       {post.downloadUrl?.trim() ? (
-        <div className="mt-6 flex items-center gap-3">
+        <div className="mt-6">
           <ResourceDownloadButton
             slug={slug}
             href={post.downloadUrl.trim()}
-            label={post.downloadLabel?.trim() || `Download ${post.title}`}
+            label={resourceDownloadButtonLabel(post)}
           />
-          <span className="text-sm font-semibold text-[var(--color-ink)]">
-            {post.downloadLabel?.trim() || "Download PDF"}
-          </span>
         </div>
       ) : null}
 
@@ -95,17 +93,15 @@ export default async function ResourcePage({ params }: Props) {
         className="mt-10 border border-[var(--color-border)] bg-white px-6 py-8 sm:px-10"
       />
 
-      <section className="mt-14 border-t border-[var(--color-border)] pt-10">
-        <h2 className="text-xl font-bold text-[var(--color-ink)]">Family gallery</h2>
-        <p className="mt-1 text-sm text-[var(--color-muted)]">
-          See what other families made—and share yours after you finish this craft.
-        </p>
-
-        <div className="mt-6 max-w-xl">
-          <CraftGallerySubmitForm resourceSlug={slug} resourceTitle={post.title} />
-        </div>
-
-        {galleryItems.length > 0 ? (
+      {galleryItems.length > 0 ? (
+        <section className="mt-14 border-t border-[var(--color-border)] pt-10">
+          <h2 className="text-xl font-bold text-[var(--color-ink)]">Family gallery</h2>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">
+            See what other families made—and share yours after you finish this craft.
+          </p>
+          <div className="mt-6 max-w-xl">
+            <CraftGallerySubmitForm resourceSlug={slug} resourceTitle={post.title} />
+          </div>
           <div className="mt-10">
             <CraftGalleryGrid items={galleryItems} />
             <p className="mt-6 text-center text-sm">
@@ -114,8 +110,8 @@ export default async function ResourcePage({ params }: Props) {
               </Link>
             </p>
           </div>
-        ) : null}
-      </section>
+        </section>
+      ) : null}
     </PageShell>
   );
 }

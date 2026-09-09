@@ -16,11 +16,11 @@ export function ResourceDownloadButton({ slug, href, label }: Props) {
       download
       target="_blank"
       rel="noopener noreferrer"
-      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
-      aria-label={label}
+      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)]/10 px-4 py-2 text-sm font-semibold text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
       onClick={() => recordResourceView(slug)}
     >
-      <DownloadIcon />
+      <DownloadIcon className="h-4 w-4" />
+      {label}
     </a>
   );
 }

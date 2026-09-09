@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ResourceDownloadButton } from "@/components/ResourceDownloadButton";
+import { resourceDownloadButtonLabel } from "@/lib/resource-download-label";
 import { resolveAssetUrl } from "@/lib/asset-url";
 import type { ResourcePost } from "@/lib/content";
 import Link from "next/link";
@@ -54,36 +55,34 @@ function FloatingResourceCard({ post }: { post: ResourcePost }) {
         </div>
       </Link>
 
-      <div className="mt-4 flex items-start justify-between gap-3 px-1">
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
-            {post.grade} · {post.topic}
+      <div className="mt-4 px-1">
+        <p className="text-xs font-bold uppercase tracking-wide text-[var(--color-muted)]">
+          {post.grade} · {post.topic}
+        </p>
+        <h3 className="mt-1 line-clamp-2 text-lg font-semibold text-[var(--color-ink)]">
+          <Link href={detailHref} className="hover:text-[var(--color-accent)]">
+            {post.title}
+          </Link>
+        </h3>
+        {post.tptUrl && post.isFreeSample ? (
+          <p className="mt-1 text-xs font-semibold text-[var(--color-accent)]">
+            Free preview · Full pack on TPT
           </p>
-          <h3 className="mt-1 line-clamp-2 text-lg font-semibold text-[var(--color-ink)]">
-            <Link href={detailHref} className="hover:text-[var(--color-accent)]">
-              {post.title}
-            </Link>
-          </h3>
-          {post.tptUrl && post.isFreeSample ? (
-            <p className="mt-1 text-xs font-semibold text-[var(--color-accent)]">
-              Free preview · Full pack on TPT
-            </p>
-          ) : null}
-        </div>
-
+        ) : null}
         {downloadHref ? (
-          <ResourceDownloadButton
-            slug={post.slug}
-            href={downloadHref}
-            label={post.downloadLabel?.trim() || `Download ${post.title}`}
-          />
+          <div className="mt-3">
+            <ResourceDownloadButton
+              slug={post.slug}
+              href={downloadHref}
+              label={resourceDownloadButtonLabel(post)}
+            />
+          </div>
         ) : (
           <Link
             href={detailHref}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface)] text-sm font-bold text-[var(--color-link)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
-            aria-label={`Open ${post.title}`}
+            className="mt-3 inline-flex text-sm font-semibold text-[var(--color-link)] hover:underline"
           >
-            →
+            Open resource
           </Link>
         )}
       </div>

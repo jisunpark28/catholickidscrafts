@@ -37,11 +37,31 @@ export default async function HomePage() {
       todaySummary.feast,
     );
 
-  const dailyMassLabel = copyText(copy, "home.daily_mass.label", "Daily Mass");
-
   return (
     <HomeLearnHub
-      dailyMassLabel={dailyMassLabel}
+      copy={{
+        heroTitle: copyText(
+          copy,
+          "home.hub.title",
+          "Catholic crafts, prayers, and games for kids",
+        ),
+        heroSubtitle: copyText(
+          copy,
+          "home.hub.subtitle",
+          "Free liturgical activities for catechists and parents.",
+        ),
+        ctaMass: copyText(copy, "home.hub.cta_mass", "Daily Mass"),
+        ctaResources: copyText(copy, "home.hub.cta_resources", "Kids Resources"),
+        dailyMassLabel: copyText(copy, "home.daily_mass.calendar_label", "Today's Mass calendar"),
+        dailyMassHint: copyText(
+          copy,
+          "home.daily_mass.hint",
+          "Church calendar and reading links — not a menu of Bible, Play, or Catechesis.",
+        ),
+        dailyMassShow: copyText(copy, "home.daily_mass.show", "Show"),
+        dailyMassHide: copyText(copy, "home.daily_mass.hide", "Hide"),
+        exploreHeading: copyText(copy, "home.explore.heading", "Explore"),
+      }}
       calendar={calendar}
       selectedDate={dateKey}
       todayDate={dateKey}
