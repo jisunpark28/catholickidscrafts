@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hangman game | Catholic Kids Crafts</title>
-    <link rel="stylesheet" href="hangman.css?v=4">
+    <link rel="stylesheet" href="hangman.css?v=5">
 </head>
 <body>
     <main class="container">
         <div class="game-body">
         <header>
-            <p style="color:#555;font-size:0.95rem;">Guess the word before the flower loses all its petals.</p>
+            <p>Guess the word before the flower loses all its petals.</p>
         </header>
 
         <div class="hangman-visual-wrap">
@@ -27,7 +27,7 @@
         </section>
         </div>
 
-        <p id="hint-display" style="font-weight: bold; color: #555; margin-bottom: 10px;"></p>
+        <p id="hint-display"></p>
         <div id="word-display">_ _ _ _ _</div>
 
         <section class="info">
@@ -48,30 +48,6 @@
 
     <script src="catholic-words.js"></script>
     <script src="site-copy.js"></script>
-    <script>
-      (async function () {
-        if (typeof loadHangmanSiteCopy === "function") {
-          await loadHangmanSiteCopy();
-          if (typeof applyHangmanDomCopy === "function") applyHangmanDomCopy();
-        }
-        try {
-          const res = await fetch("/api/hangman-words");
-          if (res.ok) {
-            const items = await res.json();
-            if (Array.isArray(items) && items.length > 0) {
-              window.HANGMAN_WORD_DATA = items.map(function (i) {
-                return { word: i.word, hint: i.hint || "" };
-              });
-            }
-          }
-        } catch (_) {}
-        await new Promise(function (resolve) {
-          var s = document.createElement("script");
-          s.src = "hangman.js";
-          s.onload = resolve;
-          document.body.appendChild(s);
-        });
-      })();
-    </script>
+    <script src="boot.js"></script>
 </body>
 </html>

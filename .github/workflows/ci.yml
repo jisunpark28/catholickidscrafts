@@ -36,7 +36,7 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: CSP Report-Only checks
+      - name: CSP header checks
         run: pnpm exec tsx scripts/test-csp.ts
 
       - name: Preview build (skip DB migrate)

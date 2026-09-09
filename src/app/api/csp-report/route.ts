@@ -43,7 +43,7 @@ function collectReports(payload: unknown): Record<string, unknown>[] {
   return [];
 }
 
-/** Browser CSP Report-Only endpoint. Logs a short summary; does not enforce. */
+/** Browser CSP report endpoint. Logs a short summary of blocked URIs. */
 export async function POST(request: Request) {
   let payload: unknown = null;
   try {
