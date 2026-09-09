@@ -4,6 +4,7 @@ import {
   massEtiquetteLowerTemplateSeed,
 } from "./data/mass-etiquette-lower-kit";
 import { upsertGlobalTemplate } from "@/lib/lesson-kit/db";
+import { isPlaceholderLessonCopy } from "@/lib/lesson-kit/placeholder-copy";
 import { getTptStoreUrl } from "@/lib/tpt";
 import type { PrismaClient } from "@prisma/client";
 
@@ -87,11 +88,35 @@ const GLOBAL_TEMPLATE_SEEDS = [
   }),
 ];
 
+export async function unpublishPlaceholderLessonKits(prisma: PrismaClient) {
+  const kits = await prisma.lessonKit.findMany({
+    where: { scope: "GLOBAL_TEMPLATE", published: true },
+    select: { id: true, title: true, description: true, shareSlug: true },
+  });
+  const ids = kits
+    .filter((kit) => isPlaceholderLessonCopy(kit.title, kit.description))
+    .map((kit) => kit.id);
+  if (ids.length === 0) return 0;
+  await prisma.lessonKit.updateMany({
+    where: { id: { in: ids } },
+    data: { published: false },
+  });
+  for (const kit of kits.filter((row) => ids.includes(row.id))) {
+    console.log(`Unpublished placeholder template: ${kit.shareSlug} (${kit.title})`);
+  }
+  return ids.length;
+}
+
 export async function seedLessonKits(_prisma: PrismaClient) {
   for (const build of GLOBAL_TEMPLATE_SEEDS) {
     const data = build();
     await upsertGlobalTemplate(data);
     console.log(`Lesson template: ${data.shareSlug}`);
+  }
+
+  const unpublished = await unpublishPlaceholderLessonKits(_prisma);
+  if (unpublished > 0) {
+    console.log(`Unpublished ${unpublished} placeholder global lesson template(s).`);
   }
 
   console.log(

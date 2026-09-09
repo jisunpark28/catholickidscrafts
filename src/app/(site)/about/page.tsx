@@ -1,4 +1,5 @@
 import { LegalPage } from "@/components/LegalPage";
+import { getPublicContactEmail, getPublicContactMailto } from "@/lib/site-contact";
 import { getTptStoreUrl } from "@/lib/tpt";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { canonicalForPath } from "@/lib/site-metadata";
@@ -14,6 +15,8 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   const tptStore = getTptStoreUrl();
+  const contactEmail = getPublicContactEmail();
+  const contactMailto = getPublicContactMailto();
   const copy = await getSiteCopyMap();
 
   return (
@@ -87,12 +90,17 @@ export default async function AboutPage() {
       <h2 className="pt-4 text-xl font-bold">A note for program leaders</h2>
       <p>
         You do not need to use every section. Pick what matches your parish: maybe Mass + one craft
-        for Advent, or Play &amp; Learn for review weeks. If something is confusing or missing for
-        your community, we are glad to hear from you through the contact on our{" "}
-        <Link href="/privacy" className="text-[var(--color-link)]">
-          Privacy
-        </Link>{" "}
-        page.
+        for Advent, or Play &amp; Learn for review weeks.
+        {contactMailto && contactEmail ? (
+          <>
+            {" "}
+            If something is confusing or missing for your community, we are glad to hear from you at{" "}
+            <a href={contactMailto} className="font-semibold text-[var(--color-link)]">
+              {contactEmail}
+            </a>
+            .
+          </>
+        ) : null}
       </p>
       <p className="text-sm text-[var(--color-muted)]">
         <Link href="/privacy" className="text-[var(--color-link)]">

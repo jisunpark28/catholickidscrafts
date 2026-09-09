@@ -55,10 +55,9 @@ export default async function PrivacyPage() {
           sticker progress. Children sign in with an Access ID only—no child email is collected.
         </li>
         <li>
-          <strong>Google sign-in (optional):</strong> If enabled, parents may use Google OAuth on{" "}
-          <code>/account/login</code>. We receive your Google account ID, verified email, and
-          display name from Google&apos;s OpenID service. We do not receive your Google password.
-          See <code>docs/FAMILY_GOOGLE_SIGNIN.md</code> for operator setup.
+          <strong>Google sign-in (optional):</strong> Google sign-in is optional and only used when
+          the operator has enabled it; we receive Google account id, verified email, and display
+          name; we never receive the Google password.
         </li>
         <li>
           <strong>Home search:</strong> Queries you type on the home page are sent to our server to
@@ -187,24 +186,17 @@ export default async function PrivacyPage() {
       <h2 className="pt-4 text-xl font-bold">Contact</h2>
       <p>
         Questions about this policy or data practices:
-        {contactMailto ? (
+        {contactMailto && contactEmail ? (
           <>
             {" "}
             <a href={contactMailto} className="font-semibold text-[var(--color-link)]">
               {contactEmail}
             </a>
+            .
           </>
         ) : (
-          <>
-            {" "}
-            email the site operator at the address published on{" "}
-            <Link href="/about" className="text-[var(--color-link)]">
-              About
-            </Link>{" "}
-            (set <code>NEXT_PUBLIC_CONTACT_EMAIL</code> in production to display it here).
-          </>
+          <> Contact unavailable.</>
         )}
-        .
       </p>
 
       <p className="pt-4 text-sm text-[var(--color-muted)]">
