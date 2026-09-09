@@ -1,4 +1,11 @@
 import { authConfig } from "@/auth.config";
+import {
+  adminLoginFailureDelayMs,
+  getAdminLoginThrottle,
+  recordAdminLoginFailure,
+  recordAdminLoginSuccess,
+} from "@/lib/admin-login-throttle";
+import { clientIpFromHeaders } from "@/lib/client-ip";
 import { prisma } from "@/lib/prisma";
 import { AdminRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -14,19 +21,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const email = (credentials?.email as string | undefined)?.trim().toLowerCase();
         const password = credentials?.password as string | undefined;
         if (!email || !password) return null;
 
+        const ip = clientIpFromHeaders(request?.headers ?? new Headers());
+        const throttle = getAdminLoginThrottle(ip, email);
+        if (throttle.blocked) {
+          return null;
+        }
+
         const user = await prisma.adminUser.findFirst({
           where: { email: { equals: email, mode: "insensitive" } },
         });
-        if (!user) return null;
+        if (!user) {
+          recordAdminLoginFailure(ip, email);
+          const delayMs = adminLoginFailureDelayMs(ip, email);
+          if (delayMs > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delayMs));
+          }
+          return null;
+        }
 
         const valid = await bcrypt.compare(password, user.passwordHash);
-        if (!valid) return null;
+        if (!valid) {
+          recordAdminLoginFailure(ip, email);
+          const delayMs = adminLoginFailureDelayMs(ip, email);
+          if (delayMs > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delayMs));
+          }
+          return null;
+        }
 
+        recordAdminLoginSuccess(ip, email);
         return {
           id: user.id,
           email: user.email,
