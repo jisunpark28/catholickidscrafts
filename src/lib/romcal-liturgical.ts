@@ -1,4 +1,7 @@
 import romcal from "romcal";
+// Server-only: romcal compiles lodash templates with `new Function()`. If this
+// module is imported from a Client Component, enforcing CSP (no `'unsafe-eval'`)
+// throws EvalError and Next.js shows "Application error".
 import { toDateKey } from "@/lib/dates";
 import {
   normalizeLiturgicalTitleStyle,
