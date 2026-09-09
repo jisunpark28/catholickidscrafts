@@ -237,23 +237,43 @@ const GESTURE_NARRATION = {
     lift: "🙌 The gifts are raised high in offering to God.",
     pray: "🙏 Hands are joined in prayerful focus and silence.",
     ourFather: "👐 Arms open gently while praying the Lord's Prayer together.",
-    signCross: "✝️ In the name of the Father, and of the Son, and of the Holy Spirit.",
+    signCross: "✝️ 성부와 성자와 성령의 이름으로. 아멘.",
+    signCross_father: "✝️ 성부와",
+    signCross_son: "성자와",
+    signCross_spirit: "성령의 이름으로",
+    signCross_amen: "아멘.",
+    greet: "🙂 The celebrant greets the assembly in the Lord's peace.",
+    orans: "🙌 Arms are raised in praise and prayer with the assembly.",
+    bless: "✨ The celebrant blesses the people in the name of the Trinity.",
+    peace: "🤝 The celebrant invites the sign of peace.",
+    kneel: "🙇 The celebrant kneels in reverence at the holy mysteries.",
+    elevate_host: "🍞 The host is elevated in consecration.",
+    elevate_chalice: "🍷 The chalice is elevated in consecration.",
+    genuflect: "🙇 A deep reverence before the altar.",
+    dismiss: "⛪ The celebrant sends the assembly forth in mission.",
 };
 
 const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
-        gesture: "idle",
+        gesture: "genuflect",
         title: "Entrance Song",
-        text: "🎶 The assembly gathers and the entrance procession begins.",
+        text: "🎶 The celebrant approaches the altar and bows in reverence.",
     },
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
         gesture: "signCross",
         title: "Sign of the Cross",
-        text: "✝️ The Mass begins with the Sign of the Cross and liturgical greeting.",
+        text: "✝️ 성부와 성자와 성령의 이름으로. 아멘.",
+    },
+    {
+        part: "1. Introductory Rites",
+        partEn: "Introductory Rites",
+        gesture: "greet",
+        title: "Greeting",
+        text: "🙂 The Lord be with you — the celebrant greets the assembly.",
     },
     {
         part: "1. Introductory Rites",
@@ -272,51 +292,51 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Gloria",
         text: "✨ Glory to God in the highest is proclaimed in praise.",
     },
     {
         part: "1. Introductory Rites",
         partEn: "Introductory Rites",
-        gesture: "pray",
+        gesture: "orans",
         title: "The Collect",
         text: "🕯️ The opening prayer gathers the intentions of the faithful.",
     },
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "point",
+        gesture: "idle",
         title: "1st Reading",
         text: "📖 The first reading is proclaimed from Sacred Scripture.",
     },
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Responsorial Psalm",
         text: "🎵 The psalm is prayed in response with the assembly.",
     },
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "point",
+        gesture: "idle",
         title: "2nd Reading",
         text: "📜 The second reading is proclaimed from the New Testament letters.",
     },
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Gospel Acclamation",
         text: "🙌 The assembly rises and acclaims the Gospel.",
     },
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "point",
+        gesture: "signCross",
         title: "Gospel",
-        text: "✝️ The Holy Gospel is proclaimed.",
+        text: "✝️ The Holy Gospel is proclaimed with the Sign of the Cross.",
     },
     {
         part: "2. Liturgy of the Word",
@@ -335,49 +355,63 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Universal Prayer",
         text: "🫶 The community prays for the Church and the world.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "hold",
+        gesture: "lift",
         title: "Preparation of the Gifts",
-        text: "🍞 Bread and wine are brought forward to the altar.",
+        text: "🍞 Bread and wine are raised and offered at the altar.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "pray",
+        gesture: "orans",
         title: "Prayer over the Offerings",
         text: "🙏 The celebrant invites all to pray over the gifts.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "ourFather",
+        gesture: "orans",
         title: "Sanctus",
         text: "🎶 Holy, Holy, Holy Lord God of hosts.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "lift",
+        gesture: "kneel",
         title: "Eucharistic Prayer",
         text: "✨ The Church gives thanks and praise through the Eucharistic Prayer.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "ourFather",
+        gesture: "elevate_host",
+        title: "Elevation of the Host",
+        text: "🍞 Take this, all of you, and eat of it — this is my Body.",
+    },
+    {
+        part: "3. Liturgy of the Eucharist",
+        partEn: "Liturgy of the Eucharist",
+        gesture: "elevate_chalice",
+        title: "Elevation of the Chalice",
+        text: "🍷 Take this, all of you, and drink from it — this is my Blood.",
+    },
+    {
+        part: "3. Liturgy of the Eucharist",
+        partEn: "Liturgy of the Eucharist",
+        gesture: "orans",
         title: "The Lord's Prayer",
         text: "👐 The faithful pray the Lord's Prayer together.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "point",
+        gesture: "peace",
         title: "Sign of Peace",
         text: "🤝 The sign of peace is exchanged in charity.",
     },
@@ -391,21 +425,21 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "hold",
+        gesture: "genuflect",
         title: "Communion",
-        text: "🍞 The faithful receive Holy Communion with reverence.",
+        text: "🍞 The celebrant and faithful receive Holy Communion with reverence.",
     },
     {
         part: "4. Concluding Rites",
         partEn: "Concluding Rites",
-        gesture: "pray",
+        gesture: "bless",
         title: "Blessing",
         text: "🔔 The celebrant blesses the people before sending forth.",
     },
     {
         part: "4. Concluding Rites",
         partEn: "Concluding Rites",
-        gesture: "point",
+        gesture: "dismiss",
         title: "Dismissal",
         text: "🔔 The people are blessed and sent forth to live the Gospel.",
     },
@@ -418,6 +452,16 @@ function getMassFlowSteps() {
         massFlowSteps = DEFAULT_MASS_FLOW_STEPS.map((step) => ({ ...step }));
     }
     return massFlowSteps;
+}
+
+function resolveMassStepGesture(step) {
+    if (!step) {
+        return "idle";
+    }
+    if (step.title === "1st Reading" || step.title === "2nd Reading") {
+        return "idle";
+    }
+    return step.gesture || "idle";
 }
 
 async function loadMassOrderSteps() {
@@ -1036,19 +1080,19 @@ function getLiturgicalSeason(inputDate = new Date()) {
     const christmasEndCurrentYear = new Date(year, 0, 12);
 
     if ((date >= christmasDay && date <= christmasEnd) || (date >= christmasStartPreviousYear && date <= christmasEndCurrentYear)) {
-        return { season: "Christmas", colorName: "White", colorHex: 0xf7f4e8 };
+        return { season: "Christmas", colorName: "White", colorHex: 0xf7f4e8, vestmentKey: "white" };
     }
     if (date >= adventStart && date < christmasDay) {
-        return { season: "Advent", colorName: "Purple", colorHex: 0x7d5db0 };
+        return { season: "Advent", colorName: "Purple", colorHex: 0x7d5db0, vestmentKey: "purple" };
     }
     if (date >= ashWednesday && date <= holySaturday) {
-        return { season: "Lent", colorName: "Purple", colorHex: 0x6f4fa8 };
+        return { season: "Lent", colorName: "Purple", colorHex: 0x6f4fa8, vestmentKey: "purple" };
     }
     if (date >= easterSunday && date <= pentecost) {
-        return { season: "Easter", colorName: "White", colorHex: 0xffffff };
+        return { season: "Easter", colorName: "White", colorHex: 0xffffff, vestmentKey: "white" };
     }
 
-    return { season: "Ordinary Time", colorName: "Green", colorHex: 0x4d9c5a };
+    return { season: "Ordinary Time", colorName: "Green", colorHex: 0x4d9c5a, vestmentKey: "green" };
 }
 
 function createVoxelChurch(container) {
@@ -1133,85 +1177,40 @@ function createVoxelChurch(container) {
     backWall.visible = true;
 
     const sanctuaryCrossGroup = new THREE.Group();
-    sanctuaryCrossGroup.position.set(0, 6.35, -17.08);
-    const sanctuaryCrossPost = new THREE.Mesh(new THREE.BoxGeometry(0.5, 4.8, 0.42), materials.darkWood);
-    sanctuaryCrossPost.castShadow = true;
-    sanctuaryCrossGroup.add(sanctuaryCrossPost);
-    const sanctuaryCrossBeam = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.65, 0.42), materials.darkWood);
-    sanctuaryCrossBeam.position.set(0, 1.95, 0);
-    sanctuaryCrossBeam.castShadow = true;
-    sanctuaryCrossGroup.add(sanctuaryCrossBeam);
+    sanctuaryCrossGroup.position.set(0, 6.35, -16.94);
     root.add(sanctuaryCrossGroup);
 
-    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(12, 0.8, 7), materials.wood);
+    const SANCTUARY_PLATFORM_WIDTH = 33;
+    const sanctuaryStep = new THREE.Mesh(new THREE.BoxGeometry(SANCTUARY_PLATFORM_WIDTH, 0.8, 7), materials.wood);
     sanctuaryStep.position.set(0, 0.4, -12.4);
     root.add(sanctuaryStep);
+
+    const ALTAR_TABLE_WIDTH = 7;
+    const ALTAR_TABLE_DEPTH = 3.7;
+    const ALTAR_CLOTH_WIDTH = 7.2;
+    const ALTAR_CLOTH_DEPTH = 3.9;
 
     const altarGroup = new THREE.Group();
     altarGroup.position.set(0, 0.4, -12.2);
     root.add(altarGroup);
 
-    const altarBase = new THREE.Mesh(new THREE.BoxGeometry(7, 2.3, 3.7), materials.wood);
+    const altarBase = new THREE.Mesh(
+        new THREE.BoxGeometry(ALTAR_TABLE_WIDTH, 2.3, ALTAR_TABLE_DEPTH),
+        materials.wood,
+    );
     altarBase.position.y = 1.15;
     altarBase.userData.interactive = true;
     altarBase.castShadow = true;
     altarGroup.add(altarBase);
 
-    const altarCloth = new THREE.Mesh(new THREE.BoxGeometry(7.2, 0.42, 3.9), materials.altarCloth);
+    const altarCloth = new THREE.Mesh(
+        new THREE.BoxGeometry(ALTAR_CLOTH_WIDTH, 0.42, ALTAR_CLOTH_DEPTH),
+        materials.altarCloth,
+    );
     altarCloth.position.y = 2.52;
     altarCloth.userData.interactive = true;
     altarCloth.castShadow = true;
     altarGroup.add(altarCloth);
-
-    const crossStand = new THREE.Mesh(new THREE.BoxGeometry(0.8, 5.2, 0.8), materials.darkWood);
-    crossStand.position.set(0, 6.1, -0.2);
-    crossStand.userData.interactive = true;
-    crossStand.castShadow = true;
-    altarGroup.add(crossStand);
-
-    const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.8, 0.8), materials.darkWood);
-    crossBeam.position.set(0, 7.3, -0.2);
-    crossBeam.userData.interactive = true;
-    crossBeam.castShadow = true;
-    altarGroup.add(crossBeam);
-
-    const corpusGroup = new THREE.Group();
-    corpusGroup.position.set(0, 0, 0.56);
-    altarGroup.add(corpusGroup);
-
-    const corpusTorso = new THREE.Mesh(new THREE.BoxGeometry(0.72, 2.2, 0.35), materials.corpusSkin);
-    corpusTorso.position.set(0, 6.32, 0.24);
-    corpusTorso.castShadow = true;
-    corpusTorso.name = "corpus-torso";
-    corpusGroup.add(corpusTorso);
-
-    const corpusHead = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.62, 0.42), materials.corpusSkin);
-    corpusHead.position.set(0, 7.74, 0.24);
-    corpusHead.castShadow = true;
-    corpusHead.name = "corpus-head";
-    corpusGroup.add(corpusHead);
-
-    const corpusArms = new THREE.Mesh(new THREE.BoxGeometry(2.7, 0.32, 0.3), materials.corpusSkin);
-    corpusArms.position.set(0, 7.3, 0.24);
-    corpusArms.castShadow = true;
-    corpusArms.name = "corpus-arms";
-    corpusGroup.add(corpusArms);
-
-    const corpusLeftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.28, 1.15, 0.26), materials.corpusSkin);
-    corpusLeftLeg.position.set(-0.14, 4.84, 0.24);
-    corpusLeftLeg.castShadow = true;
-    corpusLeftLeg.name = "corpus-left-leg";
-    corpusGroup.add(corpusLeftLeg);
-
-    const corpusRightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.28, 1.15, 0.26), materials.corpusSkin);
-    corpusRightLeg.position.set(0.14, 4.84, 0.24);
-    corpusRightLeg.castShadow = true;
-    corpusRightLeg.name = "corpus-right-leg";
-    corpusGroup.add(corpusRightLeg);
-
-    const corpusLight = new THREE.PointLight(0xffe3bf, 0.62, 11, 2);
-    corpusLight.position.set(0, 6.8, 1.35);
-    altarGroup.add(corpusLight);
 
     const candleL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 1.2, 0.35), materials.candleWax);
     candleL.position.set(-2.8, 3.2, 0.7);
@@ -1290,16 +1289,22 @@ function createVoxelChurch(container) {
     const NAVE_CENTER_Z = 0.5;
     const NAVE_HALF_DEPTH = 14.5;
     const SANCTUARY_CENTER_Z = -12.4;
-    const SANCTUARY_HALF_WIDTH = 6;
+    const SANCTUARY_HALF_WIDTH = 16;
     const SANCTUARY_HALF_DEPTH = 3.5;
     const interiorCameraBounds = { minX: -12.4, maxX: 12.4, minZ: -13.4, maxZ: 14.2 };
     const interiorCameraMargin = 0.4;
 
     function resolveGroundHeight(x, z) {
-        if (
+        const onSanctuaryPlatform =
             Math.abs(x) <= SANCTUARY_HALF_WIDTH &&
-            Math.abs(z - SANCTUARY_CENTER_Z) <= SANCTUARY_HALF_DEPTH
-        ) {
+            Math.abs(z - SANCTUARY_CENTER_Z) <= SANCTUARY_HALF_DEPTH;
+        if (onSanctuaryPlatform) {
+            const platformFrontZ = SANCTUARY_CENTER_Z + SANCTUARY_HALF_DEPTH;
+            const rampDepth = 0.65;
+            if (z > platformFrontZ - rampDepth && Math.abs(x) <= NAVE_HALF_WIDTH + 0.35) {
+                const rampT = THREE.MathUtils.clamp((platformFrontZ - z) / rampDepth, 0, 1);
+                return THREE.MathUtils.lerp(FLOOR_NAVE_Y, FLOOR_SANCTUARY_Y, rampT);
+            }
             return FLOOR_SANCTUARY_Y;
         }
         if (
@@ -1362,7 +1367,54 @@ function createVoxelChurch(container) {
     }
 
     // Keep distance from the altar table.
-    addCollisionRect(altarGroup.position.x, altarGroup.position.z, 7.2, 4.0, playerCollisionRadius + 0.08);
+    addCollisionRect(
+        altarGroup.position.x,
+        altarGroup.position.z,
+        ALTAR_CLOTH_WIDTH,
+        ALTAR_CLOTH_DEPTH,
+        playerCollisionRadius + 0.08,
+    );
+
+    function addLectern(x, z, scale, label) {
+        const lecternGroup = new THREE.Group();
+        lecternGroup.position.set(x, FLOOR_SANCTUARY_Y, z);
+        lecternGroup.userData.lecternLabel = label;
+
+        const stem = new THREE.Mesh(
+            new THREE.BoxGeometry(0.55 * scale, 1.05 * scale, 0.55 * scale),
+            materials.darkWood,
+        );
+        stem.position.y = 0.52 * scale;
+        stem.castShadow = true;
+        lecternGroup.add(stem);
+
+        const shelf = new THREE.Mesh(
+            new THREE.BoxGeometry(1.35 * scale, 0.14 * scale, 0.95 * scale),
+            materials.wood,
+        );
+        shelf.position.set(0, 1.08 * scale, 0.12 * scale);
+        shelf.rotation.x = -0.28;
+        shelf.castShadow = true;
+        lecternGroup.add(shelf);
+
+        const book = new THREE.Mesh(
+            new THREE.BoxGeometry(0.5 * scale, 0.07 * scale, 0.36 * scale),
+            new THREE.MeshLambertMaterial({ color: label === "ambo" ? 0x8b1a1a : 0x2f4f8a }),
+        );
+        book.position.set(0, 1.14 * scale, 0.28 * scale);
+        book.rotation.x = -0.28;
+        lecternGroup.add(book);
+
+        root.add(lecternGroup);
+        addCollisionRect(x, z, 1.35 * scale, 1.0 * scale, playerCollisionRadius + 0.04);
+        return lecternGroup;
+    }
+
+    // Facing the altar: right = Gospel ambo, left = Universal Prayer lectern.
+    // Between the back wall and the altar (deeper in the sanctuary).
+    const LECTERN_Z = -15.35;
+    addLectern(12.2, LECTERN_Z, 1.28, "ambo");
+    addLectern(-12.2, LECTERN_Z, 0.78, "petitions");
 
     for (let row = 0; row < 4; row += 1) {
         for (let side = -1; side <= 1; side += 2) {
@@ -1391,7 +1443,7 @@ function createVoxelChurch(container) {
     const useOverlayArms = false;
 
     const playerRig = new THREE.Group();
-    playerRig.position.set(0, 0, 7.2);
+    playerRig.position.set(0, FLOOR_NAVE_Y, 7.2);
     root.add(playerRig);
 
     const textureLoader = new THREE.TextureLoader();
@@ -1404,10 +1456,11 @@ function createVoxelChurch(container) {
         transparent: true,
         alphaTest: 0.08,
         side: THREE.DoubleSide,
-        depthWrite: false,
+        depthTest: true,
+        depthWrite: true,
     });
 
-    const PLAYER_SPRITE_WORLD_HEIGHT = isChildPlayer ? 2.05 : 2.35;
+    const PLAYER_SPRITE_WORLD_HEIGHT = isChildPlayer ? 2.05 * 1.7 : 2.35;
     let playerSpriteHeight = PLAYER_SPRITE_WORLD_HEIGHT;
     let playerSpriteWidth = playerSpriteHeight * 0.773;
     const playerSpriteBaseScale = { x: playerSpriteWidth, y: playerSpriteHeight };
@@ -1502,6 +1555,156 @@ function createVoxelChurch(container) {
     textureLoader.load(selected.backImage || selected.frontImage, (backTexture) => {
         playerTextures.back = backTexture;
         syncPlayerSpriteFromTexture(backTexture);
+    });
+
+    const SANCTUARY_CRUCIFIX_HEIGHT = 6.2;
+    const sanctuaryCrucifixMaterial = new THREE.MeshBasicMaterial({
+        map: null,
+        transparent: true,
+        alphaTest: 0.08,
+        side: THREE.DoubleSide,
+        depthTest: true,
+        depthWrite: true,
+    });
+    let sanctuaryCrucifixWidth = SANCTUARY_CRUCIFIX_HEIGHT * 0.62;
+    const sanctuaryCrucifixSprite = new THREE.Mesh(
+        new THREE.PlaneGeometry(sanctuaryCrucifixWidth, SANCTUARY_CRUCIFIX_HEIGHT),
+        sanctuaryCrucifixMaterial,
+    );
+    sanctuaryCrucifixSprite.position.set(0, 0, 0.14);
+    sanctuaryCrucifixSprite.renderOrder = 1;
+    sanctuaryCrossGroup.add(sanctuaryCrucifixSprite);
+
+    textureLoader.load("assets/sanctuary-crucifix.png", (crossTexture) => {
+        if ("colorSpace" in crossTexture) {
+            crossTexture.colorSpace = THREE.SRGBColorSpace;
+        }
+        crossTexture.magFilter = THREE.LinearFilter;
+        crossTexture.minFilter = THREE.LinearMipmapLinearFilter;
+        cropTextureToVisibleBounds(crossTexture);
+        const image = crossTexture.image;
+        if (image?.width && image?.height) {
+            const aspect = image.width / image.height;
+            sanctuaryCrucifixWidth = SANCTUARY_CRUCIFIX_HEIGHT * aspect;
+            sanctuaryCrucifixSprite.geometry.dispose();
+            sanctuaryCrucifixSprite.geometry = new THREE.PlaneGeometry(
+                sanctuaryCrucifixWidth,
+                SANCTUARY_CRUCIFIX_HEIGHT,
+            );
+        }
+        sanctuaryCrucifixMaterial.map = crossTexture;
+        sanctuaryCrucifixMaterial.needsUpdate = true;
+    });
+
+    const CELEBRANT_SPRITE_HEIGHT = 6.4;
+    const CELEBRANT_SPRITE_WIDTH = CELEBRANT_SPRITE_HEIGHT * (1024 / 1536);
+    const celebrantBehindAltarZ = altarGroup.position.z - ALTAR_TABLE_DEPTH * 0.5 - 0.82;
+    const celebrantRig = new THREE.Group();
+    celebrantRig.position.set(0, FLOOR_SANCTUARY_Y, celebrantBehindAltarZ);
+    root.add(celebrantRig);
+
+    const celebrantMaterial = new THREE.MeshBasicMaterial({
+        map: null,
+        transparent: true,
+        alphaTest: 0.08,
+        side: THREE.DoubleSide,
+        depthTest: true,
+        depthWrite: true,
+    });
+    let celebrantSpriteWidth = CELEBRANT_SPRITE_WIDTH;
+    const celebrantSprite = new THREE.Mesh(
+        new THREE.PlaneGeometry(celebrantSpriteWidth, CELEBRANT_SPRITE_HEIGHT),
+        celebrantMaterial,
+    );
+    celebrantSprite.position.set(0, CELEBRANT_SPRITE_HEIGHT * 0.5, 0);
+    celebrantSprite.renderOrder = 0;
+    celebrantRig.add(celebrantSprite);
+
+    const celebrantState = {
+        vestmentKey: "green",
+        poseKey: "idle",
+        textures: {},
+    };
+
+    function applyCelebrantTexture(texture) {
+        celebrantMaterial.map = texture;
+        celebrantMaterial.needsUpdate = true;
+    }
+
+    function loadCelebrantPoseTextures(colorKey, onReady) {
+        const sprites = window.CELEBRANT_SPRITES;
+        if (!sprites) {
+            textureLoader.load(CHARACTER_CONFIG.priest.frontImage, (tex) => {
+                applyCelebrantTexture(tex);
+                if (onReady) {
+                    onReady();
+                }
+            });
+            return;
+        }
+        const poses = sprites.POSES;
+        let pending = poses.length;
+        const finish = () => {
+            pending -= 1;
+            if (pending <= 0 && onReady) {
+                onReady();
+            }
+        };
+        poses.forEach((pose) => {
+            const path = sprites.posePath(colorKey, pose);
+            textureLoader.load(
+                path,
+                (tex) => {
+                    if ("colorSpace" in tex) {
+                        tex.colorSpace = THREE.SRGBColorSpace;
+                    }
+                    tex.magFilter = THREE.LinearFilter;
+                    tex.minFilter = THREE.LinearMipmapLinearFilter;
+                    celebrantState.textures[`${colorKey}/${pose}`] = tex;
+                    finish();
+                },
+                undefined,
+                () => {
+                    finish();
+                },
+            );
+        });
+    }
+
+    function setCelebrantPose(gestureKey) {
+        const sprites = window.CELEBRANT_SPRITES;
+        const pose = sprites ? sprites.resolvePose(gestureKey) : gestureKey || "idle";
+        celebrantState.poseKey = pose;
+        const cacheKey = `${celebrantState.vestmentKey}/${pose}`;
+        const tex =
+            celebrantState.textures[cacheKey] ||
+            celebrantState.textures[`${celebrantState.vestmentKey}/idle`] ||
+            celebrantState.textures[`green/${pose}`] ||
+            celebrantState.textures["green/idle"];
+        if (tex) {
+            applyCelebrantTexture(tex);
+        }
+    }
+
+    function setCelebrantVestment(colorKey) {
+        const sprites = window.CELEBRANT_SPRITES;
+        const key =
+            colorKey && sprites?.VESTMENT_COLORS?.[colorKey]
+                ? colorKey
+                : sprites?.resolveVestmentFromSeason?.({ colorName: "Green", vestmentKey: "green" }) ||
+                  "green";
+        if (celebrantState.vestmentKey === key && celebrantState.textures[`${key}/idle`]) {
+            setCelebrantPose(actionState?.currentGesture || "idle");
+            return;
+        }
+        celebrantState.vestmentKey = key;
+        loadCelebrantPoseTextures(key, () => {
+            setCelebrantPose(actionState?.currentGesture || "idle");
+        });
+    }
+
+    loadCelebrantPoseTextures("green", () => {
+        setCelebrantPose("idle");
     });
 
     const itemMaterial = new THREE.MeshLambertMaterial({ color: 0xc6a278 });
@@ -1809,10 +2012,15 @@ function createVoxelChurch(container) {
         setArmTargets(pose.left, pose.right);
     }
 
+    const SIGN_CROSS_CELEBRANT_POSES = ["signCross", "signCross_son", "signCross_spirit", "signCross_amen"];
+    const SIGN_CROSS_KO_KEYS = ["signCross_father", "signCross_son", "signCross_spirit", "signCross_amen"];
+
     const actionState = {
         currentGesture: "idle",
         signCrossActive: false,
         signCrossTime: 0,
+        signCrossPhase: -1,
+        signCrossPrefix: "",
         massActive: false,
         massIndex: 0,
         currentMassStepIndex: -1,
@@ -1862,9 +2070,12 @@ function createVoxelChurch(container) {
         if (name === "signCross") {
             actionState.signCrossActive = true;
             actionState.signCrossTime = 0;
+            actionState.signCrossPhase = 0;
+            actionState.signCrossPrefix = prefix;
             setGesturePose("pray");
             syncOverlayArmsVisibility("signCross");
-            narrateGesture("signCross", prefix);
+            setCelebrantPose(SIGN_CROSS_CELEBRANT_POSES[0]);
+            narrateGesture(SIGN_CROSS_KO_KEYS[0], prefix);
             setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
             return;
         }
@@ -1872,6 +2083,7 @@ function createVoxelChurch(container) {
         setGesturePose(name);
         syncOverlayArmsVisibility(name);
         narrateGesture(name, prefix);
+        setCelebrantPose(name);
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
 
@@ -1885,7 +2097,7 @@ function createVoxelChurch(container) {
         if (!step) {
             return;
         }
-        const next = step.gesture;
+        const next = resolveMassStepGesture(step);
         const stepNumber = stepIndex + 1;
         const prefix = `🎼 ${step.part} · ${step.title} (${stepNumber}/${steps.length})`;
         actionState.massIndex += 1;
@@ -1909,7 +2121,7 @@ function createVoxelChurch(container) {
             return;
         }
         actionState.massIndex = stepIndex;
-        triggerGesture(step.gesture, `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
+        triggerGesture(resolveMassStepGesture(step), `📍 ${step.part} · ${step.title} — ${step.text}`, stepIndex);
         if (typeof window.MassQuest !== "undefined" && window.MassQuest.isActive()) {
             window.MassQuest.syncToMassStep(stepIndex);
         }
@@ -1988,7 +2200,7 @@ function createVoxelChurch(container) {
         jump: 8,
         onGround: true,
         jumpLatch: false,
-        groundY: 0,
+        groundY: FLOOR_NAVE_Y,
     };
     const turnRate = 2.6;
 
@@ -2133,6 +2345,13 @@ function createVoxelChurch(container) {
         const normalized = Math.min(actionState.signCrossTime / 2.2, 1);
         const phase = normalized * 4;
 
+        const phaseIndex = phase < 1 ? 0 : phase < 2 ? 1 : phase < 3 ? 2 : 3;
+        if (actionState.signCrossPhase !== phaseIndex) {
+            actionState.signCrossPhase = phaseIndex;
+            setCelebrantPose(SIGN_CROSS_CELEBRANT_POSES[phaseIndex]);
+            narrateGesture(SIGN_CROSS_KO_KEYS[phaseIndex], actionState.signCrossPrefix);
+        }
+
         const signPose =
             phase < 1 ? signCrossPoses[0]
             : phase < 2 ? signCrossPoses[1]
@@ -2142,10 +2361,12 @@ function createVoxelChurch(container) {
 
         if (normalized >= 1) {
             actionState.signCrossActive = false;
+            actionState.signCrossPhase = -1;
             if (actionState.currentGesture === "signCross") {
                 actionState.currentGesture = "pray";
                 setGesturePose("pray");
-                narrateGesture("pray", "✝️ After completing the Sign of the Cross,");
+                setCelebrantPose("pray");
+                narrateGesture("pray", "✝️ 성호를 마친 뒤,");
             }
         }
     }
@@ -2188,7 +2409,7 @@ function createVoxelChurch(container) {
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
-    const interactiveMeshes = [altarBase, altarCloth, crossStand, crossBeam, candleL, candleR];
+    const interactiveMeshes = [altarBase, altarCloth, candleL, candleR];
     const decorationMeshes = [];
     const jumpTweens = [];
     const sparkleParticles = [];
@@ -2326,32 +2547,53 @@ function createVoxelChurch(container) {
         xDir: 1,
         walkPhase: 0,
         facingBack: false,
+        idleFaceBack: false,
         motionBlend: 0,
     };
 
     updateDirectionFromYaw();
 
-    function updatePlayerSpriteMotion(velocityX, velocityZ, turnInput, dt) {
+    function updatePlayerSpriteMotion(velocityX, velocityZ, turnInput, throttleInput, downPressed, dt) {
         const speed = Math.hypot(velocityX, velocityZ);
         const signedForwardSpeed = velocityX * moveDirection.x + velocityZ * moveDirection.z;
         const moving = speed > 0.18;
 
-        if (moving) {
-            const shouldFaceBack = signedForwardSpeed >= -0.02;
-            if (spriteFacingState.facingBack !== shouldFaceBack) {
-                spriteFacingState.facingBack = shouldFaceBack;
-                playerSpriteMaterial.map = shouldFaceBack ? playerTextures.back : playerTextures.front;
+        const applySpriteFacing = (faceBack) => {
+            if (spriteFacingState.facingBack !== faceBack) {
+                spriteFacingState.facingBack = faceBack;
+                playerSpriteMaterial.map = faceBack ? playerTextures.back : playerTextures.front;
                 playerSpriteMaterial.needsUpdate = true;
             }
+        };
+
+        if (isChildPlayer) {
+            if (moving) {
+                if (throttleInput > 0 || signedForwardSpeed > 0.08) {
+                    spriteFacingState.idleFaceBack = true;
+                    applySpriteFacing(true);
+                } else if (throttleInput < 0 || signedForwardSpeed < -0.08) {
+                    spriteFacingState.idleFaceBack = false;
+                    applySpriteFacing(false);
+                }
+            } else if (downPressed) {
+                spriteFacingState.idleFaceBack = false;
+                applySpriteFacing(false);
+            } else if (spriteFacingState.idleFaceBack) {
+                applySpriteFacing(true);
+            }
+        } else if (moving) {
+            const shouldFaceBack = signedForwardSpeed >= -0.02;
+            applySpriteFacing(shouldFaceBack);
+        } else if (spriteFacingState.facingBack) {
+            applySpriteFacing(false);
+        }
+
+        if (moving) {
             if (Math.abs(velocityX) > 0.08) {
                 spriteFacingState.xDir = velocityX < 0 ? -1 : 1;
             } else if (Math.abs(turnInput) > 0.05) {
                 spriteFacingState.xDir = turnInput < 0 ? -1 : 1;
             }
-        } else if (spriteFacingState.facingBack) {
-            spriteFacingState.facingBack = false;
-            playerSpriteMaterial.map = playerTextures.front;
-            playerSpriteMaterial.needsUpdate = true;
         } else if (Math.abs(turnInput) > 0.05) {
             spriteFacingState.xDir = turnInput < 0 ? -1 : 1;
         }
@@ -2390,6 +2632,9 @@ function createVoxelChurch(container) {
         updateMassSequence(dt);
         updateSignOfCross(dt);
 
+        celebrantSprite.position.y =
+            CELEBRANT_SPRITE_HEIGHT * 0.5 + Math.sin(performance.now() * 0.0022) * 0.028;
+
         const left = keyState.has("ArrowLeft") || keyState.has("KeyA");
         const right = keyState.has("ArrowRight") || keyState.has("KeyD");
         const up = keyState.has("ArrowUp") || keyState.has("KeyW");
@@ -2424,15 +2669,17 @@ function createVoxelChurch(container) {
         if (playerMotion.onGround) {
             const groundDelta = targetGroundY - playerRig.position.y;
             if (Math.abs(groundDelta) > 0.001) {
-                const maxStep = 4.8 * dt;
-                if (Math.abs(groundDelta) <= 0.28) {
-                    playerRig.position.y += THREE.MathUtils.clamp(groundDelta, -maxStep, maxStep);
-                } else if (groundDelta < 0) {
+                const maxStep = 5.2 * dt;
+                if (groundDelta > 0) {
+                    playerRig.position.y += Math.min(groundDelta, maxStep);
+                } else {
                     playerRig.position.y += Math.max(groundDelta, -maxStep);
                 }
                 if (Math.abs(targetGroundY - playerRig.position.y) < 0.02) {
                     playerRig.position.y = targetGroundY;
                 }
+            } else {
+                playerRig.position.y = targetGroundY;
             }
         }
 
@@ -2457,7 +2704,7 @@ function createVoxelChurch(container) {
         applyArmSecondaryMotion(horizontalSpeed);
         syncOverlayArmsVisibility(actionState.currentGesture, horizontalSpeed);
         updateLiturgyItem();
-        updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, dt);
+        updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, throttleInput, down, dt);
 
         playerShadow.position.x = playerRig.position.x;
         playerShadow.position.y = playerMotion.groundY + 0.02;
@@ -2539,7 +2786,7 @@ function createVoxelChurch(container) {
         camera,
         renderer,
         altarCloth,
-        crucifixGroup: corpusGroup,
+        crucifixGroup: sanctuaryCrossGroup,
         playerRig,
         triggerGesture: (name) => {
             if (actionState.massActive) setMassMode(false);
@@ -2553,6 +2800,8 @@ function createVoxelChurch(container) {
         },
         getCurrentGesture: () => actionState.currentGesture,
         isMassActive: () => actionState.massActive,
+        setCelebrantVestment,
+        setCelebrantPose,
         jumpToMassStep,
         dispose: disposeThreeWorld,
     };
@@ -2656,6 +2905,15 @@ async function activateThreeScene(role) {
 
         APP_STATE.threeWorld.altarCloth.material.color.setHex(liturgical.colorHex);
         APP_STATE.threeWorld.altarCloth.material.needsUpdate = true;
+
+        const vestmentOverride = new URLSearchParams(window.location.search).get("vestment");
+        const vestmentKey =
+            vestmentOverride && window.CELEBRANT_SPRITES?.VESTMENT_COLORS?.[vestmentOverride]
+                ? vestmentOverride
+                : "green";
+        if (APP_STATE.threeWorld.setCelebrantVestment) {
+            APP_STATE.threeWorld.setCelebrantVestment(vestmentKey);
+        }
 
         applyRoleCamera(role, APP_STATE.threeWorld.camera, APP_STATE.threeWorld.playerRig);
         setHudButtonsState(APP_STATE.threeWorld.getCurrentGesture(), APP_STATE.threeWorld.isMassActive());
