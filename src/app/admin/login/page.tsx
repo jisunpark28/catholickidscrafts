@@ -9,7 +9,10 @@ type PageProps = {
 
 function errorMessage(code: string | undefined): string | null {
   if (code === "CredentialsSignin") {
-    return "Invalid email or password. Use the same ADMIN_EMAIL and ADMIN_PASSWORD from your .env when you ran npm run db:seed.";
+    return "Email or password is incorrect";
+  }
+  if (code === "TooManyAttempts") {
+    return "Too many sign-in attempts. Try again in a few minutes.";
   }
   if (code === "Configuration") {
     return "Server misconfiguration: set AUTH_SECRET (and AUTH_URL=https://www.catholickidscrafts.com) in Vercel, then redeploy.";
