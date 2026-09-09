@@ -65,12 +65,13 @@ assert.equal(exploreNav.includes("/mass"), true);
 assert.equal(exploreNav.includes("/play"), true);
 assert.equal(exploreNav.includes("/resources"), true);
 assert.equal(exploreNav.includes("/curriculum"), true);
+assert.equal(exploreNav.includes("/terms"), false, "Terms belongs in the footer, not Explore nav");
 
 const footer = fs.readFileSync("src/components/SiteFooter.tsx", "utf8");
 assert.equal(footer.includes("getPublicContactMailto"), true);
 assert.equal(footer.includes("/privacy"), true);
+assert.equal(footer.includes("/terms"), true);
 assert.equal(footer.includes("PUBLIC_EXPLORE_NAV"), true);
-assert.equal(footer.includes("/terms"), false, "no Terms link until /terms exists");
 
 const previousContact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
 const previousSiteContact = process.env.SITE_CONTACT_EMAIL;
@@ -93,9 +94,24 @@ const privacy = fs.readFileSync("src/app/(site)/privacy/page.tsx", "utf8");
 assert.equal(privacy.includes("NEXT_PUBLIC_CONTACT_EMAIL"), false, "privacy must not mention the contact env name");
 assert.equal(privacy.includes("docs/FAMILY_GOOGLE_SIGNIN.md"), false, "privacy must not mention operator docs");
 assert.equal(privacy.includes("we never receive the Google password"), true);
+assert.equal(privacy.includes('href="/terms"'), true, "privacy must link to Terms");
+assert.equal(privacy.includes("Access ID"), true);
+assert.equal(privacy.includes("ckc_vid"), true);
+assert.equal(privacy.includes("camera or microphone"), true);
+
+const terms = fs.readFileSync("src/app/(site)/terms/page.tsx", "utf8");
+assert.equal(terms.includes("NEXT_PUBLIC_CONTACT_EMAIL"), false, "terms must not mention the contact env name");
+assert.equal(terms.includes("getPublicContactEmail"), true);
+assert.equal(terms.includes('href="/privacy"'), true, "terms must link to Privacy");
+assert.equal(terms.includes('href="/affiliate-disclosure"'), true);
+assert.equal(terms.includes("governing law"), false, "do not invent a jurisdiction");
+assert.equal(terms.includes("USCCB"), true);
 
 const about = fs.readFileSync("src/app/(site)/about/page.tsx", "utf8");
 assert.equal(about.includes("getPublicContactEmail"), true, "about should show contact via shared helper");
 assert.equal(about.includes("through the contact on our"), false);
+
+const recCard = fs.readFileSync("src/components/RecommendationCard.tsx", "utf8");
+assert.equal(recCard.includes("Amazon Associate"), true, "Amazon outbound cards must match Affiliate disclosure labeling");
 
 console.log("test-public-copy: ok");

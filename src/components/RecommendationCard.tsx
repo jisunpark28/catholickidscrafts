@@ -15,7 +15,7 @@ export function RecommendationCard({ item }: Props) {
           {kindLabel(item.kind)}
         </span>
         {affiliate && (
-          <span className="text-xs font-semibold text-[var(--color-muted)]">Amazon</span>
+          <span className="text-xs font-semibold text-[var(--color-muted)]">Amazon Associate</span>
         )}
         {item.tags && (
           <span className="text-xs text-[var(--color-muted)]">{item.tags}</span>

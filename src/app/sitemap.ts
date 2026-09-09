@@ -43,6 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/program/templates", { changeFrequency: "weekly", priority: 0.75 }),
     entry("/program/community", { changeFrequency: "weekly", priority: 0.75 }),
     entry("/privacy", { changeFrequency: "yearly", priority: 0.3 }),
+    entry("/terms", { changeFrequency: "yearly", priority: 0.3 }),
     entry("/affiliate-disclosure", { changeFrequency: "yearly", priority: 0.3 }),
   ];
 

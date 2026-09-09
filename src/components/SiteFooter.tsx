@@ -29,6 +29,7 @@ export function SiteFooter() {
   const legal = [
     { href: "/about", label: t("global.footer.link.about", "About") },
     { href: "/privacy", label: t("global.footer.link.privacy", "Privacy") },
+    { href: "/terms", label: t("global.footer.link.terms", "Terms") },
     { href: "/affiliate-disclosure", label: t("global.footer.link.affiliate", "Affiliate disclosure") },
   ];
 
