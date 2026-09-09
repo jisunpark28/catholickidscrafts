@@ -36,6 +36,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: CSP Report-Only checks
+        run: pnpm exec tsx scripts/test-csp.ts
+
       - name: Preview build (skip DB migrate)
         run: VERCEL_ENV=preview bash scripts/vercel-build.sh
         env:
