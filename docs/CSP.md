@@ -1,6 +1,6 @@
 # Content-Security-Policy
 
-Phase 3b enforces CSP on all routes via `next.config.ts` (`cspHeaders()` from `src/lib/csp.ts`). Report-Only was used first (Phase 3 / PR #200); this is the enforcing policy after those flows showed no critical violations.
+Phase 3b enforces CSP on all routes via `next.config.ts` (`cspHeaders()` from `src/lib/csp.ts`). Report-Only landed first on `main` (Phase 3 / PR #200); this is the enforcing policy after those flows showed no critical violations.
 
 Responses send `Content-Security-Policy` plus `Reporting-Endpoints`. They do **not** send `Content-Security-Policy-Report-Only`. Browser reports still POST to `/api/csp-report` (`report-uri` / `report-to`).
 
