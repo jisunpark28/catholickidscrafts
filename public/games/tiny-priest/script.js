@@ -2666,6 +2666,11 @@ async function activateThreeScene(role) {
                         APP_STATE.threeWorld.triggerGesture(gesture);
                     }
                 },
+                onMassStepChange: (stepIndex) => {
+                    actionState.massIndex = stepIndex;
+                    actionState.currentMassStepIndex = stepIndex;
+                    setMassFlowStepState(stepIndex, window.MassQuest.isActive());
+                },
             });
         }
         const introTemplate =
