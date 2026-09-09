@@ -1,5 +1,6 @@
 import { generateLessonShareSlug } from "@/lib/lesson-kit/share-slug";
 import { serializeLessonKit, type LessonKitWithBlocks } from "@/lib/lesson-kit/serialize";
+import { isPlaceholderLessonCopy } from "@/lib/lesson-kit/placeholder-copy";
 import type { LessonBlockConfig } from "@/lib/lesson-kit/types";
 import { prisma } from "@/lib/prisma";
 import type { LessonBlockType, LessonKitScope, Prisma } from "@prisma/client";
@@ -32,7 +33,9 @@ export async function listGlobalTemplates() {
     orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
     include: kitInclude,
   });
-  return kits.map(serializeLessonKit);
+  return kits
+    .map(serializeLessonKit)
+    .filter((kit) => !isPlaceholderLessonCopy(kit.title, kit.description));
 }
 
 export async function listPersonalKits(familyAccountId: string) {
