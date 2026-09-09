@@ -51,6 +51,27 @@ assert.equal(dailyMassPanel.includes("aria-expanded"), true);
 const resourcesPage = fs.readFileSync("src/app/(site)/resources/page.tsx", "utf8");
 assert.equal(resourcesPage.includes("Check back soon"), false);
 
+const header = fs.readFileSync("src/components/HomeHubHeader.tsx", "utf8");
+assert.equal(header.includes("PUBLIC_EXPLORE_NAV"), true);
+assert.equal(header.includes("/admin"), false, "header must not link to admin");
+
+const accountMenu = fs.readFileSync("src/components/HomeHubAccountMenu.tsx", "utf8");
+assert.equal(accountMenu.includes("/account/login"), true);
+assert.equal(accountMenu.includes("/admin"), false, "account menu must not link to admin");
+
+const exploreNav = fs.readFileSync("src/lib/public-explore-nav.ts", "utf8");
+assert.equal(exploreNav.includes("/prayers"), true);
+assert.equal(exploreNav.includes("/mass"), true);
+assert.equal(exploreNav.includes("/play"), true);
+assert.equal(exploreNav.includes("/resources"), true);
+assert.equal(exploreNav.includes("/curriculum"), true);
+
+const footer = fs.readFileSync("src/components/SiteFooter.tsx", "utf8");
+assert.equal(footer.includes("getPublicContactMailto"), true);
+assert.equal(footer.includes("/privacy"), true);
+assert.equal(footer.includes("PUBLIC_EXPLORE_NAV"), true);
+assert.equal(footer.includes("/terms"), false, "no Terms link until /terms exists");
+
 const previousContact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
 const previousSiteContact = process.env.SITE_CONTACT_EMAIL;
 delete process.env.NEXT_PUBLIC_CONTACT_EMAIL;

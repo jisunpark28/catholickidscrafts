@@ -4,6 +4,8 @@ import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/Logo.png";
+import { PUBLIC_EXPLORE_NAV } from "@/lib/public-explore-nav";
+import { getPublicContactMailto } from "@/lib/site-contact";
 import { SITE_LITURGY_FOOTER } from "@/lib/site-liturgy-footer";
 import { getTptStoreUrl } from "@/lib/tpt";
 
@@ -11,13 +13,17 @@ export function SiteFooter() {
   const copy = useSiteCopy();
   const t = (key: string, fallback = "") => textFromCopy(copy, key, fallback);
   const tptStore = getTptStoreUrl();
+  const contactMailto = getPublicContactMailto();
 
   const explore = [
-    { href: "/mass", label: t("global.footer.link.mass", "Daily Mass") },
-    { href: "/play", label: t("global.footer.link.play", "Play & Learn") },
-    { href: "/resources", label: t("global.footer.link.resources", "Kids Resources") },
-    { href: "/curriculum", label: t("global.footer.link.curriculum", "Curriculum") },
-    { href: "/recommendations", label: t("global.footer.link.recommendations", "Recommendations") },
+    ...PUBLIC_EXPLORE_NAV.map((item) => ({
+      href: item.href,
+      label: t(item.labelKey, item.fallback),
+    })),
+    {
+      href: "/recommendations",
+      label: t("global.footer.link.recommendations", "Recommendations"),
+    },
   ];
 
   const legal = [
@@ -86,6 +92,17 @@ export function SiteFooter() {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  {contactMailto ? (
+                    <a href={contactMailto} className="text-[var(--color-link)] hover:underline">
+                      {t("global.footer.link.contact", "Contact")}
+                    </a>
+                  ) : (
+                    <Link href="/privacy" className="text-[var(--color-link)] hover:underline">
+                      {t("global.footer.link.contact", "Contact")}
+                    </Link>
+                  )}
+                </li>
               </ul>
             </div>
           </div>
