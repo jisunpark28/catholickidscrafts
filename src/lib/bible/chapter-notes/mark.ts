@@ -224,7 +224,7 @@ const MARK_NOTES: Record<number, Partial<Record<ChapterNoteLocale, ChapterNote>>
         "Jesus foretells troubles, the destruction of the Temple, and calls disciples to stay watchful and faithful.",
       words: [
         { term: "watch", gloss: "Stay awake spiritually—ready to follow Jesus." },
-        { term: "end times", gloss: "Jesus warns of trials before God fully renews the world." },
+        { term: "last days", gloss: "Jesus warns of trials before God fully renews the world." },
       ],
     },
     ko: {

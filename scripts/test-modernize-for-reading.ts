@@ -34,12 +34,24 @@ const pronouns = modernizeForReading("Prepare ye the way; thy sins are forgiven 
 assert(pronouns.includes("Prepare the way"), "Prepare ye");
 assert(pronouns.includes("your sins"), "thy → your");
 
-assert(getCatholicBookName("mark", "ko") === "마르코", "Korean Catholic name for Mark");
+assert(getCatholicBookName("mark", "ko") === "마르코 복음서", "Korean Catholic name for Mark");
 assert(getCatholicBookName("mark", "ko") !== "마가", "never use Protestant 마가");
-assert(getCatholicBookName("luke", "ko") === "루카", "Korean Catholic name for Luke");
+assert(getCatholicBookName("luke", "ko") === "루카 복음서", "Korean Catholic name for Luke");
 assert(getCatholicBookName("exodus", "ko") === "탈출기", "Korean Catholic name for Exodus");
 assert(getCatholicBookName("judges", "ko") === "판관기", "Korean Catholic name for Judges");
+assert(getCatholicBookName("josue", "ko") === "여호수아기", "CBCK Joshua");
+assert(getCatholicBookName("abdias", "ko") === "오바드야서", "CBCK Obadiah");
+assert(getCatholicBookName("zacharias", "ko") === "즈카르야서", "CBCK Zechariah");
 assert(getCatholicBookName("apocalypse", "ko") === "요한 묵시록", "Korean Catholic name for Revelation");
+assert(getCatholicBookName("josue", "en") === "Joshua", "NAB/CBCK English Joshua, not Josue");
+assert(getCatholicBookName("1-kings-samuel", "en") === "1 Samuel", "NAB 1 Samuel, not 1 Kings");
+assert(getCatholicBookName("3-kings", "en") === "1 Kings", "NAB 1 Kings, not 3 Kings");
+assert(getCatholicBookName("1-paralipomenon", "en") === "1 Chronicles", "NAB Chronicles");
+assert(getCatholicBookName("tobias", "en") === "Tobit", "NAB Tobit");
+assert(getCatholicBookName("ecclesiasticus", "en") === "Sirach", "NAB Sirach");
+assert(getCatholicBookName("canticle-of-canticles", "en") === "Song of Songs", "NAB Song of Songs");
+assert(getCatholicBookName("apocalypse", "en") === "Revelation", "NAB Revelation, not Apocalypse");
+assert(getCatholicBookName("isaias", "en") === "Isaiah", "NAB Isaiah");
 assert(catholicGospelLabel("mark", "ko") === "마르코가 전한 복음", "Gospel label KO");
 assert((catholicGospelLabel("mark", "es") ?? "").includes("Marcos"), "Gospel label ES");
 

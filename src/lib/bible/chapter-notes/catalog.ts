@@ -39,6 +39,7 @@ export const BIBLE_BOOK_CATALOG: readonly BibleBookCatalogEntry[] = [
   { slug: "ezechiel", totalChapters: 48, testament: "OT" },
   { slug: "daniel", totalChapters: 14, testament: "OT" },
   { slug: "osee", totalChapters: 14, testament: "OT" },
+  // Douay-Rheims/Vulgate numbering (latinprayer). CBCK/NAB Joel has 4 chapters.
   { slug: "joel", totalChapters: 3, testament: "OT" },
   { slug: "amos", totalChapters: 9, testament: "OT" },
   { slug: "abdias", totalChapters: 1, testament: "OT" },
@@ -49,7 +50,8 @@ export const BIBLE_BOOK_CATALOG: readonly BibleBookCatalogEntry[] = [
   { slug: "sophonias", totalChapters: 3, testament: "OT" },
   { slug: "aggeus", totalChapters: 2, testament: "OT" },
   { slug: "zacharias", totalChapters: 14, testament: "OT" },
-  { slug: "malachias", totalChapters: 4, testament: "OT" },
+  // Douay-Rheims and CBCK/NAB both have 3 chapters for Malachi.
+  { slug: "malachias", totalChapters: 3, testament: "OT" },
   { slug: "1-machabees", totalChapters: 16, testament: "OT" },
   { slug: "2-machabees", totalChapters: 15, testament: "OT" },
   { slug: "matthew", totalChapters: 28, testament: "NT" },

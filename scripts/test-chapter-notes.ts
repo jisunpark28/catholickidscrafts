@@ -68,4 +68,23 @@ const mark1Ko = getChapterNote("mark", 1, "ko", "Mark");
 assert(mark1Ko?.summary.includes("세례자 요한"), "mark ch1 uses 세례자 요한");
 assert(mark1Ko?.summary.includes("갈릴래아"), "mark ch1 uses Catholic 갈릴래아");
 
+const malachiCh4 = getChapterNote("malachias", 4, "en", "Malachi");
+assert(malachiCh4 === null, "Malachi has 3 chapters (CBCK/NAB/Douay)");
+
+const romansEn = getChapterNote("romans", 1, "en", "Romans");
+assert(romansEn?.summary.includes("made righteous"), "romans en avoids sola-fide phrasing");
+assert(!romansEn?.summary.includes("justification by faith"), "romans en not Protestant justification by faith");
+
+const cor1En = getChapterNote("1-corinthians", 1, "en", "1 Corinthians");
+assert(cor1En?.summary.includes("Eucharist"), "1 corinthians en uses Eucharist");
+assert(!cor1En?.summary.includes("Eucharistic worship"), "1 corinthians en not Eucharistic worship");
+
+const mark13En = getChapterNote("mark", 13, "en", "Mark");
+assert(mark13En?.words?.some((w) => w.term === "last days"), "mark 13 en uses last days");
+assert(!mark13En?.words?.some((w) => w.term === "end times"), "mark 13 en not end times");
+
+const josueEn = getChapterNote("josue", 1, "en", "Josue");
+assert(josueEn?.summary.includes("Joshua"), "josue notes display NAB Joshua");
+assert(!josueEn?.summary.startsWith("Josue"), "josue notes do not keep Douay Josue");
+
 console.log("test-chapter-notes: ok", BIBLE_BOOK_CATALOG.length, "books");

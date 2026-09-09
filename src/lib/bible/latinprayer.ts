@@ -1,4 +1,11 @@
+import { getCatholicBookName } from "@/lib/bible/catholic-book-names";
+
 const BASE = "https://latinprayer.org/bible";
+
+/** Douay-Rheims API names (Josue, 1 Kings Samuel) → NAB/CBCK English (Joshua, 1 Samuel). */
+function withCatholicEnglishName<T extends { slug: string; name: string }>(book: T): T {
+  return { ...book, name: getCatholicBookName(book.slug, "en", book.name) };
+}
 
 export type BibleBookMeta = {
   order: number;
@@ -36,7 +43,7 @@ export async function fetchBibleBooks(): Promise<BibleBookMeta[]> {
   });
   if (!res.ok) throw new Error("Failed to load Bible book list");
   const data = (await res.json()) as IndexResponse;
-  booksCache = data.books;
+  booksCache = data.books.map(withCatholicEnglishName);
   booksCacheAt = now;
   return booksCache;
 }
@@ -61,7 +68,7 @@ export async function fetchBibleChapter(
     citation: data.citation,
     verses: data.verses,
     meta: {
-      book: data._meta.book,
+      book: withCatholicEnglishName(data._meta.book),
       chapter: data._meta.chapter,
     },
   };
