@@ -52,8 +52,8 @@ const BOOK_GLOSSARY: Partial<
       { term: "creation", gloss: "God made the world good at the beginning." },
     ],
     ko: [
-      { term: "언약", gloss: "하나님과 백성 사이의 거룩한 약속입니다." },
-      { term: "창조", gloss: "하나님께서 처음에 세상을 선하게 만드셨습니다." },
+      { term: "계약", gloss: "하느님과 백성 사이의 거룩한 약속입니다." },
+      { term: "창조", gloss: "하느님께서 처음에 세상을 선하게 만드셨습니다." },
     ],
     es: [
       { term: "alianza", gloss: "La promesa sagrada de Dios con su pueblo." },

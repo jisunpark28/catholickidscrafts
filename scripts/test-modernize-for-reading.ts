@@ -36,6 +36,10 @@ assert(pronouns.includes("your sins"), "thy → your");
 
 assert(getCatholicBookName("mark", "ko") === "마르코", "Korean Catholic name for Mark");
 assert(getCatholicBookName("mark", "ko") !== "마가", "never use Protestant 마가");
+assert(getCatholicBookName("luke", "ko") === "루카", "Korean Catholic name for Luke");
+assert(getCatholicBookName("exodus", "ko") === "탈출기", "Korean Catholic name for Exodus");
+assert(getCatholicBookName("judges", "ko") === "판관기", "Korean Catholic name for Judges");
+assert(getCatholicBookName("apocalypse", "ko") === "요한 묵시록", "Korean Catholic name for Revelation");
 assert(catholicGospelLabel("mark", "ko") === "마르코가 전한 복음", "Gospel label KO");
 assert((catholicGospelLabel("mark", "es") ?? "").includes("Marcos"), "Gospel label ES");
 
