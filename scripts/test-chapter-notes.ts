@@ -31,6 +31,7 @@ const PROTESTANT_KO_TERMS = [
   "말세",
   "백부장",
   "마가",
+  "갈릴리",
 ];
 
 function koreanNoteText(note: { summary: string; words?: { term: string; gloss: string }[] }): string {
@@ -65,5 +66,6 @@ assert(hebrewsKo?.summary.includes("대사제"), "hebrews ko uses 대사제");
 
 const mark1Ko = getChapterNote("mark", 1, "ko", "Mark");
 assert(mark1Ko?.summary.includes("세례자 요한"), "mark ch1 uses 세례자 요한");
+assert(mark1Ko?.summary.includes("갈릴래아"), "mark ch1 uses Catholic 갈릴래아");
 
 console.log("test-chapter-notes: ok", BIBLE_BOOK_CATALOG.length, "books");
