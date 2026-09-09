@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { isPlaceholderLessonCopy } from "../src/lib/lesson-kit/placeholder-copy";
+import { resourceDownloadButtonLabel } from "../src/lib/resource-download-label";
 import { getPublicContactEmail } from "../src/lib/site-contact";
 import { isTeachersPayTeachersUrl, isYoutubeUrl, partnerOutboundLabel } from "../src/lib/tpt";
 
@@ -18,6 +19,37 @@ assert.equal(
   "Full classroom pack on TPT →",
 );
 assert.equal(partnerOutboundLabel("https://example.com/pack"), "Open link →");
+
+assert.equal(
+  resourceDownloadButtonLabel({ isFreeSample: true }),
+  "Download sample PDF",
+);
+assert.equal(
+  resourceDownloadButtonLabel({ isFreeSample: false }),
+  "Download full PDF",
+);
+assert.equal(
+  resourceDownloadButtonLabel({ downloadLabel: "Download PDF", isFreeSample: true }),
+  "Download sample PDF",
+);
+assert.equal(
+  resourceDownloadButtonLabel({
+    downloadLabel: "Download craft template (sample)",
+    isFreeSample: true,
+  }),
+  "Download craft template (sample)",
+);
+
+const homeHub = fs.readFileSync("src/components/HomeLearnHub.tsx", "utf8");
+assert.equal(homeHub.includes("<h1"), true, "home hub must render an H1");
+assert.equal(homeHub.includes("home.hero"), false);
+
+const dailyMassPanel = fs.readFileSync("src/components/DailyMassPanel.tsx", "utf8");
+assert.equal(dailyMassPanel.includes("▼"), false, "mass calendar must not use a menu chevron");
+assert.equal(dailyMassPanel.includes("aria-expanded"), true);
+
+const resourcesPage = fs.readFileSync("src/app/(site)/resources/page.tsx", "utf8");
+assert.equal(resourcesPage.includes("Check back soon"), false);
 
 const previousContact = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
 const previousSiteContact = process.env.SITE_CONTACT_EMAIL;

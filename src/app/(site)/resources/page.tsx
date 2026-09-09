@@ -30,6 +30,12 @@ type Props = {
   searchParams: Promise<{ q?: string; period?: string; sort?: string }>;
 };
 
+function joinSeasonTitles(titles: string[]): string {
+  if (titles.length <= 1) return titles[0] ?? "";
+  if (titles.length === 2) return `${titles[0]} and ${titles[1]}`;
+  return `${titles.slice(0, -1).join(", ")}, and ${titles[titles.length - 1]}`;
+}
+
 export default async function ResourcesPage({ searchParams }: Props) {
   const params = await searchParams;
   const q = params.q;
@@ -74,19 +80,32 @@ export default async function ResourcesPage({ searchParams }: Props) {
 
   const all = await getAllResources(sort);
 
-  const periodCounts = await Promise.all(
-    periods.map(async (p) => ({
-      period: p,
-      count: (await getResourcesByPeriod(p.id, sort)).length,
-    })),
-  );
-
   const periodPosts = await Promise.all(
     periods.map(async (p) => ({
       period: p,
       posts: await getResourcesByPeriod(p.id, sort),
     })),
   );
+  const filledPeriods = periodPosts.filter(({ posts }) => posts.length > 0);
+  const emptySeasonTitles = periodPosts
+    .filter(({ posts }) => posts.length === 0)
+    .map(({ period: p }) => p.title);
+
+  const emptySeasonsNote =
+    all.length === 0
+      ? ""
+      : emptySeasonTitles.length === 1
+        ? copyText(copy, "resources.empty.one_season", "No {season} resources are published yet.").replace(
+            "{season}",
+            emptySeasonTitles[0],
+          )
+        : emptySeasonTitles.length > 1
+          ? copyText(
+              copy,
+              "resources.empty.many_seasons",
+              "No published resources yet for {seasons}.",
+            ).replace("{seasons}", joinSeasonTitles(emptySeasonTitles))
+          : "";
 
   return (
     <PageShell wide>
@@ -96,45 +115,41 @@ export default async function ResourcesPage({ searchParams }: Props) {
         <ResourcesToolbar />
       </Suspense>
 
-      <nav className="mb-10 flex flex-wrap gap-2">
-        {periodCounts.map(({ period: p, count }) => (
-          <a
-            key={p.id}
-            href={`#${p.id}`}
-            className="rounded-full bg-[var(--color-surface)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
-          >
-            {p.title}
-            {count > 0 && (
-              <span className="ml-2 text-[var(--color-muted)]">({count})</span>
-            )}
-          </a>
-        ))}
-      </nav>
+      {filledPeriods.length > 0 ? (
+        <nav className="mb-10 flex flex-wrap gap-2">
+          {filledPeriods.map(({ period: p, posts }) => (
+            <a
+              key={p.id}
+              href={`#${p.id}`}
+              className="rounded-full bg-[var(--color-surface)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+            >
+              {p.title}
+              <span className="ml-2 text-[var(--color-muted)]">({posts.length})</span>
+            </a>
+          ))}
+        </nav>
+      ) : null}
 
       <div className="space-y-16">
-        {periodPosts.map(({ period: p, posts }) => {
-          return (
-            <section key={p.id} id={p.id} className="scroll-mt-24 space-y-6">
-              <div className="rounded-2xl bg-[var(--color-surface)] px-6 py-5 sm:px-8">
-                <h2 className="text-2xl font-bold text-[var(--color-ink)]">{p.title}</h2>
-                <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{p.description}</p>
-              </div>
+        {filledPeriods.map(({ period: p, posts }) => (
+          <section key={p.id} id={p.id} className="scroll-mt-24 space-y-6">
+            <div className="rounded-2xl bg-[var(--color-surface)] px-6 py-5 sm:px-8">
+              <h2 className="text-2xl font-bold text-[var(--color-ink)]">{p.title}</h2>
+              <p className="mt-2 max-w-3xl text-[var(--color-muted)]">{p.description}</p>
+            </div>
 
-              {posts.length > 0 ? (
-                <ResourceCardGrid>
-                  {posts.map((post) => (
-                    <ResourceCard key={post.slug} post={post} />
-                  ))}
-                </ResourceCardGrid>
-              ) : (
-                <p className="rounded-2xl bg-white px-6 py-8 text-sm text-[var(--color-muted)] shadow-sm">
-                  No resources in this season yet. Check back soon.
-                </p>
-              )}
-            </section>
-          );
-        })}
+            <ResourceCardGrid>
+              {posts.map((post) => (
+                <ResourceCard key={post.slug} post={post} />
+              ))}
+            </ResourceCardGrid>
+          </section>
+        ))}
       </div>
+
+      {emptySeasonsNote ? (
+        <p className="mt-12 text-sm text-[var(--color-muted)]">{emptySeasonsNote}</p>
+      ) : null}
 
       {all.length === 0 && (
         <p className="text-[var(--color-muted)]">No resources published yet.</p>
