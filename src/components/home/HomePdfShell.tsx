@@ -6,8 +6,6 @@ import { useEffect, useId, useState } from "react";
 
 type Props = {
   groups: HomePdfGroup[];
-  extra: HomePdfLink[];
-  extraHeading: string;
   children: React.ReactNode;
 };
 
@@ -45,7 +43,7 @@ function NavAnchor({
   );
 }
 
-export function HomePdfShell({ groups, extra, extraHeading, children }: Props) {
+export function HomePdfShell({ groups, children }: Props) {
   const navId = useId();
   const [desktopOpen, setDesktopOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -131,24 +129,6 @@ export function HomePdfShell({ groups, extra, extraHeading, children }: Props) {
         )}
 
         {children}
-
-        {extra.length > 0 && (
-          <section className="mt-10 border-t border-[#e8e0d6] pt-8" aria-labelledby="home-pdf-extra">
-            <h2
-              id="home-pdf-extra"
-              className="mb-4 text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]"
-            >
-              {extraHeading}
-            </h2>
-            <ul className="flex max-w-md list-none flex-col gap-2.5 p-0">
-              {extra.map((item) => (
-                <li key={item.id}>
-                  <NavAnchor item={item} active={false} onNavigate={() => setMobileOpen(false)} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
       </div>
     </div>
   );

@@ -58,7 +58,13 @@ export function HomeHubHeader({ initialSession }: Props) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e8dccf] bg-[#f5ebe0]">
-      <div className="mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-8 lg:px-12">
+      <div
+        className={
+          isHome
+            ? "w-full px-3 py-3 sm:px-4"
+            : "mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-8 lg:px-12"
+        }
+      >
         <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3">
           <div className="col-start-1 row-start-1 flex min-w-0 justify-start">
             <HomeLearnSearch

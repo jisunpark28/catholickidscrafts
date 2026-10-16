@@ -41,18 +41,15 @@ export function HomeLearnHub({
   calendarCelebration,
   sections,
 }: Props) {
-  const nav = buildHomePdfNav(sections, {
+  const { groups } = buildHomePdfNav(sections, {
     gallery: copy.gallery,
     curriculum: copy.curriculum,
     resources: copy.ctaResources,
     play: copy.play,
   });
-  const extra = nav.extra.some((item) => item.href === "/mass")
-    ? nav.extra
-    : [{ id: "daily-mass-page", label: copy.ctaMass, href: "/mass" }, ...nav.extra];
 
   return (
-    <HomePdfShell groups={nav.groups} extra={extra} extraHeading={copy.exploreHeading}>
+    <HomePdfShell groups={groups}>
       <h1 className="sr-only">{copy.heroTitle}</h1>
       <p className="sr-only">{copy.heroSubtitle}</p>
       <section aria-label={copy.dailyMassLabel}>
