@@ -1,6 +1,5 @@
 "use client";
 
-import { BibleHubShell } from "@/components/bible/BibleHubShell";
 import { GospelTypingSection } from "@/components/gospel/GospelTypingSection";
 import { MyReadingCalendarPanel } from "@/components/gospel/MyReadingCalendarPanel";
 import { isHeaderSignedIn, type HeaderSessionResponse } from "@/lib/header-session";
@@ -45,7 +44,7 @@ export function GospelHub({ signedIn: initialSignedIn, initialCompleted, todayDa
   }
 
   return (
-    <BibleHubShell showBack={false} wide>
+    <>
       <MyReadingCalendarPanel
         signedIn={signedIn}
         initialCompleted={completed}
@@ -58,6 +57,6 @@ export function GospelHub({ signedIn: initialSignedIn, initialCompleted, todayDa
         focusDate={focusDate}
         onCompleted={handleCompleted}
       />
-    </BibleHubShell>
+    </>
   );
 }

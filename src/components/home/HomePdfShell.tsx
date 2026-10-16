@@ -2,7 +2,16 @@
 
 import type { HomePdfGroup, HomePdfLink } from "@/lib/home-pdf-nav";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+
+function linkIsCurrent(href: string, pathname: string): boolean {
+  const path = href.split("?")[0] || href;
+  if (path === "/gospel" || path === "/bible/gospel") {
+    return pathname === "/gospel" || pathname === "/bible/gospel";
+  }
+  return pathname === path;
+}
 
 type Props = {
   groups: HomePdfGroup[];
@@ -46,6 +55,7 @@ function NavAnchor({
 }
 
 export function HomePdfShell({ groups, extra, extraHeading, children }: Props) {
+  const pathname = usePathname() ?? "";
   const navId = useId();
   const [desktopOpen, setDesktopOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -92,7 +102,7 @@ export function HomePdfShell({ groups, extra, extraHeading, children }: Props) {
                     <li key={item.id}>
                       <NavAnchor
                         item={item}
-                        active={false}
+                        active={linkIsCurrent(item.href, pathname)}
                         onNavigate={() => setMobileOpen(false)}
                       />
                     </li>
