@@ -14,7 +14,6 @@ import {
   type PrayerLanguageCode,
 } from "@/lib/prayers/prayer-languages";
 import type { LocalizedPrayer } from "@/lib/prayers/prayer-types";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 
@@ -168,12 +167,6 @@ export function PrayersReader() {
           </div>
         </div>
       </article>
-
-      <p className="mt-8 text-sm text-[var(--color-muted)] lg:col-span-2">
-        <Link href="/" className="font-semibold text-[var(--color-link)]">
-          ← Home
-        </Link>
-      </p>
     </div>
   );
 }

@@ -29,8 +29,9 @@ export function HomeHubHeader({ initialSession }: Props) {
   const isHome = pathname === "/";
   const isGospel = pathname === "/bible/gospel" || pathname === "/gospel";
   const isTestament = isTestamentChromePath(pathname);
-  const hideExplore = isHome || isGospel || isTestament;
-  const edgeHeader = isHome || isGospel || isTestament;
+  const isPrayers = pathname === "/prayers" || pathname.startsWith("/prayers/");
+  const edgeHeader = isHome || isGospel || isTestament || isPrayers;
+  const hideExplore = edgeHeader;
   const searchResultsSlotId = useId();
   const exploreMenuId = useId();
   const exploreRef = useRef<HTMLDivElement>(null);
