@@ -1,5 +1,4 @@
-import { PageHeader } from "@/components/PageHeader";
-import { PageShell } from "@/components/PageShell";
+import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { PrayersReader } from "@/components/prayers/PrayersReader";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -15,15 +14,10 @@ export const metadata: Metadata = {
 
 export default function PrayersPage() {
   return (
-    <PageShell wide>
-      <PageHeader title="Prayers" />
-      <Suspense
-        fallback={
-          <p className="text-sm text-[var(--color-muted)]">Loading prayers…</p>
-        }
-      >
+    <TestamentPageShell>
+      <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading prayers…</p>}>
         <PrayersReader />
       </Suspense>
-    </PageShell>
+    </TestamentPageShell>
   );
 }

@@ -14,7 +14,6 @@ import {
   type PrayerLanguageCode,
 } from "@/lib/prayers/prayer-languages";
 import type { LocalizedPrayer } from "@/lib/prayers/prayer-types";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo } from "react";
 
@@ -80,50 +79,6 @@ export function PrayersReader() {
 
   return (
     <div className="prayers-reader">
-      <div className="prayers-reader__lang-bar">
-        <label htmlFor="prayer-language" className="prayers-reader__lang-label">
-          Language
-        </label>
-        <select
-          id="prayer-language"
-          className="prayers-reader__lang-select"
-          value={language}
-          onChange={(e) => selectLanguage(normalizePrayerLanguage(e.target.value))}
-        >
-          {PRAYER_LANGUAGES.map((opt) => (
-            <option key={opt.code} value={opt.code}>
-              {opt.nativeName}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="prayers-reader__mobile-picker lg:hidden">
-        <label htmlFor="prayer-picker" className="prayers-reader__picker-label">
-          Prayer
-        </label>
-        <select
-          id="prayer-picker"
-          className="prayers-reader__prayer-select"
-          value={active.slug}
-          onChange={(e) => selectPrayer(e.target.value)}
-        >
-          {categories.map((category) => {
-            const prayers = localizedPrayersByCategory(category.id, language);
-            if (prayers.length === 0) return null;
-            return (
-              <optgroup key={category.id} label={category.label}>
-                {prayers.map((prayer) => (
-                  <option key={prayer.slug} value={prayer.slug}>
-                    {prayer.title}
-                  </option>
-                ))}
-              </optgroup>
-            );
-          })}
-        </select>
-      </div>
-
       <nav className="prayers-reader__sidebar hidden lg:block" aria-label="Prayer list">
         {categories.map((category) => {
           const prayers = localizedPrayersByCategory(category.id, language);
@@ -153,27 +108,67 @@ export function PrayersReader() {
         })}
       </nav>
 
-      <article className="prayers-reader__panel" aria-labelledby="prayer-title">
-        <header className="prayers-reader__panel-head">
-          <h2 id="prayer-title" className="prayers-reader__title">
-            {active.title}
-          </h2>
-          {active.subtitle ? (
-            <p className="prayers-reader__subtitle">{active.subtitle}</p>
-          ) : null}
-        </header>
-        <div className="prayers-reader__body">
-          <div className="prayers-reader__text" lang={language}>
-            {displayText}
-          </div>
+      <div className="prayers-reader__main">
+        <div className="prayers-reader__lang-bar">
+          <label htmlFor="prayer-language" className="prayers-reader__lang-label">
+            Language
+          </label>
+          <select
+            id="prayer-language"
+            className="prayers-reader__lang-select"
+            value={language}
+            onChange={(e) => selectLanguage(normalizePrayerLanguage(e.target.value))}
+          >
+            {PRAYER_LANGUAGES.map((opt) => (
+              <option key={opt.code} value={opt.code}>
+                {opt.nativeName}
+              </option>
+            ))}
+          </select>
         </div>
-      </article>
 
-      <p className="mt-8 text-sm text-[var(--color-muted)] lg:col-span-2">
-        <Link href="/" className="font-semibold text-[var(--color-link)]">
-          ← Home
-        </Link>
-      </p>
+        <div className="prayers-reader__mobile-picker lg:hidden">
+          <label htmlFor="prayer-picker" className="prayers-reader__picker-label">
+            Prayer
+          </label>
+          <select
+            id="prayer-picker"
+            className="prayers-reader__prayer-select"
+            value={active.slug}
+            onChange={(e) => selectPrayer(e.target.value)}
+          >
+            {categories.map((category) => {
+              const prayers = localizedPrayersByCategory(category.id, language);
+              if (prayers.length === 0) return null;
+              return (
+                <optgroup key={category.id} label={category.label}>
+                  {prayers.map((prayer) => (
+                    <option key={prayer.slug} value={prayer.slug}>
+                      {prayer.title}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            })}
+          </select>
+        </div>
+
+        <article className="prayers-reader__panel" aria-labelledby="prayer-title">
+          <header className="prayers-reader__panel-head">
+            <h2 id="prayer-title" className="prayers-reader__title">
+              {active.title}
+            </h2>
+            {active.subtitle ? (
+              <p className="prayers-reader__subtitle">{active.subtitle}</p>
+            ) : null}
+          </header>
+          <div className="prayers-reader__body">
+            <div className="prayers-reader__text" lang={language}>
+              {displayText}
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
   );
 }
