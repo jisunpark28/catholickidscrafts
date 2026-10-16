@@ -26,6 +26,8 @@ export function HomeHubHeader({ initialSession }: Props) {
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
   const pathname = usePathname() ?? "";
   const isHome = pathname === "/";
+  const isGospel = pathname === "/bible/gospel" || pathname === "/gospel";
+  const hideExplore = isHome || isGospel;
   const searchResultsSlotId = useId();
   const exploreMenuId = useId();
   const exploreRef = useRef<HTMLDivElement>(null);
@@ -60,7 +62,7 @@ export function HomeHubHeader({ initialSession }: Props) {
     <header className="sticky top-0 z-50 border-b border-[#e8dccf] bg-[#f5ebe0]">
       <div
         className={
-          isHome
+          isHome || isGospel
             ? "w-full px-3 py-3 sm:px-4"
             : "mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-8 lg:px-12"
         }
@@ -70,7 +72,9 @@ export function HomeHubHeader({ initialSession }: Props) {
             <HomeLearnSearch
               variant="header"
               className={
-                isHome ? "w-full max-w-[11rem] sm:max-w-xs lg:max-w-sm" : "w-full max-w-[10.5rem] sm:max-w-xs"
+                isHome || isGospel
+                  ? "w-full max-w-[11rem] sm:max-w-xs lg:max-w-sm"
+                  : "w-full max-w-[10.5rem] sm:max-w-xs"
               }
               headerResultsSlotId={searchResultsSlotId}
             />
@@ -81,7 +85,7 @@ export function HomeHubHeader({ initialSession }: Props) {
           </div>
 
           <div className="col-start-3 row-start-1 flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
-            <div ref={exploreRef} className={isHome ? "hidden" : "relative md:hidden"}>
+            <div ref={exploreRef} className={hideExplore ? "hidden" : "relative md:hidden"}>
               <HomeHubMenuButton
                 onClick={() => setExploreOpen((v) => !v)}
                 ariaExpanded={exploreOpen}
@@ -126,7 +130,7 @@ export function HomeHubHeader({ initialSession }: Props) {
         </div>
 
         <nav
-          className={`mt-2 hidden flex-wrap items-center justify-center gap-x-4 gap-y-1 ${isHome ? "" : "md:flex"}`}
+          className={`mt-2 hidden flex-wrap items-center justify-center gap-x-4 gap-y-1 ${hideExplore ? "" : "md:flex"}`}
           aria-label="Explore"
         >
           {exploreNav.map((item) => (

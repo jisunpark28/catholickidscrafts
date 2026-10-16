@@ -2,7 +2,7 @@
 
 import { GospelPraiseSticker } from "@/components/gospel/GospelPraiseSticker";
 import { toDateKey } from "@/lib/dates";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -11,6 +11,8 @@ type Props = {
   initialCompleted: string[];
   todayDate: string;
   onSelectDate?: (dateKey: string) => void;
+  /** Collapse control, shown at the top-right of the month header. */
+  headerEnd?: ReactNode;
 };
 
 export function GospelReadingCalendar({
@@ -18,6 +20,7 @@ export function GospelReadingCalendar({
   initialCompleted,
   todayDate,
   onSelectDate,
+  headerEnd,
 }: Props) {
   const today = new Date(`${todayDate}T12:00:00Z`);
   const [year, setYear] = useState(today.getUTCFullYear());
@@ -89,13 +92,14 @@ export function GospelReadingCalendar({
           >
             Next
           </button>
+          {headerEnd}
           {loading && <span className="text-xs text-[var(--color-muted)]">Loading…</span>}
         </div>
       </div>
 
-      <div className="grid grid-cols-7 border-b border-[#e8e0d6] bg-[#f5ebe0]/50 text-center text-[10px] font-bold uppercase tracking-wide text-[var(--color-muted)] sm:text-xs">
+      <div className="grid grid-cols-7 border-b border-[#e8e0d6] bg-[#f7f3ee] text-center text-[10px] font-bold uppercase tracking-wide text-[#9aa0a6] sm:text-[11px]">
         {WEEKDAYS.map((d) => (
-          <div key={d} className="border-r border-[#e8e0d6] py-2 last:border-r-0">
+          <div key={d} className="border-r border-[#ece7e1] py-1.5 last:border-r-0">
             {d}
           </div>
         ))}
@@ -105,7 +109,7 @@ export function GospelReadingCalendar({
         {Array.from({ length: firstDow }).map((_, i) => (
           <div
             key={`pad-${i}`}
-            className="min-h-[4.5rem] border-b border-r border-[#e8e0d6] bg-[#faf8f5]/80 sm:min-h-[5.5rem]"
+            className="min-h-[3.15rem] border-b border-r border-[#ece7e1] bg-[#fbfaf8] sm:min-h-[3.6rem]"
           />
         ))}
         {Array.from({ length: daysInMonth }, (_, i) => {
@@ -124,24 +128,29 @@ export function GospelReadingCalendar({
               type="button"
               disabled={!canSelect}
               onClick={() => canSelect && onSelectDate?.(dateKey)}
-              className={`flex min-h-[4.5rem] flex-col items-center border-b border-r border-[#e8e0d6] p-1 transition sm:min-h-[5.5rem] sm:p-2 ${
-                !canSelect ? "cursor-default bg-[#faf8f5]/80" : "hover:bg-[#fdfaf7]"
-              } ${isToday ? "ring-2 ring-inset ring-[#dfc9b0]" : ""}`}
+              className={`flex min-h-[3.15rem] flex-col items-center border-b border-r border-[#ece7e1] px-1 py-1 transition sm:min-h-[3.6rem] ${
+                !canSelect ? "cursor-default bg-[#fbfaf8]" : "bg-white hover:bg-[#fdfaf7]"
+              } ${isToday ? "ring-2 ring-inset ring-[#d35400]" : ""}`}
             >
               <span
-                className={`text-xs font-bold sm:text-sm ${
+                className={`text-[11px] font-semibold leading-none sm:text-xs ${
                   isToday
-                    ? "text-[var(--color-accent)]"
+                    ? "text-[#d35400]"
                     : isFuture || isPast
-                      ? "text-[var(--color-muted)] opacity-60"
-                      : "text-[var(--color-ink)]"
+                      ? "text-[#b0b4b8]"
+                      : "text-[#1c1c1c]"
                 }`}
               >
                 {day}
               </span>
-              <div className="mt-auto flex flex-1 items-end justify-center pb-0.5">
-                {signedIn && !isFuture && (
+              <div className="mt-1 flex flex-1 items-start justify-center">
+                {signedIn && !isFuture ? (
                   <GospelPraiseSticker completed={isDone} size="sm" />
+                ) : (
+                  <span
+                    className="inline-block h-4 w-4 rounded-full border border-[#e6e0d8] bg-[#f4f0ea]"
+                    aria-hidden
+                  />
                 )}
               </div>
             </button>
