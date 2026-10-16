@@ -162,12 +162,19 @@ export function HomeLearnSearch({
         </label>
         <div className="relative">
           <span
-            className={`pointer-events-none absolute top-1/2 -translate-y-1/2 text-[var(--color-muted)] ${
-              isHeader ? "left-3 text-sm sm:left-3.5" : "left-4"
+            className={`pointer-events-none absolute top-1/2 -translate-y-1/2 text-[#9aa0a6] ${
+              isHeader ? "left-3 sm:left-3.5" : "left-4"
             }`}
             aria-hidden
           >
-            ⌕
+            {isHeader ? (
+              <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <circle cx="8.5" cy="8.5" r="5.25" />
+                <path d="M12.5 12.5 17 17" strokeLinecap="round" />
+              </svg>
+            ) : (
+              "⌕"
+            )}
           </span>
           <input
             id={inputId}
@@ -178,7 +185,7 @@ export function HomeLearnSearch({
               setOpen(true);
             }}
             onFocus={() => setOpen(true)}
-            placeholder={isHeader ? "Search…" : "Search resources, curriculum, games, Bible…"}
+            placeholder={isHeader ? "Search..." : "Search resources, curriculum, games, Bible…"}
             className={inputClass}
             autoComplete="off"
             suppressHydrationWarning

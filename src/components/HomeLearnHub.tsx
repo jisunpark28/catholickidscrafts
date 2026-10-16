@@ -1,9 +1,7 @@
-import { DailyMassPanel } from "@/components/DailyMassPanel";
-import { HubPillWidth } from "@/components/HubPillWidth";
-import { HubTypingWidth } from "@/components/HubTypingWidth";
-import { HomeHubButtonLink } from "@/components/HomeHubButton";
-import { HomeNavPill } from "@/components/HomeNavPill";
+import { DailyMassCalendarBlock } from "@/components/DailyMassCalendarBlock";
+import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { ReaderThisWeekCard } from "@/components/lesson/ReaderThisWeekCard";
+import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import type { HomeSectionWithItems } from "@/lib/home-sections";
 import type { MonthCalendar } from "@/types/mass";
 import "@/styles/lesson-kit.css";
@@ -15,9 +13,13 @@ export type HomeLearnHubCopy = {
   ctaResources: string;
   dailyMassLabel: string;
   dailyMassHint: string;
-  dailyMassShow: string;
-  dailyMassHide: string;
   exploreHeading: string;
+  readingUsccb: string;
+  readingLwc: string;
+  readingGoodnews: string;
+  curriculum: string;
+  gallery: string;
+  play: string;
 };
 
 type Props = {
@@ -39,75 +41,40 @@ export function HomeLearnHub({
   calendarCelebration,
   sections,
 }: Props) {
+  const nav = buildHomePdfNav(sections, {
+    gallery: copy.gallery,
+    curriculum: copy.curriculum,
+    resources: copy.ctaResources,
+    play: copy.play,
+  });
+  const extra = nav.extra.some((item) => item.href === "/mass")
+    ? nav.extra
+    : [{ id: "daily-mass-page", label: copy.ctaMass, href: "/mass" }, ...nav.extra];
+
   return (
-    <div className="mx-auto w-full max-w-[144rem] px-4 py-8 sm:px-8 sm:py-10">
-      <HubTypingWidth>
-        <header className="mb-10 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
-            {copy.heroTitle}
-          </h1>
-          <p className="mt-3 text-lg leading-relaxed text-[var(--color-muted)]">
-            {copy.heroSubtitle}
-          </p>
-          <div className="mt-6 flex flex-col items-center gap-3">
-            <HomeHubButtonLink href="/mass" variant="primary">
-              {copy.ctaMass}
-            </HomeHubButtonLink>
-            <HomeHubButtonLink href="/resources" variant="outline">
-              {copy.ctaResources}
-            </HomeHubButtonLink>
-          </div>
-        </header>
-      </HubTypingWidth>
-
-      <DailyMassPanel
-        label={copy.dailyMassLabel}
-        hint={copy.dailyMassHint}
-        showLabel={copy.dailyMassShow}
-        hideLabel={copy.dailyMassHide}
-        calendar={calendar}
-        selectedDate={selectedDate}
-        todayDate={todayDate}
-        todayTitle={todayTitle}
-        calendarCelebration={calendarCelebration}
-      />
-
-      <HubPillWidth>
+    <HomePdfShell groups={nav.groups} extra={extra} extraHeading={copy.exploreHeading}>
+      <h1 className="sr-only">{copy.heroTitle}</h1>
+      <p className="sr-only">{copy.heroSubtitle}</p>
+      <section aria-label={copy.dailyMassLabel}>
+        <DailyMassCalendarBlock
+          variant="home"
+          calendar={calendar}
+          selectedDate={selectedDate}
+          todayDate={todayDate}
+          todayTitle={todayTitle}
+          calendarCelebration={calendarCelebration}
+          readingLinkLabels={{
+            usccb: copy.readingUsccb,
+            lwc: copy.readingLwc,
+            goodnews: copy.readingGoodnews,
+          }}
+          readingLinkHint={copy.dailyMassHint}
+        />
+        <p className="sr-only">{copy.dailyMassHint}</p>
+      </section>
+      <div className="mt-8 max-w-3xl">
         <ReaderThisWeekCard />
-      </HubPillWidth>
-
-      <div className="relative z-30 mt-4 border-t border-[#e8dccf] pt-10">
-        <HubPillWidth>
-          <h2 className="mb-8 text-center text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-            {copy.exploreHeading}
-          </h2>
-        </HubPillWidth>
-        <div className="space-y-12">
-          {sections.map((section) => (
-            <section
-              key={section.id}
-              aria-labelledby={`home-section-${section.id}`}
-              className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-4 py-6 sm:px-6"
-            >
-              <HubPillWidth>
-                <h3
-                  id={`home-section-${section.id}`}
-                  className="mb-3 text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]"
-                >
-                  {section.title}
-                </h3>
-              </HubPillWidth>
-              <div className="flex flex-col gap-3">
-                {section.items.map((item) => (
-                  <HomeNavPill key={item.id} href={item.href}>
-                    {item.title}
-                  </HomeNavPill>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
       </div>
-    </div>
+    </HomePdfShell>
   );
 }

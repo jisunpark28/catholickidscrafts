@@ -10,6 +10,14 @@ const accentBar: Record<LiturgicalSeasonInfo["color"], string> = {
   rose: "bg-pink-500",
 };
 
+const homeAccentBar: Record<LiturgicalSeasonInfo["color"], string> = {
+  green: "bg-[#009966]",
+  purple: "bg-violet-600",
+  white: "bg-amber-500",
+  red: "bg-red-600",
+  rose: "bg-pink-500",
+};
+
 type ReadingLink = { href: string; label: string };
 
 type Props = {
@@ -23,6 +31,8 @@ type Props = {
   readingLinkHint?: string;
   /** Home Daily Mass panel — enlarged banner text. */
   large?: boolean;
+  /** Homepage PDF banner: season name only, color bar on a light panel. */
+  variant?: "default" | "home";
 };
 
 export function LiturgicalSeasonBanner({
@@ -32,7 +42,24 @@ export function LiturgicalSeasonBanner({
   readingLinks,
   readingLinkHint,
   large = false,
+  variant = "default",
 }: Props) {
+  if (variant === "home") {
+    return (
+      <div className="bg-[#f9f9f9]">
+        <div className={`h-[3px] ${homeAccentBar[season.color]}`} />
+        <div className="border-b border-[#e6e8eb] px-5 py-4 sm:px-6 sm:py-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#9aa0a6]">
+            Liturgical season
+          </p>
+          <h2 className="mt-1.5 text-[1.65rem] font-bold leading-tight tracking-tight text-[#1c1c1c] sm:text-3xl">
+            {season.name}
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
   const labelClass = large
     ? "text-sm font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]"
     : "text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]";

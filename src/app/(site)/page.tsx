@@ -58,9 +58,13 @@ export default async function HomePage() {
           "home.daily_mass.hint",
           "Church calendar and reading links — not a menu of Bible, Play, or Catechesis.",
         ),
-        dailyMassShow: copyText(copy, "home.daily_mass.show", "Show"),
-        dailyMassHide: copyText(copy, "home.daily_mass.hide", "Hide"),
         exploreHeading: copyText(copy, "home.explore.heading", "Explore"),
+        readingUsccb: copyText(copy, "mass.page.cta.usccb", "Today's readings (USCCB)"),
+        readingLwc: copyText(copy, "mass.page.cta.lwc", "Today's readings (Living with Christ)"),
+        readingGoodnews: copyText(copy, "mass.page.cta.goodnews", "Today's readings (GoodNews)"),
+        curriculum: copyText(copy, "global.nav.curriculum", "Curriculum"),
+        gallery: "Gallery",
+        play: copyText(copy, "global.nav.play_learn", "Play & Learn"),
       }}
       calendar={calendar}
       selectedDate={dateKey}
