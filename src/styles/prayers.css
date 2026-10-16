@@ -53,30 +53,33 @@
 
 @media (min-width: 1024px) {
   .prayers-reader {
+    position: relative;
     grid-template-columns: 15.5rem minmax(0, 1fr);
     gap: 0 1.75rem;
+    align-items: start;
     margin: -1.5rem -2rem;
     min-height: calc(100dvh - 6.5rem);
   }
 
   .prayers-reader__lang-bar {
-    grid-column: 2;
-    grid-row: 1;
-    justify-content: flex-end;
-    padding: 0.85rem 1.5rem 0 0;
+    position: absolute;
+    top: 0.15rem;
+    right: 1.25rem;
+    z-index: 1;
+    padding: 0;
   }
 
   .prayers-reader__sidebar {
     grid-column: 1;
-    grid-row: 1 / span 2;
-    align-self: stretch;
+    grid-row: 1;
+    align-self: start;
   }
 
   .prayers-reader__panel {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
     align-self: start;
-    margin: 0.85rem 1.5rem 1.5rem 0;
+    margin: 0 1.25rem 1.5rem 0;
   }
 }
 
