@@ -69,7 +69,7 @@ export function catholicChapterHeading(
 ): string {
   const book = getCatholicBookName(bookSlug, locale, apiBookName);
   if (locale === "ko") return `${book} ${chapter}장`;
-  if (locale === "en") return `${book} — Chapter ${chapter}`;
+  if (locale === "en") return `${book} - Chapter ${chapter}`;
   return `${book} — ${locale === "es" || locale === "pt" ? "capítulo" : locale === "fr" ? "chapitre" : locale === "de" ? "Kapitel" : locale === "pl" ? "rozdział" : locale === "vi" ? "chương" : locale === "tl" ? "kabanata" : locale === "it" ? "capitolo" : "Chapter"} ${chapter}`;
 }
 

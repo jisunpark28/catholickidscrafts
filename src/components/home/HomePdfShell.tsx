@@ -1,15 +1,18 @@
 "use client";
 
+import { testamentNavLabel } from "@/lib/bible/testament-chrome";
 import type { HomePdfGroup, HomePdfLink } from "@/lib/home-pdf-nav";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
-function linkIsCurrent(href: string, pathname: string): boolean {
-  const path = href.split("?")[0] || href;
+function linkIsCurrent(item: HomePdfLink, pathname: string): boolean {
+  const path = item.href.split("?")[0] || item.href;
   if (path === "/gospel" || path === "/bible/gospel") {
     return pathname === "/gospel" || pathname === "/bible/gospel";
   }
+  const testament = testamentNavLabel(pathname);
+  if (testament && item.label === testament) return true;
   return pathname === path;
 }
 
@@ -100,7 +103,7 @@ export function HomePdfShell({ groups, children }: Props) {
                     <li key={item.id}>
                       <NavAnchor
                         item={item}
-                        active={linkIsCurrent(item.href, pathname)}
+                        active={linkIsCurrent(item, pathname)}
                         onNavigate={() => setMobileOpen(false)}
                       />
                     </li>

@@ -26,18 +26,12 @@ export default async function BibleBookPage({ params }: Props) {
   if (!book) notFound();
 
   const testamentBooks = booksByTestament(books, book.testament);
-  const [completedChapters] = await Promise.all([getCompletedChaptersForBook(bookSlug)]);
-
-  const testamentHref =
-    book.testament === "OT" ? "/bible/old-testament" : "/bible/new-testament";
-  const testamentLabel = book.testament === "OT" ? "Old Testament" : "New Testament";
+  const completedChapters = await getCompletedChaptersForBook(bookSlug);
 
   return (
     <BibleBookHub
       book={book}
       testamentBooks={testamentBooks}
-      testamentHref={testamentHref}
-      testamentLabel={testamentLabel}
       completedChapters={completedChapters}
     />
   );
