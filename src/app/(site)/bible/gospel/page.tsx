@@ -43,7 +43,7 @@ export default async function TodaysGospelPage() {
   });
 
   return (
-    <HomePdfShell groups={groups} extra={[]} extraHeading="">
+    <HomePdfShell groups={groups}>
       <GospelHub
         signedIn={signedIn}
         initialCompleted={initialCompleted}

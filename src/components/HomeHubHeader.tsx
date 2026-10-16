@@ -62,7 +62,7 @@ export function HomeHubHeader({ initialSession }: Props) {
     <header className="sticky top-0 z-50 border-b border-[#e8dccf] bg-[#f5ebe0]">
       <div
         className={
-          isGospel
+          isHome || isGospel
             ? "w-full px-3 py-3 sm:px-4"
             : "mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-8 lg:px-12"
         }

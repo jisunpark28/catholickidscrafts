@@ -74,23 +74,6 @@ export function DailyMassCalendarBlock({
           variant="home"
           todayReading={todayReading}
         />
-        {readingLinks.length > 0 && (
-          <div className="flex flex-wrap gap-x-4 gap-y-2 px-1">
-            {readingLinks.map((link, index) => (
-              <a
-                key={link.href}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`text-sm font-semibold text-[var(--color-link)] underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] ${
-                  index === 0 ? "sm:hidden" : ""
-                }`}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        )}
       </div>
     );
   }
