@@ -71,7 +71,7 @@ export function HomePdfShell({ groups, extra, extraHeading, children }: Props) {
           <div className="mb-1 flex justify-end">
             <button
               type="button"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-lg leading-none text-[#9ca3af] hover:bg-white hover:text-[#4b5563] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-xl leading-none text-[#6b7280] hover:bg-white hover:text-[#1c1c1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]"
               aria-expanded={true}
               aria-controls={navId}
               onClick={() => {
@@ -87,7 +87,7 @@ export function HomePdfShell({ groups, extra, extraHeading, children }: Props) {
             {groups.map((group) => (
               <div key={group.id} className="mt-4 first:mt-1">
                 <h2 className="mb-3 px-1 text-base font-medium text-[#1c1c1c]">{group.title}</h2>
-                <ul className="flex flex-col gap-2.5">
+                <ul className="flex list-none flex-col gap-2.5 p-0">
                   {group.items.map((item) => (
                     <li key={item.id}>
                       <NavAnchor
@@ -140,7 +140,7 @@ export function HomePdfShell({ groups, extra, extraHeading, children }: Props) {
             >
               {extraHeading}
             </h2>
-            <ul className="flex max-w-md flex-col gap-2.5">
+            <ul className="flex max-w-md list-none flex-col gap-2.5 p-0">
               {extra.map((item) => (
                 <li key={item.id}>
                   <NavAnchor item={item} active={false} onNavigate={() => setMobileOpen(false)} />
