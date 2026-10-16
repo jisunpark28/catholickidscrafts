@@ -30,6 +30,8 @@ type Props = {
   readingLinkHint?: string;
   /** Home Daily Mass panel — wide layout with enlarged text. */
   large?: boolean;
+  /** Homepage PDF: season panel, month grid, and reading links under the grid. */
+  variant?: "default" | "home";
 };
 
 function buildReadingLinks(
@@ -56,8 +58,42 @@ export function DailyMassCalendarBlock({
   readingLinkLabels = defaultReadingLabels,
   readingLinkHint,
   large = false,
+  variant = "default",
 }: Props) {
   const readingLinks = buildReadingLinks(todayDate, readingLinkLabels);
+
+  if (variant === "home") {
+    const todayReading = readingLinks[0];
+    return (
+      <div className="space-y-4">
+        <LiturgicalSeasonBanner season={calendar.season} variant="home" />
+        <MassCalendar
+          initial={calendar}
+          selectedDate={selectedDate}
+          todayDate={todayDate}
+          variant="home"
+          todayReading={todayReading}
+        />
+        {readingLinks.length > 0 && (
+          <div className="flex flex-wrap gap-x-4 gap-y-2 px-1">
+            {readingLinks.map((link, index) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`text-sm font-semibold text-[var(--color-link)] underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] ${
+                  index === 0 ? "sm:hidden" : ""
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

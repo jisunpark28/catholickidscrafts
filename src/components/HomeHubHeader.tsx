@@ -25,6 +25,7 @@ export function HomeHubHeader({ initialSession }: Props) {
   const copy = useSiteCopy();
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
   const pathname = usePathname() ?? "";
+  const isHome = pathname === "/";
   const searchResultsSlotId = useId();
   const exploreMenuId = useId();
   const exploreRef = useRef<HTMLDivElement>(null);
@@ -62,7 +63,9 @@ export function HomeHubHeader({ initialSession }: Props) {
           <div className="col-start-1 row-start-1 flex min-w-0 justify-start">
             <HomeLearnSearch
               variant="header"
-              className="w-full max-w-[10.5rem] sm:max-w-xs"
+              className={
+                isHome ? "w-full max-w-[11rem] sm:max-w-xs lg:max-w-sm" : "w-full max-w-[10.5rem] sm:max-w-xs"
+              }
               headerResultsSlotId={searchResultsSlotId}
             />
           </div>
@@ -72,7 +75,7 @@ export function HomeHubHeader({ initialSession }: Props) {
           </div>
 
           <div className="col-start-3 row-start-1 flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
-            <div ref={exploreRef} className="relative md:hidden">
+            <div ref={exploreRef} className={isHome ? "hidden" : "relative md:hidden"}>
               <HomeHubMenuButton
                 onClick={() => setExploreOpen((v) => !v)}
                 ariaExpanded={exploreOpen}
@@ -117,7 +120,7 @@ export function HomeHubHeader({ initialSession }: Props) {
         </div>
 
         <nav
-          className="mt-2 hidden flex-wrap items-center justify-center gap-x-4 gap-y-1 md:flex"
+          className={`mt-2 hidden flex-wrap items-center justify-center gap-x-4 gap-y-1 ${isHome ? "" : "md:flex"}`}
           aria-label="Explore"
         >
           {exploreNav.map((item) => (

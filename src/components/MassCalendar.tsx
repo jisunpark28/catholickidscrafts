@@ -27,12 +27,30 @@ const rankStyles: Record<MassDaySummary["rank"], string> = {
   ferial: "bg-white hover:bg-[var(--color-surface)]",
 };
 
+/** Homepage PDF calendar — lighter rank colors, green Sundays, purple memorials. */
+const homeRankStyles: Record<MassDaySummary["rank"], string> = {
+  solemnity: "border-l-[3px] border-l-amber-500 bg-amber-50/50",
+  feast: "border-l-[3px] border-l-[#1f51a2] bg-[#f4f8fc]",
+  memorial: "border-l-[3px] border-l-[#af90ff] bg-[#fbfaff]",
+  sunday: "border-l-[3px] border-l-[#009966] bg-[#f3fef9]",
+  ferial: "bg-white",
+};
+
+type TodayReadingLink = {
+  href: string;
+  label: string;
+};
+
 type Props = {
   initial: MonthCalendar;
   selectedDate: string;
   todayDate: string;
   /** Home Daily Mass panel — enlarged calendar text (between compact and 2×). */
   large?: boolean;
+  /** Homepage composition from the design PDF. Other pages keep the default grid. */
+  variant?: "default" | "home";
+  /** Shown inside today's cell on the homepage calendar. */
+  todayReading?: TodayReadingLink;
 };
 
 function MassCalendarMobileReadings({ dateKey }: { dateKey: string }) {
@@ -65,7 +83,15 @@ function MassCalendarMobileReadings({ dateKey }: { dateKey: string }) {
   );
 }
 
-export function MassCalendar({ initial, selectedDate, todayDate, large = false }: Props) {
+export function MassCalendar({
+  initial,
+  selectedDate,
+  todayDate,
+  large = false,
+  variant = "default",
+  todayReading,
+}: Props) {
+  const home = variant === "home";
   const [calendar, setCalendar] = useState(initial);
   const [year, setYear] = useState(initial.year);
   const [month, setMonth] = useState(initial.month);
@@ -111,39 +137,68 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
     void loadMonth(y, m);
   }
 
-  const headerMonthClass = large
-    ? "text-2xl font-bold text-[var(--color-ink)] sm:text-3xl"
-    : "text-lg font-bold text-[var(--color-ink)]";
-  const navBtnClass = large
-    ? "border border-[var(--color-border)] px-4 py-2 text-base font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)] sm:px-5 sm:py-2.5 sm:text-lg"
-    : "border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]";
+  const headerMonthClass = home
+    ? "text-base font-semibold text-[#1c1c1c] sm:text-lg"
+    : large
+      ? "text-2xl font-bold text-[var(--color-ink)] sm:text-3xl"
+      : "text-lg font-bold text-[var(--color-ink)]";
+  const navBtnClass = home
+    ? "rounded-md border border-[#e5e7eb] bg-white px-2.5 py-1 text-xs font-medium text-[#374151] hover:bg-[#f9fafb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] sm:px-3 sm:text-sm"
+    : large
+      ? "border border-[var(--color-border)] px-4 py-2 text-base font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)] sm:px-5 sm:py-2.5 sm:text-lg"
+      : "border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]";
   const loadingClass = large ? "text-base text-[var(--color-muted)] sm:text-lg" : "text-sm text-[var(--color-muted)]";
-  const weekdayRowClass = large
-    ? "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-xs font-bold uppercase tracking-wide text-[var(--color-muted)] sm:text-lg"
-    : "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-[10px] font-bold uppercase tracking-wide text-[var(--color-muted)] sm:text-xs";
-  const weekdayCellClass = large
-    ? "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-4"
-    : "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-3";
-  const padCellClass = large
-    ? "min-h-[4.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[7rem] md:min-h-[10rem] lg:min-h-[11rem]"
-    : "min-h-[4.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[6rem] md:min-h-[7rem] lg:min-h-[8rem]";
-  const dayCellBase = large
-    ? "flex min-h-[4.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[7rem] sm:p-3 md:min-h-[9rem] md:p-4 lg:min-h-[11rem]"
-    : "flex min-h-[4.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[6rem] sm:p-2 md:min-h-[7rem] md:p-3 lg:min-h-[8rem]";
-  const dayNumClass = large
-    ? "shrink-0 text-sm font-bold sm:text-lg md:text-xl"
-    : "shrink-0 text-xs font-bold sm:text-sm md:text-base";
-  const dayWeekClass = large
-    ? "mt-0.5 w-full truncate text-[10px] font-semibold leading-tight text-[var(--color-ink)] sm:text-xs md:text-sm"
-    : "mt-0.5 w-full truncate text-[9px] font-semibold leading-tight text-[var(--color-ink)] sm:text-[10px] md:text-xs";
-  const dayTitleClass = large
-    ? "mt-0.5 w-full truncate text-[10px] leading-tight text-[var(--color-muted)] sm:mt-1 sm:text-xs md:text-sm"
-    : "mt-0.5 w-full truncate text-[9px] leading-tight text-[var(--color-muted)] sm:text-[10px] md:text-xs";
+  const weekdayRowClass = home
+    ? "grid grid-cols-7 border-b border-[#eceff3] bg-[#fafafa] text-center text-[10px] font-semibold uppercase tracking-[0.08em] text-[#9aa0a6] sm:text-xs"
+    : large
+      ? "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-xs font-bold uppercase tracking-wide text-[var(--color-muted)] sm:text-lg"
+      : "grid grid-cols-7 border-b border-[var(--color-border)] bg-[var(--color-surface)] text-center text-[10px] font-bold uppercase tracking-wide text-[var(--color-muted)] sm:text-xs";
+  const weekdayCellClass = home
+    ? "border-r border-[#eceff3] py-2 last:border-r-0 sm:py-2.5"
+    : large
+      ? "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-4"
+      : "border-r border-[var(--color-border)] py-2 last:border-r-0 sm:py-3";
+  const padCellClass = home
+    ? "min-h-[3.25rem] border-b border-r border-[#eceff3] bg-white last:border-r-0 sm:min-h-[6.5rem] lg:min-h-[7.25rem]"
+    : large
+      ? "min-h-[4.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[7rem] md:min-h-[10rem] lg:min-h-[11rem]"
+      : "min-h-[4.5rem] border-b border-r border-[var(--color-border)] bg-[var(--color-surface)]/50 sm:min-h-[6rem] md:min-h-[7rem] lg:min-h-[8rem]";
+  const dayCellBase = home
+    ? "flex min-h-[3.25rem] min-w-0 flex-col border-b border-r border-[#eceff3] p-1 sm:min-h-[6.5rem] sm:p-2 lg:min-h-[7.25rem] lg:p-2.5"
+    : large
+      ? "flex min-h-[4.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[7rem] sm:p-3 md:min-h-[9rem] md:p-4 lg:min-h-[11rem]"
+      : "flex min-h-[4.5rem] min-w-0 flex-col border-b border-r border-[var(--color-border)] p-1.5 sm:min-h-[6rem] sm:p-2 md:min-h-[7rem] md:p-3 lg:min-h-[8rem]";
+  const dayNumClass = home
+    ? "shrink-0 text-[11px] font-semibold text-[#1c1c1c] sm:text-sm"
+    : large
+      ? "shrink-0 text-sm font-bold sm:text-lg md:text-xl"
+      : "shrink-0 text-xs font-bold sm:text-sm md:text-base";
+  const dayWeekClass = home
+    ? "mt-0.5 w-full truncate text-[9px] font-medium leading-tight text-[#0b7a4b] sm:text-[11px]"
+    : large
+      ? "mt-0.5 w-full truncate text-[10px] font-semibold leading-tight text-[var(--color-ink)] sm:text-xs md:text-sm"
+      : "mt-0.5 w-full truncate text-[9px] font-semibold leading-tight text-[var(--color-ink)] sm:text-[10px] md:text-xs";
+  const dayTitleClass = home
+    ? "mt-0.5 w-full truncate text-[9px] leading-tight text-[#6b7280] sm:text-[11px]"
+    : large
+      ? "mt-0.5 w-full truncate text-[10px] leading-tight text-[var(--color-muted)] sm:mt-1 sm:text-xs md:text-sm"
+      : "mt-0.5 w-full truncate text-[9px] leading-tight text-[var(--color-muted)] sm:text-[10px] md:text-xs";
+  const stylesForRank = home ? homeRankStyles : rankStyles;
 
   return (
-    <section className="w-full border border-[var(--color-border)] bg-white">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--color-border)] px-4 py-4 sm:px-6">
-        <h2 className={headerMonthClass}>{monthLabel}</h2>
+    <section className={home ? "w-full bg-white" : "w-full border border-[var(--color-border)] bg-white"}>
+      <div
+        className={
+          home
+            ? "flex items-center justify-between gap-3 border-b border-[#eceff3] bg-white px-3 py-3 sm:px-4"
+            : "flex flex-wrap items-center justify-between gap-4 border-b border-[var(--color-border)] px-4 py-4 sm:px-6"
+        }
+      >
+        {home ? (
+          <h3 className={headerMonthClass}>{monthLabel}</h3>
+        ) : (
+          <h2 className={headerMonthClass}>{monthLabel}</h2>
+        )}
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -165,8 +220,8 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
         </div>
       </div>
 
-      <div className="overflow-x-auto overscroll-x-contain md:overflow-visible">
-        <div className={`${MOBILE_GRID_MIN_WIDTH} md:min-w-0`}>
+      <div className={home ? "w-full" : "overflow-x-auto overscroll-x-contain md:overflow-visible"}>
+        <div className={home ? "min-w-0" : `${MOBILE_GRID_MIN_WIDTH} md:min-w-0`}>
           <div className={weekdayRowClass}>
             {WEEKDAYS.map((d) => (
               <div key={d} className={weekdayCellClass}>
@@ -194,13 +249,17 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
               return (
                 <div
                   key={day.date}
-                  className={`${dayCellBase} ${rankStyles[day.rank]} ${
-                    isSelected ? "ring-2 ring-inset ring-[var(--color-accent)]" : ""
+                  className={`${dayCellBase} ${stylesForRank[day.rank]} ${
+                    home && isToday
+                      ? "shadow-[inset_0_0_0_2px_#d35400]"
+                      : !home && isSelected
+                        ? "ring-2 ring-inset ring-[var(--color-accent)]"
+                        : ""
                   }`}
                 >
                   <span
                     className={`${dayNumClass} ${
-                      isToday ? "text-[var(--color-accent)]" : "text-[var(--color-ink)]"
+                      !home && isToday ? "text-[var(--color-accent)]" : home ? "" : "text-[var(--color-ink)]"
                     }`}
                   >
                     {dayNum}
@@ -215,6 +274,16 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
                       {displayTitle}
                     </p>
                   )}
+                  {home && isToday && todayReading && (
+                    <a
+                      href={todayReading.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto hidden max-w-full truncate rounded border border-[#e5e7eb] bg-white px-1 py-0.5 text-center text-[10px] font-medium leading-tight text-[#6b7280] hover:text-[#d35400] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400] sm:inline-block"
+                    >
+                      {todayReading.label}
+                    </a>
+                  )}
                 </div>
               );
             })}
@@ -222,7 +291,7 @@ export function MassCalendar({ initial, selectedDate, todayDate, large = false }
         </div>
       </div>
 
-      <MassCalendarMobileReadings dateKey={selectedDate} />
+      {!home && <MassCalendarMobileReadings dateKey={selectedDate} />}
     </section>
   );
 }
