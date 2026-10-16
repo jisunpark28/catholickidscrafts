@@ -17,10 +17,7 @@ export function BibleStickerGrid({
 
   return (
     <div className="mt-8">
-      <p className="mb-4 text-sm text-[var(--color-muted)]">
-        {completedChapters.length} / {chapterCount} stickers
-      </p>
-      <div className="grid grid-cols-5 gap-3 sm:grid-cols-8 md:grid-cols-10">
+      <div className="mx-auto grid w-fit max-w-full grid-cols-5 gap-3 sm:grid-cols-8 md:grid-cols-10">
         {Array.from({ length: chapterCount }, (_, i) => {
           const chapter = i + 1;
           const filled = done.has(chapter);

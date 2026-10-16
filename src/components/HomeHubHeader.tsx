@@ -6,6 +6,7 @@ import { HomeLearnSearch } from "@/components/HomeLearnSearch";
 import { SiteLogo } from "@/components/SiteLogo";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import type { HeaderSessionResponse } from "@/lib/header-session";
+import { isTestamentChromePath } from "@/lib/bible/testament-chrome";
 import { PUBLIC_EXPLORE_NAV } from "@/lib/public-explore-nav";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -27,7 +28,9 @@ export function HomeHubHeader({ initialSession }: Props) {
   const pathname = usePathname() ?? "";
   const isHome = pathname === "/";
   const isGospel = pathname === "/bible/gospel" || pathname === "/gospel";
-  const hideExplore = isHome || isGospel;
+  const isTestament = isTestamentChromePath(pathname);
+  const hideExplore = isHome || isGospel || isTestament;
+  const edgeHeader = isHome || isGospel || isTestament;
   const searchResultsSlotId = useId();
   const exploreMenuId = useId();
   const exploreRef = useRef<HTMLDivElement>(null);
@@ -62,7 +65,7 @@ export function HomeHubHeader({ initialSession }: Props) {
     <header className="sticky top-0 z-50 border-b border-[#e8dccf] bg-[#f5ebe0]">
       <div
         className={
-          isHome || isGospel
+          edgeHeader
             ? "w-full px-3 py-3 sm:px-4"
             : "mx-auto w-full max-w-[1600px] px-4 py-3 sm:px-8 lg:px-12"
         }
@@ -72,7 +75,7 @@ export function HomeHubHeader({ initialSession }: Props) {
             <HomeLearnSearch
               variant="header"
               className={
-                isHome || isGospel
+                edgeHeader
                   ? "w-full max-w-[11rem] sm:max-w-xs lg:max-w-sm"
                   : "w-full max-w-[10.5rem] sm:max-w-xs"
               }

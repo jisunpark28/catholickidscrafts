@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { BibleChapterReadClient } from "@/components/bible/BibleChapterReadClient";
-import { BibleHubShell } from "@/components/bible/BibleHubShell";
+import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { chapterPlainTextForReading } from "@/lib/bible/reading-text";
@@ -42,12 +42,7 @@ export default async function BibleReadPage({ params }: Props) {
     "?";
 
   return (
-    <BibleHubShell
-      backHref={`/bible/${bookSlug}`}
-      backLabel={`← ${data.meta.book.name}`}
-      compact
-      wide
-    >
+    <TestamentPageShell>
       <HubTypingWidth wide className="space-y-4">
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
           <BibleChapterReadClient
@@ -61,6 +56,6 @@ export default async function BibleReadPage({ params }: Props) {
           />
         </Suspense>
       </HubTypingWidth>
-    </BibleHubShell>
+    </TestamentPageShell>
   );
 }
