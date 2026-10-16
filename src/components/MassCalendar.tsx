@@ -279,7 +279,7 @@ export function MassCalendar({
                       href={todayReading.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-auto hidden max-w-full truncate rounded border border-[#e5e7eb] bg-white px-1 py-0.5 text-center text-[10px] font-medium leading-tight text-[#6b7280] hover:text-[#d35400] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400] sm:inline-block"
+                      className="mt-auto inline-block max-w-full truncate rounded border border-[#e5e7eb] bg-white px-1 py-0.5 text-center text-[10px] font-medium leading-tight text-[#6b7280] hover:text-[#d35400] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]"
                     >
                       {todayReading.label}
                     </a>
