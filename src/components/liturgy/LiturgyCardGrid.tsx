@@ -19,7 +19,11 @@ export function LiturgyCardGrid({ cards }: Props) {
         ) : null;
 
         if (!card.href) {
-          return <div key={card.id} className={cardClass()} aria-hidden />;
+          return (
+            <div key={card.id} className={`${cardClass()} overflow-hidden`} aria-hidden>
+              {image}
+            </div>
+          );
         }
 
         const external = card.href.startsWith("http");

@@ -9,14 +9,8 @@ import { signOut } from "@/auth";
 export default async function AdminDashboardPage() {
   const session = await auth();
   const superAdmin = isSuperAdmin(session);
-  const [resourceCount, curriculumCount, draftResources, pendingGallery, traffic] =
-    await Promise.all([
-    prisma.resource.count(),
-    prisma.curriculumTrack.count(),
-    prisma.resource.count({ where: { published: false } }),
-    prisma.craftGallerySubmission.count({
-      where: { isApproved: false, rejectedAt: null },
-    }),
+  const [cardCount, traffic] = await Promise.all([
+    prisma.liturgyCard.count(),
     getTrafficSummary(),
   ]);
 
@@ -44,28 +38,10 @@ export default async function AdminDashboardPage() {
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <div className="border border-[var(--color-border)] bg-white p-6">
-          <p className="text-3xl font-bold">{resourceCount}</p>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">Kids resources</p>
-          <Link href="/admin/resources" className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]">
+          <p className="text-3xl font-bold">{cardCount}</p>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">Liturgy cards</p>
+          <Link href="/admin/liturgy-cards" className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]">
             Manage →
-          </Link>
-        </div>
-        <div className="border border-[var(--color-border)] bg-white p-6">
-          <p className="text-3xl font-bold">{curriculumCount}</p>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">Curriculum tracks</p>
-          <Link href="/admin/curriculum" className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]">
-            Manage →
-          </Link>
-        </div>
-        <div className="border border-[var(--color-border)] bg-white p-6">
-          <p className="text-3xl font-bold">{draftResources}</p>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">Unpublished resources</p>
-        </div>
-        <div className="border border-[var(--color-border)] bg-white p-6">
-          <p className="text-3xl font-bold">{pendingGallery}</p>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">Gallery pending review</p>
-          <Link href="/admin/gallery" className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]">
-            Moderate →
           </Link>
         </div>
         {superAdmin && (
@@ -90,16 +66,8 @@ export default async function AdminDashboardPage() {
         <h2 className="font-bold text-[var(--color-ink)]">What you can manage</h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-[var(--color-muted)]">
           <li>
-            <strong className="text-[var(--color-ink)]">Kids Resources</strong> — create, edit,
-            delete, upload PDFs, assign liturgical season
-          </li>
-          <li>
-            <strong className="text-[var(--color-ink)]">Curriculum</strong> — tracks, descriptions,
-            publish / unpublish
-          </li>
-          <li>
-            <strong className="text-[var(--color-ink)]">Craft gallery</strong> — approve or reject
-            family photo submissions before they go public
+            <strong className="text-[var(--color-ink)]">Liturgy cards</strong> — image, link, and
+            title for Mass, the sacraments, saints, devotions, and each season
           </li>
           <li>
             <strong className="text-[var(--color-ink)]">Daily Mass</strong> — automatic from

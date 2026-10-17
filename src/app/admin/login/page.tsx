@@ -32,7 +32,7 @@ async function LoginPanel({ searchParams }: PageProps) {
     >
       <h1 className="text-2xl font-bold text-[var(--color-ink)]">Operator login</h1>
       <p className="mt-2 text-sm text-[var(--color-muted)]">
-        Manage Curriculum and Kids Resources. Daily Mass readings are loaded automatically.
+        Manage liturgy cards and the rest of the operator tools. Daily Mass readings are loaded automatically.
       </p>
 
       {message && (
