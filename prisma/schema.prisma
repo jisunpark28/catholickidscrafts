@@ -168,6 +168,20 @@ model Recommendation {
   @@index([published])
 }
 
+/// Operator-managed cards on the public liturgy grids (/liturgy/[topic]).
+model LiturgyCard {
+  id        String   @id @default(cuid())
+  topic     String
+  title     String   @default("")
+  href      String
+  imageUrl  String   @default("")
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([topic, sortOrder])
+}
+
 /// Interactive images inside the Tiny Priest 3D church (/play/church).
 model ChurchDecoration {
   id          String   @id @default(cuid())
