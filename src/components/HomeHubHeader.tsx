@@ -30,7 +30,8 @@ export function HomeHubHeader({ initialSession }: Props) {
   const isGospel = pathname === "/bible/gospel" || pathname === "/gospel";
   const isTestament = isTestamentChromePath(pathname);
   const isPrayers = pathname === "/prayers" || pathname.startsWith("/prayers/");
-  const edgeHeader = isHome || isGospel || isTestament || isPrayers;
+  const isLiturgyGrid = pathname.startsWith("/liturgy/");
+  const edgeHeader = isHome || isGospel || isTestament || isPrayers || isLiturgyGrid;
   const hideExplore = edgeHeader;
   const searchResultsSlotId = useId();
   const exploreMenuId = useId();
