@@ -24,6 +24,8 @@ type PdfItem = {
   label: string;
   match: RegExp;
   fallback: string;
+  /** Keep this href even when a home-section item matches the label. */
+  lockHref?: boolean;
 };
 
 const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
@@ -56,7 +58,28 @@ const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
     title: "Liturgy",
     items: [
       { id: "prayers", label: "Prayers", match: /^prayers$/i, fallback: "/prayers" },
-      { id: "mass", label: "Mass", match: /^mass$/i, fallback: "/mass/participation" },
+      { id: "mass", label: "Mass", match: /^mass$/i, fallback: "/liturgy/mass", lockHref: true },
+      {
+        id: "sacraments",
+        label: "Sacraments",
+        match: /^sacraments$/i,
+        fallback: "/liturgy/sacraments",
+        lockHref: true,
+      },
+      {
+        id: "saints",
+        label: "Saints",
+        match: /^saints$/i,
+        fallback: "/liturgy/saints",
+        lockHref: true,
+      },
+      {
+        id: "devotions",
+        label: "Devotions",
+        match: /^devotions$/i,
+        fallback: "/liturgy/devotions",
+        lockHref: true,
+      },
       {
         id: "ordinary",
         label: "Ordinary Time",
@@ -107,8 +130,8 @@ export function buildHomePdfNav(
     title: group.title,
     items: group.items.map((item) => {
       const found = pool.find((entry) => !used.has(entry.id) && item.match.test(entry.title));
-      if (found) {
-        used.add(found.id);
+      if (found) used.add(found.id);
+      if (found && !item.lockHref) {
         return { id: found.id, label: item.label, href: found.href };
       }
       return { id: item.id, label: item.label, href: item.fallback };
