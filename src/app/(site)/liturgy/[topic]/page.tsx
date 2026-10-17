@@ -10,6 +10,12 @@ const TITLES: Record<LiturgyTopic, string> = {
   sacraments: "Sacraments",
   saints: "Saints",
   devotions: "Devotions",
+  "ordinary-time": "Ordinary Time",
+  advent: "Advent",
+  "christmas-time": "Christmas Time",
+  lent: "Lent",
+  "paschal-triduum": "Paschal Triduum",
+  "easter-time": "Easter Time",
 };
 
 type Props = { params: Promise<{ topic: string }> };
