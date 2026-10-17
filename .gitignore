@@ -43,3 +43,12 @@ next-env.d.ts
 /prisma/dev.db-journal
 /public/uploads/*
 !public/uploads/.gitkeep
+
+# local env / tooling (repo cleanup)
+.env*
+!.env.example
+.vercel/
+.vs/
+
+# pnpm is the package manager; ignore npm lockfile
+package-lock.json
