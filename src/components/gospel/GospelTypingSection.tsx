@@ -4,6 +4,7 @@ import { GospelReadingRecorder } from "@/components/gospel/GospelReadingRecorder
 import { PassageTypingGame } from "@/components/PassageTypingGame";
 import { HOME_HUB_PANEL_CLASS } from "@/components/HomeHubButton";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
+import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
@@ -30,6 +31,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const siteCopy = useSiteCopy();
   const [stickerError, setStickerError] = useState("");
   const [stickerSaved, setStickerSaved] = useState(false);
   const [needsSignIn, setNeedsSignIn] = useState(false);
@@ -172,8 +174,10 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
             </div>
             <div className="flex flex-col items-end gap-1.5">
               <GospelReadingRecorder storageKey={`${readingsDateKey}:${readingKind}`} />
-              <p className="text-right text-[10px] leading-tight text-[var(--color-muted)]">
-                Practice reading aloud.<br />Recordings stay on your device.
+              <p className="max-w-[16rem] text-right text-[10px] leading-tight text-[var(--color-muted)]">
+                {textFromCopy(siteCopy, "gospel.recorder.note_line1", "Practice reading aloud.")}
+                <br />
+                {textFromCopy(siteCopy, "gospel.recorder.note_line2", "Recordings stay in this browser and disappear when you leave the page.")}
               </p>
             </div>
           </div>

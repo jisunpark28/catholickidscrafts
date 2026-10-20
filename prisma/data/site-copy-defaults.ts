@@ -107,6 +107,25 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
 
   // —— Page headers ——
   sc("mass.page.title", "Daily Mass", "mass"),
+  // -- Gospel read-aloud recorder --
+  sc("gospel.recorder.toolbar", "Record and listen to your reading", "bible"),
+  sc("gospel.recorder.record", "Record", "bible"),
+  sc("gospel.recorder.pause", "Pause recording", "bible"),
+  sc("gospel.recorder.resume", "Resume recording", "bible"),
+  sc("gospel.recorder.stop", "Stop recording", "bible"),
+  sc("gospel.recorder.listen", "Listen to recording", "bible"),
+  sc("gospel.recorder.stop_listening", "Stop playback", "bible"),
+  sc("gospel.recorder.status.recording", "Recording…", "bible"),
+  sc("gospel.recorder.status.paused", "Paused", "bible"),
+  sc("gospel.recorder.status.saving", "Saving…", "bible"),
+  sc("gospel.recorder.status.playing", "Playing…", "bible"),
+  sc("gospel.recorder.error.denied", "Microphone access was blocked. Allow the microphone in your browser settings and try again.", "bible"),
+  sc("gospel.recorder.error.no_mic", "No microphone was found. Connect one and try again.", "bible"),
+  sc("gospel.recorder.error.unsupported", "Recording isn't supported in this browser.", "bible"),
+  sc("gospel.recorder.error.silent", "No sound was recorded. Try again?", "bible"),
+  sc("gospel.recorder.error.failed", "Something went wrong with the recording. Try again.", "bible"),
+  sc("gospel.recorder.note_line1", "Practice reading aloud.", "bible"),
+  sc("gospel.recorder.note_line2", "Recordings stay in this browser and disappear when you leave the page.", "bible"),
   // -- Daily Mass page (/daily-mass) --
   sc("daily_mass.page.title", "Daily Mass", "mass"),
   sc("daily_mass.tools.label", "Reading tools", "mass"),
