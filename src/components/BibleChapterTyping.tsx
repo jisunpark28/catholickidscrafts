@@ -3,6 +3,8 @@
 import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
 import { BibleChapterReadingNotes } from "@/components/bible/BibleChapterReadingNotes";
 import { PassageTypingGame } from "@/components/PassageTypingGame";
+import { usePassageMemos } from "@/components/bible/usePassageMemos";
+import type { PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
 import { bibleUiLabels } from "@/lib/bible/bible-ui-labels";
 import type { ChapterNoteLocale } from "@/lib/bible/chapter-notes";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
@@ -20,6 +22,7 @@ type Props = {
   onUiLanguageChange: (locale: ChapterNoteLocale) => void;
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
+  memoSetup?: PassageMemoSetup | null;
 };
 
 export function BibleChapterTyping({
@@ -32,7 +35,9 @@ export function BibleChapterTyping({
   onUiLanguageChange,
   discussionSignedIn,
   discussionReaderLabel,
+  memoSetup = null,
 }: Props) {
+  const memos = usePassageMemos({ bookSlug, bookName, chapter, text, setup: memoSetup });
   const [stickerError, setStickerError] = useState("");
   const labels = bibleUiLabels(uiLanguage);
 
@@ -76,6 +81,7 @@ export function BibleChapterTyping({
         hideInstructions
         hideTitle
         appearance="bible"
+        {...memos.typingProps}
         completionMessage={
           <p>
             {labels.stickerSaved(chapter, bookName)}{" "}
@@ -85,6 +91,7 @@ export function BibleChapterTyping({
           </p>
         }
       />
+      {memos.panel}
       {stickerError && <p className="mt-3 text-sm text-red-600">{stickerError}</p>}
       <BibleChapterDiscussion
         bookSlug={bookSlug}

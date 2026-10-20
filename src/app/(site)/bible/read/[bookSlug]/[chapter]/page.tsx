@@ -4,7 +4,12 @@ import { BibleChapterReadClient } from "@/components/bible/BibleChapterReadClien
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { fetchBibleChapter } from "@/lib/bible/latinprayer";
-import { chapterPlainTextForReading } from "@/lib/bible/reading-text";
+import { modernizeVerse } from "@/lib/bible/modernize-for-reading";
+import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
+import type { PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
+import { buildVerseOffsetTable, chapterTextVersion } from "@/lib/bible-memos/verse-offsets";
+import { hasPaidFeatures } from "@/lib/subscription/entitlements";
+import { normalizePassageText } from "@/lib/typing-accuracy";
 import { getHeaderSession } from "@/lib/get-header-session";
 import { isHeaderSignedIn } from "@/lib/header-session";
 import { canonicalForPath } from "@/lib/site-metadata";
@@ -32,7 +37,22 @@ export default async function BibleReadPage({ params }: Props) {
     notFound();
   }
 
-  const text = chapterPlainTextForReading(data);
+  // Same per-verse text and join as chapterPlainTextForReading, kept per verse for memo anchoring.
+  const verseTexts = data.verses.map((v) => ({
+    verse: v.verse,
+    text: modernizeVerse(data.meta.book.slug, data.meta.chapter, v.verse, v.text),
+  }));
+  const text = verseTexts.map((v) => v.text).join(" ");
+  const verseTable = buildVerseOffsetTable(verseTexts);
+  const readerKey = await getReaderKey();
+  const memoSetup: PassageMemoSetup | null = verseTable
+    ? {
+        verseTable,
+        textVersion: chapterTextVersion(normalizePassageText(text)),
+        signedIn: isSignedInReaderKey(readerKey),
+        paid: await hasPaidFeatures(readerKey),
+      }
+    : null;
   const headerSession = await getHeaderSession();
   const signedIn = isHeaderSignedIn(headerSession);
   const readerLabel =
@@ -53,6 +73,7 @@ export default async function BibleReadPage({ params }: Props) {
             text={text}
             discussionSignedIn={signedIn}
             discussionReaderLabel={readerLabel}
+            memoSetup={memoSetup}
           />
         </Suspense>
       </HubTypingWidth>
