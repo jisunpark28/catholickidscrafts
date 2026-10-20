@@ -11,6 +11,8 @@ import {
   verifyGoogleOAuthState,
   type GoogleOAuthFrom,
 } from "@/lib/google-oauth";
+import { clientIpFromHeaders } from "@/lib/client-ip";
+import { GOOGLE_LOGIN_RULE, recordRateLimitFailure } from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -27,6 +29,15 @@ export async function GET(request: Request) {
     url.searchParams.set("error", reason);
     return NextResponse.redirect(url);
   };
+
+  // DB-backed throttle: counts every callback hit per IP.
+  const throttle = await recordRateLimitFailure(
+    `google:ip:${clientIpFromHeaders(request.headers)}`,
+    GOOGLE_LOGIN_RULE,
+  );
+  if (throttle.blocked) {
+    return failRedirect("google_rate_limited");
+  }
 
   if (oauthError) {
     return failRedirect("google_denied");

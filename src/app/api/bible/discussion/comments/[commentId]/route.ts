@@ -7,12 +7,16 @@ import {
 } from "@/lib/bible/discussion";
 import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
 import { isDiscussionAuthor } from "@/lib/bible/discussion-permissions";
-import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
+import {
+  CHILD_POSTING_BLOCKED_MESSAGE,
+  getSignedInDiscussionReader,
+  isChildReader,
+} from "@/lib/bible/discussion-reader";
 import { NextResponse } from "next/server";
 
 type RouteContext = { params: Promise<{ commentId: string }> };
 
-async function authorizeCommentWrite(commentId: string) {
+async function authorizeCommentWrite(commentId: string, mode: "edit" | "delete" = "delete") {
   const comment = await withDiscussionSchemaReady(() => getChapterComment(commentId));
   if (!comment) {
     return { error: NextResponse.json({ error: "Not found" }, { status: 404 }) };
@@ -23,6 +27,10 @@ async function authorizeCommentWrite(commentId: string) {
   const canModerate = !error;
   const isAuthor = isDiscussionAuthor(comment, readerKey);
 
+  if (mode === "edit" && !canModerate && isChildReader(readerKey)) {
+    return { error: NextResponse.json({ error: CHILD_POSTING_BLOCKED_MESSAGE }, { status: 403 }) };
+  }
+
   if (!isAuthor && !canModerate) {
     return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
   }
@@ -32,7 +40,7 @@ async function authorizeCommentWrite(commentId: string) {
 
 export async function PATCH(request: Request, context: RouteContext) {
   const { commentId } = await context.params;
-  const auth = await authorizeCommentWrite(commentId);
+  const auth = await authorizeCommentWrite(commentId, "edit");
   if (auth.error) return auth.error;
 
   let body: { body?: string };

@@ -17,3 +17,11 @@ export function readerAuthorIds(readerKey: SignedInReaderKey): {
   }
   return { familyAccountId: null, subProfileId: readerKey.subProfileId };
 }
+
+/** Child (Access ID) readers may read the public discussion but never post, reply, edit, or set a pen name. */
+export function isChildReader(readerKey: SignedInReaderKey | null): boolean {
+  return readerKey?.type === "sub";
+}
+
+export const CHILD_POSTING_BLOCKED_MESSAGE =
+  "Chapter discussion is for parents. Children can read comments but cannot post.";

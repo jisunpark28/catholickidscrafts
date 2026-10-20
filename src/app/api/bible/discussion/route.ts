@@ -11,7 +11,9 @@ import {
   publicAuthorDisplay,
 } from "@/lib/bible/discussion-permissions";
 import {
+  CHILD_POSTING_BLOCKED_MESSAGE,
   getSignedInDiscussionReader,
+  isChildReader,
   type SignedInReaderKey,
 } from "@/lib/bible/discussion-reader";
 import { ensureOwnerReaderCookie } from "@/lib/family-auth";
@@ -31,6 +33,7 @@ function serializeThread(
   readerKey: SignedInReaderKey | null,
   canModerate: boolean,
 ) {
+  const childReader = isChildReader(readerKey);
   const threadPerms = canManageDiscussionPost(thread, readerKey, canModerate);
   return {
     id: thread.id,
@@ -38,7 +41,7 @@ function serializeThread(
     authorDisplay: publicAuthorDisplay(thread.isAnonymous, thread.authorLabel),
     createdAt: thread.createdAt.toISOString(),
     updatedAt: thread.updatedAt.toISOString(),
-    canEdit: threadPerms.canEdit,
+    canEdit: threadPerms.canEdit && !childReader,
     canDelete: threadPerms.canDelete,
     comments: thread.comments.map((comment) => {
       const commentPerms = canManageDiscussionPost(comment, readerKey, canModerate);
@@ -48,7 +51,7 @@ function serializeThread(
         authorDisplay: publicAuthorDisplay(comment.isAnonymous, comment.authorLabel),
         createdAt: comment.createdAt.toISOString(),
         updatedAt: comment.updatedAt.toISOString(),
-        canEdit: commentPerms.canEdit,
+        canEdit: commentPerms.canEdit && !childReader,
         canDelete: commentPerms.canDelete,
       };
     }),
@@ -68,7 +71,7 @@ async function buildViewer(readerKey: SignedInReaderKey | null, canModerate: boo
 
   const { penName } = await getDiscussionPenNameForReader(readerKey);
   return {
-    canWrite: true,
+    canWrite: !isChildReader(readerKey),
     penName: penName ?? (readerKey.type === "owner" ? "Parent" : "Reader"),
     needsPenName: false,
     canModerate,
@@ -136,6 +139,9 @@ export async function POST(request: Request) {
         { error: "Sign in with a family account or Access ID to post." },
         { status: 401 },
       );
+    }
+    if (isChildReader(readerKey)) {
+      return NextResponse.json({ error: CHILD_POSTING_BLOCKED_MESSAGE }, { status: 403 });
     }
 
     let body: { bookSlug?: string; chapter?: number | string; body?: string };

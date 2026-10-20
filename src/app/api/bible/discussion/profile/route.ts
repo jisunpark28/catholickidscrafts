@@ -4,7 +4,11 @@ import {
   saveDiscussionPenName,
 } from "@/lib/bible/discussion-pen-name";
 import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
-import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
+import {
+  CHILD_POSTING_BLOCKED_MESSAGE,
+  getSignedInDiscussionReader,
+  isChildReader,
+} from "@/lib/bible/discussion-reader";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -27,6 +31,9 @@ export async function PUT(request: Request) {
   const readerKey = await getSignedInDiscussionReader();
   if (!readerKey) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
+  }
+  if (isChildReader(readerKey)) {
+    return NextResponse.json({ error: CHILD_POSTING_BLOCKED_MESSAGE }, { status: 403 });
   }
 
   let body: { penName?: string };
