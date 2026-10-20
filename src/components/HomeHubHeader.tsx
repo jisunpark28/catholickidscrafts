@@ -27,11 +27,13 @@ export function HomeHubHeader({ initialSession }: Props) {
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
   const pathname = usePathname() ?? "";
   const isHome = pathname === "/";
+  const isDailyMass = pathname === "/daily-mass";
   const isGospel = pathname === "/bible/gospel" || pathname === "/gospel";
   const isTestament = isTestamentChromePath(pathname);
   const isPrayers = pathname === "/prayers" || pathname.startsWith("/prayers/");
   const isLiturgyGrid = pathname.startsWith("/liturgy/");
-  const edgeHeader = isHome || isGospel || isTestament || isPrayers || isLiturgyGrid;
+  const edgeHeader =
+    isHome || isDailyMass || isGospel || isTestament || isPrayers || isLiturgyGrid;
   const hideExplore = edgeHeader;
   const searchResultsSlotId = useId();
   const exploreMenuId = useId();
