@@ -23,7 +23,6 @@ export type DailyMassViewProps = {
   color: VestmentColorInfo;
   readings: DailyMassReadingRef[];
   usccbUrl: string;
-  lwcUrl: string;
   familyTalk: FamilyTalkEntry | null;
   gospelCitation?: string;
   nextSunday: {
@@ -183,37 +182,13 @@ export function DailyMassView(props: DailyMassViewProps) {
                 )}
               </div>
             </div>
-            <div className="dm-card mt-4 inline-flex items-center gap-2.5 rounded-xl border border-[#e7e3de] bg-white px-3.5 py-2.5">
-              <span
-                className="h-7 w-7 shrink-0 rounded-full border border-black/10"
-                style={{ background: color.hex }}
-                aria-hidden
-              />
-              <div>
-                <div className="dm-muted text-[0.6875em] font-semibold uppercase text-[#6b7280]">
-                  {t("daily_mass.today.color", "Vestment color")}
-                </div>
-                <div className="font-bold" style={{ color: color.id === "white" ? undefined : color.hex }}>
-                  {color.label}
-                </div>
-                {color.note && <div className="dm-muted text-[0.6875em] text-[#9ca3af]">{color.note}</div>}
-              </div>
-            </div>
-            <p className="dm-muted mb-2.5 mt-3 text-[0.75em] text-[#9ca3af]">
-              {t("daily_mass.today.timezone_note", "Today is set by your device's time zone.")}
-              {!isToday && deviceToday && (
-                <>
-                  {" "}
-                  <Link href={`/daily-mass?date=${deviceToday}`} className="font-semibold text-[#d35400]">
-                    {t("daily_mass.today.back", "Back to today")}
-                  </Link>
-                </>
-              )}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <ExtLink href={props.usccbUrl}>{t("daily_mass.links.usccb_today", "Today's readings")}</ExtLink>
-              <ExtLink href={props.lwcUrl}>{t("daily_mass.links.lwc", "Living with Christ")}</ExtLink>
-            </div>
+            {!isToday && deviceToday && (
+              <p className="dm-muted mb-0 mt-3 text-[0.75em] text-[#9ca3af]">
+                <Link href={`/daily-mass?date=${deviceToday}`} className="font-semibold text-[#d35400]">
+                  {t("daily_mass.today.back", "Back to today")}
+                </Link>
+              </p>
+            )}
           </section>
 
           <section className={card} aria-labelledby="dm-readings-title">
@@ -301,8 +276,7 @@ export function DailyMassView(props: DailyMassViewProps) {
           USCCB Daily Readings
         </a>{" "}
         ({t("daily_mass.sources.links_only", "links only")}).{" "}
-        {t("daily_mass.sources.questions", "Family talk questions written by CatholicKidsCrafts.")}{" "}
-        {t("daily_mass.sources.color", "Vestment color is a guide based on the liturgical calendar; parishes may differ.")}
+        {t("daily_mass.sources.questions", "Family talk questions written by CatholicKidsCrafts.")}
       </footer>
     </div>
   );

@@ -116,7 +116,6 @@ export default async function DailyMassPage({
         color={deriveVestmentColor({ ...summary, saint: firstSaint(summary.saint) }, season)}
         readings={readings}
         usccbUrl={usccbReadingsPageUrl(date)}
-        lwcUrl={livingWithChristReadingUrl(dateKey)}
         familyTalk={familyTalkFor(dateKey)}
         gospelCitation={readings.find((r) => r.kind === "gospel")?.citation}
         nextSunday={{
