@@ -127,7 +127,9 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
       </h2>
 
       {canType && loading && (
-        <p className="text-sm text-[var(--color-muted)]">Loading today&apos;s readings…</p>
+        <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-[var(--color-border)]">
+          <p className="text-sm text-[var(--color-muted)] animate-pulse">Loading today&apos;s readings…</p>
+        </div>
       )}
       {canType && error && (
         <p className={`${HOME_HUB_PANEL_CLASS} bg-white text-sm text-[var(--color-ink)]`}>
@@ -146,7 +148,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
 
       {canType && day && !loading && !error && (
         <>
-          <div className="flex w-full max-w-full items-center justify-between gap-2">
+          <div className="flex w-full max-w-full items-end justify-between gap-4">
             <div className="flex min-w-0 flex-wrap gap-2">
               {GOSPEL_READING_OPTIONS.map((opt) => {
                 const available = availableKinds.includes(opt.kind);
@@ -168,7 +170,12 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
                 );
               })}
             </div>
-            <GospelReadingRecorder storageKey={`${readingsDateKey}:${readingKind}`} />
+            <div className="flex flex-col items-end gap-1.5">
+              <GospelReadingRecorder storageKey={`${readingsDateKey}:${readingKind}`} />
+              <p className="text-right text-[10px] leading-tight text-[var(--color-muted)]">
+                Practice reading aloud.<br />Recordings stay on your device.
+              </p>
+            </div>
           </div>
 
           {readingText ? (

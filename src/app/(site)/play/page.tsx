@@ -25,18 +25,34 @@ export default async function PlayHubPage() {
         {games.map((game) => (
           <article
             key={game.slug}
-            className="border border-[var(--color-border)] bg-white p-6 transition hover:border-[var(--color-accent)]"
+            className="flex flex-col border border-[var(--color-border)] bg-white p-6 transition hover:border-[var(--color-accent)]"
           >
-            <h2 className="text-lg font-bold text-[var(--color-ink)]">{game.title}</h2>
-            {game.description ? (
-              <p className="mt-2 text-sm text-[var(--color-muted)]">{game.description}</p>
-            ) : null}
-            <Link
-              href={game.slug === "emoji" ? "/play/photo-booth" : `/play/${game.slug}`}
-              className="mt-4 inline-block text-sm font-semibold text-[var(--color-link)]"
-            >
-              {copyText(copy, "play.hub.play_link", "Play →")}
-            </Link>
+            <div className="flex-1">
+              <h2 className="text-lg font-bold text-[var(--color-ink)]">{game.title}</h2>
+              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
+                {game.ageRange && <span>{game.ageRange}</span>}
+                {game.duration && <span>{game.duration}</span>}
+                {game.supervision && <span className="text-[var(--color-accent)]">Adult Supervision</span>}
+              </div>
+              {game.description ? (
+                <p className="mt-3 text-sm text-[var(--color-muted)]">{game.description}</p>
+              ) : null}
+            </div>
+
+            <div className="mt-6 flex items-center justify-between gap-4">
+              <Link
+                href={game.slug === "emoji" ? "/play/photo-booth" : `/play/${game.slug}`}
+                className="text-sm font-semibold text-[var(--color-link)]"
+              >
+                {copyText(copy, "play.hub.play_link", "Play →")}
+              </Link>
+
+              {(game.slug === "face-to-emoji" || game.slug === "emoji") && (
+                <span className="text-[10px] text-[var(--color-muted)]">
+                  Camera/Photos stay on your device
+                </span>
+              )}
+            </div>
           </article>
         ))}
       </div>

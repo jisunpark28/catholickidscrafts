@@ -14,6 +14,8 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
         "Welcome to Tiny Church!",
       ),
       embedPath: getTinyPriestEmbedPath(),
+      ageRange: "All ages",
+      duration: "5-10 min",
     },
     {
       slug: "liturgical-vestments",
@@ -24,12 +26,16 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
         "What color vestments does Father wear?",
       ),
       embedPath: "/play/liturgical-vestments",
+      ageRange: "Grades K-5",
+      duration: "2-5 min",
     },
     {
       slug: "typing",
       title: copyText(copy, "play.game.typing.title", "Typing Game"),
       description: copyText(copy, "play.game.typing.description", "Type church words before they land."),
       embedPath: "/play/typing",
+      ageRange: "Grades 2+",
+      duration: "2-5 min",
     },
     {
       slug: "hangman",
@@ -40,18 +46,26 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
         "Guess the word before the petals fall.",
       ),
       embedPath: "/games/hangman/index.html",
+      ageRange: "Grades 1+",
+      duration: "2-5 min",
     },
     {
       slug: "face-to-emoji",
       title: copyText(copy, "play.game.face-to-emoji.title", "Face to Emoji"),
       description: copyText(copy, "play.game.face-to-emoji.description", "Turn faces into emoji fun!"),
       embedPath: "/play/face-to-emoji",
+      ageRange: "All ages",
+      duration: "2-5 min",
+      supervision: true,
     },
     {
       slug: "emoji",
       title: copyText(copy, "play.game.emoji.title", "4-Cut Photo Booth"),
       description: copyText(copy, "play.game.emoji.description", "Make a four-photo strip with stickers!"),
       embedPath: "/play/photo-booth",
+      ageRange: "All ages",
+      duration: "2-5 min",
+      supervision: true,
     },
   ];
 }

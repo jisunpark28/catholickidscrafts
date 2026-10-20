@@ -1,0 +1,33 @@
+/* /daily-mass reader: page-scoped dark mode (toggled in DailyMassView, saved in localStorage). */
+.daily-mass-reader.dm-dark {
+  background: #1d1b19;
+  color: #f3efe9;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+.daily-mass-reader.dm-dark .dm-card {
+  background: #2a2724;
+  border-color: #3d3833;
+}
+.daily-mass-reader.dm-dark .dm-family {
+  background: #33281f;
+  border-color: #6b4423;
+}
+.daily-mass-reader.dm-dark .dm-ink {
+  color: #f3efe9;
+}
+.daily-mass-reader.dm-dark .dm-muted {
+  color: #c8c0b6;
+}
+.daily-mass-reader.dm-dark .dm-rule {
+  border-color: #3d3833;
+}
+.daily-mass-reader.dm-dark .dm-pill {
+  background: #34302c;
+  border-color: #4a443e;
+  color: #f3efe9;
+}
+.daily-mass-reader .dm-pill:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

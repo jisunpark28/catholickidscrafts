@@ -7,6 +7,9 @@ export type PlayGame = {
   /** Path under /games/ or external URL */
   embedPath: string;
   external?: boolean;
+  ageRange?: string;
+  duration?: string;
+  supervision?: boolean;
 };
 
 export const PLAY_GAMES: PlayGame[] = [
