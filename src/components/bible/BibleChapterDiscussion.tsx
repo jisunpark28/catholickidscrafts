@@ -126,7 +126,9 @@ export function BibleChapterDiscussion({
   const [submitting, setSubmitting] = useState(false);
   const loadGeneration = useRef(0);
 
-  const canCompose = viewerReady ? viewer.canWrite : initialSignedIn;
+  // Wait for the server's viewer info so child readers never see the composer.
+  const canCompose = viewerReady && viewer.canWrite;
+  const isChildViewer = viewerReady && viewer.readerType === "sub";
 
   const commentCount = useMemo(
     () => threads.reduce((sum, thread) => sum + 1 + thread.comments.length, 0),
@@ -458,6 +460,10 @@ export function BibleChapterDiscussion({
             </div>
           </div>
         </div>
+      ) : !viewerReady ? null : isChildViewer ? (
+        <p className="text-sm text-[var(--color-muted)]">
+          Comments are shared by parents. Ask a parent if you would like to add one.
+        </p>
       ) : (
         <p className="text-sm text-[var(--color-muted)]">
           <Link href="/account/login" className="font-semibold text-[var(--color-link)]">

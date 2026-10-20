@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error:
-          "Sign in with a family account or Access ID to share a craft photo.",
+          "A parent needs to sign in with a family account to share a craft photo.",
       },
       { status: 401 },
     );

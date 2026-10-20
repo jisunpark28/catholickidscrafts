@@ -320,6 +320,8 @@ model FamilyAccount {
   displayName        String?
   /// Pen name for Bible chapter discussion (fallback: displayName).
   discussionPenName  String?
+  /// Bumped by "sign out of all devices"; must match the ckc_family / ckc_reader token.
+  sessionVersion     Int                    @default(0)
   createdAt          DateTime               @default(now())
   updatedAt          DateTime               @updatedAt
   subProfiles        SubProfile[]
@@ -348,7 +350,7 @@ model SubProfile {
   accessCodeHash     String
   accessCodeLookup   String                 @unique
   accessCodeLast4    String?
-  /// Full Access ID for parent dashboard (login still uses hash only).
+  /// DEPRECATED: no longer written (plaintext Access ID). Nulled by migration; drop later.
   accessCodeDisplay  String?
   active             Boolean                @default(true)
   sortOrder          Int                    @default(0)
@@ -586,3 +588,13 @@ model BibleChapterComment {
   @@index([subProfileId])
 }
 
+/// DB-backed sign-in failure counters (admin, parent Google, child Access ID).
+model AuthRateLimit {
+  key          String    @id
+  failures     Int       @default(0)
+  windowStart  DateTime  @default(now())
+  blockedUntil DateTime?
+  updatedAt    DateTime  @default(now())
+
+  @@index([updatedAt])
+}

@@ -1,7 +1,9 @@
-import { verifyReaderSession, READER_SESSION_COOKIE } from "@/lib/family-session";
+import { verifyReaderSession, READER_SESSION_COOKIE, type ReaderSession } from "@/lib/family-session";
 import { getFamilySession } from "@/lib/family-auth";
+import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 /** Anonymous browser progress before signing in. */
 export const BIBLE_GUEST_COOKIE = "ckc_bible_reader";
@@ -13,17 +15,46 @@ export type ReaderKey =
   | { type: "owner"; familyAccountId: string }
   | { type: "sub"; subProfileId: string };
 
+/**
+ * Check a reader token against the DB so revocation is immediate:
+ * - the family account must exist and its sessionVersion must match;
+ * - a child profile must still exist, be active, and belong to that family.
+ */
+async function isReaderSessionCurrent(session: ReaderSession): Promise<boolean> {
+  if (session.type === "owner") {
+    const account = await prisma.familyAccount.findUnique({
+      where: { id: session.familyAccountId },
+      select: { sessionVersion: true },
+    });
+    return Boolean(account && account.sessionVersion === session.sessionVersion);
+  }
+  const sub = await prisma.subProfile.findUnique({
+    where: { id: session.subProfileId },
+    select: {
+      active: true,
+      familyAccountId: true,
+      familyAccount: { select: { sessionVersion: true } },
+    },
+  });
+  return Boolean(
+    sub &&
+      sub.active &&
+      sub.familyAccountId === session.familyAccountId &&
+      sub.familyAccount.sessionVersion === session.sessionVersion,
+  );
+}
+
 /** Active reader for Bible progress: reader session, then parent family sign-in, then guest. */
-export async function getReaderKey(): Promise<ReaderKey | null> {
+export const getReaderKey = cache(async (): Promise<ReaderKey | null> => {
   const jar = await cookies();
 
   const readerToken = jar.get(READER_SESSION_COOKIE)?.value?.trim();
   if (readerToken) {
     const session = await verifyReaderSession(readerToken);
-    if (session?.type === "owner") {
-      return { type: "owner", familyAccountId: session.familyAccountId };
-    }
-    if (session?.type === "sub") {
+    if (session && (await isReaderSessionCurrent(session))) {
+      if (session.type === "owner") {
+        return { type: "owner", familyAccountId: session.familyAccountId };
+      }
       return { type: "sub", subProfileId: session.subProfileId };
     }
   }
@@ -37,7 +68,7 @@ export async function getReaderKey(): Promise<ReaderKey | null> {
   if (guestId) return { type: "guest", guestId };
 
   return null;
-}
+});
 
 export function isSignedInReaderKey(
   key: ReaderKey | null,

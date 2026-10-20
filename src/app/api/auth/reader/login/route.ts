@@ -10,10 +10,28 @@ import {
 } from "@/lib/bible/reader";
 import { mergeGuestProgressIntoReader } from "@/lib/bible/progress";
 import { readerCookieOptions, signReaderSession } from "@/lib/family-session";
+import { clientIpFromHeaders } from "@/lib/client-ip";
 import { prisma } from "@/lib/prisma";
+import {
+  clearRateLimit,
+  getRateLimitState,
+  READER_LOGIN_RULE,
+  recordRateLimitFailure,
+} from "@/lib/rate-limit";
 import { NextResponse } from "next/server";
 
+function tooManyAttempts(retryAfterSec: number) {
+  return NextResponse.json(
+    { error: "Too many sign-in attempts. Please wait a few minutes and try again." },
+    { status: 429, headers: { "Retry-After": String(retryAfterSec) } },
+  );
+}
+
 export async function POST(request: Request) {
+  const rateKey = `reader:ip:${clientIpFromHeaders(request.headers)}`;
+  const limit = await getRateLimitState([rateKey]);
+  if (limit.blocked) return tooManyAttempts(limit.retryAfterSec);
+
   let body: { accessId?: string };
   try {
     body = await request.json();
@@ -37,17 +55,23 @@ export async function POST(request: Request) {
       displayName: true,
       accessCodeHash: true,
       familyAccountId: true,
+      familyAccount: { select: { sessionVersion: true } },
     },
   });
 
   if (!sub) {
+    const state = await recordRateLimitFailure(rateKey, READER_LOGIN_RULE);
+    if (state.blocked) return tooManyAttempts(state.retryAfterSec);
     return NextResponse.json({ error: "Access ID not found" }, { status: 401 });
   }
 
   const valid = await verifyAccessCode(normalized, sub.accessCodeHash);
   if (!valid) {
+    const state = await recordRateLimitFailure(rateKey, READER_LOGIN_RULE);
+    if (state.blocked) return tooManyAttempts(state.retryAfterSec);
     return NextResponse.json({ error: "Access ID not found" }, { status: 401 });
   }
+  await clearRateLimit([rateKey]);
 
   const guestId = (await getGuestIdFromCookies()) ?? null;
   if (guestId) {
@@ -61,13 +85,14 @@ export async function POST(request: Request) {
     type: "sub",
     subProfileId: sub.id,
     familyAccountId: sub.familyAccountId,
+    sessionVersion: sub.familyAccount.sessionVersion,
   });
 
   const res = NextResponse.json({
     ok: true,
     reader: { type: "sub", displayName: sub.displayName, subProfileId: sub.id },
   });
-  const opts = readerCookieOptions(readerToken);
+  const opts = readerCookieOptions(readerToken, "sub");
   res.cookies.set(opts.name, opts.value, {
     httpOnly: opts.httpOnly,
     sameSite: opts.sameSite,

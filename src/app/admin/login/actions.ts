@@ -25,7 +25,7 @@ export async function loginAction(formData: FormData): Promise<void> {
   }
 
   const ip = clientIpFromHeaders(await headers());
-  if (getAdminLoginThrottle(ip, email).blocked) {
+  if ((await getAdminLoginThrottle(ip, email)).blocked) {
     redirect("/admin/login?error=TooManyAttempts");
   }
 
@@ -44,7 +44,7 @@ export async function loginAction(formData: FormData): Promise<void> {
       throw error;
     }
     if (error instanceof AuthError) {
-      if (getAdminLoginThrottle(ip, email).blocked) {
+      if ((await getAdminLoginThrottle(ip, email)).blocked) {
         redirect("/admin/login?error=TooManyAttempts");
       }
       redirect("/admin/login?error=CredentialsSignin");
