@@ -6,6 +6,7 @@ import { MAX_SUB_PROFILES_PER_FAMILY } from "@/lib/access-code";
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { requireFamilySession } from "@/lib/family-auth";
 import { canonicalForPath } from "@/lib/site-metadata";
+import { prisma } from "@/lib/prisma";
 import { isBillingConfigured } from "@/lib/stripe";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
 import { PLAN_FEATURES, PLUS_PRICE_LABEL, planRenewalLine } from "@/lib/subscription/plan-copy";
@@ -25,6 +26,9 @@ export default async function AccountDashboardPage() {
   const isPlus = plan.isPlus;
   const renewal = planRenewalLine(plan);
   const billingReady = isBillingConfigured();
+  const memoCount = await prisma.biblePassageMemo.count({
+    where: { familyAccountId: session!.familyAccountId },
+  });
 
   return (
     <PageShell wide>
@@ -97,6 +101,18 @@ export default async function AccountDashboardPage() {
               readable; new memos need Plus.
             </p>
             <p className="mt-3 text-xs text-[var(--color-muted)]">Secure checkout with Stripe.</p>
+          </section>
+
+          <section className="flex items-center justify-between gap-3 border border-[var(--color-border)] bg-white p-5 sm:p-6">
+            <div>
+              <h2 className="text-xl font-bold text-[var(--color-ink)]">My memos</h2>
+              <p className="mt-1 text-sm text-[var(--color-muted)]">
+                {memoCount} private {memoCount === 1 ? "memo" : "memos"} on Bible passages
+              </p>
+            </div>
+            <Link href="/account/memos" className="shrink-0 text-sm font-bold text-[var(--color-link)] hover:underline">
+              View all &rarr;
+            </Link>
           </section>
 
           <section className="border border-[var(--color-border)] bg-white p-5 sm:p-6">

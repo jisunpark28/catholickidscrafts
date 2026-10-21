@@ -9,7 +9,7 @@ export type PassageMemoSetup = {
   paid: boolean;
 };
 
-export const MEMO_BODY_MAX = 2000;
+export const MEMO_BODY_MAX = 1000;
 export const MEMO_QUOTE_MAX = 4000;
 
 export type PassageMemoDto = {
@@ -103,4 +103,19 @@ export function parseMemoInput(raw: unknown): MemoInput | string {
     textVersion,
     body,
   };
+}
+
+/** Validate an edited memo body (PATCH). Returns an error string or the clean body. */
+export function parseMemoBody(raw: unknown): { body: string } | string {
+  if (!raw || typeof raw !== "object") return "Invalid body";
+  const v = (raw as Record<string, unknown>).body;
+  const body = typeof v === "string" ? v.trim() : "";
+  if (!body) return "Memo is empty";
+  if (body.length > MEMO_BODY_MAX) return `Memo must be ${MEMO_BODY_MAX} characters or fewer`;
+  return { body };
+}
+
+/** "Oct 18, 2026" style date for memo cards. */
+export function formatMemoDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 }
