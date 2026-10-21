@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { qaListHref } from "@/lib/admin-liturgy-paths";
 import { useState } from "react";
 
 export type QaCardForm = {
@@ -80,7 +81,7 @@ export function LiturgyQaCardEditor({ id, topicSlug, initial }: Props) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : "Save failed");
-      router.push(`/admin/liturgy-qa?topic=${topicSlug}`);
+      router.push(qaListHref(topicSlug));
       router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");

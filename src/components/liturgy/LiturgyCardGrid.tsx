@@ -36,7 +36,14 @@ function CardInner({ card }: { card: LiturgyCard }) {
   );
 }
 
-export function LiturgyCardGrid({ cards, compact = false }: Props) {
+/** A card with no image and no title would render as an empty dashed square. */
+function hasContent(card: LiturgyCard): boolean {
+  return Boolean(card.imageUrl || card.title.trim());
+}
+
+export function LiturgyCardGrid({ cards: allCards, compact = false }: Props) {
+  const cards = allCards.filter(hasContent);
+  if (cards.length === 0) return null;
   return (
     <div
       className={`mx-auto grid w-full max-w-5xl grid-cols-2 gap-6 sm:grid-cols-3 sm:gap-8 lg:grid-cols-4 ${

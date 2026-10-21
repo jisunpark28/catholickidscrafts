@@ -110,6 +110,12 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-10 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)]">
+          {t(
+            "global.footer.catechism_note",
+            "All questions and answers on this site are based on the teaching of the Catechism of the Catholic Church (CCC).",
+          )}
+        </p>
+        <p className="mt-2 text-xs text-[var(--color-muted)]">
           {SITE_LITURGY_FOOTER} · © {new Date().getFullYear()}{" "}
           {t("global.site.name", "Catholic Kids Crafts")} ·{" "}
           {t("global.footer.disclosure", "Some links may earn a commission (see")}{" "}

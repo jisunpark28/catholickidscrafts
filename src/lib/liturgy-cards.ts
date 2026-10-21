@@ -18,19 +18,6 @@ export type LiturgyCard = {
   badge?: string;
 };
 
-const EMPTY_FRAMES = 7;
-
-export function emptyLiturgyFrames(topic: LiturgyTopic): LiturgyCard[] {
-  return Array.from({ length: EMPTY_FRAMES }, (_, index) => ({
-    id: `empty-${topic}-${index}`,
-    title: "",
-  }));
-}
-
-export function isEmptyFrame(card: LiturgyCard): boolean {
-  return card.id.startsWith("empty-");
-}
-
 export async function loadLiturgyCards(topic: LiturgyTopic): Promise<LiturgyCard[]> {
   try {
     const rows = await prisma.liturgyCard.findMany({
@@ -46,8 +33,8 @@ export async function loadLiturgyCards(topic: LiturgyTopic): Promise<LiturgyCard
       }));
     }
   } catch {
-    // No table yet, or the database is down: show the empty grid.
+    // No table yet, or the database is down: show no cards.
   }
 
-  return emptyLiturgyFrames(topic);
+  return [];
 }
