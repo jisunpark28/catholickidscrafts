@@ -18,6 +18,7 @@ TARGETS = {
     "light_purple": (155, 125, 196),
     "pink": (232, 160, 184),
     "white": (247, 244, 232),
+    "red": (178, 40, 48),
 }
 
 # Source green chasuble reference

@@ -9,7 +9,7 @@ type Props = {
   description?: string;
   /** Show mobile/desktop tip under the title (off for hangman, etc.). */
   showTip?: boolean;
-  /** Taller iframe; game provides its own fullscreen control (Tiny Priest). */
+  /** Taller iframe; game provides its own fullscreen control (Come to Mass!). */
   immersive?: boolean;
   /** Taller iframe for games with a large illustration (Hangman). */
   tall?: boolean;

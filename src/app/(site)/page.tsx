@@ -87,7 +87,7 @@ const FEATURES: Feature[] = [
     tint: "#e3ecfb",
     title: "Play & Learn",
     hook: "Learn the faith by playing!",
-    description: "Faith games for kids: Tiny Priest, liturgical vestments, hangman and more.",
+    description: "Faith games for kids: Come to Mass!, liturgical vestments, hangman and more.",
     benefits: ["Ages & play time on every game", "Photos stay on your device"],
     badge: "🎉 Faith games",
     cta: "Play now",

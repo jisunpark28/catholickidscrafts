@@ -113,7 +113,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("home.features.curriculum.description", "Year-round lessons for Sunday school, grounded in the Catechism.", "home"),
   sc("home.features.curriculum.cta", "Browse lessons", "home"),
   sc("home.features.play.title", "Play & Learn", "home"),
-  sc("home.features.play.description", "Faith games for kids: Tiny Priest, liturgical vestments, hangman and more.", "home"),
+  sc("home.features.play.description", "Faith games for kids: Come to Mass!, liturgical vestments, hangman and more.", "home"),
   sc("home.features.play.cta", "Play now", "home"),
   sc("home.features.prayers.title", "Prayers", "home"),
   sc("home.features.prayers.description", "Flip cards for the Sign of the Cross, Our Father, Hail Mary and more, plus every prayer in 10 languages.", "home"),
@@ -267,8 +267,8 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.hub.typing_footer", "", "play"),
   sc("play.hub.typing_link", "", "play"),
 
-  sc("play.game.church.title", "Tiny Priest", "play"),
-  sc("play.game.church.description", "Welcome to Tiny Church!", "play"),
+  sc("play.game.church.title", "Come to Mass!", "play"),
+  sc("play.game.church.description", "Welcome to our church!", "play"),
   sc("play.game.vestments.title", "Liturgical vestments", "play"),
   sc("play.game.vestments.description", "What color vestments does Father wear?", "play"),
   sc("play.game.typing.title", "Typing Game", "play"),
@@ -355,8 +355,8 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("legal.affiliate.title", "Affiliate disclosure", "legal"),
 
   // Tiny Priest
-  sc("game.tiny_priest.page_title", "Tiny Priest - Welcome to Our Church", "game_tiny_priest"),
-  sc("game.tiny_priest.entry.title", "Welcome to Tiny Church.", "game_tiny_priest"),
+  sc("game.tiny_priest.page_title", "Come to Mass! - Welcome to Our Church", "game_tiny_priest"),
+  sc("game.tiny_priest.entry.title", "Come to Mass!", "game_tiny_priest"),
   sc(
     "game.tiny_priest.entry.dialogue_default",
     "You're at church for Sunday Mass. Look closely at the courtyard picture! Five things are hiding in the scene. Can you find them all? Then say hello to Father or Sister.",

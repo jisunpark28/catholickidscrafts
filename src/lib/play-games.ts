@@ -15,8 +15,8 @@ export type PlayGame = {
 export const PLAY_GAMES: PlayGame[] = [
   {
     slug: "church",
-    title: "Tiny Priest",
-    description: "Welcome to Tiny Church!",
+    title: "Come to Mass!",
+    description: "Welcome to our church!",
     embedPath: getTinyPriestEmbedPath(),
   },
   {

@@ -1,12 +1,12 @@
 export const CHARACTER_CONFIG = {
     priest: {
-        frontImage: "assets/priest_front.png",
-        backImage: "assets/priest_back.png",
+        frontImage: "assets/priest_front.webp",
+        backImage: "assets/priest_back.webp",
         welcomeText: "Father: Peace be with you! Let's walk through the center door.",
     },
     nun: {
-        frontImage: "assets/nun_front.png",
-        backImage: "assets/nun_back.png",
+        frontImage: "assets/nun_front.webp",
+        backImage: "assets/nun_back.webp",
         welcomeText: "Sister: Let us pray together. We'll enter through the center door now.",
     },
 };
