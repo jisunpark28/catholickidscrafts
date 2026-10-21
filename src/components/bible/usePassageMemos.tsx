@@ -1,6 +1,7 @@
 "use client";
 
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
+import { PLUS_PRICE_LABEL } from "@/lib/subscription/plan-copy";
 import type { PassageMemoDto, PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
 import {
   offsetsToVerseRange,
@@ -73,7 +74,8 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
   const t = useCallback((key: string, fallback: string) => textFromCopy(copy, key, fallback), [copy]);
   const target = useMemo(() => normalizePassageText(text), [text]);
   const enabled = Boolean(setup && setup.verseTable.length === target.length);
-  const paid = Boolean(setup?.paid && setup.signedIn);
+  const signedIn = Boolean(setup?.signedIn);
+  const paid = Boolean(setup?.paid && signedIn);
 
   const passageRef = useRef<HTMLParagraphElement | null>(null);
   const typingFocusRef = useRef<(() => void) | null>(null);
@@ -101,9 +103,9 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Load memos (paid readers only; API also enforces).
+  // Load memos for any signed-in reader (after cancel, existing memos stay viewable/deletable).
   useEffect(() => {
-    if (!enabled || !paid) return;
+    if (!enabled || !signedIn) return;
     let cancelled = false;
     fetch(`/api/bible/memos?bookSlug=${encodeURIComponent(bookSlug)}&chapter=${chapter}`)
       .then((r) => (r.ok ? r.json() : { memos: [] }))
@@ -114,7 +116,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
     return () => {
       cancelled = true;
     };
-  }, [enabled, paid, bookSlug, chapter]);
+  }, [enabled, signedIn, bookSlug, chapter]);
 
   const memoRange = useCallback(
     (m: PassageMemoDto): { start: number; end: number } | null => {
@@ -466,7 +468,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           {t("bible.memo.upsell_body", "Typing the Bible is free. Subscribe to save memos on your favourite passages.")}
         </p>
         <p className="mt-3 text-xl font-bold">
-          {t("bible.memo.upsell_price", "$9.99")}
+          {t("bible.memo.upsell_price", PLUS_PRICE_LABEL)}
           <span className="text-sm font-normal text-[var(--color-muted)]">{t("bible.memo.upsell_period", "/mo")}</span>
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -620,7 +622,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
     </>
   );
 
-  const panel = paid ? (
+  const panel = paid || memos.length > 0 ? (
     <section aria-labelledby={`${dialogId}-list`} className="rounded-2xl border border-[#eadfce] bg-white p-4 shadow-sm">
       <h2 id={`${dialogId}-list`} className="text-sm font-bold text-[var(--color-ink)]">
         {t("bible.memo.list_title", "My memos in this chapter")}{" "}
@@ -650,7 +652,15 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           ))}
         </ul>
       )}
-      <p className="mt-2 text-xs text-[var(--color-muted)]">{t("bible.memo.list_hint", "Tap a memo to jump to its verse. Memos are private.")}</p>
+      <p className="mt-2 text-xs text-[var(--color-muted)]">{paid
+          ? t("bible.memo.list_hint", "Tap a memo to jump to its verse. Memos are private.")
+          : t("bible.memo.list_hint_readonly", "Your Plus plan has ended, so memos are read-only. You can still view and delete them.")}{" "}
+        {!paid && (
+          <Link href={SUBSCRIBE_HREF} className="font-semibold text-[var(--color-link)]">
+            {lock} {t("bible.memo.upsell_cta", "Start subscription")}
+          </Link>
+        )}
+      </p>
     </section>
   ) : null;
 

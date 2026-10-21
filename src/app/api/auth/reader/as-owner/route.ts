@@ -12,13 +12,14 @@ export async function POST() {
   const readerToken = await signReaderSession({
     type: "owner",
     familyAccountId: session.familyAccountId,
+    sessionVersion: session.sessionVersion,
   });
 
   const res = NextResponse.json({
     ok: true,
     reader: { type: "owner", familyAccountId: session.familyAccountId },
   });
-  const opts = readerCookieOptions(readerToken);
+  const opts = readerCookieOptions(readerToken, "owner");
   res.cookies.set(opts.name, opts.value, {
     httpOnly: opts.httpOnly,
     sameSite: opts.sameSite,

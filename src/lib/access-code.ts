@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-export const MAX_SUB_PROFILES_PER_FAMILY = 30;
+export const MAX_SUB_PROFILES_PER_FAMILY = 5;
 
 /** Format: CKC-XXXX-XXXX (no ambiguous 0/O/1/I). */
 export function generateAccessCode(): string {

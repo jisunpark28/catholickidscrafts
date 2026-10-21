@@ -27,7 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!email || !password) return null;
 
         const ip = clientIpFromHeaders(request?.headers ?? new Headers());
-        const throttle = getAdminLoginThrottle(ip, email);
+        const throttle = await getAdminLoginThrottle(ip, email);
         if (throttle.blocked) {
           return null;
         }
@@ -36,8 +36,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { email: { equals: email, mode: "insensitive" } },
         });
         if (!user) {
-          recordAdminLoginFailure(ip, email);
-          const delayMs = adminLoginFailureDelayMs(ip, email);
+          const failure = await recordAdminLoginFailure(ip, email);
+          const delayMs = adminLoginFailureDelayMs(failure.failures);
           if (delayMs > 0) {
             await new Promise((resolve) => setTimeout(resolve, delayMs));
           }
@@ -46,15 +46,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) {
-          recordAdminLoginFailure(ip, email);
-          const delayMs = adminLoginFailureDelayMs(ip, email);
+          const failure = await recordAdminLoginFailure(ip, email);
+          const delayMs = adminLoginFailureDelayMs(failure.failures);
           if (delayMs > 0) {
             await new Promise((resolve) => setTimeout(resolve, delayMs));
           }
           return null;
         }
 
-        recordAdminLoginSuccess(ip, email);
+        await recordAdminLoginSuccess(ip, email);
         return {
           id: user.id,
           email: user.email,

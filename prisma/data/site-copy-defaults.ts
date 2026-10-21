@@ -150,7 +150,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("bible.memo.tip", "Tip: long-press to select words, or tap the first verse, then the last verse.", "bible"),
   sc("bible.memo.upsell_title", "Memos are part of the family subscription", "bible"),
   sc("bible.memo.upsell_body", "Typing the Bible is free. Subscribe to save memos on your favourite passages, use colors, share with your family, and keep a memo journal.", "bible"),
-  sc("bible.memo.upsell_price", "$9.99", "bible"),
+  sc("bible.memo.upsell_price", "CA$5.99", "bible"),
   sc("bible.memo.upsell_period", "/mo", "bible"),
   sc("bible.memo.upsell_cta", "Start subscription", "bible"),
   sc("bible.memo.upsell_dismiss", "Not now", "bible"),

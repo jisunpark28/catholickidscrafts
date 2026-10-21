@@ -19,7 +19,7 @@ function resolveDisplayName(
   return fallback;
 }
 
-/** Family account or signed-in reader (parent / Access ID student). */
+/** Parent only: a family session or an owner reader session. Children (Access ID) cannot post publicly. */
 export async function getGallerySubmitterContext(): Promise<GallerySubmitterContext | null> {
   const family = await getFamilySession();
   if (family) {
@@ -49,14 +49,6 @@ export async function getGallerySubmitterContext(): Promise<GallerySubmitterCont
     };
   }
 
-  const sub = await prisma.subProfile.findUnique({
-    where: { id: reader.subProfileId },
-    select: { familyAccountId: true, displayName: true, active: true },
-  });
-  if (!sub?.active) return null;
-
-  return {
-    familyAccountId: sub.familyAccountId,
-    defaultAuthorName: sub.displayName.trim().slice(0, 40) || "Reader",
-  };
+  // Child (Access ID) sessions cannot submit to the public gallery.
+  return null;
 }

@@ -6,7 +6,11 @@ import {
 import { withDiscussionSchemaReady } from "@/lib/bible/discussion-db";
 import { getAuthorLabelForPost } from "@/lib/bible/discussion-pen-name";
 import { publicAuthorDisplay } from "@/lib/bible/discussion-permissions";
-import { getSignedInDiscussionReader } from "@/lib/bible/discussion-reader";
+import {
+  CHILD_POSTING_BLOCKED_MESSAGE,
+  getSignedInDiscussionReader,
+  isChildReader,
+} from "@/lib/bible/discussion-reader";
 import { ensureOwnerReaderCookie } from "@/lib/family-auth";
 import { NextResponse } from "next/server";
 
@@ -22,6 +26,9 @@ export async function POST(request: Request, context: RouteContext) {
         { error: "Sign in with a family account or Access ID to reply." },
         { status: 401 },
       );
+    }
+    if (isChildReader(readerKey)) {
+      return NextResponse.json({ error: CHILD_POSTING_BLOCKED_MESSAGE }, { status: 403 });
     }
 
     const thread = await withDiscussionSchemaReady(() => getChapterThread(threadId));

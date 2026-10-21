@@ -1,7 +1,6 @@
 import { ownerWhere } from "@/lib/bible-memos/passage-memos";
 import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
 import { prisma } from "@/lib/prisma";
-import { hasPaidFeatures } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -12,12 +11,6 @@ export async function DELETE(_request: Request, { params }: Ctx) {
   const key = await getReaderKey();
   if (!isSignedInReaderKey(key)) {
     return NextResponse.json({ error: "Sign in to use memos" }, { status: 401 });
-  }
-  if (!(await hasPaidFeatures(key))) {
-    return NextResponse.json(
-      { error: "Memos are part of the family subscription", code: "subscription_required" },
-      { status: 403 },
-    );
   }
   const { memoId } = await params;
   const result = await prisma.biblePassageMemo.deleteMany({

@@ -49,7 +49,6 @@ export async function POST(_request: Request, { params }: Params) {
       accessCodeHash,
       accessCodeLookup: accessCodeLookupKey(normalized),
       accessCodeLast4: accessCodeLast4(normalized),
-      accessCodeDisplay: normalized,
     },
     select: { id: true, displayName: true, accessCodeLast4: true },
   });

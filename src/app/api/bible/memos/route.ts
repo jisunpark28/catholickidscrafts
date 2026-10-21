@@ -24,8 +24,11 @@ async function requirePaidReader() {
 }
 
 export async function GET(request: Request) {
-  const { key, error } = await requirePaidReader();
-  if (error) return error;
+  // Viewing existing memos only needs sign-in (read-only after Plus ends).
+  const key = await getReaderKey();
+  if (!isSignedInReaderKey(key)) {
+    return NextResponse.json({ error: "Sign in to use memos" }, { status: 401 });
+  }
   const { searchParams } = new URL(request.url);
   const bookSlug = searchParams.get("bookSlug")?.trim();
   const chapter = Number(searchParams.get("chapter"));

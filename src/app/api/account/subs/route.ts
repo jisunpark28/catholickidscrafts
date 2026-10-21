@@ -64,7 +64,7 @@ export async function POST(request: Request) {
   });
   if (count >= MAX_SUB_PROFILES_PER_FAMILY) {
     return NextResponse.json(
-      { error: `Maximum ${MAX_SUB_PROFILES_PER_FAMILY} reader profiles per family` },
+      { error: `A family account can have up to ${MAX_SUB_PROFILES_PER_FAMILY} children. Delete a profile to add a new one.` },
       { status: 400 },
     );
   }
@@ -79,7 +79,6 @@ export async function POST(request: Request) {
       accessCodeHash,
       accessCodeLookup: accessCodeLookupKey(normalized),
       accessCodeLast4: accessCodeLast4(normalized),
-      accessCodeDisplay: normalized,
       sortOrder: count,
       active: true,
     },

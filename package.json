@@ -53,6 +53,7 @@
     "romcal": "1.3.0",
     "sanitize-html": "^2.17.4",
     "sharp": "^0.34.5",
+    "stripe": "^19",
     "zod": "^4.4.3"
   },
   "devDependencies": {
