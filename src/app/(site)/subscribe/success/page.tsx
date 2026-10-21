@@ -43,8 +43,7 @@ export default async function SubscribeSuccessPage({ searchParams }: Props) {
       </h1>
       {plan?.isPlus ? (
         <p className="mt-3 text-sm text-[var(--color-ink)]">
-          Your family now has Plus. Every child profile on your account can use memos, catechism activities, and
-          custom sheets.
+          Your family now has Plus. Every child profile on your account can use memos and catechism activities.
         </p>
       ) : (
         <p className="mt-3 text-sm text-[var(--color-ink)]">

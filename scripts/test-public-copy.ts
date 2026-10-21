@@ -1,13 +1,9 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { isPlaceholderLessonCopy } from "../src/lib/lesson-kit/placeholder-copy";
 import { resourceDownloadButtonLabel } from "../src/lib/resource-download-label";
 import { getPublicContactEmail } from "../src/lib/site-contact";
 import { isTeachersPayTeachersUrl, isYoutubeUrl, partnerOutboundLabel } from "../src/lib/tpt";
 
-assert.equal(isPlaceholderLessonCopy("Advent", "test"), true);
-assert.equal(isPlaceholderLessonCopy("test", "A real description"), true);
-assert.equal(isPlaceholderLessonCopy("Advent warm-up", "Purple time: colors, words, and a short Gospel."), false);
 
 assert.equal(isTeachersPayTeachersUrl("https://www.teacherspayteachers.com/store/catholic-kids-crafts"), true);
 assert.equal(isTeachersPayTeachersUrl("https://www.youtube.com/"), false);

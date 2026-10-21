@@ -63,14 +63,6 @@ const FEATURES: {
     description: "Learn the Sign of the Cross, Our Father, Hail Mary and more, one prayer at a time.",
     cta: "Pray together",
   },
-  {
-    id: "program",
-    href: "/program",
-    image: "/home-features/program.webp",
-    title: "Lesson Kits (Custom Sheet)",
-    description: "Build your own lesson kit: games, Gospel typing and crafts in one sheet.",
-    cta: "Build a kit",
-  },
 ];
 
 export default async function HomePage() {

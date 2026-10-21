@@ -12,7 +12,6 @@ export const PLAN_FEATURES: { label: string; plus: boolean }[] = [
   { label: "Bible typing", plus: false },
   { label: "Memos", plus: true },
   { label: "Catechism activities", plus: true },
-  { label: "Custom sheets", plus: true },
 ];
 
 export function formatPlanDate(d: Date): string {
