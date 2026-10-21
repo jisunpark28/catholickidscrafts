@@ -1,4 +1,5 @@
 import { LiturgyCardEditor } from "@/components/admin/LiturgyCardEditor";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { isLiturgyTopic } from "@/lib/liturgy-topics";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
@@ -7,6 +8,7 @@ import { notFound } from "next/navigation";
 type Props = { params: Promise<{ id: string }> };
 
 export default async function EditLiturgyCardPage({ params }: Props) {
+  await requireAdminPage();
   const { id } = await params;
   const item = await prisma.liturgyCard.findUnique({ where: { id } });
   if (!item || !isLiturgyTopic(item.topic)) notFound();

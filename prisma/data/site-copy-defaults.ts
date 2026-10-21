@@ -46,6 +46,11 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("global.footer.link.affiliate", "Affiliate disclosure", "global"),
   sc("global.footer.disclosure", "Some links may earn a commission (see disclosure).", "global"),
   sc("global.footer.disclosure_link", "disclosure", "global"),
+  sc(
+    "global.footer.catechism_note",
+    "All questions and answers on this site are based on the teaching of the Catechism of the Catholic Church (CCC).",
+    "global",
+  ),
 
   // —— Home ——
   sc("home.hero.eyebrow", "For catechists and parents", "home"),
@@ -91,7 +96,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("home.features.prayers.hook", "Learn to pray, one prayer at a time.", "home"),
   sc("home.features.liturgy.title", "Liturgical Year", "home"),
   sc("home.features.liturgy.hook", "Celebrate every season of the Church.", "home"),
-  sc("home.features.liturgy.description", "Crafts and activities for Advent, Christmas, Lent, Easter and Ordinary Time.", "home"),
+  sc("home.features.liturgy.description", "Kid questions and answers, crafts and activities for Advent, Christmas, Lent, Easter and Ordinary Time.", "home"),
   sc("home.features.liturgy.cta", "Explore the seasons", "home"),
   sc("home.features.prev", "Previous feature", "home", "Screen-reader label for the carousel left arrow"),
   sc("home.features.next", "Next feature", "home", "Screen-reader label for the carousel right arrow"),
@@ -111,7 +116,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("home.features.play.description", "Faith games for kids: Tiny Priest, liturgical vestments, hangman and more.", "home"),
   sc("home.features.play.cta", "Play now", "home"),
   sc("home.features.prayers.title", "Prayers", "home"),
-  sc("home.features.prayers.description", "Learn the Sign of the Cross, Our Father, Hail Mary and more, one prayer at a time.", "home"),
+  sc("home.features.prayers.description", "Flip cards for the Sign of the Cross, Our Father, Hail Mary and more, plus every prayer in 10 languages.", "home"),
   sc("home.features.prayers.cta", "Pray together", "home"),
   sc("home.features.program.title", "Lesson Kits (Custom Sheet)", "home"),
   sc("home.features.program.description", "Build your own lesson kit: games, Gospel typing and crafts in one sheet.", "home"),

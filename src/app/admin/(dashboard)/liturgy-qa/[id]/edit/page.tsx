@@ -1,4 +1,5 @@
 import { LiturgyQaCardEditor } from "@/components/admin/LiturgyQaCardEditor";
+import { qaListHref } from "@/lib/admin-liturgy-paths";
 import { requireAdminPage } from "@/lib/admin-auth";
 import { ID_RE } from "@/lib/liturgy-qa-admin";
 import { isQaTopic, QA_TOPIC_LABELS } from "@/lib/liturgy-qa-topics";
@@ -17,7 +18,7 @@ export default async function EditLiturgyQaCardPage({ params }: Props) {
 
   return (
     <div>
-      <Link href={`/admin/liturgy-qa?topic=${card.topicSlug}`} className="text-sm font-semibold text-[var(--color-link)]">
+      <Link href={qaListHref(card.topicSlug)} className="text-sm font-semibold text-[var(--color-link)]">
         ← {QA_TOPIC_LABELS[card.topicSlug]} Q&amp;A cards
       </Link>
       <h1 className="mt-4 text-2xl font-bold">Edit card #{card.sortOrder}</h1>

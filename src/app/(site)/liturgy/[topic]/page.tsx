@@ -4,8 +4,6 @@ import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
 import { WeeklyThisWeekSection } from "@/components/liturgy/WeeklyThisWeekSection";
 import {
-  emptyLiturgyFrames,
-  isEmptyFrame,
   isLiturgyTopic,
   LITURGY_TOPIC_LABELS,
   loadLiturgyCards,
@@ -41,8 +39,7 @@ export default async function LiturgyTopicPage({ params }: Props) {
     loadThisWeek(),
     loadPublishedQa(topic),
   ]);
-  const realCards = [...liturgyCards.filter((card) => !isEmptyFrame(card)), ...weeklyCards];
-  const cards = realCards.length > 0 ? realCards : emptyLiturgyFrames(topic);
+  const cards = [...liturgyCards, ...weeklyCards];
 
   return (
     <TestamentPageShell>
