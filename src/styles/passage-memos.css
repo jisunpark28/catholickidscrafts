@@ -1,0 +1,46 @@
+.passage-memo-hl {
+  background: #fdecc8;
+  box-shadow: inset 0 -2px 0 #e8b04b;
+}
+.passage-memo-pending {
+  background: #cfe2fb;
+}
+.passage-memo-flash {
+  animation: passage-memo-flash 1.4s ease-out 1;
+}
+@keyframes passage-memo-flash {
+  0% { background: #f9c97a; }
+  100% { background: #fdecc8; }
+}
+.passage-memo-pencil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0 0.1rem;
+  vertical-align: super;
+  border-radius: 9999px;
+  background: #d9580f;
+  color: #fff;
+  font-size: 0.65rem;
+  line-height: 1;
+  font-family: system-ui, sans-serif;
+  cursor: pointer;
+  user-select: none;
+}
+.passage-memo-pencil:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+.passage-memo-tapmode [data-ci] {
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+  .passage-memo-flash { animation: none; }
+}
+.passage-memo-ui {
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: normal;
+  line-height: 1.45;
+}

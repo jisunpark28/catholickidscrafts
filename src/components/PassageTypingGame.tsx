@@ -18,7 +18,7 @@ import {
   tryAppendMatchingFrontier,
   tryConfirmGhostSuffixAtSelection,
 } from "@/lib/passage-typing-frontier";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "@/styles/gospel-typing.css";
 
 type Appearance = "default" | "gospel" | "bible";
@@ -52,6 +52,16 @@ type Props = {
   embedded?: boolean;
   /** Called when user reaches maxChars or completes (lesson flow). */
   onLessonStepReady?: () => void;
+  /** Extra class per passage character (e.g. memo highlights). */
+  passageCharClassName?: (index: number) => string | undefined;
+  /** Inline node rendered after a passage character (e.g. memo pencil button). */
+  renderAfterPassageChar?: (index: number) => React.ReactNode;
+  /** Overlay rendered inside the passage pane (pane is position: relative). */
+  passageAddon?: React.ReactNode;
+  /** Receives the passage <p> element (spans carry data-ci = character index). */
+  onPassageElement?: (el: HTMLParagraphElement | null) => void;
+  /** Filled with a function that returns focus + caret to the typing box. */
+  typingFocusRef?: React.MutableRefObject<(() => void) | null>;
 };
 
 function usesGospelCharStyles(appearance: Appearance): boolean {
@@ -149,6 +159,11 @@ export function PassageTypingGame({
   maxChars,
   embedded = false,
   onLessonStepReady,
+  passageCharClassName,
+  renderAfterPassageChar,
+  passageAddon,
+  onPassageElement,
+  typingFocusRef,
 }: Props) {
   const isBible = appearance === "bible";
   const isGospel = appearance === "gospel" || isBible;
@@ -163,6 +178,7 @@ export function PassageTypingGame({
     return slice;
   }, [fullTarget, maxChars]);
   const [typed, setTyped] = useState("");
+  const lastInputSelectionRef = useRef<{ start: number; end: number } | null>(null);
   const [started, setStarted] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
@@ -442,6 +458,24 @@ export function PassageTypingGame({
     syncCaretOverlay();
   }, [draftLoaded, typed.length, syncInputMirrorScroll, syncCaretOverlay]);
 
+  useEffect(() => {
+    if (!typingFocusRef) return;
+    typingFocusRef.current = () => {
+      const el = textareaRef.current;
+      if (!el) return;
+      const saved = lastInputSelectionRef.current;
+      const max = typedRef.current.length;
+      const start = clampCaretIndex(saved?.start ?? max, max);
+      const end = clampCaretIndex(saved?.end ?? max, max);
+      el.focus({ preventScroll: true });
+      el.setSelectionRange(start, end);
+      syncCaretOverlay();
+    };
+    return () => {
+      typingFocusRef.current = null;
+    };
+  }, [typingFocusRef, syncCaretOverlay]);
+
   if (!target) {
     return (
       <p className="text-sm text-[var(--color-muted)]">No text available for this reading.</p>
@@ -512,7 +546,10 @@ export function PassageTypingGame({
 
   const passagePanel = (
     <p
-      ref={alignedColumns ? passageScrollRef : undefined}
+      ref={(el) => {
+        if (alignedColumns) passageScrollRef.current = el;
+        onPassageElement?.(el);
+      }}
       onScroll={
         alignedColumns
           ? () => {
@@ -525,9 +562,19 @@ export function PassageTypingGame({
       className={passageClass}
     >
       {target.split("").map((char, i) => (
-        <span key={i} className={charClassName(appearance, i, typedNorm, target, nextIndex)}>
-          {char}
-        </span>
+        <Fragment key={i}>
+          <span
+            data-ci={i}
+            className={
+              passageCharClassName
+                ? `${charClassName(appearance, i, typedNorm, target, nextIndex)} ${passageCharClassName(i) ?? ""}`
+                : charClassName(appearance, i, typedNorm, target, nextIndex)
+            }
+          >
+            {char}
+          </span>
+          {renderAfterPassageChar?.(i)}
+        </Fragment>
       ))}
     </p>
   );
@@ -577,7 +624,13 @@ export function PassageTypingGame({
           setInputFocused(true);
           syncCaretOverlay();
         }}
-        onBlur={() => setInputFocused(false)}
+        onBlur={(e) => {
+          lastInputSelectionRef.current = {
+            start: e.currentTarget.selectionStart,
+            end: e.currentTarget.selectionEnd,
+          };
+          setInputFocused(false);
+        }}
         onSelect={() => {
           clampTextareaSelection();
           syncCaretOverlay();
@@ -845,9 +898,10 @@ export function PassageTypingGame({
         {sideBySide ? (
           <>
             <div className="gospel-typing__columns">
-              <div className="gospel-typing__passage-pane">
+              <div className="gospel-typing__passage-pane relative">
                 <p className="gospel-typing__pane-label">Passage</p>
                 {passagePanel}
+                {passageAddon}
               </div>
               <div className="gospel-typing__input-pane">
                 <p className="gospel-typing__pane-label">Your typing</p>
@@ -858,7 +912,10 @@ export function PassageTypingGame({
           </>
         ) : (
           <>
-            {passagePanel}
+            <div className="relative">
+              {passagePanel}
+              {passageAddon}
+            </div>
             {typingInput}
             {controlsPanel}
           </>

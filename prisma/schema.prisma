@@ -330,6 +330,7 @@ model FamilyAccount {
   typingDrafts       TypingDraft[]          @relation("OwnerTypingDrafts")
   discussionThreads  BibleChapterThread[]   @relation("OwnerDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("OwnerDiscussionComments")
+  passageMemos       BiblePassageMemo[]     @relation("OwnerPassageMemos")
   lessonKits         LessonKit[]
   lessonAssignments  LessonAssignment[]
   lessonProgress     LessonKitProgress[]
@@ -363,6 +364,7 @@ model SubProfile {
   typingDrafts       TypingDraft[]          @relation("SubTypingDrafts")
   discussionThreads  BibleChapterThread[]   @relation("SubDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("SubDiscussionComments")
+  passageMemos       BiblePassageMemo[]     @relation("SubPassageMemos")
   lessonAssignments  LessonAssignment[]
   lessonProgress     LessonKitProgress[]
 
@@ -587,6 +589,41 @@ model BibleChapterComment {
   @@index([threadId, createdAt])
   @@index([familyAccountId])
   @@index([subProfileId])
+}
+
+
+enum BibleMemoVisibility {
+  PRIVATE
+  FAMILY
+  DISCUSSION
+}
+
+/// Private memo anchored to a verse range / character range of the reading text (paid feature).
+model BiblePassageMemo {
+  id              String              @id @default(cuid())
+  bookSlug        String
+  chapter         Int
+  startVerse      Int
+  endVerse        Int
+  /// Character offsets into the normalized chapter typing text (end exclusive).
+  startOffset     Int?
+  endOffset       Int?
+  quotedText      String              @db.Text
+  /// Hash of the normalized chapter text when the memo was saved (detect text changes).
+  textVersion     String
+  body            String              @db.Text
+  color           String?
+  visibility      BibleMemoVisibility @default(PRIVATE)
+  familyAccountId String?
+  subProfileId    String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  familyAccount   FamilyAccount?      @relation("OwnerPassageMemos", fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subProfile      SubProfile?         @relation("SubPassageMemos", fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@index([familyAccountId, bookSlug, chapter])
+  @@index([subProfileId, bookSlug, chapter])
+  @@index([bookSlug, chapter])
 }
 
 /// DB-backed sign-in failure counters (admin, parent Google, child Access ID).

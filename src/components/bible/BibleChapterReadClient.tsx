@@ -11,6 +11,7 @@ import {
   normalizePrayerLanguage,
   type PrayerLanguageCode,
 } from "@/lib/prayers/prayer-languages";
+import type { PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -22,6 +23,7 @@ type Props = {
   text: string;
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
+  memoSetup?: PassageMemoSetup | null;
 };
 
 export function BibleChapterReadClient({
@@ -32,6 +34,7 @@ export function BibleChapterReadClient({
   text,
   discussionSignedIn,
   discussionReaderLabel,
+  memoSetup = null,
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -93,6 +96,7 @@ export function BibleChapterReadClient({
         onUiLanguageChange={selectLanguage}
         discussionSignedIn={discussionSignedIn}
         discussionReaderLabel={discussionReaderLabel}
+        memoSetup={memoSetup}
       />
     </div>
   );
