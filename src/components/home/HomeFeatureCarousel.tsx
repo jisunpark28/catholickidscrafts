@@ -43,6 +43,10 @@ type Props = {
 const ARROW =
   "absolute top-[150px] z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e7e3de] bg-white text-2xl leading-none text-[#1c1c1c] shadow-md transition hover:bg-[#fffdfb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] lg:top-1/2 lg:h-11 lg:w-11 lg:-translate-y-1/2";
 
+/** Every slide sits in grid cell 1/1. Inactive ones stay in layout (invisible) from sm up, so the card keeps the
+ * tallest slide's height; on phones they leave the layout so the sheet slide (and its Print button) stays short. */
+const cell = (on: boolean) => `relative [grid-area:1/1] ${on ? "visible" : "invisible max-sm:hidden"}`;
+
 const FOCUS = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
 /** Home "What you can do here": colour chips + themed slides, arrows + dots, no autoplay. */
@@ -59,8 +63,7 @@ export function HomeFeatureCarousel({ eyebrow, heading, subtitle, lead, slides, 
 
   if (count === 0) return null;
   const onLead = lead != null && index === 0;
-  const slide = onLead ? null : slides[index - offset]!;
-  const theme: Theme = onLead ? lead : slide!;
+  const theme: Theme = onLead ? lead : slides[index - offset]!;
   const items = [
     ...(lead ? [{ id: lead.id, label: lead.chipLabel, title: lead.title, icon: lead.icon, color: lead.color, tint: lead.tint }] : []),
     ...slides.map((s) => ({ id: s.id, label: s.title, title: s.title, icon: s.icon, color: s.color, tint: s.tint })),
@@ -145,93 +148,103 @@ export function HomeFeatureCarousel({ eyebrow, heading, subtitle, lead, slides, 
         <span aria-hidden className="pointer-events-none absolute bottom-5 right-16 text-lg opacity-30" style={{ color: theme.color }}>♡</span>
         <span aria-hidden className="pointer-events-none absolute left-1/2 top-3 text-sm opacity-30" style={{ color: theme.color }}>✦</span>
 
-        {lead ? (
-          <div
-            role="group"
-            aria-roledescription="slide"
-            aria-label={`1 / ${count}: ${lead.title}`}
-            hidden={!onLead}
-            className="relative px-4 pb-12 pt-4 sm:px-16 sm:pt-7 lg:min-h-[22rem]"
-          >
-            {lead.content}
-          </div>
-        ) : null}
-
-        {slide ? (
-          <div
-            role="group"
-            aria-roledescription="slide"
-            aria-label={`${index + 1} / ${count}: ${slide.title}`}
-            aria-live="polite"
-            className="relative flex flex-col gap-5 px-4 pb-12 pt-4 sm:px-16 sm:pt-7 lg:min-h-[22rem] lg:flex-row lg:items-center lg:gap-9"
-          >
-            <div className="relative w-full p-1 sm:p-3 lg:w-[52%] lg:shrink-0">
+        <p className="sr-only" aria-live="polite">
+          {`${index + 1} / ${count}: ${items[index]!.title}`}
+        </p>
+        {/* All slides share one grid cell: the card is as tall as the tallest slide, so it never jumps. */}
+        <div className="grid">
+          {lead ? (
+            <div
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`1 / ${count}: ${lead.title}`}
+              aria-hidden={!onLead}
+              inert={!onLead}
+              className={`${cell(onLead)} px-4 pb-12 pt-4 sm:px-16 sm:pt-7 lg:flex lg:flex-col lg:justify-center`}
+            >
+              {lead.content}
+            </div>
+          ) : null}
+          {slides.map((s, i) => {
+            const on = index === i + offset;
+            return (
               <div
-                className="-rotate-2 overflow-hidden rounded-[14px] bg-white shadow-[0_18px_34px_-14px_rgba(0,0,0,0.35)]"
-                style={{ boxShadow: `0 18px 34px -14px rgba(0,0,0,.35), 0 0 0 6px ${slide.tint}` }}
+                key={s.id}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${i + offset + 1} / ${count}: ${s.title}`}
+                aria-hidden={!on}
+                inert={!on}
+                className={`${cell(on)} flex flex-col gap-5 px-4 pb-12 pt-4 sm:px-16 sm:pt-7 lg:flex-row lg:items-center lg:gap-9`}
               >
-                <div aria-hidden className="flex items-center gap-1.5 border-b border-[#eee] bg-[#f6f1ec] px-2.5 py-1.5">
-                  <i className="h-2 w-2 rounded-full bg-[#e0d6cc]" />
-                  <i className="h-2 w-2 rounded-full bg-[#e0d6cc]" />
-                  <i className="h-2 w-2 rounded-full bg-[#e0d6cc]" />
-                  <span className="ml-2 flex-1 truncate rounded-md bg-white px-2 py-0.5 text-[10px] text-[#8a8a8a]">{slide.frameUrl}</span>
+                <div className="relative w-full p-1 sm:p-3 lg:w-[52%] lg:shrink-0">
+                  <div
+                    className="-rotate-2 overflow-hidden rounded-[14px] bg-white shadow-[0_18px_34px_-14px_rgba(0,0,0,0.35)]"
+                    style={{ boxShadow: `0 18px 34px -14px rgba(0,0,0,.35), 0 0 0 6px ${s.tint}` }}
+                  >
+                    <div aria-hidden className="flex items-center gap-1.5 border-b border-[#eee] bg-[#f6f1ec] px-2.5 py-1.5">
+                      <i className="h-2 w-2 rounded-full bg-[#e0d6cc]" />
+                      <i className="h-2 w-2 rounded-full bg-[#e0d6cc]" />
+                      <i className="h-2 w-2 rounded-full bg-[#e0d6cc]" />
+                      <span className="ml-2 flex-1 truncate rounded-md bg-white px-2 py-0.5 text-[10px] text-[#8a8a8a]">{s.frameUrl}</span>
+                    </div>
+                    <div className="relative aspect-[3/2] w-full lg:aspect-auto lg:h-[250px]">
+                      <Image
+                        src={s.image}
+                        alt={s.imageAlt}
+                        fill
+                        sizes="(min-width: 1024px) 40vw, 100vw"
+                        className="object-cover object-left-top"
+                      />
+                    </div>
+                  </div>
+                  {s.badge ? (
+                    <span
+                      className="absolute -right-1 bottom-0 rotate-6 rounded-full border-2 border-dashed bg-white px-3 py-1.5 text-[13px] font-extrabold shadow-[0_6px_14px_-6px_rgba(0,0,0,0.3)]"
+                      style={{ borderColor: s.color, color: s.color }}
+                    >
+                      {s.badge}
+                    </span>
+                  ) : null}
                 </div>
-                <div className="relative aspect-[3/2] w-full">
-                  <Image
-                    key={slide.id}
-                    src={slide.image}
-                    alt={slide.imageAlt}
-                    fill
-                    sizes="(min-width: 1024px) 40vw, 100vw"
-                    className="object-cover object-left-top"
-                  />
+
+                <div className="flex min-w-0 flex-1 flex-col lg:pr-4">
+                  <span className="text-[13px] font-bold" style={{ color: s.color }}>
+                    {i + offset + 1} / {count}
+                  </span>
+                  <h3 className="mb-1.5 mt-1.5 flex items-center gap-2.5 text-[23px] font-extrabold leading-tight text-[#1c1c1c] sm:text-[27px]">
+                    <span aria-hidden className="flex h-[42px] w-[42px] flex-none items-center justify-center rounded-[14px] text-[22px]" style={{ background: s.tint }}>
+                      {s.icon}
+                    </span>
+                    {s.title}
+                  </h3>
+                  <p className="mb-1.5 text-[17px] font-bold" style={{ color: s.color }}>{s.hook}</p>
+                  <p className="mb-3 text-base leading-relaxed text-[#4b5563]">{s.description}</p>
+                  {s.benefits.length ? (
+                    <ul className="mb-4 flex flex-wrap gap-1.5">
+                      {s.benefits.map((b) => (
+                        <li
+                          key={b}
+                          className="rounded-full border-[1.5px] bg-white px-2.5 py-1 text-[12.5px] font-bold"
+                          style={{ color: s.color, borderColor: s.tint }}
+                        >
+                          ✓ {b}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  <Link
+                    href={s.href}
+                    className={`rounded-full px-6 py-3 text-center text-[15px] font-extrabold text-white no-underline transition hover:brightness-95 sm:self-start ${FOCUS}`}
+                    style={{ background: s.color, boxShadow: `0 8px 16px -8px ${s.color}` }}
+                  >
+                    {s.cta} <span aria-hidden>→</span>
+                  </Link>
                 </div>
               </div>
-              {slide.badge ? (
-                <span
-                  className="absolute -right-1 bottom-0 rotate-6 rounded-full border-2 border-dashed bg-white px-3 py-1.5 text-[13px] font-extrabold shadow-[0_6px_14px_-6px_rgba(0,0,0,0.3)]"
-                  style={{ borderColor: slide.color, color: slide.color }}
-                >
-                  {slide.badge}
-                </span>
-              ) : null}
-            </div>
-
-            <div className="flex min-w-0 flex-1 flex-col lg:pr-4">
-              <span className="text-[13px] font-bold" style={{ color: slide.color }}>
-                {index + 1} / {count}
-              </span>
-              <h3 className="mb-1.5 mt-1.5 flex items-center gap-2.5 text-[23px] font-extrabold leading-tight text-[#1c1c1c] sm:text-[27px]">
-                <span aria-hidden className="flex h-[42px] w-[42px] flex-none items-center justify-center rounded-[14px] text-[22px]" style={{ background: slide.tint }}>
-                  {slide.icon}
-                </span>
-                {slide.title}
-              </h3>
-              <p className="mb-1.5 text-[17px] font-bold" style={{ color: slide.color }}>{slide.hook}</p>
-              <p className="mb-3 text-base leading-relaxed text-[#4b5563]">{slide.description}</p>
-              {slide.benefits.length ? (
-                <ul className="mb-4 flex flex-wrap gap-1.5">
-                  {slide.benefits.map((b) => (
-                    <li
-                      key={b}
-                      className="rounded-full border-[1.5px] bg-white px-2.5 py-1 text-[12.5px] font-bold"
-                      style={{ color: slide.color, borderColor: slide.tint }}
-                    >
-                      ✓ {b}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              <Link
-                href={slide.href}
-                className={`rounded-full px-6 py-3 text-center text-[15px] font-extrabold text-white no-underline transition hover:brightness-95 sm:self-start ${FOCUS}`}
-                style={{ background: slide.color, boxShadow: `0 8px 16px -8px ${slide.color}` }}
-              >
-                {slide.cta} <span aria-hidden>→</span>
-              </Link>
-            </div>
-          </div>
-        ) : null}
+            );
+          })}
+        </div>
 
         <button type="button" className={`${ARROW} left-2 sm:left-4`} aria-label={prevLabel} onClick={() => go(-1)}>
           <span aria-hidden>‹</span>
