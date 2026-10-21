@@ -62,15 +62,24 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
+    // From sm up, match the page preview's height to the feature slides' screenshot frame (rendered invisibly in the
+    // same carousel grid) so every slide is equally tall. Phones keep a small preview so Print stays above the fold.
+    const frame = el.closest("[role=tabpanel]")?.querySelector<HTMLElement>("[data-feature-frame]") ?? null;
     const update = () => {
       const w = el.clientWidth;
       if (w <= 0) return; // hidden slide: keep last scale
-      const max = window.innerWidth < 640 ? 170 : 330; // desktop: fills the equal-height card // smaller on phones so Print stays high
-      setScale(Math.min(w, max) / PAGE_W);
+      if (window.innerWidth < 640) {
+        setScale(Math.min(w, 170) / PAGE_W);
+        return;
+      }
+      const target = frame && frame.offsetHeight > 0 ? frame.offsetHeight : 0;
+      const byHeight = target ? (target + 24) / PAGE_H : 330 / PAGE_W; // +24: the frame's 12px padding on each side
+      setScale(Math.min(byHeight, w / PAGE_W, 520 / PAGE_W));
     };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
+    if (frame) ro.observe(frame);
     return () => ro.disconnect();
   }, []);
 
