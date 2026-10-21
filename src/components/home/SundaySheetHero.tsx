@@ -65,7 +65,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
     const update = () => {
       const w = el.clientWidth;
       if (w <= 0) return; // hidden slide: keep last scale
-      const max = window.innerWidth < 640 ? 170 : 300; // smaller on phones so Print stays high
+      const max = window.innerWidth < 640 ? 170 : 330; // desktop: fills the equal-height card // smaller on phones so Print stays high
       setScale(Math.min(w, max) / PAGE_W);
     };
     update();
