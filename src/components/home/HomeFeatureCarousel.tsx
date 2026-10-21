@@ -179,6 +179,7 @@ export function HomeFeatureCarousel({ eyebrow, heading, subtitle, lead, slides, 
               >
                 <div className="relative w-full p-1 sm:p-3 lg:w-[52%] lg:shrink-0">
                   <div
+                    data-feature-frame=""
                     className="-rotate-2 overflow-hidden rounded-[14px] bg-white shadow-[0_18px_34px_-14px_rgba(0,0,0,0.35)]"
                     style={{ boxShadow: `0 18px 34px -14px rgba(0,0,0,.35), 0 0 0 6px ${s.tint}` }}
                   >
@@ -188,7 +189,7 @@ export function HomeFeatureCarousel({ eyebrow, heading, subtitle, lead, slides, 
                       <i className="h-2 w-2 rounded-full bg-[#e0d6cc]" />
                       <span className="ml-2 flex-1 truncate rounded-md bg-white px-2 py-0.5 text-[10px] text-[#8a8a8a]">{s.frameUrl}</span>
                     </div>
-                    <div className="relative aspect-[3/2] w-full lg:aspect-auto lg:h-[250px]">
+                    <div className="relative aspect-[3/2] w-full">
                       <Image
                         src={s.image}
                         alt={s.imageAlt}
