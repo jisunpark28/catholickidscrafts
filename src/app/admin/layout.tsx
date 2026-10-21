@@ -19,6 +19,9 @@ export default async function AdminLayout({
               <Link href="/admin" className="hover:text-[var(--color-accent)]">
                 Dashboard
               </Link>
+              <Link href="/admin/weekly" className="hover:text-[var(--color-accent)]">
+                Weekly content
+              </Link>
               <Link href="/admin/liturgy-cards" className="hover:text-[var(--color-accent)]">
                 Liturgy cards
               </Link>
