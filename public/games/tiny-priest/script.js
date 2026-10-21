@@ -646,6 +646,73 @@ function exitChurchInterior() {
 }
 
 
+/** Kid-friendly step names (real liturgical name always shows underneath). Editable via site copy: mass.kid.<Title>. */
+const KID_STEP_LABELS = {
+    "Entrance Song": ["🎶", "Opening song"],
+    "Sign of the Cross": ["✝️", "Sign of the Cross"],
+    Greeting: ["👋", "Greeting"],
+    "Penitential Rite": ["🙏", "I'm sorry, God"],
+    Kyrie: ["🕯️", "Lord, have mercy"],
+    Gloria: ["✨", "Glory to God"],
+    "The Collect": ["🙌", "Opening prayer"],
+    "1st Reading": ["📖", "First reading"],
+    "Responsorial Psalm": ["🎵", "Psalm song"],
+    "2nd Reading": ["📜", "Second reading"],
+    "Gospel Acclamation": ["🎉", "Alleluia!"],
+    Gospel: ["✝️", "The Gospel"],
+    Homily: ["🗣️", "Homily"],
+    "Apostles' Creed": ["💛", "We believe"],
+    "Universal Prayer": ["🌍", "Prayers for everyone"],
+    "Preparation of the Gifts": ["🎁", "Gifts to the altar"],
+    "Prayer over the Offerings": ["🙏", "Pray over the gifts"],
+    Sanctus: ["😇", "Holy, Holy, Holy"],
+    "Eucharistic Prayer": ["💫", "Great prayer of thanks"],
+    "Elevation of the Host": ["⚪", "The Body of Christ"],
+    "Elevation of the Chalice": ["🍷", "The Precious Blood"],
+    "The Lord's Prayer": ["👐", "Our Father"],
+    "Sign of Peace": ["🤝", "Sign of Peace"],
+    "Lamb of God": ["🐑", "Lamb of God"],
+    Communion: ["✨", "Holy Communion"],
+    Blessing: ["🙌", "Blessing"],
+    Dismissal: ["❤️", "Go in peace!"],
+};
+
+const KID_PART_LABELS = {
+    "Introductory Rites": ["🌅", "Getting ready", "kid-part--ready"],
+    "Liturgy of the Word": ["📖", "Listening to God's Word", "kid-part--word"],
+    "Liturgy of the Eucharist": ["🍞", "Jesus' special meal", "kid-part--meal"],
+    "Concluding Rites": ["❤️", "Going out to love", "kid-part--love"],
+};
+
+function kidCopy(key, fallback) {
+    return typeof tpCopy === "function" ? tpCopy(key, fallback) : fallback;
+}
+
+function buildKidLabel(el, icon, kid, real) {
+    el.textContent = "";
+    const iconEl = document.createElement("span");
+    iconEl.className = "mass-nav-icon";
+    iconEl.setAttribute("aria-hidden", "true");
+    iconEl.textContent = icon;
+    const text = document.createElement("span");
+    text.className = "mass-nav-text";
+    const kidEl = document.createElement("span");
+    kidEl.className = "mass-nav-label";
+    kidEl.textContent = kid;
+    text.appendChild(kidEl);
+    if (real && real.toLowerCase() !== kid.toLowerCase()) {
+        const realEl = document.createElement("small");
+        realEl.className = "mass-nav-real";
+        realEl.textContent = real;
+        text.appendChild(realEl);
+    }
+    el.append(iconEl, text);
+    const now = document.createElement("span");
+    now.className = "mass-nav-now";
+    now.textContent = kidCopy("mass.now", "now");
+    el.appendChild(now);
+}
+
 function buildMassFlowNavigation() {
     const groupsContainer = document.getElementById("mass-nav-groups");
     if (!groupsContainer || groupsContainer.dataset.built === "true") {
@@ -668,7 +735,8 @@ function buildMassFlowNavigation() {
     groupsContainer.innerHTML = "";
     groups.forEach((group) => {
         const section = document.createElement("section");
-        section.className = "mass-nav-group";
+        const partInfo = KID_PART_LABELS[buildMassNavLabel(group.partEn)] || ["⛪", buildMassNavLabel(group.partEn), ""];
+        section.className = `mass-nav-group ${partInfo[2]}`.trim();
 
         const firstIndex = group.indices[0];
         const headerButton = document.createElement("button");
@@ -676,7 +744,12 @@ function buildMassFlowNavigation() {
         headerButton.className = "mass-nav-part-btn";
         headerButton.dataset.stepIndex = String(firstIndex);
         headerButton.setAttribute("aria-label", group.partEn);
-        headerButton.innerHTML = `<span class="mass-nav-label">${buildMassNavLabel(group.partEn)}</span>`;
+        buildKidLabel(
+            headerButton,
+            partInfo[0],
+            kidCopy(`mass.kid_part.${buildMassNavLabel(group.partEn)}`, partInfo[1]),
+            buildMassNavLabel(group.partEn),
+        );
         section.appendChild(headerButton);
 
         const list = document.createElement("div");
@@ -688,7 +761,9 @@ function buildMassFlowNavigation() {
             button.className = "mass-nav-step-btn";
             button.dataset.stepIndex = String(stepIndex);
             button.setAttribute("aria-label", step.title);
-            button.innerHTML = `<span class="mass-nav-label">${buildMassNavLabel(step.title)}</span>`;
+            const real = buildMassNavLabel(step.title);
+            const kidInfo = KID_STEP_LABELS[step.title] || ["•", real];
+            buildKidLabel(button, kidInfo[0], kidCopy(`mass.kid.${step.title}`, kidInfo[1]), real);
             list.appendChild(button);
         });
         section.appendChild(list);
