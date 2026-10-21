@@ -1,4 +1,4 @@
-export const PLUS_PRICE_LABEL = "CA$9.99";
+export const PLUS_PRICE_LABEL = "CA$5.99";
 
 export const PLAN_FEATURES: { label: string; plus: boolean }[] = [
   { label: "Bible typing", plus: false },

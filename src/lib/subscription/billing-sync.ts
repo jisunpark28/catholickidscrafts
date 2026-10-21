@@ -30,12 +30,18 @@ function idOf(v: string | { id: string } | null | undefined): string | null {
   return typeof v === "string" ? v : v.id;
 }
 
-/** Period end lives on subscription items in recent Stripe API versions. */
-function periodEnd(sub: Stripe.Subscription): Date | null {
-  const legacy = (sub as unknown as { current_period_end?: number }).current_period_end;
-  const ends = sub.items?.data?.map((i) => i.current_period_end).filter((n): n is number => typeof n === "number") ?? [];
-  const sec = ends.length ? Math.max(...ends) : legacy;
-  return typeof sec === "number" ? new Date(sec * 1000) : null;
+/**
+ * Period end: clover+ puts it on subscription items (items.data[0].current_period_end);
+ * older API versions have it top-level. Use the first item, then any item, then top-level.
+ */
+export function periodEnd(sub: Stripe.Subscription): Date | null {
+  const items = sub.items?.data ?? [];
+  const first = items[0]?.current_period_end;
+  const anyItem = items.map((i) => i.current_period_end).find((n) => typeof n === "number");
+  const legacy = (sub as unknown as { current_period_end?: unknown }).current_period_end;
+  const sec =
+    typeof first === "number" ? first : typeof anyItem === "number" ? anyItem : typeof legacy === "number" ? legacy : null;
+  return sec === null ? null : new Date(sec * 1000);
 }
 
 /** Find the family for a Stripe customer: our BillingCustomer row, else customer/subscription metadata. */
@@ -82,7 +88,7 @@ export async function upsertSubscriptionFromStripe(sub: Stripe.Subscription): Pr
 }
 
 export async function syncSubscriptionById(stripe: Stripe, subscriptionId: string): Promise<void> {
-  const sub = await stripe.subscriptions.retrieve(subscriptionId);
+  const sub = await stripe.subscriptions.retrieve(subscriptionId, { expand: ["items.data.price"] });
   await upsertSubscriptionFromStripe(sub);
 }
 
