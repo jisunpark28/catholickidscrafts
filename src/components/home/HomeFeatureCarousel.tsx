@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useId, useRef, useState } from "react";
+import { type ReactNode, useCallback, useId, useRef, useState } from "react";
 
 export type HomeFeatureSlide = {
   id: string;
@@ -14,8 +14,16 @@ export type HomeFeatureSlide = {
   imageAlt: string;
 };
 
+/** Optional custom first slide (e.g. this Sunday's sheet). Kept mounted so its state survives slide changes. */
+export type HomeLeadSlide = {
+  id: string;
+  title: string;
+  content: ReactNode;
+};
+
 type Props = {
   heading: string;
+  lead?: HomeLeadSlide | null;
   slides: HomeFeatureSlide[];
   prevLabel: string;
   nextLabel: string;
@@ -25,11 +33,12 @@ const ARROW =
   "absolute top-1/2 z-10 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#e7e3de] bg-white text-2xl leading-none text-[#1c1c1c] shadow-md transition hover:bg-[#fffdfb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
 /** Home "What you can do here" carousel: one feature per slide, arrows + dots, no autoplay. */
-export function HomeFeatureCarousel({ heading, slides, prevLabel, nextLabel }: Props) {
+export function HomeFeatureCarousel({ heading, lead, slides, prevLabel, nextLabel }: Props) {
   const [index, setIndex] = useState(0);
   const headingId = useId();
   const touchX = useRef<number | null>(null);
-  const count = slides.length;
+  const offset = lead ? 1 : 0;
+  const count = slides.length + offset;
 
   const go = useCallback(
     (delta: number) => setIndex((i) => (i + delta + count) % count),
@@ -37,13 +46,17 @@ export function HomeFeatureCarousel({ heading, slides, prevLabel, nextLabel }: P
   );
 
   if (count === 0) return null;
-  const slide = slides[index]!;
+  const onLead = lead != null && index === 0;
+  const slide = onLead ? null : slides[index - offset]!;
+  const dots = [...(lead ? [{ id: lead.id, title: lead.title }] : []), ...slides.map((s) => ({ id: s.id, title: s.title }))];
 
   return (
     <section
       aria-roledescription="carousel"
       aria-labelledby={headingId}
       onKeyDown={(e) => {
+        const t = e.target as HTMLElement;
+        if (t.closest("input, textarea, select, [role=radio], [role=radiogroup], [contenteditable=true]")) return;
         if (e.key === "ArrowRight") {
           e.preventDefault();
           go(1);
@@ -70,6 +83,18 @@ export function HomeFeatureCarousel({ heading, slides, prevLabel, nextLabel }: P
           if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
         }}
       >
+        {lead ? (
+          <div
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`1 / ${count}: ${lead.title}`}
+            hidden={!onLead}
+            className="px-4 pb-14 pt-4 sm:px-16 sm:pt-7 lg:min-h-[36rem]"
+          >
+            {lead.content}
+          </div>
+        ) : null}
+        {slide ? (
         <div
           role="group"
           aria-roledescription="slide"
@@ -85,7 +110,7 @@ export function HomeFeatureCarousel({ heading, slides, prevLabel, nextLabel }: P
               fill
               sizes="(min-width: 1024px) 55vw, 100vw"
               className="object-cover object-left-top"
-              priority={index === 0}
+              priority={index === offset}
             />
           </div>
           <div className="flex min-w-0 flex-1 flex-col lg:pr-6">
@@ -104,6 +129,7 @@ export function HomeFeatureCarousel({ heading, slides, prevLabel, nextLabel }: P
             </Link>
           </div>
         </div>
+        ) : null}
 
         <button type="button" className={`${ARROW} left-2 sm:left-4`} aria-label={prevLabel} onClick={() => go(-1)}>
           <span aria-hidden>‹</span>
@@ -113,7 +139,7 @@ export function HomeFeatureCarousel({ heading, slides, prevLabel, nextLabel }: P
         </button>
 
         <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
-          {slides.map((s, i) => (
+          {dots.map((s, i) => (
             <button
               key={s.id}
               type="button"
