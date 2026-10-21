@@ -296,7 +296,7 @@ export function MyMemosClient({
   const printHref = `/account/memos/print${qs ? `?${qs}` : ""}`;
 
   return (
-    <div className="max-w-3xl">
+    <div className="w-full">
       <nav aria-label="Breadcrumb" className="text-sm">
         <Link href="/account" className="font-semibold text-[var(--color-link)] hover:underline">
           Family account
