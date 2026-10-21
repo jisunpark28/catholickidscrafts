@@ -1,6 +1,7 @@
 import { replaceLessonBlocksSchema } from "@/lib/lesson-kit/block-schema";
 import { replaceLessonBlocksForEditor } from "@/lib/lesson-kit/db";
 import { requireFamilySession } from "@/lib/family-auth";
+import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ id: string }> };
@@ -9,6 +10,9 @@ export async function PUT(req: Request, { params }: Params) {
   const session = await requireFamilySession();
   if (!session) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
+  }
+  if (!(await familyHasPlus(session.familyAccountId))) {
+    return plusRequiredResponse();
   }
   const { id } = await params;
   const raw = await req.json().catch(() => ({}));

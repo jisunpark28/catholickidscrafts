@@ -338,6 +338,7 @@ model FamilyAccount {
   sundayWeekStart    String?
   sundayLessonKit    LessonKit?             @relation("TeacherSundayKit", fields: [sundayLessonKitId], references: [id], onDelete: SetNull)
   gallerySubmissions CraftGallerySubmission[]
+  billingCustomer    BillingCustomer?
 }
 
 /// Student profile under a teacher account (Access ID login); max per account in access-code config.
@@ -597,4 +598,60 @@ model AuthRateLimit {
   updatedAt    DateTime  @default(now())
 
   @@index([updatedAt])
+}
+
+// ─── Billing (Stripe) ─────────────────────────────────────────────────────────
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  UNPAID
+  PAUSED
+}
+
+/// Stripe customer for a parent family account (the billing owner).
+model BillingCustomer {
+  id               String         @id @default(cuid())
+  familyAccountId  String         @unique
+  stripeCustomerId String         @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  familyAccount    FamilyAccount  @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+  subscriptions    Subscription[]
+}
+
+/// Mirror of a Stripe subscription, kept up to date by /api/billing/webhook.
+model Subscription {
+  id                   String             @id @default(cuid())
+  billingCustomerId    String
+  stripeSubscriptionId String             @unique
+  status               SubscriptionStatus
+  priceId              String?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  canceledAt           DateTime?
+  /// First time the subscription went PAST_DUE in the current dunning cycle (for the 7-day grace).
+  pastDueSince         DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  billingCustomer      BillingCustomer    @relation(fields: [billingCustomerId], references: [id], onDelete: Cascade)
+
+  @@index([billingCustomerId])
+}
+
+/// Processed Stripe webhook events (idempotency + audit).
+model BillingEvent {
+  id            String    @id @default(cuid())
+  stripeEventId String    @unique
+  type          String
+  payload       Json
+  processedAt   DateTime?
+  error         String?
+  createdAt     DateTime  @default(now())
+
+  @@index([type])
 }

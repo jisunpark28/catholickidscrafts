@@ -1,4 +1,5 @@
 import { requireFamilySession } from "@/lib/family-auth";
+import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
 import { validateLessonMediaFile } from "@/lib/lesson-kit/media-upload";
 import { saveUploadedFile, UploadConfigurationError } from "@/lib/upload";
 import { NextResponse } from "next/server";
@@ -7,6 +8,9 @@ export async function POST(request: Request) {
   const session = await requireFamilySession();
   if (!session) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
+  }
+  if (!(await familyHasPlus(session.familyAccountId))) {
+    return plusRequiredResponse();
   }
 
   const formData = await request.formData();
