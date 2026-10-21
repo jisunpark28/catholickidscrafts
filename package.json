@@ -23,6 +23,7 @@
     "db:seed-home-sections": "tsx prisma/seed-home-sections.ts",
     "db:seed-production-once": "prisma generate && tsx scripts/prod-seed-once.ts",
     "db:seed-gospel-sheets": "tsx prisma/seed-gospel-sheets.ts",
+    "db:seed-liturgy-qa": "tsx prisma/seed-liturgy-qa.ts",
     "db:seed-trinity-resource": "tsx prisma/seed-holy-trinity-resource.ts",
     "vestments:split": "node scripts/split-vestment-spritesheet.mjs",
     "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs",
