@@ -57,30 +57,30 @@ model CurriculumTrackResource {
 }
 
 model Resource {
-  id                String   @id @default(cuid())
-  slug              String   @unique
-  title             String
-  excerpt           String
-  content           String
-  contentFormat     String   @default("html")
-  grade             String
-  topic             String
-  liturgicalPeriod  String
-  downloadLabel     String?
-  downloadUrl       String?
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  excerpt          String
+  content          String
+  contentFormat    String   @default("html")
+  grade            String
+  topic            String
+  liturgicalPeriod String
+  downloadLabel    String?
+  downloadUrl      String?
   /// Teachers Pay Teachers product or store URL for the full paid pack.
-  tptUrl            String?
+  tptUrl           String?
   /// When true, on-site content/PDF is a free sample; full pack is on TPT.
-  isFreeSample      Boolean  @default(true)
-  previewImageUrl   String?
-  published         Boolean  @default(true)
+  isFreeSample     Boolean  @default(true)
+  previewImageUrl  String?
+  published        Boolean  @default(true)
   /// Page views for public resource detail pages (used for popularity sort).
-  viewCount         Int      @default(0)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  viewCount        Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  trackLinks           CurriculumTrackResource[]
-  gallerySubmissions   CraftGallerySubmission[]
+  trackLinks         CurriculumTrackResource[]
+  gallerySubmissions CraftGallerySubmission[]
 }
 
 /// User-submitted craft photo; operator approves before public gallery.
@@ -205,15 +205,15 @@ model ChurchDecoration {
 
 /// PNG overlay frames for 4-Cut Photo Booth (/play/photo-booth).
 model PhotoBoothFrame {
-  id        String             @id @default(cuid())
-  slug      String             @unique
+  id        String           @id @default(cuid())
+  slug      String           @unique
   title     String
   imageUrl  String
-  layout    PhotoBoothLayout   @default(BOTH)
-  sortOrder Int                @default(0)
-  published Boolean            @default(true)
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  layout    PhotoBoothLayout @default(BOTH)
+  sortOrder Int              @default(0)
+  published Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   @@index([published])
 }
@@ -313,24 +313,24 @@ model HomeSectionItem {
 
 /// Parent account for Bible sticker progress and sub-profiles.
 model FamilyAccount {
-  id                 String                 @id @default(cuid())
-  email              String                 @unique
+  id                 String                   @id @default(cuid())
+  email              String                   @unique
   passwordHash       String?
-  googleId           String?                @unique
+  googleId           String?                  @unique
   displayName        String?
   /// Pen name for Bible chapter discussion (fallback: displayName).
   discussionPenName  String?
   /// Bumped by "sign out of all devices"; must match the ckc_family / ckc_reader token.
-  sessionVersion     Int                    @default(0)
-  createdAt          DateTime               @default(now())
-  updatedAt          DateTime               @updatedAt
+  sessionVersion     Int                      @default(0)
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
   subProfiles        SubProfile[]
-  progress           BibleChapterProgress[] @relation("OwnerProgress")
-  gospelDays         GospelDayProgress[]    @relation("OwnerGospelDays")
-  typingDrafts       TypingDraft[]          @relation("OwnerTypingDrafts")
-  discussionThreads  BibleChapterThread[]   @relation("OwnerDiscussionThreads")
-  discussionComments BibleChapterComment[]  @relation("OwnerDiscussionComments")
-  passageMemos       BiblePassageMemo[]     @relation("OwnerPassageMemos")
+  progress           BibleChapterProgress[]   @relation("OwnerProgress")
+  gospelDays         GospelDayProgress[]      @relation("OwnerGospelDays")
+  typingDrafts       TypingDraft[]            @relation("OwnerTypingDrafts")
+  discussionThreads  BibleChapterThread[]     @relation("OwnerDiscussionThreads")
+  discussionComments BibleChapterComment[]    @relation("OwnerDiscussionComments")
+  passageMemos       BiblePassageMemo[]       @relation("OwnerPassageMemos")
   gallerySubmissions CraftGallerySubmission[]
   billingCustomer    BillingCustomer?
 }
@@ -460,7 +460,6 @@ model BibleChapterComment {
   @@index([familyAccountId])
   @@index([subProfileId])
 }
-
 
 /// DISCUSSION is reserved (never written by the API).
 enum BibleMemoVisibility {
@@ -635,4 +634,52 @@ model EmailSubscriber {
   updatedAt        DateTime  @updatedAt
 
   @@index([status])
+}
+
+enum LiturgyQaStatus {
+  DRAFT
+  PUBLISHED
+}
+
+/// Kid Q&A flip-card page header for a /liturgy/[topic] page.
+model LiturgyQaTopic {
+  id            String          @id @default(cuid())
+  slug          String          @unique
+  title         String
+  bigIdea       String          @default("")
+  ageNote       String          @default("")
+  accentColor   String          @default("#d35400")
+  cardBackColor String          @default("#fff4ea")
+  sortOrder     Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  cards         LiturgyQaCard[]
+}
+
+/// One kid question card. internalSourceRef and reviewNote are admin-only.
+model LiturgyQaCard {
+  id                String          @id @default(cuid())
+  topicSlug         String
+  topic             LiturgyQaTopic  @relation(fields: [topicSlug], references: [slug], onDelete: Cascade, onUpdate: Cascade)
+  sortOrder         Int
+  question          String
+  answer            String
+  tryThis           String          @default("")
+  iconFallback      String          @default("")
+  imageFilename     String          @default("")
+  imageUrl          String?
+  imageScene        String          @default("")
+  imagePrompt       String          @default("")
+  altText           String          @default("")
+  cardColor         String          @default("")
+  status            LiturgyQaStatus @default(DRAFT)
+  internalSourceRef String          @default("")
+  reviewNote        String          @default("")
+  /// Set when an admin edits the card; the seed skips these unless --force.
+  adminEditedAt     DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@unique([topicSlug, sortOrder])
+  @@index([topicSlug, status, sortOrder])
 }

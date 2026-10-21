@@ -1,0 +1,47 @@
+/* Kid Q&A flip cards (liturgy topics and prayers). */
+.qa-hero { text-align: center; margin: 8px auto 36px; max-width: 760px; }
+.qa-eyebrow { color: var(--qa-accent, #d35400); font-weight: 800; letter-spacing: .14em; font-size: 13px; text-transform: uppercase; }
+.qa-title { font-family: var(--font-fredoka), var(--font-sans); font-size: clamp(34px, 5vw, 52px); font-weight: 700; margin: 6px 0 16px; color: var(--color-ink); }
+.qa-big { display: inline-block; background: #fff; border: 2px dashed color-mix(in srgb, var(--qa-accent, #d35400) 55%, white); border-radius: 26px; padding: 16px 24px; font-family: var(--font-fredoka), var(--font-sans); font-size: clamp(18px, 2.2vw, 22px); font-weight: 600; line-height: 1.35; color: var(--color-ink); }
+.qa-big-label { display: block; font-family: var(--font-sans); font-size: 12px; letter-spacing: .14em; color: var(--qa-accent, #d35400); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+.qa-age { margin-top: 14px; font-size: 15px; color: #8a5a33; font-weight: 600; }
+
+.qa-grid { list-style: none; padding: 0; margin: 0 0 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.qa-card { height: 360px; perspective: 1200px; }
+.qa-grid--prayer .qa-card { height: 380px; }
+.qa-inner { position: relative; width: 100%; height: 100%; transition: transform .6s cubic-bezier(.3,.7,.3,1); transform-style: preserve-3d; }
+.qa-card.is-flipped .qa-inner { transform: rotateY(180deg); }
+.qa-face { position: absolute; inset: 0; border-radius: 30px; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 20px; display: flex; flex-direction: column; text-align: left; box-shadow: 0 14px 28px -18px rgba(150,80,20,.45); }
+.qa-front { background: var(--qa-p); border: 0; cursor: pointer; font: inherit; color: inherit; }
+.qa-front:focus-visible, .qa-flip-back:focus-visible { outline: 4px solid var(--color-accent); outline-offset: 4px; }
+.qa-back { background: var(--qa-back, #fff); border: 3px solid var(--qa-p); transform: rotateY(180deg); gap: 12px; justify-content: center; }
+.qa-ill { position: relative; display: grid; place-items: center; height: 160px; border-radius: 22px; overflow: hidden; background: rgba(255,255,255,.6) radial-gradient(circle, rgba(255,255,255,.9) 2px, transparent 3px) 0 0 / 22px 22px; }
+.qa-ill img { width: 100%; height: 100%; object-fit: cover; }
+.qa-emoji { font-size: 72px; filter: drop-shadow(0 6px 6px rgba(0,0,0,.12)); }
+.qa-q { font-family: var(--font-fredoka), var(--font-sans); font-weight: 600; font-size: 24px; line-height: 1.2; margin-top: 16px; color: color-mix(in srgb, var(--qa-p) 25%, #3b2414); }
+.qa-when { margin-top: 6px; font-size: 15px; line-height: 1.4; color: #5c4a3d; }
+.qa-hint { margin-top: auto; font-size: 14px; font-weight: 700; color: #6b4a2f; opacity: .8; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; font-family: inherit; }
+.qa-back-q { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #8a5a33; margin: 0; }
+.qa-answer { font-size: 19px; line-height: 1.5; color: var(--color-ink); }
+.qa-prayer-text { flex: 1 1 auto; min-height: 0; overflow-y: auto; white-space: pre-line; font-size: 17px; line-height: 1.6; color: var(--color-ink); padding-right: 6px; overscroll-behavior: contain; }
+.qa-chip { align-self: flex-start; background: var(--qa-p); color: #4a3020; border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: 15px; margin: 0; }
+.qa-grid--prayer .qa-back { justify-content: flex-start; }
+
+@media (prefers-reduced-motion: reduce) {
+  .qa-inner { transition: none; transform: none !important; }
+  .qa-face { backface-visibility: visible; transition: opacity .3s ease; }
+  .qa-back { transform: none; opacity: 0; pointer-events: none; }
+  .qa-card.is-flipped .qa-back { opacity: 1; pointer-events: auto; }
+  .qa-card.is-flipped .qa-front { opacity: 0; pointer-events: none; }
+}
+
+@media (max-width: 900px) { .qa-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+  .qa-grid { grid-template-columns: 1fr; gap: 18px; }
+  .qa-card { height: 310px; }
+  .qa-grid--prayer .qa-card { height: 360px; }
+  .qa-ill { height: 120px; }
+  .qa-emoji { font-size: 56px; }
+  .qa-q { font-size: 22px; }
+  .qa-answer { font-size: 18px; }
+}

@@ -25,6 +25,9 @@ export default async function AdminLayout({
               <Link href="/admin/liturgy-cards" className="hover:text-[var(--color-accent)]">
                 Liturgy cards
               </Link>
+              <Link href="/admin/liturgy-qa" className="hover:text-[var(--color-accent)]">
+                Liturgy Q&amp;A
+              </Link>
               <Link href="/admin/mass-order-steps" className="hover:text-[var(--color-accent)]">
                 Mass Order
               </Link>
