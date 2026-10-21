@@ -2,6 +2,7 @@ import { getFamilySession } from "@/lib/family-auth";
 import { getReaderKey } from "@/lib/bible/reader";
 import type { HeaderSessionResponse } from "@/lib/header-session";
 import { prisma } from "@/lib/prisma";
+import { hasPaidFeatures } from "@/lib/subscription/entitlements";
 
 export async function getHeaderSession(): Promise<HeaderSessionResponse> {
   const [familySession, readerKey] = await Promise.all([
@@ -11,14 +12,27 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
 
   let family: HeaderSessionResponse["family"] = null;
   if (familySession) {
-    const account = await prisma.familyAccount.findUnique({
-      where: { id: familySession.familyAccountId },
-      select: { email: true, displayName: true },
-    });
+    const familyAccountId = familySession.familyAccountId;
+    const [account, children, isPlus] = await Promise.all([
+      prisma.familyAccount.findUnique({
+        where: { id: familyAccountId },
+        select: { email: true, displayName: true },
+      }),
+      prisma.subProfile
+        .findMany({
+          where: { familyAccountId, active: true },
+          select: { id: true, displayName: true },
+          orderBy: { createdAt: "asc" },
+        })
+        .catch(() => []),
+      hasPaidFeatures({ type: "owner", familyAccountId }).catch(() => false),
+    ]);
     if (account) {
       family = {
         email: account.email,
         displayName: account.displayName,
+        isPlus,
+        children,
       };
     }
   }
@@ -40,7 +54,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
         select: { displayName: true, active: true },
       });
       if (sub?.active) {
-        reader = { type: "sub", displayName: sub.displayName };
+        reader = { type: "sub", displayName: sub.displayName, subProfileId: readerKey.subProfileId };
       }
     }
   }
