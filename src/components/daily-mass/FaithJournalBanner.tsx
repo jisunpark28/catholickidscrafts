@@ -153,8 +153,11 @@ export function FaithJournalBanner({ dateKey, gospelLabel, readHref, questions, 
           </span>
         ) : null}
       </div>
+      <p className="relative m-0 mt-0.5 text-[0.78em] font-semibold text-[#a0704a]">
+        {t("daily_mass.journal.subtitle", "Today's questions · from today's Gospel")}
+      </p>
 
-      <div className="relative mb-3.5 mt-3 flex flex-wrap items-start gap-x-3 gap-y-2">
+      <div className="relative mb-3.5 mt-2.5 flex flex-wrap items-start gap-x-3 gap-y-2">
         <p aria-live="polite" className="dm-ink m-0 min-w-0 basis-full text-[1.3em] font-extrabold sm:flex-1 sm:basis-0 leading-snug text-[#1c1c1c] sm:text-[1.55em]">
           <span aria-hidden className="text-[#f0b98a]">“</span>
           {question}
