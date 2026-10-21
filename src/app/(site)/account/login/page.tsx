@@ -26,31 +26,22 @@ export default async function AccountLoginPage({ searchParams }: Props) {
 
   return (
     <PageShell>
-      <Link href="/" className="text-sm font-semibold text-[var(--color-link)]">
-        ← Home
-      </Link>
-      <h1 className="mt-6 text-3xl text-[var(--color-ink)]">Family account</h1>
-      {googleError && (
-        <p className="mt-4 max-w-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-          {googleError}
-        </p>
-      )}
-      <div className="mt-8">
-        <FamilyLoginForm />
+      <div className="-mx-4 flex justify-center rounded-2xl bg-[#fbf6f0] px-4 py-10 sm:mx-0 sm:py-16">
+        <div className="w-full max-w-[420px]">
+          <Link
+            href="/"
+            className="text-sm font-semibold text-[var(--color-link)] no-underline hover:underline"
+          >
+            ← Home
+          </Link>
+          <div className="mt-3">
+            <FamilyLoginForm error={googleError} />
+          </div>
+          <p className="mt-4 text-center text-[13px] text-[var(--color-muted)]">
+            Plus is CA$5.99/month · cancel anytime
+          </p>
+        </div>
       </div>
-      <p className="mt-6 text-sm text-[var(--color-muted)]">
-        New here?{" "}
-        <Link href="/account/signup" className="font-semibold text-[var(--color-link)]">
-          Create a family account
-        </Link>
-      </p>
-      <p className="mt-2 text-sm text-[var(--color-muted)]">
-        Children use an Access ID at{" "}
-        <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-          Reader sign-in
-        </Link>
-        .
-      </p>
     </PageShell>
   );
 }

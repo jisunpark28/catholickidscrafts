@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 
 type Props = {
   from?: "signup" | "login";
+  /** Show the legacy "or use email" divider under the button (default true). */
+  showDivider?: boolean;
+  /** Extra classes for the Google button (e.g. taller variant). */
+  buttonClassName?: string;
 };
 
 function GoogleMark() {
@@ -29,7 +33,7 @@ function GoogleMark() {
   );
 }
 
-export function GoogleFamilySignIn({ from = "login" }: Props) {
+export function GoogleFamilySignIn({ from = "login", showDivider = true, buttonClassName = "" }: Props) {
   const [enabled, setEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -78,11 +82,12 @@ export function GoogleFamilySignIn({ from = "login" }: Props) {
       {/* Full page navigation — Next.js Link breaks OAuth redirects on /api routes */}
       <a
         href={href}
-        className="relative z-10 flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-[var(--color-border)] bg-white py-3 text-sm font-semibold text-[var(--color-ink)] shadow-sm transition hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)]"
+        className={`relative z-10 flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg border border-[var(--color-border)] bg-white py-3 text-sm font-semibold text-[var(--color-ink)] shadow-sm transition hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)] ${buttonClassName}`}
       >
         <GoogleMark />
         Continue with Google
       </a>
+      {showDivider && (
       <div className="relative flex items-center py-4">
         <div className="grow border-t border-[var(--color-border)]" />
         <span className="mx-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
@@ -90,6 +95,7 @@ export function GoogleFamilySignIn({ from = "login" }: Props) {
         </span>
         <div className="grow border-t border-[var(--color-border)]" />
       </div>
+      )}
     </>
   );
 }
