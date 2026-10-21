@@ -331,13 +331,6 @@ model FamilyAccount {
   discussionThreads  BibleChapterThread[]   @relation("OwnerDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("OwnerDiscussionComments")
   passageMemos       BiblePassageMemo[]     @relation("OwnerPassageMemos")
-  lessonKits         LessonKit[]
-  lessonAssignments  LessonAssignment[]
-  lessonProgress     LessonKitProgress[]
-  /// Kit pinned for this Sunday on /program (My Sunday).
-  sundayLessonKitId  String?
-  sundayWeekStart    String?
-  sundayLessonKit    LessonKit?             @relation("TeacherSundayKit", fields: [sundayLessonKitId], references: [id], onDelete: SetNull)
   gallerySubmissions CraftGallerySubmission[]
   billingCustomer    BillingCustomer?
 }
@@ -365,8 +358,6 @@ model SubProfile {
   discussionThreads  BibleChapterThread[]   @relation("SubDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("SubDiscussionComments")
   passageMemos       BiblePassageMemo[]     @relation("SubPassageMemos")
-  lessonAssignments  LessonAssignment[]
-  lessonProgress     LessonKitProgress[]
 
   @@index([familyAccountId, sortOrder])
 }
@@ -448,127 +439,6 @@ model BibleChapterThread {
   @@index([bookSlug, chapter, createdAt])
   @@index([familyAccountId])
   @@index([subProfileId])
-}
-
-enum LessonKitScope {
-  GLOBAL_TEMPLATE
-  PERSONAL
-}
-
-enum LessonBlockType {
-  CUSTOM_NOTE
-  WRITING
-  RESOURCE
-  LINK
-  IMAGE
-  SLIDES
-  PLAY_GAME
-  TYPING_WORDS
-  HANGMAN_WORDS
-  GOSPEL_TYPING
-  BIBLE_CHAPTER
-  MASS_TODAY
-}
-
-/// Assembled lesson kit for classroom run (/lesson/[shareSlug]).
-model LessonKit {
-  id               String          @id @default(cuid())
-  shareSlug        String          @unique
-  title            String
-  description      String          @default("")
-  scope            LessonKitScope  @default(PERSONAL)
-  sourceKitId      String?
-  familyAccountId  String?
-  liturgicalPeriod String?
-  gradeBand        String?
-  /// Optional Teachers Pay Teachers URL for the full classroom pack.
-  tptUrl           String?
-  /// When true, on-site kit is a sample; full pack on TPT.
-  isFreeSample     Boolean         @default(true)
-  /// JSON: { gospelMaxChars?, includedBlockIds? } for /family route
-  familyMode       Json?
-  published        Boolean         @default(false)
-  /// Listed on /program/community for other teachers (personal kits).
-  communityVisible Boolean         @default(false)
-  publishedAt      DateTime?
-  authorDisplayName String?
-  sortOrder        Int             @default(0)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  blocks           LessonBlock[]
-  opens            LessonKitOpen[]
-  assignments      LessonAssignment[]
-  progress         LessonKitProgress[]
-  familyAccount    FamilyAccount?  @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
-  sundayPinnedBy   FamilyAccount[] @relation("TeacherSundayKit")
-
-  @@index([scope, published, sortOrder])
-  @@index([communityVisible, publishedAt])
-  @@index([familyAccountId])
-}
-
-model LessonBlock {
-  id        String          @id @default(cuid())
-  kitId     String
-  sortOrder Int             @default(0)
-  type      LessonBlockType
-  label     String?
-  config    Json            @default("{}")
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
-  kit       LessonKit       @relation(fields: [kitId], references: [id], onDelete: Cascade)
-
-  @@index([kitId, sortOrder])
-}
-
-/// Anonymous daily open counts per lesson kit.
-model LessonKitOpen {
-  id      String    @id @default(cuid())
-  kitId   String
-  dateKey String
-  opens   Int       @default(0)
-  kit     LessonKit @relation(fields: [kitId], references: [id], onDelete: Cascade)
-
-  @@unique([kitId, dateKey])
-  @@index([dateKey])
-}
-
-/// Teacher assigns an at-home lesson kit to a student for a week.
-model LessonAssignment {
-  id              String    @id @default(cuid())
-  lessonKitId     String
-  familyAccountId String
-  subProfileId    String?
-  weekStart       String
-  note            String    @default("")
-  completedAt     DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  lessonKit       LessonKit     @relation(fields: [lessonKitId], references: [id], onDelete: Cascade)
-  familyAccount   FamilyAccount @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
-  subProfile      SubProfile?   @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
-
-  @@unique([lessonKitId, familyAccountId, subProfileId, weekStart])
-  @@index([familyAccountId, weekStart])
-  @@index([subProfileId, weekStart])
-}
-
-/// Reader finished a lesson (family or classroom run).
-model LessonKitProgress {
-  id              String    @id @default(cuid())
-  lessonKitId     String
-  familyAccountId String?
-  subProfileId    String?
-  guestId         String?
-  completedAt     DateTime  @default(now())
-  lessonKit       LessonKit      @relation(fields: [lessonKitId], references: [id], onDelete: Cascade)
-  familyAccount   FamilyAccount? @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
-  subProfile      SubProfile?    @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
-
-  @@index([lessonKitId])
-  @@index([familyAccountId])
-  @@index([subProfileId])
-  @@index([guestId])
 }
 
 /// Reply on a Bible chapter thread.

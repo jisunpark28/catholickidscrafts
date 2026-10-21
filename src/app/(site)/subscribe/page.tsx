@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Catholic Kids Crafts Plus",
-  description: "Memos, catechism activities, and custom sheets for your whole family. CA$5.99/month, cancel anytime.",
+  description: "Memos and catechism activities for your whole family. CA$5.99/month, cancel anytime.",
   ...canonicalForPath("/subscribe"),
 };
 

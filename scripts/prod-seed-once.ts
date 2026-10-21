@@ -1,13 +1,11 @@
 /**
- * Idempotent production seed: lesson templates + home hub.
- * Lesson templates are always upserted by shareSlug (safe to re-run).
+ * Idempotent production seed: home hub sections.
  * Home sections skip when already present (unless FORCE_PROD_SEED=true).
  * Set RUN_FULL_SEED=true to also run `prisma db seed` (needs ADMIN_EMAIL / ADMIN_PASSWORD).
  */
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { execSync } from "node:child_process";
-import { seedLessonKits } from "../prisma/seed-lesson-kits";
 import { seedHomeSections, ensureMissingHomeItems } from "../prisma/seed-home-sections-lib";
 
 type CountDelegate = { count: () => Promise<number> };
@@ -37,17 +35,9 @@ async function main() {
 
   const prisma = new PrismaClient();
   try {
-    if (!prismaDelegate(prisma, "lessonKit")) {
-      throw new Error(missingClientHint("lessonKit"));
-    }
-
-    console.log("Upserting global lesson templates…");
-    await seedLessonKits(prisma);
-
     const homeSection = prismaDelegate(prisma, "homeSection");
     if (!homeSection) {
       console.warn(missingClientHint("homeSection"));
-      console.warn("Lesson templates were upserted; home sections were skipped.");
     } else {
       const homeCount = await homeSection.count();
       if (force || homeCount === 0) {
@@ -59,7 +49,7 @@ async function main() {
       }
     }
 
-    console.log("Production seed done (lesson kits + home sections as needed).");
+    console.log("Production seed done (home sections as needed).");
 
     if (runFull) {
       if (!process.env.ADMIN_EMAIL?.trim() || !process.env.ADMIN_PASSWORD) {

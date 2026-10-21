@@ -5,7 +5,6 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { seedHangmanWords } from "./seed-hangman-words";
-import { seedLessonKits } from "./seed-lesson-kits";
 import { seedMassOrderSteps } from "./seed-mass-order-steps";
 import { seedSiteCopy } from "./seed-site-copy";
 import { seedTypingWords } from "./seed-typing-words";
@@ -161,7 +160,6 @@ async function main() {
   const siteCopyCount = await seedSiteCopy(prisma);
   console.log(`Site copy seeded: ${siteCopyCount}`);
 
-  await seedLessonKits(prisma);
   await seedHomeSections(prisma);
 }
 

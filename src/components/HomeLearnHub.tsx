@@ -1,10 +1,8 @@
 import { DailyMassCalendarBlock } from "@/components/DailyMassCalendarBlock";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
-import { ReaderThisWeekCard } from "@/components/lesson/ReaderThisWeekCard";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import type { HomeSectionWithItems } from "@/lib/home-sections";
 import type { MonthCalendar } from "@/types/mass";
-import "@/styles/lesson-kit.css";
 
 export type HomeLearnHubCopy = {
   heroTitle: string;
@@ -69,9 +67,6 @@ export function HomeLearnHub({
         />
         <p className="sr-only">{copy.dailyMassHint}</p>
       </section>
-      <div className="mt-8 max-w-3xl">
-        <ReaderThisWeekCard />
-      </div>
     </HomePdfShell>
   );
 }

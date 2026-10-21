@@ -27,7 +27,6 @@ export const DEFAULT_HOME_SECTIONS: HomeSectionWithItems[] = [
       { id: "default-prayers", title: "Prayers", href: "/prayers", sortOrder: 0 },
       { id: "default-mass", title: "Mass", href: "/mass/participation", sortOrder: 1 },
       { id: "default-games", title: "Games", href: "/play", sortOrder: 2 },
-      { id: "default-class-lessons", title: "Lesson Kits", href: "/program", sortOrder: 3 },
     ],
   },
   {
