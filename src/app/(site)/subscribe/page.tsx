@@ -1,9 +1,9 @@
-import { BillingButton } from "@/components/BillingButton";
+import { BillingButton, PlanCheckout } from "@/components/BillingButton";
 import { PageShell } from "@/components/PageShell";
 import { getReaderKey } from "@/lib/bible/reader";
 import { requireFamilySession } from "@/lib/family-auth";
 import { canonicalForPath } from "@/lib/site-metadata";
-import { isBillingConfigured } from "@/lib/stripe";
+import { isBillingConfigured, stripePriceAnnual } from "@/lib/stripe";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
 import { PLAN_FEATURES, PLUS_PRICE_LABEL, planRenewalLine } from "@/lib/subscription/plan-copy";
 import type { Metadata } from "next";
@@ -27,6 +27,9 @@ export default async function SubscribePage() {
   const plan = session ? await getFamilyPlan(session.familyAccountId, session.email) : null;
   const configured = isBillingConfigured();
   const renewal = plan ? planRenewalLine(plan) : null;
+  // Only a boolean reaches the client; the price id stays on the server.
+  const annualAvailable = Boolean(stripePriceAnnual());
+  const showPlanCards = !isChild && Boolean(session) && !plan?.isPlus && configured && annualAvailable;
 
   return (
     <PageShell>
@@ -41,10 +44,12 @@ export default async function SubscribePage() {
       </p>
 
       <section className="mt-8 border border-[var(--color-border)] bg-white p-5 sm:p-6">
-        <p className="text-3xl font-bold text-[var(--color-ink)]">
-          {PLUS_PRICE_LABEL}
-          <span className="text-sm font-normal text-[var(--color-muted)]">/month</span>
-        </p>
+        {!showPlanCards && (
+          <p className="text-3xl font-bold text-[var(--color-ink)]">
+            {PLUS_PRICE_LABEL}
+            <span className="text-sm font-normal text-[var(--color-muted)]">/month</span>
+          </p>
+        )}
         <ul className="mt-4 space-y-2 text-sm">
           {PLAN_FEATURES.map((f) => (
             <li key={f.label} className="flex items-center justify-between gap-2">
@@ -78,6 +83,8 @@ export default async function SubscribePage() {
             </>
           ) : !configured ? (
             <p className="text-sm font-semibold text-[var(--color-muted)]">Subscriptions open soon.</p>
+          ) : showPlanCards ? (
+            <PlanCheckout className={btn} />
           ) : (
             <BillingButton action="checkout" className={btn}>
               Upgrade to Plus

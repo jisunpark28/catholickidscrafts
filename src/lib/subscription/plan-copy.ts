@@ -1,4 +1,12 @@
 export const PLUS_PRICE_LABEL = "CA$5.99";
+export const PLUS_ANNUAL_PRICE_LABEL = "CA$55";
+
+export type PlanInterval = "month" | "year";
+
+export const PLAN_OPTIONS: Record<PlanInterval, { name: string; price: string; unit: string; billed: string; cta: string }> = {
+  month: { name: "Monthly", price: PLUS_PRICE_LABEL, unit: "/month", billed: "billed monthly", cta: "Subscribe monthly" },
+  year: { name: "Yearly", price: PLUS_ANNUAL_PRICE_LABEL, unit: "/year", billed: "billed yearly", cta: "Subscribe yearly" },
+};
 
 export const PLAN_FEATURES: { label: string; plus: boolean }[] = [
   { label: "Bible typing", plus: false },
