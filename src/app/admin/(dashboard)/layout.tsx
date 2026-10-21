@@ -1,12 +1,10 @@
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import { requireAdminPage } from "@/lib/admin-auth";
 
 export default async function AdminProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  if (!session?.user) redirect("/admin/login");
+  await requireAdminPage();
   return children;
 }
