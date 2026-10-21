@@ -53,7 +53,8 @@ export function GameEmbed({
   const iframeClassName = isFullscreen
     ? "h-full w-full flex-1 bg-white"
     : immersive
-      ? "h-[min(calc(100svh-15rem),860px)] w-full bg-white"
+      ? // Phones: nearly edge-to-edge (header is trimmed below 640px); desktop keeps the framed size.
+        "h-[calc(100svh-7.5rem)] w-full bg-white sm:h-[min(calc(100svh-15rem),860px)]"
       : tall
         ? "h-[min(88vh,820px)] w-full bg-white"
         : "h-[min(80vh,720px)] w-full bg-white";
@@ -66,22 +67,32 @@ export function GameEmbed({
       >
         ← Play & learn
       </Link>
-      <header className="mt-6 border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-5">
-        <h1 className="text-2xl font-bold text-[var(--color-ink)]">{title}</h1>
+      <header
+        className={`border border-[var(--color-border)] bg-[var(--color-surface)] ${
+          immersive ? "mt-3 px-4 py-2 sm:mt-6 sm:px-6 sm:py-5" : "mt-6 px-6 py-5"
+        }`}
+      >
+        <h1
+          className={`font-bold text-[var(--color-ink)] ${immersive ? "text-lg sm:text-2xl" : "text-2xl"}`}
+        >
+          {title}
+        </h1>
         {description ? (
-          <p className="mt-2 text-sm text-[var(--color-muted)]">{description}</p>
+          <p className={`mt-2 text-sm text-[var(--color-muted)] ${immersive ? "hidden sm:block" : ""}`}>
+            {description}
+          </p>
         ) : null}
         {showTip ? (
-          <p className="mt-3 text-xs text-[var(--color-muted)]">
+          <p className={`mt-3 text-xs text-[var(--color-muted)] ${immersive ? "hidden sm:block" : ""}`}>
             {immersive
-              ? "Use Fullscreen in the game (top right) for a larger play area. Keyboard controls work best on a computer."
+              ? "Use Fullscreen in the game (top right) for a larger play area. On a computer use the arrow keys; on a phone or tablet tap the floor or use the on-screen arrows."
               : "In class: one laptop on the projector, or rotate one child at a time. Use Fullscreen for a larger play area; keyboard games work best on a computer."}
           </p>
         ) : null}
       </header>
       <div
         ref={frameRef}
-        className={`relative mt-4 flex flex-col border border-[var(--color-border)] bg-white ${
+        className={`relative ${immersive ? "mt-2 sm:mt-4" : "mt-4"} flex flex-col border border-[var(--color-border)] bg-white ${
           isFullscreen ? "h-screen w-screen" : ""
         }`}
       >
