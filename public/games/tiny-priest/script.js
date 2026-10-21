@@ -725,6 +725,10 @@ function setMassNavigatorVisible(isVisible) {
     nav.classList.toggle("is-active", isVisible);
     nav.setAttribute("aria-hidden", isVisible ? "false" : "true");
     document.body.classList.toggle("in-church", isVisible);
+    if (window.Missions) {
+        window.Missions.init();
+        window.Missions.setVisible(isVisible);
+    }
     if (!isVisible) {
         setMassSheetExpanded(false);
     }
@@ -1224,7 +1228,13 @@ function createVoxelChurch(container) {
         darkWood: new THREE.MeshLambertMaterial({ color: 0x8d6541 }),
         wall: new THREE.MeshLambertMaterial({ color: 0xf2e6cb }),
         roof: new THREE.MeshLambertMaterial({ color: 0xe5d1a6 }),
-        altarCloth: new THREE.MeshLambertMaterial({ color: 0x4d9c5a }),
+        altarCloth: new THREE.MeshLambertMaterial({ color: 0xfbf8ef }),
+        altarFrontal: new THREE.MeshLambertMaterial({ color: 0x4d9c5a }),
+        gold: new THREE.MeshLambertMaterial({ color: 0xe3c35a }),
+        lampRed: new THREE.MeshBasicMaterial({ color: 0xd8342c }),
+        water: new THREE.MeshLambertMaterial({ color: 0x9fd3f0 }),
+        stone: new THREE.MeshLambertMaterial({ color: 0xd9d2c3 }),
+        missalRed: new THREE.MeshLambertMaterial({ color: 0x8b1a1a }),
         stainedGlassBlue: new THREE.MeshLambertMaterial({ color: 0x8cc2e8 }),
         stainedGlassGold: new THREE.MeshLambertMaterial({ color: 0xe8d17c }),
         candleWax: new THREE.MeshLambertMaterial({ color: 0xf8f1dc }),
@@ -1502,11 +1512,9 @@ function createVoxelChurch(container) {
         return lecternGroup;
     }
 
-    // Facing the altar: right = Gospel ambo, left = Universal Prayer lectern.
-    // Between the back wall and the altar (deeper in the sanctuary).
-    const LECTERN_Z = -15.35;
-    addLectern(12.2, LECTERN_Z, 1.28, "ambo");
-    addLectern(-12.2, LECTERN_Z, 0.78, "petitions");
+    // Ambo: at the front edge of the sanctuary (people's right side), facing the people.
+    // The Universal Prayer is read from the ambo, so there is no second lectern.
+    addLectern(9.6, -9.9, 1.28, "ambo");
 
     for (let row = 0; row < 4; row += 1) {
         for (let side = -1; side <= 1; side += 2) {
@@ -1524,6 +1532,190 @@ function createVoxelChurch(container) {
             addCollisionRect(back.position.x, back.position.z, 5.8, 0.35);
         }
     }
+
+    // ===== Sanctuary furniture & church missions objects (simple low-poly meshes) =====
+    const missionMeshes = [];
+    const box = (w, h, d, mat) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    const cyl = (rt, rb, h, mat, seg = 12) => new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat);
+    const ALTAR_TOP_Y = 2.73; // top of the altar cloth (altarGroup local)
+
+    // Coloured front panel shows the season; the cloth itself stays white.
+    const altarFrontal = box(ALTAR_TABLE_WIDTH * 0.62, 1.7, 0.06, materials.altarFrontal);
+    altarFrontal.position.set(0, 1.25, ALTAR_TABLE_DEPTH / 2 + 0.04);
+    altarGroup.add(altarFrontal);
+
+    // Corporal (white linen square), chalice and paten in the middle; Missal on its stand.
+    const corporal = box(1.3, 0.02, 1.3, new THREE.MeshLambertMaterial({ color: 0xffffff }));
+    corporal.position.set(0, ALTAR_TOP_Y + 0.01, 0.3);
+    altarGroup.add(corporal);
+    const chalice = new THREE.Group();
+    const cBase = cyl(0.22, 0.26, 0.06, materials.gold);
+    const cStem = cyl(0.05, 0.05, 0.34, materials.gold);
+    cStem.position.y = 0.2;
+    const cCup = cyl(0.2, 0.09, 0.3, materials.gold);
+    cCup.position.y = 0.5;
+    chalice.add(cBase, cStem, cCup);
+    chalice.position.set(0.18, ALTAR_TOP_Y + 0.03, 0.3);
+    altarGroup.add(chalice);
+    const paten = cyl(0.24, 0.24, 0.03, materials.gold, 16);
+    paten.position.set(-0.36, ALTAR_TOP_Y + 0.04, 0.35);
+    const host = cyl(0.17, 0.17, 0.02, new THREE.MeshLambertMaterial({ color: 0xfff6df }), 16);
+    host.position.set(-0.36, ALTAR_TOP_Y + 0.07, 0.35);
+    altarGroup.add(paten, host);
+    const missalStand = box(0.5, 0.18, 0.4, materials.darkWood);
+    missalStand.position.set(-1.6, ALTAR_TOP_Y + 0.09, 0.1);
+    missalStand.rotation.x = -0.35;
+    const missal = box(0.62, 0.08, 0.46, materials.missalRed);
+    missal.position.set(-1.6, ALTAR_TOP_Y + 0.22, 0.12);
+    missal.rotation.x = -0.35;
+    altarGroup.add(missalStand, missal);
+
+    // Tabernacle (gold box on a pillar) with the red sanctuary lamp beside it.
+    const tabernacleGroup = new THREE.Group();
+    tabernacleGroup.position.set(-10.2, FLOOR_SANCTUARY_Y, -15.9);
+    const tPillar = box(1.3, 2.2, 1.0, materials.stone);
+    tPillar.position.y = 1.1;
+    const tBox = box(1.2, 1.1, 0.9, materials.gold);
+    tBox.position.y = 2.75;
+    const tRoof = box(1.35, 0.14, 1.0, materials.gold);
+    tRoof.position.y = 3.37;
+    const tCross = box(0.08, 0.36, 0.06, materials.gold);
+    tCross.position.y = 3.62;
+    const tDoor = box(0.6, 0.7, 0.04, new THREE.MeshLambertMaterial({ color: 0xc9a23c }));
+    tDoor.position.set(0, 2.75, 0.47);
+    tabernacleGroup.add(tPillar, tBox, tRoof, tCross, tDoor);
+    root.add(tabernacleGroup);
+    addCollisionRect(-10.2, -15.9, 1.3, 1.0);
+    tBox.userData.info = {
+        title: "Tabernacle",
+        text: "🙇 Jesus is here in the Tabernacle. The red lamp is always lit to tell us He is with us. We genuflect toward Him.",
+    };
+    const lampPost = cyl(0.04, 0.04, 2.6, materials.gold, 6);
+    lampPost.position.set(-8.7, FLOOR_SANCTUARY_Y + 1.3, -15.8);
+    const lamp = cyl(0.16, 0.12, 0.32, materials.lampRed, 10);
+    lamp.position.set(-8.7, FLOOR_SANCTUARY_Y + 2.7, -15.8);
+    root.add(lampPost, lamp);
+    const lampGlow = new THREE.PointLight(0xff5a3c, 0.6, 4, 2);
+    lampGlow.position.copy(lamp.position);
+    root.add(lampGlow);
+    lamp.userData.info = {
+        title: "Sanctuary lamp",
+        text: "🔴 The red sanctuary lamp burns next to the Tabernacle: Jesus is here!",
+    };
+
+    // Presider's chair (where the priest sits during the readings).
+    const chair = new THREE.Group();
+    const seat = box(1.3, 0.2, 1.1, materials.darkWood);
+    seat.position.y = 0.9;
+    const chairBack = box(1.3, 1.9, 0.18, materials.darkWood);
+    chairBack.position.set(0, 1.85, -0.48);
+    const cushion = box(1.15, 0.1, 0.95, new THREE.MeshLambertMaterial({ color: 0xa33a3a }));
+    cushion.position.y = 1.04;
+    [-0.55, 0.55].forEach((x) => {
+        [-0.45, 0.45].forEach((z) => {
+            const leg = box(0.12, 0.8, 0.12, materials.darkWood);
+            leg.position.set(x, 0.4, z);
+            chair.add(leg);
+        });
+    });
+    chair.add(seat, chairBack, cushion);
+    chair.position.set(-4.6, FLOOR_SANCTUARY_Y, -15.7);
+    root.add(chair);
+    addCollisionRect(-4.6, -15.7, 1.3, 1.1);
+    seat.userData.info = {
+        title: "Presider's chair",
+        text: "🪑 The priest sits here while we listen to the readings.",
+    };
+
+    // Credence table with cruets (water & wine) and the lavabo bowl.
+    const credence = new THREE.Group();
+    const cTop = box(1.6, 0.1, 0.8, materials.wood);
+    cTop.position.y = 1.5;
+    const cCloth = box(1.65, 0.04, 0.85, materials.altarCloth);
+    cCloth.position.y = 1.57;
+    const cBody = box(1.4, 1.45, 0.65, materials.darkWood);
+    cBody.position.y = 0.73;
+    const cruetW = cyl(0.08, 0.1, 0.32, materials.water, 8);
+    cruetW.position.set(-0.4, 1.75, 0);
+    const cruetR = cyl(0.08, 0.1, 0.32, new THREE.MeshLambertMaterial({ color: 0x8a2944 }), 8);
+    cruetR.position.set(-0.1, 1.75, 0);
+    const lavabo = cyl(0.24, 0.16, 0.1, new THREE.MeshLambertMaterial({ color: 0xf4f1ea }), 12);
+    lavabo.position.set(0.4, 1.64, 0);
+    credence.add(cTop, cCloth, cBody, cruetW, cruetR, lavabo);
+    credence.position.set(5.6, FLOOR_SANCTUARY_Y, -15.9);
+    root.add(credence);
+    addCollisionRect(5.6, -15.9, 1.6, 0.8);
+    cTop.userData.info = {
+        title: "Credence table",
+        text: "🍷 The credence table holds the water and wine, and the little bowl for washing the priest's hands.",
+    };
+
+    // Paschal (Easter) candle beside the ambo.
+    const easterCandle = new THREE.Group();
+    const ecStand = cyl(0.28, 0.4, 1.4, materials.gold, 10);
+    ecStand.position.y = 0.7;
+    const ecWax = cyl(0.17, 0.17, 2.4, materials.candleWax, 12);
+    ecWax.position.y = 2.6;
+    const ecCross = box(0.2, 0.42, 0.02, materials.lampRed);
+    ecCross.position.set(0, 2.9, 0.175);
+    const ecFlame = box(0.14, 0.24, 0.14, materials.candleFlame);
+    ecFlame.position.y = 3.94;
+    easterCandle.add(ecStand, ecWax, ecCross, ecFlame);
+    easterCandle.position.set(12.0, FLOOR_SANCTUARY_Y, -10.4);
+    root.add(easterCandle);
+    addCollisionRect(12.0, -10.4, 0.8, 0.8);
+    ecWax.userData.info = {
+        title: "Easter candle",
+        text: "🕯️ The big Easter (Paschal) candle reminds us that Jesus is risen — He is the Light of the world!",
+    };
+
+    // Holy water font at the entrance (walk up to it or tap it to bless yourself).
+    const font = new THREE.Group();
+    const fPillar = cyl(0.22, 0.3, 1.2, materials.stone, 10);
+    fPillar.position.y = 0.6;
+    const fBowl = cyl(0.55, 0.32, 0.3, materials.stone, 14);
+    fBowl.position.y = 1.32;
+    const fWater = cyl(0.48, 0.48, 0.03, materials.water, 14);
+    fWater.position.y = 1.46;
+    font.add(fPillar, fBowl, fWater);
+    const FONT_POS = { x: -2.6, z: 10.2 };
+    font.position.set(FONT_POS.x, FLOOR_NAVE_Y, FONT_POS.z);
+    root.add(font);
+    addCollisionRect(FONT_POS.x, FONT_POS.z, 1.1, 1.1);
+    fBowl.userData.mission = "holy_water";
+    fWater.userData.mission = "holy_water";
+
+    // Votive candle stand on the left side of the nave (tap to light a candle).
+    const VOTIVE_POS = { x: -13.6, z: -6.2 };
+    const votive = new THREE.Group();
+    const vTable = box(2.4, 0.9, 0.9, materials.darkWood);
+    vTable.position.y = 0.45;
+    const vTop = box(2.5, 0.1, 1.0, materials.gold);
+    vTop.position.y = 0.95;
+    votive.add(vTable, vTop);
+    const votiveFlames = [];
+    for (let i = 0; i < 8; i += 1) {
+        const x = -0.9 + (i % 4) * 0.6;
+        const z = i < 4 ? -0.22 : 0.22;
+        const cup = cyl(0.1, 0.09, 0.2, new THREE.MeshLambertMaterial({ color: 0xc23b3b, transparent: true, opacity: 0.85 }), 8);
+        cup.position.set(x, 1.1, z);
+        const flame = box(0.07, 0.14, 0.07, materials.candleFlame);
+        flame.position.set(x, 1.27, z);
+        flame.visible = i === 2 || i === 5;
+        votive.add(cup, flame);
+        votiveFlames.push(flame);
+        cup.userData.mission = "candle";
+        missionMeshes.push(cup);
+    }
+    votive.position.set(VOTIVE_POS.x, FLOOR_NAVE_Y, VOTIVE_POS.z);
+    votive.rotation.y = Math.PI / 2;
+    root.add(votive);
+    addCollisionRect(VOTIVE_POS.x, VOTIVE_POS.z, 1.0, 2.5);
+    vTop.userData.mission = "candle";
+    vTable.userData.mission = "candle";
+
+    missionMeshes.push(fBowl, fWater, vTop, vTable);
+    const infoMeshes = [tBox, lamp, seat, cTop, ecWax];
 
     const playerKey =
         APP_STATE.selectedCharacter && CHARACTER_CONFIG[APP_STATE.selectedCharacter]
@@ -2224,6 +2416,10 @@ function createVoxelChurch(container) {
         narrateGesture(name, prefix);
         setCelebrantPose(name);
         scheduleGenuflectAfterElevation(name);
+        const flowStep = getMassFlowSteps()[actionState.currentMassStepIndex];
+        if (flowStep) {
+            window.dispatchEvent(new CustomEvent("ctm:mass-step", { detail: { title: flowStep.title } }));
+        }
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
 
@@ -2622,6 +2818,7 @@ function createVoxelChurch(container) {
             mesh.rotation.y = slot.rotationY;
             mesh.renderOrder = 2;
             mesh.userData.hotspot = {
+                number: Number(station.number),
                 title: station.title || `Station ${station.number}`,
                 description: station.description || "",
             };
@@ -2633,13 +2830,82 @@ function createVoxelChurch(container) {
 
     loadChurchDecorations();
 
+    function completeMission(id) {
+        if (window.Missions) {
+            window.Missions.complete(id);
+        }
+    }
+
+    function hopPlayer() {
+        playerMotion.jumpLatch = false;
+        attemptJump();
+    }
+
+    let lastBlessAt = 0;
+    function blessWithHolyWater() {
+        const now = performance.now();
+        if (now - lastBlessAt < 4000) {
+            return;
+        }
+        lastBlessAt = now;
+        setLiturgySubtitle(
+            typeof tpCopy === "function"
+                ? tpCopy("missions.bless_text", "💧 You dip your fingers in the holy water and make the Sign of the Cross: In the name of the Father, and of the Son, and of the Holy Spirit. Amen.")
+                : "💧 You dip your fingers in the holy water and make the Sign of the Cross: In the name of the Father, and of the Son, and of the Holy Spirit. Amen.",
+        );
+        spawnSparkles(new THREE.Vector3(FONT_POS.x, FLOOR_NAVE_Y + 1.4, FONT_POS.z), 0x9fd3f0);
+        completeMission("holy_water");
+    }
+
+    function lightVotiveCandle(point) {
+        const unlit = votiveFlames.find((f) => !f.visible);
+        if (unlit) {
+            unlit.visible = true;
+        }
+        spawnSparkles(point, 0xffcf73);
+        setLiturgySubtitle(
+            typeof tpCopy === "function"
+                ? tpCopy("missions.candle_text", "🕯️ You lit a candle. Who are you praying for? Say a little prayer for them in your heart.")
+                : "🕯️ You lit a candle. Who are you praying for? Say a little prayer for them in your heart.",
+        );
+        completeMission("candle");
+    }
+
+    let pewDone = false;
+    function checkMissionProximity() {
+        const px = playerRig.position.x;
+        const pz = playerRig.position.z;
+        if (Math.hypot(px - FONT_POS.x, pz - FONT_POS.z) < 1.9) {
+            blessWithHolyWater();
+        }
+        // Between the pews (rows at z −2.6…7.3, x ±4.3…10.1).
+        if (!pewDone && Math.abs(px) > 4.6 && Math.abs(px) < 9.8 && pz > -3.5 && pz < 8.2) {
+            pewDone = true;
+            hopPlayer();
+            setLiturgySubtitle(
+                typeof tpCopy === "function"
+                    ? tpCopy("missions.pew_text", "🙇 You genuflect toward Jesus in the Tabernacle and slip into your pew.")
+                    : "🙇 You genuflect toward Jesus in the Tabernacle and slip into your pew.",
+            );
+            completeMission("pew");
+        }
+    }
+
+    window.onKneelTapped = () => {
+        setLiturgySubtitle(
+            typeof tpCopy === "function"
+                ? tpCopy("missions.kneel_text", "🙏 You kneel. Jesus becomes present on the altar — let's pray quietly.")
+                : "🙏 You kneel. Jesus becomes present on the altar — let's pray quietly.",
+        );
+    };
+
     function onPointerDown(event) {
         const bounds = renderer.domElement.getBoundingClientRect();
         pointer.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
         pointer.y = -((event.clientY - bounds.top) / bounds.height) * 2 + 1;
         raycaster.setFromCamera(pointer, camera);
 
-        const allTargets = interactiveMeshes.concat(decorationMeshes);
+        const allTargets = interactiveMeshes.concat(decorationMeshes, missionMeshes, infoMeshes);
         const hit = raycaster.intersectObjects(allTargets, false)[0];
         if (!hit) {
             hideHotspotModal();
@@ -2650,6 +2916,23 @@ function createVoxelChurch(container) {
         if (hit.object.userData.hotspot) {
             const spot = hit.object.userData.hotspot;
             showHotspotModal(spot.title, spot.description);
+            if (spot.number === 1) {
+                completeMission("station");
+            }
+            return;
+        }
+
+        if (hit.object.userData.mission === "holy_water") {
+            blessWithHolyWater();
+            return;
+        }
+        if (hit.object.userData.mission === "candle") {
+            lightVotiveCandle(hit.point);
+            return;
+        }
+        if (hit.object.userData.info) {
+            setLiturgySubtitle(hit.object.userData.info.text);
+            spawnSparkles(hit.point, 0xffe596);
             return;
         }
 
@@ -2935,6 +3218,7 @@ function createVoxelChurch(container) {
         applyArmSecondaryMotion(horizontalSpeed);
         syncOverlayArmsVisibility(actionState.currentGesture, horizontalSpeed);
         updateLiturgyItem();
+        checkMissionProximity();
         updatePlayerSpriteMotion(playerVelocityXZ.x, playerVelocityXZ.y, turnInput, throttleInput, down, dt);
 
         playerShadow.position.x = playerRig.position.x;
@@ -3018,6 +3302,7 @@ function createVoxelChurch(container) {
         camera,
         renderer,
         altarCloth,
+        altarFrontal,
         crucifixGroup: sanctuaryCrossGroup,
         playerRig,
         triggerGesture: (name) => {
@@ -3135,7 +3420,7 @@ async function activateThreeScene(role) {
             APP_STATE.threeWorld = createVoxelChurch(threeContainer);
         }
 
-        APP_STATE.threeWorld.altarCloth.material.color.setHex(liturgical.colorHex);
+        APP_STATE.threeWorld.altarFrontal.material.color.setHex(liturgical.colorHex);
         APP_STATE.threeWorld.altarCloth.material.needsUpdate = true;
 
         const vestmentOverride = new URLSearchParams(window.location.search).get("vestment");
@@ -3156,9 +3441,9 @@ async function activateThreeScene(role) {
                         APP_STATE.threeWorld.triggerGesture(gesture);
                     }
                 },
+                // actionState lives inside createVoxelChurch; referencing it here threw a
+                // ReferenceError that stopped the "Join Responses" panel from ever opening.
                 onMassStepChange: (stepIndex) => {
-                    actionState.massIndex = stepIndex;
-                    actionState.currentMassStepIndex = stepIndex;
                     setMassFlowStepState(stepIndex, window.MassQuest.isActive());
                 },
             });
@@ -3312,4 +3597,4 @@ window.confirmEntryToChurch = confirmEntryToChurch;
 window.declineEntry = declineEntry;
 window.getLiturgicalSeason = getLiturgicalSeason;
 window.getMassFlowSteps = getMassFlowSteps;
-window.setLiturgySubtitle = setLiturgySubtitle;
+window.setLiturgySubtitle = setLiturgySubtitle;

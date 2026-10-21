@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <title>Come to Mass! - Welcome to Our Church</title>
-        <link rel="stylesheet" href="style.css?v=20261021b" />
+        <link rel="stylesheet" href="style.css?v=20261021c" />
         <link rel="icon" type="image/png" href="assets/favicon-64.png" />
     </head>
     <body>
@@ -142,6 +142,35 @@
             <p class="mass-nav-hint">WASD move · Space jump · M auto Mass</p>
         </aside>
 
+        <button type="button" id="missions-btn" class="missions-btn" hidden aria-expanded="false" aria-controls="missions-card">
+            ⭐ <span id="missions-btn-count">0/6</span>
+        </button>
+        <section id="missions-card" class="missions-card" hidden aria-labelledby="missions-title">
+            <div class="missions-card-head">
+                <h2 id="missions-title" class="missions-title">⭐ My church missions</h2>
+                <button type="button" id="missions-close" class="missions-close" aria-label="Close missions">×</button>
+            </div>
+            <p id="missions-summary" class="missions-summary"></p>
+            <ul id="missions-list" class="missions-list"></ul>
+            <a href="#" id="missions-reset" class="missions-reset">Start again</a>
+        </section>
+        <div id="mission-toast" class="mission-toast" role="status" aria-live="polite" hidden></div>
+        <button type="button" id="kneel-btn" class="kneel-btn" hidden>Kneel 🙏</button>
+        <div id="mass-end" class="mass-end" hidden role="dialog" aria-modal="true" aria-labelledby="mass-end-title">
+            <div class="mass-end-card">
+                <div class="mass-end-burst" aria-hidden="true">⭐ ✨ 🌸 🔔 ✨ ⭐</div>
+                <h2 id="mass-end-title" class="mass-end-title">You came to Mass!</h2>
+                <p id="mass-end-body" class="mass-end-body">Jesus was so happy to have you here today. Thank you for praying with God's family.</p>
+                <p id="mass-end-stars" class="mass-end-stars"></p>
+                <p id="mass-end-peace" class="mass-end-peace">“Go in peace!” Take Jesus' love home with you.</p>
+                <div class="mass-end-actions">
+                    <button type="button" id="mass-end-again" class="mass-end-btn mass-end-btn--primary">Play again</button>
+                    <a href="/play" target="_top" class="mass-end-btn">Back to games</a>
+                    <button type="button" id="mass-end-close" class="mass-end-btn">Keep exploring</button>
+                </div>
+            </div>
+        </div>
+
         <div id="touch-controls" class="touch-controls" aria-label="Walk controls">
             <button type="button" class="touch-btn touch-up" data-key="ArrowUp" aria-label="Walk forward">▲</button>
             <button type="button" class="touch-btn touch-left" data-key="ArrowLeft" aria-label="Turn left">◀</button>
@@ -180,12 +209,13 @@
         </div>
 
         <script src="vendor/three.min.js"></script>
-        <script src="site-copy.js?v=20261021b"></script>
-        <script src="stations.js?v=20261021b"></script>
-        <script src="mass-participation-lines.js?v=20261021b"></script>
-        <script src="mass-quest.js?v=20261021b"></script>
-        <script src="courtyard-events.js?v=20261021b"></script>
-        <script src="celebrant-sprites.js?v=20261021b"></script>
-        <script src="script.js?v=20261021b"></script>
+        <script src="site-copy.js?v=20261021c"></script>
+        <script src="stations.js?v=20261021c"></script>
+        <script src="mass-participation-lines.js?v=20261021c"></script>
+        <script src="mass-quest.js?v=20261021c"></script>
+        <script src="courtyard-events.js?v=20261021c"></script>
+        <script src="celebrant-sprites.js?v=20261021c"></script>
+        <script src="missions.js?v=20261021c"></script>
+        <script src="script.js?v=20261021c"></script>
     </body>
 </html>

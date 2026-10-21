@@ -149,7 +149,12 @@
 
     function notifyMassStepChange(stepIndex) {
         if (typeof state.onMassStepChange === "function") {
-            state.onMassStepChange(stepIndex);
+            // A failing callback must never stop the panel from rendering.
+            try {
+                state.onMassStepChange(stepIndex);
+            } catch (error) {
+                console.warn("MassQuest step callback failed:", error);
+            }
         }
     }
 
@@ -298,6 +303,11 @@
                 return;
             }
             triggerRoleGesture("assembly");
+            try {
+                global.dispatchEvent(new CustomEvent("ctm:response", { detail: { id: line.id } }));
+            } catch {
+                /* ignore */
+            }
             advanceLine();
             return;
         }

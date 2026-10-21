@@ -1565,3 +1565,122 @@ body:fullscreen .mass-navigator.is-active {
         min-height: 40px;
     }
 }
+
+/* ===== Phase 3: missions, kneel button, end screen ===== */
+.missions-btn {
+    position: fixed;
+    top: 52px;
+    left: 10px;
+    z-index: 250;
+    min-height: 40px;
+    padding: 0 12px;
+    border: 2px solid #e2c46a;
+    border-radius: 999px;
+    background: rgba(255, 251, 238, 0.97);
+    color: #6b4e12;
+    font-size: 0.9rem;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(82, 58, 44, 0.14);
+    cursor: pointer;
+}
+.missions-btn[hidden] { display: none; }
+.missions-btn.is-bump { animation: missions-bump 0.6s ease; }
+@keyframes missions-bump {
+    0%, 100% { transform: scale(1); }
+    40% { transform: scale(1.18); }
+}
+.missions-card {
+    position: fixed;
+    top: 98px;
+    left: 10px;
+    z-index: 270;
+    width: min(340px, calc(100vw - 20px));
+    max-height: calc(100svh - 120px);
+    overflow-y: auto;
+    padding: 12px 12px 10px;
+    border-radius: 18px;
+    border: 2px solid #e6d3a8;
+    background: rgba(255, 250, 240, 0.98);
+    box-shadow: 0 10px 28px rgba(82, 58, 44, 0.2);
+    color: #4a3419;
+}
+.missions-card[hidden] { display: none; }
+.missions-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.missions-title { margin: 0; font-size: 1.05rem; font-weight: 800; }
+.missions-close {
+    width: 36px; height: 36px; border: none; border-radius: 50%;
+    background: #f3e7cc; color: #5d4037; font-size: 1.3rem; font-weight: 800; cursor: pointer;
+}
+.missions-summary { margin: 4px 0 8px; font-size: 0.82rem; color: #7a6243; }
+.missions-list { list-style: none; margin: 0; padding: 0; }
+.missions-list li { margin-bottom: 6px; }
+.mission-item {
+    display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px;
+    padding: 6px 10px; border: 1.5px solid #ead9b5; border-radius: 12px;
+    background: #fff; color: #4a3419; font-size: 0.92rem; font-weight: 600; text-align: left; cursor: pointer;
+}
+.mission-item.is-done { background: #eef8ea; border-color: #b9dcb1; }
+.mission-icon { font-size: 1.2rem; }
+.mission-text { flex: 1; }
+.mission-star { font-size: 1.15rem; color: #d9a521; }
+.mission-hint { margin: 4px 6px 2px 38px; font-size: 0.8rem; color: #7a6243; }
+.mission-hint[hidden] { display: none; }
+.missions-reset { display: inline-block; margin-top: 4px; font-size: 0.78rem; color: #8a7350; }
+.mission-toast {
+    position: fixed; top: 52px; left: 50%; z-index: 280;
+    transform: translateX(-50%);
+    max-width: calc(100vw - 140px);
+    padding: 8px 14px; border-radius: 999px;
+    background: #fffbea; border: 2px solid #e2c46a; color: #6b4e12;
+    font-weight: 800; font-size: 0.9rem; text-align: center;
+    box-shadow: 0 6px 18px rgba(82, 58, 44, 0.18);
+    pointer-events: none;
+}
+.mission-toast[hidden] { display: none; }
+.mission-toast.is-show { animation: toast-in 0.35s ease-out; }
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, -8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.kneel-btn {
+    position: fixed; right: 16px; bottom: 120px; z-index: 255;
+    min-height: 56px; padding: 0 20px; border-radius: 999px;
+    border: 3px solid #fff; background: #6f4fa8; color: #fff;
+    font-size: 1.1rem; font-weight: 800; cursor: pointer;
+    box-shadow: 0 8px 20px rgba(60, 30, 90, 0.35);
+    animation: kneel-pulse 1.4s ease-in-out infinite;
+}
+.kneel-btn[hidden] { display: none; }
+@keyframes kneel-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+.mass-end {
+    position: fixed; inset: 0; z-index: 400;
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: rgba(70, 50, 20, 0.45);
+}
+.mass-end[hidden] { display: none; }
+.mass-end-card {
+    width: min(440px, 100%); padding: 22px 20px 18px; border-radius: 24px;
+    background: #fffaf0; border: 3px solid #e2c46a; text-align: center; color: #4a3419;
+    box-shadow: 0 16px 40px rgba(60, 40, 10, 0.3);
+    animation: elevation-card-in 0.5s ease-out;
+}
+.mass-end-burst { font-size: 1.6rem; letter-spacing: 0.2em; }
+.mass-end-title { margin: 8px 0 6px; font-size: 1.7rem; font-weight: 800; }
+.mass-end-body, .mass-end-peace { margin: 6px 0; font-size: 1rem; line-height: 1.4; }
+.mass-end-stars { margin: 10px 0; font-size: 1.15rem; font-weight: 800; color: #b07d10; }
+.mass-end-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+.mass-end-btn {
+    min-height: 44px; padding: 0 16px; display: inline-flex; align-items: center;
+    border-radius: 12px; border: 2px solid #d8c39a; background: #fff; color: #5d4037;
+    font-size: 0.95rem; font-weight: 800; text-decoration: none; cursor: pointer;
+}
+.mass-end-btn--primary { background: #4d9c5a; border-color: #4d9c5a; color: #fff; }
+@media (max-width: 700px) {
+    .missions-btn { top: max(56px, calc(env(safe-area-inset-top) + 48px)); left: max(8px, env(safe-area-inset-left)); }
+    .missions-card { top: 104px; left: 8px; width: calc(100vw - 16px); max-height: calc(100svh - 180px); }
+    .kneel-btn { bottom: calc(var(--sheet-collapsed) + 110px + env(safe-area-inset-bottom)); right: 12px; }
+    .mission-toast { top: 100px; max-width: calc(100vw - 32px); }
+}
+/* Phones: the response panel needs the space, so hide the D-pad while it is open (tap-to-walk still works). */
+@media (max-width: 700px) {
+    body.in-church:has(.mass-quest-panel.is-active) .touch-controls {
+        display: none;
+    }
+}
