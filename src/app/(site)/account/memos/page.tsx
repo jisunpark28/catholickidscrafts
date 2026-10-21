@@ -28,7 +28,7 @@ export default async function MyMemosPage() {
   const memos: MyMemo[] = dtos.map(withBookInfo);
 
   return (
-    <PageShell wide>
+    <PageShell>
       <MyMemosClient
         initialMemos={memos}
         paid={paid}
