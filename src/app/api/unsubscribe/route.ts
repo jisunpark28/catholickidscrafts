@@ -20,8 +20,8 @@ export async function POST(request: Request) {
       data: { status: SUBSCRIBER_STATUS.unsubscribed, unsubscribedAt: new Date(), confirmToken: null },
     });
   }
-  const accept = request.headers.get("content-type") ?? "";
-  if (accept.includes("form")) {
+  const contentType = request.headers.get("content-type") ?? "";
+  if (contentType.includes("form")) {
     return NextResponse.redirect(new URL("/newsletter?status=unsubscribed", url), 303);
   }
   return NextResponse.json({ ok: true });

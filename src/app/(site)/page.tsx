@@ -1,6 +1,7 @@
 import { HomeFeatureCarousel, type HomeFeatureSlide } from "@/components/home/HomeFeatureCarousel";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SundaySheetHero } from "@/components/home/SundaySheetHero";
+import { emailConfigured } from "@/lib/email";
 import { loadFeaturedSheet } from "@/lib/gospel-sheet";
 import { getPublicContactEmail } from "@/lib/site-contact";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
@@ -115,6 +116,7 @@ export default async function HomePage() {
           sundayLabel={sheet.sundayLabel}
           gospelRef={sheet.gospelRef}
           groupInquiryHref={groupInquiryHref}
+          emailEnabled={emailConfigured()}
         />
       ) : null}
       <HomeFeatureCarousel
