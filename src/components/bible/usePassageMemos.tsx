@@ -2,7 +2,18 @@
 
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { PLUS_PRICE_LABEL } from "@/lib/subscription/plan-copy";
-import { MEMO_BODY_MAX, formatMemoDate, type PassageMemoDto, type PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
+import {
+  DEFAULT_MEMO_COLOR,
+  MEMO_BODY_MAX,
+  MEMO_COLORS,
+  authorMemoLabel,
+  formatMemoDate,
+  memoColor,
+  type MemoColor,
+  type MemoVisibility,
+  type PassageMemoDto,
+  type PassageMemoSetup,
+} from "@/lib/bible-memos/passage-memos";
 import {
   offsetsToVerseRange,
   verseAtOffset,
@@ -66,6 +77,84 @@ function trimRange(text: string, start: number, end: number) {
   return a < b ? { start: a, end: b } : null;
 }
 
+/** Color swatches (radio group) for the write/edit popup. */
+export function MemoColorPicker({
+  value,
+  onChange,
+  label,
+  name,
+}: {
+  value: MemoColor;
+  onChange: (c: MemoColor) => void;
+  label: string;
+  name: string;
+}) {
+  return (
+    <fieldset className="mt-3">
+      <legend className="mb-1 text-[13px] font-semibold">{label}</legend>
+      <div className="flex gap-2">
+        {MEMO_COLORS.map((c) => (
+          <label key={c.key} className="cursor-pointer" title={c.label}>
+            <input
+              type="radio"
+              name={name}
+              value={c.key}
+              checked={value === c.key}
+              onChange={() => onChange(c.key)}
+              className="peer sr-only"
+            />
+            <span
+              aria-hidden
+              className="block h-7 w-7 rounded-full border-2 border-white shadow-[0_0_0_1px_#d1d5db] peer-checked:shadow-[0_0_0_2px_#1f2937] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-[#1d4ed8]"
+              style={{ background: c.swatch }}
+            />
+            <span className="sr-only">{c.label}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+/** "Only me" / "Share with family" segmented toggle. */
+export function MemoVisibilityToggle({
+  value,
+  onChange,
+  disabled,
+  onlyMeLabel,
+  shareLabel,
+  size = "md",
+}: {
+  value: MemoVisibility;
+  onChange: (v: MemoVisibility) => void;
+  disabled?: boolean;
+  onlyMeLabel: string;
+  shareLabel: string;
+  size?: "sm" | "md";
+}) {
+  const pad = size === "sm" ? "px-3 py-1 text-xs" : "px-4 py-1.5 text-sm";
+  const opt = (v: MemoVisibility, icon: string, text: string) => (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={value === v}
+      disabled={disabled}
+      onClick={() => value !== v && onChange(v)}
+      className={`${pad} font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${
+        value === v ? "bg-[#d9580f] text-white" : "bg-white text-[var(--color-ink)] hover:bg-[#fff4ec]"
+      }`}
+    >
+      <span aria-hidden>{icon}</span> {text}
+    </button>
+  );
+  return (
+    <div role="radiogroup" className="inline-flex overflow-hidden rounded-full border border-[#e3d9cc]">
+      {opt("PRIVATE", "\u{1F512}", onlyMeLabel)}
+      {opt("FAMILY", "\u{1F46A}", shareLabel)}
+    </div>
+  );
+}
+
 function verseRef(bookName: string, chapter: number, a: number, b: number) {
   return a === b ? `${bookName} ${chapter}:${a}` : `${bookName} ${chapter}:${a}–${b}`;
 }
@@ -98,6 +187,10 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
   const [total, setTotal] = useState(0);
   const [viewMode, setViewMode] = useState<"view" | "edit" | "confirm">("view");
   const [editBody, setEditBody] = useState("");
+  const [color, setColor] = useState<MemoColor>(DEFAULT_MEMO_COLOR);
+  const [visibility, setVisibility] = useState<MemoVisibility>("PRIVATE");
+  const [editColor, setEditColor] = useState<MemoColor>(DEFAULT_MEMO_COLOR);
+  const [editVisibility, setEditVisibility] = useState<MemoVisibility>("PRIVATE");
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
@@ -137,12 +230,12 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
   );
 
   const { hlByChar, memoEndAt } = useMemo(() => {
-    const hl = new Map<number, string>();
+    const hl = new Map<number, PassageMemoDto>();
     const ends = new Map<number, PassageMemoDto>();
     for (const m of memos) {
       const r = memoRange(m);
       if (!r) continue;
-      for (let i = r.start; i < r.end; i++) hl.set(i, m.id);
+      for (let i = r.start; i < r.end; i++) hl.set(i, m);
       ends.set(r.end - 1, m);
     }
     return { hlByChar: hl, memoEndAt: ends };
@@ -206,6 +299,8 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         return;
       }
       setBody("");
+      setColor(DEFAULT_MEMO_COLOR);
+      setVisibility("PRIVATE");
       setError("");
       setEditor(d);
     },
@@ -326,6 +421,8 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           quotedText: editor.quote,
           textVersion: setup.textVersion,
           body: body.trim(),
+          color,
+          visibility,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { memo?: PassageMemoDto; error?: string };
@@ -342,7 +439,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
     } finally {
       setSaving(false);
     }
-  }, [editor, setup, saving, body, bookSlug, chapter, t, closeAll]);
+  }, [editor, setup, saving, body, color, visibility, bookSlug, chapter, t, closeAll]);
 
   const remove = useCallback(
     async (memo: PassageMemoDto) => {
@@ -372,7 +469,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         const res = await fetch(`/api/bible/memos/${encodeURIComponent(memo.id)}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ body: next }),
+          body: JSON.stringify({ body: next, color: editColor, visibility: editVisibility }),
         });
         const data = (await res.json().catch(() => ({}))) as { memo?: PassageMemoDto; error?: string };
         if (!res.ok || !data.memo) {
@@ -394,7 +491,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         setSaving(false);
       }
     },
-    [editBody, t],
+    [editBody, editColor, editVisibility, t],
   );
 
   const jumpTo = useCallback(
@@ -419,9 +516,10 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
   const passageCharClassName = useCallback(
     (i: number) => {
       if (pendingRange && i >= pendingRange.start && i < pendingRange.end && editor) return "passage-memo-pending";
-      const id = hlByChar.get(i);
-      if (!id) return undefined;
-      return id === flashId ? "passage-memo-hl passage-memo-flash" : "passage-memo-hl";
+      const m = hlByChar.get(i);
+      if (!m) return undefined;
+      const base = `passage-memo-hl passage-memo-c-${memoColor(m.color).key}`;
+      return m.id === flashId ? `${base} passage-memo-flash` : base;
     },
     [pendingRange, editor, hlByChar, flashId],
   );
@@ -431,11 +529,13 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       const memo = memoEndAt.get(i);
       if (!memo) return null;
       const ref = verseRef(bookName, chapter, memo.startVerse, memo.endVerse);
+      const shared = memo.visibility === "FAMILY";
       return (
         <button
           type="button"
-          className="passage-memo-pencil"
-          aria-label={`${t("bible.memo.open", "Open memo")}: ${ref}`}
+          className={`passage-memo-pencil${memo.mine ? "" : " passage-memo-pencil-shared"}`}
+          style={{ background: memoColor(memo.color).swatch }}
+          aria-label={`${memo.mine ? t("bible.memo.open", "Open memo") : authorMemoLabel(memo.authorName)}: ${ref}`}
           onMouseDown={(e) => e.preventDefault()}
           onClick={(e) => {
             const anchor = anchorFor((e.currentTarget as HTMLElement).getBoundingClientRect());
@@ -448,7 +548,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
             }
           }}
         >
-          <span aria-hidden>✎</span>
+          <span aria-hidden>{shared ? "\u{1F46A}" : "✎"}</span>
         </button>
       );
     },
@@ -543,11 +643,20 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       </>,
     );
 
-  const privateTag = (
-    <span className="inline-flex items-center gap-1 rounded-full bg-[#f3efe9] px-2 py-0.5 text-[11px] font-semibold text-[var(--color-muted)]">
-      {lock} {t("bible.memo.private", "Private · only you")}
-    </span>
-  );
+  const visTag = (v: MemoVisibility) =>
+    v === "FAMILY" ? (
+      <span className="inline-flex items-center gap-1 rounded-full bg-[#eef2ff] px-2 py-0.5 text-[11px] font-semibold text-[#3730a3]">
+        <span aria-hidden>{"\u{1F46A}"}</span> {t("bible.memo.shared", "Shared with family")}
+      </span>
+    ) : (
+      <span className="inline-flex items-center gap-1 rounded-full bg-[#f3efe9] px-2 py-0.5 text-[11px] font-semibold text-[var(--color-muted)]">
+        {lock} {t("bible.memo.private", "Only me")}
+      </span>
+    );
+  const quoteStyle = (c: string) => ({ background: memoColor(c).bg, borderLeftColor: memoColor(c).swatch });
+  const colorLabel = t("bible.memo.color", "Highlight color");
+  const onlyMeLabel = t("bible.memo.only_me", "Only me");
+  const shareLabel = t("bible.memo.share_family", "Share with family");
 
   const editorCard =
     editor &&
@@ -564,9 +673,9 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           <h3 id={`${dialogId}-ed`} className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
             {t("bible.memo.eyebrow", "Memo")} · {verseRef(bookName, chapter, editor.startVerse, editor.endVerse)}
           </h3>
-          {privateTag}
+          {visTag(visibility)}
         </div>
-        <blockquote className="mt-2 max-h-28 overflow-y-auto rounded-r-lg border-l-4 border-[#e8b04b] bg-[#fffaeb] px-3 py-2 text-sm italic">
+        <blockquote className="mt-2 max-h-28 overflow-y-auto rounded-r-lg border-l-4 px-3 py-2 text-sm italic" style={quoteStyle(color)}>
           “{editor.quote}”
         </blockquote>
         <label htmlFor={`${dialogId}-body`} className="sr-only">
@@ -586,6 +695,15 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         <p className="mt-1 text-right text-xs text-[var(--color-muted)]">
           {body.length} / {MEMO_BODY_MAX}
         </p>
+        <MemoColorPicker value={color} onChange={setColor} label={colorLabel} name={`${dialogId}-color`} />
+        <div className="mt-3">
+          <MemoVisibilityToggle value={visibility} onChange={setVisibility} onlyMeLabel={onlyMeLabel} shareLabel={shareLabel} />
+          {visibility === "FAMILY" && (
+            <p className="mt-1 text-xs text-[var(--color-muted)]">
+              {t("bible.memo.share_hint", "Your family can read this memo. Only you can edit it.")}
+            </p>
+          )}
+        </div>
         {isMobile && <p className="mt-1 text-xs text-[var(--color-muted)]">{t("bible.memo.tip", "Tip: long-press to select words, or tap the first verse, then the last verse.")}</p>}
         {error && (
           <p id={`${dialogId}-err`} role="alert" className="mt-1 text-sm text-red-600">
@@ -613,12 +731,32 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           <h3 id={`${dialogId}-vw`} className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
             {t("bible.memo.eyebrow", "Memo")} · {verseRef(bookName, chapter, viewing.memo.startVerse, viewing.memo.endVerse)}
           </h3>
-          {privateTag}
+          {visTag(viewMode === "edit" ? editVisibility : viewing.memo.visibility)}
         </div>
-        <blockquote className="mt-2 max-h-28 overflow-y-auto rounded-r-lg border-l-4 border-[#e8b04b] bg-[#fffaeb] px-3 py-2 text-sm italic">
+        {!viewing.memo.mine && (
+          <p className="mt-1 text-sm font-semibold text-[#3730a3]">
+            <span aria-hidden>{"\u{1F46A}"}</span> {authorMemoLabel(viewing.memo.authorName)}
+          </p>
+        )}
+        <blockquote
+          className="mt-2 max-h-28 overflow-y-auto rounded-r-lg border-l-4 px-3 py-2 text-sm italic"
+          style={quoteStyle(viewMode === "edit" ? editColor : viewing.memo.color)}
+        >
           “{viewing.memo.quotedText}”
         </blockquote>
-        {viewMode === "edit" ? (
+        {!viewing.memo.mine ? (
+          <>
+            <p className="mt-2 whitespace-pre-wrap text-sm">{viewing.memo.body}</p>
+            <p className="mt-2 text-xs text-[var(--color-muted)]">
+              {viewing.memo.authorName} · {formatMemoDate(viewing.memo.createdAt)} · {t("bible.memo.read_only", "Read only")}
+            </p>
+            <div className="mt-3 flex justify-end">
+              <button type="button" className={btnGhost} autoFocus onClick={() => closeAll()}>
+                {t("bible.memo.close", "Close")}
+              </button>
+            </div>
+          </>
+        ) : viewMode === "edit" ? (
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -644,6 +782,15 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
               <span>
                 {editBody.length} / {MEMO_BODY_MAX}
               </span>
+            </div>
+            <MemoColorPicker value={editColor} onChange={setEditColor} label={colorLabel} name={`${dialogId}-ecolor`} />
+            <div className="mt-3">
+              <MemoVisibilityToggle
+                value={editVisibility}
+                onChange={setEditVisibility}
+                onlyMeLabel={onlyMeLabel}
+                shareLabel={shareLabel}
+              />
             </div>
             {error && <p role="alert" className="mt-1 text-sm text-red-600">{error}</p>}
             <div className="mt-3 flex gap-2">
@@ -682,6 +829,8 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
                   className={btnPrimary}
                   onClick={() => {
                     setEditBody(viewing.memo.body);
+                    setEditColor(viewing.memo.color);
+                    setEditVisibility(viewing.memo.visibility);
                     setError("");
                     setViewMode("edit");
                   }}
@@ -787,7 +936,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
   const panel = paid || memos.length > 0 ? (
     <section aria-labelledby={`${dialogId}-list`} className="rounded-2xl border border-[#eadfce] bg-white p-4 shadow-sm">
       <h2 id={`${dialogId}-list`} className="text-sm font-bold text-[var(--color-ink)]">
-        {t("bible.memo.list_title", "My memos in this chapter")}{" "}
+        {t("bible.memo.list_title", "Memos in this chapter")}{" "}
         <span className="font-normal text-[var(--color-muted)]">({memos.length})</span>
         <Link href={MY_MEMOS_HREF} className="float-right text-xs font-semibold text-[var(--color-link)]">
           {t("bible.memo.my_memos", "My memos")} ({total}) →
@@ -804,13 +953,21 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
               <button
                 type="button"
                 onClick={() => jumpTo(m)}
-                className="w-full rounded-xl border border-[#eee6db] border-l-4 border-l-[#d9580f] bg-white p-3 text-left hover:bg-[#fffaf5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#1d4ed8]"
+                className="w-full rounded-xl border border-[#eee6db] border-l-4 bg-white p-3 text-left hover:bg-[#fffaf5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#1d4ed8]"
+                style={{ borderLeftColor: memoColor(m.color).swatch }}
               >
-                <span className="flex justify-between text-xs font-semibold text-[var(--color-muted)]">
-                  <span>{verseRef(bookName, chapter, m.startVerse, m.endVerse)}</span>
+                <span className="flex justify-between gap-2 text-xs font-semibold text-[var(--color-muted)]">
+                  <span>
+                    {verseRef(bookName, chapter, m.startVerse, m.endVerse)}
+                    {m.visibility === "FAMILY" && (
+                      <span className="ml-1 text-[#3730a3]">
+                        <span aria-hidden>{"\u{1F46A}"}</span> {m.mine ? t("bible.memo.shared_short", "Shared") : authorMemoLabel(m.authorName)}
+                      </span>
+                    )}
+                  </span>
                   <span>{new Date(m.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
                 </span>
-                <span className="mt-1 line-clamp-2 block rounded-md bg-[#fffaeb] px-2 py-1 text-xs italic">“{m.quotedText}”</span>
+                <span className="mt-1 line-clamp-2 block rounded-md px-2 py-1 text-xs italic" style={{ background: memoColor(m.color).bg }}>“{m.quotedText}”</span>
                 <span className="mt-1 line-clamp-3 block text-sm">{m.body}</span>
               </button>
             </li>
@@ -818,7 +975,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         </ul>
       )}
       <p className="mt-2 text-xs text-[var(--color-muted)]">{paid
-          ? t("bible.memo.list_hint", "Tap a memo to jump to its verse. Memos are private.")
+          ? t("bible.memo.list_hint", "Tap a memo to jump to its verse. Memos are private unless you share them with your family.")
           : t("bible.memo.list_hint_readonly", "Your Plus plan has ended, so memos are read-only. You can still view and delete them.")}{" "}
         {!paid && (
           <Link href={SUBSCRIBE_HREF} className="font-semibold text-[var(--color-link)]">

@@ -1,0 +1,39 @@
+.memo-print-swatch {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+  vertical-align: middle;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.memo-print-item {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+@media print {
+  @page {
+    margin: 14mm;
+  }
+  /* Print only the memo export (site header/footer are hidden on paper only). */
+  body * {
+    visibility: hidden;
+  }
+  .memo-print,
+  .memo-print * {
+    visibility: visible;
+  }
+  .memo-print {
+    position: absolute;
+    inset: 0 0 auto 0;
+    max-width: none;
+    padding: 0;
+  }
+  .memo-print * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .memo-print-actions {
+    display: none !important;
+  }
+}

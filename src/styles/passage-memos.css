@@ -1,7 +1,12 @@
 .passage-memo-hl {
-  background: #fdecc8;
+  background: rgba(253, 226, 120, 0.55);
   box-shadow: inset 0 -2px 0 #e8b04b;
 }
+.passage-memo-c-yellow { background: rgba(253, 226, 120, 0.55); box-shadow: inset 0 -2px 0 #e8b04b; }
+.passage-memo-c-sky { background: rgba(147, 207, 255, 0.5); box-shadow: inset 0 -2px 0 #3b9be8; }
+.passage-memo-c-green { background: rgba(170, 230, 150, 0.55); box-shadow: inset 0 -2px 0 #4caf50; }
+.passage-memo-c-pink { background: rgba(255, 170, 205, 0.5); box-shadow: inset 0 -2px 0 #e8609a; }
+.passage-memo-c-purple { background: rgba(205, 180, 255, 0.55); box-shadow: inset 0 -2px 0 #8b5cf6; }
 .passage-memo-pending {
   background: #cfe2fb;
 }
@@ -10,7 +15,6 @@
 }
 @keyframes passage-memo-flash {
   0% { background: #f9c97a; }
-  100% { background: #fdecc8; }
 }
 .passage-memo-pencil {
   display: inline-flex;
@@ -43,4 +47,10 @@
   font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
   letter-spacing: normal;
   line-height: 1.45;
+}
+.passage-memo-pencil-shared {
+  width: auto;
+  min-width: 1.15rem;
+  padding: 0 0.15rem;
+  font-size: 0.7rem;
 }
