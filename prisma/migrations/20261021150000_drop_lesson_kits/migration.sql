@@ -6,6 +6,7 @@ ALTER TABLE "FamilyAccount" DROP COLUMN IF EXISTS "sundayLessonKitId";
 ALTER TABLE "FamilyAccount" DROP COLUMN IF EXISTS "sundayWeekStart";
 
 -- Lesson kit tables (children first)
+DROP TABLE IF EXISTS "LessonKitComment"; -- from 20260709120000_lesson_kit_comments (self-FK + FK to LessonKit)
 DROP TABLE IF EXISTS "LessonKitProgress";
 DROP TABLE IF EXISTS "LessonAssignment";
 DROP TABLE IF EXISTS "LessonKitOpen";
