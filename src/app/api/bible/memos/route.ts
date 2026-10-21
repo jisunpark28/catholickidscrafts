@@ -2,6 +2,8 @@ import { loadVisibleMemos, memoAuthorInclude, resolveMemoViewer, toViewerMemoDto
 import { ownerWhere, parseMemoInput } from "@/lib/bible-memos/passage-memos";
 import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
 import { prisma } from "@/lib/prisma";
+import { freeJournalSlotLeft } from "@/lib/daily-mass/faith-journal";
+import { isJournalMemo } from "@/lib/daily-mass/faith-journal-shared";
 import { hasPaidFeatures } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
@@ -33,12 +35,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const key = await getReaderKey();
   if (!isSignedInReaderKey(key)) return signInError();
-  if (!(await hasPaidFeatures(key))) {
-    return NextResponse.json(
-      { error: "Memos are part of the family subscription", code: "subscription_required" },
-      { status: 403 },
-    );
-  }
+  const paid = await hasPaidFeatures(key);
   const viewer = await resolveMemoViewer(key);
   if (!viewer) return signInError();
   let raw: unknown;
@@ -49,6 +46,18 @@ export async function POST(request: Request) {
   }
   const input = parseMemoInput(raw);
   if (typeof input === "string") return NextResponse.json({ error: input }, { status: 400 });
+  // Memos are Plus-only, except a family's first FREE_JOURNAL_LIMIT Faith Journal entries (Daily Mass banner).
+  if (!paid) {
+    const journal = isJournalMemo(input);
+    if (!journal || !(await freeJournalSlotLeft(key))) {
+      return NextResponse.json(
+        journal
+          ? { error: "You've used your free Faith Journal entries", code: "journal_limit" }
+          : { error: "Memos are part of the family subscription", code: "subscription_required" },
+        { status: 403 },
+      );
+    }
+  }
   try {
     const row = await prisma.biblePassageMemo.create({
       data: { ...input, ...ownerWhere(key) },

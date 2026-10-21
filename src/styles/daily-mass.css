@@ -31,3 +31,9 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+/* Faith Journal banner in dark mode */
+.daily-mass-reader.dm-dark .dm-journal {
+  background: #2a2420;
+  border-color: #5a4636;
+}
