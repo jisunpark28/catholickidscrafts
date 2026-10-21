@@ -5,6 +5,8 @@ import { getTrafficSummary } from "@/lib/analytics";
 import { prisma } from "@/lib/prisma";
 import { TrafficStats } from "@/components/admin/TrafficStats";
 import { signOut } from "@/auth";
+import { FamilyTalkReminderCard } from "@/components/admin/FamilyTalkNotice";
+import { familyTalkCoverage } from "@/lib/daily-mass/family-talk-coverage";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
@@ -35,6 +37,8 @@ export default async function AdminDashboardPage() {
           </button>
         </form>
       </div>
+
+      <FamilyTalkReminderCard coverage={familyTalkCoverage()} />
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <div className="border border-[var(--color-border)] bg-white p-6">

@@ -187,6 +187,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("daily_mass.readings.type_gospel", "Type today's Gospel", "mass"),
   sc("daily_mass.family.title", "Family talk", "mass"),
   sc("daily_mass.journal.title", "Our Faith Journal", "mass"),
+  sc("daily_mass.journal.subtitle", "Today's questions · from today's Gospel", "mass"),
   sc("daily_mass.journal.read", "Read", "mass"),
   sc("daily_mass.journal.read_sr", "today's Gospel", "mass"),
   sc("daily_mass.journal.prev", "Previous question", "mass"),
