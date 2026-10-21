@@ -169,12 +169,6 @@ export function buildHomePdfNav(
   if (!paths.has("/gallery")) {
     extra.push({ id: "gallery", label: extraLabels.gallery, href: "/gallery" });
   }
-  if (!paths.has("/curriculum")) {
-    extra.push({ id: "curriculum", label: extraLabels.curriculum, href: "/curriculum" });
-  }
-  if (!hrefs.has("/resources")) {
-    extra.push({ id: "resources", label: extraLabels.resources, href: "/resources" });
-  }
 
   return { groups, extra };
 }
