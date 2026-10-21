@@ -65,7 +65,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
     const update = () => {
       const w = el.clientWidth;
       if (w <= 0) return; // hidden slide: keep last scale
-      const max = window.innerWidth < 640 ? 220 : 340; // smaller on phones so Print stays high
+      const max = window.innerWidth < 640 ? 170 : 300; // smaller on phones so Print stays high
       setScale(Math.min(w, max) / PAGE_W);
     };
     update();
@@ -111,10 +111,10 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
   };
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-10">
       <div ref={wrapRef} className="w-full lg:w-[46%] lg:shrink-0">
         <div
-          className="mx-auto overflow-hidden rounded-xl border border-[#e7e3de] bg-white shadow-lg"
+          className="mx-auto -rotate-2 overflow-hidden rounded-xl border border-[#e7e3de] bg-white shadow-[0_14px_26px_-10px_rgba(0,0,0,0.3)]"
           style={{ width: PAGE_W * scale, height: PAGE_H * scale }}
         >
           <iframe
@@ -135,7 +135,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
         </div>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-4 lg:pr-6">
+      <div className="flex min-w-0 flex-1 flex-col gap-3 lg:gap-4 lg:pr-6">
         <p className="text-sm font-semibold text-[#d35400]">
           {position ? `${position} · ` : null}This Sunday · {sundayLabel}
         </p>
@@ -166,7 +166,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
         <button
           type="button"
           onClick={onPrint}
-          className="w-full rounded-full bg-[#2e7d32] px-8 py-4 text-xl font-bold text-white hover:bg-[#256628] sm:w-auto sm:self-start"
+          className="w-full rounded-full bg-[#2e7d32] px-8 py-4 text-xl font-bold shadow-[0_8px_16px_-8px_rgba(46,125,50,0.6)] text-white hover:bg-[#256628] sm:w-auto sm:self-start"
         >
           🖨 Print this week&apos;s sheet
         </button>
