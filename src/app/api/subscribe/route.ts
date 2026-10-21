@@ -1,4 +1,5 @@
 import { clientIpFromHeaders } from "@/lib/client-ip";
+import { emailConfigured } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
 import { getRateLimitState, recordRateLimitFailure, type RateLimitRule } from "@/lib/rate-limit";
 import { SUBSCRIBER_STATUS, newToken, sendConfirmEmail } from "@/lib/subscribers";
@@ -7,6 +8,8 @@ import { z } from "zod";
 
 /** 8 sign-up attempts per IP per hour. */
 const SUBSCRIBE_RULE: RateLimitRule = { max: 8, windowMs: 60 * 60 * 1000, blockMs: 60 * 60 * 1000 };
+/** Don't send another confirmation to the same address within 10 minutes. */
+const RESEND_COOLDOWN_MS = 10 * 60 * 1000;
 
 const bodySchema = z.object({
   email: z.string().trim().toLowerCase().max(254).email("Please enter a valid email."),
@@ -20,6 +23,10 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
+  if (!emailConfigured()) {
+    return NextResponse.json({ error: "Email sign-up isn't available yet." }, { status: 503 });
+  }
+
   const ip = clientIpFromHeaders(request.headers);
   const key = `subscribe:ip:${ip}`;
   const state = await getRateLimitState([key]);
@@ -36,24 +43,42 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
   }
   const { email, source } = parsed.data;
+  const ok = NextResponse.json({ ok: true });
 
   const existing = await prisma.emailSubscriber.findUnique({ where: { email } });
-  // Already confirmed: answer the same way so the endpoint doesn't reveal who is subscribed.
-  if (existing?.status === SUBSCRIBER_STATUS.confirmed) return NextResponse.json({ ok: true });
+  // Same answer in every case so the endpoint doesn't reveal who is subscribed.
+  if (existing?.status === SUBSCRIBER_STATUS.confirmed) return ok;
+  if (existing && Date.now() - existing.updatedAt.getTime() < RESEND_COOLDOWN_MS) return ok;
 
+  // Consent (time + IP) is recorded when the address is confirmed, not here.
   const confirmToken = newToken();
-  const consent = { consentAt: new Date(), consentIp: ip, source: source ?? "" };
   if (existing) {
     await prisma.emailSubscriber.update({
       where: { id: existing.id },
-      data: { status: SUBSCRIBER_STATUS.pending, confirmToken, unsubscribedAt: null, ...consent },
+      data:
+        existing.status === SUBSCRIBER_STATUS.pending
+          ? { confirmToken }
+          : {
+              status: SUBSCRIBER_STATUS.pending,
+              confirmToken,
+              unsubscribedAt: null,
+              consentAt: null,
+              consentIp: "",
+              source: source ?? "",
+            },
     });
   } else {
     await prisma.emailSubscriber.create({
-      data: { email, status: SUBSCRIBER_STATUS.pending, confirmToken, unsubscribeToken: newToken(), ...consent },
+      data: {
+        email,
+        status: SUBSCRIBER_STATUS.pending,
+        confirmToken,
+        unsubscribeToken: newToken(),
+        source: source ?? "",
+      },
     });
   }
 
   await sendConfirmEmail(email, confirmToken);
-  return NextResponse.json({ ok: true });
+  return ok;
 }

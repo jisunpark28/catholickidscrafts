@@ -10,6 +10,8 @@ type Props = {
   sundayLabel: string;
   gospelRef: string;
   groupInquiryHref: string | null;
+  /** False until RESEND_API_KEY, EMAIL_FROM and MAILING_ADDRESS are set: skip straight to the Plus line. */
+  emailEnabled: boolean;
 };
 
 const PAGE_W = 816; // 8.5in at 96dpi
@@ -40,7 +42,7 @@ function writeEmailState(value: "subscribed" | "dismissed") {
 }
 
 /** Homepage hero: this Sunday's sheet, one big Print button, then an inline email opt-in. */
-export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gospelRef, groupInquiryHref }: Props) {
+export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gospelRef, groupInquiryHref, emailEnabled }: Props) {
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
@@ -168,8 +170,8 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
         </button>
         <p className="text-sm text-[var(--color-muted)]">Free. No sign-in. One letter-size page.</p>
 
-        {printed && !emailState ? <EmailOptIn onDone={choose} /> : null}
-        {printed && emailState ? (
+        {printed && emailEnabled && !emailState ? <EmailOptIn onDone={choose} /> : null}
+        {printed && (emailState || !emailEnabled) ? (
           <p className="text-sm">
             Want seasonal bundles and early access?{" "}
             <Link href="/subscribe" className="font-semibold text-[var(--color-link)]">

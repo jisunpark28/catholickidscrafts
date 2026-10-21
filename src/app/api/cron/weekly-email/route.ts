@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ skipped: "not Friday in America/Toronto" });
   }
   if (!emailConfigured()) {
-    console.warn("[cron weekly-email] RESEND_API_KEY / EMAIL_FROM not set; skipping");
+    console.warn("[cron weekly-email] RESEND_API_KEY / EMAIL_FROM / MAILING_ADDRESS not set; skipping");
     return NextResponse.json({ skipped: "email not configured" });
   }
 
@@ -68,5 +68,10 @@ export async function GET(request: Request) {
 
   const sent = await sendEmailBatch(mails);
   console.log(`[cron weekly-email] ${sheet.slug}: ${sent}/${mails.length} sent`);
+  if (mails.length > 0 && sent === 0) {
+    // Nothing went out (e.g. Resend down): release the claim so the next run retries.
+    await prisma.gospelSheet.update({ where: { id: sheet.id }, data: { emailSentAt: null } });
+    console.warn(`[cron weekly-email] ${sheet.slug}: send failed, will retry next run`);
+  }
   return NextResponse.json({ sheet: sheet.slug, subscribers: mails.length, sent });
 }

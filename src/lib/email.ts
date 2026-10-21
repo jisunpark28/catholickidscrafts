@@ -12,7 +12,10 @@ export type OutgoingEmail = {
 export const SENDER_NAME = "Catholic Kids Crafts";
 
 export function emailConfigured(): boolean {
-  return Boolean(process.env.RESEND_API_KEY?.trim() && process.env.EMAIL_FROM?.trim());
+  // MAILING_ADDRESS is required: CASL needs a postal address in every message.
+  return Boolean(
+    process.env.RESEND_API_KEY?.trim() && process.env.EMAIL_FROM?.trim() && process.env.MAILING_ADDRESS?.trim(),
+  );
 }
 
 function fromHeader(): string {
@@ -52,6 +55,12 @@ export function complianceFooter(unsubscribeUrl: string | null): { html: string;
   };
 }
 
+/** Optional EMAIL_REPLY_TO, sent as Resend `reply_to` on every message. */
+function replyTo(): string | null {
+  const value = process.env.EMAIL_REPLY_TO?.trim() ?? "";
+  return value.includes("@") ? value : null;
+}
+
 function payload(mail: OutgoingEmail) {
   return {
     from: fromHeader(),
@@ -59,6 +68,7 @@ function payload(mail: OutgoingEmail) {
     subject: mail.subject,
     html: mail.html,
     text: mail.text,
+    ...(replyTo() ? { reply_to: replyTo() } : {}),
     ...(mail.unsubscribeUrl
       ? {
           headers: {
@@ -73,7 +83,7 @@ function payload(mail: OutgoingEmail) {
 /** Sends via the Resend REST API. Without RESEND_API_KEY / EMAIL_FROM it logs and skips. */
 export async function sendEmail(mail: OutgoingEmail): Promise<boolean> {
   if (!emailConfigured()) {
-    console.warn(`[email] RESEND_API_KEY or EMAIL_FROM not set; skipped "${mail.subject}"`);
+    console.warn(`[email] RESEND_API_KEY, EMAIL_FROM or MAILING_ADDRESS not set; skipped "${mail.subject}"`);
     return false;
   }
   try {
