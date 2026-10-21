@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Liturgical Vestments Game",
   description:
-    "Dress Father in the right liturgical color for each season—using the Tiny Priest character.",
+    "Dress Father in the right liturgical color for each season—using the Come to Mass! priest character.",
   ...canonicalForPath("/play/liturgical-vestments"),
 };
 

@@ -7,11 +7,11 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
   return [
     {
       slug: "church",
-      title: copyText(copy, "play.game.church.title", "Tiny Priest"),
+      title: copyText(copy, "play.game.church.title", "Come to Mass!"),
       description: copyText(
         copy,
         "play.game.church.description",
-        "Welcome to Tiny Church!",
+        "Welcome to our church!",
       ),
       embedPath: getTinyPriestEmbedPath(),
       ageRange: "All ages",

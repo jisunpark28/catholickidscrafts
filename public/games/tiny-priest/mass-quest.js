@@ -96,6 +96,9 @@
         if (role === "priest") {
             return tp("mass_quest.role_priest", "Priest");
         }
+        if (role === "reader") {
+            return tp("mass_quest.role_reader", "Reader");
+        }
         if (role === "assembly") {
             return tp("mass_quest.role_children", "Children");
         }

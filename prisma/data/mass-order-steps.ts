@@ -1,4 +1,4 @@
-/** Default Mass Order steps for Tiny Priest (stepIndex 0–23). */
+/** Default Mass Order steps for Come to Mass! (stepIndex 0–23). */
 export type MassOrderStepSeed = {
   stepIndex: number;
   part: string;
@@ -63,7 +63,7 @@ export const MASS_ORDER_STEPS: MassOrderStepSeed[] = [
     partEn: "Liturgy of the Word",
     gesture: "idle",
     title: "1st Reading",
-    text: "📖 The first reading is proclaimed from Sacred Scripture.",
+    text: "📖 A reader (lector) proclaims the first reading from the ambo. We sit and listen.",
   },
   {
     stepIndex: 7,
@@ -79,7 +79,7 @@ export const MASS_ORDER_STEPS: MassOrderStepSeed[] = [
     partEn: "Liturgy of the Word",
     gesture: "idle",
     title: "2nd Reading",
-    text: "📜 The second reading is proclaimed from the New Testament letters.",
+    text: "📜 A reader (lector) proclaims the second reading. We sit and listen.",
   },
   {
     stepIndex: 9,
@@ -87,7 +87,7 @@ export const MASS_ORDER_STEPS: MassOrderStepSeed[] = [
     partEn: "Liturgy of the Word",
     gesture: "ourFather",
     title: "Gospel Acclamation",
-    text: "🙌 The assembly rises and acclaims the Gospel.",
+    text: "🙌 All stand and sing the Gospel Acclamation (Alleluia!).",
   },
   {
     stepIndex: 10,
@@ -95,7 +95,7 @@ export const MASS_ORDER_STEPS: MassOrderStepSeed[] = [
     partEn: "Liturgy of the Word",
     gesture: "point",
     title: "Gospel",
-    text: "✝️ The Holy Gospel is proclaimed.",
+    text: "✝️ We stay standing. The priest or deacon proclaims the Holy Gospel, and we sign our forehead, lips and heart.",
   },
   {
     stepIndex: 11,
@@ -151,7 +151,7 @@ export const MASS_ORDER_STEPS: MassOrderStepSeed[] = [
     partEn: "Liturgy of the Eucharist",
     gesture: "lift",
     title: "Eucharistic Prayer",
-    text: "✨ The Church gives thanks and praise through the Eucharistic Prayer.",
+    text: "✨ The priest stands and prays the great prayer of thanks. We kneel and pray with him.",
   },
   {
     stepIndex: 18,
@@ -183,7 +183,7 @@ export const MASS_ORDER_STEPS: MassOrderStepSeed[] = [
     partEn: "Liturgy of the Eucharist",
     gesture: "hold",
     title: "Communion",
-    text: "🍞 The faithful receive Holy Communion with reverence.",
+    text: "✨ \"The Body of Christ.\" \"Amen.\" We receive Jesus in Holy Communion.",
   },
   {
     stepIndex: 22,

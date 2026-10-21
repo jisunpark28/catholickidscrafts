@@ -1,6 +1,6 @@
 /**
- * Celebrant pose sprites — green/purple/light_purple/pink/white chasuble variants.
- * Paths: assets/mass/characters/celebrant/{color}/{pose}.png
+ * Celebrant pose sprites — green/purple/light_purple/pink/white/red chasuble variants.
+ * Paths: assets/mass/characters/celebrant/{color}/{pose}.webp
  */
 (function initCelebrantSprites(global) {
     const POSES = [
@@ -30,6 +30,7 @@
         light_purple: { label: "Light purple", hex: 0x9b7dc4, recolorFrom: "green" },
         pink: { label: "Pink", hex: 0xe8a0b8, recolorFrom: "green" },
         white: { label: "White", hex: 0xf7f4e8, recolorFrom: "green" },
+        red: { label: "Red", hex: 0xb22830, recolorFrom: "green" },
     };
 
     /** Map game gesture keys → celebrant pose sprite id */
@@ -63,10 +64,11 @@
         White: "white",
         "Light purple": "light_purple",
         Pink: "pink",
+        Red: "red",
     };
 
     function posePath(colorKey, poseKey) {
-        return `assets/mass/characters/celebrant/${colorKey}/${poseKey}.png`;
+        return `assets/mass/characters/celebrant/${colorKey}/${poseKey}.webp`;
     }
 
     function resolvePose(gestureKey) {

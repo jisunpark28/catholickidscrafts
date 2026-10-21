@@ -2,31 +2,31 @@ const TINY_PRIEST_BUILD = "20260615";
 
 const CHARACTER_CONFIG = {
     priest: {
-        frontImage: "assets/priest_front.png",
-        backImage: "assets/priest_back.png",
+        frontImage: "assets/priest_front.webp",
+        backImage: "assets/priest_back.webp",
         greetingText: "Father: Peace be with you! We're glad you came to Mass.",
         enterPromptText: "Would you like to come inside and join us for Mass?",
         isGreeter: true,
         farewellText: "See you inside!",
     },
     nun: {
-        frontImage: "assets/nun_front.png",
-        backImage: "assets/nun_back.png",
+        frontImage: "assets/nun_front.webp",
+        backImage: "assets/nun_back.webp",
         greetingText: "Sister: Welcome! We're so glad you came to church today.",
         enterPromptText: "Would you like to come inside and join us for Mass?",
         isGreeter: true,
         farewellText: "See you inside!",
     },
     child_girl: {
-        frontImage: "assets/mass/characters/child_girl_front.png",
-        backImage: "assets/mass/characters/child_girl_back.png",
+        frontImage: "assets/mass/characters/child_girl_front.webp",
+        backImage: "assets/mass/characters/child_girl_back.webp",
         isGreeter: false,
         isPlayer: true,
         pickerLabel: "Girl",
     },
     child_boy: {
-        frontImage: "assets/mass/characters/child_boy_front.png",
-        backImage: "assets/mass/characters/child_boy_back.png",
+        frontImage: "assets/mass/characters/child_boy_front.webp",
+        backImage: "assets/mass/characters/child_boy_back.webp",
         isGreeter: false,
         isPlayer: true,
         pickerLabel: "Boy",
@@ -237,18 +237,18 @@ const GESTURE_NARRATION = {
     lift: "🙌 The gifts are raised high in offering to God.",
     pray: "🙏 Hands are joined in prayerful focus and silence.",
     ourFather: "👐 Arms open gently while praying the Lord's Prayer together.",
-    signCross: "✝️ 성부와 성자와 성령의 이름으로. 아멘.",
-    signCross_father: "✝️ 성부와",
-    signCross_son: "성자와",
-    signCross_spirit: "성령의 이름으로",
-    signCross_amen: "아멘.",
+    signCross: "✝️ In the name of the Father, and of the Son, and of the Holy Spirit. Amen.",
+    signCross_father: "✝️ In the name of the Father,",
+    signCross_son: "and of the Son,",
+    signCross_spirit: "and of the Holy Spirit.",
+    signCross_amen: "Amen.",
     greet: "🙂 The celebrant greets the assembly in the Lord's peace.",
     orans: "🙌 Arms are raised in praise and prayer with the assembly.",
     bless: "✨ The celebrant blesses the people in the name of the Trinity.",
     peace: "🤝 The celebrant invites the sign of peace.",
-    kneel: "🙇 The celebrant kneels in reverence at the holy mysteries.",
-    elevate_host: "🍞 The host is elevated in consecration.",
-    elevate_chalice: "🍷 The chalice is elevated in consecration.",
+    kneel: "🙇 We kneel in reverence at the holy mysteries.",
+    elevate_host: "✨ \"This is my Body.\" The priest lifts up the Body of Christ, then genuflects.",
+    elevate_chalice: "✨ \"This is the chalice of my Blood.\" The priest lifts up the Precious Blood, then genuflects.",
     genuflect: "🙇 A deep reverence before the altar.",
     dismiss: "⛪ The celebrant sends the assembly forth in mission.",
 };
@@ -266,7 +266,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
         partEn: "Introductory Rites",
         gesture: "signCross",
         title: "Sign of the Cross",
-        text: "✝️ 성부와 성자와 성령의 이름으로. 아멘.",
+        text: "✝️ In the name of the Father, and of the Son, and of the Holy Spirit. Amen.",
     },
     {
         part: "1. Introductory Rites",
@@ -308,7 +308,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
         partEn: "Liturgy of the Word",
         gesture: "idle",
         title: "1st Reading",
-        text: "📖 The first reading is proclaimed from Sacred Scripture.",
+        text: "📖 A reader (lector) proclaims the first reading from the ambo. We sit and listen.",
     },
     {
         part: "2. Liturgy of the Word",
@@ -322,21 +322,21 @@ const DEFAULT_MASS_FLOW_STEPS = [
         partEn: "Liturgy of the Word",
         gesture: "idle",
         title: "2nd Reading",
-        text: "📜 The second reading is proclaimed from the New Testament letters.",
+        text: "📜 A reader (lector) proclaims the second reading. We sit and listen.",
     },
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
         gesture: "orans",
         title: "Gospel Acclamation",
-        text: "🙌 The assembly rises and acclaims the Gospel.",
+        text: "🙌 All stand and sing the Gospel Acclamation (Alleluia!).",
     },
     {
         part: "2. Liturgy of the Word",
         partEn: "Liturgy of the Word",
         gesture: "signCross",
         title: "Gospel",
-        text: "✝️ The Holy Gospel is proclaimed with the Sign of the Cross.",
+        text: "✝️ We stay standing. The priest or deacon proclaims the Holy Gospel, and we sign our forehead, lips and heart.",
     },
     {
         part: "2. Liturgy of the Word",
@@ -364,7 +364,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
         partEn: "Liturgy of the Eucharist",
         gesture: "lift",
         title: "Preparation of the Gifts",
-        text: "🍞 Bread and wine are raised and offered at the altar.",
+        text: "🙌 Bread and wine are brought forward and offered at the altar.",
     },
     {
         part: "3. Liturgy of the Eucharist",
@@ -383,23 +383,23 @@ const DEFAULT_MASS_FLOW_STEPS = [
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
-        gesture: "kneel",
+        gesture: "orans",
         title: "Eucharistic Prayer",
-        text: "✨ The Church gives thanks and praise through the Eucharistic Prayer.",
+        text: "✨ The priest stands and prays the great prayer of thanks. We kneel and pray with him.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
         gesture: "elevate_host",
         title: "Elevation of the Host",
-        text: "🍞 Take this, all of you, and eat of it — this is my Body.",
+        text: "✨ \"This is my Body.\" The priest lifts up the Body of Christ, then genuflects.",
     },
     {
         part: "3. Liturgy of the Eucharist",
         partEn: "Liturgy of the Eucharist",
         gesture: "elevate_chalice",
         title: "Elevation of the Chalice",
-        text: "🍷 Take this, all of you, and drink from it — this is my Blood.",
+        text: "✨ \"This is the chalice of my Blood.\" The priest lifts up the Precious Blood, then genuflects.",
     },
     {
         part: "3. Liturgy of the Eucharist",
@@ -427,7 +427,7 @@ const DEFAULT_MASS_FLOW_STEPS = [
         partEn: "Liturgy of the Eucharist",
         gesture: "genuflect",
         title: "Communion",
-        text: "🍞 The celebrant and faithful receive Holy Communion with reverence.",
+        text: "✨ \"The Body of Christ.\" \"Amen.\" We receive Jesus in Holy Communion.",
     },
     {
         part: "4. Concluding Rites",
@@ -474,25 +474,28 @@ async function loadMassOrderSteps() {
         if (!Array.isArray(items) || items.length === 0) {
             return;
         }
-        const byIndex = new Map();
+        // Admin rows use stepIndex 0–23 while the game has 27 steps (Greeting, elevations…),
+        // so match rows to game steps by title, never by index.
+        const byTitle = new Map();
         for (const item of items) {
-            const index = Number(item.stepIndex);
-            if (!Number.isInteger(index) || index < 0 || index >= DEFAULT_MASS_FLOW_STEPS.length) {
-                continue;
+            const key = String(item.title || "").trim().toLowerCase();
+            if (key) {
+                byTitle.set(key, item);
             }
-            byIndex.set(index, item);
         }
-        massFlowSteps = DEFAULT_MASS_FLOW_STEPS.map((def, index) => {
-            const row = byIndex.get(index);
+        // Gestures the admin list cannot express (orans, elevations, genuflect…) stay as the game defines them.
+        const ADMIN_GESTURES = new Set(["idle", "signCross", "pray", "ourFather", "point", "hold", "lift"]);
+        massFlowSteps = DEFAULT_MASS_FLOW_STEPS.map((def) => {
+            const row = byTitle.get(def.title.toLowerCase());
             if (!row) {
                 return { ...def };
             }
             return {
                 part: String(row.part || def.part),
                 partEn: String(row.partEn || def.partEn),
-                title: String(row.title || def.title),
+                title: def.title,
                 text: String(row.text || def.text),
-                gesture: String(row.gesture || def.gesture),
+                gesture: ADMIN_GESTURES.has(def.gesture) ? String(row.gesture || def.gesture) : def.gesture,
             };
         });
     } catch (error) {
@@ -1064,29 +1067,61 @@ function getAdventStart(year) {
     return adventStart;
 }
 
+function torontoDateParts(inputDate) {
+    try {
+        const parts = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/Toronto",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).formatToParts(inputDate);
+        const get = (type) => Number(parts.find((p) => p.type === type).value);
+        return new Date(get("year"), get("month") - 1, get("day"));
+    } catch {
+        return startOfDay(inputDate);
+    }
+}
+
+/** Baptism of the Lord: Sunday after Epiphany (Epiphany = Sunday Jan 2–8); Monday if Epiphany is Jan 7 or 8. */
+function getBaptismOfTheLord(year) {
+    const jan2 = new Date(year, 0, 2);
+    const epiphany = addDays(jan2, (7 - jan2.getDay()) % 7);
+    return epiphany.getDate() >= 7 ? addDays(epiphany, 1) : addDays(epiphany, 7);
+}
+
 function getLiturgicalSeason(inputDate = new Date()) {
-    const date = startOfDay(inputDate);
+    const date = torontoDateParts(inputDate);
     const year = date.getFullYear();
 
     const easterSunday = calculateEasterSunday(year);
     const ashWednesday = addDays(easterSunday, -46);
+    const holyThursday = addDays(easterSunday, -3);
+    const goodFriday = addDays(easterSunday, -2);
     const holySaturday = addDays(easterSunday, -1);
     const pentecost = addDays(easterSunday, 49);
 
     const adventStart = getAdventStart(year);
     const christmasDay = new Date(year, 11, 25);
-    const christmasEnd = new Date(year + 1, 0, 12);
-    const christmasStartPreviousYear = new Date(year - 1, 11, 25);
-    const christmasEndCurrentYear = new Date(year, 0, 12);
+    const baptismOfTheLord = getBaptismOfTheLord(year);
 
-    if ((date >= christmasDay && date <= christmasEnd) || (date >= christmasStartPreviousYear && date <= christmasEndCurrentYear)) {
+    if (date >= christmasDay || date <= baptismOfTheLord) {
         return { season: "Christmas", colorName: "White", colorHex: 0xf7f4e8, vestmentKey: "white" };
     }
-    if (date >= adventStart && date < christmasDay) {
+    if (date >= adventStart) {
         return { season: "Advent", colorName: "Purple", colorHex: 0x7d5db0, vestmentKey: "purple" };
     }
-    if (date >= ashWednesday && date <= holySaturday) {
+    if (date >= ashWednesday && date < holyThursday) {
         return { season: "Lent", colorName: "Purple", colorHex: 0x6f4fa8, vestmentKey: "purple" };
+    }
+    if (date.getTime() === holyThursday.getTime()) {
+        return { season: "Paschal Triduum", day: "Holy Thursday", colorName: "White", colorHex: 0xf7f4e8, vestmentKey: "white" };
+    }
+    if (date.getTime() === goodFriday.getTime()) {
+        return { season: "Paschal Triduum", day: "Good Friday", colorName: "Red", colorHex: 0xb22830, vestmentKey: "red" };
+    }
+    if (date.getTime() === holySaturday.getTime()) {
+        // Holy Saturday: the altar is bare; the Easter Vigil at night is white.
+        return { season: "Paschal Triduum", day: "Holy Saturday", colorName: "Purple", colorHex: 0x6f4fa8, vestmentKey: "purple" };
     }
     if (date >= easterSunday && date <= pentecost) {
         return { season: "Easter", colorName: "White", colorHex: 0xffffff, vestmentKey: "white" };
@@ -1575,7 +1610,7 @@ function createVoxelChurch(container) {
     sanctuaryCrucifixSprite.renderOrder = 1;
     sanctuaryCrossGroup.add(sanctuaryCrucifixSprite);
 
-    textureLoader.load("assets/sanctuary-crucifix.png", (crossTexture) => {
+    textureLoader.load("assets/sanctuary-crucifix.webp", (crossTexture) => {
         if ("colorSpace" in crossTexture) {
             crossTexture.colorSpace = THREE.SRGBColorSpace;
         }
@@ -2030,9 +2065,56 @@ function createVoxelChurch(container) {
 
     function narrateGesture(name, prefix = "") {
         const message = GESTURE_NARRATION[name] || GESTURE_NARRATION.idle;
-        const merged = prefix ? `${prefix} ${message}` : message;
+        const merged = prefix ? (prefix.includes(message) ? prefix : `${prefix} ${message}`) : message;
         setLiturgySubtitle(merged);
+        showElevationCard(name);
         setHudButtonsState(name, actionState.massActive);
+    }
+
+    const ELEVATION_CARDS = {
+        elevate_host: { src: "assets/mass/host.svg", label: "The Body of Christ" },
+        elevate_chalice: { src: "assets/mass/chalice.svg", label: "The Precious Blood" },
+    };
+
+    function showElevationCard(name) {
+        const card = document.getElementById("elevation-card");
+        if (!card) {
+            return;
+        }
+        const info = ELEVATION_CARDS[name];
+        if (!info) {
+            card.hidden = true;
+            return;
+        }
+        const img = card.querySelector("img");
+        const label = card.querySelector(".elevation-card-label");
+        if (img) {
+            img.src = info.src;
+            img.alt = info.label;
+        }
+        if (label) {
+            label.textContent = info.label;
+        }
+        card.hidden = false;
+    }
+
+    let genuflectTimer = null;
+
+    /** After each elevation the priest genuflects in adoration. */
+    function scheduleGenuflectAfterElevation(name) {
+        if (genuflectTimer) {
+            clearTimeout(genuflectTimer);
+            genuflectTimer = null;
+        }
+        if (name !== "elevate_host" && name !== "elevate_chalice") {
+            return;
+        }
+        genuflectTimer = setTimeout(() => {
+            genuflectTimer = null;
+            if (actionState.currentGesture === name) {
+                setCelebrantPose("genuflect");
+            }
+        }, 2200);
     }
 
     function shouldShowOverlayHands() {
@@ -2084,6 +2166,7 @@ function createVoxelChurch(container) {
         syncOverlayArmsVisibility(name);
         narrateGesture(name, prefix);
         setCelebrantPose(name);
+        scheduleGenuflectAfterElevation(name);
         setMassFlowStepState(actionState.currentMassStepIndex, actionState.massActive);
     }
 
@@ -2366,7 +2449,7 @@ function createVoxelChurch(container) {
                 actionState.currentGesture = "pray";
                 setGesturePose("pray");
                 setCelebrantPose("pray");
-                narrateGesture("pray", "✝️ 성호를 마친 뒤,");
+                narrateGesture("pray", "✝️ After the Sign of the Cross,");
             }
         }
     }

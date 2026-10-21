@@ -24,6 +24,6 @@ export const SITE_COPY_GROUPS = [
   { id: "play_facetemoji", label: "Face to Emoji" },
   { id: "legal", label: "About & legal pages" },
   { id: "taxonomy", label: "Season labels & filters" },
-  { id: "game_tiny_priest", label: "Tiny Priest game" },
+  { id: "game_tiny_priest", label: "Come to Mass! game" },
   { id: "game_hangman", label: "Hangman game" },
 ] as const;

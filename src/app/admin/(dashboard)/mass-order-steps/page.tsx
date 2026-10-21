@@ -15,7 +15,7 @@ export default async function AdminMassOrderStepsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Mass Order (Tiny Priest)</h1>
+      <h1 className="text-2xl font-bold">Mass Order (Come to Mass!)</h1>
       <p className="mt-2 text-sm text-[var(--color-muted)]">
         {steps.length} steps — text shown in the sanctuary when players use Mass Order.
       </p>

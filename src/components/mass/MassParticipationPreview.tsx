@@ -19,6 +19,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 function roleLabel(role: MassSpeakerRole): string {
   if (role === "priest") return "Priest";
+  if (role === "reader") return "Reader";
   if (role === "assembly") return "Children";
   return "Direction";
 }
@@ -54,7 +55,7 @@ function MassLineRow({
     <li className={lineClass} data-line-id={line.id}>
       {!isRubric && (
         <div className="mass-line__icon" aria-hidden>
-          {line.role === "priest" ? (
+          {line.role === "priest" || line.role === "reader" ? (
             <MassSpeakerPriestIcon size={44} />
           ) : (
             <MassSpeakerChildrenIcon size={44} />

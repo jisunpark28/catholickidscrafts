@@ -1,6 +1,7 @@
 /** Preview subset — St. Andrew Kim Sunday School projector flow. */
 
-export type MassSpeakerRole = "priest" | "assembly" | "rubric";
+/** "reader" = the lector (e.g. "The word of the Lord." after a reading). */
+export type MassSpeakerRole = "priest" | "reader" | "assembly" | "rubric";
 
 export type MassLiturgyPartId =
   | "intro"
@@ -78,7 +79,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "intro-6",
     section: "intro",
     role: "assembly",
-    text: "I confess to almighty God and to you, my brothers and sisters, that I have greatly sinned, in my thoughts and in my words, in what I have done and in what I have failed to do,",
+    text: "I confess to almighty God and to you, my brothers and sisters, that I have greatly sinned… (we pray the whole “I confess” together)",
     revealable: true,
   },
   {
@@ -91,7 +92,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "intro-8",
     section: "intro",
     role: "assembly",
-    text: "through my fault, through my fault, through my most grievous fault; therefore I ask blessed Mary ever-Virgin, all the Angels and Saints, and you, my brothers and sisters, to pray for me to the Lord our God.",
+    text: "…through my fault, through my fault, through my most grievous fault…",
     revealable: true,
   },
   {
@@ -125,23 +126,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "intro-12",
     section: "intro",
     role: "assembly",
-    text: "Glory to God in the highest, and on earth peace to people of good will. We praise you, we bless you, we adore you, we glorify you. We give you thanks for your great glory, Lord God, heavenly King, O God, almighty Father.",
-    revealable: true,
-    skipWhen: "advent-lent",
-  },
-  {
-    id: "intro-13",
-    section: "intro",
-    role: "assembly",
-    text: "Lord Jesus Christ, only Begotten Son, Lord God, Lamb of God, Son of the Father, you take away the sins of the world, have mercy on us; you take away the sins of the world, receive our prayer; you are seated at the right hand of the Father; have mercy on us.",
-    revealable: true,
-    skipWhen: "advent-lent",
-  },
-  {
-    id: "intro-14",
-    section: "intro",
-    role: "assembly",
-    text: "For you alone are the Holy One, you alone are the Lord, you alone are the Most High, Jesus Christ, with the Holy Spirit, in the glory of God the Father. Amen.",
+    text: "Glory to God in the highest, and on earth peace to people of good will… (we sing or say the whole Gloria)",
     revealable: true,
     skipWhen: "advent-lent",
   },
@@ -149,13 +134,13 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "intro-14b",
     section: "intro",
     role: "rubric",
-    text: "All stand. The priest prays the Opening Prayer (Collect).",
+    text: "The priest prays the Opening Prayer (Collect).",
   },
   {
     id: "intro-15",
     section: "intro",
     role: "priest",
-    text: "Let us pray. … Through our Lord Jesus Christ, your Son, who lives and reigns with you in the unity of the Holy Spirit, one God, for ever and ever.",
+    text: "Let us pray. … for ever and ever.",
   },
   {
     id: "intro-16",
@@ -179,7 +164,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
   {
     id: "word-2",
     section: "word",
-    role: "priest",
+    role: "reader",
     text: "The word of the Lord.",
   },
   {
@@ -205,7 +190,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "word-3d",
     section: "word",
     role: "rubric",
-    text: "Sing the Gospel Acclamation.",
+    text: "All stand and sing the Gospel Acclamation (Alleluia!). In Lent we sing a different acclamation.",
   },
   {
     id: "word-4",
@@ -274,21 +259,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "word-9b3",
     section: "word",
     role: "assembly",
-    text: "I believe in God, the Father almighty, Creator of heaven and earth, and in Jesus Christ, his only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate,",
-    revealable: true,
-  },
-  {
-    id: "word-9b4",
-    section: "word",
-    role: "assembly",
-    text: "was crucified, died and was buried; he descended into hell; on the third day he rose again from the dead; he ascended into heaven, and is seated at the right hand of God the Father almighty; from there he will come to judge the living and the dead.",
-    revealable: true,
-  },
-  {
-    id: "word-9b5",
-    section: "word",
-    role: "assembly",
-    text: "I believe in the Holy Spirit, the holy catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.",
+    text: "I believe in God, the Father almighty, Creator of heaven and earth… (we pray the whole Creed together)",
     revealable: true,
   },
   {
@@ -423,7 +394,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "thanks-5",
     section: "thanksgiving",
     role: "priest",
-    text: "Through him, and with him, and in him, O God, almighty Father, in the unity of the Holy Spirit, all glory and honour is yours, forever and ever.",
+    text: "Through him, and with him, and in him… for ever and ever.",
   },
   {
     id: "thanks-6",
@@ -455,7 +426,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "comm-2b",
     section: "communion",
     role: "priest",
-    text: "Deliver us, Lord, we pray, from every evil, graciously grant peace in our day, that, by the help of your mercy, we may be always free from sin and safe from all distress, as we wait the blessed hope and the coming of our Saviour, Jesus Christ.",
+    text: "Deliver us, Lord, we pray, from every evil… the coming of our Saviour, Jesus Christ.",
   },
   {
     id: "comm-3",
@@ -468,7 +439,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "comm-3b",
     section: "communion",
     role: "priest",
-    text: "Lord Jesus Christ, who said to your Apostles: Peace I leave you; my peace I give you. Look not on our sins, but on the faith of your Church, and graciously grant her peace and unity in accordance with your will. Who live and reign for ever and ever.",
+    text: "Lord Jesus Christ, who said to your Apostles: Peace I leave you; my peace I give you… for ever and ever.",
   },
   {
     id: "comm-3c",
@@ -557,7 +528,7 @@ export const MASS_PREVIEW_LINES: MassParticipationLine[] = [
     id: "end-2b",
     section: "concluding",
     role: "rubric",
-    text: "All stand for the final blessing.",
+    text: "The priest gives the final blessing.",
   },
   {
     id: "end-3",
