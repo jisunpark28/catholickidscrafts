@@ -40,7 +40,8 @@ export async function GET(request: Request) {
     orderBy: [{ startVerse: "asc" }, { createdAt: "asc" }],
     take: 500,
   });
-  return NextResponse.json({ memos: rows.map(toMemoDto) });
+  const total = await prisma.biblePassageMemo.count({ where: ownerWhere(key) });
+  return NextResponse.json({ memos: rows.map(toMemoDto), total });
 }
 
 export async function POST(request: Request) {

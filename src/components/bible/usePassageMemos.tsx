@@ -2,7 +2,7 @@
 
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { PLUS_PRICE_LABEL } from "@/lib/subscription/plan-copy";
-import type { PassageMemoDto, PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
+import { MEMO_BODY_MAX, formatMemoDate, type PassageMemoDto, type PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
 import {
   offsetsToVerseRange,
   verseAtOffset,
@@ -25,6 +25,7 @@ type Draft = { start: number; end: number; startVerse: number; endVerse: number;
 type Anchor = { top: number; left: number; bottom: number };
 
 const SUBSCRIBE_HREF = "/subscribe";
+const MY_MEMOS_HREF = "/account/memos";
 const POPOVER_W = 340;
 
 function ciOf(node: Node | null): number | null {
@@ -94,6 +95,9 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
   const [tapMode, setTapMode] = useState<{ firstVerse: number | null } | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [flashId, setFlashId] = useState<string | null>(null);
+  const [total, setTotal] = useState(0);
+  const [viewMode, setViewMode] = useState<"view" | "edit" | "confirm">("view");
+  const [editBody, setEditBody] = useState("");
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
@@ -109,8 +113,10 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
     let cancelled = false;
     fetch(`/api/bible/memos?bookSlug=${encodeURIComponent(bookSlug)}&chapter=${chapter}`)
       .then((r) => (r.ok ? r.json() : { memos: [] }))
-      .then((d: { memos?: PassageMemoDto[] }) => {
-        if (!cancelled) setMemos(d.memos ?? []);
+      .then((d: { memos?: PassageMemoDto[]; total?: number }) => {
+        if (cancelled) return;
+        setMemos(d.memos ?? []);
+        setTotal(d.total ?? d.memos?.length ?? 0);
       })
       .catch(() => {});
     return () => {
@@ -180,6 +186,8 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       setEditor(null);
       setUpsell(null);
       setViewing(null);
+      setViewMode("view");
+      setEditBody("");
       setSelection(null);
       setBody("");
       setError("");
@@ -326,6 +334,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         return;
       }
       setMemos((list) => [...list, data.memo!].sort((a, b) => a.startVerse - b.startVerse));
+      setTotal((n) => n + 1);
       setStatus(t("bible.memo.saved", "Memo saved."));
       closeAll();
     } catch {
@@ -340,13 +349,52 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       const res = await fetch(`/api/bible/memos/${encodeURIComponent(memo.id)}`, { method: "DELETE" });
       if (res.ok) {
         setMemos((list) => list.filter((m) => m.id !== memo.id));
+        setTotal((n) => Math.max(0, n - 1));
         setStatus(t("bible.memo.deleted", "Memo deleted."));
         closeAll();
       } else {
-        setError(t("bible.memo.error", "Could not save memo. Please try again."));
+        setError(t("bible.memo.delete_error", "Could not delete memo. Please try again."));
       }
     },
     [t, closeAll],
+  );
+
+  const update = useCallback(
+    async (memo: PassageMemoDto) => {
+      const next = editBody.trim();
+      if (!next) {
+        setError(t("bible.memo.empty", "Write a memo first."));
+        return;
+      }
+      setSaving(true);
+      setError("");
+      try {
+        const res = await fetch(`/api/bible/memos/${encodeURIComponent(memo.id)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ body: next }),
+        });
+        const data = (await res.json().catch(() => ({}))) as { memo?: PassageMemoDto; error?: string };
+        if (!res.ok || !data.memo) {
+          setError(
+            res.status === 403
+              ? t("bible.memo.edit_locked", "Editing memos needs Plus.")
+              : data.error ?? t("bible.memo.error", "Could not save memo. Please try again."),
+          );
+          return;
+        }
+        const saved = data.memo;
+        setMemos((list) => list.map((m) => (m.id === saved.id ? saved : m)));
+        setViewing((v) => (v ? { ...v, memo: saved } : v));
+        setViewMode("view");
+        setStatus(t("bible.memo.saved", "Memo saved."));
+      } catch {
+        setError(t("bible.memo.error", "Could not save memo. Please try again."));
+      } finally {
+        setSaving(false);
+      }
+    },
+    [editBody, t],
   );
 
   const jumpTo = useCallback(
@@ -394,6 +442,8 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
             if (anchor) {
               setSelection(null);
               setEditor(null);
+              setViewMode("view");
+              setError("");
               setViewing({ memo, anchor });
             }
           }}
@@ -527,12 +577,15 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           ref={textareaRef}
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          maxLength={2000}
+          maxLength={MEMO_BODY_MAX}
           rows={isMobile ? 3 : 3}
           placeholder={t("bible.memo.placeholder", "Write what this passage means to you…")}
           className="mt-2 w-full rounded-xl border border-[#e3d9cc] px-3 py-2 text-sm focus:border-[#d9580f] focus:outline-none focus:ring-2 focus:ring-[#d9580f]/30"
           aria-describedby={error ? `${dialogId}-err` : undefined}
         />
+        <p className="mt-1 text-right text-xs text-[var(--color-muted)]">
+          {body.length} / {MEMO_BODY_MAX}
+        </p>
         {isMobile && <p className="mt-1 text-xs text-[var(--color-muted)]">{t("bible.memo.tip", "Tip: long-press to select words, or tap the first verse, then the last verse.")}</p>}
         {error && (
           <p id={`${dialogId}-err`} role="alert" className="mt-1 text-sm text-red-600">
@@ -565,16 +618,125 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         <blockquote className="mt-2 max-h-28 overflow-y-auto rounded-r-lg border-l-4 border-[#e8b04b] bg-[#fffaeb] px-3 py-2 text-sm italic">
           “{viewing.memo.quotedText}”
         </blockquote>
-        <p className="mt-2 whitespace-pre-wrap text-sm">{viewing.memo.body}</p>
-        {error && <p role="alert" className="mt-1 text-sm text-red-600">{error}</p>}
-        <div className="mt-3 flex justify-between gap-2">
-          <button type="button" className="text-sm font-semibold text-red-600 hover:underline" onClick={() => void remove(viewing.memo)}>
-            {t("bible.memo.delete", "Delete memo")}
-          </button>
-          <button type="button" className={btnGhost} onClick={() => closeAll()} autoFocus>
-            {t("bible.memo.close", "Close")}
-          </button>
-        </div>
+        {viewMode === "edit" ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void update(viewing.memo);
+            }}
+          >
+            <label htmlFor={`${dialogId}-edit`} className="sr-only">
+              {t("bible.memo.eyebrow", "Memo")}
+            </label>
+            <textarea
+              id={`${dialogId}-edit`}
+              value={editBody}
+              onChange={(e) => setEditBody(e.target.value)}
+              maxLength={MEMO_BODY_MAX}
+              rows={4}
+              autoFocus
+              className="mt-2 w-full rounded-xl border border-[#d9580f] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#d9580f]/30"
+            />
+            <div className="mt-1 flex justify-between text-xs text-[var(--color-muted)]">
+              <span>
+                {t("bible.memo.last_edited", "Last edited")} {formatMemoDate(viewing.memo.updatedAt)}
+              </span>
+              <span>
+                {editBody.length} / {MEMO_BODY_MAX}
+              </span>
+            </div>
+            {error && <p role="alert" className="mt-1 text-sm text-red-600">{error}</p>}
+            <div className="mt-3 flex gap-2">
+              <button type="submit" disabled={saving} className={btnPrimary}>
+                {saving ? t("bible.memo.saving", "Saving…") : t("bible.memo.save", "Save")}
+              </button>
+              <button
+                type="button"
+                className={btnGhost}
+                onClick={() => {
+                  setViewMode("view");
+                  setError("");
+                }}
+              >
+                {t("bible.memo.cancel", "Cancel")}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <>
+            <p className="mt-2 whitespace-pre-wrap text-sm">{viewing.memo.body}</p>
+            <p className="mt-2 text-xs text-[var(--color-muted)]">
+              {t("bible.memo.created", "Created")} {formatMemoDate(viewing.memo.createdAt)}
+              {viewing.memo.updatedAt !== viewing.memo.createdAt && (
+                <>
+                  {" · "}
+                  {t("bible.memo.last_edited", "Last edited")} {formatMemoDate(viewing.memo.updatedAt)}
+                </>
+              )}
+            </p>
+            {error && <p role="alert" className="mt-1 text-sm text-red-600">{error}</p>}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              {paid ? (
+                <button
+                  type="button"
+                  className={btnPrimary}
+                  onClick={() => {
+                    setEditBody(viewing.memo.body);
+                    setError("");
+                    setViewMode("edit");
+                  }}
+                >
+                  {t("bible.memo.edit", "Edit")}
+                </button>
+              ) : (
+                <Link href={SUBSCRIBE_HREF} className={`${btnGhost} text-[var(--color-muted)]`}>
+                  {lock} {t("bible.memo.edit_plus", "Edit · Plus")}
+                </Link>
+              )}
+              <button
+                type="button"
+                className={`${btnGhost} text-red-600`}
+                onClick={() => setViewMode("confirm")}
+              >
+                {t("bible.memo.delete_short", "Delete")}
+              </button>
+              <button type="button" className="ml-auto text-sm font-semibold text-[var(--color-muted)] hover:underline" onClick={() => closeAll()}>
+                {t("bible.memo.close", "Close")}
+              </button>
+            </div>
+            {viewMode === "confirm" && (
+              <div role="alertdialog" className="mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm">
+                {t("bible.memo.delete_confirm", "Delete this memo? This can't be undone.")}
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    autoFocus
+                    className="rounded-full bg-red-700 px-4 py-1.5 text-sm font-bold text-white hover:bg-red-800"
+                    onClick={() => void remove(viewing.memo)}
+                  >
+                    {t("bible.memo.delete", "Delete memo")}
+                  </button>
+                  <button type="button" className={btnGhost} onClick={() => setViewMode("view")}>
+                    {t("bible.memo.keep", "Keep")}
+                  </button>
+                </div>
+              </div>
+            )}
+            {!paid && (
+              <p className="mt-2 text-xs text-[var(--color-muted)]">
+                {t("bible.memo.plan_ended", "Your Plus plan has ended.")}{" "}
+                <Link href={SUBSCRIBE_HREF} className="font-semibold text-[var(--color-link)]">
+                  {t("bible.memo.renew", "Renew")} · {PLUS_PRICE_LABEL}/month
+                </Link>
+              </p>
+            )}
+          </>
+        )}
+        <p className="mt-3 text-right text-xs">
+          <Link href={MY_MEMOS_HREF} className="font-semibold text-[var(--color-link)]">
+            {t("bible.memo.my_memos", "My memos")} ({total}) →
+          </Link>
+        </p>
       </>,
     );
 
@@ -627,6 +789,9 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       <h2 id={`${dialogId}-list`} className="text-sm font-bold text-[var(--color-ink)]">
         {t("bible.memo.list_title", "My memos in this chapter")}{" "}
         <span className="font-normal text-[var(--color-muted)]">({memos.length})</span>
+        <Link href={MY_MEMOS_HREF} className="float-right text-xs font-semibold text-[var(--color-link)]">
+          {t("bible.memo.my_memos", "My memos")} ({total}) →
+        </Link>
       </h2>
       {memos.length === 0 ? (
         <p className="mt-2 text-sm text-[var(--color-muted)]">
