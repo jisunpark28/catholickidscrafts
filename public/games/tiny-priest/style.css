@@ -1363,3 +1363,205 @@ body:fullscreen .mass-navigator.is-active {
 @media (max-width: 520px) {
     .elevation-card img { width: 72px; height: 72px; }
 }
+
+/* ===== Phase 2: phones & tablets ===== */
+.mass-nav-sheet-toggle {
+    display: none;
+}
+
+.touch-controls {
+    display: none;
+}
+
+.touch-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    border: 2px solid rgba(150, 116, 86, 0.45);
+    background: rgba(255, 252, 248, 0.88);
+    color: #5d4037;
+    font-size: 1.25rem;
+    font-weight: 800;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    box-shadow: 0 4px 12px rgba(82, 58, 44, 0.14);
+}
+
+.touch-btn.is-pressed {
+    background: rgba(228, 248, 220, 0.98);
+    border-color: rgba(97, 149, 91, 0.8);
+    transform: scale(0.95);
+}
+
+.touch-jump {
+    font-size: 0.85rem;
+}
+
+@media (pointer: coarse), (max-width: 700px) {
+    body.in-church .touch-controls {
+        display: grid;
+        position: fixed;
+        left: max(10px, env(safe-area-inset-left));
+        bottom: calc(var(--sheet-collapsed, 0px) + 96px + env(safe-area-inset-bottom));
+        z-index: 150;
+        grid-template-columns: repeat(3, 56px);
+        grid-template-rows: repeat(2, 56px);
+        gap: 6px;
+        grid-template-areas:
+            ". up jump"
+            "left down right";
+    }
+    .touch-up { grid-area: up; }
+    .touch-left { grid-area: left; }
+    .touch-right { grid-area: right; }
+    .touch-down { grid-area: down; }
+    .touch-jump { grid-area: jump; border-radius: 50%; }
+
+    .three-container canvas {
+        touch-action: none;
+    }
+}
+
+@media (max-width: 700px) {
+    body {
+        --sheet-collapsed: 58px;
+    }
+
+    /* Mass Order: bottom sheet instead of a side panel covering 2/3 of the screen. */
+    .mass-navigator {
+        top: auto;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: auto;
+        max-height: var(--sheet-collapsed);
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        border-radius: 18px 18px 0 0;
+        border: 1px solid rgba(150, 116, 86, 0.4);
+        border-bottom: none;
+        overflow: hidden;
+        transform: translateY(16px);
+        box-shadow: 0 -6px 20px rgba(82, 58, 44, 0.14);
+        transition:
+            max-height 0.3s ease,
+            opacity 0.28s ease,
+            transform 0.28s ease;
+    }
+
+    .mass-navigator.is-active,
+    body:fullscreen .mass-navigator.is-active {
+        top: auto;
+        right: 0;
+        width: auto;
+        max-height: var(--sheet-collapsed);
+        transform: translateY(0);
+    }
+
+    .mass-navigator.is-active.is-expanded {
+        max-height: min(70svh, 560px);
+        overflow-y: auto;
+        z-index: 260;
+    }
+
+    .mass-navigator::before {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        width: 40px;
+        height: 4px;
+        margin-left: -20px;
+        border-radius: 2px;
+        background: rgba(150, 116, 86, 0.35);
+    }
+
+    .mass-nav-header {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+        gap: 6px;
+        flex-wrap: nowrap;
+    }
+
+    .mass-nav-title {
+        display: none;
+    }
+
+    .mass-nav-sheet-toggle {
+        display: inline-flex;
+        align-items: center;
+        min-height: 40px;
+        padding: 0 9px;
+        border: 1px solid rgba(160, 121, 86, 0.5);
+        border-radius: 10px;
+        background: #fff;
+        color: #5d4037;
+        font-size: 0.85rem;
+        font-weight: 800;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .mass-nav-header-actions {
+        flex-wrap: nowrap;
+        gap: 6px;
+    }
+
+    .mass-nav-quest-btn,
+    .mass-nav-mass-btn {
+        min-height: 40px;
+        padding: 0 8px;
+        font-size: 0.72rem;
+        border-radius: 10px;
+        white-space: nowrap;
+    }
+
+    .mass-nav-step-btn,
+    .mass-nav-part-btn {
+        min-height: 44px;
+        font-size: 0.9rem;
+    }
+
+    /* Subtitle / quest panel sit above the collapsed sheet, full width. */
+    .liturgy-hud {
+        right: 0;
+        bottom: calc(var(--sheet-collapsed) + 8px + env(safe-area-inset-bottom));
+        padding: 0 8px;
+    }
+
+    .liturgy-subtitle {
+        font-size: 0.9rem;
+        line-height: 1.35;
+        max-height: 4.2em;
+        overflow-y: auto;
+        pointer-events: auto;
+    }
+
+    .mass-quest-text {
+        font-size: 1rem;
+    }
+
+    .mass-quest-action {
+        min-height: 44px;
+        font-size: 0.95rem;
+    }
+
+    /* Keep the Host/chalice card clear of the D-pad (left). */
+    .elevation-card {
+        padding: 6px 12px 6px;
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .mass-nav-header-actions {
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .church-exit-btn {
+        top: max(8px, env(safe-area-inset-top));
+        left: max(8px, env(safe-area-inset-left));
+        min-height: 40px;
+    }
+}

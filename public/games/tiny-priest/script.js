@@ -98,7 +98,9 @@ function applyTinyPriestStaticCopy() {
     }
     const massHint = document.querySelector(".mass-nav-hint");
     if (massHint) {
-        massHint.textContent = tpCopy("mass.hint", massHint.textContent);
+        massHint.textContent = isTouchLayout()
+            ? tpCopy("mass.hint_touch", "Tap the floor to walk · tap a step to jump there")
+            : tpCopy("mass.hint", massHint.textContent);
     }
     const questToggle = document.getElementById("mass-quest-toggle");
     if (questToggle) {
@@ -222,6 +224,33 @@ function setPlayerCharacter(key) {
     }
     APP_STATE.playerCharacter = key;
     updateEntryPlayerSprite();
+}
+
+/** Phones/tablets: touch controls, lighter rendering, touch wording. */
+function isTouchLayout() {
+    try {
+        return window.matchMedia("(pointer: coarse)").matches || window.matchMedia("(max-width: 700px)").matches;
+    } catch {
+        return false;
+    }
+}
+
+function isCoarsePointer() {
+    try {
+        return window.matchMedia("(pointer: coarse)").matches;
+    } catch {
+        return false;
+    }
+}
+
+/** Portrait screens: widen the vertical FOV so the child does not fill the screen and the altar stays visible. */
+function fovForAspect(aspect) {
+    if (aspect >= 1) {
+        return 58;
+    }
+    const targetHorizontal = THREE.MathUtils.degToRad(64);
+    const v = 2 * Math.atan(Math.tan(targetHorizontal / 2) / aspect);
+    return THREE.MathUtils.clamp(THREE.MathUtils.radToDeg(v), 58, 82);
 }
 
 const THREE_CDN_FALLBACKS = [
@@ -695,6 +724,24 @@ function setMassNavigatorVisible(isVisible) {
     }
     nav.classList.toggle("is-active", isVisible);
     nav.setAttribute("aria-hidden", isVisible ? "false" : "true");
+    document.body.classList.toggle("in-church", isVisible);
+    if (!isVisible) {
+        setMassSheetExpanded(false);
+    }
+}
+
+/** Phones: the Mass Order is a bottom sheet (collapsed = one row; expanded = step list). */
+function setMassSheetExpanded(expanded) {
+    const nav = document.getElementById("mass-navigator");
+    const toggle = document.getElementById("mass-nav-sheet-toggle");
+    if (!nav) {
+        return;
+    }
+    nav.classList.toggle("is-expanded", expanded);
+    if (toggle) {
+        toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+        toggle.textContent = expanded ? "Steps ▼" : "Steps ▲";
+    }
 }
 
 function bindMassNavigator() {
@@ -707,6 +754,10 @@ function bindMassNavigator() {
     }
 
     nav.addEventListener("click", (event) => {
+        if (event.target.closest("#mass-nav-sheet-toggle")) {
+            setMassSheetExpanded(!nav.classList.contains("is-expanded"));
+            return;
+        }
         const button = event.target.closest(".mass-nav-step-btn[data-step-index], .mass-nav-part-btn[data-step-index]");
         if (!button || !APP_STATE.threeWorld) {
             return;
@@ -716,6 +767,9 @@ function bindMassNavigator() {
             return;
         }
         APP_STATE.threeWorld.jumpToMassStep(stepIndex);
+        if (window.matchMedia && window.matchMedia("(max-width: 700px)").matches) {
+            setMassSheetExpanded(false);
+        }
     });
 
     APP_STATE.massNavBound = true;
@@ -1139,13 +1193,16 @@ function createVoxelChurch(container) {
     scene.background = new THREE.Color(0xf5f5dc);
     scene.fog = new THREE.Fog(0xf5f5dc, 14, 44);
 
-    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 52);
+    const initialAspect = window.innerWidth / window.innerHeight;
+    const camera = new THREE.PerspectiveCamera(fovForAspect(initialAspect), initialAspect, 0.1, 52);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // Phones: no MSAA, lower pixel ratio and no shadow maps keep the frame rate up and the battery cooler.
+    const lightweight = isCoarsePointer();
+    const renderer = new THREE.WebGLRenderer({ antialias: !lightweight, powerPreference: lightweight ? "low-power" : "default" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lightweight ? 1.5 : 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = !lightweight;
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
 
@@ -2376,6 +2433,9 @@ function createVoxelChurch(container) {
             event.preventDefault();
         }
         keyState.add(event.code);
+        if (typeof cancelWalkTarget === "function") {
+            cancelWalkTarget();
+        }
 
         if (event.repeat) {
             return;
@@ -2411,6 +2471,7 @@ function createVoxelChurch(container) {
         keyState.delete(event.code);
     }
 
+    let cancelWalkTarget = null;
     window.addEventListener("keydown", onKeyDown, { passive: false });
     window.addEventListener("keyup", onKeyUp);
 
@@ -2582,6 +2643,7 @@ function createVoxelChurch(container) {
         const hit = raycaster.intersectObjects(allTargets, false)[0];
         if (!hit) {
             hideHotspotModal();
+            setWalkTargetFromRay();
             return;
         }
 
@@ -2597,6 +2659,77 @@ function createVoxelChurch(container) {
 
     renderer.domElement.addEventListener("pointerdown", onPointerDown);
 
+    // Tap the floor to walk there (phones and mouse). Any key or D-pad press cancels it.
+    const walkTarget = { active: false, x: 0, z: 0 };
+    const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const floorHit = new THREE.Vector3();
+
+    function setWalkTargetFromRay() {
+        floorPlane.constant = -playerRig.position.y;
+        if (!raycaster.ray.intersectPlane(floorPlane, floorHit)) {
+            return;
+        }
+        const dx = floorHit.x - playerRig.position.x;
+        const dz = floorHit.z - playerRig.position.z;
+        if (Math.hypot(dx, dz) < 0.6 || Math.hypot(dx, dz) > 30) {
+            return;
+        }
+        walkTarget.active = true;
+        walkTarget.x = floorHit.x;
+        walkTarget.z = floorHit.z;
+        spawnSparkles(floorHit.clone(), 0xfff1b8);
+    }
+
+    // On-screen D-pad + Jump: presses feed the same key codes the keyboard uses.
+    function bindTouchControls() {
+        const pad = document.getElementById("touch-controls");
+        if (!pad) {
+            return () => {};
+        }
+        const active = new Map();
+        const press = (event) => {
+            const btn = event.target.closest("[data-key]");
+            if (!btn) {
+                return;
+            }
+            event.preventDefault();
+            walkTarget.active = false;
+            active.set(event.pointerId, btn.dataset.key);
+            keyState.add(btn.dataset.key);
+            btn.classList.add("is-pressed");
+            try {
+                btn.setPointerCapture(event.pointerId);
+            } catch {
+                /* ignore */
+            }
+        };
+        const release = (event) => {
+            const key = active.get(event.pointerId);
+            if (!key) {
+                return;
+            }
+            active.delete(event.pointerId);
+            if (![...active.values()].includes(key)) {
+                keyState.delete(key);
+            }
+            pad.querySelectorAll(`[data-key="${key}"]`).forEach((b) => b.classList.remove("is-pressed"));
+        };
+        pad.addEventListener("pointerdown", press);
+        pad.addEventListener("pointerup", release);
+        pad.addEventListener("pointercancel", release);
+        pad.addEventListener("contextmenu", (e) => e.preventDefault());
+        return () => {
+            pad.removeEventListener("pointerdown", press);
+            pad.removeEventListener("pointerup", release);
+            pad.removeEventListener("pointercancel", release);
+            active.forEach((key) => keyState.delete(key));
+        };
+    }
+    const unbindTouchControls = bindTouchControls();
+    cancelWalkTarget = () => {
+        walkTarget.active = false;
+    };
+
     let animationFrameId = 0;
     let disposed = false;
 
@@ -2608,6 +2741,7 @@ function createVoxelChurch(container) {
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
         }
+        unbindTouchControls();
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("keyup", onKeyUp);
         window.removeEventListener("resize", onResize);
@@ -2724,8 +2858,21 @@ function createVoxelChurch(container) {
         const down = keyState.has("ArrowDown") || keyState.has("KeyS");
         const jump = keyState.has("Space");
 
-        const turnInput = (right ? 1 : 0) - (left ? 1 : 0);
-        const throttleInput = (up ? 1 : 0) - (down ? 1 : 0);
+        let turnInput = (right ? 1 : 0) - (left ? 1 : 0);
+        let throttleInput = (up ? 1 : 0) - (down ? 1 : 0);
+        if (walkTarget.active && turnInput === 0 && throttleInput === 0) {
+            const dx = walkTarget.x - playerRig.position.x;
+            const dz = walkTarget.z - playerRig.position.z;
+            if (Math.hypot(dx, dz) < 0.45) {
+                walkTarget.active = false;
+            } else {
+                // moveDirection = (sin yaw, -cos yaw) → yaw toward the target:
+                const desiredYaw = Math.atan2(dx, -dz);
+                const diff = normalizeAngle(desiredYaw - facingState.yaw);
+                turnInput = THREE.MathUtils.clamp(diff * 2.2, -1, 1);
+                throttleInput = Math.abs(diff) < 0.9 ? 1 : 0;
+            }
+        }
         facingState.yaw = normalizeAngle(facingState.yaw + turnInput * turnRate * dt);
         updateDirectionFromYaw();
 
@@ -2742,6 +2889,7 @@ function createVoxelChurch(container) {
         if (blocked) {
             forwardSpeed *= 0.15;
             playerVelocityXZ.set(0, 0);
+            walkTarget.active = false;
         }
 
         const horizontalSpeed = playerVelocityXZ.length();
@@ -2858,6 +3006,7 @@ function createVoxelChurch(container) {
 
     function onResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
+        camera.fov = fovForAspect(camera.aspect);
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
@@ -3021,7 +3170,10 @@ async function activateThreeScene(role) {
                       "Today is {season}. Move: arrows/WASD, jump: Space, gestures: 1-7, Mass sequence: M.",
                   )
                 : "Today is {season}. Move: arrows/WASD, jump: Space, gestures: 1-7, Mass sequence: M.";
-        setDialogue(introTemplate.replace("{season}", liturgical.season));
+        const touchIntroDefault = "Today is {season}. Tap the floor or use the arrows to walk. Tap Steps to see the Mass.";
+        const touchIntro =
+            typeof tpCopy === "function" ? tpCopy("enter.church_intro_touch", touchIntroDefault) : touchIntroDefault;
+        setDialogue((isTouchLayout() ? touchIntro : introTemplate).replace("{season}", liturgical.season));
     } catch (error) {
         console.error("Failed to initialize 3D church scene:", error);
         resetEntryAfterFailure("The church interior could not load. Please refresh and try again.");
@@ -3160,4 +3312,4 @@ window.confirmEntryToChurch = confirmEntryToChurch;
 window.declineEntry = declineEntry;
 window.getLiturgicalSeason = getLiturgicalSeason;
 window.getMassFlowSteps = getMassFlowSteps;
-window.setLiturgySubtitle = setLiturgySubtitle;
+window.setLiturgySubtitle = setLiturgySubtitle;
