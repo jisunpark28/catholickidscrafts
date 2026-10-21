@@ -1,0 +1,5 @@
+.vs
+.next
+node_modules
+.env*
+progress.txt
