@@ -54,8 +54,8 @@ const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
     ],
   },
   {
-    id: "liturgy",
-    title: "Liturgy",
+    id: "faith",
+    title: "Faith & Prayer",
     items: [
       { id: "prayers", label: "Prayers", match: /^prayers$/i, fallback: "/prayers" },
       { id: "mass", label: "Mass", match: /^mass$/i, fallback: "/liturgy/mass", lockHref: true },
@@ -80,6 +80,12 @@ const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
         fallback: "/liturgy/devotions",
         lockHref: true,
       },
+    ],
+  },
+  {
+    id: "liturgical-year",
+    title: "Liturgical Year",
+    items: [
       {
         id: "ordinary",
         label: "Ordinary Time",
@@ -131,7 +137,7 @@ function pathOf(href: string): string {
 }
 
 /**
- * PDF sidebar (Bible, Liturgy) with hrefs taken from published home sections
+ * PDF sidebar (Bible, Faith & Prayer, Liturgical Year) with hrefs taken from published home sections
  * when the title matches. Items the PDF does not show stay in `extra`.
  */
 export function buildHomePdfNav(

@@ -159,7 +159,7 @@ export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass" }
             onClick={() => setMobileOpen(true)}
           >
             <span aria-hidden>»</span>
-            Bible & Liturgy
+            Bible & Faith
           </button>
         )}
         {!desktopOpen && (

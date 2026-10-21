@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-/** Homepage sidebar (Bible + Liturgy) around an Old or New Testament page. */
+/** Homepage sidebar (Bible, Faith & Prayer, Liturgical Year) around an Old or New Testament page. */
 export async function TestamentPageShell({ children }: Props) {
   const [sections, copy] = await Promise.all([getPublishedHomeSections(), getSiteCopyMap()]);
   const { groups } = buildHomePdfNav(sections, {
