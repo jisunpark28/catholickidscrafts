@@ -48,14 +48,6 @@ const FEATURES: {
     cta: "Try memos",
   },
   {
-    id: "curriculum",
-    href: "/curriculum",
-    image: "/home-features/curriculum.webp",
-    title: "Catechism Curriculum",
-    description: "Year-round lessons for Sunday school, grounded in the Catechism.",
-    cta: "Browse lessons",
-  },
-  {
     id: "play",
     href: "/play",
     image: "/home-features/play.webp",

@@ -1,4 +1,3 @@
-import { getAllResourceSlugs, getCurriculumTracks } from "@/lib/content";
 import { getAllRecommendationSlugs } from "@/lib/recommendations";
 import { getSiteUrl } from "@/lib/site-url";
 import type { MetadataRoute } from "next";
@@ -30,8 +29,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/", { changeFrequency: "weekly", priority: 1 }),
     entry("/mass", { changeFrequency: "daily", priority: 0.95 }),
     entry("/daily-mass", { changeFrequency: "daily", priority: 0.95 }),
-    entry("/curriculum", { changeFrequency: "weekly", priority: 0.85 }),
-    entry("/resources", { changeFrequency: "weekly", priority: 0.85 }),
     entry("/gallery", { changeFrequency: "weekly", priority: 0.7 }),
     entry("/recommendations", { changeFrequency: "weekly", priority: 0.8 }),
     entry("/play", { changeFrequency: "weekly", priority: 0.75 }),
@@ -48,24 +45,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/affiliate-disclosure", { changeFrequency: "yearly", priority: 0.3 }),
   ];
 
-  let curriculumUrls: MetadataRoute.Sitemap = [];
-  let resourceUrls: MetadataRoute.Sitemap = [];
   let recommendationUrls: MetadataRoute.Sitemap = [];
 
   try {
-    const [tracks, resourceSlugs, recommendationSlugs] = await Promise.all([
-      getCurriculumTracks(),
-      getAllResourceSlugs(),
-      getAllRecommendationSlugs(),
-    ]);
-
-    curriculumUrls = tracks.map((t) =>
-      entry(`/curriculum/${t.slug}`, { changeFrequency: "monthly", priority: 0.7 }),
-    );
-
-    resourceUrls = resourceSlugs.map((slug) =>
-      entry(`/resources/${slug}`, { changeFrequency: "monthly", priority: 0.65 }),
-    );
+    const recommendationSlugs = await getAllRecommendationSlugs();
 
     recommendationUrls = recommendationSlugs.map((slug) =>
       entry(`/recommendations/${slug}`, { changeFrequency: "monthly", priority: 0.6 }),
@@ -76,8 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes.map((e) => ({ ...e, lastModified: now })),
-    ...curriculumUrls,
-    ...resourceUrls,
     ...recommendationUrls,
   ];
 }

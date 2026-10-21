@@ -2,9 +2,7 @@ import { getPublishedHomeSections } from "@/lib/home-sections";
 import { fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { allPrayerSearchEntries } from "@/lib/prayers/resolve-prayer";
 import { getPlayGamesFromCopy } from "@/lib/play-games-copy";
-import { prisma } from "@/lib/prisma";
 import { getSiteCopyMap } from "@/lib/site-copy";
-import type { Prisma } from "@prisma/client";
 
 export type LearnSearchKind =
   | "resource"
@@ -23,7 +21,6 @@ export type LearnSearchResult = {
   badge: string;
 };
 
-const MAX_PER_KIND = 8;
 const MAX_TOTAL = 24;
 
 function playGameHref(slug: string): string {
@@ -66,65 +63,10 @@ export async function searchLearnCatalog(query: string): Promise<LearnSearchResu
   const copy = await getSiteCopyMap();
   const results: (LearnSearchResult & { score: number })[] = [];
 
-  const resourceWhere: Prisma.ResourceWhereInput = {
-    published: true,
-    OR: [
-      { title: { contains: q, mode: "insensitive" } },
-      { excerpt: { contains: q, mode: "insensitive" } },
-      { content: { contains: q, mode: "insensitive" } },
-      { grade: { contains: q, mode: "insensitive" } },
-      { topic: { contains: q, mode: "insensitive" } },
-    ],
-  };
-
-  const [resources, tracks, sections, books] = await Promise.all([
-    prisma.resource.findMany({
-      where: resourceWhere,
-      take: MAX_PER_KIND,
-      orderBy: { updatedAt: "desc" },
-      select: { slug: true, title: true, excerpt: true, grade: true, topic: true },
-    }),
-    prisma.curriculumTrack.findMany({
-      where: {
-        published: true,
-        OR: [
-          { title: { contains: q, mode: "insensitive" } },
-          { description: { contains: q, mode: "insensitive" } },
-          { stage: { contains: q, mode: "insensitive" } },
-          { body: { contains: q, mode: "insensitive" } },
-        ],
-      },
-      take: MAX_PER_KIND,
-      orderBy: { sortOrder: "asc" },
-      select: { slug: true, title: true, description: true, stage: true },
-    }),
+  const [sections, books] = await Promise.all([
     getPublishedHomeSections(),
     fetchBibleBooks().catch(() => []),
   ]);
-
-  for (const r of resources) {
-    results.push({
-      id: `resource-${r.slug}`,
-      kind: "resource",
-      title: r.title,
-      excerpt: r.excerpt,
-      href: `/resources/${r.slug}`,
-      badge: "Kids Resource",
-      score: scoreMatch(q, r.title, r.excerpt, r.grade, r.topic),
-    });
-  }
-
-  for (const t of tracks) {
-    results.push({
-      id: `curriculum-${t.slug}`,
-      kind: "curriculum",
-      title: t.title,
-      excerpt: t.description,
-      href: `/curriculum/${t.slug}`,
-      badge: t.stage,
-      score: scoreMatch(q, t.title, t.description, t.stage),
-    });
-  }
 
   for (const game of getPlayGamesFromCopy(copy)) {
     const score = scoreMatch(q, game.title, game.description, game.slug);

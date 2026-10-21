@@ -44,18 +44,6 @@ export default async function AboutPage() {
           — see the liturgical day and jump to official readings (publisher links below).
         </li>
         <li>
-          <Link href="/resources" className="font-semibold text-[var(--color-link)]">
-            Kids Resources
-          </Link>{" "}
-          — crafts and lesson ideas sorted by Church season.
-        </li>
-        <li>
-          <Link href="/curriculum" className="font-semibold text-[var(--color-link)]">
-            Curriculum
-          </Link>{" "}
-          — longer tracks when you are planning a whole year.
-        </li>
-        <li>
           <Link href="/play" className="font-semibold text-[var(--color-link)]">
             Play &amp; Learn
           </Link>{" "}

@@ -6,7 +6,6 @@ import { listApprovedGallerySubmissions } from "@/lib/craft-gallery";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -50,10 +49,7 @@ export default async function GalleryPage() {
         <div className="max-w-xl">
           <p className="text-[var(--color-muted)]">
             When families share crafts from{" "}
-            <Link href="/resources" className="font-semibold text-[var(--color-link)]">
-              Kids Resources
-            </Link>
-            , approved photos will show here.
+            Kids Resources, approved photos will show here.
           </p>
           <div className="mt-8">
             <CraftGallerySubmitForm />
