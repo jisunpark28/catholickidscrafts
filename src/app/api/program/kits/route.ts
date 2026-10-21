@@ -6,6 +6,7 @@ import {
 } from "@/lib/lesson-kit/db";
 import { getTeacherSundayPin } from "@/lib/lesson-kit/sunday-pin";
 import { requireFamilySession } from "@/lib/family-auth";
+import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -31,6 +32,9 @@ export async function POST(req: Request) {
   const session = await requireFamilySession();
   if (!session) {
     return NextResponse.json({ error: "Sign in required" }, { status: 401 });
+  }
+  if (!(await familyHasPlus(session.familyAccountId))) {
+    return plusRequiredResponse();
   }
 
   const body = (await req.json().catch(() => ({}))) as { sourceId?: string };

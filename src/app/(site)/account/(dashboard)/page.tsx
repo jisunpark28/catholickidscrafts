@@ -1,3 +1,4 @@
+import { BillingButton } from "@/components/BillingButton";
 import { FamilyLogoutButton } from "@/components/FamilyLogoutButton";
 import { SubProfilesManager } from "@/components/SubProfilesManager";
 import { PageShell } from "@/components/PageShell";
@@ -5,6 +6,9 @@ import { MAX_SUB_PROFILES_PER_FAMILY } from "@/lib/access-code";
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { requireFamilySession } from "@/lib/family-auth";
 import { canonicalForPath } from "@/lib/site-metadata";
+import { isBillingConfigured } from "@/lib/stripe";
+import { getFamilyPlan } from "@/lib/subscription/entitlements";
+import { PLAN_FEATURES, PLUS_PRICE_LABEL, planRenewalLine } from "@/lib/subscription/plan-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -14,18 +18,13 @@ export const metadata: Metadata = {
   ...canonicalForPath("/account"),
 };
 
-const PLAN_FEATURES: { label: string; plus: boolean }[] = [
-  { label: "Bible typing", plus: false },
-  { label: "Memos", plus: true },
-  { label: "Catechism activities", plus: true },
-  { label: "Custom sheets", plus: true },
-];
-
 export default async function AccountDashboardPage() {
   const session = await requireFamilySession();
   const { owner, subs } = await loadAccountDashboardReaders(session!.familyAccountId);
-  // TODO: use hasPaidFeatures() from src/lib/subscription/entitlements.ts once it lands on this branch.
-  const isPlus = false;
+  const plan = await getFamilyPlan(session!.familyAccountId, session!.email);
+  const isPlus = plan.isPlus;
+  const renewal = planRenewalLine(plan);
+  const billingReady = isBillingConfigured();
 
   return (
     <PageShell wide>
@@ -74,16 +73,22 @@ export default async function AccountDashboardPage() {
             {!isPlus && (
               <>
                 <p className="mt-5 text-2xl font-bold text-[var(--color-ink)]">
-                  CA$9.99<span className="text-sm font-normal text-[var(--color-muted)]">/month</span>
+                  {PLUS_PRICE_LABEL}<span className="text-sm font-normal text-[var(--color-muted)]">/month</span>
                 </p>
-                <Link
-                  href="/subscribe"
-                  className="mt-3 block bg-[var(--color-accent)] px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)]"
-                >
-                  Upgrade to Plus
-                </Link>
+                {billingReady ? (
+                  <div className="mt-3">
+                    <BillingButton action="checkout" className="block w-full bg-[var(--color-accent)] px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60">
+                      Upgrade to Plus
+                    </BillingButton>
+                  </div>
+                ) : (
+                  <Link href="/subscribe" className="mt-3 block bg-[var(--color-accent)] px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)]">
+                    Upgrade to Plus
+                  </Link>
+                )}
               </>
             )}
+            {renewal && <p className="mt-4 text-sm text-[var(--color-ink)]">{renewal}</p>}
             <p className="mt-4 text-sm font-bold text-[var(--color-ink)]">
               Cancel anytime. Your memos stay with you.
             </p>
@@ -98,7 +103,13 @@ export default async function AccountDashboardPage() {
             <h2 className="text-xl font-bold text-[var(--color-ink)]">Account &amp; security</h2>
             <div className="mt-4 flex items-center justify-between gap-2 border-b border-[var(--color-border)] pb-4 text-sm">
               <span className="text-[var(--color-ink)]">Billing &amp; receipts</span>
-              <span className="text-xs font-semibold text-[var(--color-muted)]">Coming soon</span>
+              {plan.hasCustomer && billingReady ? (
+                <BillingButton action="portal" className="text-xs font-bold text-[var(--color-link)] hover:underline">
+                  Manage
+                </BillingButton>
+              ) : (
+                <span className="text-xs font-semibold text-[var(--color-muted)]">No payments yet</span>
+              )}
             </div>
             <div className="mt-4">
               <FamilyLogoutButton mode="all" />
