@@ -695,3 +695,35 @@ model BillingEvent {
 
   @@index([type])
 }
+
+model WeeklyIssue {
+  id         String       @id @default(cuid())
+  sundayDate DateTime     @unique @db.Date
+  title      String
+  season     String       @default("")
+  cycle      String       @default("")
+  gospelRef  String       @default("")
+  color      String       @default("")
+  published  Boolean      @default(false)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  items      WeeklyItem[]
+
+  @@index([published, sundayDate])
+}
+
+model WeeklyItem {
+  id        String      @id @default(cuid())
+  issueId   String
+  issue     WeeklyIssue @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  title     String
+  type      String
+  fileUrl   String
+  thumbUrl  String      @default("")
+  topic     String?
+  sortOrder Int         @default(0)
+  createdAt DateTime    @default(now())
+
+  @@index([issueId, sortOrder])
+  @@index([topic])
+}

@@ -1,7 +1,15 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { LiturgyCardGrid } from "@/components/liturgy/LiturgyCardGrid";
-import { isLiturgyTopic, LITURGY_TOPIC_LABELS, loadLiturgyCards } from "@/lib/liturgy-cards";
+import { WeeklyThisWeekSection } from "@/components/liturgy/WeeklyThisWeekSection";
+import {
+  emptyLiturgyFrames,
+  isEmptyFrame,
+  isLiturgyTopic,
+  LITURGY_TOPIC_LABELS,
+  loadLiturgyCards,
+} from "@/lib/liturgy-cards";
 import { canonicalForPath } from "@/lib/site-metadata";
+import { loadThisWeek, loadWeeklyCardsForTopic } from "@/lib/weekly-content";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -23,11 +31,18 @@ export default async function LiturgyTopicPage({ params }: Props) {
   const { topic } = await params;
   if (!isLiturgyTopic(topic)) notFound();
 
-  const cards = await loadLiturgyCards(topic);
+  const [liturgyCards, weeklyCards, thisWeek] = await Promise.all([
+    loadLiturgyCards(topic),
+    loadWeeklyCardsForTopic(topic),
+    loadThisWeek(),
+  ]);
+  const realCards = [...liturgyCards.filter((card) => !isEmptyFrame(card)), ...weeklyCards];
+  const cards = realCards.length > 0 ? realCards : emptyLiturgyFrames(topic);
 
   return (
     <TestamentPageShell>
       <h1 className="sr-only">{LITURGY_TOPIC_LABELS[topic]}</h1>
+      {thisWeek && <WeeklyThisWeekSection week={thisWeek} />}
       <LiturgyCardGrid cards={cards} />
     </TestamentPageShell>
   );

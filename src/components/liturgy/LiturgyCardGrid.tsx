@@ -3,25 +3,51 @@ import { isTeachersPayTeachersUrl } from "@/lib/tpt";
 
 type Props = {
   cards: LiturgyCard[];
+  /** Drop the default top padding (used when the grid sits under a section header). */
+  compact?: boolean;
 };
 
 function cardClass(): string {
-  return "block aspect-square w-full rounded-2xl border border-dashed border-[#d9d3cb] bg-white";
+  return "relative block aspect-square w-full overflow-hidden rounded-2xl border border-dashed border-[#d9d3cb] bg-white";
 }
 
-export function LiturgyCardGrid({ cards }: Props) {
+function CardInner({ card }: { card: LiturgyCard }) {
   return (
-    <div className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-6 pt-6 sm:grid-cols-3 sm:gap-8 lg:grid-cols-4 lg:pt-10">
-      {cards.map((card) => {
-        const image = card.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={card.imageUrl} alt="" className="h-full w-full object-cover" />
-        ) : null;
+    <>
+      {card.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={card.imageUrl} alt="" className="h-full w-full object-cover" />
+      ) : card.title ? (
+        <span className="flex h-full w-full items-center justify-center bg-[#faf6f0] p-4 text-center text-sm font-semibold text-[var(--color-ink)]">
+          {card.title}
+        </span>
+      ) : null}
+      {card.badge && (
+        <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[var(--color-ink)] shadow-sm">
+          {card.badge}
+        </span>
+      )}
+      {card.title && card.imageUrl && (
+        <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-6 text-sm font-semibold leading-snug text-white">
+          {card.title}
+        </span>
+      )}
+    </>
+  );
+}
 
+export function LiturgyCardGrid({ cards, compact = false }: Props) {
+  return (
+    <div
+      className={`mx-auto grid w-full max-w-5xl grid-cols-2 gap-6 sm:grid-cols-3 sm:gap-8 lg:grid-cols-4 ${
+        compact ? "pt-4" : "pt-6 lg:pt-10"
+      }`}
+    >
+      {cards.map((card) => {
         if (!card.href) {
           return (
-            <div key={card.id} className={`${cardClass()} overflow-hidden`} aria-hidden>
-              {image}
+            <div key={card.id} className={cardClass()} aria-hidden={!card.title}>
+              <CardInner card={card} />
             </div>
           );
         }
@@ -31,7 +57,7 @@ export function LiturgyCardGrid({ cards }: Props) {
           <a
             key={card.id}
             href={card.href}
-            className={`${cardClass()} overflow-hidden`}
+            className={cardClass()}
             aria-label={card.title || "Open link"}
             {...(external
               ? {
@@ -42,7 +68,7 @@ export function LiturgyCardGrid({ cards }: Props) {
                 }
               : {})}
           >
-            {image}
+            <CardInner card={card} />
           </a>
         );
       })}
