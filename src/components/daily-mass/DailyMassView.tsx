@@ -1,7 +1,9 @@
 "use client";
 
+import { FaithJournalBanner } from "@/components/daily-mass/FaithJournalBanner";
 import { MiniMonthCalendar } from "@/components/daily-mass/MiniMonthCalendar";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
+import type { FaithJournalState } from "@/lib/daily-mass/faith-journal-shared";
 import type { FamilyTalkEntry } from "@/lib/daily-mass/family-talk";
 import type { VestmentColorInfo } from "@/lib/daily-mass/vestment-color";
 import type { MonthCalendar, ReadingKind } from "@/types/mass";
@@ -25,6 +27,10 @@ export type DailyMassViewProps = {
   usccbUrl: string;
   familyTalk: FamilyTalkEntry | null;
   gospelCitation?: string;
+  /** Where "Read the Gospel" goes: the passage in the Bible reader, else /gospel. */
+  gospelReadHref: string;
+  /** Sign-in / Plus state and (Plus) memo anchor + recent entries for the Faith Journal banner. */
+  journal: FaithJournalState;
   nextSunday: {
     dateKey: string;
     shortDate: string;
@@ -158,6 +164,18 @@ export function DailyMassView(props: DailyMassViewProps) {
         </div>
       </div>
 
+      <div className="mb-5">
+        <FaithJournalBanner
+          dateKey={props.dateKey}
+          gospelLabel={familyTalk?.gospel ?? props.gospelCitation}
+          readHref={props.gospelReadHref}
+          questions={questions}
+          lookFor={lookFor}
+          lookColorHex={color.hex}
+          journal={props.journal}
+        />
+      </div>
+
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
         {/* Left column */}
         <div className="flex min-w-0 flex-1 flex-col gap-[1.125em]">
@@ -221,28 +239,6 @@ export function DailyMassView(props: DailyMassViewProps) {
             >
               {t("daily_mass.readings.type_gospel", "Type today's Gospel")} <span aria-hidden>&nbsp;→</span>
             </Link>
-          </section>
-
-          <section className={`${card} dm-family border-[#f5d9bf] bg-[#fff8f1]`} aria-labelledby="dm-family-title">
-            <h2 id="dm-family-title" className={`${eyebrow} !text-[#b84a00]`}>
-              {t("daily_mass.family.title", "Family talk")}
-              {(familyTalk?.gospel ?? props.gospelCitation) ? ` · ${familyTalk?.gospel ?? props.gospelCitation}` : ""}
-            </h2>
-            <ol className="dm-ink mb-3.5 mt-0 pl-[1.4em] text-[0.9375em] leading-[1.7] text-[#1c1c1c]">
-              {questions.map((q) => (
-                <li key={q}>{q}</li>
-              ))}
-            </ol>
-            <div className="dm-card flex items-center gap-2.5 rounded-xl border border-dashed border-[#d35400] bg-white px-3.5 py-2.5">
-              <span
-                className="h-[18px] w-[18px] shrink-0 rounded-full border border-black/10"
-                style={{ background: color.hex }}
-                aria-hidden
-              />
-              <p className="dm-ink m-0 text-[0.875em] text-[#1c1c1c]">
-                <b>{t("daily_mass.family.look_for", "Look for this at Mass")}:</b> {lookFor}
-              </p>
-            </div>
           </section>
         </div>
 

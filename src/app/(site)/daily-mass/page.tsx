@@ -1,6 +1,8 @@
 import { DailyMassView, type DailyMassReadingRef } from "@/components/daily-mass/DailyMassView";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
+import { loadFaithJournal } from "@/lib/daily-mass/faith-journal";
 import { familyTalkFor } from "@/lib/daily-mass/family-talk";
+import { parseGospelCitation } from "@/lib/daily-mass/gospel-citation";
 import { deriveVestmentColor } from "@/lib/daily-mass/vestment-color";
 import { formatDisplayDate, parseDateParam, todayUtc, toDateKey } from "@/lib/dates";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
@@ -102,6 +104,13 @@ export default async function DailyMassPage({
   const sundaySummary = sundayDay ?? summaryFrom(sundayCalendar ?? calendar, sundayKey);
   const sundayGospel = readingRefs(sundayDay).find((r) => r.kind === "gospel")?.citation;
 
+  const familyTalk = familyTalkFor(dateKey);
+  const gospelCitation = readings.find((r) => r.kind === "gospel")?.citation;
+  const journalCitation = familyTalk?.gospel ?? gospelCitation;
+  const passage = parseGospelCitation(journalCitation);
+  const gospelReadHref = passage ? `/bible/read/${passage.bookSlug}/${passage.chapter}` : "/gospel";
+  const journal = await loadFaithJournal(journalCitation);
+
   const shortDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(sunday);
 
   return (
@@ -116,8 +125,10 @@ export default async function DailyMassPage({
         color={deriveVestmentColor({ ...summary, saint: firstSaint(summary.saint) }, season)}
         readings={readings}
         usccbUrl={usccbReadingsPageUrl(date)}
-        familyTalk={familyTalkFor(dateKey)}
-        gospelCitation={readings.find((r) => r.kind === "gospel")?.citation}
+        familyTalk={familyTalk}
+        gospelCitation={gospelCitation}
+        gospelReadHref={gospelReadHref}
+        journal={journal}
         nextSunday={{
           dateKey: sundayKey,
           shortDate,
