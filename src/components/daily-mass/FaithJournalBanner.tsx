@@ -154,31 +154,40 @@ export function FaithJournalBanner({ dateKey, gospelLabel, readHref, questions, 
         ) : null}
       </div>
 
-      <p aria-live="polite" className="dm-ink relative mb-1 mt-3 max-w-[30ch] text-[1.3em] font-extrabold leading-snug text-[#1c1c1c] sm:text-[1.55em]">
-        <span aria-hidden className="text-[#f0b98a]">“</span>
-        {question}
-        <span aria-hidden className="text-[#f0b98a]">”</span>
-      </p>
-
-      <div className="relative mb-3.5 flex flex-wrap items-center gap-2">
+      <div className="relative mb-3.5 mt-3 flex flex-wrap items-start gap-x-3 gap-y-2">
+        <p aria-live="polite" className="dm-ink m-0 min-w-0 basis-full text-[1.3em] font-extrabold sm:flex-1 sm:basis-0 leading-snug text-[#1c1c1c] sm:text-[1.55em]">
+          <span aria-hidden className="text-[#f0b98a]">“</span>
+          {question}
+          <span aria-hidden className="text-[#f0b98a]">”</span>
+        </p>
         {questions.length > 1 ? (
-          <button
-            type="button"
-            onClick={() => setQIdx((i) => (i + 1) % questions.length)}
-            className={`rounded text-[0.8125em] font-bold text-[#d35400] ${FOCUS}`}
-          >
-            {t("daily_mass.journal.another", "Another question")} <span aria-hidden>↻</span>{" "}
-            <span className="font-semibold text-[#9ca3af]">
-              {(qIdx % questions.length) + 1}/{questions.length}
-            </span>
-          </button>
+          <div className="flex flex-none gap-1.5 pt-0.5 max-sm:order-2">
+            <button
+              type="button"
+              aria-label={t("daily_mass.journal.prev", "Previous question")}
+              onClick={() => setQIdx((i) => (i - 1 + questions.length) % questions.length)}
+              className={`grid h-8 w-8 place-items-center rounded-full border border-[#f5d9bf] bg-white text-lg font-extrabold leading-none text-[#d35400] hover:bg-[#fff1e3] ${FOCUS}`}
+            >
+              <span aria-hidden>‹</span>
+            </button>
+            <button
+              type="button"
+              aria-label={t("daily_mass.journal.next", "Next question")}
+              onClick={() => setQIdx((i) => (i + 1) % questions.length)}
+              className={`grid h-8 w-8 place-items-center rounded-full border border-[#f5d9bf] bg-white text-lg font-extrabold leading-none text-[#d35400] hover:bg-[#fff1e3] ${FOCUS}`}
+            >
+              <span aria-hidden>›</span>
+            </button>
+          </div>
         ) : null}
-        <span className="dm-card inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-dashed border-[#e8a46d] bg-white px-2.5 py-0.5 text-[0.78em] text-[#4b5563]">
-          <span aria-hidden className="h-2.5 w-2.5 flex-none rounded-full border border-black/10" style={{ background: lookColorHex }} />
-          <span>
-            <b className="font-semibold">{t("daily_mass.family.look_for", "Look for this at Mass")}:</b> {firstSentence(lookFor)}
+        <div className="min-w-0 max-sm:order-1 max-sm:flex-1 sm:basis-full">
+          <span className="dm-card inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-dashed border-[#e8a46d] bg-white px-2.5 py-0.5 text-[0.78em] text-[#4b5563]">
+            <span aria-hidden className="h-2.5 w-2.5 flex-none rounded-full border border-black/10" style={{ background: lookColorHex }} />
+            <span>
+              <b className="font-semibold">{t("daily_mass.family.look_for", "Look for this at Mass")}:</b> {firstSentence(lookFor)}
+            </span>
           </span>
-        </span>
+        </div>
       </div>
 
       <form onSubmit={save} className="dm-card relative flex items-center gap-2.5 rounded-2xl border-[1.5px] border-[#f0d4bb] bg-white py-1.5 pl-3.5 pr-1.5 shadow-[inset_0_-2px_0_#fde7d6] focus-within:border-[#d35400]">
