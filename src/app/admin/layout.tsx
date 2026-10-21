@@ -28,12 +28,6 @@ export default async function AdminLayout({
               <Link href="/admin/mass-order-steps" className="hover:text-[var(--color-accent)]">
                 Mass Order
               </Link>
-              <Link href="/admin/site-copy" className="hover:text-[var(--color-accent)]">
-                Site text
-              </Link>
-              <Link href="/admin/home-sections" className="hover:text-[var(--color-accent)]">
-                Home sections
-              </Link>
               <Link href="/admin/typing-words" className="hover:text-[var(--color-accent)]">
                 Typing words
               </Link>
@@ -42,12 +36,6 @@ export default async function AdminLayout({
               </Link>
               <Link href="/admin/photo-booth-frames" className="hover:text-[var(--color-accent)]">
                 Photo booth
-              </Link>
-              <Link href="/admin/recommendations" className="hover:text-[var(--color-accent)]">
-                Recommendations
-              </Link>
-              <Link href="/admin/lesson-templates" className="hover:text-[var(--color-accent)]">
-                Lesson templates
               </Link>
               {superAdmin && (
                 <Link href="/admin/operators" className="hover:text-[var(--color-accent)]">

@@ -78,18 +78,10 @@ export function teacherPrintNavItems(kitId: string): LessonKitNavItem[] {
   ];
 }
 
-export function adminTemplatesNavItems(): LessonKitNavItem[] {
-  return [
-    { href: "/admin", label: "Admin" },
-    { href: "/", label: "Home" },
-    { label: "Lesson templates" },
-  ];
-}
-
 export function adminTemplateEditNavItems(): LessonKitNavItem[] {
   return [
     { href: "/admin", label: "Admin" },
-    { href: "/admin/lesson-templates", label: "Lesson templates" },
+    { label: "Lesson templates" },
     { label: "Edit" },
   ];
 }
