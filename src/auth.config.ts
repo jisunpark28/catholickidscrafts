@@ -16,8 +16,15 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const pathname = nextUrl.pathname;
       if (pathname === "/admin/login") return true;
+      // Edge pre-check only; every admin page/API also calls the DB-backed helper in lib/admin-auth.
+      const role = (auth?.user as { role?: string } | undefined)?.role;
+      const hasAdminRole = role === "SUPER_ADMIN" || role === "OPERATOR";
+      if (pathname.startsWith("/api/admin")) {
+        if (hasAdminRole) return true;
+        return Response.json({ error: "Unauthorized" }, { status: 401 });
+      }
       if (pathname.startsWith("/admin")) {
-        return !!auth?.user;
+        return hasAdminRole;
       }
       return true;
     },

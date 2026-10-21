@@ -23,9 +23,27 @@ function canonicalRedirect(request: NextRequest): NextResponse | null {
   return NextResponse.redirect(url, 308);
 }
 
+const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+
+/** Block cross-site writes to admin APIs (defense in depth on top of SameSite cookies). */
+function crossSiteAdminWrite(request: NextRequest): NextResponse | null {
+  if (!request.nextUrl.pathname.startsWith("/api/admin") || SAFE_METHODS.has(request.method)) return null;
+  const origin = request.headers.get("origin");
+  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  if (!origin) return null;
+  try {
+    if (new URL(origin).host === host) return null;
+  } catch {
+    /* fall through */
+  }
+  return NextResponse.json({ error: "Cross-site request blocked" }, { status: 403 });
+}
+
 export default auth((request) => {
   const redirect = canonicalRedirect(request);
   if (redirect) return redirect;
+  const blocked = crossSiteAdminWrite(request);
+  if (blocked) return blocked;
   return NextResponse.next();
 });
 

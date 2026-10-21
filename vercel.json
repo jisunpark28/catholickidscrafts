@@ -24,5 +24,11 @@
       "destination": "https://www.catholickidscrafts.com/:path*",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/weekly-email",
+      "schedule": "0 11 * * 5"
+    }
   ]
 }

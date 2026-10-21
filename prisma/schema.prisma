@@ -597,3 +597,42 @@ model WeeklyItem {
   @@index([issueId, sortOrder])
   @@index([topic])
 }
+
+/// Printable Sunday Gospel sheet (Level 1 / Level 2). Content lives in `levels` (see src/lib/gospel-sheet.ts).
+model GospelSheet {
+  id             String    @id @default(cuid())
+  slug           String    @unique
+  sundayDate     DateTime  @unique @db.Date
+  liturgicalName String
+  gospelRef      String
+  usccbUrl       String    @default("")
+  color          String    @default("green")
+  published      Boolean   @default(false)
+  /// Shown on the homepage. If none is featured, the latest published sheet is used.
+  featured       Boolean   @default(false)
+  levels         Json
+  /// Set once the Friday email for this sheet went out.
+  emailSentAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([published, sundayDate])
+}
+
+/// Weekly sheet email list (double opt-in, CASL). status: pending | confirmed | unsubscribed
+model EmailSubscriber {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  status           String    @default("pending")
+  confirmToken     String?   @unique
+  unsubscribeToken String    @unique
+  consentAt        DateTime?
+  consentIp        String    @default("")
+  source           String    @default("")
+  confirmedAt      DateTime?
+  unsubscribedAt   DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([status])
+}

@@ -1,5 +1,8 @@
 import { HomeFeatureCarousel, type HomeFeatureSlide } from "@/components/home/HomeFeatureCarousel";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
+import { SundaySheetHero } from "@/components/home/SundaySheetHero";
+import { loadFeaturedSheet } from "@/lib/gospel-sheet";
+import { getPublicContactEmail } from "@/lib/site-contact";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { canonicalForPath } from "@/lib/site-metadata";
@@ -66,7 +69,15 @@ const FEATURES: {
 ];
 
 export default async function HomePage() {
-  const [copy, sections] = await Promise.all([getSiteCopyMap(), getPublishedHomeSections()]);
+  const [copy, sections, sheet] = await Promise.all([
+    getSiteCopyMap(),
+    getPublishedHomeSections(),
+    loadFeaturedSheet(),
+  ]);
+  const contactEmail = getPublicContactEmail();
+  const groupInquiryHref = contactEmail
+    ? `mailto:${contactEmail}?subject=${encodeURIComponent("Group / parish inquiry")}`
+    : null;
 
   const { groups } = buildHomePdfNav(sections, {
     gallery: "Gallery",
@@ -96,6 +107,16 @@ export default async function HomePage() {
       <p className="sr-only">
         {copyText(copy, "home.hub.subtitle", "Free liturgical activities for catechists and parents.")}
       </p>
+      {sheet ? (
+        <SundaySheetHero
+          slug={sheet.slug}
+          title={sheet.levels.level1.title || sheet.liturgicalName}
+          liturgicalName={sheet.liturgicalName}
+          sundayLabel={sheet.sundayLabel}
+          gospelRef={sheet.gospelRef}
+          groupInquiryHref={groupInquiryHref}
+        />
+      ) : null}
       <HomeFeatureCarousel
         heading={copyText(copy, "home.features.heading", "What you can do here")}
         slides={slides}
