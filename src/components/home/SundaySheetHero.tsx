@@ -12,6 +12,8 @@ type Props = {
   groupInquiryHref: string | null;
   /** False until RESEND_API_KEY, EMAIL_FROM and MAILING_ADDRESS are set: skip straight to the Plus line. */
   emailEnabled: boolean;
+  /** "1 / 6" label shown when rendered as a carousel slide. */
+  position?: string;
 };
 
 const PAGE_W = 816; // 8.5in at 96dpi
@@ -42,7 +44,7 @@ function writeEmailState(value: "subscribed" | "dismissed") {
 }
 
 /** Homepage hero: this Sunday's sheet, one big Print button, then an inline email opt-in. */
-export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gospelRef, groupInquiryHref, emailEnabled }: Props) {
+export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gospelRef, groupInquiryHref, emailEnabled, position }: Props) {
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
@@ -60,7 +62,12 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const update = () => setScale(Math.min(0.5, el.clientWidth / PAGE_W));
+    const update = () => {
+      const w = el.clientWidth;
+      if (w <= 0) return; // hidden slide: keep last scale
+      const max = window.innerWidth < 640 ? 220 : 340; // smaller on phones so Print stays high
+      setScale(Math.min(w, max) / PAGE_W);
+    };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
@@ -104,13 +111,10 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
   };
 
   return (
-    <section
-      aria-labelledby="sunday-sheet-heading"
-      className="mx-auto mb-8 grid max-w-5xl gap-6 border border-[var(--color-border)] bg-white p-4 sm:p-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"
-    >
-      <div ref={wrapRef} className="w-full">
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-10">
+      <div ref={wrapRef} className="w-full lg:w-[46%] lg:shrink-0">
         <div
-          className="mx-auto overflow-hidden border border-[var(--color-border)] shadow-sm"
+          className="mx-auto overflow-hidden rounded-xl border border-[#e7e3de] bg-white shadow-lg"
           style={{ width: PAGE_W * scale, height: PAGE_H * scale }}
         >
           <iframe
@@ -131,14 +135,14 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
         </div>
       </div>
 
-      <div className="flex flex-col justify-center gap-4">
-        <p className="text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">
-          This Sunday · {sundayLabel}
+      <div className="flex min-w-0 flex-1 flex-col gap-4 lg:pr-6">
+        <p className="text-sm font-semibold text-[#d35400]">
+          {position ? `${position} · ` : null}This Sunday · {sundayLabel}
         </p>
-        <h2 id="sunday-sheet-heading" className="text-3xl font-bold leading-tight">
+        <h3 className="text-2xl font-bold leading-tight text-[#1c1c1c] sm:text-3xl">
           {title}
-        </h2>
-        <p className="text-[var(--color-muted)]">
+        </h3>
+        <p className="text-base text-[#4b5563]">
           {liturgicalName} · {gospelRef}
         </p>
 
@@ -150,10 +154,8 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
               role="radio"
               aria-checked={level === n}
               onClick={() => setLevel(n)}
-              className={`border px-4 py-2 text-base font-semibold ${
-                level === n
-                  ? "border-[var(--color-ink,#111)] bg-[var(--color-ink,#111)] text-white"
-                  : "border-[var(--color-border)] bg-white"
+              className={`rounded-full border px-4 py-2 text-base font-semibold ${
+                level === n ? "border-[#1c1c1c] bg-[#1c1c1c] text-white" : "border-[#e7e3de] bg-white text-[#1c1c1c]"
               }`}
             >
               Level {n}
@@ -164,11 +166,10 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
         <button
           type="button"
           onClick={onPrint}
-          className="w-full rounded-lg bg-[#2e7d32] px-8 py-5 text-2xl font-bold text-white hover:bg-[#256628] sm:w-auto"
+          className="w-full rounded-full bg-[#2e7d32] px-8 py-4 text-xl font-bold text-white hover:bg-[#256628] sm:w-auto sm:self-start"
         >
-          🖨 Print
+          🖨 Print this week&apos;s sheet
         </button>
-        <p className="text-sm text-[var(--color-muted)]">Free. No sign-in. One letter-size page.</p>
 
         {printed && emailEnabled && !emailState ? <EmailOptIn onDone={choose} /> : null}
         {printed && (emailState || !emailEnabled) ? (
@@ -188,7 +189,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
           </p>
         ) : null}
       </div>
-    </section>
+    </div>
   );
 }
 

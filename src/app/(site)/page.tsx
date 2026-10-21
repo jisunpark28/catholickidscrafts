@@ -1,4 +1,4 @@
-import { HomeFeatureCarousel, type HomeFeatureSlide } from "@/components/home/HomeFeatureCarousel";
+import { HomeFeatureCarousel, type HomeFeatureSlide, type HomeLeadSlide } from "@/components/home/HomeFeatureCarousel";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SundaySheetHero } from "@/components/home/SundaySheetHero";
 import { emailConfigured } from "@/lib/email";
@@ -100,6 +100,26 @@ export default async function HomePage() {
     };
   });
 
+  const emailEnabled = emailConfigured();
+  const lead: HomeLeadSlide | null = sheet
+    ? {
+        id: "sunday-sheet",
+        title: sheet.levels.level1.title || sheet.liturgicalName,
+        content: (
+          <SundaySheetHero
+            position={`1 / ${FEATURES.length + 1}`}
+            slug={sheet.slug}
+            title={sheet.levels.level1.title || sheet.liturgicalName}
+            liturgicalName={sheet.liturgicalName}
+            sundayLabel={sheet.sundayLabel}
+            gospelRef={sheet.gospelRef}
+            groupInquiryHref={groupInquiryHref}
+            emailEnabled={emailEnabled}
+          />
+        ),
+      }
+    : null;
+
   return (
     <HomePdfShell groups={groups} dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}>
       <h1 className="sr-only">
@@ -108,19 +128,9 @@ export default async function HomePage() {
       <p className="sr-only">
         {copyText(copy, "home.hub.subtitle", "Free liturgical activities for catechists and parents.")}
       </p>
-      {sheet ? (
-        <SundaySheetHero
-          slug={sheet.slug}
-          title={sheet.levels.level1.title || sheet.liturgicalName}
-          liturgicalName={sheet.liturgicalName}
-          sundayLabel={sheet.sundayLabel}
-          gospelRef={sheet.gospelRef}
-          groupInquiryHref={groupInquiryHref}
-          emailEnabled={emailConfigured()}
-        />
-      ) : null}
       <HomeFeatureCarousel
         heading={copyText(copy, "home.features.heading", "What you can do here")}
+        lead={lead}
         slides={slides}
         prevLabel={copyText(copy, "home.features.prev", "Previous feature")}
         nextLabel={copyText(copy, "home.features.next", "Next feature")}
