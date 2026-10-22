@@ -1,12 +1,15 @@
 import { getSiteUrl } from "@/lib/site-url";
 
 export type OutgoingEmail = {
-  to: string;
+  /** One address or several (internal notifications). */
+  to: string | string[];
   subject: string;
   html: string;
   text: string;
   /** Adds List-Unsubscribe headers (RFC 8058 one-click). */
   unsubscribeUrl?: string;
+  /** Per-message Reply-To; overrides EMAIL_REPLY_TO. */
+  replyTo?: string;
 };
 
 export const SENDER_NAME = "Catholic Kids Crafts";
@@ -64,11 +67,11 @@ function replyTo(): string | null {
 function payload(mail: OutgoingEmail) {
   return {
     from: fromHeader(),
-    to: [mail.to],
+    to: Array.isArray(mail.to) ? mail.to : [mail.to],
     subject: mail.subject,
     html: mail.html,
     text: mail.text,
-    ...(replyTo() ? { reply_to: replyTo() } : {}),
+    ...(mail.replyTo ? { reply_to: mail.replyTo } : replyTo() ? { reply_to: replyTo() } : {}),
     ...(mail.unsubscribeUrl
       ? {
           headers: {

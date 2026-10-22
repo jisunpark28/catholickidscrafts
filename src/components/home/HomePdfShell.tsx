@@ -54,6 +54,37 @@ function pillClass(active: boolean): string {
   ].join(" ");
 }
 
+/** Small Bible-book icons, only on the three Bible buttons (open book: Gospel; closed brown Bible: Testaments). */
+function OpenBookIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden focusable="false" className="shrink-0">
+      <path d="M2 5.5c3.2-1.2 6.3-1 9.3.9v13.1c-3-1.8-6.1-2.1-9.3-.9z" fill="#fff" stroke="#8a5a2b" strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M22 5.5c-3.2-1.2-6.3-1-9.3.9v13.1c3-1.8 6.1-2.1 9.3-.9z" fill="#fff" stroke="#8a5a2b" strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M4.5 9c1.6-.4 3.2-.2 4.8.5M4.5 12c1.6-.4 3.2-.2 4.8.5M14.7 9.5c1.6-.7 3.2-.9 4.8-.5M14.7 12.5c1.6-.7 3.2-.9 4.8-.5" stroke="#c9a27a" strokeWidth="1" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+function ClosedBibleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden focusable="false" className="shrink-0">
+      <rect x="5" y="2.5" width="14" height="19" rx="1.6" fill="#7a4a24" />
+      <rect x="5" y="2.5" width="2.4" height="19" rx="1" fill="#5c3518" />
+      <path d="M13.2 7v8M10.4 9.6h5.6" stroke="#f2c14e" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function NavLabel({ item }: { item: HomePdfLink }) {
+  if (!item.icon) return <>{item.label}</>;
+  return (
+    <span className="inline-flex items-center gap-2">
+      {item.icon === "open-book" ? <OpenBookIcon /> : <ClosedBibleIcon />}
+      {item.label}
+    </span>
+  );
+}
+
 function NavAnchor({
   item,
   active,
@@ -67,13 +98,13 @@ function NavAnchor({
   if (item.href.startsWith("http://") || item.href.startsWith("https://")) {
     return (
       <a href={item.href} className={className} onClick={onNavigate}>
-        {item.label}
+        <NavLabel item={item} />
       </a>
     );
   }
   return (
     <Link href={item.href} className={className} onClick={onNavigate} aria-current={active ? "page" : undefined}>
-      {item.label}
+      <NavLabel item={item} />
     </Link>
   );
 }

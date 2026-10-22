@@ -92,11 +92,15 @@ function Icon({ name, className = "h-[18px] w-[18px]" }: { name: IconName; class
 
 function Avatar({ name, child, size = "sm" }: { name: string; child?: boolean; size?: "sm" | "md" }) {
   const dims = size === "md" ? "h-10 w-10 text-base" : "h-7 w-7 text-sm";
-  const tone = child ? "bg-[#d6ebf7] text-[#2d5f7c]" : "bg-[#f5d4b8] text-[var(--color-ink)]";
+  // Soft pastel gradient (peach/pink to lavender, mint for children), thin light ring, soft shadow.
+  const tone = child
+    ? "bg-[linear-gradient(135deg,#f8d9c4_0%,#f2d3d6_35%,#cfe6dc_70%,#c9d3ef_100%)] text-[#2b2622]"
+    : "bg-[linear-gradient(135deg,#f8d3c0_0%,#f4cbc8_38%,#d9d2ec_70%,#c8cdf1_100%)] text-[#2b2622]";
+  const ring = "ring-2 ring-white/85 shadow-[0_2px_6px_rgba(150,120,160,0.28)]";
   return (
     <span
       aria-hidden
-      className={`inline-flex shrink-0 items-center justify-center rounded-full font-bold ${dims} ${tone}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full font-bold ${dims} ${tone} ${ring}`}
     >
       {avatarInitial(name)}
     </span>

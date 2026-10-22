@@ -28,14 +28,27 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
       familyHasPlus(familyAccountId).catch(() => false),
       effectiveReaderMode(familySession),
     ]);
+    const childMode = mode.type === "sub" || readerKey?.type === "sub";
     if (account) {
-      family = {
-        email: account.email,
-        displayName: account.displayName,
-        isPlus,
-        children,
-        childMode: mode.type === "sub",
-      };
+      family = childMode
+        ? {
+            // Child mode: no parent email, family name or sibling names reach the browser.
+            email: "",
+            displayName: null,
+            isPlus: false,
+            children:
+              readerKey?.type === "sub"
+                ? children.filter((c) => c.id === readerKey.subProfileId)
+                : [],
+            childMode: true,
+          }
+        : {
+            email: account.email,
+            displayName: account.displayName,
+            isPlus,
+            children,
+            childMode: false,
+          };
     }
   }
 

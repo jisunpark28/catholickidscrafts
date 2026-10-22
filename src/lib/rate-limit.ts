@@ -110,3 +110,10 @@ export const GOOGLE_LOGIN_RULE: RateLimitRule = {
   windowMs: 15 * 60 * 1000,
   blockMs: 15 * 60 * 1000,
 };
+
+/** Feedback form: 5 submissions per IP in 10 minutes, then 30 minutes blocked. */
+export const FEEDBACK_RULE: RateLimitRule = {
+  max: 5,
+  windowMs: 10 * 60 * 1000,
+  blockMs: 30 * 60 * 1000,
+};

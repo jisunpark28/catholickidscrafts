@@ -17,7 +17,7 @@ export type HeaderSessionResponse = {
 export function headerButtonLabel(session: HeaderSessionResponse | null): string {
   if (!session) return "Sign in";
   if (session.family) {
-    return session.family.displayName?.trim() || session.family.email;
+    return session.family.displayName?.trim() || session.family.email || "Parent";
   }
   if (session.reader) {
     return session.reader.displayName;
