@@ -3,18 +3,18 @@ import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
 import { PrayersReader } from "@/components/prayers/PrayersReader";
 import { loadPublishedQa } from "@/lib/liturgy-qa";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import "@/styles/prayers.css";
 import "@/styles/qa-cards.css";
 
-export const metadata: Metadata = {
-  title: "Catholic Prayers",
+export const metadata: Metadata = pageMetadata({
+  title: "Catholic Prayers for Kids",
   description:
-    "Essential Catholic prayers for children and catechists: Our Father, Hail Mary, creeds, meal prayers, and more.",
-  ...canonicalForPath("/prayers"),
-};
+    "Learn Catholic prayers with kids: the Sign of the Cross, Our Father, Hail Mary and more on tap-to-pray cards, each available in 10 languages.",
+  path: "/prayers",
+});
 
 // Prayer cards are edited in admin, so read them per request.
 export const dynamic = "force-dynamic";

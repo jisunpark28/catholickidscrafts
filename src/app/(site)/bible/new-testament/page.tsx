@@ -1,13 +1,15 @@
 import { BibleTestamentHub } from "@/components/bible/BibleTestamentHub";
 import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "New Testament",
-  description: "Choose a New Testament book to read and collect praise stickers.",
-  ...canonicalForPath("/bible/new-testament"),
-};
+export const metadata: Metadata = pageMetadata({
+  title: "New Testament for Kids – Bible Typing",
+  absoluteTitle: true,
+  description:
+    "Read and type the New Testament chapter by chapter, Matthew to Revelation. Type with 80% accuracy to earn praise stickers. Free Catholic Bible for kids.",
+  path: "/bible/new-testament",
+});
 
 export default async function NewTestamentPage() {
   const books = await fetchBibleBooks().catch(() => []);

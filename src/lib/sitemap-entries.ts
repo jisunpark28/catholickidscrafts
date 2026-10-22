@@ -22,7 +22,7 @@ export const CHILD_SITEMAP_PATHS = ["/sitemaps/pages/sitemap.xml", "/sitemaps/bi
  */
 const PLAY_ALIAS_SLUGS = new Set(["emoji"]);
 
-/** Indexable public pages that are not generated from data. Excluded on purpose: /gospel (alias of /bible/gospel), /newsletter, /unsubscribe and /subscribe/success (noindex), /account/*, /reader/*, /admin/*, /api/* and /print/*. */
+/** Indexable public pages that are not generated from data. Excluded on purpose: /gospel (alias of /bible/gospel), /gallery, /newsletter, /unsubscribe and /subscribe/success (noindex), /account/*, /reader/*, /admin/*, /api/* and /print/*. */
 const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFrequency"], priority: number]> = [
   ["/", "weekly", 1],
   ["/mass", "daily", 0.95],
@@ -34,7 +34,6 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/play", "weekly", 0.75],
   ["/prayers", "monthly", 0.75],
   ["/mass/participation", "monthly", 0.7],
-  ["/gallery", "weekly", 0.7],
   ["/about", "yearly", 0.5],
   ["/subscribe", "monthly", 0.5],
   ["/privacy", "yearly", 0.3],

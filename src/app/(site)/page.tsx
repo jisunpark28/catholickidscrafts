@@ -7,16 +7,17 @@ import { getPublicContactEmail } from "@/lib/site-contact";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { currentSeasonHref } from "@/lib/liturgy-season-href";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Home",
+export const metadata: Metadata = pageMetadata({
+  title: "Catholic Kids Crafts – Mass, Bible & Prayer Activities",
+  absoluteTitle: true,
   description:
-    "Daily Mass, Bible reading, liturgical activities, and games for Catholic children's ministry.",
-  ...canonicalForPath("/"),
-};
+    "Free Catholic activities for kids: today's Gospel, Bible typing, prayers, Mass games and liturgical year lessons for parents and Sunday school catechists.",
+  path: "/",
+});
 
 export const dynamic = "force-dynamic";
 

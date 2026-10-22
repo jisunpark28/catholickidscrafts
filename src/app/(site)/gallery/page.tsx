@@ -4,16 +4,18 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { listApprovedGallerySubmissions } from "@/lib/craft-gallery";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Family craft gallery",
-  description: "Photos shared by families after trying Catholic Kids Crafts activities.",
-  ...canonicalForPath("/gallery"),
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Family Catholic Craft Gallery",
+  description:
+    "See Catholic crafts made by families and kids from our activities. Approved photos shared by families appear here. Get ideas for your next faith craft.",
+  path: "/gallery",
+  robots: { index: false, follow: true },
+});
 
 export default async function GalleryPage() {
   const [items, copy] = await Promise.all([

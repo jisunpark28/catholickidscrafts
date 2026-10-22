@@ -5,26 +5,41 @@ import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
 import { WeeklyThisWeekSection } from "@/components/liturgy/WeeklyThisWeekSection";
 import {
   isLiturgyTopic,
+  type LiturgyTopic,
   LITURGY_TOPIC_LABELS,
   loadLiturgyCards,
 } from "@/lib/liturgy-cards";
 import { loadPublishedQa } from "@/lib/liturgy-qa";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import { loadThisWeek, loadWeeklyCardsForTopic } from "@/lib/weekly-content";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import "@/styles/qa-cards.css";
+
+const LITURGY_SEO: Record<LiturgyTopic, { title: string; description: string }> = {
+  "mass": { title: "Questions About Mass for Kids", description: "Why do we go to Mass? Kid-friendly questions and answers on flip cards explain what happens at Mass. Ready to use in Sunday school or at home." },
+  "sacraments": { title: "The Seven Sacraments for Kids", description: "Learn the seven sacraments with kid-friendly flip cards: Baptism, Eucharist, Confirmation and more. Simple Catholic answers for Sunday school and home." },
+  "saints": { title: "Catholic Saints for Kids", description: "Meet the Catholic saints with kid-friendly flip cards and activities. Simple stories and questions about holy men and women for Sunday school and home." },
+  "devotions": { title: "Catholic Devotions for Kids", description: "Rosary, Stations of the Cross and other Catholic devotions explained for kids with flip cards and simple answers, for catechists and parents." },
+  "ordinary-time": { title: "Ordinary Time for Kids", description: "What is Ordinary Time and why is it green? Kid-friendly flip cards and this week's activities for Catholic Sunday school and families." },
+  "advent": { title: "Advent for Kids – Catholic Activities", description: "Advent is getting our hearts ready for Jesus. Kid-friendly flip cards and weekly activities explain the Advent wreath, colors and waiting for Christmas." },
+  "christmas-time": { title: "Christmas Time for Kids", description: "Celebrate the Christmas season with kids: flip cards about the Nativity, Epiphany and Baptism of the Lord, plus weekly Catholic activities." },
+  "lent": { title: "Lent for Kids – Catholic Activities", description: "Prayer, fasting and almsgiving explained for kids. Flip cards and weekly activities help children and catechists walk through Lent toward Easter." },
+  "paschal-triduum": { title: "Holy Week & Triduum for Kids", description: "Holy Thursday, Good Friday and the Easter Vigil explained for kids with flip cards and simple answers, for Catholic families and catechists." },
+  "easter-time": { title: "Easter Season for Kids", description: "Jesus is risen! Kid-friendly flip cards and weekly activities for the 50 days of Easter, from Easter Sunday to Pentecost, for home and Sunday school." },
+};
 
 type Props = { params: Promise<{ topic: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { topic } = await params;
   if (!isLiturgyTopic(topic)) return { title: "Not found" };
-  return {
-    title: LITURGY_TOPIC_LABELS[topic],
-    description: `${LITURGY_TOPIC_LABELS[topic]} resources for children and catechists.`,
-    ...canonicalForPath(`/liturgy/${topic}`),
-  };
+  const seo = LITURGY_SEO[topic];
+  return pageMetadata({
+    title: seo.title,
+    description: seo.description,
+    path: `/liturgy/${topic}`,
+  });
 }
 
 export const dynamic = "force-dynamic";

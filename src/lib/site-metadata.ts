@@ -50,3 +50,47 @@ export function canonicalForPath(path: string): Pick<Metadata, "alternates"> {
   const normalized = path.startsWith("/") ? path : `/${path}`;
   return { alternates: { canonical: normalized } };
 }
+
+const SITE_NAME = "Catholic Kids Crafts";
+const DEFAULT_OG_IMAGE = { url: "/logo.png", width: 512, height: 512, alt: SITE_NAME };
+
+type PageMetadataInput = {
+  /** Page title without the " | Catholic Kids Crafts" suffix (the root template adds it). */
+  title: string;
+  /** Use the title as-is with no site suffix (e.g. when the brand is already in it). */
+  absoluteTitle?: boolean;
+  description: string;
+  /** Canonical path, e.g. "/mass". Also used for og:url. */
+  path: string;
+  robots?: Metadata["robots"];
+};
+
+/**
+ * Per-page SEO metadata: title, description, canonical, and matching Open Graph / Twitter
+ * tags (og:title without the site suffix, og:url = canonical). Next.js replaces the root
+ * openGraph/twitter objects instead of merging them, so the shared fields are repeated here.
+ */
+export function pageMetadata({ title, absoluteTitle, description, path, robots }: PageMetadataInput): Metadata {
+  const canonical = path.startsWith("/") ? path : `/${path}`;
+  return {
+    title: absoluteTitle ? { absolute: title } : title,
+    description,
+    alternates: { canonical },
+    ...(robots ? { robots } : {}),
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      siteName: SITE_NAME,
+      url: canonical,
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE.url],
+    },
+  };
+}

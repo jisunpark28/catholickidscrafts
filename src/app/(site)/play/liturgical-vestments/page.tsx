@@ -3,15 +3,15 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Liturgical Vestments Game",
+export const metadata: Metadata = pageMetadata({
+  title: "Liturgical Colors Game for Kids",
   description:
-    "Dress Father in the right liturgical color for each season—using the Come to Mass! priest character.",
-  ...canonicalForPath("/play/liturgical-vestments"),
-};
+    "What color does Father wear today? Kids pick the right vestment color for Advent, Lent, Easter, feasts and Ordinary Time in this 12-round quiz game.",
+  path: "/play/liturgical-vestments",
+});
 
 export default async function LiturgicalVestmentsPage() {
   const copy = await getSiteCopyMap();

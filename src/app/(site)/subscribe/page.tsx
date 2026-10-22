@@ -2,7 +2,7 @@ import { BillingButton, PlanCheckout } from "@/components/BillingButton";
 import { PageShell } from "@/components/PageShell";
 import { getReaderKey } from "@/lib/bible/reader";
 import { requireFamilySession } from "@/lib/family-auth";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import { isBillingConfigured, stripePriceAnnual } from "@/lib/stripe";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
 import { PLAN_FEATURES, PLUS_PRICE_LABEL, planRenewalLine } from "@/lib/subscription/plan-copy";
@@ -11,11 +11,13 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Catholic Kids Crafts Plus",
-  description: "Memos and catechism activities for your whole family. CA$5.99/month, cancel anytime.",
-  ...canonicalForPath("/subscribe"),
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Catholic Kids Crafts Plus – Family Plan",
+  absoluteTitle: true,
+  description:
+    "One Plus plan for the whole family, up to 5 children: Bible typing extras, memos and catechism activities. CA$5.99/month, cancel anytime.",
+  path: "/subscribe",
+});
 
 const btn =
   "block w-full bg-[var(--color-accent)] px-4 py-3 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60";

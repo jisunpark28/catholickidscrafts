@@ -3,14 +3,15 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { TypingGameHub } from "@/components/TypingGameHub";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Typing Game",
-  description: "Church vocabulary typing game with Easy, Medium, and Hard levels.",
-  ...canonicalForPath("/play/typing"),
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Church Words Typing Game",
+  description:
+    "Type Catholic church words before they land! A free typing game for kids in grade 2 and up with easy, medium and hard levels. Plays right in the browser.",
+  path: "/play/typing",
+});
 
 export default async function PlayTypingPage() {
   const copy = await getSiteCopyMap();

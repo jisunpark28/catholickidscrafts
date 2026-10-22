@@ -6,18 +6,18 @@ import { PageShell } from "@/components/PageShell";
 import { parseKindParam } from "@/lib/recommendation-types";
 import { getPublishedRecommendations } from "@/lib/recommendations";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Recommendations",
+export const metadata: Metadata = pageMetadata({
+  title: "Catholic Books & Videos for Kids",
   description:
-    "Curated Catholic videos, books, templates, and resources for families and teachers.",
-  ...canonicalForPath("/recommendations"),
-};
+    "Catholic books, Bible videos, templates and websites we use with kids and would suggest to a friend on the parish team. Some links are affiliate links.",
+  path: "/recommendations",
+});
 
 type Props = {
   searchParams: Promise<{ q?: string; kind?: string }>;
