@@ -5,11 +5,16 @@ import { PhotoBoothGame } from "@/components/PhotoBoothGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbNode, playAppNode } from "@/lib/structured-data";
+
+const SEO_TITLE = "4-Cut Photo Booth for Kids";
+const SEO_DESCRIPTION =
+  "Make a 4-cut photo strip with Catholic frames, stickers and backgrounds. Use the camera or upload photos; editing happens on your device, not our servers.";
 
 export const metadata: Metadata = pageMetadata({
-  title: "4-Cut Photo Booth for Kids",
-  description:
-    "Make a 4-cut photo strip with Catholic frames, stickers and backgrounds. Use the camera or upload photos; editing happens on your device, not our servers.",
+  title: SEO_TITLE,
+  description: SEO_DESCRIPTION,
   path: "/play/photo-booth",
 });
 
@@ -18,6 +23,12 @@ export default async function PhotoBoothPage() {
 
   return (
     <PageShell wide>
+      <JsonLd
+        nodes={[
+          breadcrumbNode([{ name: "Play & Learn", path: "/play" }, { name: SEO_TITLE, path: "/play/photo-booth" }]),
+          playAppNode({ name: SEO_TITLE, description: SEO_DESCRIPTION, path: "/play/photo-booth", kind: "tool" }),
+        ]}
+      />
       <Link
         href="/play"
         className="text-sm font-semibold text-[var(--color-link)] hover:underline"

@@ -11,6 +11,8 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Parent sign-in",
+  // Sign-in screens have no search value; keep them out of the index.
+  robots: { index: false, follow: true },
   description: "Sign in to manage family reader profiles and Bible sticker progress.",
   ...canonicalForPath("/account/login"),
 };

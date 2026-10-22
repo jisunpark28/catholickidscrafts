@@ -16,6 +16,8 @@ import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import type { MassDay, MassDaySummary, MonthCalendar } from "@/types/mass";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbNode } from "@/lib/structured-data";
 import "@/styles/daily-mass.css";
 
 export const metadata: Metadata = pageMetadata({
@@ -115,6 +117,7 @@ export default async function DailyMassPage({
 
   return (
     <HomePdfShell groups={groups} dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}>
+      <JsonLd nodes={[breadcrumbNode([{ name: "Daily Mass", path: "/daily-mass" }])]} />
       <DailyMassView
         dateKey={dateKey}
         explicitDate={Boolean(requested)}

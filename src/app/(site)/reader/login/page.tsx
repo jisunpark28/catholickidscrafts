@@ -8,6 +8,8 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Reader sign-in",
+  // Sign-in screens have no search value; keep them out of the index.
+  robots: { index: false, follow: true },
   description: "Sign in with an Access ID from your parent or teacher.",
   ...canonicalForPath("/reader/login"),
 };

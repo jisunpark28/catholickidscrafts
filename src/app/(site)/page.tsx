@@ -8,14 +8,16 @@ import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { currentSeasonHref } from "@/lib/liturgy-season-href";
 import { pageMetadata } from "@/lib/site-metadata";
+import { LITURGY_TOPIC_LABELS, isLiturgyTopic } from "@/lib/liturgy-topics";
+import { SITE_DESCRIPTION, worksheetNode } from "@/lib/structured-data";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Catholic Kids Crafts – Mass, Bible & Prayer Activities",
+  title: "Catholic Kids Crafts | Free Mass, Bible & Prayer Activities",
   absoluteTitle: true,
-  description:
-    "Free Catholic activities for kids: today's Gospel, Bible typing, prayers, Mass games and liturgical year lessons for parents and Sunday school catechists.",
+  description: SITE_DESCRIPTION,
   path: "/",
 });
 
@@ -89,7 +91,7 @@ const FEATURES: Feature[] = [
     title: "Play & Learn",
     hook: "Learn the faith by playing!",
     description: "Faith games for kids: Come to Mass!, liturgical vestments, hangman and more.",
-    benefits: ["Ages & play time on every game", "Photos stay on your device"],
+    benefits: ["Play time on every game", "Photos stay on your device"],
     badge: "🎉 Faith games",
     cta: "Play now",
   },
@@ -142,6 +144,8 @@ export default async function HomePage() {
   });
 
   const seasonHref = currentSeasonHref();
+  const seasonSlug = seasonHref.replace("/liturgy/", "");
+  const seasonLabel = isLiturgyTopic(seasonSlug) ? LITURGY_TOPIC_LABELS[seasonSlug] : "seasonal";
   const slides: HomeFeatureSlide[] = FEATURES.map((f) => {
     const title = copyText(copy, `home.features.${f.id}.title`, f.title);
     const href = f.id === "liturgy" ? seasonHref : f.href;
@@ -180,6 +184,8 @@ export default async function HomePage() {
             liturgicalName={sheet.liturgicalName}
             sundayLabel={sheet.sundayLabel}
             gospelRef={sheet.gospelRef}
+            seasonHref={seasonHref}
+            seasonLabel={seasonLabel}
             groupInquiryHref={groupInquiryHref}
             emailEnabled={emailEnabled}
           />
@@ -189,6 +195,20 @@ export default async function HomePage() {
 
   return (
     <HomePdfShell groups={groups} dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}>
+      {sheet ? (
+        <JsonLd
+          nodes={[
+            worksheetNode({
+              name: sheet.levels.level1.title || sheet.liturgicalName,
+              gospelRef: sheet.gospelRef,
+              description: `Free printable Sunday Gospel sheet for ${sheet.liturgicalName} (${sheet.gospelRef}), in two levels.`,
+              pagePath: "/",
+              // Both levels print from /print/[slug] with no Plus check.
+              isAccessibleForFree: true,
+            }),
+          ]}
+        />
+      ) : null}
       <h1 className="sr-only">
         {copyText(copy, "home.hub.title", "Catholic crafts, prayers, and games for kids")}
       </h1>

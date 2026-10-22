@@ -2,12 +2,13 @@ import { BibleTestamentHub } from "@/components/bible/BibleTestamentHub";
 import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbNode } from "@/lib/structured-data";
 
 export const metadata: Metadata = pageMetadata({
-  title: "New Testament for Kids – Bible Typing",
-  absoluteTitle: true,
+  title: "Bible Typing for Kids: New Testament",
   description:
-    "Read and type the New Testament chapter by chapter, Matthew to Revelation. Type with 80% accuracy to earn praise stickers. Free Catholic Bible for kids.",
+    "Type your way through the New Testament chapter by chapter, Matthew to Revelation! Fun, interactive Bible typing with praise stickers for children.",
   path: "/bible/new-testament",
 });
 
@@ -16,10 +17,13 @@ export default async function NewTestamentPage() {
   const ntBooks = booksByTestament(books, "NT");
 
   return (
-    <BibleTestamentHub
-      title="New Testament"
-      description="Choose a book to read chapter by chapter. Type with 80% accuracy to earn praise stickers."
-      books={ntBooks}
-    />
+    <>
+      <JsonLd nodes={[breadcrumbNode([{ name: "New Testament", path: "/bible/new-testament" }])]} />
+      <BibleTestamentHub
+        title="New Testament"
+        description="Choose a book to read chapter by chapter. Type with 80% accuracy to earn praise stickers."
+        books={ntBooks}
+      />
+    </>
   );
 }
