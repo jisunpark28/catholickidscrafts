@@ -2,16 +2,16 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { getPlayGamesFromCopy } from "@/lib/play-games-copy";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Play & Learn",
+export const metadata: Metadata = pageMetadata({
+  title: "Catholic Games for Kids",
   description:
-    "Interactive Catholic games: explore the church, gospel typing, hangman, face to emoji, and photo booth fun.",
-  ...canonicalForPath("/play"),
-};
+    "Free Catholic games for kids: Come to Mass!, liturgical vestment colors, church-word typing, hangman and a photo booth. Great for Sunday school and home.",
+  path: "/play",
+});
 
 export default async function PlayHubPage() {
   const copy = await getSiteCopyMap();

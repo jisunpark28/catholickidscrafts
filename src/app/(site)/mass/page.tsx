@@ -5,14 +5,15 @@ import { todayUtc, toDateKey } from "@/lib/dates";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { formatRomanCalendarCelebration } from "@/lib/liturgical-calendar";
 import { fetchMassDaySummaryWithCalendar, fetchMonthCalendar } from "@/lib/mass-source";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Daily Mass",
-  description: "English Catholic daily Mass calendar with links to official reading sites.",
-  ...canonicalForPath("/mass"),
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Liturgical Calendar & Today at Mass",
+  description:
+    "See what the Church celebrates today: liturgical season, feast days and saints, with links to the official Mass readings. Plan your Catholic kids lesson.",
+  path: "/mass",
+});
 
 export const dynamic = "force-dynamic";
 

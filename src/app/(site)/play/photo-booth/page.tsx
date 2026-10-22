@@ -3,15 +3,15 @@ import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
 import { PhotoBoothGame } from "@/components/PhotoBoothGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "4-Cut Photo Booth",
+export const metadata: Metadata = pageMetadata({
+  title: "4-Cut Photo Booth for Kids",
   description:
-    "Upload or take photos, then decorate with backgrounds and stickers—make a fun photo strip in your browser.",
-  ...canonicalForPath("/play/photo-booth"),
-};
+    "Make a 4-cut photo strip with Catholic frames, stickers and backgrounds. Use the camera or upload photos; editing happens on your device, not our servers.",
+  path: "/play/photo-booth",
+});
 
 export default async function PhotoBoothPage() {
   const copy = await getSiteCopyMap();

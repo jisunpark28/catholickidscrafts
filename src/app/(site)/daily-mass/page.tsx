@@ -11,19 +11,19 @@ import { formatLiturgicalTitleDisplay } from "@/lib/liturgical-calendar";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
 import { fetchMassDay, fetchMonthCalendar } from "@/lib/mass-source";
 import { livingWithChristReadingUrl } from "@/lib/scripture-links";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import type { MassDay, MassDaySummary, MonthCalendar } from "@/types/mass";
 import type { Metadata } from "next";
 import "@/styles/daily-mass.css";
 
-export const metadata: Metadata = {
-  title: "Daily Mass",
+export const metadata: Metadata = pageMetadata({
+  title: "Today's Mass Readings for Kids",
   description:
-    "Today's liturgical day, vestment color, and Mass reading citations with links to USCCB and Living with Christ, plus family talk questions for kids.",
-  ...canonicalForPath("/daily-mass"),
-};
+    "Today's Mass readings and Gospel with kid-friendly questions and a Faith Journal. Read with your children or Sunday school class, then talk about it.",
+  path: "/daily-mass",
+});
 
 export const dynamic = "force-dynamic";
 

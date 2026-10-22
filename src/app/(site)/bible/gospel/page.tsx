@@ -8,15 +8,16 @@ import {
 import { getReaderKey } from "@/lib/bible/reader";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Today's Gospel",
-  description: "Type today's Gospel and collect daily praise stickers on your reading calendar.",
-  ...canonicalForPath("/bible/gospel"),
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Today's Gospel Typing for Kids",
+  description:
+    "Type today's Gospel from the Catholic Mass and collect a daily praise sticker on your reading calendar. A simple daily Bible habit for kids and families.",
+  path: "/bible/gospel",
+});
 
 export const dynamic = "force-dynamic";
 

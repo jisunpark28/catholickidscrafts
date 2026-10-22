@@ -2,16 +2,16 @@ import Link from "next/link";
 import { FaceToEmojiEmbed } from "@/components/FaceToEmojiEmbed";
 import { PageHeader } from "@/components/PageHeader";
 import { PageShell } from "@/components/PageShell";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Face to Emoji",
+export const metadata: Metadata = pageMetadata({
+  title: "Face to Emoji Party Photo Fun",
   description:
-    "Upload a photo and replace faces with emoji automatically—private, in-browser editing for class parties and feast days.",
-  ...canonicalForPath("/play/face-to-emoji"),
-};
+    "Turn group photos into emoji fun for feast-day parties, First Communion or end-of-year celebrations. Faces are found in your browser; nothing is uploaded.",
+  path: "/play/face-to-emoji",
+});
 
 export default async function FaceToEmojiPage() {
   const copy = await getSiteCopyMap();

@@ -3,7 +3,8 @@ import { Suspense } from "react";
 import { BibleChapterReadClient } from "@/components/bible/BibleChapterReadClient";
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
-import { fetchBibleChapter } from "@/lib/bible/latinprayer";
+import { getCatholicBookName } from "@/lib/bible/catholic-book-names";
+import { fetchBibleBooks, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { modernizeVerse } from "@/lib/bible/modernize-for-reading";
 import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
 import type { PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
@@ -12,17 +13,32 @@ import { hasPaidFeatures } from "@/lib/subscription/entitlements";
 import { normalizePassageText } from "@/lib/typing-accuracy";
 import { getHeaderSession } from "@/lib/get-header-session";
 import { isHeaderSignedIn } from "@/lib/header-session";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
+
+const TITLE_SUFFIX = " | Catholic Kids Crafts";
+
+/** Keep the full title at 60 characters or less (see titles proposal). */
+function chapterTitle(ref: string): { title: string; absoluteTitle?: boolean } {
+  for (const title of [`${ref} – Type & Read the Bible`, `${ref} – Type the Bible`]) {
+    if (title.length + TITLE_SUFFIX.length <= 60) return { title };
+  }
+  return { title: `${ref} – Bible Typing for Kids`, absoluteTitle: true };
+}
 
 type Props = { params: Promise<{ bookSlug: string; chapter: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { bookSlug, chapter } = await params;
-  return {
-    title: `Type ${bookSlug} ${chapter}`,
-    ...canonicalForPath(`/bible/read/${bookSlug}/${chapter}`),
-  };
+  const books = await fetchBibleBooks().catch(() => []);
+  const bookName =
+    books.find((b) => b.slug === bookSlug)?.name ?? getCatholicBookName(bookSlug, "en", bookSlug);
+  const ref = `${bookName} ${chapter}`;
+  return pageMetadata({
+    ...chapterTitle(ref),
+    description: `Read and type ${ref} from the Catholic Bible (Douay-Rheims). Kids type with 80% accuracy to earn a praise sticker on their reading calendar.`,
+    path: `/bible/read/${bookSlug}/${chapter}`,
+  });
 }
 
 export default async function BibleReadPage({ params }: Props) {

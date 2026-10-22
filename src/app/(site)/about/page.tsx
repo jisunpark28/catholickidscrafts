@@ -2,16 +2,17 @@ import { LegalPage } from "@/components/LegalPage";
 import { getPublicContactEmail, getPublicContactMailto } from "@/lib/site-contact";
 import { getTptStoreUrl } from "@/lib/tpt";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
-import { canonicalForPath } from "@/lib/site-metadata";
+import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata: Metadata = pageMetadata({
+  title: "About Catholic Kids Crafts",
+  absoluteTitle: true,
   description:
-    "Why Catholic Kids Crafts exists—to support children's ministry in parishes and homes.",
-  ...canonicalForPath("/about"),
-};
+    "Why we built Catholic Kids Crafts: simple, free faith formation activities and printables so parent volunteers can run Sunday school with confidence.",
+  path: "/about",
+});
 
 export default async function AboutPage() {
   const tptStore = getTptStoreUrl();
