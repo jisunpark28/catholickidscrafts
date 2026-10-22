@@ -1,4 +1,5 @@
 import { HomeFeatureCarousel, type HomeFeatureSlide, type HomeLeadSlide } from "@/components/home/HomeFeatureCarousel";
+import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SundaySheetHero } from "@/components/home/SundaySheetHero";
 import { emailConfigured } from "@/lib/email";
@@ -215,6 +216,8 @@ export default async function HomePage() {
       <p className="sr-only">
         {copyText(copy, "home.hub.subtitle", "Free liturgical activities for catechists and parents.")}
       </p>
+      <div className="relative isolate pb-16 pt-6 sm:pt-8">
+        <HomeBackdrop />
       <HomeFeatureCarousel
         eyebrow={copyText(copy, "home.features.heading", "What you can do here")}
         heading={copyText(copy, "home.features.headline", "Faith fun for every week")}
@@ -224,6 +227,7 @@ export default async function HomePage() {
         prevLabel={copyText(copy, "home.features.prev", "Previous feature")}
         nextLabel={copyText(copy, "home.features.next", "Next feature")}
       />
+      </div>
     </HomePdfShell>
   );
 }

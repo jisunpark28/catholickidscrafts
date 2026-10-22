@@ -4,6 +4,8 @@ export type HomePdfLink = {
   id: string;
   label: string;
   href: string;
+  /** Small book icon shown left of the label (Bible group only). */
+  icon?: "open-book" | "bible";
 };
 
 export type HomePdfGroup = {
@@ -26,6 +28,7 @@ type PdfItem = {
   fallback: string;
   /** Keep this href even when a home-section item matches the label. */
   lockHref?: boolean;
+  icon?: HomePdfLink["icon"];
 };
 
 const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
@@ -38,18 +41,21 @@ const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
         label: "Today's Gospel",
         match: /gospel/i,
         fallback: "/gospel",
+        icon: "open-book",
       },
       {
         id: "old-testament",
         label: "Old Testament",
         match: /old testament/i,
         fallback: "/bible/genesis",
+        icon: "bible",
       },
       {
         id: "new-testament",
         label: "New Testament",
         match: /new testament/i,
         fallback: "/bible/matthew",
+        icon: "bible",
       },
     ],
   },
@@ -153,10 +159,11 @@ export function buildHomePdfNav(
     items: group.items.map((item) => {
       const found = pool.find((entry) => !used.has(entry.id) && item.match.test(entry.title));
       if (found) used.add(found.id);
+      const icon = item.icon ? { icon: item.icon } : {};
       if (found && !item.lockHref) {
-        return { id: found.id, label: item.label, href: found.href };
+        return { id: found.id, label: item.label, href: found.href, ...icon };
       }
-      return { id: item.id, label: item.label, href: item.fallback };
+      return { id: item.id, label: item.label, href: item.fallback, ...icon };
     }),
   }));
 

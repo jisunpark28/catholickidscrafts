@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/components/AuthProvider";
+import { FeedbackWidget } from "@/components/FeedbackWidget";
 import { SiteJsonLd } from "@/components/SiteJsonLd";
 import { getGoogleSiteVerification } from "@/lib/google-site-verification";
 import { siteMetadata } from "@/lib/site-metadata";
@@ -37,6 +38,7 @@ export default async function RootLayout({
       >
         <SiteJsonLd />
         <AuthProvider>{children}</AuthProvider>
+        <FeedbackWidget />
         <Analytics />
       </body>
     </html>

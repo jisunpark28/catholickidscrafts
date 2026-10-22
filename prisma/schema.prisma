@@ -683,3 +683,19 @@ model LiturgyQaCard {
   @@unique([topicSlug, sortOrder])
   @@index([topicSlug, status, sortOrder])
 }
+
+/// Site-wide floating feedback form. Identity fields come only from the signed session, never the client.
+model Feedback {
+  id              String   @id @default(cuid())
+  /// doctrine | bug | idea | plus (see src/lib/feedback.ts)
+  category        String
+  message         String
+  email           String?
+  pagePath        String?
+  familyAccountId String?
+  subProfileId    String?
+  createdAt       DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([category, createdAt])
+}
