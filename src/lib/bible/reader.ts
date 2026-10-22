@@ -1,5 +1,5 @@
 import { verifyReaderSession, READER_SESSION_COOKIE, type ReaderSession } from "@/lib/family-session";
-import { getFamilySession } from "@/lib/family-auth";
+import { effectiveReaderMode, getDeviceLock, getFamilySession } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
@@ -47,19 +47,42 @@ async function isReaderSessionCurrent(session: ReaderSession): Promise<boolean> 
 /** Active reader for Bible progress: reader session, then parent family sign-in, then guest. */
 export const getReaderKey = cache(async (): Promise<ReaderKey | null> => {
   const jar = await cookies();
+  const family = await getFamilySession();
+  const familyMode = family ? await effectiveReaderMode(family) : null;
 
   const readerToken = jar.get(READER_SESSION_COOKIE)?.value?.trim();
-  if (readerToken) {
-    const session = await verifyReaderSession(readerToken);
-    if (session && (await isReaderSessionCurrent(session))) {
-      if (session.type === "owner") {
-        return { type: "owner", familyAccountId: session.familyAccountId };
+  const readerSession = readerToken ? await verifyReaderSession(readerToken) : null;
+  const reader =
+    readerSession && (await isReaderSessionCurrent(readerSession)) ? readerSession : null;
+
+  // Child mode is decided by the signed parent cookie, never by ckc_reader alone:
+  // a missing or edited reader cookie keeps the device on the child (or on no reader).
+  if (family && familyMode?.type === "sub") {
+    const subId =
+      familyMode.subProfileId ??
+      (reader?.type === "sub" && reader.familyAccountId === family.familyAccountId
+        ? reader.subProfileId
+        : null);
+    if (subId) {
+      const sub = await prisma.subProfile.findUnique({
+        where: { id: subId },
+        select: { active: true, familyAccountId: true },
+      });
+      if (sub?.active && sub.familyAccountId === family.familyAccountId) {
+        return { type: "sub", subProfileId: subId };
       }
-      return { type: "sub", subProfileId: session.subProfileId };
+    }
+    return null;
+  }
+
+  if (reader) {
+    if (reader.type === "sub") return { type: "sub", subProfileId: reader.subProfileId };
+    // An owner reader token alone is not enough on a locked device without a parent session.
+    if (family || !(await getDeviceLock())) {
+      return { type: "owner", familyAccountId: reader.familyAccountId };
     }
   }
 
-  const family = await getFamilySession();
   if (family) {
     return { type: "owner", familyAccountId: family.familyAccountId };
   }

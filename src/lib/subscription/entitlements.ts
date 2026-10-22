@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getAdmin } from "@/lib/admin-auth";
 import type { ReaderKey } from "@/lib/bible/reader";
 import { prisma } from "@/lib/prisma";
 import { subscriptionGrantsPlus, type SubscriptionSnapshot } from "@/lib/subscription/status";
@@ -21,8 +21,8 @@ export function paidPreviewEmails(): Set<string> {
 
 async function isAdminSignedIn(): Promise<boolean> {
   try {
-    const session = await auth();
-    return Boolean(session?.user?.email);
+    // getAdmin() is DB-backed and refuses child-mode browsers.
+    return Boolean(await getAdmin());
   } catch {
     return false;
   }

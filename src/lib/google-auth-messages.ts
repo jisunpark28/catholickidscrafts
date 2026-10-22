@@ -10,6 +10,8 @@ export function googleAuthErrorMessage(code: string | undefined): string | null 
       return "Could not save your account to the database. Run npx prisma migrate deploy, then try again.";
     case "google_session":
       return "Account was created but sign-in could not finish. Check AUTH_SECRET in .env, restart pnpm dev, and try Google sign-in again.";
+    case "google_reauth_required":
+      return "This device is in child mode. Google did not ask for a password just now, so we kept the child reading. Grown-ups: sign out of Google on this device (google.com, then your profile picture, then Sign out), then sign in here again.";
     case "google_state":
       return "Sign-in expired. Please try again.";
     case "google_profile":

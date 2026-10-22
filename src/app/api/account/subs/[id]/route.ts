@@ -1,14 +1,13 @@
-import { requireFamilySession } from "@/lib/family-auth";
+import { parentApiGuard } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: Params) {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
 
   const { id } = await params;
   let body: { displayName?: string; active?: boolean };
@@ -45,10 +44,9 @@ export async function PATCH(request: Request, { params }: Params) {
 }
 
 export async function DELETE(_request: Request, { params }: Params) {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
 
   const { id } = await params;
   const existing = await prisma.subProfile.findFirst({

@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { isSuperAdmin } from "@/lib/admin-roles";
+import { isFamilyChildMode } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import type { AdminRole } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -20,6 +21,8 @@ export async function getAdmin(): Promise<{ session: Session; admin: AdminIdenti
     const id = session?.user?.id;
     const email = session?.user?.email?.trim().toLowerCase();
     if (!session?.user || !id || !email) return null;
+    // A browser handed to a child (family cookie in child mode) never has admin access.
+    if (await isFamilyChildMode()) return null;
     const admin = await prisma.adminUser.findUnique({
       where: { id },
       select: { id: true, email: true, role: true },

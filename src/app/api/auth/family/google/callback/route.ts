@@ -5,14 +5,23 @@ import {
 import { mergeGuestProgressIntoReader } from "@/lib/bible/progress";
 import { assertFamilyAuthConfigured, googleAccountFailureReason } from "@/lib/family-auth-errors";
 import { findOrCreateFamilyFromGoogle } from "@/lib/family-google";
-import { setFamilyAndOwnerReaderCookies } from "@/lib/family-auth";
+import {
+  clearDeviceLock,
+  getDeviceLock,
+  setFamilyAndOwnerReaderCookies,
+  setFamilyChildModeCookies,
+} from "@/lib/family-auth";
+import { prisma } from "@/lib/prisma";
 import {
   fetchGoogleUserProfile,
+  GOOGLE_FRESH_AUTH_MAX_AGE_SEC,
+  GOOGLE_OAUTH_NONCE_COOKIE,
   verifyGoogleOAuthState,
   type GoogleOAuthFrom,
 } from "@/lib/google-oauth";
 import { clientIpFromHeaders } from "@/lib/client-ip";
 import { GOOGLE_LOGIN_RULE, recordRateLimitFailure } from "@/lib/rate-limit";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -75,6 +84,44 @@ export async function GET(request: Request) {
     return failRedirect("google_session");
   }
 
+  // Device lock (the device was handed to a child): the parent only gets back in with a
+  // verified, fresh Google sign-in from this same browser. Anything less lands in child mode.
+  const lock = await getDeviceLock();
+  const jar = await cookies();
+  const boundNonce = jar.get(GOOGLE_OAUTH_NONCE_COOKIE)?.value ?? null;
+  if (lock) {
+    const now = Math.floor(Date.now() / 1000);
+    const idt = profile.idToken;
+    const fresh =
+      Boolean(idt) &&
+      idt!.sub === profile.googleId &&
+      account.googleId === idt!.sub &&
+      idt!.nonce === statePayload.nonce &&
+      boundNonce === statePayload.nonce &&
+      typeof idt!.authTime === "number" &&
+      now - idt!.authTime! <= GOOGLE_FRESH_AUTH_MAX_AGE_SEC &&
+      idt!.authTime! <= now + 60;
+    if (!fresh) {
+      let subProfileId: string | null = null;
+      if (lock.subProfileId && lock.familyAccountId === account.id) {
+        const sub = await prisma.subProfile.findUnique({
+          where: { id: lock.subProfileId },
+          select: { active: true, familyAccountId: true },
+        });
+        if (sub?.active && sub.familyAccountId === account.id) subProfileId = lock.subProfileId;
+      }
+      console.warn(
+        `[device-lock] Google sign-in kept in child mode (fresh=${fresh}, auth_time=${idt?.authTime ?? "none"})`,
+      );
+      const url = new URL("/account/login", request.url);
+      url.searchParams.set("error", "google_reauth_required");
+      const res = NextResponse.redirect(url);
+      await setFamilyChildModeCookies(res, account.id, account.email, subProfileId);
+      res.cookies.set(GOOGLE_OAUTH_NONCE_COOKIE, "", { path: "/api/auth/family/google", maxAge: 0 });
+      return res;
+    }
+  }
+
   const guestId = (await getGuestIdFromCookies()) ?? null;
   if (guestId) {
     await mergeGuestProgressIntoReader(guestId, {
@@ -86,6 +133,9 @@ export async function GET(request: Request) {
   try {
     const res = NextResponse.redirect(new URL("/account", request.url));
     await setFamilyAndOwnerReaderCookies(res, account.id, account.email);
+    res.cookies.set(GOOGLE_OAUTH_NONCE_COOKIE, "", { path: "/api/auth/family/google", maxAge: 0 });
+    // A verified fresh parent sign-in (or an unlocked device) clears the child-mode marker.
+    clearDeviceLock(res);
     if (guestId) {
       res.cookies.set(BIBLE_GUEST_COOKIE, "", { path: "/", maxAge: 0 });
     }

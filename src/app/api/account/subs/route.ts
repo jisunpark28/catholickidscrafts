@@ -8,7 +8,7 @@ import {
   normalizeAccessCode,
 } from "@/lib/access-code";
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
-import { requireFamilySession } from "@/lib/family-auth";
+import { parentApiGuard } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -27,10 +27,9 @@ async function uniqueAccessCode(): Promise<string> {
 }
 
 export async function GET() {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
 
   const { owner, subs } = await loadAccountDashboardReaders(session.familyAccountId);
 
@@ -42,10 +41,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
 
   let body: { displayName?: string };
   try {

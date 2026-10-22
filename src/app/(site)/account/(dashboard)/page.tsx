@@ -4,7 +4,8 @@ import { SubProfilesManager } from "@/components/SubProfilesManager";
 import { PageShell } from "@/components/PageShell";
 import { MAX_SUB_PROFILES_PER_FAMILY } from "@/lib/access-code";
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
-import { requireFamilySession } from "@/lib/family-auth";
+import { requireParentActive } from "@/lib/family-auth";
+import { redirect } from "next/navigation";
 import { canonicalForPath } from "@/lib/site-metadata";
 import { prisma } from "@/lib/prisma";
 import { isBillingConfigured } from "@/lib/stripe";
@@ -20,7 +21,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AccountDashboardPage() {
-  const session = await requireFamilySession();
+  const session = await requireParentActive();
+  if (!session) redirect("/");
   const { owner, subs } = await loadAccountDashboardReaders(session!.familyAccountId);
   const plan = await getFamilyPlan(session!.familyAccountId, session!.email);
   const isPlus = plan.isPlus;

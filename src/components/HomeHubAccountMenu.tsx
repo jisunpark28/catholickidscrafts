@@ -128,6 +128,7 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
   const router = useRouter();
   const menuId = useId();
   const dialogTitleId = useId();
+  const dialogDescId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonWrapRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -140,7 +141,11 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
   const signedIn = isHeaderSignedIn(session);
   const family = session.family;
   const reader = session.reader;
-  const mode: Mode = family ? (reader?.type === "sub" ? "parent-child" : "parent") : "child";
+  const mode: Mode = family
+    ? reader?.type === "sub" || family.childMode
+      ? "parent-child"
+      : "parent"
+    : "child";
 
   const parentName = family ? headerButtonLabel({ family, reader: null }) : "";
   const familyLabel = family?.displayName?.trim() || "your family";
@@ -260,21 +265,20 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
     window.location.reload();
   }
 
-  /** Existing mechanism: parent reads as themselves (owner reader session). */
-  async function switchToParent() {
+  /**
+   * Child -> parent is never a client-side switch: a grown-up signs out and signs in
+   * with Google again (the server checks the sign-in is fresh on a child-mode device).
+   */
+  async function signOutForParent() {
     setBusy(true);
     try {
-      const res = await fetch("/api/auth/reader/as-owner", { method: "POST" });
-      if (res.ok) {
-        setConfirmOpen(false);
-        close();
-        window.location.reload();
-        return;
-      }
+      await fetch("/api/auth/family/logout", { method: "POST" });
     } finally {
       setBusy(false);
     }
     setConfirmOpen(false);
+    close();
+    window.location.href = "/account/login";
   }
 
   /** Existing switch-reader flow: children sign in with their Access ID. */
@@ -465,20 +469,25 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
             role="alertdialog"
             aria-modal="true"
             aria-labelledby={dialogTitleId}
+            aria-describedby={dialogDescId}
             onKeyDown={onDialogKeyDown}
             className="w-full max-w-sm rounded-xl bg-white p-5 shadow-[0_12px_32px_rgba(120,84,48,0.2)]"
           >
             <div className="flex items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#f7efe6] text-[var(--color-ink)]">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f7efe6] text-[var(--color-ink)]">
                 <Icon name="lock" />
               </span>
               <div>
                 <p id={dialogTitleId} className="text-[17px] font-bold text-[var(--color-ink)]">
-                  Switch to {firstName(parentName)}?
+                  Grown-ups only
                 </p>
-                <p className="text-[14px] text-[#6b625a]">Grown-ups only</p>
+                <p className="text-[14px] text-[#6b625a]">Switching to {firstName(parentName)}</p>
               </div>
             </div>
+            <p id={dialogDescId} className="mt-4 text-[15px] leading-relaxed text-[var(--color-ink)]">
+              Grown-ups: sign out and sign in with Google again to return to{" "}
+              {firstName(parentName)}&rsquo;s account.
+            </p>
             <div className="mt-5 flex justify-end gap-2">
               <button
                 type="button"
@@ -491,9 +500,9 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
                 type="button"
                 disabled={busy}
                 className="min-h-[40px] rounded-lg bg-[#f5d4b8] px-4 text-[15px] font-semibold text-[var(--color-ink)] hover:bg-[#f0c9a8] disabled:opacity-60"
-                onClick={() => void switchToParent()}
+                onClick={() => void signOutForParent()}
               >
-                Continue
+                Sign out
               </button>
             </div>
           </div>

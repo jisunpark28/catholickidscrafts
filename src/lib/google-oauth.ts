@@ -1,9 +1,17 @@
-import { SignJWT, jwtVerify } from "jose";
+import { SignJWT, createRemoteJWKSet, jwtVerify } from "jose";
 import { randomUUID } from "crypto";
 
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 const GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo";
+const GOOGLE_JWKS = createRemoteJWKSet(new URL("https://www.googleapis.com/oauth2/v3/certs"));
+const GOOGLE_ISSUERS = ["https://accounts.google.com", "accounts.google.com"];
+
+/** HttpOnly cookie that binds an OAuth round trip to this browser (holds the state nonce). */
+export const GOOGLE_OAUTH_NONCE_COOKIE = "ckc_oauth_nonce";
+export const GOOGLE_OAUTH_NONCE_MAX_AGE_SEC = 10 * 60;
+/** A sign-in on a locked device must be this recent (ID token auth_time). */
+export const GOOGLE_FRESH_AUTH_MAX_AGE_SEC = 5 * 60;
 
 function authSecret(): Uint8Array {
   const secret = process.env.AUTH_SECRET?.trim();
@@ -35,26 +43,39 @@ export function getGoogleRedirectUri(): string {
 
 export type GoogleOAuthFrom = "signup" | "login";
 
-export async function createGoogleOAuthState(from: GoogleOAuthFrom = "login"): Promise<string> {
-  return new SignJWT({ nonce: randomUUID(), from })
+export type GoogleOAuthState = { from: GoogleOAuthFrom; nonce: string; locked: boolean };
+
+export async function createGoogleOAuthState(
+  from: GoogleOAuthFrom = "login",
+  locked = false,
+): Promise<{ state: string; nonce: string }> {
+  const nonce = randomUUID();
+  const state = await new SignJWT({ nonce, from, locked })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("10m")
     .sign(authSecret());
+  return { state, nonce };
 }
 
-export async function verifyGoogleOAuthState(
-  state: string,
-): Promise<{ from: GoogleOAuthFrom } | null> {
+export async function verifyGoogleOAuthState(state: string): Promise<GoogleOAuthState | null> {
   try {
     const { payload } = await jwtVerify(state, authSecret());
-    return { from: payload.from === "signup" ? "signup" : "login" };
+    if (typeof payload.nonce !== "string") return null;
+    return {
+      from: payload.from === "signup" ? "signup" : "login",
+      nonce: payload.nonce,
+      locked: payload.locked === true,
+    };
   } catch {
     return null;
   }
 }
 
-export function buildGoogleAuthUrl(state: string): string {
+export function buildGoogleAuthUrl(
+  state: string,
+  opts: { nonce: string; locked?: boolean },
+): string {
   const clientId = getGoogleOAuthClientId();
   if (!clientId) throw new Error("GOOGLE_CLIENT_ID is not set");
 
@@ -66,17 +87,52 @@ export function buildGoogleAuthUrl(state: string): string {
     state,
     prompt: "select_account",
     access_type: "online",
+    nonce: opts.nonce,
   });
+  if (opts.locked) {
+    // Google does not support prompt=login and may ignore max_age; we still ask, and the
+    // callback enforces auth_time from the verified ID token.
+    params.set("max_age", "0");
+    params.set("claims", JSON.stringify({ id_token: { auth_time: { essential: true } } }));
+  }
 
   return `${GOOGLE_AUTH_URL}?${params.toString()}`;
 }
+
+export type GoogleIdTokenClaims = {
+  sub: string;
+  nonce: string | null;
+  /** Seconds since epoch of the user's last Google authentication, when provided. */
+  authTime: number | null;
+};
 
 export type GoogleUserProfile = {
   googleId: string;
   email: string;
   name: string | null;
   emailVerified: boolean;
+  /** Verified ID token claims (signature, iss, aud, exp checked), or null if missing/invalid. */
+  idToken: GoogleIdTokenClaims | null;
 };
+
+async function verifyGoogleIdToken(idToken: string | undefined, clientId: string) {
+  if (!idToken) return null;
+  try {
+    const { payload } = await jwtVerify(idToken, GOOGLE_JWKS, {
+      issuer: GOOGLE_ISSUERS,
+      audience: clientId,
+    });
+    if (typeof payload.sub !== "string") return null;
+    return {
+      sub: payload.sub,
+      nonce: typeof payload.nonce === "string" ? payload.nonce : null,
+      authTime: typeof payload.auth_time === "number" ? payload.auth_time : null,
+    } satisfies GoogleIdTokenClaims;
+  } catch (e) {
+    console.error("google id_token verification failed", e instanceof Error ? e.message : e);
+    return null;
+  }
+}
 
 export async function fetchGoogleUserProfile(code: string): Promise<GoogleUserProfile> {
   const clientId = getGoogleOAuthClientId();
@@ -103,9 +159,9 @@ export async function fetchGoogleUserProfile(code: string): Promise<GoogleUserPr
   }
 
   const tokenText = await tokenRes.text();
-  let tokenData: { access_token?: string };
+  let tokenData: { access_token?: string; id_token?: string };
   try {
-    tokenData = tokenText ? (JSON.parse(tokenText) as { access_token?: string }) : {};
+    tokenData = tokenText ? (JSON.parse(tokenText) as { access_token?: string; id_token?: string }) : {};
   } catch {
     throw new Error("Google token response was not valid JSON");
   }
@@ -141,10 +197,13 @@ export async function fetchGoogleUserProfile(code: string): Promise<GoogleUserPr
     throw new Error("Google email is not verified");
   }
 
+  const idToken = await verifyGoogleIdToken(tokenData.id_token, clientId);
+
   return {
     googleId: user.sub,
     email: user.email.toLowerCase(),
     name: user.name?.trim() || null,
     emailVerified: true,
+    idToken,
   };
 }

@@ -1,11 +1,10 @@
-import { requireFamilySession } from "@/lib/family-auth";
+import { parentApiGuard } from "@/lib/family-auth";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
   return NextResponse.json({
     account: {
       id: session.familyAccountId,

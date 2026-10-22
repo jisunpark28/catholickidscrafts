@@ -9,6 +9,7 @@ import {
   getGuestIdFromCookies,
 } from "@/lib/bible/reader";
 import { mergeGuestProgressIntoReader } from "@/lib/bible/progress";
+import { enterChildMode } from "@/lib/family-auth";
 import { readerCookieOptions, signReaderSession } from "@/lib/family-session";
 import { clientIpFromHeaders } from "@/lib/client-ip";
 import { prisma } from "@/lib/prisma";
@@ -103,5 +104,7 @@ export async function POST(request: Request) {
   if (guestId) {
     res.cookies.set(BIBLE_GUEST_COOKIE, "", { path: "/", maxAge: 0 });
   }
+  // Parent -> child stays instant; lock the device and sign out any admin session.
+  await enterChildMode(res, { subProfileId: sub.id, familyAccountId: sub.familyAccountId });
   return res;
 }

@@ -1,5 +1,8 @@
+import { getDeviceLock } from "@/lib/family-auth";
 import {
   buildGoogleAuthUrl,
+  GOOGLE_OAUTH_NONCE_COOKIE,
+  GOOGLE_OAUTH_NONCE_MAX_AGE_SEC,
   createGoogleOAuthState,
   isGoogleSignInConfigured,
   type GoogleOAuthFrom,
@@ -14,7 +17,17 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const from: GoogleOAuthFrom = searchParams.get("from") === "signup" ? "signup" : "login";
 
-  const state = await createGoogleOAuthState(from);
-  const url = buildGoogleAuthUrl(state);
-  return NextResponse.redirect(url);
+  const locked = Boolean(await getDeviceLock());
+  const { state, nonce } = await createGoogleOAuthState(from, locked);
+  const url = buildGoogleAuthUrl(state, { nonce, locked });
+  const res = NextResponse.redirect(url);
+  // Binds this round trip to this browser; checked in the callback.
+  res.cookies.set(GOOGLE_OAUTH_NONCE_COOKIE, nonce, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/api/auth/family/google",
+    maxAge: GOOGLE_OAUTH_NONCE_MAX_AGE_SEC,
+  });
+  return res;
 }
