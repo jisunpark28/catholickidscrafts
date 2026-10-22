@@ -1,5 +1,5 @@
 import { loginAction } from "@/app/admin/login/actions";
-import { auth } from "@/auth";
+import { getAdmin } from "@/lib/admin-auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -74,8 +74,8 @@ async function LoginPanel({ searchParams }: PageProps) {
 }
 
 export default async function AdminLoginPage({ searchParams }: PageProps) {
-  const session = await auth();
-  if (session?.user) {
+  // Only a real, active admin (not a child-mode browser) skips the login page; avoids a redirect loop.
+  if (await getAdmin()) {
     redirect("/admin");
   }
 

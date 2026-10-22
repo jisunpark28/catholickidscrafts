@@ -10,7 +10,8 @@ export const authConfig = {
   pages: {
     signIn: "/admin/login",
   },
-  session: { strategy: "jwt" },
+  // Admin sessions last 12 hours (Auth.js default is 30 days).
+  session: { strategy: "jwt", maxAge: 60 * 60 * 12 },
   providers: [],
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {

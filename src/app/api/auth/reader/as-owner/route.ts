@@ -1,13 +1,13 @@
-import { requireFamilySession } from "@/lib/family-auth";
+import { parentApiGuard } from "@/lib/family-auth";
 import { readerCookieOptions, signReaderSession } from "@/lib/family-session";
 import { NextResponse } from "next/server";
 
 /** Parent uses their own account for Bible reading (owner reader session). */
 export async function POST() {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Parent sign-in required" }, { status: 401 });
-  }
+  // Child mode cannot be left from here: grown-ups sign out and sign in with Google again.
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
 
   const readerToken = await signReaderSession({
     type: "owner",

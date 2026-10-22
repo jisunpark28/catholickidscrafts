@@ -1,6 +1,6 @@
 import { FamilyLoginForm } from "@/components/FamilyLoginForm";
 import { PageShell } from "@/components/PageShell";
-import { getFamilySession } from "@/lib/family-auth";
+import { requireParentActive } from "@/lib/family-auth";
 import { googleAuthErrorMessage } from "@/lib/google-auth-messages";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -18,7 +18,8 @@ export const metadata: Metadata = {
 type Props = { searchParams: Promise<{ error?: string }> };
 
 export default async function AccountLoginPage({ searchParams }: Props) {
-  const session = await getFamilySession();
+  // In child mode the parent must sign in again here, so only an active parent is redirected.
+  const session = await requireParentActive();
   if (session) redirect("/account");
 
   const params = await searchParams;

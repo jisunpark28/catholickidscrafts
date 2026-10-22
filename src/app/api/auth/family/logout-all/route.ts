@@ -1,4 +1,4 @@
-import { clearFamilyCookies, requireFamilySession } from "@/lib/family-auth";
+import { clearFamilyCookies, parentApiGuard } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -7,10 +7,9 @@ import { NextResponse } from "next/server";
  * parent and child (Access ID) session for this family stops working.
  */
 export async function POST() {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
   await prisma.familyAccount.update({
     where: { id: session.familyAccountId },
     data: { sessionVersion: { increment: 1 } },

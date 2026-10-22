@@ -1,7 +1,7 @@
 import { BillingButton, PlanCheckout } from "@/components/BillingButton";
 import { PageShell } from "@/components/PageShell";
 import { getReaderKey } from "@/lib/bible/reader";
-import { requireFamilySession } from "@/lib/family-auth";
+import { requireFamilySession, requireParentActive } from "@/lib/family-auth";
 import { pageMetadata } from "@/lib/site-metadata";
 import { isBillingConfigured, stripePriceAnnual } from "@/lib/stripe";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
@@ -23,9 +23,10 @@ const btn =
   "block w-full bg-[var(--color-accent)] px-4 py-3 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60";
 
 export default async function SubscribePage() {
-  const session = await requireFamilySession();
+  const familySession = await requireFamilySession();
+  const session = await requireParentActive();
   const reader = await getReaderKey();
-  const isChild = reader?.type === "sub";
+  const isChild = reader?.type === "sub" || Boolean(familySession && !session);
   const plan = session ? await getFamilyPlan(session.familyAccountId, session.email) : null;
   const configured = isBillingConfigured();
   const renewal = plan ? planRenewalLine(plan) : null;

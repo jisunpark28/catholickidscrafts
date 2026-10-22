@@ -1,4 +1,4 @@
-import { getFamilySession } from "@/lib/family-auth";
+import { effectiveReaderMode, getFamilySession } from "@/lib/family-auth";
 import { getReaderKey } from "@/lib/bible/reader";
 import type { HeaderSessionResponse } from "@/lib/header-session";
 import { prisma } from "@/lib/prisma";
@@ -13,7 +13,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
   let family: HeaderSessionResponse["family"] = null;
   if (familySession) {
     const familyAccountId = familySession.familyAccountId;
-    const [account, children, isPlus] = await Promise.all([
+    const [account, children, isPlus, mode] = await Promise.all([
       prisma.familyAccount.findUnique({
         where: { id: familyAccountId },
         select: { email: true, displayName: true },
@@ -26,6 +26,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
         })
         .catch(() => []),
       hasPaidFeatures({ type: "owner", familyAccountId }).catch(() => false),
+      effectiveReaderMode(familySession),
     ]);
     if (account) {
       family = {
@@ -33,6 +34,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
         displayName: account.displayName,
         isPlus,
         children,
+        childMode: mode.type === "sub",
       };
     }
   }

@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getAdmin } from "@/lib/admin-auth";
 import { isSuperAdmin } from "@/lib/admin-roles";
 import Link from "next/link";
 
@@ -7,7 +7,8 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  // DB-backed check (also refuses a browser in child mode), so the admin nav never shows there.
+  const session = (await getAdmin())?.session ?? null;
   const superAdmin = isSuperAdmin(session);
 
   return (

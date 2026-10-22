@@ -1,5 +1,5 @@
 import { PageShell } from "@/components/PageShell";
-import { requireFamilySession } from "@/lib/family-auth";
+import { requireParentActive } from "@/lib/family-auth";
 import { getStripe } from "@/lib/stripe";
 import { linkCheckoutCustomer, syncSubscriptionById } from "@/lib/subscription/billing-sync";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
@@ -32,7 +32,7 @@ async function syncFromCheckout(sessionId: string, familyAccountId: string) {
 
 export default async function SubscribeSuccessPage({ searchParams }: Props) {
   const { session_id } = await searchParams;
-  const session = await requireFamilySession();
+  const session = await requireParentActive();
   if (session && session_id) await syncFromCheckout(session_id, session.familyAccountId);
   const plan = session ? await getFamilyPlan(session.familyAccountId, session.email) : null;
 

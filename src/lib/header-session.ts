@@ -8,6 +8,8 @@ export type HeaderSessionResponse = {
     isPlus?: boolean;
     /** Active child profiles, for the "Reading as" list. */
     children?: HeaderSessionChild[];
+    /** Device is in child mode: returning to the parent needs a fresh Google sign-in. */
+    childMode?: boolean;
   } | null;
   reader: { type: "owner" | "sub"; displayName: string; subProfileId?: string } | null;
 };

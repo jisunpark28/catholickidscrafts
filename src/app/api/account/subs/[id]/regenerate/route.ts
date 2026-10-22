@@ -6,7 +6,7 @@ import {
   isValidAccessCodeFormat,
   normalizeAccessCode,
 } from "@/lib/access-code";
-import { requireFamilySession } from "@/lib/family-auth";
+import { parentApiGuard } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -27,10 +27,9 @@ async function uniqueAccessCode(): Promise<string> {
 }
 
 export async function POST(_request: Request, { params }: Params) {
-  const session = await requireFamilySession();
-  if (!session) {
-    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
-  }
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+  const { session } = guard;
 
   const { id } = await params;
   const existing = await prisma.subProfile.findFirst({
