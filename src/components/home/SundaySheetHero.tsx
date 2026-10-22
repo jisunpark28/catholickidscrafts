@@ -9,6 +9,9 @@ type Props = {
   liturgicalName: string;
   sundayLabel: string;
   gospelRef: string;
+  /** Liturgy page for the current season, e.g. "/liturgy/ordinary-time". */
+  seasonHref: string;
+  seasonLabel: string;
   groupInquiryHref: string | null;
   /** False until RESEND_API_KEY, EMAIL_FROM and MAILING_ADDRESS are set: skip straight to the Plus line. */
   emailEnabled: boolean;
@@ -44,7 +47,7 @@ function writeEmailState(value: "subscribed" | "dismissed") {
 }
 
 /** Homepage hero: this Sunday's sheet, one big Print button, then an inline email opt-in. */
-export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gospelRef, groupInquiryHref, emailEnabled, position }: Props) {
+export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gospelRef, seasonHref, seasonLabel, groupInquiryHref, emailEnabled, position }: Props) {
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
@@ -179,6 +182,15 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
         >
           🖨 Print this week&apos;s sheet
         </button>
+
+        <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          <Link href="/bible/gospel" className="font-semibold text-[var(--color-link)] hover:underline">
+            Practice typing today&apos;s Gospel →
+          </Link>
+          <Link href={seasonHref} className="font-semibold text-[var(--color-link)] hover:underline">
+            More {seasonLabel} activities →
+          </Link>
+        </p>
 
         {printed && emailEnabled && !emailState ? <EmailOptIn onDone={choose} /> : null}
         {printed && (emailState || !emailEnabled) ? (

@@ -4,12 +4,14 @@ import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
 import { loadPublishedQa } from "@/lib/liturgy-qa";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbNode } from "@/lib/structured-data";
 import "@/styles/qa-cards.css";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Catholic Prayers for Kids",
+  title: "Catholic Prayer Flip Cards for Kids",
   description:
-    "Learn Catholic prayers with kids: the Sign of the Cross, Our Father, Hail Mary and more on tap-to-pray flip cards.",
+    "Learn Catholic prayers together with tap-to-pray flip cards: the Sign of the Cross, Our Father, Hail Mary and more key prayers for kids.",
   path: "/prayers",
 });
 
@@ -21,6 +23,7 @@ export default async function PrayersPage() {
 
   return (
     <TestamentPageShell>
+      <JsonLd nodes={[breadcrumbNode([{ name: "Prayers", path: "/prayers" }])]} />
       {qa ? (
         <>
           <QaPageHeader topic={qa.topic} eyebrow="Faith & Prayer · Prayers" />

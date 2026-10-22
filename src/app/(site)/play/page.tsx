@@ -5,11 +5,15 @@ import { getPlayGamesFromCopy } from "@/lib/play-games-copy";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { breadcrumbNode, itemListNode } from "@/lib/structured-data";
+
+const gamePath = (slug: string) => (slug === "emoji" ? "/play/photo-booth" : `/play/${slug}`);
 
 export const metadata: Metadata = pageMetadata({
-  title: "Catholic Games for Kids",
+  title: "Free Catholic Faith Games for Kids",
   description:
-    "Free Catholic games for kids: Come to Mass!, liturgical vestment colors, church-word typing, hangman and a photo booth. Great for Sunday school and home.",
+    "Free Catholic games for children: dress the priest in Mass vestments, explore the church in Come to Mass!, hangman and more for class and home.",
   path: "/play",
 });
 
@@ -19,6 +23,15 @@ export default async function PlayHubPage() {
 
   return (
     <PageShell wide>
+      <JsonLd
+        nodes={[
+          breadcrumbNode([{ name: "Play & Learn", path: "/play" }]),
+          itemListNode(
+            "Catholic games for kids",
+            games.map((g) => ({ name: g.title, path: gamePath(g.slug) })),
+          ),
+        ]}
+      />
       <PageHeader title={copyText(copy, "play.hub.title", "Play & Learn")} />
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -30,7 +43,6 @@ export default async function PlayHubPage() {
             <div className="flex-1">
               <h2 className="text-lg font-bold text-[var(--color-ink)]">{game.title}</h2>
               <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
-                {game.ageRange && <span>{game.ageRange}</span>}
                 {game.duration && <span>{game.duration}</span>}
                 {game.supervision && <span className="text-[var(--color-accent)]">Adult Supervision</span>}
               </div>
@@ -41,7 +53,7 @@ export default async function PlayHubPage() {
 
             <div className="mt-6 flex items-center justify-between gap-4">
               <Link
-                href={game.slug === "emoji" ? "/play/photo-booth" : `/play/${game.slug}`}
+                href={gamePath(game.slug)}
                 className="text-sm font-semibold text-[var(--color-link)]"
               >
                 {copyText(copy, "play.hub.play_link", "Play →")}

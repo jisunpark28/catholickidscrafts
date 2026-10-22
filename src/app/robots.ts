@@ -8,7 +8,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/api/admin/"],
+      // /print/ stays crawlable so Google can read its noindex tag.
+      disallow: ["/admin/", "/api/"],
     },
     sitemap: `${base}/sitemap.xml`,
   };

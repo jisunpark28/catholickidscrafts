@@ -2,16 +2,18 @@ import { getSiteUrl } from "@/lib/site-url";
 import type { Metadata } from "next";
 
 const siteUrl = getSiteUrl();
+const SITE_DESCRIPTION =
+  "Free printable Sunday Gospel sheets, Bible typing, prayer flip cards and liturgical-year activities for catechists and parents, following the Church calendar.";
 
 /** Shared site metadata (verification tag is injected in root layout `<head>`). */
 export const siteMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Catholic Kids Crafts | Daily Mass & Catechism",
+    default: "Catholic Kids Crafts | Free Mass, Bible & Prayer Activities",
     template: "%s | Catholic Kids Crafts",
   },
   description:
-    "Daily Catholic Mass readings in English, liturgical calendar, and kids catechism resources.",
+    SITE_DESCRIPTION,
   robots: {
     index: true,
     follow: true,
@@ -22,16 +24,16 @@ export const siteMetadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "Catholic Kids Crafts",
-    title: "Catholic Kids Crafts | Daily Mass & Catechism",
+    title: "Catholic Kids Crafts | Free Mass, Bible & Prayer Activities",
     description:
-      "Daily Catholic Mass readings in English, liturgical calendar, and kids catechism resources.",
+      SITE_DESCRIPTION,
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Catholic Kids Crafts" }],
   },
   twitter: {
     card: "summary",
     title: "Catholic Kids Crafts",
     description:
-      "Daily Catholic Mass readings in English, liturgical calendar, and kids catechism resources.",
+      SITE_DESCRIPTION,
     images: ["/logo.png"],
   },
   icons: {
