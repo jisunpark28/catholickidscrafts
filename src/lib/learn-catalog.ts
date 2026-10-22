@@ -96,7 +96,7 @@ export async function searchLearnCatalog(query: string): Promise<LearnSearchResu
       kind: "prayer",
       title: prayer.title,
       excerpt: prayer.subtitle || prayer.excerpt,
-      href: `/prayers?p=${prayer.slug}&lang=${prayer.lang}`,
+      href: "/prayers",
       badge: "Prayer",
       score,
     });
