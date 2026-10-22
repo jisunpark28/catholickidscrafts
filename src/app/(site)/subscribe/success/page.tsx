@@ -34,7 +34,7 @@ export default async function SubscribeSuccessPage({ searchParams }: Props) {
   const { session_id } = await searchParams;
   const session = await requireParentActive();
   if (session && session_id) await syncFromCheckout(session_id, session.familyAccountId);
-  const plan = session ? await getFamilyPlan(session.familyAccountId, session.email) : null;
+  const plan = session ? await getFamilyPlan(session.familyAccountId) : null;
 
   return (
     <PageShell>

@@ -27,7 +27,7 @@ export default async function SubscribePage() {
   const session = await requireParentActive();
   const reader = await getReaderKey();
   const isChild = reader?.type === "sub" || Boolean(familySession && !session);
-  const plan = session ? await getFamilyPlan(session.familyAccountId, session.email) : null;
+  const plan = session ? await getFamilyPlan(session.familyAccountId) : null;
   const configured = isBillingConfigured();
   const renewal = plan ? planRenewalLine(plan) : null;
   // Only a boolean reaches the client; the price id stays on the server.

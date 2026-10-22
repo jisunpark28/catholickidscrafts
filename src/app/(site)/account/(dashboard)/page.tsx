@@ -24,7 +24,7 @@ export default async function AccountDashboardPage() {
   const session = await requireParentActive();
   if (!session) redirect("/");
   const { owner, subs } = await loadAccountDashboardReaders(session!.familyAccountId);
-  const plan = await getFamilyPlan(session!.familyAccountId, session!.email);
+  const plan = await getFamilyPlan(session!.familyAccountId);
   const isPlus = plan.isPlus;
   const renewal = planRenewalLine(plan);
   const billingReady = isBillingConfigured();

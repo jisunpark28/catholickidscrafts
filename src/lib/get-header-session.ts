@@ -2,7 +2,7 @@ import { effectiveReaderMode, getFamilySession } from "@/lib/family-auth";
 import { getReaderKey } from "@/lib/bible/reader";
 import type { HeaderSessionResponse } from "@/lib/header-session";
 import { prisma } from "@/lib/prisma";
-import { hasPaidFeatures } from "@/lib/subscription/entitlements";
+import { familyHasPlus } from "@/lib/subscription/entitlements";
 
 export async function getHeaderSession(): Promise<HeaderSessionResponse> {
   const [familySession, readerKey] = await Promise.all([
@@ -25,7 +25,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
           orderBy: { createdAt: "asc" },
         })
         .catch(() => []),
-      hasPaidFeatures({ type: "owner", familyAccountId }).catch(() => false),
+      familyHasPlus(familyAccountId).catch(() => false),
       effectiveReaderMode(familySession),
     ]);
     if (account) {

@@ -1,13 +1,13 @@
-import { getAdmin } from "@/lib/admin-auth";
 import type { ReaderKey } from "@/lib/bible/reader";
 import { prisma } from "@/lib/prisma";
 import { subscriptionGrantsPlus, type SubscriptionSnapshot } from "@/lib/subscription/status";
 
 /**
- * Paid-feature gate. There is no payment system yet, so this is false for everyone
- * except signed-in site admins and family accounts listed in PAID_PREVIEW_EMAILS
- * (comma-separated). Sub profiles inherit from their parent family account's email.
- * Server-only: always re-check in API routes.
+ * Paid-feature gate. Plus is decided ONLY by the family account behind the signed-in
+ * reader (signed ckc_family / ckc_reader session -> familyAccountId): an active Stripe
+ * Subscription row or the family's email in PAID_PREVIEW_EMAILS (comma-separated).
+ * Admin sessions never grant Plus. Sub profiles inherit their parent family's plan.
+ * Server-only: always re-check in API routes. Never cache across requests/users.
  */
 export function paidPreviewEmails(): Set<string> {
   const raw = process.env.PAID_PREVIEW_EMAILS ?? "";
@@ -19,42 +19,33 @@ export function paidPreviewEmails(): Set<string> {
   );
 }
 
-async function isAdminSignedIn(): Promise<boolean> {
-  try {
-    // getAdmin() is DB-backed and refuses child-mode browsers.
-    return Boolean(await getAdmin());
-  } catch {
-    return false;
-  }
+async function familyEmail(familyAccountId: string): Promise<string | null> {
+  const row = await prisma.familyAccount.findUnique({
+    where: { id: familyAccountId },
+    select: { email: true },
+  });
+  return row?.email?.trim().toLowerCase() ?? null;
 }
 
-async function familyEmailForReader(key: ReaderKey): Promise<string | null> {
-  if (key.type === "owner") {
-    const row = await prisma.familyAccount.findUnique({
-      where: { id: key.familyAccountId },
-      select: { email: true },
-    });
-    return row?.email?.toLowerCase() ?? null;
+/** Single source of truth for a family's plan (used by paywalls, /account and the header badge). */
+export async function resolveFamilyPlus(
+  familyAccountId: string,
+): Promise<{ isPlus: boolean; source: "stripe" | "preview" | "free"; sub: Awaited<ReturnType<typeof getFamilySubscription>> }> {
+  const sub = await getFamilySubscription(familyAccountId);
+  if (sub.grantsPlus) return { isPlus: true, source: "stripe", sub };
+  const allow = paidPreviewEmails();
+  if (allow.size > 0) {
+    const email = await familyEmail(familyAccountId);
+    if (email && allow.has(email)) return { isPlus: true, source: "preview", sub };
   }
-  if (key.type === "sub") {
-    const row = await prisma.subProfile.findUnique({
-      where: { id: key.subProfileId },
-      select: { familyAccount: { select: { email: true } } },
-    });
-    return row?.familyAccount.email?.toLowerCase() ?? null;
-  }
-  return null;
+  return { isPlus: false, source: "free", sub };
 }
 
 export async function hasPaidFeatures(key: ReaderKey | null): Promise<boolean> {
-  if (await isAdminSignedIn()) return true;
   if (!key || key.type === "guest") return false;
   const familyAccountId = await familyAccountIdForReader(key);
-  if (familyAccountId && (await hasActiveSubscription(familyAccountId))) return true;
-  const allow = paidPreviewEmails();
-  if (allow.size === 0) return false;
-  const email = await familyEmailForReader(key);
-  return Boolean(email && allow.has(email));
+  if (!familyAccountId) return false;
+  return (await resolveFamilyPlus(familyAccountId)).isPlus;
 }
 
 // ─── Stripe subscription (billing owner = parent FamilyAccount) ─────────────
@@ -109,13 +100,13 @@ export async function hasActiveSubscription(familyAccountId: string): Promise<bo
   return (await getFamilySubscription(familyAccountId)).grantsPlus;
 }
 
-/** Plan summary for the parent's /account page and /subscribe. */
-export async function getFamilyPlan(familyAccountId: string, email: string) {
-  const { customer, subscription, grantsPlus } = await getFamilySubscription(familyAccountId);
-  const preview = paidPreviewEmails().has(email.toLowerCase());
+/** Plan summary for the parent's /account page and /subscribe. Email is re-read from the DB, not trusted from the caller. */
+export async function getFamilyPlan(familyAccountId: string) {
+  const { isPlus, source, sub } = await resolveFamilyPlus(familyAccountId);
+  const { customer, subscription } = sub;
   return {
-    isPlus: grantsPlus || preview,
-    source: grantsPlus ? ("stripe" as const) : preview ? ("preview" as const) : ("free" as const),
+    isPlus,
+    source,
     hasCustomer: Boolean(customer),
     status: subscription?.status ?? null,
     currentPeriodEnd: subscription?.currentPeriodEnd ?? null,
@@ -132,5 +123,5 @@ export function plusRequiredResponse() {
 
 /** Paywall for parent-only API routes that only have a family session. */
 export async function familyHasPlus(familyAccountId: string): Promise<boolean> {
-  return hasPaidFeatures({ type: "owner", familyAccountId });
+  return (await resolveFamilyPlus(familyAccountId)).isPlus;
 }
