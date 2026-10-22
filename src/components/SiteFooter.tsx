@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { SITE_LITURGY_FOOTER } from "@/lib/site-liturgy-footer";
 
