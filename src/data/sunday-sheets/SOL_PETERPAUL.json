@@ -1,0 +1,92 @@
+{
+  "key": "SOL_PETERPAUL",
+  "liturgicalName": "Sts Peter and Paul, Apostles",
+  "season": "Solemnity",
+  "gospelRef": "Matthew 16:13-19 (Mass during the Day; Vigil: John 21:15-19)",
+  "keyVerseDR": "\"...thou art Peter; and upon this rock I will build my church...\" (Mt 16:18)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "Peter and Paul",
+      "story": "Jesus asked, \"Who do you say I am?\" Peter said, \"You are the Christ, the Son of the living God!\" Jesus said, \"You are Peter, the rock. On this rock I will build My Church.\"",
+      "keyLine": "Jesus builds His Church.",
+      "heartTitle": "Pillars of the Church",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Peter leads",
+      "heartLabelB": "Paul preaches",
+      "questions": [
+        "What did Jesus call Peter?",
+        "How can you tell others about Jesus?"
+      ],
+      "actions": [
+        "Pray for the Pope",
+        "Tell a friend about Jesus",
+        "Go to Mass"
+      ],
+      "prayer": "Sts. Peter and Paul, pray for us. Amen.",
+      "activity": {
+        "title": "The rock",
+        "intro": "Trace Jesus' words to Peter.",
+        "idea": 51,
+        "type": "copyverse",
+        "text": "Thou art Peter."
+      },
+      "words": [
+        "Peter",
+        "Paul",
+        "rock",
+        "Church"
+      ]
+    },
+    "level2": {
+      "title": "Upon This Rock",
+      "story": "Jesus came into the region of Caesarea Philippi and asked His disciples, \"Whom do men say that the Son of man is?\" Then He asked, \"But whom do you say that I am?\" Simon Peter answered, \"Thou art Christ, the Son of the living God.\" Jesus said, \"Blessed art thou, Simon,\" for the Father had revealed this to him. \"Thou art Peter; and upon this rock I will build My church... And I will give to thee the keys of the kingdom of heaven.\"",
+      "keyLine": "Thou art Peter; and upon this rock I will build my church.",
+      "heartTitle": "Two Apostles",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Peter's gifts",
+      "heartLabelB": "Paul's gifts",
+      "questions": [
+        "Why do we pray for the Pope?",
+        "What can we learn from Peter's and Paul's conversions?"
+      ],
+      "actions": [
+        "Pray for the Pope and bishops",
+        "Read a letter of St. Paul",
+        "Share my faith"
+      ],
+      "prayer": "Lord, keep Your Church strong on the rock. Amen.",
+      "activity": {
+        "title": "Upon this rock",
+        "intro": "Number the word cards in order.",
+        "idea": 40,
+        "type": "wordorder",
+        "pieces": [
+          "Thou art Peter;",
+          "and upon this rock",
+          "I will build",
+          "My church."
+        ]
+      },
+      "words": [
+        "Pope",
+        "keys",
+        "rock",
+        "Apostle",
+        "martyr",
+        "Church"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_PETERPAUL_main.png",
+    "heart": "SOL_PETERPAUL_heart.png",
+    "icons": [
+      "icon_keys.png",
+      "icon_rock.png",
+      "icon_church.png"
+    ],
+    "mainBrief": "Peter holding keys and Paul holding a sword and book, standing before a church",
+    "heartBrief": "Crossed keys and sword around heart"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "key": "B_OT02",
+  "liturgicalName": "2nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 1:35-42",
+  "keyVerseDR": "\"He saith to them: Come and see.\" (Jn 1:39)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Come and See",
+      "story": "John said, \"Look! The Lamb of God!\" Two disciples followed Jesus. Andrew told his brother Simon, \"We found the Messiah!\"",
+      "keyLine": "Come and see Jesus!",
+      "heartTitle": "Bringing Friends",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I meet Jesus",
+      "heartLabelB": "I bring others",
+      "questions": [
+        "Who did Andrew bring to Jesus?",
+        "Who can you bring to Jesus?"
+      ],
+      "actions": [
+        "Invite a friend to church",
+        "Pray",
+        "Tell about Jesus"
+      ],
+      "prayer": "Jesus, I want to stay with You. Amen.",
+      "activity": {
+        "title": "Find the lamb",
+        "intro": "John called Jesus the Lamb of God. Find the hidden animals.",
+        "idea": 16,
+        "type": "findhidden",
+        "objects": [
+          "lamb",
+          "dove",
+          "sheep",
+          "fish"
+        ]
+      },
+      "words": [
+        "Andrew",
+        "come",
+        "see",
+        "brother"
+      ]
+    },
+    "level2": {
+      "title": "The First Disciples",
+      "story": "John the Baptist was standing with two of his disciples when Jesus walked by. John said, \"Behold the Lamb of God.\" The two disciples followed Jesus, and He asked, \"What seek you?\" They asked where He was staying, and Jesus said, \"Come and see.\" Andrew went to his brother Simon and said, \"We have found the Messias,\" and Jesus named Simon \"Cephas,\" which means Peter, or Rock.",
+      "keyLine": "Come and see.",
+      "heartTitle": "Come and See",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I'm looking for",
+      "heartLabelB": "Who I can invite",
+      "questions": [
+        "What are you looking for in life?",
+        "Why did Jesus give Simon a new name?"
+      ],
+      "actions": [
+        "Invite someone to Mass",
+        "Spend time with Jesus",
+        "Pray for a friend"
+      ],
+      "prayer": "Jesus, I want to come and see. Amen.",
+      "activity": {
+        "title": "Who said it?",
+        "intro": "Match each person to what happened.",
+        "idea": 36,
+        "type": "matchup",
+        "pairs": [
+          [
+            "John the Baptist",
+            "Said, Behold the Lamb of God"
+          ],
+          [
+            "Jesus",
+            "Said, Come and see"
+          ],
+          [
+            "Andrew",
+            "Told his brother, We found the Messiah"
+          ],
+          [
+            "Simon",
+            "Was given the name Peter"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "disciple",
+        "Lamb of God",
+        "Messiah",
+        "Andrew",
+        "Cephas",
+        "invite"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT02_main.png",
+    "heart": "B_OT02_heart.png",
+    "icons": [
+      "icon_footprints.png",
+      "icon_house.png",
+      "icon_lamb.png"
+    ],
+    "mainBrief": "Andrew and John following Jesus; 'Come and see'",
+    "heartBrief": "Footprints leading into heart"
+  }
+}

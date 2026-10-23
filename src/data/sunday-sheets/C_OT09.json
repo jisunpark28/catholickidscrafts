@@ -1,0 +1,88 @@
+{
+  "key": "C_OT09",
+  "liturgicalName": "9th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 7:1-10",
+  "keyVerseDR": "\"...say the word, and my servant shall be healed.\" (Lk 7:7)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Just Say the Word",
+      "story": "A Roman officer's servant was very sick. He sent word to Jesus: \"Just say the word, and he will be healed.\" Jesus was amazed at his faith, and the servant was healed.",
+      "keyLine": "Jesus, I trust You.",
+      "heartTitle": "Big Faith",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I ask",
+      "heartLabelB": "I trust",
+      "questions": [
+        "What did the soldier ask?",
+        "What words do we say like him at Mass?"
+      ],
+      "actions": [
+        "Pray for someone sick",
+        "Trust Jesus",
+        "Listen at Mass"
+      ],
+      "prayer": "Jesus, only say the word. Amen.",
+      "activity": {
+        "title": "Lord, I am not worthy",
+        "intro": "We pray like the centurion at Mass. Trace his words.",
+        "idea": 51,
+        "type": "copyverse",
+        "text": "Say the word, and my servant shall be healed."
+      },
+      "words": [
+        "soldier",
+        "servant",
+        "word",
+        "faith"
+      ]
+    },
+    "level2": {
+      "title": "The Centurion's Faith",
+      "story": "A centurion had a servant who was sick and ready to die. He sent elders to ask Jesus to come and heal him. As Jesus came near, the centurion sent friends saying, \"Lord, trouble not Thyself; for I am not worthy that Thou shouldst enter under my roof.\" He said, \"Say the word, and my servant shall be healed.\" Jesus marveled and said, \"I have not found so great faith, not even in Israel,\" and the servant was healed.",
+      "keyLine": "Say the word, and my servant shall be healed.",
+      "heartTitle": "Humble Faith",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "I am not worthy",
+      "heartLabelB": "Jesus heals",
+      "questions": [
+        "Where do we hear the centurion's words at Mass?",
+        "How can you pray for others with faith?"
+      ],
+      "actions": [
+        "Pray the 'Lord, I am not worthy' with attention",
+        "Pray for someone sick",
+        "Be humble"
+      ],
+      "prayer": "Lord, I am not worthy, but only say the word. Amen.",
+      "activity": {
+        "title": "We say it at Mass",
+        "intro": "Read it, fold one line at a time, and say it from memory.",
+        "idea": 88,
+        "type": "foldreveal",
+        "question": "What did the centurion say to Jesus?",
+        "answer": "Lord, I am not worthy that Thou shouldst enter under my roof... but say the word, and my servant shall be healed."
+      },
+      "words": [
+        "centurion",
+        "worthy",
+        "humble",
+        "faith",
+        "authority",
+        "Mass"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT09_main.png",
+    "heart": "C_OT09_heart.png",
+    "icons": [
+      "icon_helmet.png",
+      "icon_house.png",
+      "icon_praying_hands.png"
+    ],
+    "mainBrief": "Roman centurion humbly sending a message to Jesus",
+    "heartBrief": "'Only say the word' banner"
+  }
+}

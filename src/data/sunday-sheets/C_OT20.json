@@ -1,0 +1,96 @@
+{
+  "key": "C_OT20",
+  "liturgicalName": "20th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 12:49-53",
+  "keyVerseDR": "\"I am come to cast fire on the earth. And what will I, but that it be kindled?\" (Lk 12:49)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Fire of Love",
+      "story": "Jesus said, \"I came to bring fire to the earth!\" He wanted everyone's heart to burn with love for God. Following Jesus is not always easy.",
+      "keyLine": "My heart burns for Jesus.",
+      "heartTitle": "Heart on Fire",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love God",
+      "heartLabelB": "I am brave",
+      "questions": [
+        "What did Jesus come to light?",
+        "How can your heart be on fire for God?"
+      ],
+      "actions": [
+        "Pray with my whole heart",
+        "Be brave",
+        "Sing to God"
+      ],
+      "prayer": "Jesus, set my heart on fire. Amen.",
+      "activity": {
+        "title": "A burning heart",
+        "intro": "Color the flame of the candle. Let your heart burn with love for Jesus!",
+        "idea": 15,
+        "type": "candles",
+        "candles": [
+          [
+            "My love for Jesus",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "fire",
+        "love",
+        "heart",
+        "brave"
+      ]
+    },
+    "level2": {
+      "title": "Fire on the Earth",
+      "story": "Jesus said, \"I am come to cast fire on the earth; and what will I, but that it be kindled?\" He said He had a baptism to be baptized with, speaking of His Passion. Jesus said that following Him would bring division, even in families. Some would choose Him and some would not. Jesus wants our hearts to burn with love for God above all things.",
+      "keyLine": "I am come to cast fire on the earth.",
+      "heartTitle": "Zeal for God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What lights my fire",
+      "heartLabelB": "What puts it out",
+      "questions": [
+        "What is the 'fire' Jesus brings?",
+        "Why can following Jesus be hard with others?"
+      ],
+      "actions": [
+        "Stay faithful when others don't",
+        "Pray to the Holy Spirit",
+        "Share my faith kindly"
+      ],
+      "prayer": "Jesus, kindle the fire of Your love in me. Amen.",
+      "activity": {
+        "title": "What is zeal?",
+        "intro": "Jesus wanted hearts on fire with love. Explain in your own words.",
+        "idea": 63,
+        "type": "prayerframe",
+        "starters": [
+          "Zeal means...",
+          "My heart burns for Jesus when...",
+          "I can share God's love by..."
+        ]
+      },
+      "words": [
+        "fire",
+        "baptism",
+        "Passion",
+        "division",
+        "zeal",
+        "commitment"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT20_main.png",
+    "heart": "C_OT20_heart.png",
+    "icons": [
+      "icon_flame.png",
+      "icon_heart_hands.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "Jesus with a small fire lighting hearts",
+    "heartBrief": "Flames rising from heart"
+  }
+}

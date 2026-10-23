@@ -1,0 +1,93 @@
+{
+  "key": "SOL_JOHNBAPTIST",
+  "liturgicalName": "Nativity of St John the Baptist",
+  "season": "Solemnity",
+  "gospelRef": "Luke 1:57-66, 80 (Mass during the Day; Vigil: Luke 1:5-17)",
+  "keyVerseDR": "\"...he wrote, saying: John is his name. And they all wondered.\" (Lk 1:63)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Baby John Is Born",
+      "story": "Elizabeth had a baby boy. Everyone wanted to name him Zechariah, like his father. Zechariah wrote, \"His name is John,\" and then he could speak again!",
+      "keyLine": "His name is John!",
+      "heartTitle": "God's Plan",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God has a plan",
+      "heartLabelB": "I say yes",
+      "questions": [
+        "What was the baby's name?",
+        "What do you know about your name?"
+      ],
+      "actions": [
+        "Learn about my name or saint",
+        "Thank God for babies",
+        "Pray"
+      ],
+      "prayer": "St. John the Baptist, pray for me. Amen.",
+      "activity": {
+        "title": "My baptismal name",
+        "intro": "God chose John's name. Sign your own baptismal name!",
+        "idea": 91,
+        "type": "letter",
+        "style": "certificate",
+        "to": "Child of God",
+        "lines": 2
+      },
+      "words": [
+        "baby",
+        "John",
+        "name",
+        "joy"
+      ]
+    },
+    "level2": {
+      "title": "His Name Is John",
+      "story": "Elizabeth gave birth to a son, and her neighbors and relatives rejoiced with her. On the eighth day they wanted to call him Zechariah after his father. His mother said, \"Not so; but he shall be called John.\" They asked his father, and he wrote on a tablet, \"John is his name,\" and at once his mouth was opened, and he praised God. The child grew and became strong in spirit, and lived in the desert until he appeared to Israel.",
+      "keyLine": "John is his name.",
+      "heartTitle": "My Mission",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "John's mission",
+      "heartLabelB": "My mission",
+      "questions": [
+        "Why couldn't Zechariah speak?",
+        "How did John prepare the way for Jesus?"
+      ],
+      "actions": [
+        "Learn my patron saint",
+        "Point a friend to Jesus",
+        "Pray the Benedictus"
+      ],
+      "prayer": "St. John the Baptist, help me point others to Jesus. Amen.",
+      "activity": {
+        "title": "My name saint",
+        "intro": "John's name means 'God is gracious.' Write about your name saint.",
+        "idea": 73,
+        "type": "prayerframe",
+        "starters": [
+          "My name is...",
+          "My name saint is...",
+          "I can be like my saint by..."
+        ]
+      },
+      "words": [
+        "Zechariah",
+        "Elizabeth",
+        "name",
+        "prophet",
+        "forerunner",
+        "praise"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_JOHNBAPTIST_main.png",
+    "heart": "SOL_JOHNBAPTIST_heart.png",
+    "icons": [
+      "icon_baby.png",
+      "icon_scroll.png",
+      "icon_river.png"
+    ],
+    "mainBrief": "Zechariah writing 'His name is John' on a tablet; Elizabeth holding baby",
+    "heartBrief": "Baby's name banner inside heart"
+  }
+}

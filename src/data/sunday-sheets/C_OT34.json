@@ -1,0 +1,89 @@
+{
+  "key": "C_OT34",
+  "liturgicalName": "34th Sunday: Our Lord Jesus Christ, King of the Universe",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 23:35-43",
+  "keyVerseDR": "\"Amen I say to thee: This day thou shalt be with me in paradise.\" (Lk 23:43)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is King",
+      "story": "Jesus was on the cross. One man beside Him said, \"Jesus, remember me when You come into Your Kingdom.\" Jesus said, \"Today you will be with Me in Paradise.\"",
+      "keyLine": "Jesus, remember me!",
+      "heartTitle": "My King",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is King",
+      "heartLabelB": "I love Him",
+      "questions": [
+        "What did the man ask Jesus?",
+        "How is Jesus a different kind of king?"
+      ],
+      "actions": [
+        "Pray to Jesus my King",
+        "Forgive",
+        "Be kind"
+      ],
+      "prayer": "Jesus, remember me in Your kingdom. Amen.",
+      "activity": {
+        "title": "Christ the King",
+        "intro": "Color by number to finish the King's crown.",
+        "idea": 38,
+        "type": "colornum",
+        "shape": "crown",
+        "mode": "key"
+      },
+      "words": [
+        "king",
+        "cross",
+        "remember",
+        "paradise"
+      ]
+    },
+    "level2": {
+      "title": "King on the Cross",
+      "story": "The rulers mocked Jesus on the cross, saying, \"He saved others; let Him save Himself.\" Over Him was written, \"This is the King of the Jews.\" One of the criminals crucified with Him mocked Him too. But the other said, \"We receive the due reward of our deeds; but this Man hath done no evil.\" He said, \"Lord, remember me when Thou shalt come into Thy kingdom,\" and Jesus said, \"Amen I say to thee, this day thou shalt be with Me in paradise.\"",
+      "keyLine": "This day thou shalt be with me in paradise.",
+      "heartTitle": "Christ the King",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How He reigns",
+      "heartLabelB": "How I serve Him",
+      "questions": [
+        "How does Jesus rule from the cross?",
+        "What can we learn from the good thief?"
+      ],
+      "actions": [
+        "Pray 'Jesus, remember me'",
+        "Show mercy",
+        "Make Jesus King of my day"
+      ],
+      "prayer": "Christ the King, remember me in Your kingdom. Amen.",
+      "activity": {
+        "title": "Mirror message",
+        "intro": "Hold this up to a mirror, then copy it the right way.",
+        "idea": 45,
+        "type": "copyverse",
+        "text": "Lord, remember me when Thou shalt come into Thy kingdom.",
+        "mirror": true
+      },
+      "words": [
+        "King",
+        "cross",
+        "good thief",
+        "paradise",
+        "mercy",
+        "reign"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT34_main.png",
+    "heart": "C_OT34_heart.png",
+    "icons": [
+      "icon_crown.png",
+      "icon_cross.png",
+      "icon_sunrise.png"
+    ],
+    "mainBrief": "Jesus on the cross promising paradise to the good thief",
+    "heartBrief": "Crown on top of heart"
+  }
+}

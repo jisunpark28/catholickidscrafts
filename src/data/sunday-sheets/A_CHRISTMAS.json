@@ -1,0 +1,87 @@
+{
+  "key": "A_CHRISTMAS",
+  "liturgicalName": "The Nativity of the Lord (Christmas Day)",
+  "season": "Christmas",
+  "gospelRef": "John 1:1-18",
+  "keyVerseDR": "\"And the Word was made flesh and dwelt among us...\" (Jn 1:14)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Born!",
+      "story": "Jesus is born! He is God's Word who came to live with us. Jesus is the Light of the world!",
+      "keyLine": "Jesus came to us!",
+      "heartTitle": "Happy Birthday, Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love Jesus",
+      "heartLabelB": "Jesus loves me",
+      "questions": [
+        "Why did Jesus come?",
+        "What gift can you give Jesus?"
+      ],
+      "actions": [
+        "Sing Happy Birthday to Jesus",
+        "Give a gift",
+        "Visit the manger"
+      ],
+      "prayer": "Baby Jesus, thank You for coming. Amen.",
+      "activity": {
+        "title": "My family at Christmas Mass",
+        "intro": "Draw your family at Mass, celebrating Jesus' birthday.",
+        "idea": 24,
+        "type": "drawscene",
+        "prompt": "My family at Christmas Mass, with the manger and Baby Jesus"
+      },
+      "words": [
+        "baby",
+        "Jesus",
+        "light",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "The Word Became Flesh",
+      "story": "\"In the beginning was the Word, and the Word was with God, and the Word was God.\" Everything was made through Him. The Word is the light that shines in the darkness, and the darkness cannot overcome it. John the Baptist came to tell people about the light. At Christmas we celebrate that the Word became flesh and lived among us: Jesus, God's Son!",
+      "keyLine": "The Word was made flesh and dwelt among us.",
+      "heartTitle": "Light of the World",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus is light",
+      "heartLabelB": "I share light",
+      "questions": [
+        "What does 'the Word was made flesh' mean?",
+        "How can you be a light to others?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Share with someone in need",
+        "Pray by the Nativity"
+      ],
+      "prayer": "Jesus, Word made flesh, shine in my heart. Amen.",
+      "activity": {
+        "title": "LIGHT acrostic",
+        "intro": "Jesus is the light that shines in the darkness. Write a line for each letter.",
+        "idea": 62,
+        "type": "acrostic",
+        "word": "LIGHT"
+      },
+      "words": [
+        "Word",
+        "flesh",
+        "Incarnation",
+        "light",
+        "glory",
+        "grace"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_CHRISTMAS_main.png",
+    "heart": "A_CHRISTMAS_heart.png",
+    "icons": [
+      "icon_manger.png",
+      "icon_star.png",
+      "icon_sheep.png"
+    ],
+    "mainBrief": "Nativity: Mary and Joseph kneel by the manger, star above",
+    "heartBrief": "Baby Jesus' manger in the heart; little stars border"
+  }
+}

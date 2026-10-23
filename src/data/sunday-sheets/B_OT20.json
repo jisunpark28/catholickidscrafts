@@ -1,0 +1,91 @@
+{
+  "key": "B_OT20",
+  "liturgicalName": "20th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 6:51-58",
+  "keyVerseDR": "\"For my flesh is meat indeed: and my blood is drink indeed.\" (Jn 6:56 DR)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Gives Himself",
+      "story": "Jesus said, \"My Flesh is true food, and My Blood is true drink.\" In Holy Communion, we receive Jesus. He stays in us, and we stay in Him.",
+      "keyLine": "Jesus is truly here.",
+      "heartTitle": "Jesus in Me",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus comes",
+      "heartLabelB": "I love Him",
+      "questions": [
+        "What did Jesus say is true food?",
+        "How can you get ready for Communion?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Pray thank You after Communion",
+        "Bow to the altar"
+      ],
+      "prayer": "Jesus, come into my heart. Amen.",
+      "activity": {
+        "title": "Jesus in the tabernacle",
+        "intro": "Draw the tabernacle in your church, where Jesus is truly present.",
+        "idea": 6,
+        "type": "drawscene",
+        "prompt": "Inside my church: the golden tabernacle with the red sanctuary lamp burning beside it"
+      },
+      "words": [
+        "Body",
+        "Blood",
+        "Communion",
+        "food"
+      ]
+    },
+    "level2": {
+      "title": "True Food and True Drink",
+      "story": "Jesus said, \"The bread that I will give, is My flesh, for the life of the world.\" The people argued, \"How can this man give us His flesh to eat?\" Jesus said, \"Except you eat the flesh of the Son of man, and drink His blood, you shall not have life in you.\" He said, \"For My flesh is meat indeed: and My blood is drink indeed.\" Whoever eats His flesh and drinks His blood abides in Him, and He in them.",
+      "keyLine": "My flesh is meat indeed: and my blood is drink indeed.",
+      "heartTitle": "Real Presence",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I prepare",
+      "heartLabelB": "How I give thanks",
+      "questions": [
+        "Why do Catholics believe the Eucharist is truly Jesus?",
+        "What does it mean to 'remain' in Jesus?"
+      ],
+      "actions": [
+        "Visit Eucharistic Adoration",
+        "Prepare before Mass",
+        "Make a thanksgiving after Communion"
+      ],
+      "prayer": "Jesus, truly present, I adore You. Amen.",
+      "activity": {
+        "title": "Adoration",
+        "intro": "Jesus is truly present. Write a prayer before the tabernacle.",
+        "idea": 146,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, I believe You are here...",
+          "I adore You, Jesus...",
+          "Stay with me always..."
+        ]
+      },
+      "words": [
+        "Real Presence",
+        "flesh",
+        "blood",
+        "remain",
+        "eternal life",
+        "Eucharist"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT20_main.png",
+    "heart": "B_OT20_heart.png",
+    "icons": [
+      "icon_host.png",
+      "icon_chalice.png",
+      "icon_monstrance.png"
+    ],
+    "mainBrief": "Child receiving Holy Communion reverently",
+    "heartBrief": "Host and chalice inside heart"
+  }
+}

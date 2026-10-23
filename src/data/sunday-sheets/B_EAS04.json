@@ -1,0 +1,92 @@
+{
+  "key": "B_EAS04",
+  "liturgicalName": "4th Sunday of Easter (Good Shepherd)",
+  "season": "Easter",
+  "gospelRef": "John 10:11-18",
+  "keyVerseDR": "\"I am the good shepherd. The good shepherd giveth his life for his sheep.\" (Jn 10:11)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "The Good Shepherd",
+      "story": "Jesus said, \"I am the Good Shepherd.\" A good shepherd gives his life for his sheep. Jesus knows us and loves us!",
+      "keyLine": "Jesus is my Shepherd.",
+      "heartTitle": "His Little Lamb",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus leads",
+      "heartLabelB": "I follow",
+      "questions": [
+        "What does a good shepherd do?",
+        "How does Jesus take care of you?"
+      ],
+      "actions": [
+        "Pray for priests",
+        "Be gentle",
+        "Follow Jesus"
+      ],
+      "prayer": "Good Shepherd, take care of me. Amen.",
+      "activity": {
+        "title": "Find the Shepherd",
+        "intro": "Help the little sheep find the Good Shepherd.",
+        "idea": 26,
+        "type": "maze",
+        "start": "Little lost sheep",
+        "goal": "The Good Shepherd"
+      },
+      "words": [
+        "shepherd",
+        "sheep",
+        "know",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "I Lay Down My Life",
+      "story": "Jesus said, \"I am the good shepherd. The good shepherd giveth his life for his sheep.\" A hired man runs away when he sees the wolf coming, because he does not care for the sheep. Jesus said, \"I know Mine, and Mine know Me.\" He said He has other sheep too, and there shall be one fold and one shepherd. Jesus said, \"I lay down My life, that I may take it again.\"",
+      "keyLine": "The good shepherd giveth his life for his sheep.",
+      "heartTitle": "One Flock",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus cares",
+      "heartLabelB": "I care for others",
+      "questions": [
+        "How is Jesus different from the hired man?",
+        "How can you help bring others to Jesus' flock?"
+      ],
+      "actions": [
+        "Pray for vocations",
+        "Invite someone to church",
+        "Thank a priest"
+      ],
+      "prayer": "Jesus, Good Shepherd, I am Yours. Amen.",
+      "activity": {
+        "title": "A shepherd saint",
+        "intro": "Bishops and priests are shepherds. Write about a saint you want to be like.",
+        "idea": 72,
+        "type": "prayerframe",
+        "starters": [
+          "The saint I admire is...",
+          "This saint cared for people by...",
+          "I want to be like this saint because..."
+        ]
+      },
+      "words": [
+        "shepherd",
+        "hired man",
+        "wolf",
+        "lay down",
+        "flock",
+        "vocation"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_EAS04_main.png",
+    "heart": "B_EAS04_heart.png",
+    "icons": [
+      "icon_sheep.png",
+      "icon_shepherd_staff.png",
+      "icon_lamb.png"
+    ],
+    "mainBrief": "Good Shepherd carrying a lamb; wolf far off",
+    "heartBrief": "Little sheep in heart; staff on side"
+  }
+}

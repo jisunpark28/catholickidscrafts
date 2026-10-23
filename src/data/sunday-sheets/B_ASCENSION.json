@@ -1,0 +1,101 @@
+{
+  "key": "B_ASCENSION",
+  "liturgicalName": "The Ascension of the Lord (Thursday or 7th Sunday of Easter where transferred)",
+  "season": "Easter",
+  "gospelRef": "Mark 16:15-20",
+  "keyVerseDR": "\"Go ye into the whole world and preach the gospel to every creature.\" (Mk 16:15)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Goes to Heaven",
+      "story": "Jesus told His friends, \"Go into the whole world and tell the Good News!\" Then He was taken up into heaven. The disciples went out and preached everywhere.",
+      "keyLine": "Tell the Good News!",
+      "heartTitle": "Tell the World",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is in heaven",
+      "heartLabelB": "I tell others",
+      "questions": [
+        "Where did Jesus go?",
+        "Who can you tell about Jesus?"
+      ],
+      "actions": [
+        "Tell a friend about Jesus",
+        "Pray",
+        "Be kind"
+      ],
+      "prayer": "Jesus, help me share Your good news. Amen.",
+      "activity": {
+        "title": "Share the Good News",
+        "intro": "Pray together for missionaries everywhere.",
+        "idea": 99,
+        "type": "checklist",
+        "items": [
+          "Hold hands with my family",
+          "Pray for missionaries",
+          "Tell someone one thing about Jesus"
+        ]
+      },
+      "words": [
+        "heaven",
+        "go",
+        "tell",
+        "good news"
+      ]
+    },
+    "level2": {
+      "title": "Go Into the Whole World",
+      "story": "Jesus said to the Eleven, \"Go ye into the whole world, and preach the gospel to every creature.\" He said whoever believes and is baptized shall be saved. Signs would follow those who believe, and they would lay hands on the sick and heal them. The Lord Jesus was taken up into heaven and sat at the right hand of God. The disciples went forth and preached everywhere, and the Lord worked with them.",
+      "keyLine": "Go ye into the whole world and preach the gospel.",
+      "heartTitle": "Mission",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Where I go",
+      "heartLabelB": "What I share",
+      "questions": [
+        "Why didn't Jesus stay on earth?",
+        "How does the Lord work with us?"
+      ],
+      "actions": [
+        "Pray for missionaries",
+        "Share my faith",
+        "Look up and pray"
+      ],
+      "prayer": "Jesus, seated at God's right hand, send me out. Amen.",
+      "activity": {
+        "title": "Good News board game",
+        "intro": "Roll a die, move, and answer a question about the Gospel.",
+        "idea": 87,
+        "type": "bingo",
+        "words": [
+          "Start",
+          "Go!",
+          "Preach",
+          "Believe",
+          "Baptized",
+          "Heal",
+          "Heaven",
+          "Right hand",
+          "Finish"
+        ]
+      },
+      "words": [
+        "Ascension",
+        "proclaim",
+        "Gospel",
+        "right hand",
+        "mission",
+        "signs"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_ASCENSION_main.png",
+    "heart": "B_ASCENSION_heart.png",
+    "icons": [
+      "icon_cloud.png",
+      "icon_globe.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Jesus ascending, apostles looking up, globe below",
+    "heartBrief": "Globe in heart, arrows going out"
+  }
+}

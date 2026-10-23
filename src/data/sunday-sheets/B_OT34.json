@@ -1,0 +1,91 @@
+{
+  "key": "B_OT34",
+  "liturgicalName": "34th Sunday: Our Lord Jesus Christ, King of the Universe",
+  "season": "Ordinary Time",
+  "gospelRef": "John 18:33b-37",
+  "keyVerseDR": "\"...For this was I born, and for this came I into the world; that I should give testimony to the truth...\" (Jn 18:37)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is King",
+      "story": "Pilate asked Jesus, \"Are You a king?\" Jesus said, \"My Kingdom is not from this world.\" Jesus is the King of truth and love!",
+      "keyLine": "Jesus is my King!",
+      "heartTitle": "My King",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is King",
+      "heartLabelB": "I follow Him",
+      "questions": [
+        "Who did Pilate talk to?",
+        "How do you follow King Jesus?"
+      ],
+      "actions": [
+        "Tell the truth",
+        "Pray to Jesus my King",
+        "Be kind"
+      ],
+      "prayer": "Jesus, my King, I love You. Amen.",
+      "activity": {
+        "title": "Christ the King",
+        "intro": "Connect the dots to make the King's crown.",
+        "idea": 31,
+        "type": "dottodot",
+        "shape": "crown"
+      },
+      "words": [
+        "king",
+        "kingdom",
+        "truth",
+        "heaven"
+      ]
+    },
+    "level2": {
+      "title": "My Kingdom Is Not of This World",
+      "story": "Pilate asked Jesus, \"Art Thou the king of the Jews?\" Jesus answered, \"My kingdom is not of this world.\" Pilate said, \"Art Thou a king then?\" Jesus said, \"Thou sayest that I am a king. For this was I born, and for this came I into the world; that I should give testimony to the truth.\" Jesus said, \"Every one that is of the truth, heareth My voice.\"",
+      "keyLine": "For this was I born, that I should give testimony to the truth.",
+      "heartTitle": "Christ the King",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How He reigns",
+      "heartLabelB": "How I serve Him",
+      "questions": [
+        "How is Jesus' kingdom different from earthly kingdoms?",
+        "How can you listen to the King's voice?"
+      ],
+      "actions": [
+        "Tell the truth when hard",
+        "Make Jesus King of my day",
+        "Pray the Our Father slowly"
+      ],
+      "prayer": "Christ the King, reign in my heart. Amen.",
+      "activity": {
+        "title": "Jesus answers Pilate",
+        "intro": "Number the word cards in order.",
+        "idea": 40,
+        "type": "wordorder",
+        "pieces": [
+          "My kingdom",
+          "is not",
+          "of this world."
+        ]
+      },
+      "words": [
+        "King",
+        "kingdom",
+        "truth",
+        "Pilate",
+        "testify",
+        "reign"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT34_main.png",
+    "heart": "B_OT34_heart.png",
+    "icons": [
+      "icon_crown.png",
+      "icon_scroll.png",
+      "icon_cross.png"
+    ],
+    "mainBrief": "Jesus before Pilate, calm, with a crown of truth",
+    "heartBrief": "Crown on top of heart"
+  }
+}

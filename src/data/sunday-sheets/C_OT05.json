@@ -1,0 +1,101 @@
+{
+  "key": "C_OT05",
+  "liturgicalName": "5th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 5:1-11",
+  "keyVerseDR": "\"Fear not: from henceforth thou shalt catch men.\" (Lk 5:10)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "So Many Fish!",
+      "story": "Peter fished all night and caught nothing. Jesus said, \"Put your nets out deep.\" They caught so many fish the nets were breaking! Peter left everything to follow Jesus.",
+      "keyLine": "I will follow Jesus!",
+      "heartTitle": "Following Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus calls",
+      "heartLabelB": "I follow",
+      "questions": [
+        "What happened to the nets?",
+        "How can you trust Jesus?"
+      ],
+      "actions": [
+        "Try again when it's hard",
+        "Follow Jesus",
+        "Pray"
+      ],
+      "prayer": "Jesus, I will follow You. Amen.",
+      "activity": {
+        "title": "A net full of fish",
+        "intro": "Finish the picture: fill the net with fish!",
+        "idea": 4,
+        "type": "drawscene",
+        "prompt": "Peter's boat with a net bursting with fish on the Sea of Galilee"
+      },
+      "words": [
+        "fish",
+        "net",
+        "Peter",
+        "follow"
+      ]
+    },
+    "level2": {
+      "title": "Put Out Into Deep Water",
+      "story": "Jesus taught the crowds from Simon Peter's boat by the lake of Gennesaret. Then He said to Simon, \"Launch out into the deep, and let down your nets for a draught.\" Simon said, \"Master, we have labored all the night, and have taken nothing: but at Thy word I will let down the net.\" They caught so many fish that their nets were breaking, and two boats were filled. Peter fell at Jesus' knees, and Jesus said, \"Fear not: from henceforth thou shalt catch men.\"",
+      "keyLine": "Fear not: from henceforth thou shalt catch men.",
+      "heartTitle": "Into the Deep",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Where I'm afraid",
+      "heartLabelB": "Where Jesus calls",
+      "questions": [
+        "Why did Peter feel unworthy?",
+        "What 'deep water' is Jesus asking you to try?"
+      ],
+      "actions": [
+        "Try something brave for God",
+        "Obey even when tired",
+        "Pray about my vocation"
+      ],
+      "prayer": "Jesus, I will put out into the deep for You. Amen.",
+      "activity": {
+        "title": "Who did what?",
+        "intro": "Match each person to what happened.",
+        "idea": 36,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Jesus",
+            "Taught the crowds from the boat"
+          ],
+          [
+            "Simon Peter",
+            "Let down the nets at Jesus' word"
+          ],
+          [
+            "James and John",
+            "Helped fill the second boat"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "deep water",
+        "nets",
+        "obey",
+        "sinful",
+        "call",
+        "disciples"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT05_main.png",
+    "heart": "C_OT05_heart.png",
+    "icons": [
+      "icon_boat.png",
+      "icon_fish.png",
+      "icon_net.png"
+    ],
+    "mainBrief": "Peter's boat with overflowing nets; Peter kneeling",
+    "heartBrief": "Net with fish in heart"
+  }
+}

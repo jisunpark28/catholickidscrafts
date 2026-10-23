@@ -1,0 +1,102 @@
+{
+  "key": "B_ADV01",
+  "liturgicalName": "1st Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Mark 13:33-37",
+  "keyVerseDR": "\"Take ye heed, watch and pray. For ye know not when the time is.\" (Mk 13:33)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Watch and Pray",
+      "story": "Jesus said, \"Watch! Be ready!\" He told a story about a man who went on a trip. His servants kept watch for him to come home.",
+      "keyLine": "Watch and pray!",
+      "heartTitle": "Awake Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I pray",
+      "heartLabelB": "I wait",
+      "questions": [
+        "What did Jesus tell us to do?",
+        "How can you pray this Advent?"
+      ],
+      "actions": [
+        "Light the Advent wreath",
+        "Pray at bedtime",
+        "Be patient"
+      ],
+      "prayer": "Jesus, keep me awake for You. Amen.",
+      "activity": {
+        "title": "A candle for watching",
+        "intro": "Color a candle each time you pray this week.",
+        "idea": 97,
+        "type": "candles",
+        "candles": [
+          [
+            "Morning prayer",
+            "light"
+          ],
+          [
+            "Grace at meals",
+            "light"
+          ],
+          [
+            "Bedtime prayer",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "watch",
+        "pray",
+        "awake",
+        "ready"
+      ]
+    },
+    "level2": {
+      "title": "Be Watchful!",
+      "story": "Jesus told His disciples, \"Take ye heed, watch and pray. For ye know not when the time is.\" He said it is like a man who went on a journey and left his servants in charge. He told the doorkeeper to keep watch. No one knew if the master would come in the evening, at midnight, or at dawn. Jesus said, \"What I say to you, I say to all: Watch.\"",
+      "keyLine": "Take ye heed, watch and pray.",
+      "heartTitle": "Staying Awake",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What makes me sleepy",
+      "heartLabelB": "What keeps me alert",
+      "questions": [
+        "What does it mean to be spiritually awake?",
+        "What will you do each day this Advent?"
+      ],
+      "actions": [
+        "Make an Advent prayer plan",
+        "Do a daily kindness",
+        "Read the Sunday Gospel"
+      ],
+      "prayer": "Lord, keep me watchful for Your coming. Amen.",
+      "activity": {
+        "title": "Ready for the Master",
+        "intro": "Do a good deed each day while you wait for Jesus.",
+        "idea": 108,
+        "type": "tracker",
+        "rows": [
+          "My good deed today"
+        ]
+      },
+      "words": [
+        "watchful",
+        "gatekeeper",
+        "servant",
+        "Advent",
+        "return",
+        "alert"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_ADV01_main.png",
+    "heart": "B_ADV01_heart.png",
+    "icons": [
+      "icon_lamp.png",
+      "icon_door.png",
+      "icon_advent_wreath.png"
+    ],
+    "mainBrief": "Gatekeeper at a house door at night with a lamp, watching",
+    "heartBrief": "Top: praying hands; bottom: clock; stars border"
+  }
+}

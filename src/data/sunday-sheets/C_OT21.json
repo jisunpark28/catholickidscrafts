@@ -1,0 +1,88 @@
+{
+  "key": "C_OT21",
+  "liturgicalName": "21st Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 13:22-30",
+  "keyVerseDR": "\"...they are last that shall be first: and they are first that shall be last.\" (Lk 13:30)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Narrow Door",
+      "story": "Someone asked, \"Will only a few be saved?\" Jesus said, \"Try hard to enter through the narrow gate.\" People will come from everywhere to God's feast.",
+      "keyLine": "I will choose the good way.",
+      "heartTitle": "The Narrow Door",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Good choices",
+      "heartLabelB": "Heaven",
+      "questions": [
+        "What kind of door did Jesus talk about?",
+        "What good choice can you make?"
+      ],
+      "actions": [
+        "Make a good choice",
+        "Pray",
+        "Be kind to everyone"
+      ],
+      "prayer": "Jesus, help me walk the narrow way. Amen.",
+      "activity": {
+        "title": "The narrow gate",
+        "intro": "Find the narrow way to God's kingdom.",
+        "idea": 26,
+        "type": "maze",
+        "start": "Me",
+        "goal": "The narrow gate"
+      },
+      "words": [
+        "door",
+        "narrow",
+        "heaven",
+        "try"
+      ]
+    },
+    "level2": {
+      "title": "Strive for the Narrow Gate",
+      "story": "As Jesus traveled toward Jerusalem, someone asked, \"Lord, are they few that are saved?\" Jesus said, \"Strive to enter by the narrow gate.\" He said that once the master shuts the door, some will knock and say, \"Lord, open to us,\" but He will say, \"I know you not.\" People will come from the east and the west, the north and the south, and sit down in the kingdom of God. \"And behold, they are last that shall be first, and they are first that shall be last.\"",
+      "keyLine": "They are last that shall be first.",
+      "heartTitle": "Narrow Way",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Easy choices",
+      "heartLabelB": "Right choices",
+      "questions": [
+        "Why is the gate 'narrow'?",
+        "Is it enough to just know about Jesus?"
+      ],
+      "actions": [
+        "Choose the harder right thing",
+        "Pray daily",
+        "Welcome someone left out"
+      ],
+      "prayer": "Jesus, help me strive for heaven. Amen.",
+      "activity": {
+        "title": "Secret message",
+        "intro": "Use the code to find Jesus' words.",
+        "idea": 29,
+        "type": "secretcode",
+        "message": "ENTER BY THE NARROW GATE"
+      },
+      "words": [
+        "narrow gate",
+        "strive",
+        "salvation",
+        "feast",
+        "last",
+        "first"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT21_main.png",
+    "heart": "C_OT21_heart.png",
+    "icons": [
+      "icon_door.png",
+      "icon_path.png",
+      "icon_globe.png"
+    ],
+    "mainBrief": "Narrow door open with light; people from all nations",
+    "heartBrief": "Narrow door inside heart"
+  }
+}

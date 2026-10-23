@@ -1,0 +1,89 @@
+{
+  "key": "A_OT22",
+  "liturgicalName": "22nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 16:21-27",
+  "keyVerseDR": "\"If any man will come after me, let him deny himself, and take up his cross, and follow me.\" (Mt 16:24)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Carry Your Cross",
+      "story": "Jesus said He would suffer and die, then rise again. Peter said, \"No!\" Jesus said, \"Take up your cross and follow Me.\"",
+      "keyLine": "I will follow Jesus.",
+      "heartTitle": "Little Crosses",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Hard things",
+      "heartLabelB": "I offer to Jesus",
+      "questions": [
+        "What did Jesus ask us to carry?",
+        "What hard thing can you do with love?"
+      ],
+      "actions": [
+        "Do a hard chore cheerfully",
+        "Share first",
+        "Offer it to Jesus"
+      ],
+      "prayer": "Jesus, help me carry my cross. Amen.",
+      "activity": {
+        "title": "I will follow Jesus",
+        "intro": "Put your thumbprint on the cross as a promise.",
+        "idea": 92,
+        "type": "shapecraft",
+        "shape": "cross",
+        "label": "I will carry my cross"
+      },
+      "words": [
+        "cross",
+        "follow",
+        "hard",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Take Up Your Cross",
+      "story": "Jesus began to tell His disciples that He must go to Jerusalem, suffer, be killed, and rise on the third day. Peter took Him aside and said, \"God forbid, Lord! This shall never happen to You.\" Jesus said Peter was thinking as people think, not as God thinks. He said, \"If any man will come after Me, let him deny himself, and take up his cross, and follow Me.\" Whoever loses his life for Jesus' sake will find it.",
+      "keyLine": "Take up his cross, and follow me.",
+      "heartTitle": "My Cross",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What's hard",
+      "heartLabelB": "How Jesus helps",
+      "questions": [
+        "Why did Peter not want Jesus to suffer?",
+        "What does 'deny yourself' look like for you?"
+      ],
+      "actions": [
+        "Offer up a complaint",
+        "Do a sacrifice",
+        "Pray the Stations"
+      ],
+      "prayer": "Jesus, I will follow You, even to the cross. Amen.",
+      "activity": {
+        "title": "Deny yourself",
+        "intro": "Weigh it up: what habit can I drop to follow Jesus better?",
+        "idea": 67,
+        "type": "scale",
+        "left": "A habit I will drop",
+        "right": "What I will do instead"
+      },
+      "words": [
+        "cross",
+        "deny",
+        "suffer",
+        "sacrifice",
+        "disciple",
+        "offer up"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT22_main.png",
+    "heart": "A_OT22_heart.png",
+    "icons": [
+      "icon_cross.png",
+      "icon_footprints.png",
+      "icon_path.png"
+    ],
+    "mainBrief": "Jesus walking ahead carrying a cross; disciples follow",
+    "heartBrief": "Small cross in heart"
+  }
+}

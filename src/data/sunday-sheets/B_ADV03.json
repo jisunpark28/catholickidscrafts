@@ -1,0 +1,98 @@
+{
+  "key": "B_ADV03",
+  "liturgicalName": "3rd Sunday of Advent (Gaudete)",
+  "season": "Advent",
+  "gospelRef": "John 1:6-8, 19-28",
+  "keyVerseDR": "\"I am the voice of one crying in the wilderness, make straight the way of the Lord...\" (Jn 1:23)",
+  "color": "rose",
+  "levels": {
+    "level1": {
+      "title": "John Points to Jesus",
+      "story": "John came to tell people about the Light. Leaders asked, \"Who are you?\" John said, \"I am not the Christ. I prepare the way for Him!\"",
+      "keyLine": "Jesus is the Light!",
+      "heartTitle": "Joyful Witness",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is the Light",
+      "heartLabelB": "I point to Him",
+      "questions": [
+        "What did John say about himself?",
+        "How can you point to Jesus?"
+      ],
+      "actions": [
+        "Tell someone about Jesus",
+        "Smile",
+        "Light a candle"
+      ],
+      "prayer": "Jesus, I rejoice in You! Amen.",
+      "activity": {
+        "title": "Who is John?",
+        "intro": "Fold the page, guess, then open to check.",
+        "idea": 78,
+        "type": "foldreveal",
+        "question": "John said, \"I am not the Christ.\" Who was John?",
+        "answer": "The voice crying in the wilderness, getting people ready for Jesus!"
+      },
+      "words": [
+        "John",
+        "light",
+        "voice",
+        "joy"
+      ]
+    },
+    "level2": {
+      "title": "A Witness to the Light",
+      "story": "John was sent by God to give testimony about the light, so that all might believe. Priests and Levites came from Jerusalem and asked him, \"Who art thou?\" John said, \"I am not the Christ,\" nor Elijah, nor the prophet. He said, \"I am the voice of one crying in the wilderness: Make straight the way of the Lord.\" John said that One was standing among them whose sandal he was not worthy to untie.",
+      "keyLine": "I am the voice of one crying in the wilderness.",
+      "heartTitle": "Pointing to Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How John did it",
+      "heartLabelB": "How I can do it",
+      "questions": [
+        "Why was John so humble?",
+        "How can you be a 'voice' for Jesus?"
+      ],
+      "actions": [
+        "Share my faith",
+        "Let others get credit",
+        "Pray with joy"
+      ],
+      "prayer": "Jesus, help me witness to Your light. Amen.",
+      "activity": {
+        "title": "Who am I?",
+        "intro": "Read the clues and guess.",
+        "idea": 50,
+        "type": "whoami",
+        "clues": [
+          "I baptized people in the Jordan River.",
+          "I said, \"I am not the Christ.\"",
+          "I said I was not worthy to untie His sandal."
+        ],
+        "answer": "John the Baptist",
+        "choices": [
+          "Elijah",
+          "John the Baptist",
+          "Isaiah"
+        ]
+      },
+      "words": [
+        "testify",
+        "witness",
+        "Light",
+        "voice",
+        "humble",
+        "Gaudete"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_ADV03_main.png",
+    "heart": "B_ADV03_heart.png",
+    "icons": [
+      "icon_rose_candle.png",
+      "icon_candle.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "John the Baptist pointing to a bright light on the road",
+    "heartBrief": "Candle flame in heart; rays out"
+  }
+}

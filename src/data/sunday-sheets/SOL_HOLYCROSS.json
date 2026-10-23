@@ -1,0 +1,93 @@
+{
+  "key": "SOL_HOLYCROSS",
+  "liturgicalName": "Exaltation of the Holy Cross",
+  "season": "Feast of the Lord",
+  "gospelRef": "John 3:13-17",
+  "keyVerseDR": "\"And as Moses lifted up the serpent in the desert, so must the Son of man be lifted up:\" (Jn 3:14)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "The Cross of Love",
+      "story": "Jesus said, \"God loved the world so much that He gave His only Son.\" Jesus died on the cross to save us. We honor the Cross because Jesus loves us!",
+      "keyLine": "We adore You, O Christ.",
+      "heartTitle": "Cross of Love",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus loves me",
+      "heartLabelB": "I love Him",
+      "questions": [
+        "Why is the cross special?",
+        "How do we make the Sign of the Cross?"
+      ],
+      "actions": [
+        "Make the Sign of the Cross carefully",
+        "Pray before a crucifix",
+        "Love others"
+      ],
+      "prayer": "Jesus, thank You for the cross. Amen.",
+      "activity": {
+        "title": "The Holy Cross",
+        "intro": "Fill the cross with fingerprints of love.",
+        "idea": 82,
+        "type": "shapecraft",
+        "shape": "cross",
+        "label": "We adore You, O Christ"
+      },
+      "words": [
+        "cross",
+        "love",
+        "save",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "Lifted Up",
+      "story": "Jesus told Nicodemus, \"No man hath ascended into heaven, but He that descended from heaven, the Son of man.\" He said, \"As Moses lifted up the serpent in the desert, so must the Son of man be lifted up.\" Whoever believes in Him may have life everlasting. \"For God so loved the world, as to give His only begotten Son.\" God sent His Son not to judge the world, but that the world may be saved by Him.",
+      "keyLine": "So must the Son of man be lifted up.",
+      "heartTitle": "Sign of Love",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What the cross means",
+      "heartLabelB": "How I carry it",
+      "questions": [
+        "How is the bronze serpent like the cross?",
+        "Why do Catholics display the crucifix?"
+      ],
+      "actions": [
+        "Pray the Stations of the Cross",
+        "Bless myself carefully",
+        "Offer up something hard"
+      ],
+      "prayer": "We adore You, O Christ, and we bless You. Amen.",
+      "activity": {
+        "title": "Stations of the Cross",
+        "intro": "Number these Stations in order.",
+        "idea": 137,
+        "type": "sequence",
+        "scenes": [
+          "Jesus is condemned to death",
+          "Jesus carries His cross",
+          "Jesus is nailed to the cross",
+          "Jesus dies on the cross"
+        ]
+      },
+      "words": [
+        "Exaltation",
+        "bronze serpent",
+        "lifted up",
+        "save",
+        "crucifix",
+        "love"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_HOLYCROSS_main.png",
+    "heart": "SOL_HOLYCROSS_heart.png",
+    "icons": [
+      "icon_cross.png",
+      "icon_sunrise.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Simple crucifix on a hill with sunrise; a bronze serpent on a pole in the background",
+    "heartBrief": "Cross with light rays inside heart"
+  }
+}

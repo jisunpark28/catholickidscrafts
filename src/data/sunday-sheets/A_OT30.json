@@ -1,0 +1,105 @@
+{
+  "key": "A_OT30",
+  "liturgicalName": "30th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 22:34-40",
+  "keyVerseDR": "\"Thou shalt love the Lord thy God with thy whole heart and with thy whole soul and with thy whole mind.\" (Mt 22:37)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Love God, Love Others",
+      "story": "A man asked Jesus, \"What is the greatest commandment?\" Jesus said, \"Love God with all your heart.\" And love your neighbor as yourself!",
+      "keyLine": "Love God. Love others.",
+      "heartTitle": "My Heart of Love",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love God",
+      "heartLabelB": "I love my family and friends",
+      "questions": [
+        "Who loves you?",
+        "How can you be kind today?"
+      ],
+      "actions": [
+        "Give a big hug",
+        "Share a toy",
+        "Say a prayer to God"
+      ],
+      "prayer": "Jesus, help me love God and love everyone. Amen.",
+      "activity": {
+        "type": "heart",
+        "title": "Two great commandments",
+        "a": "Love God",
+        "b": "Love my neighbour",
+        "intro": "Fill the heart with love for God and others."
+      },
+      "words": [
+        "love",
+        "God",
+        "others",
+        "rule"
+      ]
+    },
+    "level2": {
+      "title": "The Greatest Commandment",
+      "story": "A Pharisee who was a lawyer tested Jesus, asking, \"Master, which is the great commandment in the law?\" Jesus said, \"Thou shalt love the Lord thy God with thy whole heart, and with thy whole soul, and with thy whole mind.\" He said, \"This is the greatest and the first commandment.\" The second is like it: \"Thou shalt love thy neighbour as thyself.\" Jesus said the whole law and the prophets depend on these two commandments.",
+      "keyLine": "Thou shalt love the Lord thy God with thy whole heart.",
+      "heartTitle": "The Two Great Commandments",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Love God",
+      "heartLabelB": "Love your neighbor",
+      "questions": [
+        "Who is a \"neighbor\" you can love this week?",
+        "What is one way to love God with your whole heart?"
+      ],
+      "actions": [
+        "Help someone without being asked",
+        "Pray each morning",
+        "Include someone left out"
+      ],
+      "prayer": "Lord Jesus, teach me to love God and my neighbor with all my heart. Amen.",
+      "activity": {
+        "title": "Love in action",
+        "intro": "Match each commandment to a daily action.",
+        "idea": 47,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Honor your father and mother",
+            "Help with chores without complaining"
+          ],
+          [
+            "Keep holy the Lord's Day",
+            "Go to Mass on Sunday"
+          ],
+          [
+            "You shall not steal",
+            "Return what I borrowed"
+          ],
+          [
+            "You shall not lie",
+            "Tell the truth even when it's hard"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "commandment",
+        "neighbor",
+        "soul",
+        "mind",
+        "law",
+        "prophets"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT30_main.png",
+    "heart": "A_OT30_heart.png",
+    "icons": [
+      "icon_heart_hands.png",
+      "icon_praying_hands.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "Jesus pointing to heart and up to heaven",
+    "heartBrief": "Top: love God; bottom: love family"
+  }
+}

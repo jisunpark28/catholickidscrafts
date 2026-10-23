@@ -1,0 +1,91 @@
+{
+  "key": "C_OT02",
+  "liturgicalName": "2nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 2:1-11",
+  "keyVerseDR": "\"His mother saith to the waiters: Whatsoever he shall say to you, do ye.\" (Jn 2:5)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Water Into Wine",
+      "story": "Jesus, Mary, and the disciples went to a wedding. The wine ran out! Mary said, \"Do whatever He tells you.\" Jesus turned water into wine.",
+      "keyLine": "Do whatever Jesus tells you.",
+      "heartTitle": "Listening to Mary",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Mary helps",
+      "heartLabelB": "I obey Jesus",
+      "questions": [
+        "What did Mary say?",
+        "How can you do what Jesus says?"
+      ],
+      "actions": [
+        "Obey right away",
+        "Pray to Mary",
+        "Help at a party"
+      ],
+      "prayer": "Mary, help me do what Jesus says. Amen.",
+      "activity": {
+        "title": "Wedding faces",
+        "intro": "Draw the faces: worried, then happy!",
+        "idea": 2,
+        "type": "faces",
+        "people": [
+          "The servants",
+          "The bride and groom",
+          "Mary"
+        ]
+      },
+      "words": [
+        "wedding",
+        "water",
+        "wine",
+        "Mary"
+      ]
+    },
+    "level2": {
+      "title": "The Wedding at Cana",
+      "story": "There was a wedding in Cana of Galilee, and the mother of Jesus was there, and Jesus and His disciples were invited. When the wine ran out, Mary said to Jesus, \"They have no wine.\" She told the servants, \"Whatsoever He shall say to you, do ye.\" Jesus had them fill six stone water jars with water and take some to the chief steward. The water had become wine, the best wine, and this was the first of Jesus' signs.",
+      "keyLine": "Whatsoever he shall say to you, do ye.",
+      "heartTitle": "Mary's Advice",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What Jesus asks",
+      "heartLabelB": "How I do it",
+      "questions": [
+        "How does Mary help us go to Jesus?",
+        "Why is this called a 'sign'?"
+      ],
+      "actions": [
+        "Ask Mary to pray for a need",
+        "Obey quickly",
+        "Pray for married couples"
+      ],
+      "prayer": "Mary, lead me to do whatever Jesus says. Amen.",
+      "activity": {
+        "title": "Fix the words",
+        "intro": "Three words are wrong. Cross them out and write the right ones.",
+        "idea": 39,
+        "type": "fixwords",
+        "text": "His {father|mother} saith to the {guests|waiters}: Whatsoever He shall say to you, {wait|do} ye."
+      },
+      "words": [
+        "Cana",
+        "sign",
+        "jars",
+        "Mary",
+        "intercession",
+        "believe"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT02_main.png",
+    "heart": "C_OT02_heart.png",
+    "icons": [
+      "icon_water_jar.png",
+      "icon_grapes.png",
+      "icon_mary_heart.png"
+    ],
+    "mainBrief": "Wedding at Cana: Mary speaking to servers by stone jars",
+    "heartBrief": "Jars turning to wine around heart"
+  }
+}

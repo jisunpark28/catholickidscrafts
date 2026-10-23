@@ -1,0 +1,93 @@
+{
+  "key": "A_OT20",
+  "liturgicalName": "20th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 15:21-28",
+  "keyVerseDR": "\"O woman, great is thy faith: be it done to thee as thou wilt.\" (Mt 15:28)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "A Mom with Big Faith",
+      "story": "A mother asked Jesus to heal her sick daughter. She kept asking with great faith. Jesus said, \"Your faith is great!\" and her daughter was healed.",
+      "keyLine": "I have faith in Jesus.",
+      "heartTitle": "Big Faith",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I ask",
+      "heartLabelB": "I trust",
+      "questions": [
+        "What did the mom keep doing?",
+        "What can you ask Jesus for?"
+      ],
+      "actions": [
+        "Pray for someone sick",
+        "Keep praying",
+        "Trust"
+      ],
+      "prayer": "Jesus, give me great faith. Amen.",
+      "activity": {
+        "title": "Pray for my family",
+        "intro": "The mother prayed for her daughter. Pray for your family!",
+        "idea": 122,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, please help...",
+          "I pray for...",
+          "Thank You for my family..."
+        ]
+      },
+      "words": [
+        "mom",
+        "faith",
+        "ask",
+        "heal"
+      ]
+    },
+    "level2": {
+      "title": "The Canaanite Woman",
+      "story": "A Canaanite woman came to Jesus crying out, \"Have mercy on me, Lord, Son of David! My daughter is troubled by a demon.\" At first Jesus did not answer, and the disciples asked Him to send her away. She knelt before Him and said, \"Lord, help me.\" She humbly said that even the dogs eat the crumbs that fall from the master's table. Jesus said, \"O woman, great is thy faith,\" and her daughter was healed that very hour.",
+      "keyLine": "O woman, great is thy faith.",
+      "heartTitle": "Persistent Prayer",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I pray for",
+      "heartLabelB": "Why I keep asking",
+      "questions": [
+        "What can we learn from her persistence?",
+        "Does Jesus love people from every nation?"
+      ],
+      "actions": [
+        "Pray daily for one intention",
+        "Pray for someone sick",
+        "Welcome someone different"
+      ],
+      "prayer": "Jesus, I believe; help my faith grow. Amen.",
+      "activity": {
+        "title": "Get-well prayer card",
+        "intro": "The mother asked Jesus to heal her child. Make a prayer card for someone who is sick.",
+        "idea": 114,
+        "type": "letter",
+        "style": "card",
+        "to": "Someone who is sick",
+        "lines": 3
+      },
+      "words": [
+        "Canaanite",
+        "persistent",
+        "humble",
+        "faith",
+        "healing",
+        "mercy"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT20_main.png",
+    "heart": "A_OT20_heart.png",
+    "icons": [
+      "icon_praying_hands.png",
+      "icon_mother_child.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Canaanite mother kneeling before Jesus asking for her daughter",
+    "heartBrief": "Mother and child inside heart"
+  }
+}

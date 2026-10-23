@@ -1,0 +1,90 @@
+{
+  "key": "A_OT29",
+  "liturgicalName": "29th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 22:15-21",
+  "keyVerseDR": "\"Render therefore to Caesar the things that are Caesar's; and to God, the things that are God's.\" (Mt 22:21)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Give to God",
+      "story": "Some men tried to trick Jesus about paying taxes. Jesus looked at a coin with Caesar's face. He said, \"Give to God what belongs to God.\"",
+      "keyLine": "I belong to God.",
+      "heartTitle": "I Belong to God",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Made by God",
+      "heartLabelB": "Given to God",
+      "questions": [
+        "Whose picture was on the coin?",
+        "What can you give God?"
+      ],
+      "actions": [
+        "Give to the collection",
+        "Pray",
+        "Obey rules"
+      ],
+      "prayer": "God, I give You my heart. Amen.",
+      "activity": {
+        "title": "I belong to God",
+        "intro": "The coin had Caesar's image. You are made in God's image! Sign your baptismal name.",
+        "idea": 91,
+        "type": "letter",
+        "style": "certificate",
+        "to": "A child of God",
+        "lines": 3
+      },
+      "words": [
+        "coin",
+        "give",
+        "God",
+        "belong"
+      ]
+    },
+    "level2": {
+      "title": "Caesar's Coin",
+      "story": "The Pharisees wanted to trap Jesus, so they asked, \"Is it lawful to pay tax to Caesar or not?\" Jesus knew their wicked plan and said, \"Show Me the coin of the tax.\" They brought Him a coin, and He asked, \"Whose image is this?\" They answered, \"Caesar's.\" Jesus said, \"Render therefore to Caesar the things that are Caesar's; and to God, the things that are God's.\"",
+      "keyLine": "Render to God, the things that are God's.",
+      "heartTitle": "Image of God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I give the world",
+      "heartLabelB": "What I give God",
+      "questions": [
+        "How did Jesus avoid the trap?",
+        "Whose image is on you?"
+      ],
+      "actions": [
+        "Give part of my allowance",
+        "Pray for leaders",
+        "Offer my day to God"
+      ],
+      "prayer": "God, I belong to You. Amen.",
+      "activity": {
+        "title": "Hidden picture",
+        "intro": "Color the even-numbered cells to find the picture.",
+        "idea": 43,
+        "type": "colornum",
+        "shape": "heart",
+        "mode": "even"
+      },
+      "words": [
+        "Caesar",
+        "tax",
+        "image",
+        "render",
+        "citizen",
+        "belong"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT29_main.png",
+    "heart": "A_OT29_heart.png",
+    "icons": [
+      "icon_coins.png",
+      "icon_crown.png",
+      "icon_child.png"
+    ],
+    "mainBrief": "Jesus holding a coin with Caesar's face; child with God's heart",
+    "heartBrief": "Coin vs heart labeled 'God's'"
+  }
+}

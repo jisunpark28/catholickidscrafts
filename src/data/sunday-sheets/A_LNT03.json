@@ -1,0 +1,89 @@
+{
+  "key": "A_LNT03",
+  "liturgicalName": "3rd Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "John 4:5-42",
+  "keyVerseDR": "\"...the water that I will give him shall become in him a fountain of water, springing up into life everlasting.\" (Jn 4:14)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Living Water",
+      "story": "Jesus met a woman at a well. He said, \"I can give you living water!\" She ran to tell her whole town about Jesus.",
+      "keyLine": "Jesus gives living water.",
+      "heartTitle": "Living Water",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus fills me",
+      "heartLabelB": "I share",
+      "questions": [
+        "What did Jesus offer the woman?",
+        "Who can you tell about Jesus?"
+      ],
+      "actions": [
+        "Drink water and thank God",
+        "Tell a friend about Jesus",
+        "Pray"
+      ],
+      "prayer": "Jesus, fill me with Your living water. Amen.",
+      "activity": {
+        "title": "What did Jesus offer?",
+        "intro": "Fold the page, guess, then open to check.",
+        "idea": 78,
+        "type": "foldreveal",
+        "question": "What did Jesus offer the woman at the well?",
+        "answer": "Living water, so she would never thirst again!"
+      },
+      "words": [
+        "well",
+        "water",
+        "woman",
+        "life"
+      ]
+    },
+    "level2": {
+      "title": "The Woman at the Well",
+      "story": "Tired from His journey, Jesus sat by Jacob's well in Samaria. A Samaritan woman came to draw water, and Jesus said, \"Give Me a drink.\" He told her, \"Whoever drinks the water I give will never thirst again.\" Jesus knew everything about her life, and she believed He was the Messiah. She ran to tell her town, and many came to believe that Jesus is the Savior of the world.",
+      "keyLine": "The water that I will give him shall become in him a fountain of water.",
+      "heartTitle": "Thirsty for God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I'm thirsty for",
+      "heartLabelB": "What Jesus gives",
+      "questions": [
+        "What is the 'living water' Jesus gives?",
+        "How did the woman become a missionary?"
+      ],
+      "actions": [
+        "Invite someone to Mass",
+        "Pray for someone who doesn't know Jesus",
+        "Make a sacrifice"
+      ],
+      "prayer": "Jesus, You are the living water. Amen.",
+      "activity": {
+        "title": "Say it in one line",
+        "intro": "Think about the Gospel, then open to read a summary.",
+        "idea": 75,
+        "type": "foldreveal",
+        "question": "Can you tell today's Gospel in one sentence?",
+        "answer": "Jesus offered living water to a Samaritan woman, and her whole town came to believe in Him."
+      },
+      "words": [
+        "Samaritan",
+        "well",
+        "living water",
+        "eternal life",
+        "Messiah",
+        "believe"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_LNT03_main.png",
+    "heart": "A_LNT03_heart.png",
+    "icons": [
+      "icon_well.png",
+      "icon_water_jar.png",
+      "icon_water_drop.png"
+    ],
+    "mainBrief": "Jesus sitting by a well talking with a Samaritan woman with a jar",
+    "heartBrief": "Water drops filling the heart"
+  }
+}

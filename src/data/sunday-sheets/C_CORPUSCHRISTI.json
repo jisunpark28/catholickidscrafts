@@ -1,0 +1,113 @@
+{
+  "key": "C_CORPUSCHRISTI",
+  "liturgicalName": "The Most Holy Body and Blood of Christ (Corpus Christi)",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 9:11b-17",
+  "keyVerseDR": "\"And they did all eat and were filled. And there were taken up of fragments that remained to them, twelve baskets.\" (Lk 9:17)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Feeds Everyone",
+      "story": "Jesus healed and taught a big crowd. They had only five loaves and two fish. Jesus blessed the food, and everyone ate!",
+      "keyLine": "Jesus feeds me.",
+      "heartTitle": "Jesus in the Eucharist",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is here",
+      "heartLabelB": "I adore",
+      "questions": [
+        "How many people did Jesus feed?",
+        "How does Jesus feed us at Mass?"
+      ],
+      "actions": [
+        "Bow to the tabernacle",
+        "Go to Mass",
+        "Pray thank You"
+      ],
+      "prayer": "Jesus, You are truly here. Amen.",
+      "activity": {
+        "title": "One word about Mass",
+        "intro": "Write one word about today's Mass and why.",
+        "idea": 71,
+        "type": "prayerframe",
+        "starters": [
+          "My word is...",
+          "I chose it because...",
+          "Jesus fed me with..."
+        ]
+      },
+      "words": [
+        "bread",
+        "bless",
+        "feed",
+        "Mass"
+      ]
+    },
+    "level2": {
+      "title": "Loaves and Fishes",
+      "story": "Jesus spoke to the crowds about the kingdom of God and healed those who needed healing. As evening came, the Twelve said, \"Send away the multitude,\" but Jesus said, \"Give you them to eat.\" They had only five loaves and two fishes for about five thousand men. Jesus took the loaves and fish, looked up to heaven, blessed them, broke them, and gave them to the disciples. All ate and were filled, and twelve baskets of fragments were left.",
+      "keyLine": "They did all eat and were filled.",
+      "heartTitle": "Real Presence",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I prepare",
+      "heartLabelB": "How I give thanks",
+      "questions": [
+        "How do Jesus' actions match the Mass?",
+        "How can you prepare for Holy Communion?"
+      ],
+      "actions": [
+        "Visit Eucharistic Adoration",
+        "Fast before Mass",
+        "Make a thanksgiving after Communion"
+      ],
+      "prayer": "Jesus in the Blessed Sacrament, I adore You. Amen.",
+      "activity": {
+        "title": "Seven sacraments",
+        "intro": "Match each sacrament to what it gives.",
+        "idea": 46,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Eucharist",
+            "Jesus' Body and Blood"
+          ],
+          [
+            "Baptism",
+            "New life as God's child"
+          ],
+          [
+            "Confirmation",
+            "The gifts of the Spirit"
+          ],
+          [
+            "Matrimony",
+            "A husband and wife joined by God"
+          ],
+          [
+            "Anointing of the Sick",
+            "Strength and healing"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Eucharist",
+        "bless",
+        "break",
+        "Real Presence",
+        "Body",
+        "Blood"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_CORPUSCHRISTI_main.png",
+    "heart": "C_CORPUSCHRISTI_heart.png",
+    "icons": [
+      "icon_bread.png",
+      "icon_basket.png",
+      "icon_monstrance.png"
+    ],
+    "mainBrief": "Jesus blessing loaves; twelve baskets; monstrance hint",
+    "heartBrief": "Host and chalice inside heart"
+  }
+}

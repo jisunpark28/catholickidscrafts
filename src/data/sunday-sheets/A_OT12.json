@@ -1,0 +1,104 @@
+{
+  "key": "A_OT12",
+  "liturgicalName": "12th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 10:26-33",
+  "keyVerseDR": "\"Fear not therefore: better are you than many sparrows.\" (Mt 10:31)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Don't Be Afraid",
+      "story": "Jesus said, \"Do not be afraid! God knows every little bird.\" God even counts the hairs on your head. You are worth more than many sparrows!",
+      "keyLine": "God knows me.",
+      "heartTitle": "God Knows Me",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God loves me",
+      "heartLabelB": "I am brave",
+      "questions": [
+        "What does God count?",
+        "When do you feel afraid?"
+      ],
+      "actions": [
+        "Pray when scared",
+        "Be brave",
+        "Thank God"
+      ],
+      "prayer": "Jesus, I am not afraid with You. Amen.",
+      "activity": {
+        "title": "God knows me",
+        "intro": "Use the first letters to solve the crossword.",
+        "idea": 37,
+        "type": "crossword",
+        "entries": [
+          [
+            "SPARROW",
+            "A little bird God watches over"
+          ],
+          [
+            "HAIRS",
+            "God counts every one on your head"
+          ],
+          [
+            "FATHER",
+            "He knows when a sparrow falls"
+          ],
+          [
+            "AFRAID",
+            "Jesus says, Do not be ___"
+          ]
+        ]
+      },
+      "words": [
+        "sparrow",
+        "hair",
+        "afraid",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Worth More Than Sparrows",
+      "story": "Jesus told His disciples not to be afraid of people. What He told them in the dark, they must speak in the light. \"Are not two sparrows sold for a small coin?\" He asked. Yet not one falls to the ground without the Father knowing. \"Even all the hairs of your head are counted. So do not be afraid; you are worth more than many sparrows.\"",
+      "keyLine": "Fear not: better are you than many sparrows.",
+      "heartTitle": "Brave Witness",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What scares me",
+      "heartLabelB": "Why I trust God",
+      "questions": [
+        "Why can we be brave?",
+        "When is it hard to say you follow Jesus?"
+      ],
+      "actions": [
+        "Pray grace in public",
+        "Speak up for faith",
+        "Trust God with a fear"
+      ],
+      "prayer": "Father, give me courage to speak of Jesus. Amen.",
+      "activity": {
+        "title": "A courage verse",
+        "intro": "Copy Jesus' words beautifully.",
+        "idea": 65,
+        "type": "copyverse",
+        "text": "Fear not therefore: better are you than many sparrows."
+      },
+      "words": [
+        "sparrows",
+        "fear",
+        "acknowledge",
+        "courage",
+        "witness",
+        "Father"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT12_main.png",
+    "heart": "A_OT12_heart.png",
+    "icons": [
+      "icon_sparrow.png",
+      "icon_hair_comb.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Sparrows on a branch; Jesus speaking to apostles",
+    "heartBrief": "Little sparrows perching on heart"
+  }
+}

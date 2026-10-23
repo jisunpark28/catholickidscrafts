@@ -1,0 +1,95 @@
+{
+  "key": "B_OT10",
+  "liturgicalName": "10th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 3:20-35",
+  "keyVerseDR": "\"For whosoever shall do the will of God, he is my brother, and my sister, and mother.\" (Mk 3:35)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "God's Family",
+      "story": "Jesus' family came to bring Him home. Jesus looked at the people around Him. He said, \"Whoever does God's will is My brother, sister, and mother.\"",
+      "keyLine": "I am in God's family.",
+      "heartTitle": "God's Family",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I belong",
+      "heartLabelB": "I obey",
+      "questions": [
+        "Who is in Jesus' family?",
+        "How can you do what God wants?"
+      ],
+      "actions": [
+        "Obey my parents",
+        "Be kind to my siblings",
+        "Pray"
+      ],
+      "prayer": "Jesus, thank You for making me Your family. Amen.",
+      "activity": {
+        "title": "God's family talk",
+        "intro": "Talk about these with your family.",
+        "idea": 101,
+        "type": "checklist",
+        "items": [
+          "Who is in God's family?",
+          "How do we do God's will at home?",
+          "Who can we pray for today?"
+        ]
+      },
+      "words": [
+        "family",
+        "brother",
+        "sister",
+        "God"
+      ]
+    },
+    "level2": {
+      "title": "Jesus' True Family",
+      "story": "So many people came that Jesus and His disciples could not even eat bread. Some scribes said He cast out devils by the prince of devils. Jesus said, \"If a house be divided against itself, that house cannot stand.\" His mother and brethren came and sent for Him. Looking at those around Him, Jesus said, \"Whosoever shall do the will of God, he is My brother, and My sister, and mother.\"",
+      "keyLine": "Whosoever shall do the will of God, he is my brother, and my sister, and mother.",
+      "heartTitle": "Doing God's Will",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What God wants",
+      "heartLabelB": "What I do",
+      "questions": [
+        "How is Mary the best example of doing God's will?",
+        "Why can't a divided house stand?"
+      ],
+      "actions": [
+        "Pray 'Thy will be done' daily",
+        "Make peace at home",
+        "Obey quickly"
+      ],
+      "prayer": "Jesus, help me do the Father's will. Amen.",
+      "activity": {
+        "title": "Our family promises",
+        "intro": "We are God's family when we do His will. Write family promises.",
+        "idea": 70,
+        "type": "prayerframe",
+        "starters": [
+          "Our family will do God's will by...",
+          "We will pray together...",
+          "We will welcome others..."
+        ]
+      },
+      "words": [
+        "Beelzebul",
+        "divided",
+        "will of God",
+        "family",
+        "Holy Spirit",
+        "Mary"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT10_main.png",
+    "heart": "B_OT10_heart.png",
+    "icons": [
+      "icon_family.png",
+      "icon_mary_heart.png",
+      "icon_house.png"
+    ],
+    "mainBrief": "Jesus with Mary and crowd; family of God",
+    "heartBrief": "Family figures in heart"
+  }
+}

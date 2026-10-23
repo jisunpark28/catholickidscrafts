@@ -1,0 +1,97 @@
+{
+  "key": "A_ADV02",
+  "liturgicalName": "2nd Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Matthew 3:1-12",
+  "keyVerseDR": "\"Prepare ye the way of the Lord, make straight his paths.\" (Mt 3:3)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Prepare the Way",
+      "story": "John the Baptist lived in the desert. He wore camel hair and ate locusts and honey. He said, \"Get ready! Jesus is coming!\"",
+      "keyLine": "Prepare the way!",
+      "heartTitle": "Making a Path",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say sorry",
+      "heartLabelB": "I start again",
+      "questions": [
+        "What did John tell the people?",
+        "What can you clean up in your heart?"
+      ],
+      "actions": [
+        "Say sorry when I am wrong",
+        "Tidy my room",
+        "Pray to Jesus"
+      ],
+      "prayer": "Jesus, help me make my heart ready. Amen.",
+      "activity": {
+        "title": "Purple for Advent",
+        "intro": "Advent's color is violet. Find 3 purple things at home.",
+        "idea": 105,
+        "type": "checklist",
+        "items": [
+          "Something purple in my room",
+          "Something purple in the kitchen",
+          "Something purple to wear"
+        ]
+      },
+      "words": [
+        "John",
+        "desert",
+        "prepare",
+        "way"
+      ]
+    },
+    "level2": {
+      "title": "A Voice in the Desert",
+      "story": "John the Baptist preached in the desert of Judea, saying, \"Repent, for the kingdom of heaven is at hand!\" He wore camel hair and ate locusts and wild honey. Crowds came to the Jordan River to confess their sins and be baptized. John said, \"Prepare the way of the Lord, make His paths straight.\" He told them that someone mightier was coming who would baptize with the Holy Spirit.",
+      "keyLine": "Prepare ye the way of the Lord, make straight his paths.",
+      "heartTitle": "Straight Paths",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Turn away from",
+      "heartLabelB": "Turn toward",
+      "questions": [
+        "What does it mean to repent?",
+        "What is one 'crooked path' in your life to make straight?"
+      ],
+      "actions": [
+        "Go to Confession or make an examen",
+        "Forgive someone",
+        "Read Isaiah 40"
+      ],
+      "prayer": "Lord, make my heart a straight path for You. Amen.",
+      "activity": {
+        "title": "Prepare the way",
+        "intro": "John said, \"Repent!\" Check your heart this week.",
+        "idea": 130,
+        "type": "checklist",
+        "items": [
+          "Did I pray each day?",
+          "Did I obey my parents?",
+          "Did I tell the truth?",
+          "Was I kind to my family?",
+          "Did I say sorry when I was wrong?"
+        ]
+      },
+      "words": [
+        "repent",
+        "baptize",
+        "prophet",
+        "desert",
+        "Isaiah",
+        "straight"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_ADV02_main.png",
+    "heart": "A_ADV02_heart.png",
+    "icons": [
+      "icon_river.png",
+      "icon_path.png",
+      "icon_camel.png"
+    ],
+    "mainBrief": "John the Baptist in camel-hair by the Jordan, pointing down a winding path",
+    "heartBrief": "Heart drawn as a path with stones to color; footprints inside"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "key": "B_HOLYFAMILY",
+  "liturgicalName": "The Holy Family of Jesus, Mary and Joseph",
+  "season": "Christmas",
+  "gospelRef": "Luke 2:22-40",
+  "keyVerseDR": "\"And the child grew and waxed strong, full of wisdom: and the grace of God was in him.\" (Lk 2:40)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Goes to the Temple",
+      "story": "Mary and Joseph brought Baby Jesus to the Temple. Old Simeon held Jesus and praised God. Anna told everyone about Him.",
+      "keyLine": "Jesus grew strong and wise.",
+      "heartTitle": "My Family",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "We love",
+      "heartLabelB": "We pray",
+      "questions": [
+        "Who was happy to see Jesus?",
+        "How does your family pray?"
+      ],
+      "actions": [
+        "Pray with my family",
+        "Go to church together",
+        "Help my parents"
+      ],
+      "prayer": "Holy Family, bless my family. Amen.",
+      "activity": {
+        "title": "People I'm thankful for",
+        "intro": "Simeon and Anna thanked God for Jesus. Draw people you thank God for.",
+        "idea": 17,
+        "type": "faces",
+        "people": [
+          "Mom or Dad",
+          "Grandma or Grandpa",
+          "Someone else"
+        ]
+      },
+      "words": [
+        "temple",
+        "Simeon",
+        "Anna",
+        "family"
+      ]
+    },
+    "level2": {
+      "title": "The Presentation",
+      "story": "Mary and Joseph brought Jesus to the Temple in Jerusalem to present Him to the Lord. A holy man named Simeon took the child in his arms and praised God. He said, \"Now Thou dost dismiss Thy servant, O Lord,\" because his eyes had seen the Savior. The prophetess Anna, who was very old, gave thanks and spoke about the child to everyone. The family went home to Nazareth, where Jesus grew strong and full of wisdom.",
+      "keyLine": "The child grew and waxed strong, full of wisdom.",
+      "heartTitle": "Holy Families",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How we pray",
+      "heartLabelB": "How we serve",
+      "questions": [
+        "What did Simeon say about Jesus?",
+        "How can your family grow closer to God?"
+      ],
+      "actions": [
+        "Pray a family prayer nightly",
+        "Honor my grandparents",
+        "Do a family service"
+      ],
+      "prayer": "Jesus, Mary and Joseph, make our home holy. Amen.",
+      "activity": {
+        "title": "Thank you, parents",
+        "intro": "Mary and Joseph cared for Jesus. Make a thank-you certificate for a parent or guardian.",
+        "idea": 58,
+        "type": "letter",
+        "style": "certificate",
+        "to": "My parent",
+        "lines": 3
+      },
+      "words": [
+        "Presentation",
+        "Temple",
+        "Simeon",
+        "Anna",
+        "Nazareth",
+        "wisdom"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_HOLYFAMILY_main.png",
+    "heart": "B_HOLYFAMILY_heart.png",
+    "icons": [
+      "icon_temple.png",
+      "icon_dove.png",
+      "icon_candle.png"
+    ],
+    "mainBrief": "Simeon holding baby Jesus in the Temple, Anna and Mary nearby",
+    "heartBrief": "Two turtle doves on heart; family inside"
+  }
+}

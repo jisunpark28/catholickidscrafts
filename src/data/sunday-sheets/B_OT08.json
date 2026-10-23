@@ -1,0 +1,91 @@
+{
+  "key": "B_OT08",
+  "liturgicalName": "8th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 2:18-22",
+  "keyVerseDR": "\"Can the children of the marriage fast, as long as the bridegroom is with them?\" (Mk 2:19)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Happy With Jesus",
+      "story": "People asked why Jesus' friends did not fast. Jesus said, \"While the groom is here, it's a happy time!\" Being with Jesus brings joy.",
+      "keyLine": "Jesus makes me happy.",
+      "heartTitle": "Joy in Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is here",
+      "heartLabelB": "I rejoice",
+      "questions": [
+        "What did Jesus compare Himself to?",
+        "What makes you happy about Jesus?"
+      ],
+      "actions": [
+        "Sing to Jesus",
+        "Smile",
+        "Thank God"
+      ],
+      "prayer": "Jesus, thank You for the joy You bring. Amen.",
+      "activity": {
+        "title": "Joy with Jesus",
+        "intro": "Draw happy faces: Jesus' friends rejoice that He is with them!",
+        "idea": 2,
+        "type": "faces",
+        "people": [
+          "Peter",
+          "John",
+          "Me"
+        ]
+      },
+      "words": [
+        "happy",
+        "wedding",
+        "new",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "New Wine, New Wineskins",
+      "story": "People asked Jesus, \"Why do the disciples of John and the Pharisees fast, but Thy disciples do not fast?\" Jesus answered, \"Can the children of the marriage fast, as long as the bridegroom is with them?\" He said the day would come when the bridegroom would be taken away, and then they would fast. Jesus said no one sews a new patch on an old garment. And no one puts new wine into old wineskins, but new wine into new skins.",
+      "keyLine": "Can the children of the marriage fast, as long as the bridegroom is with them?",
+      "heartTitle": "Made New",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Old ways",
+      "heartLabelB": "New life in Jesus",
+      "questions": [
+        "Why is Jesus called the Bridegroom?",
+        "What 'new wineskin' does your heart need?"
+      ],
+      "actions": [
+        "Try a new prayer",
+        "Let go of an old grudge",
+        "Rejoice in Jesus"
+      ],
+      "prayer": "Jesus, make my heart new for You. Amen.",
+      "activity": {
+        "title": "JOY acrostic",
+        "intro": "Being with Jesus brings joy! Write a line for each letter.",
+        "idea": 62,
+        "type": "acrostic",
+        "word": "JOY"
+      },
+      "words": [
+        "fast",
+        "bridegroom",
+        "wineskins",
+        "new",
+        "joy",
+        "Kingdom"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT08_main.png",
+    "heart": "B_OT08_heart.png",
+    "icons": [
+      "icon_grapes.png",
+      "icon_wineskin.png",
+      "icon_wedding_garment.png"
+    ],
+    "mainBrief": "Wedding party with bridegroom; new wineskins",
+    "heartBrief": "Joyful confetti around heart"
+  }
+}

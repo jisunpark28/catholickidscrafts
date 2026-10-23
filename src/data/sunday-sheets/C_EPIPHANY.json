@@ -1,0 +1,87 @@
+{
+  "key": "C_EPIPHANY",
+  "liturgicalName": "The Epiphany of the Lord",
+  "season": "Christmas",
+  "gospelRef": "Matthew 2:1-12",
+  "keyVerseDR": "\"...falling down they adored him: and opening their treasures, they offered him gifts...\" (Mt 2:11)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Wise Men Follow the Star",
+      "story": "Wise men came from far away, following a star. They found Baby Jesus with Mary. They knelt and gave Him their gifts.",
+      "keyLine": "I follow Jesus.",
+      "heartTitle": "Gifts for Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "My gift",
+      "heartLabelB": "My prayer",
+      "questions": [
+        "What gifts did the Wise Men bring?",
+        "What gift can you give Jesus?"
+      ],
+      "actions": [
+        "Give a gift",
+        "Bless my home",
+        "Follow Jesus"
+      ],
+      "prayer": "Jesus, I give You my heart. Amen.",
+      "activity": {
+        "title": "Follow the star",
+        "intro": "Connect the dots to make the star of Bethlehem.",
+        "idea": 31,
+        "type": "dottodot",
+        "shape": "star"
+      },
+      "words": [
+        "star",
+        "Wise Men",
+        "gifts",
+        "worship"
+      ]
+    },
+    "level2": {
+      "title": "The Magi Find the King",
+      "story": "Wise men came from the East to Jerusalem, saying, \"We have seen His star in the east, and are come to adore Him.\" King Herod was troubled and asked where the Christ would be born. The priests said in Bethlehem of Judah, as the prophet had written. The star went before the wise men and stood over where the child was. They found the child with Mary His mother, adored Him, and opened their treasures: gold, frankincense, and myrrh.",
+      "keyLine": "Falling down they adored him: and they offered him gifts.",
+      "heartTitle": "Seeking Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I seek",
+      "heartLabelB": "What I offer",
+      "questions": [
+        "What does each gift say about Jesus?",
+        "How do you 'follow the star' today?"
+      ],
+      "actions": [
+        "Chalk the door blessing",
+        "Offer my talents",
+        "Pray before the tabernacle"
+      ],
+      "prayer": "Jesus, King of all, I offer You my life. Amen.",
+      "activity": {
+        "title": "We have seen His star",
+        "intro": "Fill in the missing words.",
+        "idea": 52,
+        "type": "fillblank",
+        "text": "We have seen His [star] in the east, and are come to [adore] Him."
+      },
+      "words": [
+        "Magi",
+        "Epiphany",
+        "gold",
+        "frankincense",
+        "myrrh",
+        "adore"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_EPIPHANY_main.png",
+    "heart": "C_EPIPHANY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_crown.png",
+      "icon_gift.png"
+    ],
+    "mainBrief": "Three Magi kneel with gifts before Mary and Child; star",
+    "heartBrief": "Three gift boxes around the heart to color"
+  }
+}

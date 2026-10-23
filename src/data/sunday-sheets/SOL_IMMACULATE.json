@@ -1,0 +1,87 @@
+{
+  "key": "SOL_IMMACULATE",
+  "liturgicalName": "Immaculate Conception",
+  "season": "Solemnity",
+  "gospelRef": "Luke 1:26-38",
+  "keyVerseDR": "\"Hail, full of grace, the Lord is with thee: blessed art thou among women.\" (Lk 1:28)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Mary, Full of Grace",
+      "story": "The angel Gabriel came to Mary. He said, \"Hail, full of grace! The Lord is with you.\" Mary said yes to God. God kept Mary free from sin from the very start!",
+      "keyLine": "Hail Mary, full of grace!",
+      "heartTitle": "Pure Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Mary is pure",
+      "heartLabelB": "Help me be good",
+      "questions": [
+        "What did the angel say to Mary?",
+        "How can you keep your heart pure?"
+      ],
+      "actions": [
+        "Pray the Hail Mary",
+        "Make a good choice",
+        "Go to Confession with family"
+      ],
+      "prayer": "Mary, conceived without sin, pray for us. Amen.",
+      "activity": {
+        "title": "Hail Mary!",
+        "intro": "Decorate the letters for Mary.",
+        "idea": 12,
+        "type": "copyverse",
+        "text": "AVE MARIA"
+      },
+      "words": [
+        "Mary",
+        "grace",
+        "pure",
+        "angel"
+      ]
+    },
+    "level2": {
+      "title": "Full of Grace",
+      "story": "God sent the angel Gabriel to Nazareth, to a virgin named Mary. The angel said, \"Hail, full of grace, the Lord is with thee: blessed art thou among women.\" He said she would bear a son and call Him Jesus, the Son of the Most High. Mary asked how, and the angel said, \"The Holy Ghost shall come upon thee.\" Mary said, \"Behold the handmaid of the Lord; be it done to me according to thy word.\"",
+      "keyLine": "Hail, full of grace, the Lord is with thee.",
+      "heartTitle": "Full of Grace",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "God's gift to Mary",
+      "heartLabelB": "Grace God gives me",
+      "questions": [
+        "How is the Immaculate Conception different from the Virgin Birth?",
+        "How does grace help you say yes to God?"
+      ],
+      "actions": [
+        "Pray the Angelus",
+        "Go to Confession",
+        "Pray for my country (Mary, patroness of the US)"
+      ],
+      "prayer": "O Mary, conceived without sin, pray for us who have recourse to thee. Amen.",
+      "activity": {
+        "title": "Hail Mary",
+        "intro": "Fill in the missing words of the angel's greeting.",
+        "idea": 144,
+        "type": "fillblank",
+        "text": "Hail, full of [grace], the Lord is with thee: [blessed] art thou among women."
+      },
+      "words": [
+        "Immaculate Conception",
+        "original sin",
+        "grace",
+        "Gabriel",
+        "fiat",
+        "patroness"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_IMMACULATE_main.png",
+    "heart": "SOL_IMMACULATE_heart.png",
+    "icons": [
+      "icon_angel.png",
+      "icon_lily.png",
+      "icon_mary_heart.png"
+    ],
+    "mainBrief": "Angel Gabriel greeting Mary in soft light; lily and blue mantle",
+    "heartBrief": "Lilies and stars around heart"
+  }
+}

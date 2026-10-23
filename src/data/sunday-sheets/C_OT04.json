@@ -1,0 +1,95 @@
+{
+  "key": "C_OT04",
+  "liturgicalName": "4th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 4:21-30",
+  "keyVerseDR": "\"Amen I say to you that no prophet is accepted in his own country.\" (Lk 4:24)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Not Welcome",
+      "story": "Jesus spoke in His hometown. At first people liked His words. Then they got angry and tried to push Him off a cliff! But Jesus walked right through them.",
+      "keyLine": "I will be brave for Jesus.",
+      "heartTitle": "Brave Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "When it's hard",
+      "heartLabelB": "I keep going",
+      "questions": [
+        "How did the people act?",
+        "When is it hard to do right?"
+      ],
+      "actions": [
+        "Be brave",
+        "Do what's right",
+        "Pray"
+      ],
+      "prayer": "Jesus, make me brave. Amen.",
+      "activity": {
+        "title": "Sing bravely",
+        "intro": "Tap the rhythm and sing a hymn to Jesus.",
+        "idea": 90,
+        "type": "checklist",
+        "items": [
+          "Tap the beat with my hands",
+          "Sing a hymn about Jesus",
+          "Say, I will be brave for Jesus!"
+        ]
+      },
+      "words": [
+        "home",
+        "angry",
+        "brave",
+        "prophet"
+      ]
+    },
+    "level2": {
+      "title": "No Prophet Accepted at Home",
+      "story": "Jesus said in the synagogue, \"This day is fulfilled this scripture in your ears.\" All wondered at His gracious words and said, \"Is not this the son of Joseph?\" Jesus said, \"No prophet is accepted in his own country.\" He reminded them that Elijah and Elisha were sent to help foreigners. The people were filled with anger and led Him to a cliff to throw Him down, but He passed through the midst of them and went His way.",
+      "keyLine": "No prophet is accepted in his own country.",
+      "heartTitle": "Courage for Truth",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "When I'm rejected",
+      "heartLabelB": "Why I keep going",
+      "questions": [
+        "Why were the people so angry?",
+        "How can you stay brave when others reject your faith?"
+      ],
+      "actions": [
+        "Stand up for faith",
+        "Be kind to those who disagree",
+        "Pray for courage"
+      ],
+      "prayer": "Jesus, give me courage to follow You. Amen.",
+      "activity": {
+        "title": "Jesus, I wonder...",
+        "intro": "Jesus stayed brave when people were angry. Write what you wonder.",
+        "idea": 57,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, I wonder how You felt...",
+          "I wonder why they got angry...",
+          "Help me be brave when..."
+        ]
+      },
+      "words": [
+        "prophet",
+        "Nazareth",
+        "Elijah",
+        "Elisha",
+        "rejection",
+        "courage"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT04_main.png",
+    "heart": "C_OT04_heart.png",
+    "icons": [
+      "icon_synagogue.png",
+      "icon_path.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Crowd at Nazareth hill; Jesus walking calmly through",
+    "heartBrief": "Brave heart with shield"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "key": "B_OT14",
+  "liturgicalName": "14th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 6:1-6",
+  "keyVerseDR": "\"A prophet is not without honour, but in his own country...\" (Mk 6:4)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Goes Home",
+      "story": "Jesus went home to Nazareth to teach. The people said, \"Isn't He just the carpenter?\" They did not believe, so He did few miracles there.",
+      "keyLine": "I believe in Jesus.",
+      "heartTitle": "Believing Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I believe",
+      "heartLabelB": "I listen",
+      "questions": [
+        "What did people call Jesus?",
+        "How can you show you believe?"
+      ],
+      "actions": [
+        "Listen at Mass",
+        "Pray",
+        "Be kind to people near me"
+      ],
+      "prayer": "Jesus, I believe in You. Amen.",
+      "activity": {
+        "title": "The four Gospels",
+        "intro": "The Gospels tell us who Jesus is. Number them in order.",
+        "idea": 109,
+        "type": "wordorder",
+        "pieces": [
+          "Matthew",
+          "Mark",
+          "Luke",
+          "John"
+        ]
+      },
+      "words": [
+        "home",
+        "carpenter",
+        "believe",
+        "teach"
+      ]
+    },
+    "level2": {
+      "title": "A Prophet Without Honor",
+      "story": "Jesus came to His own country with His disciples and taught in the synagogue on the sabbath. Many were astonished and said, \"Is not this the carpenter, the son of Mary?\" They were scandalized because they knew His family. Jesus said, \"A prophet is not without honour, but in his own country.\" He could do no miracles there except heal a few sick people, and He wondered at their unbelief.",
+      "keyLine": "A prophet is not without honour, but in his own country.",
+      "heartTitle": "Seeing Jesus Clearly",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What blocks faith",
+      "heartLabelB": "What opens faith",
+      "questions": [
+        "Why couldn't the people believe?",
+        "How can familiarity make us miss God?"
+      ],
+      "actions": [
+        "Pay attention at Mass",
+        "Honor my family",
+        "Pray for more faith"
+      ],
+      "prayer": "Jesus, open my eyes to see who You are. Amen.",
+      "activity": {
+        "title": "What do we believe?",
+        "intro": "Circle T or F.",
+        "idea": 147,
+        "type": "truefalse",
+        "items": [
+          [
+            "Jesus is the Son of God and the son of Mary.",
+            true
+          ],
+          [
+            "The people of Nazareth all believed in Jesus.",
+            false
+          ],
+          [
+            "Jesus worked as a carpenter.",
+            true
+          ],
+          [
+            "Jesus wondered at their unbelief.",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "prophet",
+        "Nazareth",
+        "carpenter",
+        "offense",
+        "faith",
+        "miracle"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT14_main.png",
+    "heart": "B_OT14_heart.png",
+    "icons": [
+      "icon_carpenter_tools.png",
+      "icon_synagogue.png",
+      "icon_scroll.png"
+    ],
+    "mainBrief": "Jesus teaching at Nazareth; carpenter tools on wall",
+    "heartBrief": "Carpenter tools around heart"
+  }
+}

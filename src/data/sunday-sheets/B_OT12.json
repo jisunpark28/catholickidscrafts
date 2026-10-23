@@ -1,0 +1,88 @@
+{
+  "key": "B_OT12",
+  "liturgicalName": "12th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 4:35-41",
+  "keyVerseDR": "\"Peace, be still.\" (Mk 4:39)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Calms the Storm",
+      "story": "Jesus and His friends were in a boat. A big storm came, and Jesus was asleep! He woke up and said, \"Peace, be still,\" and the storm stopped.",
+      "keyLine": "Jesus calms my storms.",
+      "heartTitle": "Calm Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "When I'm scared",
+      "heartLabelB": "Jesus calms me",
+      "questions": [
+        "What did Jesus say to the storm?",
+        "When do you feel scared?"
+      ],
+      "actions": [
+        "Pray when scared",
+        "Stay calm",
+        "Trust Jesus"
+      ],
+      "prayer": "Jesus, calm my heart. Amen.",
+      "activity": {
+        "title": "The boat in the storm",
+        "intro": "Color by number to finish the boat.",
+        "idea": 38,
+        "type": "colornum",
+        "shape": "boat",
+        "mode": "key"
+      },
+      "words": [
+        "storm",
+        "boat",
+        "calm",
+        "trust"
+      ]
+    },
+    "level2": {
+      "title": "Who Is This?",
+      "story": "When evening came, Jesus said, \"Let us pass over to the other side.\" A great storm of wind arose, and the waves beat into the boat. Jesus was in the back, asleep on a pillow, and the disciples woke Him, saying, \"Master, doth it not concern Thee that we perish?\" Rising up, He rebuked the wind and said to the sea, \"Peace, be still,\" and there was a great calm. Jesus said, \"Why are you fearful? Have you not faith yet?\"",
+      "keyLine": "Peace, be still.",
+      "heartTitle": "Storms in Life",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "My storms",
+      "heartLabelB": "Jesus' peace",
+      "questions": [
+        "Why were the disciples still afraid after the calm?",
+        "How can you trust Jesus in a hard time?"
+      ],
+      "actions": [
+        "Pray 'Jesus, I trust in You' when afraid",
+        "Comfort a scared friend",
+        "Trust in a hard situation"
+      ],
+      "prayer": "Jesus, Lord of wind and sea, give me peace. Amen.",
+      "activity": {
+        "title": "Fix the words",
+        "intro": "Three words are wrong. Cross them out and write the right ones.",
+        "idea": 39,
+        "type": "fixwords",
+        "text": "Peace, be {quiet|still}. Why are you {angry|fearful}? Have you not {food|faith} yet?"
+      },
+      "words": [
+        "storm",
+        "rebuke",
+        "calm",
+        "faith",
+        "fear",
+        "awe"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT12_main.png",
+    "heart": "B_OT12_heart.png",
+    "icons": [
+      "icon_boat.png",
+      "icon_wave.png",
+      "icon_wind.png"
+    ],
+    "mainBrief": "Jesus calming the storm from the boat",
+    "heartBrief": "Calm waves at heart bottom"
+  }
+}

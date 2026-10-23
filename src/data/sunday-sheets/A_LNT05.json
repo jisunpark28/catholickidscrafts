@@ -1,0 +1,92 @@
+{
+  "key": "A_LNT05",
+  "liturgicalName": "5th Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "John 11:1-45",
+  "keyVerseDR": "\"I am the resurrection and the life: he that believeth in me, although he be dead, shall live.\" (Jn 11:25)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Lazarus, Come Out!",
+      "story": "Jesus' friend Lazarus died. Martha and Mary were very sad, and Jesus cried too. Jesus said, \"Lazarus, come out!\" and he lived again!",
+      "keyLine": "Jesus gives life!",
+      "heartTitle": "Jesus My Friend",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus cares",
+      "heartLabelB": "I care",
+      "questions": [
+        "How did Jesus feel?",
+        "How can you be a good friend?"
+      ],
+      "actions": [
+        "Comfort someone sad",
+        "Pray for those who died",
+        "Be a friend"
+      ],
+      "prayer": "Jesus, You are my life. Amen.",
+      "activity": {
+        "title": "How did they feel?",
+        "intro": "Draw each face: sad before, happy after!",
+        "idea": 2,
+        "type": "faces",
+        "people": [
+          "Martha",
+          "Mary",
+          "Lazarus"
+        ]
+      },
+      "words": [
+        "Lazarus",
+        "friend",
+        "life",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "The Resurrection and the Life",
+      "story": "Lazarus, the brother of Martha and Mary, was very sick, and he died. When Jesus came to Bethany, Martha said, \"Lord, if You had been here, my brother would not have died.\" Jesus said, \"I am the resurrection and the life.\" Seeing Mary and the others weeping, Jesus wept too. At the tomb He cried out, \"Lazarus, come out!\" and Lazarus walked out alive.",
+      "keyLine": "I am the resurrection and the life.",
+      "heartTitle": "Hope in Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "When I'm sad",
+      "heartLabelB": "Jesus gives hope",
+      "questions": [
+        "Why did Jesus cry even though He knew He would raise Lazarus?",
+        "What does 'I am the resurrection' mean for us?"
+      ],
+      "actions": [
+        "Pray for the dead",
+        "Comfort a grieving person",
+        "Make the Stations of the Cross"
+      ],
+      "prayer": "Jesus, give me hope and new life. Amen.",
+      "activity": {
+        "title": "Memory verse",
+        "intro": "Read it, fold one line at a time, and say it from memory.",
+        "idea": 88,
+        "type": "foldreveal",
+        "question": "What did Jesus tell Martha?",
+        "answer": "I am the resurrection and the life: he that believeth in Me, although he be dead, shall live."
+      },
+      "words": [
+        "resurrection",
+        "tomb",
+        "weep",
+        "Martha",
+        "believe",
+        "eternal life"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_LNT05_main.png",
+    "heart": "A_LNT05_heart.png",
+    "icons": [
+      "icon_tomb.png",
+      "icon_stone.png",
+      "icon_butterfly.png"
+    ],
+    "mainBrief": "Lazarus stepping from the tomb in wrappings; Martha and Mary amazed",
+    "heartBrief": "Butterfly (new life) in heart, flowers around"
+  }
+}

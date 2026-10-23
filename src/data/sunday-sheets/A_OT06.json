@@ -1,0 +1,107 @@
+{
+  "key": "A_OT06",
+  "liturgicalName": "6th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 5:17-37",
+  "keyVerseDR": "\"I am not come to destroy, but to fulfil.\" (Mt 5:17)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Love From the Heart",
+      "story": "Jesus said, \"Do not stay angry. Make peace with your brother first.\" Then bring your gift to God.",
+      "keyLine": "I love from my heart.",
+      "heartTitle": "Good Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I make up",
+      "heartLabelB": "I tell the truth",
+      "questions": [
+        "What should we do if we are angry?",
+        "How can you say sorry?"
+      ],
+      "actions": [
+        "Make up with someone",
+        "Tell the truth",
+        "Say kind words"
+      ],
+      "prayer": "Jesus, give me a good and loving heart. Amen.",
+      "activity": {
+        "title": "Sign of peace card",
+        "intro": "Make peace first! Make a card for someone.",
+        "idea": 142,
+        "type": "letter",
+        "style": "card",
+        "to": "Someone I want to make peace with",
+        "lines": 3
+      },
+      "words": [
+        "heart",
+        "rules",
+        "sorry",
+        "truth"
+      ]
+    },
+    "level2": {
+      "title": "Fulfilling the Law",
+      "story": "Jesus said He came not to abolish the law but to fulfill it. He taught that it is not enough to avoid killing; we must not stay angry with others. \"If your brother has something against you, leave your gift at the altar,\" He said. \"First go and make peace, then come and offer your gift.\" Jesus also said, \"Let your 'Yes' mean yes and your 'No' mean no.\"",
+      "keyLine": "I am not come to destroy, but to fulfil.",
+      "heartTitle": "A Law of Love",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Outside actions",
+      "heartLabelB": "Inside heart",
+      "questions": [
+        "Why does Jesus care about our thoughts and words?",
+        "Who do you need to make peace with?"
+      ],
+      "actions": [
+        "Reconcile with someone",
+        "Keep my word",
+        "Avoid mean words"
+      ],
+      "prayer": "Jesus, make my heart match Your law of love. Amen.",
+      "activity": {
+        "title": "What would Jesus say?",
+        "intro": "Match each situation to Jesus' teaching.",
+        "idea": 60,
+        "type": "matchup",
+        "pairs": [
+          [
+            "I'm still angry at my brother",
+            "Go and make peace first"
+          ],
+          [
+            "I want to break my promise",
+            "Let your yes mean yes"
+          ],
+          [
+            "I want to call a friend a mean name",
+            "Do not insult your brother"
+          ],
+          [
+            "I'm about to go to Mass",
+            "Be reconciled, then bring your gift"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "fulfill",
+        "law",
+        "commandment",
+        "reconcile",
+        "anger",
+        "honest"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT06_main.png",
+    "heart": "A_OT06_heart.png",
+    "icons": [
+      "icon_heart_hands.png",
+      "icon_scroll.png",
+      "icon_handshake.png"
+    ],
+    "mainBrief": "Jesus gently teaching; two children making up after a fight",
+    "heartBrief": "Handshake inside heart"
+  }
+}

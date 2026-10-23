@@ -1,0 +1,110 @@
+{
+  "key": "A_BAPTISM",
+  "liturgicalName": "The Baptism of the Lord",
+  "season": "Christmas",
+  "gospelRef": "Matthew 3:13-17",
+  "keyVerseDR": "\"This is my beloved Son, in whom I am well pleased.\" (Mt 3:17)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Baptized",
+      "story": "Jesus was baptized in the Jordan River. The Holy Spirit came down like a dove. God said, \"This is My beloved Son!\"",
+      "keyLine": "God loves me!",
+      "heartTitle": "My Baptism",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God's child",
+      "heartLabelB": "I am loved",
+      "questions": [
+        "What came down like a dove?",
+        "When were you baptized?"
+      ],
+      "actions": [
+        "Ask about my baptism day",
+        "Bless myself with holy water",
+        "Thank God"
+      ],
+      "prayer": "Jesus, thank You for my baptism. Amen.",
+      "activity": {
+        "title": "My baptism candle",
+        "intro": "At Baptism we receive the light of Christ. Color the flame.",
+        "idea": 15,
+        "type": "candles",
+        "candles": [
+          [
+            "Light of Christ",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "baptism",
+        "water",
+        "dove",
+        "Son"
+      ]
+    },
+    "level2": {
+      "title": "Beloved Son",
+      "story": "Jesus came from Galilee to the Jordan River to be baptized by John. John said, \"I need to be baptized by You!\" Jesus answered that it was right to do what God asks. When Jesus came up from the water, the heavens opened, and the Spirit of God came down like a dove. A voice from heaven said, \"This is My beloved Son, with whom I am well pleased.\"",
+      "keyLine": "This is my beloved Son, in whom I am well pleased.",
+      "heartTitle": "Child of God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What baptism gives",
+      "heartLabelB": "How I live it",
+      "questions": [
+        "How do we see the Trinity in this story?",
+        "How does your baptism make you God's child?"
+      ],
+      "actions": [
+        "Learn my baptism date",
+        "Renew my baptismal promises",
+        "Make the Sign of the Cross carefully"
+      ],
+      "prayer": "Father, thank You for making me Your child. Amen.",
+      "activity": {
+        "title": "Signs of Baptism",
+        "intro": "Match each sign to what it means.",
+        "idea": 140,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Water",
+            "Washes away sin, new life"
+          ],
+          [
+            "White garment",
+            "Clothed in Christ"
+          ],
+          [
+            "Lit candle",
+            "The light of Christ"
+          ],
+          [
+            "Holy oil (chrism)",
+            "Sealed with the Holy Spirit"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Jordan",
+        "Spirit",
+        "beloved",
+        "Trinity",
+        "baptism",
+        "dove"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_BAPTISM_main.png",
+    "heart": "A_BAPTISM_heart.png",
+    "icons": [
+      "icon_dove.png",
+      "icon_water_shell.png",
+      "icon_river.png"
+    ],
+    "mainBrief": "Jesus in the Jordan, John pours water, dove above, light from cloud",
+    "heartBrief": "Shell and water drops; dove on top of heart"
+  }
+}

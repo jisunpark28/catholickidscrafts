@@ -1,0 +1,93 @@
+{
+  "key": "C_HOLYFAMILY",
+  "liturgicalName": "The Holy Family of Jesus, Mary and Joseph",
+  "season": "Christmas",
+  "gospelRef": "Luke 2:41-52",
+  "keyVerseDR": "\"And Jesus advanced in wisdom and age and grace with God and men.\" (Lk 2:52)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus in the Temple",
+      "story": "When Jesus was 12, His family went to Jerusalem. Jesus stayed behind in the Temple. Mary and Joseph found Him after three days, listening and asking questions.",
+      "keyLine": "Jesus grew in wisdom.",
+      "heartTitle": "My Family",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "We love",
+      "heartLabelB": "We obey",
+      "questions": [
+        "Where did they find Jesus?",
+        "How can you obey your parents?"
+      ],
+      "actions": [
+        "Obey my parents",
+        "Pray with my family",
+        "Learn about God"
+      ],
+      "prayer": "Holy Family, bless my family. Amen.",
+      "activity": {
+        "title": "Find Jesus",
+        "intro": "Help Mary and Joseph find Jesus in the Temple.",
+        "idea": 26,
+        "type": "maze",
+        "start": "Mary and Joseph",
+        "goal": "Jesus in the Temple"
+      },
+      "words": [
+        "Temple",
+        "twelve",
+        "lost",
+        "found"
+      ]
+    },
+    "level2": {
+      "title": "Finding Jesus in the Temple",
+      "story": "Every year Jesus' parents went to Jerusalem for the Passover. When Jesus was twelve, He stayed behind in Jerusalem, and His parents did not know it. After three days they found Him in the Temple, sitting among the teachers, listening and asking questions. Mary said, \"Son, why hast Thou done so to us?\" Jesus answered, \"Did you not know that I must be about My Father's business?\" He went down to Nazareth and was obedient to them, and He grew in wisdom and age and grace.",
+      "keyLine": "Jesus advanced in wisdom and age and grace.",
+      "heartTitle": "Growing in Grace",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I grow",
+      "heartLabelB": "How I obey",
+      "questions": [
+        "What did Jesus mean by 'my Father's house'?",
+        "How can you grow in wisdom like Jesus?"
+      ],
+      "actions": [
+        "Obey cheerfully",
+        "Pray a family Rosary",
+        "Ask questions about my faith"
+      ],
+      "prayer": "Jesus, Mary and Joseph, make our home holy. Amen.",
+      "activity": {
+        "title": "Lost and found",
+        "intro": "Number the story in order.",
+        "idea": 32,
+        "type": "sequence",
+        "scenes": [
+          "The family goes to Jerusalem for Passover",
+          "Jesus stays behind in the Temple",
+          "Mary and Joseph search for three days",
+          "They find Jesus among the teachers"
+        ]
+      },
+      "words": [
+        "Passover",
+        "Temple",
+        "Father's house",
+        "obedient",
+        "wisdom",
+        "grace"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_HOLYFAMILY_main.png",
+    "heart": "C_HOLYFAMILY_heart.png",
+    "icons": [
+      "icon_temple.png",
+      "icon_scroll.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "Boy Jesus in the Temple among teachers; Mary and Joseph arrive",
+    "heartBrief": "Family figures in heart"
+  }
+}

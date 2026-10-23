@@ -1,0 +1,88 @@
+{
+  "key": "C_PALM",
+  "liturgicalName": "Palm Sunday of the Passion of the Lord",
+  "season": "Holy Week",
+  "gospelRef": "Luke 19:28-40 (procession); Luke 22:14–23:56",
+  "keyVerseDR": "\"Blessed be the king who cometh in the name of the Lord! Peace in heaven and glory on high!\" (Lk 19:38)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "Hosanna!",
+      "story": "Jesus rode a colt toward Jerusalem. His disciples spread their cloaks on the road. They praised God, saying, \"Blessed is the King who comes!\"",
+      "keyLine": "Blessed is the King!",
+      "heartTitle": "Hosanna Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I praise",
+      "heartLabelB": "I love",
+      "questions": [
+        "What did Jesus ride?",
+        "How can you praise Jesus?"
+      ],
+      "actions": [
+        "Wave a palm",
+        "Sing praise",
+        "Pray at the cross"
+      ],
+      "prayer": "Jesus, my King, I love You. Amen.",
+      "activity": {
+        "title": "Blessed is the King!",
+        "intro": "Decorate the letters to welcome Jesus.",
+        "idea": 12,
+        "type": "copyverse",
+        "text": "KING JESUS"
+      },
+      "words": [
+        "palm",
+        "donkey",
+        "king",
+        "praise"
+      ]
+    },
+    "level2": {
+      "title": "The King Enters Jerusalem",
+      "story": "Jesus sent two disciples to bring a colt on which no one had ever sat. As He rode, people spread their garments in the way. Near the Mount of Olives, the disciples began to praise God with a loud voice for all the mighty works they had seen. They said, \"Blessed be the King who cometh in the name of the Lord, peace in heaven, and glory on high!\" When the Pharisees complained, Jesus said, \"If these shall hold their peace, the stones will cry out.\"",
+      "keyLine": "Blessed be the king who cometh in the name of the Lord!",
+      "heartTitle": "Holy Week",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus gave",
+      "heartLabelB": "I give",
+      "questions": [
+        "How did Jesus show mercy even on the cross?",
+        "How will you walk with Jesus this week?"
+      ],
+      "actions": [
+        "Attend Holy Week services",
+        "Pray before a crucifix",
+        "Do a hidden sacrifice"
+      ],
+      "prayer": "Jesus, thank You for dying for me. Amen.",
+      "activity": {
+        "title": "Say it in one line",
+        "intro": "Think about the Gospel, then open to read a summary.",
+        "idea": 75,
+        "type": "foldreveal",
+        "question": "Can you tell today's Gospel in one sentence?",
+        "answer": "Jesus rode into Jerusalem as the disciples praised God, saying, Blessed be the King who comes!"
+      },
+      "words": [
+        "Passion",
+        "king",
+        "forgive",
+        "good thief",
+        "paradise",
+        "Holy Week"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_PALM_main.png",
+    "heart": "C_PALM_heart.png",
+    "icons": [
+      "icon_palm.png",
+      "icon_donkey.png",
+      "icon_cross.png"
+    ],
+    "mainBrief": "Jesus on a colt descending Mount of Olives; disciples praise",
+    "heartBrief": "Palm branches framing heart; small cross"
+  }
+}

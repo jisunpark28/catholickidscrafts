@@ -1,0 +1,95 @@
+{
+  "key": "B_OT27",
+  "liturgicalName": "27th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 10:2-16",
+  "keyVerseDR": "\"Suffer the little children to come unto me and forbid them not: for of such is the kingdom of God.\" (Mk 10:14)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Loves Children",
+      "story": "People brought little children to Jesus. The disciples tried to stop them. Jesus said, \"Let the children come to Me!\" and He blessed them.",
+      "keyLine": "Jesus loves children!",
+      "heartTitle": "Jesus Loves Me",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus blesses",
+      "heartLabelB": "I come to Him",
+      "questions": [
+        "What did Jesus do with the children?",
+        "How can you come to Jesus?"
+      ],
+      "actions": [
+        "Pray with my family",
+        "Thank God for my family",
+        "Love my parents"
+      ],
+      "prayer": "Jesus, thank You for loving me. Amen.",
+      "activity": {
+        "title": "Jesus loves children",
+        "intro": "Draw yourself and your friends with Jesus.",
+        "idea": 17,
+        "type": "faces",
+        "people": [
+          "Jesus",
+          "Me",
+          "My friend"
+        ]
+      },
+      "words": [
+        "children",
+        "bless",
+        "hug",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Let the Children Come",
+      "story": "The Pharisees asked Jesus about marriage, and He said, \"What therefore God hath joined together, let not man put asunder.\" People brought young children to Jesus so He could touch them, and the disciples scolded them. Jesus was displeased and said, \"Suffer the little children to come unto Me, and forbid them not; for of such is the kingdom of God.\" He said whoever does not receive the kingdom like a child shall not enter it. Embracing the children, He laid His hands on them and blessed them.",
+      "keyLine": "Suffer the little children to come unto me.",
+      "heartTitle": "Family Covenant",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "God's plan for families",
+      "heartLabelB": "How I love mine",
+      "questions": [
+        "Why does Jesus say marriage is from God?",
+        "How can you receive God's kingdom like a child?"
+      ],
+      "actions": [
+        "Pray for married couples",
+        "Thank my parents",
+        "Trust God like a child"
+      ],
+      "prayer": "Jesus, bless our family and keep us close. Amen.",
+      "activity": {
+        "title": "Family talk",
+        "intro": "Talk about these together.",
+        "idea": 101,
+        "type": "checklist",
+        "items": [
+          "How did Jesus treat children?",
+          "How can our family welcome others?",
+          "What do we love about our family?"
+        ]
+      },
+      "words": [
+        "marriage",
+        "one flesh",
+        "covenant",
+        "children",
+        "bless",
+        "kingdom"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT27_main.png",
+    "heart": "B_OT27_heart.png",
+    "icons": [
+      "icon_child.png",
+      "icon_family.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Jesus blessing children on his lap",
+    "heartBrief": "Children's faces in heart"
+  }
+}

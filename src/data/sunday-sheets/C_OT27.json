@@ -1,0 +1,92 @@
+{
+  "key": "C_OT27",
+  "liturgicalName": "27th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 17:5-10",
+  "keyVerseDR": "\"If you had faith like to a grain of mustard seed, you might say to this mulberry tree: Be thou rooted up... And it would obey you.\" (Lk 17:6)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Faith Like a Seed",
+      "story": "The Apostles said, \"Lord, give us more faith!\" Jesus said even a tiny faith like a mustard seed can do great things. We serve God because we love Him.",
+      "keyLine": "Jesus, give me faith!",
+      "heartTitle": "Growing Faith",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Tiny faith",
+      "heartLabelB": "Big God",
+      "questions": [
+        "How big is a mustard seed?",
+        "How can your faith grow?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Trust God",
+        "Do my jobs well"
+      ],
+      "prayer": "Jesus, increase my faith. Amen.",
+      "activity": {
+        "title": "Faith wings",
+        "intro": "Write a thank-you or a prayer for faith on each feather.",
+        "idea": 25,
+        "type": "tree",
+        "leaves": 3,
+        "label": "Lord, increase my faith!"
+      },
+      "words": [
+        "faith",
+        "seed",
+        "tiny",
+        "strong"
+      ]
+    },
+    "level2": {
+      "title": "Increase Our Faith",
+      "story": "The apostles said to the Lord, \"Increase our faith.\" Jesus said, \"If you had faith like to a grain of mustard seed, you might say to this mulberry tree, Be thou rooted up... and it would obey you.\" He told of a servant who comes in from plowing and still serves his master's supper. Jesus said that when we have done all we were told, we should say, \"We are unprofitable servants; we have done that which we ought to do.\"",
+      "keyLine": "If you had faith like to a grain of mustard seed.",
+      "heartTitle": "Faith & Service",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Faith I need",
+      "heartLabelB": "Service I give",
+      "questions": [
+        "How can small faith do great things?",
+        "Why should we serve without expecting praise?"
+      ],
+      "actions": [
+        "Pray the Act of Faith",
+        "Serve without being thanked",
+        "Trust God in a worry"
+      ],
+      "prayer": "Lord, increase my faith. Amen.",
+      "activity": {
+        "title": "My thank-you prayer",
+        "intro": "Thank God for the gift of faith.",
+        "idea": 61,
+        "type": "prayerframe",
+        "starters": [
+          "Thank You, God, for...",
+          "Thank You for my faith in...",
+          "Help me serve You by..."
+        ]
+      },
+      "words": [
+        "faith",
+        "mustard seed",
+        "mulberry",
+        "servant",
+        "humble",
+        "duty"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT27_main.png",
+    "heart": "C_OT27_heart.png",
+    "icons": [
+      "icon_seed.png",
+      "icon_mustard_tree.png",
+      "icon_tree_fruit.png"
+    ],
+    "mainBrief": "Tiny mustard seed and a mulberry tree",
+    "heartBrief": "Seed growing in heart"
+  }
+}

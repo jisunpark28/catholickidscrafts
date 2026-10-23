@@ -1,0 +1,87 @@
+{
+  "key": "A_OT02",
+  "liturgicalName": "2nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 1:29-34",
+  "keyVerseDR": "\"Behold the Lamb of God. Behold him who taketh away the sin of the world.\" (Jn 1:29)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Lamb of God",
+      "story": "John saw Jesus coming. He said, \"Look! The Lamb of God!\" The Spirit came down on Jesus like a dove.",
+      "keyLine": "Behold the Lamb of God!",
+      "heartTitle": "Pointing to Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Look at Jesus",
+      "heartLabelB": "I tell others",
+      "questions": [
+        "What did John call Jesus?",
+        "How can you point others to Jesus?"
+      ],
+      "actions": [
+        "Listen for 'Lamb of God' at Mass",
+        "Tell about Jesus",
+        "Pray"
+      ],
+      "prayer": "Lamb of God, have mercy on me. Amen.",
+      "activity": {
+        "title": "Look! The Lamb!",
+        "intro": "Trace John's words.",
+        "idea": 51,
+        "type": "copyverse",
+        "text": "Behold the Lamb of God."
+      },
+      "words": [
+        "John",
+        "Lamb",
+        "look",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "Behold the Lamb",
+      "story": "John the Baptist saw Jesus coming toward him. He said, \"Behold, the Lamb of God, who takes away the sin of the world!\" John said he had seen the Spirit come down from heaven like a dove and stay on Jesus. God had told John that this is the one who baptizes with the Holy Spirit. John said, \"I have seen and testified that He is the Son of God.\"",
+      "keyLine": "Behold the Lamb of God.",
+      "heartTitle": "A Witness",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I know",
+      "heartLabelB": "Who I can tell",
+      "questions": [
+        "Why is Jesus called the Lamb of God?",
+        "When do we hear these words at Mass?"
+      ],
+      "actions": [
+        "Pay attention at the Agnus Dei",
+        "Be a witness",
+        "Pray for courage"
+      ],
+      "prayer": "Lamb of God, take away my sins. Amen.",
+      "activity": {
+        "title": "We say it at Mass",
+        "intro": "We pray John's words before Holy Communion. Copy them neatly.",
+        "idea": 141,
+        "type": "copyverse",
+        "text": "Behold the Lamb of God, behold Him who taketh away the sin of the world."
+      },
+      "words": [
+        "Lamb of God",
+        "testify",
+        "sin",
+        "Spirit",
+        "Son of God",
+        "witness"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT02_main.png",
+    "heart": "A_OT02_heart.png",
+    "icons": [
+      "icon_lamb.png",
+      "icon_river.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "John the Baptist pointing to Jesus, a little lamb nearby",
+    "heartBrief": "Lamb inside heart"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "key": "A_OT05",
+  "liturgicalName": "5th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 5:13-16",
+  "keyVerseDR": "\"You are the light of the world. A city seated on a mountain cannot be hid.\" (Mt 5:14)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Let Your Light Shine",
+      "story": "Jesus said, \"You are the salt of the earth. You are the light of the world!\" Let your light shine with good deeds.",
+      "keyLine": "I am a light!",
+      "heartTitle": "This Little Light",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I shine",
+      "heartLabelB": "I do good",
+      "questions": [
+        "What did Jesus say we are?",
+        "How can you shine?"
+      ],
+      "actions": [
+        "Do a good deed",
+        "Smile",
+        "Sing 'This Little Light'"
+      ],
+      "prayer": "Jesus, help me shine for You. Amen.",
+      "activity": {
+        "title": "Let your light shine",
+        "intro": "Color a candle for each good deed you will do.",
+        "idea": 97,
+        "type": "candles",
+        "candles": [
+          [
+            "Help at home",
+            "light"
+          ],
+          [
+            "Share a toy",
+            "light"
+          ],
+          [
+            "Kind words",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "light",
+        "salt",
+        "shine",
+        "good"
+      ]
+    },
+    "level2": {
+      "title": "Salt and Light",
+      "story": "Jesus told His disciples, \"You are the salt of the earth.\" Salt that loses its taste is good for nothing. \"You are the light of the world,\" He said. \"A city on a hill cannot be hidden, and no one lights a lamp to put it under a basket.\" Jesus said, \"Let your light shine before others, so they may see your good deeds and glorify your Father in heaven.\"",
+      "keyLine": "You are the light of the world.",
+      "heartTitle": "Salt & Light",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I add 'flavor'",
+      "heartLabelB": "How I shine",
+      "questions": [
+        "How is a Christian like salt?",
+        "How can your good works lead others to God?"
+      ],
+      "actions": [
+        "Do three good deeds",
+        "Stand up for someone",
+        "Pray for courage"
+      ],
+      "prayer": "Jesus, let my light shine for Your glory. Amen.",
+      "activity": {
+        "title": "You are the light",
+        "intro": "Copy the verse. Highlight the word that touched you most.",
+        "idea": 85,
+        "type": "copyverse",
+        "text": "So let your light shine before men, that they may see your good works."
+      },
+      "words": [
+        "salt",
+        "light",
+        "lamp",
+        "good works",
+        "glorify",
+        "witness"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT05_main.png",
+    "heart": "A_OT05_heart.png",
+    "icons": [
+      "icon_lamp.png",
+      "icon_salt_shaker.png",
+      "icon_city_hill.png"
+    ],
+    "mainBrief": "Child holding a lamp, a city on a hill shining",
+    "heartBrief": "Lamp glowing inside heart"
+  }
+}

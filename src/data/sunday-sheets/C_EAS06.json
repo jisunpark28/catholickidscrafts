@@ -1,0 +1,118 @@
+{
+  "key": "C_EAS06",
+  "liturgicalName": "6th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 14:23-29",
+  "keyVerseDR": "\"Peace I leave with you: my peace I give unto you... Let not your heart be troubled...\" (Jn 14:27)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Gives Peace",
+      "story": "Jesus said, \"If you love Me, keep My word.\" He promised the Holy Spirit would teach us. Jesus said, \"Peace I leave with you.\"",
+      "keyLine": "Jesus gives me peace.",
+      "heartTitle": "Peaceful Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus gives peace",
+      "heartLabelB": "I share peace",
+      "questions": [
+        "What did Jesus give us?",
+        "How can you make peace?"
+      ],
+      "actions": [
+        "Make peace with someone",
+        "Pray",
+        "Be calm"
+      ],
+      "prayer": "Jesus, give me Your peace. Amen.",
+      "activity": {
+        "title": "A message of peace",
+        "intro": "Jesus gives us His peace. Send a peace message to a friend.",
+        "idea": 74,
+        "type": "letter",
+        "style": "card",
+        "to": "My friend",
+        "lines": 2
+      },
+      "words": [
+        "peace",
+        "Spirit",
+        "help",
+        "afraid"
+      ]
+    },
+    "level2": {
+      "title": "My Peace I Give You",
+      "story": "Jesus said, \"If any one love Me, he will keep My word, and My Father will love him.\" He promised the Father and He would come and make their home with him. Jesus said, \"The Paraclete, the Holy Ghost, whom the Father will send in My name, He will teach you all things.\" He said, \"Peace I leave with you, My peace I give unto you.\" Jesus said, \"Let not your heart be troubled, nor let it be afraid.\"",
+      "keyLine": "Peace I leave with you: my peace I give unto you.",
+      "heartTitle": "God's Peace",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What troubles me",
+      "heartLabelB": "What Jesus gives",
+      "questions": [
+        "How is Jesus' peace different from the world's?",
+        "How does the Holy Spirit teach you?"
+      ],
+      "actions": [
+        "Share the sign of peace sincerely",
+        "Pray when worried",
+        "Make peace at home"
+      ],
+      "prayer": "Jesus, give me Your peace. Amen.",
+      "activity": {
+        "title": "Gifts of the Holy Spirit",
+        "intro": "The Holy Spirit will teach you all things. Color a flame for each gift you will receive at Confirmation.",
+        "idea": 23,
+        "type": "candles",
+        "candles": [
+          [
+            "Wisdom",
+            "light"
+          ],
+          [
+            "Understanding",
+            "light"
+          ],
+          [
+            "Counsel",
+            "light"
+          ],
+          [
+            "Fortitude",
+            "light"
+          ],
+          [
+            "Knowledge",
+            "light"
+          ],
+          [
+            "Piety",
+            "light"
+          ],
+          [
+            "Fear of the Lord",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "peace",
+        "Advocate",
+        "dwell",
+        "teach",
+        "remember",
+        "troubled"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_EAS06_main.png",
+    "heart": "C_EAS06_heart.png",
+    "icons": [
+      "icon_dove.png",
+      "icon_heart_hands.png",
+      "icon_olive_branch.png"
+    ],
+    "mainBrief": "Jesus with disciples; dove of peace above",
+    "heartBrief": "Dove with olive branch in heart"
+  }
+}

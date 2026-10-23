@@ -1,0 +1,105 @@
+{
+  "key": "C_ADV01",
+  "liturgicalName": "1st Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Luke 21:25-28, 34-36",
+  "keyVerseDR": "\"Watch ye, therefore, praying at all times...\" (Lk 21:36)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Look Up!",
+      "story": "Jesus said there will be signs in the sun, moon, and stars. He said, \"Stand up! Your rescue is near!\" Stay awake and pray always.",
+      "keyLine": "Pray and be ready!",
+      "heartTitle": "Ready Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I pray",
+      "heartLabelB": "I wait",
+      "questions": [
+        "What did Jesus tell us to do?",
+        "How can you get ready for Christmas?"
+      ],
+      "actions": [
+        "Light the Advent wreath",
+        "Pray every day",
+        "Be patient"
+      ],
+      "prayer": "Jesus, help me be ready for You. Amen.",
+      "activity": {
+        "title": "Advent violet",
+        "intro": "Color the priest's vestment violet for Advent, the time of waiting and praying.",
+        "idea": 8,
+        "type": "drawscene",
+        "prompt": "A priest's chasuble colored violet for Advent, with an Advent wreath beside it"
+      },
+      "words": [
+        "look up",
+        "pray",
+        "ready",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "Stand Up and Raise Your Heads",
+      "story": "Jesus said there shall be signs in the sun, and in the moon, and in the stars. People will be afraid, but then they shall see the Son of man coming in a cloud with great power and majesty. Jesus said, \"Look up, and lift up your heads, because your redemption is at hand.\" He warned them not to let their hearts be weighed down with worries of this life. \"Watch ye therefore, praying at all times,\" Jesus said.",
+      "keyLine": "Watch ye, therefore, praying at all times.",
+      "heartTitle": "Watchful Heart",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What weighs me down",
+      "heartLabelB": "What keeps me ready",
+      "questions": [
+        "Why can Christians look up with hope?",
+        "What will you change to be ready this Advent?"
+      ],
+      "actions": [
+        "Make an Advent prayer plan",
+        "Do a daily kindness",
+        "Read the Sunday Gospel"
+      ],
+      "prayer": "Lord, keep me watchful and full of hope. Amen.",
+      "activity": {
+        "title": "Colors of the Church year",
+        "intro": "Match each liturgical color to its season.",
+        "idea": 49,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Violet",
+            "Advent and Lent"
+          ],
+          [
+            "White",
+            "Christmas and Easter"
+          ],
+          [
+            "Green",
+            "Ordinary Time"
+          ],
+          [
+            "Red",
+            "Pentecost and martyrs"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "redemption",
+        "signs",
+        "vigilant",
+        "Advent",
+        "glory",
+        "watch"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_ADV01_main.png",
+    "heart": "C_ADV01_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_moon.png",
+      "icon_advent_wreath.png"
+    ],
+    "mainBrief": "Child looking up at a sky with sun, moon and stars, hands folded",
+    "heartBrief": "Top: praying hands; bottom: clock; stars border"
+  }
+}

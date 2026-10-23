@@ -1,0 +1,125 @@
+{
+  "key": "A_PENTECOST",
+  "liturgicalName": "Pentecost Sunday",
+  "season": "Easter",
+  "gospelRef": "John 20:19-23",
+  "keyVerseDR": "\"...he breathed on them; and he said to them: Receive ye the Holy Ghost.\" (Jn 20:22)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "The Holy Spirit Comes",
+      "story": "Jesus' friends were afraid behind locked doors. Jesus came and said, \"Peace be with you!\" He breathed on them and said, \"Receive the Holy Spirit!\"",
+      "keyLine": "Come, Holy Spirit!",
+      "heartTitle": "Spirit Fire",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "The Spirit helps me",
+      "heartLabelB": "I am brave",
+      "questions": [
+        "What did Jesus give His friends?",
+        "How does the Spirit help you?"
+      ],
+      "actions": [
+        "Pray 'Come, Holy Spirit'",
+        "Be brave",
+        "Share peace"
+      ],
+      "prayer": "Come, Holy Spirit, fill my heart. Amen.",
+      "activity": {
+        "title": "Gifts of the Holy Spirit",
+        "intro": "Color each flame as you pray, \"Come, Holy Spirit!\"",
+        "idea": 23,
+        "type": "candles",
+        "candles": [
+          [
+            "Wisdom",
+            "light"
+          ],
+          [
+            "Understanding",
+            "light"
+          ],
+          [
+            "Counsel",
+            "light"
+          ],
+          [
+            "Fortitude",
+            "light"
+          ],
+          [
+            "Knowledge",
+            "light"
+          ],
+          [
+            "Piety",
+            "light"
+          ],
+          [
+            "Fear of the Lord",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "Spirit",
+        "breath",
+        "peace",
+        "brave"
+      ]
+    },
+    "level2": {
+      "title": "Receive the Holy Spirit",
+      "story": "On the evening of Easter, the disciples were behind locked doors because they were afraid. Jesus came and stood among them and said, \"Peace be with you.\" He showed them His hands and side, and they rejoiced. Jesus said, \"As the Father has sent Me, so I send you.\" He breathed on them and said, \"Receive the Holy Spirit. Whose sins you forgive are forgiven them.\"",
+      "keyLine": "Receive ye the Holy Ghost.",
+      "heartTitle": "Gifts of the Spirit",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Gifts I have",
+      "heartLabelB": "How I use them",
+      "questions": [
+        "Why did Jesus give the Spirit and the power to forgive?",
+        "Which gift of the Spirit do you need most?"
+      ],
+      "actions": [
+        "Learn the 7 gifts of the Spirit",
+        "Go to Confession",
+        "Use a talent for God"
+      ],
+      "prayer": "Come, Holy Spirit, set my heart on fire. Amen.",
+      "activity": {
+        "title": "Gifts of the Spirit",
+        "intro": "Find the gifts of the Holy Spirit.",
+        "idea": 136,
+        "type": "wordfind",
+        "words": [
+          "WISDOM",
+          "COUNSEL",
+          "FORTITUDE",
+          "KNOWLEDGE",
+          "PIETY",
+          "FEAR",
+          "PEACE",
+          "SPIRIT"
+        ]
+      },
+      "words": [
+        "Pentecost",
+        "Holy Ghost",
+        "breathe",
+        "sent",
+        "forgive",
+        "gifts"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_PENTECOST_main.png",
+    "heart": "A_PENTECOST_heart.png",
+    "icons": [
+      "icon_dove.png",
+      "icon_flame.png",
+      "icon_wind.png"
+    ],
+    "mainBrief": "Upper room: risen Jesus breathing on apostles, dove and soft flames",
+    "heartBrief": "Seven small flames around heart (gifts)"
+  }
+}

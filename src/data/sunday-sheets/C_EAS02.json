@@ -1,0 +1,121 @@
+{
+  "key": "C_EAS02",
+  "liturgicalName": "2nd Sunday of Easter (Divine Mercy)",
+  "season": "Easter",
+  "gospelRef": "John 20:19-31",
+  "keyVerseDR": "\"...blessed are they that have not seen and have believed.\" (Jn 20:29)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Thomas Believes",
+      "story": "Jesus came to His friends and said, \"Peace be with you!\" Thomas was not there and did not believe. Eight days later, Jesus showed Thomas His hands, and Thomas believed.",
+      "keyLine": "My Lord and my God!",
+      "heartTitle": "I Believe",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I trust Jesus",
+      "heartLabelB": "Jesus gives peace",
+      "questions": [
+        "What did Thomas say?",
+        "How do you know Jesus loves you?"
+      ],
+      "actions": [
+        "Say 'Jesus, I trust in You'",
+        "Forgive someone",
+        "Pray"
+      ],
+      "prayer": "Jesus, I trust in You. Amen.",
+      "activity": {
+        "title": "Easter crossword",
+        "intro": "Use the first letters to solve the crossword.",
+        "idea": 37,
+        "type": "crossword",
+        "entries": [
+          [
+            "PEACE",
+            "Jesus said, ___ be with you"
+          ],
+          [
+            "THOMAS",
+            "He did not believe at first"
+          ],
+          [
+            "HANDS",
+            "Jesus showed His ___ and side"
+          ],
+          [
+            "DOORS",
+            "They were shut, but Jesus came in"
+          ]
+        ]
+      },
+      "words": [
+        "Thomas",
+        "believe",
+        "peace",
+        "hands"
+      ]
+    },
+    "level2": {
+      "title": "Peace Be With You",
+      "story": "On the evening of Easter, Jesus came to the disciples behind shut doors and said, \"Peace be to you.\" He showed them His hands and side, and they were glad. He breathed on them and said, \"Receive ye the Holy Ghost.\" Thomas was not there and said, \"Except I shall see in His hands the print of the nails... I will not believe.\" Eight days later Jesus came and Thomas said, \"My Lord, and my God,\" and Jesus said, \"Blessed are they that have not seen, and have believed.\"",
+      "keyLine": "Blessed are they that have not seen and have believed.",
+      "heartTitle": "Divine Mercy",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Mercy I receive",
+      "heartLabelB": "Mercy I give",
+      "questions": [
+        "How did Jesus help Thomas believe?",
+        "How does Jesus give us mercy today?"
+      ],
+      "actions": [
+        "Pray the Divine Mercy Chaplet",
+        "Go to Confession",
+        "Show mercy to someone"
+      ],
+      "prayer": "Jesus, I trust in You. Amen.",
+      "activity": {
+        "title": "True or false?",
+        "intro": "Circle T or F.",
+        "idea": 102,
+        "type": "truefalse",
+        "items": [
+          [
+            "The doors were locked when Jesus came.",
+            true
+          ],
+          [
+            "Thomas was with the disciples the first time.",
+            false
+          ],
+          [
+            "Jesus breathed on them and gave the Holy Spirit.",
+            true
+          ],
+          [
+            "Thomas said, My Lord, and my God.",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "mercy",
+        "doubt",
+        "wounds",
+        "forgive",
+        "peace",
+        "faith"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_EAS02_main.png",
+    "heart": "C_EAS02_heart.png",
+    "icons": [
+      "icon_hands_wounds.png",
+      "icon_dove.png",
+      "icon_rays_divine_mercy.png"
+    ],
+    "mainBrief": "Risen Jesus showing hands to Thomas in a room",
+    "heartBrief": "Divine Mercy red & pale rays from heart"
+  }
+}

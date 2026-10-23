@@ -1,0 +1,91 @@
+{
+  "key": "B_BAPTISM",
+  "liturgicalName": "The Baptism of the Lord",
+  "season": "Christmas",
+  "gospelRef": "Mark 1:7-11",
+  "keyVerseDR": "\"Thou art my beloved Son; in thee I am well pleased.\" (Mk 1:11)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Baptized",
+      "story": "Jesus came to the Jordan River. John baptized Him. God said, \"You are My beloved Son!\"",
+      "keyLine": "I am God's child!",
+      "heartTitle": "My Baptism",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God's child",
+      "heartLabelB": "I am loved",
+      "questions": [
+        "What came down like a dove?",
+        "When were you baptized?"
+      ],
+      "actions": [
+        "Ask about my baptism",
+        "Bless myself with holy water",
+        "Thank God"
+      ],
+      "prayer": "Jesus, thank You for my baptism. Amen.",
+      "activity": {
+        "title": "I am God's child",
+        "intro": "Sign your baptismal name. God calls you His beloved child!",
+        "idea": 91,
+        "type": "letter",
+        "style": "certificate",
+        "to": "God's beloved child",
+        "lines": 2
+      },
+      "words": [
+        "baptism",
+        "river",
+        "dove",
+        "Son"
+      ]
+    },
+    "level2": {
+      "title": "You Are My Beloved Son",
+      "story": "John the Baptist preached, \"There cometh after me One mightier than I.\" He said, \"I have baptized you with water; but He shall baptize you with the Holy Ghost.\" Jesus came from Nazareth and was baptized by John in the Jordan. Coming up out of the water, He saw the heavens opened and the Spirit like a dove coming down upon Him. A voice came from heaven: \"Thou art My beloved Son; in Thee I am well pleased.\"",
+      "keyLine": "Thou art my beloved Son.",
+      "heartTitle": "Child of God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What baptism gives",
+      "heartLabelB": "How I live it",
+      "questions": [
+        "What does 'beloved' mean?",
+        "How do we see the Trinity at the Jordan?"
+      ],
+      "actions": [
+        "Learn my baptism date",
+        "Light my baptism candle",
+        "Renew my promises"
+      ],
+      "prayer": "Father, thank You for calling me Your beloved. Amen.",
+      "activity": {
+        "title": "My baptismal promise",
+        "intro": "Bless yourself with holy water and remember your Baptism.",
+        "idea": 132,
+        "type": "letter",
+        "style": "letter",
+        "to": "Jesus",
+        "lines": 3
+      },
+      "words": [
+        "Jordan",
+        "Spirit",
+        "beloved",
+        "heavens",
+        "Trinity",
+        "baptism"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_BAPTISM_main.png",
+    "heart": "B_BAPTISM_heart.png",
+    "icons": [
+      "icon_dove.png",
+      "icon_water_shell.png",
+      "icon_river.png"
+    ],
+    "mainBrief": "Jesus rising from the Jordan, heavens opening, dove",
+    "heartBrief": "Shell and water drops; dove on top of heart"
+  }
+}

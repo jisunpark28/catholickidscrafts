@@ -1,0 +1,92 @@
+{
+  "key": "A_LNT04",
+  "liturgicalName": "4th Sunday of Lent (Laetare)",
+  "season": "Lent",
+  "gospelRef": "John 9:1-41",
+  "keyVerseDR": "\"One thing I know, that whereas I was blind, now I see.\" (Jn 9:25)",
+  "color": "rose",
+  "levels": {
+    "level1": {
+      "title": "Now I See!",
+      "story": "Jesus met a man who was born blind. He put mud on his eyes and said, \"Go and wash.\" The man washed and could see!",
+      "keyLine": "Jesus is my light.",
+      "heartTitle": "Eyes to See",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I see",
+      "heartLabelB": "I thank",
+      "questions": [
+        "What did Jesus use to heal?",
+        "What are you thankful to see?"
+      ],
+      "actions": [
+        "Thank God for my eyes",
+        "Help someone",
+        "Pray"
+      ],
+      "prayer": "Jesus, help me see You. Amen.",
+      "activity": {
+        "title": "What happened first?",
+        "intro": "Number the pictures in order.",
+        "idea": 32,
+        "type": "sequence",
+        "scenes": [
+          "Jesus puts mud on the blind man's eyes",
+          "The man washes in the pool",
+          "The man can see!"
+        ]
+      },
+      "words": [
+        "blind",
+        "see",
+        "mud",
+        "light"
+      ]
+    },
+    "level2": {
+      "title": "The Man Born Blind",
+      "story": "Jesus saw a man who had been blind from birth. He made mud, put it on the man's eyes, and said, \"Go wash in the Pool of Siloam.\" The man washed and came back able to see! The Pharisees argued and threw him out, but he said, \"I was blind, and now I see.\" Jesus found him, and the man said, \"I do believe, Lord,\" and worshiped Him.",
+      "keyLine": "Whereas I was blind, now I see.",
+      "heartTitle": "Seeing with Faith",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I see",
+      "heartLabelB": "What faith shows",
+      "questions": [
+        "Why couldn't the leaders 'see' Jesus?",
+        "How has Jesus helped you 'see'?"
+      ],
+      "actions": [
+        "Thank God for 3 blessings daily",
+        "Speak up for Jesus",
+        "Go to Confession"
+      ],
+      "prayer": "Jesus, Light of the World, open my eyes. Amen.",
+      "activity": {
+        "title": "Mirror message",
+        "intro": "Hold this up to a mirror, then copy it the right way.",
+        "idea": 45,
+        "type": "copyverse",
+        "text": "Whereas I was blind, now I see.",
+        "mirror": true
+      },
+      "words": [
+        "blind",
+        "Siloam",
+        "light",
+        "faith",
+        "Pharisee",
+        "worship"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_LNT04_main.png",
+    "heart": "A_LNT04_heart.png",
+    "icons": [
+      "icon_eye.png",
+      "icon_sun.png",
+      "icon_water_drop.png"
+    ],
+    "mainBrief": "Blind man washing at a pool, opening his eyes to light",
+    "heartBrief": "Eye shape and sunbeams in heart"
+  }
+}

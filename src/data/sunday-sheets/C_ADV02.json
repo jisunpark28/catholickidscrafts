@@ -1,0 +1,89 @@
+{
+  "key": "C_ADV02",
+  "liturgicalName": "2nd Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Luke 3:1-6",
+  "keyVerseDR": "\"Prepare ye the way of the Lord, make straight his paths.\" (Lk 3:4)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Prepare the Way",
+      "story": "God's word came to John in the desert. John said, \"Prepare the way of the Lord!\" Every valley will be filled, and every mountain made low.",
+      "keyLine": "Prepare the way!",
+      "heartTitle": "Making a Path",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say sorry",
+      "heartLabelB": "I start again",
+      "questions": [
+        "What did John say to do?",
+        "What can you fix in your heart?"
+      ],
+      "actions": [
+        "Say sorry",
+        "Tidy my room",
+        "Pray"
+      ],
+      "prayer": "Jesus, make my heart ready. Amen.",
+      "activity": {
+        "title": "Make straight the path",
+        "intro": "Trace a straight path to Jesus.",
+        "idea": 100,
+        "type": "maze",
+        "start": "Me",
+        "goal": "Jesus, our Savior"
+      },
+      "words": [
+        "John",
+        "path",
+        "prepare",
+        "heart"
+      ]
+    },
+    "level2": {
+      "title": "A Voice Crying in the Wilderness",
+      "story": "In the fifteenth year of Tiberius Caesar, the word of the Lord came to John, the son of Zechariah, in the desert. He went through the country around the Jordan, preaching a baptism of repentance for the forgiveness of sins. As Isaiah wrote, \"Prepare ye the way of the Lord, make straight His paths.\" Every valley shall be filled, and every mountain and hill shall be brought low. \"And all flesh shall see the salvation of God.\"",
+      "keyLine": "Prepare ye the way of the Lord, make straight his paths.",
+      "heartTitle": "Straight Paths",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Valleys to fill",
+      "heartLabelB": "Mountains to lower",
+      "questions": [
+        "Why does Luke name real rulers and places?",
+        "What 'mountain' in your heart needs lowering?"
+      ],
+      "actions": [
+        "Go to Confession",
+        "Forgive someone",
+        "Read Isaiah 40"
+      ],
+      "prayer": "Lord, make my heart a straight path for You. Amen.",
+      "activity": {
+        "title": "Memory verse",
+        "intro": "Read it, fold one line at a time, and say it from memory.",
+        "idea": 88,
+        "type": "foldreveal",
+        "question": "What did Isaiah say John would cry out?",
+        "answer": "Prepare ye the way of the Lord, make straight His paths."
+      },
+      "words": [
+        "Tiberius",
+        "repentance",
+        "Isaiah",
+        "wilderness",
+        "valley",
+        "salvation"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_ADV02_main.png",
+    "heart": "C_ADV02_heart.png",
+    "icons": [
+      "icon_river.png",
+      "icon_path.png",
+      "icon_camel.png"
+    ],
+    "mainBrief": "John the Baptist in the wilderness; a road being smoothed",
+    "heartBrief": "Heart drawn as a path with stones; footprints"
+  }
+}

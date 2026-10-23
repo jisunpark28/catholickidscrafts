@@ -1,0 +1,92 @@
+{
+  "key": "C_ADV03",
+  "liturgicalName": "3rd Sunday of Advent (Gaudete)",
+  "season": "Advent",
+  "gospelRef": "Luke 3:10-18",
+  "keyVerseDR": "\"He that hath two coats, let him give to him that hath none...\" (Lk 3:11)",
+  "color": "rose",
+  "levels": {
+    "level1": {
+      "title": "What Should We Do?",
+      "story": "People asked John, \"What should we do?\" John said, \"Share your coat and your food!\" He said Jesus is coming soon, and the people were full of joy.",
+      "keyLine": "Share with joy!",
+      "heartTitle": "Joyful Sharing",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I share",
+      "heartLabelB": "I rejoice",
+      "questions": [
+        "What did John say to share?",
+        "What can you share?"
+      ],
+      "actions": [
+        "Give away a coat or toy",
+        "Smile",
+        "Be fair"
+      ],
+      "prayer": "Jesus, fill me with joy. Amen.",
+      "activity": {
+        "title": "Share like John said",
+        "intro": "Write 3 ways to share your coat, food, or time.",
+        "idea": 64,
+        "type": "tree",
+        "leaves": 3,
+        "label": "Ways I can share with joy"
+      },
+      "words": [
+        "share",
+        "coat",
+        "joy",
+        "give"
+      ]
+    },
+    "level2": {
+      "title": "Rejoice and Share",
+      "story": "The crowds asked John the Baptist, \"What then shall we do?\" He said, \"He that hath two coats, let him give to him that hath none; and he that hath meat, let him do in like manner.\" He told tax collectors to be honest and soldiers to be fair and content with their pay. The people wondered if John was the Christ. John said, \"One mightier than I shall come... He shall baptize you with the Holy Ghost, and with fire.\"",
+      "keyLine": "He that hath two coats, let him give to him that hath none.",
+      "heartTitle": "Joyful Justice",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I can share",
+      "heartLabelB": "How I can be fair",
+      "questions": [
+        "Why does sharing bring joy?",
+        "What would John tell kids to do?"
+      ],
+      "actions": [
+        "Donate clothes",
+        "Be honest",
+        "Do a joyful kindness"
+      ],
+      "prayer": "Jesus, help me share Your joy. Amen.",
+      "activity": {
+        "title": "Share with joy",
+        "intro": "John said, \"Share your coat and food.\" Plan what you will share.",
+        "idea": 115,
+        "type": "prayerframe",
+        "starters": [
+          "A coat or clothes I can give...",
+          "Food I can share...",
+          "I can be fair and honest by..."
+        ]
+      },
+      "words": [
+        "Gaudete",
+        "rejoice",
+        "share",
+        "honest",
+        "Holy Spirit",
+        "fire"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_ADV03_main.png",
+    "heart": "C_ADV03_heart.png",
+    "icons": [
+      "icon_coat.png",
+      "icon_bread.png",
+      "icon_rose_candle.png"
+    ],
+    "mainBrief": "John giving a coat to a poor person, crowd listening",
+    "heartBrief": "Coat and bread inside heart"
+  }
+}

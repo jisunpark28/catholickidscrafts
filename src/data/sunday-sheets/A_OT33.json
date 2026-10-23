@@ -1,0 +1,92 @@
+{
+  "key": "A_OT33",
+  "liturgicalName": "33rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 25:14-30",
+  "keyVerseDR": "\"Well done, good and faithful servant... Enter thou into the joy of thy lord.\" (Mt 25:21)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Use Your Gifts",
+      "story": "A master gave his servants talents of money. Two servants used them well. The third hid his in the ground. God wants us to use our gifts!",
+      "keyLine": "I use my gifts for God.",
+      "heartTitle": "My Gifts",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God gave me",
+      "heartLabelB": "I use them",
+      "questions": [
+        "What did the good servants do?",
+        "What gift do you have?"
+      ],
+      "actions": [
+        "Use a talent to help",
+        "Draw for someone",
+        "Sing to God"
+      ],
+      "prayer": "God, thank You for my gifts. Amen.",
+      "activity": {
+        "title": "My gift badge",
+        "intro": "God gave you gifts! Design a badge for one of your talents.",
+        "idea": 10,
+        "type": "badge",
+        "label": "I use my gifts for God"
+      },
+      "words": [
+        "gifts",
+        "talents",
+        "use",
+        "good"
+      ]
+    },
+    "level2": {
+      "title": "The Parable of the Talents",
+      "story": "Jesus told of a man going on a journey who gave his servants talents: five to one, two to another, and one to a third. The first two traded and doubled what they had. The third dug a hole and hid his master's money. When the master returned, he said to the faithful servants, \"Well done, good and faithful servant; enter into the joy of thy lord.\" But the servant who buried his talent lost even what he had.",
+      "keyLine": "Well done, good and faithful servant.",
+      "heartTitle": "My Talents",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Gifts I have",
+      "heartLabelB": "How I'll use them",
+      "questions": [
+        "Why did the third servant bury his talent?",
+        "What talent can you use for God?"
+      ],
+      "actions": [
+        "Use a talent at church or home",
+        "Try something new",
+        "Thank God for my gifts"
+      ],
+      "prayer": "Lord, help me use my gifts for You. Amen.",
+      "activity": {
+        "title": "The talents in order",
+        "intro": "Number the story in order.",
+        "idea": 32,
+        "type": "sequence",
+        "scenes": [
+          "The master gives out the talents",
+          "Two servants trade and double their money",
+          "The third servant hides his talent",
+          "The master returns and praises the faithful servants"
+        ]
+      },
+      "words": [
+        "talents",
+        "faithful",
+        "servant",
+        "invest",
+        "fear",
+        "stewardship"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT33_main.png",
+    "heart": "A_OT33_heart.png",
+    "icons": [
+      "icon_coins.png",
+      "icon_treasure_chest.png",
+      "icon_crown.png"
+    ],
+    "mainBrief": "Master returning; servants presenting doubled coins",
+    "heartBrief": "Gift boxes = talents inside heart"
+  }
+}

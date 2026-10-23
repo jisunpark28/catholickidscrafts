@@ -1,0 +1,88 @@
+{
+  "key": "A_OT27",
+  "liturgicalName": "27th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 21:33-43",
+  "keyVerseDR": "\"The stone which the builders rejected, the same is become the head of the corner.\" (Mt 21:42)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "God's Vineyard",
+      "story": "A man planted a vineyard and rented it to farmers. When he sent his servants and his son for the grapes, the farmers were cruel. God's Kingdom will be given to people who bear good fruit.",
+      "keyLine": "I give God good fruit.",
+      "heartTitle": "Good Fruit",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I care",
+      "heartLabelB": "I share",
+      "questions": [
+        "What did the man plant?",
+        "What good fruit can you give God?"
+      ],
+      "actions": [
+        "Care for a plant",
+        "Be kind",
+        "Share"
+      ],
+      "prayer": "God, help me bear good fruit. Amen.",
+      "activity": {
+        "title": "Fingerprint grapes",
+        "intro": "Make a bunch of grapes with your fingerprints. Bear good fruit for God!",
+        "idea": 76,
+        "type": "drawscene",
+        "prompt": "A big bunch of fingerprint grapes in God's vineyard"
+      },
+      "words": [
+        "vineyard",
+        "grapes",
+        "care",
+        "fruit"
+      ]
+    },
+    "level2": {
+      "title": "The Wicked Tenants",
+      "story": "Jesus told of a landowner who planted a vineyard, put a hedge around it, and leased it to tenants. At harvest time, he sent servants to collect the fruit, but the tenants beat and killed them. Finally he sent his son, thinking, \"They will respect my son,\" but they killed him too. Jesus said, \"The stone which the builders rejected, the same is become the head of the corner.\" The kingdom of God will be given to a people who produce its fruit.",
+      "keyLine": "The stone which the builders rejected, the same is become the head of the corner.",
+      "heartTitle": "Cornerstone",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus first",
+      "heartLabelB": "Fruit I bear",
+      "questions": [
+        "Who is the son in the parable?",
+        "How do we give God 'fruit'?"
+      ],
+      "actions": [
+        "Make Jesus first today",
+        "Do a work of mercy",
+        "Pray for persecuted Christians"
+      ],
+      "prayer": "Jesus, be the cornerstone of my life. Amen.",
+      "activity": {
+        "title": "Good fruit",
+        "intro": "Write 3 ways to bear good fruit by helping others.",
+        "idea": 64,
+        "type": "tree",
+        "leaves": 3,
+        "label": "Ways I can help my neighbour"
+      },
+      "words": [
+        "tenants",
+        "vineyard",
+        "cornerstone",
+        "reject",
+        "prophets",
+        "fruit"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT27_main.png",
+    "heart": "A_OT27_heart.png",
+    "icons": [
+      "icon_grapes.png",
+      "icon_stone.png",
+      "icon_tower.png"
+    ],
+    "mainBrief": "Vineyard with tower; a cornerstone highlighted",
+    "heartBrief": "Cornerstone at heart base"
+  }
+}

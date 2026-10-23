@@ -1,0 +1,91 @@
+{
+  "key": "A_CORPUSCHRISTI",
+  "liturgicalName": "The Most Holy Body and Blood of Christ (Corpus Christi)",
+  "season": "Ordinary Time",
+  "gospelRef": "John 6:51-58",
+  "keyVerseDR": "\"I am the living bread which came down from heaven.\" (Jn 6:51 DR)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Bread from Heaven",
+      "story": "Jesus said, \"I am the living bread from heaven.\" Whoever eats this bread will live forever. At Mass, Jesus gives us Himself!",
+      "keyLine": "Jesus is the Bread of Life.",
+      "heartTitle": "Jesus in the Eucharist",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is here",
+      "heartLabelB": "I adore",
+      "questions": [
+        "What did Jesus say He is?",
+        "Where do we receive Jesus?"
+      ],
+      "actions": [
+        "Bow to the tabernacle",
+        "Go to Mass",
+        "Pray thank You"
+      ],
+      "prayer": "Jesus, You are truly here. Amen.",
+      "activity": {
+        "title": "The Bread of Life",
+        "intro": "Fill in the missing word.",
+        "idea": 129,
+        "type": "fillblank",
+        "text": "At Mass, the bread becomes [Jesus]."
+      },
+      "words": [
+        "bread",
+        "Communion",
+        "Mass",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "The Living Bread",
+      "story": "Jesus said, \"I am the living bread that came down from heaven. Whoever eats this bread will live forever.\" The people argued, \"How can this man give us His flesh to eat?\" Jesus said, \"My flesh is true food, and My blood is true drink.\" Whoever eats His flesh and drinks His blood remains in Him, and He in them. At every Mass, Jesus gives us His Body and Blood in Holy Communion.",
+      "keyLine": "I am the living bread which came down from heaven.",
+      "heartTitle": "Real Presence",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I prepare",
+      "heartLabelB": "How I give thanks",
+      "questions": [
+        "What does the Church mean by Real Presence?",
+        "How can you prepare for Holy Communion?"
+      ],
+      "actions": [
+        "Visit Eucharistic Adoration",
+        "Fast before Mass",
+        "Make a thanksgiving after Communion"
+      ],
+      "prayer": "Jesus in the Blessed Sacrament, I adore You. Amen.",
+      "activity": {
+        "title": "Before the tabernacle",
+        "intro": "Jesus is truly present in the Eucharist. Write a prayer of adoration.",
+        "idea": 146,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, I believe You are here...",
+          "I adore You because...",
+          "Thank You for the Bread of Life..."
+        ]
+      },
+      "words": [
+        "Eucharist",
+        "Real Presence",
+        "Body",
+        "Blood",
+        "Communion",
+        "adoration"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_CORPUSCHRISTI_main.png",
+    "heart": "A_CORPUSCHRISTI_heart.png",
+    "icons": [
+      "icon_monstrance.png",
+      "icon_host.png",
+      "icon_chalice.png"
+    ],
+    "mainBrief": "Monstrance with Host in a church, children kneeling",
+    "heartBrief": "Host and chalice inside heart"
+  }
+}

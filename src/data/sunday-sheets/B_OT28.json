@@ -1,0 +1,91 @@
+{
+  "key": "B_OT28",
+  "liturgicalName": "28th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 10:17-30",
+  "keyVerseDR": "\"With men it is impossible; but not with God. For all things are possible with God.\" (Mk 10:27)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Comes First",
+      "story": "A rich man asked Jesus how to get to heaven. Jesus said, \"Sell what you have, give to the poor, and follow Me.\" The man went away sad because he had many things.",
+      "keyLine": "Jesus is my treasure.",
+      "heartTitle": "Jesus First",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "What I love",
+      "heartLabelB": "Jesus is best",
+      "questions": [
+        "Why was the man sad?",
+        "What can you share?"
+      ],
+      "actions": [
+        "Give a toy away",
+        "Share",
+        "Pray"
+      ],
+      "prayer": "Jesus, You come first in my heart. Amen.",
+      "activity": {
+        "title": "Treasure in heaven",
+        "intro": "Rub a coin under the paper, then draw how you can help the poor.",
+        "idea": 83,
+        "type": "drawscene",
+        "prompt": "Coins given to the poor, and a treasure chest in heaven"
+      },
+      "words": [
+        "rich",
+        "give",
+        "follow",
+        "heaven"
+      ]
+    },
+    "level2": {
+      "title": "The Rich Young Man",
+      "story": "A man ran up, knelt before Jesus, and asked, \"Good Master, what shall I do that I may receive life everlasting?\" Jesus reminded him of the commandments, and the man said he had kept them all. Jesus, looking on him, loved him and said, \"Go, sell whatsoever thou hast, and give to the poor... and come, follow Me.\" The man went away sad, for he had great possessions. Jesus said, \"With men it is impossible; but not with God: for all things are possible with God.\"",
+      "keyLine": "All things are possible with God.",
+      "heartTitle": "Treasure in Heaven",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I hold onto",
+      "heartLabelB": "What I can let go",
+      "questions": [
+        "Why was it hard for the man to follow Jesus?",
+        "What holds you back from following Jesus fully?"
+      ],
+      "actions": [
+        "Give something I value",
+        "Donate to the poor",
+        "Pray for detachment"
+      ],
+      "prayer": "Jesus, You are worth more than all I have. Amen.",
+      "activity": {
+        "title": "My giving list",
+        "intro": "Jesus asked the rich man to give to the poor. Plan what you can share.",
+        "idea": 115,
+        "type": "prayerframe",
+        "starters": [
+          "A toy I can give...",
+          "Clothes I can share...",
+          "Money I can save for the poor..."
+        ]
+      },
+      "words": [
+        "eternal life",
+        "riches",
+        "commandments",
+        "poor",
+        "camel",
+        "possible"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT28_main.png",
+    "heart": "B_OT28_heart.png",
+    "icons": [
+      "icon_coins.png",
+      "icon_treasure_chest.png",
+      "icon_camel.png"
+    ],
+    "mainBrief": "Rich young man walking away sad; Jesus looking with love",
+    "heartBrief": "Treasure chest vs. cross"
+  }
+}

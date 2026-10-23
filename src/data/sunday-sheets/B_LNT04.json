@@ -1,0 +1,88 @@
+{
+  "key": "B_LNT04",
+  "liturgicalName": "4th Sunday of Lent (Laetare; Year A readings may be used)",
+  "season": "Lent",
+  "gospelRef": "John 3:14-21",
+  "keyVerseDR": "\"For God so loved the world, as to give his only begotten Son...\" (Jn 3:16)",
+  "color": "rose",
+  "levels": {
+    "level1": {
+      "title": "God So Loved the World",
+      "story": "Jesus said, \"God loved the world so much that He gave His only Son.\" Whoever believes in Jesus will live forever. Jesus is our light!",
+      "keyLine": "God so loved the world!",
+      "heartTitle": "God's Big Love",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God loves me",
+      "heartLabelB": "I love God",
+      "questions": [
+        "Who did God send?",
+        "How does God show His love?"
+      ],
+      "actions": [
+        "Thank God",
+        "Love others",
+        "Pray"
+      ],
+      "prayer": "God, thank You for sending Jesus. Amen.",
+      "activity": {
+        "title": "God so loved the world",
+        "intro": "Fill the heart with fingerprints of love.",
+        "idea": 82,
+        "type": "shapecraft",
+        "shape": "heart",
+        "label": "God gave His only Son"
+      },
+      "words": [
+        "love",
+        "world",
+        "save",
+        "light"
+      ]
+    },
+    "level2": {
+      "title": "Light Came Into the World",
+      "story": "Jesus told Nicodemus, \"As Moses lifted up the serpent in the desert, so must the Son of man be lifted up.\" He said, \"God so loved the world, as to give His only begotten Son.\" Whoever believes in Him may not perish, but may have life everlasting. God sent His Son not to judge the world, but that the world may be saved through Him. Jesus said that whoever does the truth comes to the light.",
+      "keyLine": "For God so loved the world, as to give his only begotten Son.",
+      "heartTitle": "Light & Darkness",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Darkness I avoid",
+      "heartLabelB": "Light I choose",
+      "questions": [
+        "What does 'lifted up' point to?",
+        "Why do people sometimes hide from the light?"
+      ],
+      "actions": [
+        "Memorize John 3:16",
+        "Go to Confession",
+        "Do a good deed in secret"
+      ],
+      "prayer": "Jesus, lifted up on the cross, draw me to You. Amen.",
+      "activity": {
+        "title": "Gospel acclamation",
+        "intro": "Copy these words neatly.",
+        "idea": 141,
+        "type": "copyverse",
+        "text": "God so loved the world, as to give His only begotten Son."
+      },
+      "words": [
+        "Nicodemus",
+        "lifted up",
+        "serpent",
+        "eternal life",
+        "light",
+        "darkness"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_LNT04_main.png",
+    "heart": "B_LNT04_heart.png",
+    "icons": [
+      "icon_lamp.png",
+      "icon_cross.png",
+      "icon_moon.png"
+    ],
+    "mainBrief": "Jesus speaking with Nicodemus at night by lamplight",
+    "heartBrief": "Cross with light rays inside heart"
+  }
+}

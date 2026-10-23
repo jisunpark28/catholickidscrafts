@@ -1,0 +1,97 @@
+{
+  "key": "A_EAS07",
+  "liturgicalName": "7th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 17:1-11a",
+  "keyVerseDR": "\"Now this is eternal life: That they may know thee, the only true God, and Jesus Christ, whom thou hast sent.\" (Jn 17:3)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Prays for Us",
+      "story": "Jesus looked up to heaven and prayed. He prayed for His friends. Jesus prays for us too!",
+      "keyLine": "Jesus prays for me.",
+      "heartTitle": "Praying Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus prays for me",
+      "heartLabelB": "I pray for others",
+      "questions": [
+        "Who did Jesus pray for?",
+        "Who can you pray for?"
+      ],
+      "actions": [
+        "Pray for my family",
+        "Pray for a friend",
+        "Fold my hands and pray"
+      ],
+      "prayer": "Jesus, teach me to pray. Amen.",
+      "activity": {
+        "title": "My praying hands",
+        "intro": "Trace your hand, then decorate it. Pray like Jesus!",
+        "idea": 14,
+        "type": "hand",
+        "fingers": [
+          "Thank You, God",
+          "Bless my family",
+          "Help my friends",
+          "Forgive me",
+          "I love You"
+        ]
+      },
+      "words": [
+        "pray",
+        "Father",
+        "friends",
+        "heaven"
+      ]
+    },
+    "level2": {
+      "title": "Jesus' Prayer for His Friends",
+      "story": "At the Last Supper, Jesus raised His eyes to heaven and said, \"Father, the hour has come.\" He prayed that He would give glory to the Father. Jesus said eternal life is to know the one true God and Jesus Christ whom He sent. He prayed for His disciples, because they belonged to the Father. Jesus said, \"I pray for them,\" and He prays for us too.",
+      "keyLine": "This is eternal life: that they may know thee.",
+      "heartTitle": "Knowing God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I know God",
+      "heartLabelB": "How I grow closer",
+      "questions": [
+        "What does Jesus say eternal life is?",
+        "How can you get to know God better?"
+      ],
+      "actions": [
+        "Pray a novena to the Holy Spirit",
+        "Read a Gospel chapter",
+        "Pray for someone daily"
+      ],
+      "prayer": "Father, help me know You and Your Son. Amen.",
+      "activity": {
+        "title": "I pray for others",
+        "intro": "Jesus prayed for His friends. Write 3 prayers for your family.",
+        "idea": 112,
+        "type": "prayerframe",
+        "starters": [
+          "Lord, I pray for...",
+          "Please help...",
+          "Bless and protect..."
+        ]
+      },
+      "words": [
+        "glorify",
+        "eternal life",
+        "know",
+        "Father",
+        "intercede",
+        "disciples"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_EAS07_main.png",
+    "heart": "A_EAS07_heart.png",
+    "icons": [
+      "icon_praying_hands.png",
+      "icon_candle.png",
+      "icon_cross.png"
+    ],
+    "mainBrief": "Jesus praying, eyes lifted, apostles around the table",
+    "heartBrief": "Praying hands in heart; names to write"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "key": "A_TRINITY",
+  "liturgicalName": "The Most Holy Trinity",
+  "season": "Ordinary Time",
+  "gospelRef": "John 3:16-18",
+  "keyVerseDR": "\"For God so loved the world, as to give his only begotten Son...\" (Jn 3:16)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "God Loves the World",
+      "story": "God loves the world so much. He gave us His Son, Jesus. God is Father, Son, and Holy Spirit!",
+      "keyLine": "God so loved the world!",
+      "heartTitle": "One God, Three Persons",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God loves me",
+      "heartLabelB": "I love God",
+      "questions": [
+        "Who are the three Persons in God?",
+        "How do we make the Sign of the Cross?"
+      ],
+      "actions": [
+        "Make the Sign of the Cross",
+        "Thank God",
+        "Love others"
+      ],
+      "prayer": "Glory be to the Father, and to the Son, and to the Holy Spirit. Amen.",
+      "activity": {
+        "title": "Sign of the Cross",
+        "intro": "Number where your hand goes as you pray.",
+        "idea": 93,
+        "type": "sequence",
+        "scenes": [
+          "In the name of the Father (forehead)",
+          "and of the Son (chest)",
+          "and of the Holy (left shoulder)",
+          "Spirit (right shoulder). Amen."
+        ]
+      },
+      "words": [
+        "Father",
+        "Son",
+        "Spirit",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "God So Loved the World",
+      "story": "Jesus spoke with Nicodemus, a leader who came to Him at night. Jesus said, \"God so loved the world that He gave His only Son.\" Everyone who believes in Him will not perish but will have eternal life. God did not send His Son to condemn the world, but to save it. Today we praise one God in three Persons: the Father, the Son, and the Holy Spirit.",
+      "keyLine": "For God so loved the world, as to give his only begotten Son.",
+      "heartTitle": "The Trinity",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What the Father does",
+      "heartLabelB": "What the Son and Spirit do",
+      "questions": [
+        "How does John 3:16 show God's love?",
+        "How can you share God's love?"
+      ],
+      "actions": [
+        "Pray the Glory Be slowly",
+        "Memorize John 3:16",
+        "Do something loving"
+      ],
+      "prayer": "Holy Trinity, one God, I adore You. Amen.",
+      "activity": {
+        "title": "Glory Be",
+        "intro": "Fill in the three Persons of the Trinity.",
+        "idea": 145,
+        "type": "fillblank",
+        "text": "Glory be to the [Father], and to the [Son], and to the Holy [Spirit]."
+      },
+      "words": [
+        "Trinity",
+        "Persons",
+        "eternal life",
+        "condemn",
+        "save",
+        "believe"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_TRINITY_main.png",
+    "heart": "A_TRINITY_heart.png",
+    "icons": [
+      "icon_trinity_triangle.png",
+      "icon_dove.png",
+      "icon_shamrock.png"
+    ],
+    "mainBrief": "Simple Trinity symbol: triangle with dove, hand, and cross",
+    "heartBrief": "Shamrock / triangle in heart"
+  }
+}

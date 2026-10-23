@@ -1,0 +1,93 @@
+{
+  "key": "A_EAS05",
+  "liturgicalName": "5th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 14:1-12",
+  "keyVerseDR": "\"I am the way, and the truth, and the life.\" (Jn 14:6)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is the Way",
+      "story": "Jesus said, \"Do not be afraid. I am making a home for you in heaven.\" Thomas asked the way. Jesus said, \"I am the Way!\"",
+      "keyLine": "Jesus is the Way.",
+      "heartTitle": "Way to Heaven",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus leads",
+      "heartLabelB": "I follow",
+      "questions": [
+        "What is Jesus making for us?",
+        "How do you follow Jesus' way?"
+      ],
+      "actions": [
+        "Pray for heaven",
+        "Tell the truth",
+        "Be kind"
+      ],
+      "prayer": "Jesus, lead me home to heaven. Amen.",
+      "activity": {
+        "title": "No troubled hearts",
+        "intro": "Fill the heart with fingerprints. Jesus says, \"Do not be afraid.\"",
+        "idea": 82,
+        "type": "shapecraft",
+        "shape": "heart",
+        "label": "Jesus is the Way"
+      },
+      "words": [
+        "way",
+        "home",
+        "heaven",
+        "truth"
+      ]
+    },
+    "level2": {
+      "title": "The Way, the Truth, and the Life",
+      "story": "At the Last Supper, Jesus said, \"Do not let your hearts be troubled. In My Father's house there are many rooms.\" He said He was going to prepare a place for them. Thomas asked, \"Lord, how can we know the way?\" Jesus answered, \"I am the way and the truth and the life. No one comes to the Father except through Me.\" Philip asked to see the Father, and Jesus said, \"Whoever has seen Me has seen the Father.\"",
+      "keyLine": "I am the way, and the truth, and the life.",
+      "heartTitle": "Following Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "The Way",
+      "heartLabelB": "The Truth",
+      "questions": [
+        "Why is Jesus the only way to the Father?",
+        "What troubles your heart that you can give to Jesus?"
+      ],
+      "actions": [
+        "Always tell the truth",
+        "Pray when worried",
+        "Learn about heaven"
+      ],
+      "prayer": "Jesus, You are my way, truth, and life. Amen.",
+      "activity": {
+        "title": "Put Jesus' words in order",
+        "intro": "Number the word cards to make the verse.",
+        "idea": 40,
+        "type": "wordorder",
+        "pieces": [
+          "I am",
+          "the way,",
+          "and the truth,",
+          "and the life."
+        ]
+      },
+      "words": [
+        "way",
+        "truth",
+        "life",
+        "Father's house",
+        "dwelling",
+        "Philip"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_EAS05_main.png",
+    "heart": "A_EAS05_heart.png",
+    "icons": [
+      "icon_house.png",
+      "icon_path.png",
+      "icon_cross.png"
+    ],
+    "mainBrief": "Jesus with disciples at supper pointing to a house with many rooms",
+    "heartBrief": "Path leading up to a house in the heart"
+  }
+}

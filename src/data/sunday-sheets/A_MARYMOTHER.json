@@ -1,0 +1,88 @@
+{
+  "key": "A_MARYMOTHER",
+  "liturgicalName": "Mary, the Holy Mother of God (Jan 1, optional)",
+  "season": "Christmas",
+  "gospelRef": "Luke 2:16-21",
+  "keyVerseDR": "\"But Mary kept all these words, pondering them in her heart.\" (Lk 2:19)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Mary, Our Mother",
+      "story": "The shepherds found Mary, Joseph, and Baby Jesus. Mary kept all these things in her heart. Mary is the Mother of God!",
+      "keyLine": "Mary loves Jesus.",
+      "heartTitle": "Mary's Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Mary loves",
+      "heartLabelB": "I love",
+      "questions": [
+        "What did the shepherds see?",
+        "How can you love like Mary?"
+      ],
+      "actions": [
+        "Pray a Hail Mary",
+        "Be gentle",
+        "Thank my mom"
+      ],
+      "prayer": "Mother Mary, help me love Jesus. Amen.",
+      "activity": {
+        "title": "My rosary beads",
+        "intro": "Mary is our Mother. Color 10 beads and say a Hail Mary for each.",
+        "idea": 18,
+        "type": "beads",
+        "count": 10,
+        "label": "One Hail Mary for each bead"
+      },
+      "words": [
+        "Mary",
+        "mother",
+        "shepherds",
+        "heart"
+      ]
+    },
+    "level2": {
+      "title": "Mother of God",
+      "story": "The shepherds hurried to Bethlehem and found Mary, Joseph, and the baby lying in the manger. They told everyone what the angels had said about the child. All who heard it were amazed. Mary kept all these things, pondering them in her heart. After eight days, the baby was named Jesus, the name the angel had given Him.",
+      "keyLine": "Mary kept all these words, pondering them in her heart.",
+      "heartTitle": "Pondering Like Mary",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I treasure",
+      "heartLabelB": "What I ask God",
+      "questions": [
+        "Why do we call Mary the Mother of God?",
+        "What does it mean to ponder?"
+      ],
+      "actions": [
+        "Pray a decade of the Rosary",
+        "Start the year with a prayer",
+        "Write a thank-you"
+      ],
+      "prayer": "Holy Mary, Mother of God, pray for us. Amen.",
+      "activity": {
+        "title": "Hail Mary, Mother of God",
+        "intro": "Fill in the missing words of the prayer.",
+        "idea": 144,
+        "type": "fillblank",
+        "text": "Holy Mary, [Mother] of God, pray for us [sinners], now and at the hour of our death."
+      },
+      "words": [
+        "Theotokos",
+        "ponder",
+        "treasure",
+        "shepherds",
+        "Bethlehem",
+        "name"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_MARYMOTHER_main.png",
+    "heart": "A_MARYMOTHER_heart.png",
+    "icons": [
+      "icon_sheep.png",
+      "icon_star.png",
+      "icon_mary_heart.png"
+    ],
+    "mainBrief": "Shepherds visit; Mary holds baby Jesus close, heart glow",
+    "heartBrief": "Mary's heart with roses; space to draw my family"
+  }
+}

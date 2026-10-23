@@ -1,0 +1,95 @@
+{
+  "key": "B_OT05",
+  "liturgicalName": "5th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 1:29-39",
+  "keyVerseDR": "\"And rising very early, going out, he went into a desert place: and there he prayed.\" (Mk 1:35)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Heals and Prays",
+      "story": "Jesus healed Peter's mother-in-law of a fever. That night many sick people came, and He healed them. Early in the morning, Jesus went off alone to pray.",
+      "keyLine": "Jesus prays. I pray too!",
+      "heartTitle": "Praying Like Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus prays",
+      "heartLabelB": "I pray",
+      "questions": [
+        "When did Jesus go pray?",
+        "When can you pray?"
+      ],
+      "actions": [
+        "Say a morning prayer",
+        "Help someone sick",
+        "Find a quiet time"
+      ],
+      "prayer": "Jesus, teach me to pray. Amen.",
+      "activity": {
+        "title": "My prayer time",
+        "intro": "Jesus prayed early in the morning. Draw your prayer time on the clock.",
+        "idea": 89,
+        "type": "clock",
+        "labels": [
+          "Morning prayer"
+        ]
+      },
+      "words": [
+        "heal",
+        "pray",
+        "morning",
+        "quiet"
+      ]
+    },
+    "level2": {
+      "title": "A Day in Capernaum",
+      "story": "Jesus went to the house of Simon and Andrew, where Simon's mother-in-law was sick with a fever. He took her by the hand and lifted her up, and the fever left her, and she served them. That evening, the whole city gathered at the door, and Jesus healed many sick people. Very early in the morning, He went to a lonely place to pray. When the disciples found Him, He said, \"Let us go into the neighbouring towns, that I may preach there also.\"",
+      "keyLine": "Rising very early, he went into a desert place: and there he prayed.",
+      "heartTitle": "Prayer & Service",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "When I pray",
+      "heartLabelB": "How I serve",
+      "questions": [
+        "Why did Jesus pray even when busy?",
+        "What did the healed woman do right away?"
+      ],
+      "actions": [
+        "Pray first thing each morning",
+        "Serve someone",
+        "Visit someone sick"
+      ],
+      "prayer": "Jesus, help me pray and serve like You. Amen.",
+      "activity": {
+        "title": "Pray like Jesus",
+        "intro": "Jesus made time to pray. Check your evening examen.",
+        "idea": 125,
+        "type": "checklist",
+        "items": [
+          "Thank God for today",
+          "When did I help someone?",
+          "When did I fail to love?",
+          "Say sorry to God",
+          "Ask God to bless tomorrow"
+        ]
+      },
+      "words": [
+        "heal",
+        "serve",
+        "pray",
+        "deserted place",
+        "mission",
+        "preach"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT05_main.png",
+    "heart": "B_OT05_heart.png",
+    "icons": [
+      "icon_praying_hands.png",
+      "icon_sunrise.png",
+      "icon_bed.png"
+    ],
+    "mainBrief": "Jesus praying alone at dawn in a quiet place",
+    "heartBrief": "Sunrise behind heart; praying hands"
+  }
+}

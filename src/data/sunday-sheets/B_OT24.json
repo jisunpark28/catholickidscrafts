@@ -1,0 +1,105 @@
+{
+  "key": "B_OT24",
+  "liturgicalName": "24th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 8:27-35",
+  "keyVerseDR": "\"But whom do you say that I am? Peter answering said to him: Thou art the Christ.\" (Mk 8:29)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Who Is Jesus?",
+      "story": "Jesus asked, \"Who do you say I am?\" Peter said, \"You are the Christ!\" Jesus said whoever follows Him must take up their cross.",
+      "keyLine": "Jesus is the Christ.",
+      "heartTitle": "Who Jesus Is",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is the Christ",
+      "heartLabelB": "I follow Him",
+      "questions": [
+        "What did Peter say?",
+        "Who is Jesus to you?"
+      ],
+      "actions": [
+        "Tell someone who Jesus is",
+        "Do a hard thing with love",
+        "Pray"
+      ],
+      "prayer": "Jesus, You are the Christ. Amen.",
+      "activity": {
+        "title": "Who is Jesus?",
+        "intro": "Use the first letters to solve the crossword.",
+        "idea": 37,
+        "type": "crossword",
+        "entries": [
+          [
+            "CHRIST",
+            "Peter said, You are the ___"
+          ],
+          [
+            "PETER",
+            "He answered Jesus' question"
+          ],
+          [
+            "CROSS",
+            "Take up your ___ and follow"
+          ],
+          [
+            "DENY",
+            "Jesus says, ___ yourself"
+          ]
+        ]
+      },
+      "words": [
+        "Peter",
+        "Christ",
+        "cross",
+        "follow"
+      ]
+    },
+    "level2": {
+      "title": "Take Up Your Cross",
+      "story": "On the way to the villages of Caesarea Philippi, Jesus asked, \"Whom do men say that I am?\" They said John the Baptist, Elijah, or one of the prophets. He asked, \"But whom do you say that I am?\" Peter answered, \"Thou art the Christ.\" Jesus taught that He must suffer, die, and rise again, and He said, \"If any man will follow Me, let him deny himself, and take up his cross, and follow Me.\"",
+      "keyLine": "Whom do you say that I am? Thou art the Christ.",
+      "heartTitle": "My Answer",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who Jesus is",
+      "heartLabelB": "What it costs",
+      "questions": [
+        "Why did Peter rebuke Jesus?",
+        "What does taking up your cross look like?"
+      ],
+      "actions": [
+        "Offer up something hard",
+        "Profess my faith",
+        "Pray the Creed"
+      ],
+      "prayer": "Jesus, You are the Christ; I will follow You. Amen.",
+      "activity": {
+        "title": "Deny yourself",
+        "intro": "Weigh it up: what can I give up to follow Jesus?",
+        "idea": 67,
+        "type": "scale",
+        "left": "Something I will give up",
+        "right": "How I will follow Jesus"
+      },
+      "words": [
+        "Christ",
+        "Caesarea Philippi",
+        "suffer",
+        "cross",
+        "deny",
+        "follow"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT24_main.png",
+    "heart": "B_OT24_heart.png",
+    "icons": [
+      "icon_cross.png",
+      "icon_keys.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Peter before Jesus near Caesarea; road with cross",
+    "heartBrief": "Small cross in heart"
+  }
+}

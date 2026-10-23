@@ -1,0 +1,109 @@
+{
+  "key": "A_ADV03",
+  "liturgicalName": "3rd Sunday of Advent (Gaudete)",
+  "season": "Advent",
+  "gospelRef": "Matthew 11:2-11",
+  "keyVerseDR": "\"The blind see, the lame walk... the poor have the gospel preached to them.\" (Mt 11:5)",
+  "color": "rose",
+  "levels": {
+    "level1": {
+      "title": "Jesus Brings Joy",
+      "story": "John asked, \"Jesus, are You the One?\" Jesus said, \"The blind see and the lame walk!\" Good news makes us happy!",
+      "keyLine": "Jesus brings joy!",
+      "heartTitle": "My Joy Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus makes me happy",
+      "heartLabelB": "I share joy",
+      "questions": [
+        "What makes you joyful?",
+        "How can you make someone smile?"
+      ],
+      "actions": [
+        "Smile at someone",
+        "Sing a song to God",
+        "Share a treat"
+      ],
+      "prayer": "Jesus, fill my heart with joy. Amen.",
+      "activity": {
+        "title": "Joy for everyone!",
+        "intro": "Jesus brings joy. Draw a happy face for each person He helped.",
+        "idea": 2,
+        "type": "faces",
+        "people": [
+          "The blind man",
+          "The lame man",
+          "The poor"
+        ]
+      },
+      "words": [
+        "joy",
+        "see",
+        "heal",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "Are You the One?",
+      "story": "John the Baptist was in prison, and he sent his disciples to ask Jesus, \"Are You the one who is to come?\" Jesus answered, \"Go and tell John what you hear and see.\" The blind see, the lame walk, lepers are made clean, and the poor hear good news. Jesus said John was the messenger sent to prepare His way. This Gaudete Sunday we rejoice, because the Savior is near!",
+      "keyLine": "Go and relate to John what you have heard and seen.",
+      "heartTitle": "Signs of Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What Jesus did",
+      "heartLabelB": "What I can do",
+      "questions": [
+        "How do Jesus' actions show who He is?",
+        "How can your actions show you follow Jesus?"
+      ],
+      "actions": [
+        "Visit or call someone lonely",
+        "Give to the poor",
+        "Tell someone good news"
+      ],
+      "prayer": "Jesus, let my life show others Your joy. Amen.",
+      "activity": {
+        "title": "Isaiah said... Jesus did!",
+        "intro": "Match what the prophet foretold to what Jesus did.",
+        "idea": 33,
+        "type": "matchup",
+        "pairs": [
+          [
+            "The eyes of the blind will be opened",
+            "Jesus made the blind see"
+          ],
+          [
+            "The lame will leap like a deer",
+            "The lame walked again"
+          ],
+          [
+            "I send My messenger ahead of You",
+            "John the Baptist prepared the way"
+          ],
+          [
+            "Good news to the poor",
+            "Jesus preached to the poor"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Gaudete",
+        "rejoice",
+        "Messiah",
+        "prophet",
+        "prison",
+        "miracle"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_ADV03_main.png",
+    "heart": "A_ADV03_heart.png",
+    "icons": [
+      "icon_rose_candle.png",
+      "icon_eye.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "John in prison window; his friends watch Jesus healing a blind man",
+    "heartBrief": "Smiling faces & sunbeams; pink Gaudete candle at top"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "key": "A_OT18",
+  "liturgicalName": "18th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 14:13-21",
+  "keyVerseDR": "\"And they did all eat, and were filled. And they took up what remained, twelve full baskets...\" (Mt 14:20)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Feeds 5,000",
+      "story": "A big crowd followed Jesus. The disciples had only 5 loaves and 2 fish. Jesus blessed them, and everyone ate!",
+      "keyLine": "Jesus gives enough!",
+      "heartTitle": "Sharing Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I share",
+      "heartLabelB": "God gives",
+      "questions": [
+        "How much food was there at first?",
+        "What can you share?"
+      ],
+      "actions": [
+        "Share my snack",
+        "Thank God for food",
+        "Help someone"
+      ],
+      "prayer": "Jesus, thank You for my daily bread. Amen.",
+      "activity": {
+        "title": "The big picnic",
+        "intro": "Use the first letters to fill in the crossword.",
+        "idea": 37,
+        "type": "crossword",
+        "entries": [
+          [
+            "BREAD",
+            "There were 5 loaves of this"
+          ],
+          [
+            "FISH",
+            "There were 2 of these"
+          ],
+          [
+            "CROWD",
+            "Many people who followed Jesus"
+          ],
+          [
+            "BASKETS",
+            "12 were filled with leftovers"
+          ]
+        ]
+      },
+      "words": [
+        "bread",
+        "fish",
+        "share",
+        "crowd"
+      ]
+    },
+    "level2": {
+      "title": "Loaves and Fishes",
+      "story": "When Jesus heard John the Baptist had died, He went to a quiet place, but crowds followed Him. He felt pity for them and healed their sick. In the evening the disciples said, \"Send them away to buy food.\" Jesus said, \"Give them some food yourselves,\" but they had only five loaves and two fish. Jesus looked up to heaven, blessed and broke the loaves, and all ate and were satisfied, with twelve baskets left over.",
+      "keyLine": "They did all eat, and were filled.",
+      "heartTitle": "Little Becomes Much",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I have",
+      "heartLabelB": "What God can do",
+      "questions": [
+        "How is this miracle like the Mass?",
+        "What small thing can you give Jesus?"
+      ],
+      "actions": [
+        "Donate food",
+        "Pray grace before meals",
+        "Offer my talents"
+      ],
+      "prayer": "Jesus, take what I have and make it more. Amen.",
+      "activity": {
+        "title": "Gospel numbers",
+        "intro": "Match each number to the story.",
+        "idea": 107,
+        "type": "matchup",
+        "pairs": [
+          [
+            "5",
+            "Loaves of bread"
+          ],
+          [
+            "2",
+            "Fish"
+          ],
+          [
+            "12",
+            "Baskets of leftovers"
+          ],
+          [
+            "5,000",
+            "Men who ate, plus women and children"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "compassion",
+        "loaves",
+        "bless",
+        "multiply",
+        "baskets",
+        "Eucharist"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT18_main.png",
+    "heart": "A_OT18_heart.png",
+    "icons": [
+      "icon_bread.png",
+      "icon_fish.png",
+      "icon_basket.png"
+    ],
+    "mainBrief": "Jesus blessing 5 loaves and 2 fish, crowd on grass",
+    "heartBrief": "Baskets of bread around heart"
+  }
+}

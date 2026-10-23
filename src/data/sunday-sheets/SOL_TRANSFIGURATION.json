@@ -1,0 +1,105 @@
+{
+  "key": "SOL_TRANSFIGURATION",
+  "liturgicalName": "Transfiguration of the Lord",
+  "season": "Feast of the Lord",
+  "gospelRef": "Matthew 17:1-9 / Mark 9:2-10 / Luke 9:28b-36",
+  "keyVerseDR": "\"This is my beloved Son, in whom I am well pleased: hear ye him.\" (Mt 17:5)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Shines",
+      "story": "Jesus took Peter, James, and John up a mountain. His face shone like the sun, and His clothes became bright white. A voice said, \"This is My beloved Son. Listen to Him!\"",
+      "keyLine": "Listen to Jesus!",
+      "heartTitle": "Shining Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I listen",
+      "heartLabelB": "I shine",
+      "questions": [
+        "What did Jesus look like?",
+        "How can you listen to Jesus?"
+      ],
+      "actions": [
+        "Read a Bible story",
+        "Pray quietly",
+        "Listen to my parents"
+      ],
+      "prayer": "Jesus, help me listen to You. Amen.",
+      "activity": {
+        "title": "On the mountain",
+        "intro": "Draw Jesus shining on the mountain.",
+        "idea": 11,
+        "type": "drawscene",
+        "prompt": "Jesus shining like the sun on a high mountain, with Moses, Elijah, and three disciples"
+      },
+      "words": [
+        "mountain",
+        "shine",
+        "cloud",
+        "listen"
+      ]
+    },
+    "level2": {
+      "title": "The Transfiguration",
+      "story": "Jesus took Peter, James, and John up a high mountain apart. He was transfigured before them, and His face shone like the sun, and His garments became white as snow. Moses and Elijah appeared, talking with Him. Peter said, \"Lord, it is good for us to be here.\" A bright cloud overshadowed them, and a voice said, \"This is My beloved Son... hear ye Him.\"",
+      "keyLine": "This is my beloved Son: hear ye him.",
+      "heartTitle": "Seeing His Glory",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Where I see God",
+      "heartLabelB": "How I listen",
+      "questions": [
+        "Why did Jesus show His glory before the cross?",
+        "When have you felt close to God?"
+      ],
+      "actions": [
+        "Spend quiet time in prayer",
+        "Read the Gospel",
+        "Thank God for beauty"
+      ],
+      "prayer": "Jesus, let me see Your glory and listen. Amen.",
+      "activity": {
+        "title": "Luminous Mysteries",
+        "intro": "Match each Mystery of Light to what happened.",
+        "idea": 138,
+        "type": "matchup",
+        "pairs": [
+          [
+            "The Baptism of Jesus",
+            "The Father speaks at the Jordan"
+          ],
+          [
+            "The Wedding at Cana",
+            "Water becomes wine"
+          ],
+          [
+            "The Transfiguration",
+            "Jesus shines on the mountain"
+          ],
+          [
+            "The Eucharist",
+            "The Last Supper"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Transfiguration",
+        "glory",
+        "Moses",
+        "Elijah",
+        "cloud",
+        "Tabor"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_TRANSFIGURATION_main.png",
+    "heart": "SOL_TRANSFIGURATION_heart.png",
+    "icons": [
+      "icon_mountain.png",
+      "icon_cloud.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus in shining white on mountain top, Moses and Elijah, three apostles bowing",
+    "heartBrief": "Sun rays radiating from heart; cloud at top"
+  }
+}

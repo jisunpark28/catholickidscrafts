@@ -1,0 +1,92 @@
+{
+  "key": "B_EPIPHANY",
+  "liturgicalName": "The Epiphany of the Lord",
+  "season": "Christmas",
+  "gospelRef": "Matthew 2:1-12",
+  "keyVerseDR": "\"...falling down they adored him: and opening their treasures, they offered him gifts...\" (Mt 2:11)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Wise Men Follow the Star",
+      "story": "A bright star led the wise men to Jesus. They found Him with His mother Mary. They gave Him gold, incense, and myrrh.",
+      "keyLine": "I follow Jesus.",
+      "heartTitle": "Gifts for Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "My gift",
+      "heartLabelB": "My prayer",
+      "questions": [
+        "What gifts did the Wise Men bring?",
+        "What gift can you give Jesus?"
+      ],
+      "actions": [
+        "Give a gift",
+        "Bless my home",
+        "Follow Jesus"
+      ],
+      "prayer": "Jesus, I give You my heart. Amen.",
+      "activity": {
+        "title": "The star",
+        "intro": "Draw the other half of the star.",
+        "idea": 3,
+        "type": "symmetry",
+        "shape": "star"
+      },
+      "words": [
+        "star",
+        "Wise Men",
+        "gifts",
+        "worship"
+      ]
+    },
+    "level2": {
+      "title": "The Magi Find the King",
+      "story": "Wise men came from the East, saying, \"Where is He that is born king of the Jews? For we have seen His star.\" Herod gathered the priests, who said the Christ would be born in Bethlehem. The star went before the wise men until it stood over the place where the child was. They rejoiced with great joy, and entering the house, they found the child with Mary His mother. Falling down, they adored Him and offered Him gold, frankincense, and myrrh.",
+      "keyLine": "Falling down they adored him: and they offered him gifts.",
+      "heartTitle": "Seeking Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I seek",
+      "heartLabelB": "What I offer",
+      "questions": [
+        "What does each gift say about Jesus?",
+        "How do you 'follow the star' today?"
+      ],
+      "actions": [
+        "Chalk the door blessing",
+        "Offer my talents",
+        "Pray before the tabernacle"
+      ],
+      "prayer": "Jesus, King of all, I offer You my life. Amen.",
+      "activity": {
+        "title": "The Magi's journey",
+        "intro": "Number the story in order.",
+        "idea": 32,
+        "type": "sequence",
+        "scenes": [
+          "The wise men see the star in the East",
+          "The star stops over the house in Bethlehem",
+          "They adore Jesus and give their gifts",
+          "They go home another way"
+        ]
+      },
+      "words": [
+        "Magi",
+        "Epiphany",
+        "gold",
+        "frankincense",
+        "myrrh",
+        "adore"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_EPIPHANY_main.png",
+    "heart": "B_EPIPHANY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_crown.png",
+      "icon_gift.png"
+    ],
+    "mainBrief": "Three Magi kneel with gifts before Mary and Child; star",
+    "heartBrief": "Three gift boxes around the heart to color"
+  }
+}

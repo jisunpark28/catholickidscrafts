@@ -1,0 +1,93 @@
+{
+  "key": "A_EAS03",
+  "liturgicalName": "3rd Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "Luke 24:13-35",
+  "keyVerseDR": "\"Was not our heart burning within us, whilst he spoke in the way and opened to us the scriptures?\" (Lk 24:32)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "On the Road to Emmaus",
+      "story": "Two friends walked to Emmaus. Jesus walked with them, but they did not know Him. When He broke the bread, they knew it was Jesus!",
+      "keyLine": "Jesus walks with me.",
+      "heartTitle": "Walking with Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus walks with me",
+      "heartLabelB": "I walk with Him",
+      "questions": [
+        "How did they know it was Jesus?",
+        "Where do we see Jesus in bread?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Take a prayer walk",
+        "Share bread with family"
+      ],
+      "prayer": "Jesus, walk with me always. Amen.",
+      "activity": {
+        "title": "The road to Emmaus",
+        "intro": "Trace the path of the two friends.",
+        "idea": 100,
+        "type": "maze",
+        "start": "Jerusalem",
+        "goal": "Emmaus"
+      },
+      "words": [
+        "road",
+        "walk",
+        "bread",
+        "know"
+      ]
+    },
+    "level2": {
+      "title": "The Road to Emmaus",
+      "story": "On Easter Sunday, two disciples were walking sadly to a village called Emmaus. Jesus came and walked with them, but they did not recognize Him. He explained what the Scriptures said about the Messiah, and their hearts burned within them. At supper, Jesus took bread, blessed it, broke it, and gave it to them. Then their eyes were opened, and they knew Him in the breaking of the bread.",
+      "keyLine": "Was not our heart burning within us?",
+      "heartTitle": "Word & Bread",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus in Scripture",
+      "heartLabelB": "Jesus in the Eucharist",
+      "questions": [
+        "How is this story like the Mass?",
+        "When has your heart 'burned' for God?"
+      ],
+      "actions": [
+        "Listen closely to the readings at Mass",
+        "Read Luke 24",
+        "Tell someone about Jesus"
+      ],
+      "prayer": "Stay with me, Lord, and open my heart. Amen.",
+      "activity": {
+        "title": "Like Emmaus, like Mass",
+        "intro": "Jesus explained the Scriptures, then broke the bread. Number the parts of the Mass.",
+        "idea": 126,
+        "type": "sequence",
+        "scenes": [
+          "Introductory Rites: we gather",
+          "Liturgy of the Word: we hear the Scriptures",
+          "Liturgy of the Eucharist: bread is blessed and broken",
+          "Concluding Rites: we are sent out"
+        ]
+      },
+      "words": [
+        "Emmaus",
+        "Scripture",
+        "recognize",
+        "breaking bread",
+        "Eucharist",
+        "disciple"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_EAS03_main.png",
+    "heart": "A_EAS03_heart.png",
+    "icons": [
+      "icon_bread.png",
+      "icon_road.png",
+      "icon_cup.png"
+    ],
+    "mainBrief": "Two disciples at a table, Jesus breaking bread, road outside",
+    "heartBrief": "Bread and cup inside heart; footprints path"
+  }
+}

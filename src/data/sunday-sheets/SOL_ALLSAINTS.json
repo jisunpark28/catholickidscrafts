@@ -1,0 +1,101 @@
+{
+  "key": "SOL_ALLSAINTS",
+  "liturgicalName": "All Saints",
+  "season": "Solemnity",
+  "gospelRef": "Matthew 5:1-12a",
+  "keyVerseDR": "\"Be glad and rejoice for your reward is very great in heaven.\" (Mt 5:12)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "God's Holy Friends",
+      "story": "Jesus taught on a mountain. He said, \"Blessed are the poor in spirit, the merciful, and the peacemakers.\" The saints lived this way. We can be saints too!",
+      "keyLine": "I can be a saint!",
+      "heartTitle": "Saint Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Saints love God",
+      "heartLabelB": "I love God",
+      "questions": [
+        "Who is your favorite saint?",
+        "How can you become a saint?"
+      ],
+      "actions": [
+        "Learn about a saint",
+        "Do a kind act",
+        "Pray to my patron saint"
+      ],
+      "prayer": "All holy saints, pray for us. Amen.",
+      "activity": {
+        "title": "Guess the saint",
+        "intro": "Read the clues. Who is it?",
+        "idea": 103,
+        "type": "whoami",
+        "clues": [
+          "I was a young French nun.",
+          "I loved Jesus by doing little things with great love.",
+          "I am called the Little Flower."
+        ],
+        "answer": "St Thérèse",
+        "choices": [
+          "St Thérèse",
+          "St Clare",
+          "St Bernadette"
+        ]
+      },
+      "words": [
+        "saints",
+        "heaven",
+        "holy",
+        "friends"
+      ]
+    },
+    "level2": {
+      "title": "The Beatitudes and the Saints",
+      "story": "Seeing the crowds, Jesus went up a mountain and taught them. \"Blessed are the poor in spirit: for theirs is the kingdom of heaven.\" Blessed are the meek, those who mourn, and those who hunger and thirst after justice. \"Blessed are the merciful... Blessed are the clean of heart... Blessed are the peacemakers.\" Jesus said, \"Be glad and rejoice, for your reward is very great in heaven.\"",
+      "keyLine": "Be glad and rejoice for your reward is very great in heaven.",
+      "heartTitle": "Called to Holiness",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "A saint I admire",
+      "heartLabelB": "A virtue I'll practice",
+      "questions": [
+        "What makes someone a saint?",
+        "Which Beatitude will you live this week?"
+      ],
+      "actions": [
+        "Dress up as a saint",
+        "Pray the Litany of Saints",
+        "Practice one virtue"
+      ],
+      "prayer": "All you holy men and women, pray for us. Amen.",
+      "activity": {
+        "title": "The saint I want to be like",
+        "intro": "All Saints' Day! Write about a saint you admire.",
+        "idea": 72,
+        "type": "prayerframe",
+        "starters": [
+          "The saint I admire is...",
+          "This saint lived the Beatitudes by...",
+          "I want to be like this saint by..."
+        ]
+      },
+      "words": [
+        "saints",
+        "Beatitudes",
+        "communion of saints",
+        "holiness",
+        "heaven",
+        "intercession"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_ALLSAINTS_main.png",
+    "heart": "SOL_ALLSAINTS_heart.png",
+    "icons": [
+      "icon_halo.png",
+      "icon_crown.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Crowd of saints of all ages and nations with halos, children among them, joyful",
+    "heartBrief": "Halos and stars around heart; draw myself as a saint"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "key": "B_LNT05",
+  "liturgicalName": "5th Sunday of Lent (Year A readings may be used)",
+  "season": "Lent",
+  "gospelRef": "John 12:20-33",
+  "keyVerseDR": "\"...unless the grain of wheat falling into the ground die...\" (Jn 12:24)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "A Little Seed",
+      "story": "Some Greeks wanted to see Jesus. Jesus said a grain of wheat must fall into the ground and die to grow. Jesus would give His life for us.",
+      "keyLine": "Jesus gave His life for me.",
+      "heartTitle": "Giving Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus gives",
+      "heartLabelB": "I give",
+      "questions": [
+        "What happens to a seed in the ground?",
+        "What can you give to others?"
+      ],
+      "actions": [
+        "Plant a seed",
+        "Give something up",
+        "Help someone"
+      ],
+      "prayer": "Jesus, thank You for giving Your life. Amen.",
+      "activity": {
+        "title": "The grain of wheat",
+        "intro": "A seed dies and grows into much fruit. Write a thank-you on each leaf.",
+        "idea": 53,
+        "type": "tree",
+        "leaves": 3,
+        "label": "Thank You for Your life"
+      },
+      "words": [
+        "seed",
+        "wheat",
+        "grow",
+        "give"
+      ]
+    },
+    "level2": {
+      "title": "The Grain of Wheat",
+      "story": "Some Greeks came to Philip and said, \"Sir, we would see Jesus.\" Jesus said, \"The hour is come, that the Son of man should be glorified.\" He said that unless the grain of wheat falls into the ground and dies, it remains alone; but if it dies, it brings forth much fruit. A voice came from heaven saying, \"I have both glorified it, and will glorify it again.\" Jesus said, \"And I, if I be lifted up from the earth, will draw all things to Myself.\"",
+      "keyLine": "Unless the grain of wheat falling into the ground die.",
+      "heartTitle": "Dying to Self",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I give up",
+      "heartLabelB": "What grows",
+      "questions": [
+        "How is Jesus like a grain of wheat?",
+        "What does it mean to 'die to self'?"
+      ],
+      "actions": [
+        "Do a sacrifice for someone",
+        "Plant seeds and watch them",
+        "Pray before the crucifix"
+      ],
+      "prayer": "Jesus, help me give my life in love. Amen.",
+      "activity": {
+        "title": "The grain of wheat",
+        "intro": "Fill in the missing words.",
+        "idea": 52,
+        "type": "fillblank",
+        "text": "Unless the grain of [wheat] falling into the ground [die], itself remaineth alone."
+      },
+      "words": [
+        "grain",
+        "wheat",
+        "fruit",
+        "glorify",
+        "lifted up",
+        "sacrifice"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_LNT05_main.png",
+    "heart": "B_LNT05_heart.png",
+    "icons": [
+      "icon_wheat.png",
+      "icon_seed.png",
+      "icon_soil.png"
+    ],
+    "mainBrief": "Grain of wheat falling into soil and sprouting",
+    "heartBrief": "Seed in soil sprouting inside heart"
+  }
+}

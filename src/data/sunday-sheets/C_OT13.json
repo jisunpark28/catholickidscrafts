@@ -1,0 +1,92 @@
+{
+  "key": "C_OT13",
+  "liturgicalName": "13th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 9:51-62",
+  "keyVerseDR": "\"No man putting his hand to the plough and looking back is fit for the kingdom of God.\" (Lk 9:62)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Follow Jesus Now",
+      "story": "Jesus was going to Jerusalem. Some people said, \"I will follow You, but first...\" Jesus said, \"Follow Me now, and don't look back!\"",
+      "keyLine": "I'll follow Jesus now!",
+      "heartTitle": "Following Now",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus calls",
+      "heartLabelB": "I say yes",
+      "questions": [
+        "What did Jesus want people to do?",
+        "How can you follow Jesus today?"
+      ],
+      "actions": [
+        "Obey right away",
+        "Pray now, not later",
+        "Be kind"
+      ],
+      "prayer": "Jesus, I will follow You today. Amen.",
+      "activity": {
+        "title": "I follow Jesus now",
+        "intro": "Put your thumbprint on the cross as a promise.",
+        "idea": 92,
+        "type": "shapecraft",
+        "shape": "cross",
+        "label": "I will follow Jesus now"
+      },
+      "words": [
+        "follow",
+        "now",
+        "later",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "No Looking Back",
+      "story": "As the days drew near, Jesus set His face to go to Jerusalem. A Samaritan village would not receive Him, and James and John wanted to call down fire, but Jesus rebuked them. Someone said, \"I will follow Thee whithersoever Thou goest,\" and Jesus said the Son of man has nowhere to lay His head. Another said, \"Let me first go and bury my father,\" and another wanted first to say goodbye. Jesus said, \"No man putting his hand to the plough, and looking back, is fit for the kingdom of God.\"",
+      "keyLine": "No man putting his hand to the plough and looking back is fit for the kingdom.",
+      "heartTitle": "Wholehearted",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What pulls me back",
+      "heartLabelB": "What moves me forward",
+      "questions": [
+        "Why didn't Jesus punish the village?",
+        "What makes you put off following Jesus?"
+      ],
+      "actions": [
+        "Don't put off prayer",
+        "Forgive instead of getting even",
+        "Finish a commitment"
+      ],
+      "prayer": "Jesus, help me follow You without looking back. Amen.",
+      "activity": {
+        "title": "3 resolutions",
+        "intro": "Don't look back! Write how you'll follow Jesus this week.",
+        "idea": 56,
+        "type": "prayerframe",
+        "starters": [
+          "Right away I will...",
+          "I won't put off...",
+          "I will follow Jesus by..."
+        ]
+      },
+      "words": [
+        "Jerusalem",
+        "Samaritan",
+        "plow",
+        "commitment",
+        "discipleship",
+        "resolve"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT13_main.png",
+    "heart": "C_OT13_heart.png",
+    "icons": [
+      "icon_plow.png",
+      "icon_path.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Plow in a field; Jesus walking toward Jerusalem",
+    "heartBrief": "Path straight ahead in heart"
+  }
+}

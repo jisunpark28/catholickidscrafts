@@ -1,0 +1,109 @@
+{
+  "key": "B_EAS02",
+  "liturgicalName": "2nd Sunday of Easter (Divine Mercy)",
+  "season": "Easter",
+  "gospelRef": "John 20:19-31",
+  "keyVerseDR": "\"...blessed are they that have not seen and have believed.\" (Jn 20:29)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Thomas Believes",
+      "story": "Jesus came through locked doors and said, \"Peace be with you!\" Thomas was not there and doubted. A week later Jesus came again, and Thomas believed!",
+      "keyLine": "My Lord and my God!",
+      "heartTitle": "I Believe",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I trust Jesus",
+      "heartLabelB": "Jesus gives peace",
+      "questions": [
+        "What did Thomas say?",
+        "How do you know Jesus loves you?"
+      ],
+      "actions": [
+        "Say 'Jesus, I trust in You'",
+        "Forgive someone",
+        "Pray"
+      ],
+      "prayer": "Jesus, I trust in You. Amen.",
+      "activity": {
+        "title": "Thomas believes",
+        "intro": "Trace Thomas' words.",
+        "idea": 51,
+        "type": "copyverse",
+        "text": "My Lord, and my God."
+      },
+      "words": [
+        "Thomas",
+        "believe",
+        "peace",
+        "hands"
+      ]
+    },
+    "level2": {
+      "title": "Peace Be With You",
+      "story": "On Easter evening, the doors were shut for fear, and Jesus came and stood in the midst and said, \"Peace be to you.\" He breathed on the disciples and said, \"Receive ye the Holy Ghost: whose sins you shall forgive, they are forgiven them.\" Thomas was not with them and would not believe. Eight days later Jesus came again and said to Thomas, \"Put in thy finger hither, and see My hands.\" Thomas answered, \"My Lord, and my God.\"",
+      "keyLine": "Blessed are they that have not seen and have believed.",
+      "heartTitle": "Divine Mercy",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Mercy I receive",
+      "heartLabelB": "Mercy I give",
+      "questions": [
+        "How did Jesus help Thomas believe?",
+        "How does Jesus give us mercy today?"
+      ],
+      "actions": [
+        "Pray the Divine Mercy Chaplet",
+        "Go to Confession",
+        "Show mercy to someone"
+      ],
+      "prayer": "Jesus, I trust in You. Amen.",
+      "activity": {
+        "title": "The seven sacraments",
+        "intro": "Jesus gave the Apostles power to forgive sins. Match each sacrament to its meaning.",
+        "idea": 46,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Baptism",
+            "New life as God's child"
+          ],
+          [
+            "Confirmation",
+            "Sealed with the Holy Spirit"
+          ],
+          [
+            "Eucharist",
+            "Jesus' Body and Blood"
+          ],
+          [
+            "Reconciliation",
+            "God forgives our sins"
+          ],
+          [
+            "Holy Orders",
+            "Men become priests"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "mercy",
+        "doubt",
+        "wounds",
+        "forgive",
+        "peace",
+        "faith"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_EAS02_main.png",
+    "heart": "B_EAS02_heart.png",
+    "icons": [
+      "icon_hands_wounds.png",
+      "icon_dove.png",
+      "icon_rays_divine_mercy.png"
+    ],
+    "mainBrief": "Risen Jesus showing hands to Thomas in a room",
+    "heartBrief": "Divine Mercy red & pale rays from heart"
+  }
+}

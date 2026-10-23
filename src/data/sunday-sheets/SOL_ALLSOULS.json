@@ -1,0 +1,105 @@
+{
+  "key": "SOL_ALLSOULS",
+  "liturgicalName": "All Souls",
+  "season": "Commemoration (ranks with solemnities for this purpose)",
+  "gospelRef": "John 6:37-40",
+  "keyVerseDR": "\"...every one who seeth the Son and believeth in him may have life everlasting. And I will raise him up in the last day.\" (Jn 6:40)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "We Pray for Those Who Died",
+      "story": "Jesus said, \"I will not turn away anyone who comes to Me.\" He promised to raise us up on the last day. We pray for people who have died.",
+      "keyLine": "Eternal rest grant them.",
+      "heartTitle": "Remembering Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I remember",
+      "heartLabelB": "I pray",
+      "questions": [
+        "Who can you pray for today?",
+        "What did Jesus promise?"
+      ],
+      "actions": [
+        "Pray for someone who died",
+        "Visit a cemetery",
+        "Light a candle"
+      ],
+      "prayer": "Eternal rest grant unto them, O Lord. Amen.",
+      "activity": {
+        "title": "Candles for loved ones",
+        "intro": "Color a candle for each person who has died. Pray for them.",
+        "idea": 97,
+        "type": "candles",
+        "candles": [
+          [
+            "Grandparents",
+            "light"
+          ],
+          [
+            "Family",
+            "light"
+          ],
+          [
+            "Friends",
+            "light"
+          ],
+          [
+            "All souls",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "pray",
+        "heaven",
+        "remember",
+        "hope"
+      ]
+    },
+    "level2": {
+      "title": "I Will Raise Them Up",
+      "story": "Jesus said, \"Him that cometh to Me, I will not cast out.\" He came down from heaven to do the Father's will. The Father wants Jesus to lose no one He has been given. All who believe in the Son may have life everlasting. Jesus promised, \"I will raise him up in the last day.\"",
+      "keyLine": "I will raise him up in the last day.",
+      "heartTitle": "Praying for the Dead",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who I remember",
+      "heartLabelB": "How I pray",
+      "questions": [
+        "Why do Catholics pray for the dead?",
+        "How does Jesus' promise give us hope?"
+      ],
+      "actions": [
+        "Write names in a Book of the Dead",
+        "Pray the Eternal Rest prayer daily",
+        "Visit a grave"
+      ],
+      "prayer": "Lord, grant eternal rest to all the faithful departed. Amen.",
+      "activity": {
+        "title": "Jesus' promise",
+        "intro": "Read it, fold one line at a time, and say it from memory.",
+        "idea": 88,
+        "type": "foldreveal",
+        "question": "What did Jesus promise those who believe?",
+        "answer": "I will raise him up in the last day."
+      },
+      "words": [
+        "purgatory",
+        "faithful departed",
+        "eternal life",
+        "resurrection",
+        "hope",
+        "intercession"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_ALLSOULS_main.png",
+    "heart": "SOL_ALLSOULS_heart.png",
+    "icons": [
+      "icon_candle.png",
+      "icon_cross.png",
+      "icon_leaf.png"
+    ],
+    "mainBrief": "Family lighting a candle at a peaceful cemetery with a cross, autumn leaves",
+    "heartBrief": "Candles around heart; space to write names"
+  }
+}

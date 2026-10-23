@@ -1,0 +1,94 @@
+{
+  "key": "A_OT08",
+  "liturgicalName": "8th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 6:24-34",
+  "keyVerseDR": "\"Seek ye therefore first the kingdom of God, and his justice, and all these things shall be added unto you.\" (Mt 6:33)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "God Takes Care of Me",
+      "story": "Jesus said, \"Look at the birds and the flowers! God takes care of them.\" God takes care of you even more!",
+      "keyLine": "God cares for me.",
+      "heartTitle": "No Worries",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God cares",
+      "heartLabelB": "I trust",
+      "questions": [
+        "Who feeds the birds?",
+        "What can you give to God when you worry?"
+      ],
+      "actions": [
+        "Look at birds and thank God",
+        "Pray when worried",
+        "Share"
+      ],
+      "prayer": "Father, I trust You to care for me. Amen.",
+      "activity": {
+        "title": "Wings of thanks",
+        "intro": "God feeds the birds and clothes the lilies. Write a thank-you on each feather.",
+        "idea": 25,
+        "type": "tree",
+        "leaves": 3,
+        "label": "Thank You for caring for me"
+      },
+      "words": [
+        "birds",
+        "flowers",
+        "worry",
+        "care"
+      ]
+    },
+    "level2": {
+      "title": "Seek First the Kingdom",
+      "story": "Jesus said, \"No one can serve two masters. You cannot serve God and money.\" He told His friends not to worry about food or clothes. \"Look at the birds in the sky; they do not sow or reap, yet your heavenly Father feeds them.\" Even King Solomon was not dressed as beautifully as the lilies of the field. \"Seek first the kingdom of God,\" Jesus said, \"and all these things will be given to you.\"",
+      "keyLine": "Seek ye first the kingdom of God.",
+      "heartTitle": "Trusting God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "My worries",
+      "heartLabelB": "God's promises",
+      "questions": [
+        "What does it mean to seek God first?",
+        "What worry can you hand to God?"
+      ],
+      "actions": [
+        "Pray before worrying",
+        "Give something away",
+        "Thank God for 5 gifts"
+      ],
+      "prayer": "Father, help me seek You first. Amen.",
+      "activity": {
+        "title": "God takes care of me",
+        "intro": "Write 5 blessings God gives you.",
+        "idea": 66,
+        "type": "prayerframe",
+        "starters": [
+          "God feeds me with...",
+          "God clothes me with...",
+          "God gave me a family...",
+          "God gave me friends...",
+          "God gives me peace when..."
+        ]
+      },
+      "words": [
+        "worry",
+        "kingdom",
+        "lilies",
+        "trust",
+        "providence",
+        "mammon"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT08_main.png",
+    "heart": "A_OT08_heart.png",
+    "icons": [
+      "icon_bird.png",
+      "icon_lily.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus pointing to birds and lilies in a field",
+    "heartBrief": "Birds and lilies around heart"
+  }
+}

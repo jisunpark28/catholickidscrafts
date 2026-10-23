@@ -1,0 +1,87 @@
+{
+  "key": "C_ASCENSION",
+  "liturgicalName": "The Ascension of the Lord (Thursday or 7th Sunday of Easter where transferred)",
+  "season": "Easter",
+  "gospelRef": "Luke 24:46-53",
+  "keyVerseDR": "\"...whilst he blessed them, he departed from them and was carried up to heaven.\" (Lk 24:51)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Goes to Heaven",
+      "story": "Jesus told His friends, \"Tell everyone about Me.\" He blessed them and was carried up into heaven. They went back to Jerusalem full of joy!",
+      "keyLine": "Jesus is in heaven.",
+      "heartTitle": "Joy in Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus blesses",
+      "heartLabelB": "I praise",
+      "questions": [
+        "What did Jesus do before He went up?",
+        "Why were the disciples happy?"
+      ],
+      "actions": [
+        "Pray with joy",
+        "Tell about Jesus",
+        "Look up and pray"
+      ],
+      "prayer": "Jesus, bless me from heaven. Amen.",
+      "activity": {
+        "title": "Alleluia!",
+        "intro": "Decorate the letters. Jesus went up to heaven!",
+        "idea": 12,
+        "type": "copyverse",
+        "text": "ALLELUIA"
+      },
+      "words": [
+        "heaven",
+        "bless",
+        "joy",
+        "up"
+      ]
+    },
+    "level2": {
+      "title": "He Was Taken Up",
+      "story": "Jesus said to His disciples that the Christ must suffer and rise from the dead on the third day. He said repentance and forgiveness of sins should be preached in His name to all nations, and \"you are witnesses of these things.\" He promised to send the promise of His Father upon them. Then He led them out to Bethany, lifted up His hands, and blessed them, and He was carried up to heaven. They adored Him and went back to Jerusalem with great joy, praising God in the temple.",
+      "keyLine": "Whilst he blessed them, he departed from them and was carried up to heaven.",
+      "heartTitle": "Witnesses",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I've seen",
+      "heartLabelB": "Who I can tell",
+      "questions": [
+        "Why were they joyful, not sad?",
+        "How can you be Jesus' witness?"
+      ],
+      "actions": [
+        "Pray for missionaries",
+        "Share my faith",
+        "Praise God at Mass"
+      ],
+      "prayer": "Jesus, ascended Lord, make me Your witness. Amen.",
+      "activity": {
+        "title": "You are witnesses",
+        "intro": "Copy the verse. Highlight the word that touched you most.",
+        "idea": 85,
+        "type": "copyverse",
+        "text": "And you are witnesses of these things. And I send the promise of My Father upon you."
+      },
+      "words": [
+        "Ascension",
+        "witnesses",
+        "nations",
+        "power",
+        "bless",
+        "joy"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_ASCENSION_main.png",
+    "heart": "C_ASCENSION_heart.png",
+    "icons": [
+      "icon_cloud.png",
+      "icon_globe.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Jesus blessing as he rises; apostles joyful",
+    "heartBrief": "Globe in heart, arrows going out"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "key": "B_OT18",
+  "liturgicalName": "18th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 6:24-35",
+  "keyVerseDR": "\"I am the bread of life. He that cometh to me shall not hunger...\" (Jn 6:35)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Bread of Life",
+      "story": "The crowd looked for Jesus. They wanted more bread. Jesus said, \"I am the Bread of Life!\"",
+      "keyLine": "Jesus is the Bread of Life.",
+      "heartTitle": "Bread of Life",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus feeds me",
+      "heartLabelB": "I thank Him",
+      "questions": [
+        "What did Jesus call Himself?",
+        "How does Jesus feed our hearts?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Say grace",
+        "Thank Jesus"
+      ],
+      "prayer": "Jesus, Bread of Life, feed my heart. Amen.",
+      "activity": {
+        "title": "The Bread of Life",
+        "intro": "Fill in the missing word.",
+        "idea": 129,
+        "type": "fillblank",
+        "text": "Jesus is the [Bread] of Life."
+      },
+      "words": [
+        "bread",
+        "life",
+        "hungry",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "I Am the Bread of Life",
+      "story": "The crowd got into boats and came to Capernaum looking for Jesus. He said, \"You seek Me because you did eat of the loaves.\" Jesus told them, \"Labour not for the meat which perisheth, but for that which endureth unto life everlasting.\" They asked for a sign, like the manna their fathers ate in the desert. Jesus said, \"I am the bread of life: he that cometh to Me shall not hunger.\"",
+      "keyLine": "I am the bread of life.",
+      "heartTitle": "Food That Lasts",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Food for my body",
+      "heartLabelB": "Food for my soul",
+      "questions": [
+        "How is Jesus like manna?",
+        "What does your soul hunger for?"
+      ],
+      "actions": [
+        "Receive Communion with love",
+        "Fast before Mass",
+        "Visit the Blessed Sacrament"
+      ],
+      "prayer": "Jesus, Bread of Life, I believe in You. Amen.",
+      "activity": {
+        "title": "Bread of Life crossword",
+        "intro": "Solve the crossword from today's Gospel.",
+        "idea": 27,
+        "type": "crossword",
+        "entries": [
+          [
+            "MANNA",
+            "Bread from heaven in the desert"
+          ],
+          [
+            "BREAD",
+            "Jesus is the ___ of life"
+          ],
+          [
+            "HUNGER",
+            "Whoever comes to Jesus will not ___"
+          ],
+          [
+            "SIGN",
+            "The crowd asked Jesus for one"
+          ],
+          [
+            "BOATS",
+            "The crowd came looking in these"
+          ]
+        ]
+      },
+      "words": [
+        "manna",
+        "bread of life",
+        "eternal",
+        "believe",
+        "sign",
+        "hunger"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT18_main.png",
+    "heart": "B_OT18_heart.png",
+    "icons": [
+      "icon_bread.png",
+      "icon_manna.png",
+      "icon_host.png"
+    ],
+    "mainBrief": "Jesus with manna falling in the desert in background",
+    "heartBrief": "Bread of life inside heart"
+  }
+}

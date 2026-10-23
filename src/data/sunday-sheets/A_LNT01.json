@@ -1,0 +1,95 @@
+{
+  "key": "A_LNT01",
+  "liturgicalName": "1st Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "Matthew 4:1-11",
+  "keyVerseDR": "\"The Lord thy God shalt thou adore, and him only shalt thou serve.\" (Mt 4:10)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Jesus Says No",
+      "story": "Jesus went into the desert to pray for 40 days. The devil tried to trick Him. Jesus said no and obeyed God.",
+      "keyLine": "I choose God!",
+      "heartTitle": "Saying No",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say no to",
+      "heartLabelB": "I say yes to",
+      "questions": [
+        "Who did Jesus say no to?",
+        "When can you say no to wrong?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Give up a treat",
+        "Share with others"
+      ],
+      "prayer": "Jesus, help me choose what is good. Amen.",
+      "activity": {
+        "title": "My Lent plan",
+        "intro": "Jesus prayed and fasted. Make your plan for Lent.",
+        "idea": 134,
+        "type": "prayerframe",
+        "starters": [
+          "I will pray by...",
+          "I will give up...",
+          "I will give to others by..."
+        ]
+      },
+      "words": [
+        "desert",
+        "40",
+        "say no",
+        "God"
+      ]
+    },
+    "level2": {
+      "title": "Tempted in the Desert",
+      "story": "After His baptism, the Spirit led Jesus into the desert, where He fasted forty days and forty nights. The devil came and said, \"If You are the Son of God, turn these stones into bread.\" Jesus answered, \"One does not live by bread alone, but by every word that comes from God.\" The devil tempted Him two more times, but Jesus said, \"Worship the Lord your God, and serve Him only.\" Then angels came and served Him.",
+      "keyLine": "The Lord thy God shalt thou adore.",
+      "heartTitle": "My Lent Plan",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Prayer & fasting",
+      "heartLabelB": "Almsgiving",
+      "questions": [
+        "How did Jesus fight temptation?",
+        "What will you do for prayer, fasting, and almsgiving?"
+      ],
+      "actions": [
+        "Choose a Lent sacrifice",
+        "Memorize a Bible verse",
+        "Give to the poor"
+      ],
+      "prayer": "Jesus, make me strong against temptation. Amen.",
+      "activity": {
+        "title": "My media fast",
+        "intro": "Jesus said no to temptation. Give up some screen time and pray instead.",
+        "idea": 121,
+        "type": "tracker",
+        "rows": [
+          "Screen time I gave up",
+          "What I did instead",
+          "A prayer I said"
+        ]
+      },
+      "words": [
+        "temptation",
+        "fast",
+        "Scripture",
+        "Satan",
+        "Lent",
+        "resist"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_LNT01_main.png",
+    "heart": "A_LNT01_heart.png",
+    "icons": [
+      "icon_desert_rock.png",
+      "icon_cactus.png",
+      "icon_bread.png"
+    ],
+    "mainBrief": "Jesus in the desert, calm and praying; rocks and stones",
+    "heartBrief": "Top: 'No' sign over wrong; bottom: heart with cross"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "key": "B_LNT01",
+  "liturgicalName": "1st Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "Mark 1:12-15",
+  "keyVerseDR": "\"The time is accomplished and the kingdom of God is at hand. Repent and believe the gospel.\" (Mk 1:15)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Jesus in the Desert",
+      "story": "The Spirit led Jesus into the desert for 40 days. Satan tempted Him, and angels cared for Him. Jesus said, \"Turn away from sin and believe the Good News!\"",
+      "keyLine": "Turn to God!",
+      "heartTitle": "Turning to God",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I turn from wrong",
+      "heartLabelB": "I turn to God",
+      "questions": [
+        "How many days was Jesus in the desert?",
+        "What will you do for Lent?"
+      ],
+      "actions": [
+        "Give up a treat",
+        "Pray daily",
+        "Give to the poor"
+      ],
+      "prayer": "Jesus, help me have a holy Lent. Amen.",
+      "activity": {
+        "title": "40 days with Jesus",
+        "intro": "Stamp or draw a cross each day you pray, fast, or give.",
+        "idea": 98,
+        "type": "tracker",
+        "rows": [
+          "Pray",
+          "Fast",
+          "Give"
+        ]
+      },
+      "words": [
+        "desert",
+        "40",
+        "angels",
+        "turn"
+      ]
+    },
+    "level2": {
+      "title": "Repent and Believe",
+      "story": "Right after His baptism, the Spirit drove Jesus out into the desert. He was there forty days and forty nights, tempted by Satan. He was with the wild beasts, and the angels ministered to Him. After John was arrested, Jesus came into Galilee preaching the gospel of God. He said, \"The time is accomplished, and the kingdom of God is at hand: repent, and believe the gospel.\"",
+      "keyLine": "Repent and believe the gospel.",
+      "heartTitle": "My Lent Plan",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Prayer & fasting",
+      "heartLabelB": "Almsgiving",
+      "questions": [
+        "Why do we spend forty days in Lent?",
+        "What does 'repent' mean to you?"
+      ],
+      "actions": [
+        "Choose a Lent sacrifice",
+        "Pray daily",
+        "Save for almsgiving"
+      ],
+      "prayer": "Jesus, help me turn back to You. Amen.",
+      "activity": {
+        "title": "Lent resolutions",
+        "intro": "Repent and believe! Write 3 resolutions for Lent.",
+        "idea": 56,
+        "type": "prayerframe",
+        "starters": [
+          "I will pray more by...",
+          "I will turn away from...",
+          "I will give to others by..."
+        ]
+      },
+      "words": [
+        "Lent",
+        "temptation",
+        "repent",
+        "Gospel",
+        "forty",
+        "kingdom"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_LNT01_main.png",
+    "heart": "B_LNT01_heart.png",
+    "icons": [
+      "icon_desert_rock.png",
+      "icon_angel.png",
+      "icon_cactus.png"
+    ],
+    "mainBrief": "Jesus praying in the desert, wild animals calm, angels nearby",
+    "heartBrief": "Top: turn from; bottom: turn to; arrow"
+  }
+}

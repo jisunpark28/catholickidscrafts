@@ -1,0 +1,87 @@
+{
+  "key": "B_TRINITY",
+  "liturgicalName": "The Most Holy Trinity",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 28:16-20",
+  "keyVerseDR": "\"...baptizing them in the name of the Father and of the Son and of the Holy Ghost.\" (Mt 28:19)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "In the Name of the Father",
+      "story": "Jesus met His friends on a mountain. He said, \"Baptize everyone in the name of the Father, and of the Son, and of the Holy Spirit.\" He promised to be with us always.",
+      "keyLine": "One God: Father, Son, Spirit",
+      "heartTitle": "One God, Three Persons",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God loves me",
+      "heartLabelB": "I love God",
+      "questions": [
+        "What are the three Persons of God?",
+        "When do we say their names?"
+      ],
+      "actions": [
+        "Make the Sign of the Cross",
+        "Pray the Glory Be",
+        "Thank God"
+      ],
+      "prayer": "Glory be to the Father, and to the Son, and to the Holy Spirit. Amen.",
+      "activity": {
+        "title": "In the name of...",
+        "intro": "Copy the Sign of the Cross.",
+        "idea": 139,
+        "type": "copyverse",
+        "text": "In the name of the Father, and of the Son, and of the Holy Spirit. Amen."
+      },
+      "words": [
+        "Father",
+        "Son",
+        "Spirit",
+        "baptize"
+      ]
+    },
+    "level2": {
+      "title": "The Great Commission",
+      "story": "The eleven disciples went to the mountain in Galilee where Jesus had sent them. When they saw Him, they adored Him, though some doubted. Jesus said, \"All power is given to Me in heaven and in earth.\" He told them, \"Going therefore, teach ye all nations; baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.\" He promised, \"Behold I am with you all days, even to the consummation of the world.\"",
+      "keyLine": "Baptizing them in the name of the Father and of the Son and of the Holy Ghost.",
+      "heartTitle": "The Trinity",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Father, Son, Spirit",
+      "heartLabelB": "One God",
+      "questions": [
+        "Why is the Trinity a mystery?",
+        "How do we meet the Trinity at baptism?"
+      ],
+      "actions": [
+        "Pray the Sign of the Cross slowly",
+        "Learn a Trinity symbol",
+        "Pray the Glory Be"
+      ],
+      "prayer": "Holy Trinity, one God, I adore You. Amen.",
+      "activity": {
+        "title": "Secret message",
+        "intro": "Use the code to find Jesus' promise.",
+        "idea": 29,
+        "type": "secretcode",
+        "message": "I AM WITH YOU ALL DAYS"
+      },
+      "words": [
+        "Trinity",
+        "baptize",
+        "nations",
+        "disciples",
+        "Persons",
+        "mystery"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_TRINITY_main.png",
+    "heart": "B_TRINITY_heart.png",
+    "icons": [
+      "icon_trinity_triangle.png",
+      "icon_water_shell.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "Jesus on mountain sending apostles; baptism shell",
+    "heartBrief": "Triangle in heart with three names"
+  }
+}

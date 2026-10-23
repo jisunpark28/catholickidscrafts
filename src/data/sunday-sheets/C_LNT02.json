@@ -1,0 +1,87 @@
+{
+  "key": "C_LNT02",
+  "liturgicalName": "2nd Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "Luke 9:28b-36",
+  "keyVerseDR": "\"This is my beloved son. Hear him.\" (Lk 9:35)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Jesus Shines",
+      "story": "Jesus went up a mountain to pray with Peter, John, and James. While He prayed, His face changed and His clothes shone white. A voice said, \"This is My chosen Son. Listen to Him!\"",
+      "keyLine": "Listen to Jesus!",
+      "heartTitle": "Shining Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I listen",
+      "heartLabelB": "I shine",
+      "questions": [
+        "What happened when Jesus prayed?",
+        "How can you listen to Jesus?"
+      ],
+      "actions": [
+        "Read a Bible story",
+        "Pray quietly",
+        "Listen to my parents"
+      ],
+      "prayer": "Jesus, help me listen to You. Amen.",
+      "activity": {
+        "title": "Shining glory",
+        "intro": "Connect the dots to make a shining star.",
+        "idea": 31,
+        "type": "dottodot",
+        "shape": "star"
+      },
+      "words": [
+        "mountain",
+        "pray",
+        "shine",
+        "listen"
+      ]
+    },
+    "level2": {
+      "title": "The Transfiguration",
+      "story": "Jesus took Peter, John, and James up a mountain to pray. While He prayed, His face changed, and His clothing became white and glittering. Moses and Elijah appeared in glory and spoke of His death that He would accomplish in Jerusalem. Peter and those with him were heavy with sleep, but they woke and saw His glory. A cloud came and a voice said, \"This is My beloved Son; hear Him.\"",
+      "keyLine": "This is my beloved son. Hear him.",
+      "heartTitle": "Listening to Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Where I hear Him",
+      "heartLabelB": "How I obey",
+      "questions": [
+        "What were Moses and Elijah talking about?",
+        "How does prayer change us?"
+      ],
+      "actions": [
+        "Spend 5 quiet minutes in prayer",
+        "Read the Sunday Gospel",
+        "Fast from screens"
+      ],
+      "prayer": "Jesus, let me see Your glory and listen. Amen.",
+      "activity": {
+        "title": "Pictograms",
+        "intro": "Draw a simple picture for each key word: Mountain, Prayer, Glory.",
+        "idea": 20,
+        "type": "drawscene",
+        "prompt": "Three small pictures: a mountain, Jesus praying, and shining glory"
+      },
+      "words": [
+        "Transfiguration",
+        "glory",
+        "Moses",
+        "Elijah",
+        "cloud",
+        "exodus"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_LNT02_main.png",
+    "heart": "C_LNT02_heart.png",
+    "icons": [
+      "icon_mountain.png",
+      "icon_cloud.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus praying on mountain, face shining, Moses and Elijah",
+    "heartBrief": "Sun rays radiating from heart; cloud at top"
+  }
+}

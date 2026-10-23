@@ -1,0 +1,105 @@
+{
+  "key": "C_EAS03",
+  "liturgicalName": "3rd Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 21:1-19",
+  "keyVerseDR": "\"Lord, thou knowest all things: thou knowest that I love thee. He said to him: Feed my sheep.\" (Jn 21:17)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Breakfast With Jesus",
+      "story": "Peter and his friends fished all night and caught nothing. Jesus told them where to cast the net, and it filled with fish! Jesus asked Peter three times, \"Do you love Me?\"",
+      "keyLine": "Jesus, I love You!",
+      "heartTitle": "Loving Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love Jesus",
+      "heartLabelB": "I help others",
+      "questions": [
+        "What did Jesus cook?",
+        "How can you show Jesus you love Him?"
+      ],
+      "actions": [
+        "Say 'I love You, Jesus'",
+        "Help my family",
+        "Share food"
+      ],
+      "prayer": "Jesus, You know that I love You. Amen.",
+      "activity": {
+        "title": "A big catch",
+        "intro": "Connect the dots to make a fish.",
+        "idea": 31,
+        "type": "dottodot",
+        "shape": "fish"
+      },
+      "words": [
+        "fish",
+        "net",
+        "breakfast",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Do You Love Me?",
+      "story": "Peter and other disciples went fishing on the Sea of Tiberias, but that night they caught nothing. In the morning, Jesus stood on the shore and said, \"Cast the net on the right side of the ship,\" and they could hardly pull it in for the fish: one hundred fifty-three! The disciple whom Jesus loved said, \"It is the Lord,\" and Peter jumped into the sea. After breakfast by a charcoal fire, Jesus asked Peter three times, \"Lovest thou Me?\" Each time Peter said, \"Yea, Lord, Thou knowest that I love Thee,\" and Jesus said, \"Feed My sheep.\"",
+      "keyLine": "Lord, thou knowest that I love thee. Feed my sheep.",
+      "heartTitle": "Love in Action",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "I love Jesus",
+      "heartLabelB": "I care for His sheep",
+      "questions": [
+        "Why did Jesus ask Peter three times?",
+        "How can you 'feed Jesus' sheep'?"
+      ],
+      "actions": [
+        "Pray for the Pope",
+        "Help someone in need",
+        "Tell Jesus I love Him daily"
+      ],
+      "prayer": "Jesus, You know that I love You; help me serve. Amen.",
+      "activity": {
+        "title": "Gospel numbers",
+        "intro": "Match each number to the story.",
+        "idea": 107,
+        "type": "matchup",
+        "pairs": [
+          [
+            "153",
+            "Large fish in the net"
+          ],
+          [
+            "3",
+            "Times Jesus asked, Do you love Me?"
+          ],
+          [
+            "7",
+            "Disciples who went fishing"
+          ],
+          [
+            "0",
+            "Fish caught during the night"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Tiberias",
+        "153 fish",
+        "breakfast",
+        "Peter",
+        "love",
+        "feed my sheep"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_EAS03_main.png",
+    "heart": "C_EAS03_heart.png",
+    "icons": [
+      "icon_fish.png",
+      "icon_net.png",
+      "icon_fire.png"
+    ],
+    "mainBrief": "Breakfast fire on the beach; net full of fish; Jesus and Peter",
+    "heartBrief": "Three small hearts: 'I love you'"
+  }
+}

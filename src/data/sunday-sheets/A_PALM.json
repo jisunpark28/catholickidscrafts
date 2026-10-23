@@ -1,0 +1,93 @@
+{
+  "key": "A_PALM",
+  "liturgicalName": "Palm Sunday of the Passion of the Lord",
+  "season": "Holy Week",
+  "gospelRef": "Matthew 21:1-11 (procession); Matthew 26:14–27:66",
+  "keyVerseDR": "\"Hosanna to the son of David: Blessed is he that cometh in the name of the Lord...\" (Mt 21:9)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "Hosanna!",
+      "story": "Jesus rode a donkey into Jerusalem. People waved palm branches. They shouted, \"Hosanna!\"",
+      "keyLine": "Hosanna to Jesus!",
+      "heartTitle": "Hosanna Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I praise",
+      "heartLabelB": "I love",
+      "questions": [
+        "What did people wave?",
+        "How can you praise Jesus?"
+      ],
+      "actions": [
+        "Wave a palm",
+        "Sing Hosanna",
+        "Pray at the cross"
+      ],
+      "prayer": "Jesus, my King, I love You. Amen.",
+      "activity": {
+        "title": "Into Jerusalem",
+        "intro": "Help the donkey carry Jesus into the city. Shout Hosanna!",
+        "idea": 26,
+        "type": "maze",
+        "start": "Donkey and colt",
+        "goal": "Jerusalem"
+      },
+      "words": [
+        "palm",
+        "donkey",
+        "Hosanna",
+        "king"
+      ]
+    },
+    "level2": {
+      "title": "The King on a Donkey",
+      "story": "As Jesus came near Jerusalem, He sent two disciples to bring a donkey and its colt. Jesus rode into the city, and the crowds spread their cloaks and branches on the road. They shouted, \"Hosanna to the Son of David! Blessed is He who comes in the name of the Lord!\" The whole city asked, \"Who is this?\" This week we remember how Jesus suffered and died on the cross for us.",
+      "keyLine": "Blessed is he that cometh in the name of the Lord.",
+      "heartTitle": "Holy Week",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus gave",
+      "heartLabelB": "I give",
+      "questions": [
+        "Why did the crowd change from praise to 'Crucify him'?",
+        "How will you walk with Jesus this Holy Week?"
+      ],
+      "actions": [
+        "Attend Holy Week services",
+        "Pray before a crucifix",
+        "Do a hidden sacrifice"
+      ],
+      "prayer": "Jesus, thank You for dying for me. Amen.",
+      "activity": {
+        "title": "Holy Week in order",
+        "intro": "Number what happened to Jesus in order.",
+        "idea": 137,
+        "type": "sequence",
+        "scenes": [
+          "Jesus rides into Jerusalem",
+          "Jesus shares the Last Supper",
+          "Jesus carries His cross",
+          "Jesus dies on the cross"
+        ]
+      },
+      "words": [
+        "Hosanna",
+        "Passion",
+        "Last Supper",
+        "cross",
+        "sacrifice",
+        "Holy Week"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_PALM_main.png",
+    "heart": "A_PALM_heart.png",
+    "icons": [
+      "icon_palm.png",
+      "icon_donkey.png",
+      "icon_cross.png"
+    ],
+    "mainBrief": "Jesus on a donkey, crowd waving palm branches",
+    "heartBrief": "Palm branches framing heart; small cross"
+  }
+}

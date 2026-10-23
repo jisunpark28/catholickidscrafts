@@ -1,0 +1,104 @@
+{
+  "key": "C_TRINITY",
+  "liturgicalName": "The Most Holy Trinity",
+  "season": "Ordinary Time",
+  "gospelRef": "John 16:12-15",
+  "keyVerseDR": "\"But when he, the Spirit of truth, is come, he will teach you all truth.\" (Jn 16:13)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "God Is Three in One",
+      "story": "Jesus said the Holy Spirit will guide us to all truth. The Spirit tells us about Jesus. God is Father, Son, and Holy Spirit.",
+      "keyLine": "One God, three Persons.",
+      "heartTitle": "One God, Three Persons",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God loves me",
+      "heartLabelB": "I love God",
+      "questions": [
+        "Who are the three Persons in God?",
+        "How do we pray to the Trinity?"
+      ],
+      "actions": [
+        "Make the Sign of the Cross",
+        "Pray the Glory Be",
+        "Thank God"
+      ],
+      "prayer": "Glory be to the Father, and to the Son, and to the Holy Spirit. Amen.",
+      "activity": {
+        "title": "One God",
+        "intro": "Use the first letters to solve the crossword.",
+        "idea": 37,
+        "type": "crossword",
+        "entries": [
+          [
+            "FATHER",
+            "The first Person of the Trinity"
+          ],
+          [
+            "SON",
+            "Jesus is God the ___"
+          ],
+          [
+            "SPIRIT",
+            "He guides us to all truth"
+          ],
+          [
+            "TRUTH",
+            "The Spirit will teach you all ___"
+          ]
+        ]
+      },
+      "words": [
+        "Father",
+        "Son",
+        "Spirit",
+        "one"
+      ]
+    },
+    "level2": {
+      "title": "The Spirit of Truth",
+      "story": "Jesus said to His disciples, \"I have yet many things to say to you: but you cannot bear them now.\" He said, \"When He, the Spirit of truth, is come, He will teach you all truth.\" The Spirit would not speak on His own but would tell them what He hears. Jesus said, \"He shall glorify Me; because He shall receive of Mine, and shall shew it to you.\" Jesus said, \"All things whatsoever the Father hath, are Mine.\"",
+      "keyLine": "When he, the Spirit of truth, is come, he will teach you all truth.",
+      "heartTitle": "The Trinity",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Father, Son, Spirit",
+      "heartLabelB": "One God",
+      "questions": [
+        "How does the Spirit guide the Church?",
+        "Why is the Trinity a mystery of love?"
+      ],
+      "actions": [
+        "Pray the Sign of the Cross slowly",
+        "Learn a Trinity symbol",
+        "Pray to the Holy Spirit"
+      ],
+      "prayer": "Holy Trinity, one God, I adore You. Amen.",
+      "activity": {
+        "title": "TRINITY acrostic",
+        "intro": "Write a line about God for each letter.",
+        "idea": 62,
+        "type": "acrostic",
+        "word": "TRINITY"
+      },
+      "words": [
+        "Trinity",
+        "Spirit of truth",
+        "guide",
+        "glorify",
+        "Father",
+        "mystery"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_TRINITY_main.png",
+    "heart": "C_TRINITY_heart.png",
+    "icons": [
+      "icon_trinity_triangle.png",
+      "icon_dove.png",
+      "icon_shamrock.png"
+    ],
+    "mainBrief": "Simple Trinity symbol: triangle with dove, hand, and cross",
+    "heartBrief": "Shamrock / triangle in heart"
+  }
+}

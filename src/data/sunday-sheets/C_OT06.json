@@ -1,0 +1,89 @@
+{
+  "key": "C_OT06",
+  "liturgicalName": "6th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 6:17, 20-26",
+  "keyVerseDR": "\"Blessed are ye poor: for yours is the kingdom of God.\" (Lk 6:20)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Blessed Are You",
+      "story": "Jesus taught a big crowd on a flat place. He said, \"Blessed are you who are poor and hungry.\" God takes care of them!",
+      "keyLine": "God cares for the poor.",
+      "heartTitle": "Blessed Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God cares",
+      "heartLabelB": "I care",
+      "questions": [
+        "Who did Jesus say is blessed?",
+        "How can you help someone poor or sad?"
+      ],
+      "actions": [
+        "Give to the poor",
+        "Comfort someone sad",
+        "Pray"
+      ],
+      "prayer": "Jesus, help me care for others. Amen.",
+      "activity": {
+        "title": "Help the poor",
+        "intro": "God cares for the poor. Write 3 ways to help.",
+        "idea": 64,
+        "type": "tree",
+        "leaves": 3,
+        "label": "Ways I can help the poor"
+      },
+      "words": [
+        "blessed",
+        "poor",
+        "happy",
+        "God"
+      ]
+    },
+    "level2": {
+      "title": "Blessings and Woes",
+      "story": "Jesus came down with the Twelve and stood on a level place, with a great crowd from all Judea. Lifting His eyes to His disciples, He said, \"Blessed are ye poor, for yours is the kingdom of God.\" He said, \"Blessed are ye that hunger now: for you shall be filled. Blessed are ye that weep now: for you shall laugh.\" Jesus said to rejoice when people hate you because of Him, for your reward is great in heaven. He warned, \"Woe to you that are rich: for you have your consolation.\"",
+      "keyLine": "Blessed are ye poor: for yours is the kingdom of God.",
+      "heartTitle": "True Happiness",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What the world says",
+      "heartLabelB": "What Jesus says",
+      "questions": [
+        "Why does Jesus call the poor blessed?",
+        "What does Jesus warn the rich about?"
+      ],
+      "actions": [
+        "Donate to the poor",
+        "Thank God for what I have",
+        "Stand with someone teased"
+      ],
+      "prayer": "Jesus, make me rich in what matters. Amen.",
+      "activity": {
+        "title": "Weighing it up",
+        "intro": "Weigh what lasts: God's blessings or things of this world?",
+        "idea": 95,
+        "type": "scale",
+        "left": "Riches of this world",
+        "right": "Treasure in God's kingdom"
+      },
+      "words": [
+        "Beatitudes",
+        "woes",
+        "poor",
+        "hungry",
+        "persecuted",
+        "reward"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT06_main.png",
+    "heart": "C_OT06_heart.png",
+    "icons": [
+      "icon_sun.png",
+      "icon_bread.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Jesus on a level plain teaching a crowd with poor families",
+    "heartBrief": "Blessed faces around heart"
+  }
+}

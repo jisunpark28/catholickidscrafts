@@ -1,0 +1,94 @@
+{
+  "key": "C_OT29",
+  "liturgicalName": "29th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 18:1-8",
+  "keyVerseDR": "\"...we ought always to pray and not to faint.\" (Lk 18:1)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Keep Praying!",
+      "story": "A widow kept asking a judge to help her. She did not give up, so he helped her. Jesus said, \"Always pray and never give up!\"",
+      "keyLine": "Always pray!",
+      "heartTitle": "Never Give Up",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I keep praying",
+      "heartLabelB": "God listens",
+      "questions": [
+        "What did the woman keep doing?",
+        "What will you keep praying for?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Keep trying",
+        "Trust God"
+      ],
+      "prayer": "God, I will keep praying to You. Amen.",
+      "activity": {
+        "title": "Always pray",
+        "intro": "Never give up praying! Check each time you pray grace.",
+        "idea": 110,
+        "type": "tracker",
+        "rows": [
+          "Grace before meals",
+          "Grace after meals"
+        ]
+      },
+      "words": [
+        "pray",
+        "ask",
+        "keep",
+        "listen"
+      ]
+    },
+    "level2": {
+      "title": "The Persistent Widow",
+      "story": "Jesus told a parable to show that we ought always to pray and not lose heart. In a city there was a judge who did not fear God or respect people. A widow kept coming to him, saying, \"Avenge me of my adversary.\" At last the judge said, \"Because this widow is troublesome to me, I will avenge her.\" Jesus said God will surely help His chosen ones who cry to Him day and night, and asked, \"When the Son of man cometh, shall He find, think you, faith on earth?\"",
+      "keyLine": "We ought always to pray and not to faint.",
+      "heartTitle": "Persistent Prayer",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I pray for",
+      "heartLabelB": "Why I don't give up",
+      "questions": [
+        "How is God different from the unjust judge?",
+        "What makes it hard to keep praying?"
+      ],
+      "actions": [
+        "Pray for one intention every day",
+        "Start a prayer journal",
+        "Pray for justice"
+      ],
+      "prayer": "Lord, teach me to pray always. Amen.",
+      "activity": {
+        "title": "Pray day and night",
+        "intro": "Draw your prayer times on the clocks.",
+        "idea": 106,
+        "type": "clock",
+        "labels": [
+          "Morning",
+          "Meals",
+          "Night"
+        ]
+      },
+      "words": [
+        "persistent",
+        "widow",
+        "judge",
+        "justice",
+        "prayer",
+        "faith"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT29_main.png",
+    "heart": "C_OT29_heart.png",
+    "icons": [
+      "icon_door.png",
+      "icon_praying_hands.png",
+      "icon_scales.png"
+    ],
+    "mainBrief": "Widow knocking at the judge's door",
+    "heartBrief": "Praying hands; calendar of prayers"
+  }
+}

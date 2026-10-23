@@ -1,0 +1,91 @@
+{
+  "key": "B_OT15",
+  "liturgicalName": "15th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 6:7-13",
+  "keyVerseDR": "\"And he called the twelve; and began to send them two and two...\" (Mk 6:7)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Sends His Friends",
+      "story": "Jesus sent His twelve Apostles out two by two. He told them to take only a walking stick. They preached and healed many sick people.",
+      "keyLine": "Jesus sends me too!",
+      "heartTitle": "Sent Out",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus sends",
+      "heartLabelB": "I share",
+      "questions": [
+        "How did Jesus send His friends?",
+        "Who can you share Jesus with?"
+      ],
+      "actions": [
+        "Tell a friend about God",
+        "Help someone",
+        "Pray"
+      ],
+      "prayer": "Jesus, send me to share Your love. Amen.",
+      "activity": {
+        "title": "Sent two by two",
+        "intro": "Color your mission badge.",
+        "idea": 84,
+        "type": "badge",
+        "label": "Sent by Jesus"
+      },
+      "words": [
+        "send",
+        "two",
+        "share",
+        "heal"
+      ]
+    },
+    "level2": {
+      "title": "Sent Two by Two",
+      "story": "Jesus called the Twelve and began to send them out two by two, giving them power over unclean spirits. He told them to take nothing for the journey but a staff: no bread, no bag, no money. They were to wear sandals and not take two coats. If a place would not receive them, they were to shake the dust off their feet. They went out and preached that people should repent, cast out many devils, and anointed many sick with oil.",
+      "keyLine": "He called the twelve; and began to send them two and two.",
+      "heartTitle": "On Mission",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I bring",
+      "heartLabelB": "Who I trust",
+      "questions": [
+        "Why did Jesus send them with so little?",
+        "Who is your 'mission partner'?"
+      ],
+      "actions": [
+        "Do a service project with a friend",
+        "Pray for missionaries",
+        "Share my faith"
+      ],
+      "prayer": "Jesus, send me out with Your power. Amen.",
+      "activity": {
+        "title": "My mission this week",
+        "intro": "Jesus sends us too! Write 3 resolutions.",
+        "idea": 56,
+        "type": "prayerframe",
+        "starters": [
+          "I will share Jesus with...",
+          "I will help someone by...",
+          "I will pray for..."
+        ]
+      },
+      "words": [
+        "mission",
+        "two by two",
+        "trust",
+        "anoint",
+        "repentance",
+        "apostles"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT15_main.png",
+    "heart": "B_OT15_heart.png",
+    "icons": [
+      "icon_walking_stick.png",
+      "icon_footprints.png",
+      "icon_sandal.png"
+    ],
+    "mainBrief": "Jesus sending the Twelve two by two with walking sticks",
+    "heartBrief": "Two by two footprints in heart"
+  }
+}

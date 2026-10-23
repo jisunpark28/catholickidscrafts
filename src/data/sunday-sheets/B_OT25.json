@@ -1,0 +1,88 @@
+{
+  "key": "B_OT25",
+  "liturgicalName": "25th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 9:30-37",
+  "keyVerseDR": "\"If any man desire to be first, he shall be the last of all and be minister of all.\" (Mk 9:34 DR)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Be Like a Child",
+      "story": "The disciples argued about who was the greatest. Jesus took a little child in His arms. He said, \"Whoever welcomes a child like this welcomes Me.\"",
+      "keyLine": "Serve others first.",
+      "heartTitle": "Humble Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I serve",
+      "heartLabelB": "I welcome",
+      "questions": [
+        "Who did Jesus hug?",
+        "How can you let others go first?"
+      ],
+      "actions": [
+        "Let someone go first",
+        "Help a little kid",
+        "Share"
+      ],
+      "prayer": "Jesus, make me humble. Amen.",
+      "activity": {
+        "title": "Servant badge",
+        "intro": "Whoever wants to be first must serve. Color your badge.",
+        "idea": 10,
+        "type": "badge",
+        "label": "Servant of all"
+      },
+      "words": [
+        "child",
+        "great",
+        "serve",
+        "welcome"
+      ]
+    },
+    "level2": {
+      "title": "Who Is the Greatest?",
+      "story": "Jesus taught His disciples that He would be killed and rise again, but they did not understand. On the way, they argued among themselves about who was the greatest. Jesus sat down and said, \"If any man desire to be first, he shall be the last of all, and the minister of all.\" Taking a child, He set him in their midst and embraced him. Jesus said, \"Whosoever shall receive one such child as this in My name, receiveth Me.\"",
+      "keyLine": "If any man desire to be first, he shall be the last of all.",
+      "heartTitle": "Servant of All",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Wanting to be first",
+      "heartLabelB": "Choosing to serve",
+      "questions": [
+        "Why did Jesus use a child as an example?",
+        "Where do you want to be 'first'?"
+      ],
+      "actions": [
+        "Let others go first",
+        "Help a younger child",
+        "Serve at home"
+      ],
+      "prayer": "Jesus, teach me to be servant of all. Amen.",
+      "activity": {
+        "title": "A secret good deed",
+        "intro": "Fold it closed. Do this in secret, then open after.",
+        "idea": 123,
+        "type": "foldreveal",
+        "question": "What secret good deed will I do to serve someone this week?",
+        "answer": "Jesus sees what is done in secret. Thank you for serving like Him!"
+      },
+      "words": [
+        "greatest",
+        "servant",
+        "humble",
+        "child",
+        "welcome",
+        "ambition"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT25_main.png",
+    "heart": "B_OT25_heart.png",
+    "icons": [
+      "icon_child.png",
+      "icon_towel_basin.png",
+      "icon_crown.png"
+    ],
+    "mainBrief": "Jesus placing a child in the middle of disciples",
+    "heartBrief": "Child figure in heart"
+  }
+}

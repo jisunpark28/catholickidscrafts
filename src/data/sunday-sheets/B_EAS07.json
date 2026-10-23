@@ -1,0 +1,97 @@
+{
+  "key": "B_EAS07",
+  "liturgicalName": "7th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 17:11b-19",
+  "keyVerseDR": "\"Sanctify them in truth. Thy word is truth.\" (Jn 17:17)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Prays for Us",
+      "story": "Jesus prayed to His Father for His friends. He asked God to keep them safe and make them holy. Jesus prays for us too!",
+      "keyLine": "Jesus prays for me.",
+      "heartTitle": "Praying Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus prays for me",
+      "heartLabelB": "I pray for others",
+      "questions": [
+        "What did Jesus pray for?",
+        "Who can you pray for?"
+      ],
+      "actions": [
+        "Pray for my family",
+        "Pray for a friend",
+        "Read God's word"
+      ],
+      "prayer": "Jesus, keep me holy and safe. Amen.",
+      "activity": {
+        "title": "My thank-you prayer",
+        "intro": "Jesus prayed for His friends. Write a short prayer of thanks.",
+        "idea": 61,
+        "type": "prayerframe",
+        "starters": [
+          "Thank You, God, for...",
+          "Thank You for my friends...",
+          "Keep us safe and..."
+        ]
+      },
+      "words": [
+        "pray",
+        "holy",
+        "safe",
+        "truth"
+      ]
+    },
+    "level2": {
+      "title": "Consecrate Them in Truth",
+      "story": "At the Last Supper, Jesus prayed, \"Holy Father, keep them in Thy name whom Thou hast given Me; that they may be one, as We also are.\" He said He had kept them safe while He was with them. Jesus prayed that they would have His joy filled in themselves. He asked the Father to keep them from evil, because they are not of the world. Jesus prayed, \"Sanctify them in truth. Thy word is truth.\"",
+      "keyLine": "Sanctify them in truth. Thy word is truth.",
+      "heartTitle": "In the World, Not of It",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What the world says",
+      "heartLabelB": "What God says",
+      "questions": [
+        "What does 'in the world but not of it' mean?",
+        "How does God's word make us holy?"
+      ],
+      "actions": [
+        "Pray the Pentecost novena",
+        "Read Scripture daily",
+        "Stand for the truth"
+      ],
+      "prayer": "Father, make me holy in Your truth. Amen.",
+      "activity": {
+        "title": "Five-finger prayer",
+        "intro": "Trace your hand. Pray for someone on each finger.",
+        "idea": 86,
+        "type": "hand",
+        "fingers": [
+          "Thumb: my family",
+          "Pointer: teachers",
+          "Tall: leaders",
+          "Ring: the sick",
+          "Little: me"
+        ]
+      },
+      "words": [
+        "consecrate",
+        "sanctify",
+        "truth",
+        "world",
+        "evil one",
+        "unity"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_EAS07_main.png",
+    "heart": "B_EAS07_heart.png",
+    "icons": [
+      "icon_praying_hands.png",
+      "icon_bible.png",
+      "icon_candle.png"
+    ],
+    "mainBrief": "Jesus praying for disciples, protective light around them",
+    "heartBrief": "Open Bible in heart"
+  }
+}
