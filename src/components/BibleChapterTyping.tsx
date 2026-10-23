@@ -23,6 +23,8 @@ type Props = {
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
   memoSetup?: PassageMemoSetup | null;
+  /** Verse start offsets in the normalized chapter text (display-only verse numbers). */
+  verseMarkers?: readonly { verse: number; start: number }[];
 };
 
 export function BibleChapterTyping({
@@ -36,6 +38,7 @@ export function BibleChapterTyping({
   discussionSignedIn,
   discussionReaderLabel,
   memoSetup = null,
+  verseMarkers,
 }: Props) {
   const memos = usePassageMemos({ bookSlug, bookName, chapter, text, setup: memoSetup });
   const [stickerError, setStickerError] = useState("");
@@ -81,6 +84,8 @@ export function BibleChapterTyping({
         hideInstructions
         hideTitle
         appearance="bible"
+        verseMarkers={verseMarkers}
+        chapterLabel={`${bookName} · ${labels.chapter} ${chapter}`}
         {...memos.typingProps}
         completionMessage={
           <p>

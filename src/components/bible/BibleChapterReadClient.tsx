@@ -24,6 +24,7 @@ type Props = {
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
   memoSetup?: PassageMemoSetup | null;
+  verseMarkers?: readonly { verse: number; start: number }[];
 };
 
 export function BibleChapterReadClient({
@@ -35,6 +36,7 @@ export function BibleChapterReadClient({
   discussionSignedIn,
   discussionReaderLabel,
   memoSetup = null,
+  verseMarkers,
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -97,6 +99,7 @@ export function BibleChapterReadClient({
         discussionSignedIn={discussionSignedIn}
         discussionReaderLabel={discussionReaderLabel}
         memoSetup={memoSetup}
+        verseMarkers={verseMarkers}
       />
     </div>
   );

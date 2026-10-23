@@ -90,6 +90,7 @@ export default async function BibleReadPage({ params }: Props) {
             discussionSignedIn={signedIn}
             discussionReaderLabel={readerLabel}
             memoSetup={memoSetup}
+            verseMarkers={verseTable?.verses}
           />
         </Suspense>
       </HubTypingWidth>
