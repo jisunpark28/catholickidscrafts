@@ -39,6 +39,9 @@ jobs:
       - name: CSP header checks
         run: pnpm exec tsx scripts/test-csp.ts
 
+      - name: Sheet key mapping (romcal, enabled countries 2025-2035)
+        run: pnpm exec tsx scripts/test-sheet-keys.ts
+
       - name: Preview build (skip DB migrate)
         run: VERCEL_ENV=preview bash scripts/vercel-build.sh
         env:

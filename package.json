@@ -28,7 +28,8 @@
     "vestments:split": "node scripts/split-vestment-spritesheet.mjs",
     "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs",
     "generate:favicons": "python3 scripts/generate-favicons.py",
-    "export:mass-participation": "tsx scripts/export-mass-participation-bundle.ts"
+    "export:mass-participation": "tsx scripts/export-mass-participation-bundle.ts",
+    "test:sheet-keys": "tsx scripts/test-sheet-keys.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
