@@ -62,7 +62,26 @@ type Props = {
   onPassageElement?: (el: HTMLParagraphElement | null) => void;
   /** Filled with a function that returns focus + caret to the typing box. */
   typingFocusRef?: React.MutableRefObject<(() => void) | null>;
+  /**
+   * Display-only verse numbers: `start` is the character index in the normalized passage
+   * where each verse begins. They take no layout width and are never part of the typed text.
+   */
+  verseMarkers?: readonly { verse: number; start: number }[];
+  /** Pane heading, e.g. "Genesis · Chapter 1" (replaces the generic "Passage" label). */
+  chapterLabel?: string;
 };
+
+/** Zero-width superscript verse number placed before a verse's first character. */
+function VerseMarker({ verse, speak }: { verse: number; speak: boolean }) {
+  return (
+    <span className="gospel-typing-verse" data-verse={verse}>
+      <span className="gospel-typing-verse__num" aria-hidden>
+        {verse}
+      </span>
+      {speak ? <span className="sr-only">Verse {verse}. </span> : null}
+    </span>
+  );
+}
 
 function usesGospelCharStyles(appearance: Appearance): boolean {
   return appearance === "gospel" || appearance === "bible";
@@ -164,6 +183,8 @@ export function PassageTypingGame({
   passageAddon,
   onPassageElement,
   typingFocusRef,
+  verseMarkers,
+  chapterLabel,
 }: Props) {
   const isBible = appearance === "bible";
   const isGospel = appearance === "gospel" || isBible;
@@ -207,6 +228,11 @@ export function PassageTypingGame({
   const [caretPoint, setCaretPoint] = useState<CaretPoint | null>(null);
   const [inputFocused, setInputFocused] = useState(false);
 
+  const verseAt = useMemo(() => {
+    const map = new Map<number, number>();
+    for (const m of verseMarkers ?? []) map.set(m.start, m.verse);
+    return map;
+  }, [verseMarkers]);
   const typedNorm = useMemo(() => normalizeTypingInput(typed), [typed]);
   const nextIndex = typedNorm.length;
   const composedValue = useMemo(() => composedTypingValue(typed, target), [typed, target]);
@@ -563,6 +589,7 @@ export function PassageTypingGame({
     >
       {target.split("").map((char, i) => (
         <Fragment key={i}>
+          {verseAt.has(i) ? <VerseMarker verse={verseAt.get(i)!} speak /> : null}
           <span
             data-ci={i}
             className={
@@ -589,9 +616,13 @@ export function PassageTypingGame({
         {target.split("").map((char, i) => {
           const hasTyped = i < typed.length;
           const displayChar = hasTyped ? typed[i]! : char;
+          const verse = verseAt.get(i);
           return (
+            <Fragment key={i}>
+            {verse != null && i <= typed.length ? (
+              <VerseMarker verse={verse} speak={false} />
+            ) : null}
             <span
-              key={i}
               data-char-index={i}
               className={
                 hasTyped
@@ -601,6 +632,7 @@ export function PassageTypingGame({
             >
               {displayChar}
             </span>
+            </Fragment>
           );
         })}
       </p>
@@ -899,7 +931,7 @@ export function PassageTypingGame({
           <>
             <div className="gospel-typing__columns">
               <div className="gospel-typing__passage-pane relative">
-                <p className="gospel-typing__pane-label">Passage</p>
+                <p className="gospel-typing__pane-label">{chapterLabel ?? "Passage"}</p>
                 {passagePanel}
                 {passageAddon}
               </div>

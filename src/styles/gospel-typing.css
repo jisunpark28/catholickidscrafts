@@ -372,3 +372,30 @@
 .gospel-typing__footer {
   flex-shrink: 0;
 }
+
+/* Display-only verse numbers: zero width so wrapping matches the typing textarea exactly */
+.gospel-typing .gospel-typing-verse {
+  position: relative;
+}
+
+.gospel-typing .gospel-typing-verse__num {
+  position: absolute;
+  right: 0.06em;
+  bottom: 0.72em;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: max(0.42em, 10px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #b0896a;
+  opacity: 0.85;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gospel-typing .gospel-typing-verse .sr-only {
+  user-select: none;
+  -webkit-user-select: none;
+}
