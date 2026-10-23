@@ -1,0 +1,107 @@
+{
+  "key": "B_OT09",
+  "liturgicalName": "9th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 2:23–3:6",
+  "keyVerseDR": "\"The sabbath was made for man, and not man for the sabbath.\" (Mk 2:27)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "A Day for God",
+      "story": "On the sabbath, Jesus' friends picked grain to eat. Jesus said, \"The sabbath was made for people.\" Then He healed a man's hand on the sabbath.",
+      "keyLine": "Sunday is God's day.",
+      "heartTitle": "Holy Sunday",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I rest",
+      "heartLabelB": "I do good",
+      "questions": [
+        "What did Jesus heal?",
+        "What do you do on Sundays?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Rest with family",
+        "Do a kind thing"
+      ],
+      "prayer": "Jesus, help me keep Sunday holy. Amen.",
+      "activity": {
+        "title": "Keep holy the Lord's Day",
+        "intro": "Color a heart each Sunday you go to Mass and do good.",
+        "idea": 79,
+        "type": "tracker",
+        "rows": [
+          "I kept Sunday holy"
+        ]
+      },
+      "words": [
+        "Sunday",
+        "rest",
+        "hand",
+        "good"
+      ]
+    },
+    "level2": {
+      "title": "Lord of the Sabbath",
+      "story": "On the sabbath, Jesus' disciples began to pluck ears of corn as they walked. The Pharisees asked why they did what was not lawful on the sabbath. Jesus said, \"The sabbath was made for man, and not man for the sabbath.\" In the synagogue there was a man with a withered hand. Jesus asked, \"Is it lawful to do good on the sabbath days, or to do evil?\" and He said, \"Stretch forth thy hand,\" and it was healed.",
+      "keyLine": "The sabbath was made for man, and not man for the sabbath.",
+      "heartTitle": "The Lord's Day",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I rest",
+      "heartLabelB": "How I do good",
+      "questions": [
+        "Why were the Pharisees angry?",
+        "How can your family make Sunday special?"
+      ],
+      "actions": [
+        "Go to Mass and rest",
+        "Make Sunday family time",
+        "Do a good deed on Sunday"
+      ],
+      "prayer": "Lord of the Sabbath, make my Sundays holy. Amen.",
+      "activity": {
+        "title": "Mass postures",
+        "intro": "Sunday is the Lord's Day! Match each part of Mass to our posture.",
+        "idea": 131,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Gospel",
+            "Stand"
+          ],
+          [
+            "First Reading",
+            "Sit"
+          ],
+          [
+            "Consecration",
+            "Kneel"
+          ],
+          [
+            "Our Father",
+            "Stand"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Sabbath",
+        "Lord's Day",
+        "withered hand",
+        "Pharisees",
+        "rest",
+        "good"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT09_main.png",
+    "heart": "B_OT09_heart.png",
+    "icons": [
+      "icon_hands_reaching.png",
+      "icon_church.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus healing a man's hand in synagogue on the Sabbath",
+    "heartBrief": "Calendar 'Sunday' in heart"
+  }
+}

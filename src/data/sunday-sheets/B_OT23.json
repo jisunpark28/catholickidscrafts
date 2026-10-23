@@ -1,0 +1,92 @@
+{
+  "key": "B_OT23",
+  "liturgicalName": "23rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 7:31-37",
+  "keyVerseDR": "\"He hath done all things well. He hath made both the deaf to hear and the dumb to speak.\" (Mk 7:37)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Be Opened!",
+      "story": "People brought Jesus a man who could not hear or speak. Jesus touched his ears and said, \"Ephphatha!\" which means \"Be opened!\" The man could hear and speak!",
+      "keyLine": "Jesus does all things well.",
+      "heartTitle": "Open Ears",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I hear God",
+      "heartLabelB": "I speak kindly",
+      "questions": [
+        "What did Jesus say to the man?",
+        "What good words can you say?"
+      ],
+      "actions": [
+        "Listen carefully",
+        "Say kind words",
+        "Thank God"
+      ],
+      "prayer": "Jesus, open my ears to hear You. Amen.",
+      "activity": {
+        "title": "Listen at Mass",
+        "intro": "Jesus opened the man's ears. Listen and tally each word at Mass.",
+        "idea": 80,
+        "type": "tally",
+        "words": [
+          "Amen",
+          "Alleluia",
+          "Lord",
+          "Peace"
+        ]
+      },
+      "words": [
+        "ears",
+        "hear",
+        "speak",
+        "open"
+      ]
+    },
+    "level2": {
+      "title": "Ephphatha!",
+      "story": "Jesus came to the Sea of Galilee, and they brought Him a man who was deaf and could hardly speak. Taking him aside from the crowd, Jesus put His fingers into his ears and touched his tongue. Looking up to heaven, He groaned and said, \"Ephpheta,\" which is, \"Be thou opened.\" At once his ears were opened, and he spoke clearly. The people were amazed and said, \"He hath done all things well.\"",
+      "keyLine": "He hath done all things well.",
+      "heartTitle": "Opened by Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I hear",
+      "heartLabelB": "What I proclaim",
+      "questions": [
+        "Why do priests say 'Ephphatha' at some baptisms?",
+        "What do you need Jesus to 'open' in you?"
+      ],
+      "actions": [
+        "Listen closely at Mass",
+        "Speak up for faith",
+        "Help someone with a disability"
+      ],
+      "prayer": "Jesus, open my ears and my mouth to praise You. Amen.",
+      "activity": {
+        "title": "What does it mean?",
+        "intro": "Use the code to find what Jesus said.",
+        "idea": 29,
+        "type": "secretcode",
+        "message": "BE THOU OPENED"
+      },
+      "words": [
+        "Ephphatha",
+        "deaf",
+        "mute",
+        "healing",
+        "baptism",
+        "proclaim"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT23_main.png",
+    "heart": "B_OT23_heart.png",
+    "icons": [
+      "icon_ear.png",
+      "icon_hands_reaching.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus touching a deaf man's ears",
+    "heartBrief": "Ear and mouth icons in heart"
+  }
+}

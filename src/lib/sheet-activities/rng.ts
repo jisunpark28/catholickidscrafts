@@ -1,0 +1,36 @@
+/** Deterministic PRNG so generated puzzles are identical on every render/print. */
+export function hashSeed(text: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+export function rng(seed: string): () => number {
+  let a = hashSeed(seed);
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function shuffle<T>(items: readonly T[], rand: () => number): T[] {
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+/** Shuffle that never returns the original order (for "put in order" puzzles). */
+export function derange<T>(items: readonly T[], rand: () => number): T[] {
+  if (items.length < 2) return [...items];
+  const out = shuffle(items, rand);
+  if (out.every((v, i) => v === items[i])) out.push(out.shift() as T);
+  return out;
+}

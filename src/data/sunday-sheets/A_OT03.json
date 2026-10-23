@@ -1,0 +1,96 @@
+{
+  "key": "A_OT03",
+  "liturgicalName": "3rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 4:12-23",
+  "keyVerseDR": "\"Come ye after me, and I will make you to be fishers of men.\" (Mt 4:19)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Follow Me!",
+      "story": "Jesus saw Peter and Andrew fishing. He said, \"Follow Me!\" They left their nets and followed Jesus.",
+      "keyLine": "I will follow Jesus!",
+      "heartTitle": "Fishers of People",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus calls",
+      "heartLabelB": "I follow",
+      "questions": [
+        "What did the fishermen leave?",
+        "How can you follow Jesus?"
+      ],
+      "actions": [
+        "Say yes to Jesus",
+        "Invite a friend",
+        "Pray"
+      ],
+      "prayer": "Jesus, I will follow You. Amen.",
+      "activity": {
+        "title": "Fishers of men",
+        "intro": "Connect the dots to make a fish.",
+        "idea": 31,
+        "type": "dottodot",
+        "shape": "fish"
+      },
+      "words": [
+        "fish",
+        "boat",
+        "follow",
+        "net"
+      ]
+    },
+    "level2": {
+      "title": "Fishers of Men",
+      "story": "Jesus began to preach, \"Repent, for the kingdom of heaven is at hand.\" Walking by the Sea of Galilee, He saw two brothers, Peter and Andrew, casting a net. \"Come after Me, and I will make you fishers of men,\" Jesus said. At once they left their nets and followed Him. Then He called James and John, who left their boat and their father to follow Jesus.",
+      "keyLine": "Come ye after me, and I will make you to be fishers of men.",
+      "heartTitle": "Answering the Call",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I leave",
+      "heartLabelB": "What I follow",
+      "questions": [
+        "Why did they follow Jesus right away?",
+        "What might Jesus be calling you to do?"
+      ],
+      "actions": [
+        "Pray about my vocation",
+        "Leave a bad habit behind",
+        "Invite someone to know Jesus"
+      ],
+      "prayer": "Jesus, help me follow You right away. Amen.",
+      "activity": {
+        "title": "Find the fishermen",
+        "intro": "Find these words from today's Gospel.",
+        "idea": 28,
+        "type": "wordfind",
+        "words": [
+          "FOLLOW",
+          "NETS",
+          "PETER",
+          "ANDREW",
+          "JAMES",
+          "JOHN",
+          "BOAT",
+          "GALILEE"
+        ]
+      },
+      "words": [
+        "repent",
+        "kingdom",
+        "disciples",
+        "nets",
+        "fishers",
+        "call"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT03_main.png",
+    "heart": "A_OT03_heart.png",
+    "icons": [
+      "icon_boat.png",
+      "icon_fish.png",
+      "icon_net.png"
+    ],
+    "mainBrief": "Jesus on the shore calling fishermen from boats",
+    "heartBrief": "Net with fish in heart"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "key": "B_PENTECOST",
+  "liturgicalName": "Pentecost Sunday",
+  "season": "Easter",
+  "gospelRef": "John 20:19-23 (alt. John 15:26-27; 16:12-15)",
+  "keyVerseDR": "\"...he breathed on them; and he said to them: Receive ye the Holy Ghost.\" (Jn 20:22)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "The Holy Spirit Comes",
+      "story": "Jesus' friends were behind locked doors. Jesus came and said, \"Peace be with you!\" He breathed on them and said, \"Receive the Holy Spirit.\"",
+      "keyLine": "Come, Holy Spirit!",
+      "heartTitle": "Spirit Fire",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "The Spirit helps me",
+      "heartLabelB": "I am brave",
+      "questions": [
+        "What did Jesus give His friends?",
+        "How does the Spirit help you?"
+      ],
+      "actions": [
+        "Pray 'Come, Holy Spirit'",
+        "Be brave",
+        "Share peace"
+      ],
+      "prayer": "Come, Holy Spirit, fill my heart. Amen.",
+      "activity": {
+        "title": "Spirit badge",
+        "intro": "The Holy Spirit makes us brave. Color your badge.",
+        "idea": 10,
+        "type": "badge",
+        "label": "Come, Holy Spirit!"
+      },
+      "words": [
+        "Spirit",
+        "breath",
+        "peace",
+        "brave"
+      ]
+    },
+    "level2": {
+      "title": "Receive the Holy Spirit",
+      "story": "On the evening of the first day of the week, the doors were shut where the disciples were, for fear of the Jews. Jesus came and stood in the midst and said, \"Peace be to you.\" The disciples rejoiced when they saw the Lord. Jesus said, \"As the Father hath sent Me, I also send you.\" He breathed on them and said, \"Receive ye the Holy Ghost. Whose sins you shall forgive, they are forgiven them.\"",
+      "keyLine": "Receive ye the Holy Ghost.",
+      "heartTitle": "Gifts of the Spirit",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Gifts I have",
+      "heartLabelB": "How I use them",
+      "questions": [
+        "Why did Jesus give the Spirit and the power to forgive?",
+        "Which gift of the Spirit do you need most?"
+      ],
+      "actions": [
+        "Learn the 7 gifts of the Spirit",
+        "Go to Confession",
+        "Use a talent for God"
+      ],
+      "prayer": "Come, Holy Spirit, set my heart on fire. Amen.",
+      "activity": {
+        "title": "Come, Holy Spirit",
+        "intro": "Find the words from the hymn Veni Creator Spiritus.",
+        "idea": 48,
+        "type": "wordfind",
+        "words": [
+          "COME",
+          "CREATOR",
+          "SPIRIT",
+          "FIRE",
+          "LOVE",
+          "LIGHT",
+          "HEARTS",
+          "GRACE"
+        ]
+      },
+      "words": [
+        "Pentecost",
+        "Holy Ghost",
+        "breathe",
+        "sent",
+        "forgive",
+        "gifts"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_PENTECOST_main.png",
+    "heart": "B_PENTECOST_heart.png",
+    "icons": [
+      "icon_dove.png",
+      "icon_flame.png",
+      "icon_wind.png"
+    ],
+    "mainBrief": "Upper room: risen Jesus breathing on apostles, dove and soft flames",
+    "heartBrief": "Seven small flames around heart (gifts)"
+  }
+}

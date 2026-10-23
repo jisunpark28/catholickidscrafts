@@ -1,0 +1,89 @@
+{
+  "key": "C_OT26",
+  "liturgicalName": "26th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 16:19-31",
+  "keyVerseDR": "\"Son, remember that thou didst receive good things in thy lifetime, and likewise Lazarus evil things...\" (Lk 16:25)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Rich Man and Lazarus",
+      "story": "A rich man had fine clothes and food. Poor Lazarus lay hungry at his gate. The rich man never helped him. Jesus wants us to see and help the poor.",
+      "keyLine": "I will help the poor.",
+      "heartTitle": "Seeing the Poor",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I notice",
+      "heartLabelB": "I help",
+      "questions": [
+        "Who was at the rich man's gate?",
+        "How can you help someone in need?"
+      ],
+      "actions": [
+        "Give food to the poor",
+        "Notice someone alone",
+        "Pray"
+      ],
+      "prayer": "Jesus, open my eyes to the poor. Amen.",
+      "activity": {
+        "title": "Help the poor",
+        "intro": "Rub a coin under the paper and draw how you can help the poor.",
+        "idea": 83,
+        "type": "drawscene",
+        "prompt": "Coins and bread shared with a poor man at the gate"
+      },
+      "words": [
+        "rich",
+        "poor",
+        "Lazarus",
+        "help"
+      ]
+    },
+    "level2": {
+      "title": "The Rich Man and Lazarus",
+      "story": "Jesus told of a rich man clothed in purple and fine linen who feasted every day. At his gate lay a poor man named Lazarus, covered with sores, longing for crumbs from the rich man's table. Lazarus died and was carried by angels to Abraham's bosom. The rich man also died and was in torment, and he begged Abraham to warn his five brothers. Abraham said, \"They have Moses and the prophets; let them hear them.\"",
+      "keyLine": "Son, remember that thou didst receive good things in thy lifetime.",
+      "heartTitle": "Who Is at My Gate?",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who I overlook",
+      "heartLabelB": "How I'll respond",
+      "questions": [
+        "What was the rich man's sin?",
+        "Who is 'Lazarus' in your life?"
+      ],
+      "actions": [
+        "Donate to a food bank",
+        "Notice someone left out",
+        "Pray for the poor"
+      ],
+      "prayer": "Lord, help me never ignore those in need. Amen.",
+      "activity": {
+        "title": "A letter to Jesus",
+        "intro": "Write to Jesus about how you will help the poor.",
+        "idea": 54,
+        "type": "letter",
+        "style": "letter",
+        "to": "Jesus",
+        "lines": 3
+      },
+      "words": [
+        "Lazarus",
+        "Abraham",
+        "indifference",
+        "poor",
+        "justice",
+        "eternity"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT26_main.png",
+    "heart": "C_OT26_heart.png",
+    "icons": [
+      "icon_bread.png",
+      "icon_door.png",
+      "icon_coins.png"
+    ],
+    "mainBrief": "Lazarus at the rich man's gate with dogs",
+    "heartBrief": "Gate with bread offered"
+  }
+}

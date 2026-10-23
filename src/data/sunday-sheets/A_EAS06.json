@@ -1,0 +1,93 @@
+{
+  "key": "A_EAS06",
+  "liturgicalName": "6th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 14:15-21",
+  "keyVerseDR": "\"I will not leave you orphans: I will come to you.\" (Jn 14:18)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "I Will Not Leave You",
+      "story": "Jesus said, \"If you love Me, you will do what I ask.\" He promised to send the Holy Spirit. Jesus will never leave us alone.",
+      "keyLine": "Jesus is with me.",
+      "heartTitle": "Love & Obey",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love Jesus",
+      "heartLabelB": "I obey",
+      "questions": [
+        "Who did Jesus promise to send?",
+        "How do you show love by obeying?"
+      ],
+      "actions": [
+        "Obey my parents",
+        "Pray to the Holy Spirit",
+        "Be helpful"
+      ],
+      "prayer": "Holy Spirit, help me love Jesus. Amen.",
+      "activity": {
+        "title": "I love Jesus by obeying",
+        "intro": "Color a heart each day you do what Jesus asks.",
+        "idea": 79,
+        "type": "tracker",
+        "rows": [
+          "I obeyed with love"
+        ]
+      },
+      "words": [
+        "love",
+        "obey",
+        "Spirit",
+        "help"
+      ]
+    },
+    "level2": {
+      "title": "The Promise of the Spirit",
+      "story": "At the Last Supper, Jesus said, \"If you love Me, you will keep My commandments.\" He promised to ask the Father to send another Advocate, the Spirit of truth. \"The world cannot see Him, but you know Him, because He remains with you,\" Jesus said. He promised, \"I will not leave you orphans; I will come to you.\" Whoever loves Jesus will be loved by the Father.",
+      "keyLine": "I will not leave you orphans: I will come to you.",
+      "heartTitle": "Showing Love",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Love for Jesus",
+      "heartLabelB": "Keeping His commands",
+      "questions": [
+        "How are love and obedience connected?",
+        "How does the Holy Spirit help you?"
+      ],
+      "actions": [
+        "Pray 'Come, Holy Spirit' daily",
+        "Keep a promise",
+        "Obey without complaining"
+      ],
+      "prayer": "Come, Holy Spirit, help me keep Your word. Amen.",
+      "activity": {
+        "title": "What does it mean?",
+        "intro": "Jesus says love means keeping His commandments. Explain in your own words.",
+        "idea": 63,
+        "type": "prayerframe",
+        "starters": [
+          "Loving Jesus means...",
+          "Obeying is hard when...",
+          "The Holy Spirit helps me to..."
+        ]
+      },
+      "words": [
+        "Advocate",
+        "Spirit of truth",
+        "commandments",
+        "orphans",
+        "promise",
+        "love"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_EAS06_main.png",
+    "heart": "A_EAS06_heart.png",
+    "icons": [
+      "icon_dove.png",
+      "icon_flame.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Jesus speaking to disciples; flame/dove hint above",
+    "heartBrief": "Dove over heart; hands holding heart"
+  }
+}

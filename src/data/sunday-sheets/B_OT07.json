@@ -1,0 +1,102 @@
+{
+  "key": "B_OT07",
+  "liturgicalName": "7th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 2:1-12",
+  "keyVerseDR": "\"Arise, take up thy bed, and go into thy house.\" (Mk 2:11)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Friends Through the Roof",
+      "story": "Four friends carried a man who could not walk. The house was too full, so they lowered him through the roof! Jesus forgave his sins and healed him.",
+      "keyLine": "Jesus forgives me.",
+      "heartTitle": "Good Friends",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I help friends",
+      "heartLabelB": "Jesus forgives",
+      "questions": [
+        "How did the friends get to Jesus?",
+        "How can you help a friend?"
+      ],
+      "actions": [
+        "Help a friend",
+        "Say sorry",
+        "Pray for someone"
+      ],
+      "prayer": "Jesus, thank You for forgiving me. Amen.",
+      "activity": {
+        "title": "Sacraments of healing",
+        "intro": "Jesus forgave and healed. Match each sacrament to its picture.",
+        "idea": 128,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Reconciliation",
+            "Priest's stole"
+          ],
+          [
+            "Anointing of the Sick",
+            "Oil"
+          ],
+          [
+            "Baptism",
+            "Water"
+          ]
+        ]
+      },
+      "words": [
+        "roof",
+        "friends",
+        "forgive",
+        "walk"
+      ]
+    },
+    "level2": {
+      "title": "The Paralytic Through the Roof",
+      "story": "So many people crowded around Jesus that there was no room, even at the door. Four men brought a paralyzed man, opened the roof, and let his mat down in front of Jesus. Seeing their faith, Jesus said, \"Son, thy sins are forgiven thee.\" Some scribes thought, \"Who can forgive sins, but God only?\" To show He had power to forgive, Jesus said, \"Arise, take up thy bed, and go,\" and the man got up and walked out.",
+      "keyLine": "Arise, take up thy bed.",
+      "heartTitle": "Faith of Friends",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "My faith",
+      "heartLabelB": "Bringing friends to Jesus",
+      "questions": [
+        "Why did Jesus forgive sins before healing?",
+        "Who can you 'carry' to Jesus by prayer?"
+      ],
+      "actions": [
+        "Pray for a friend daily",
+        "Go to Confession",
+        "Help someone in need"
+      ],
+      "prayer": "Jesus, thank You for forgiving my sins. Amen.",
+      "activity": {
+        "title": "I'm sorry",
+        "intro": "Jesus forgives sins. Write a note to say sorry to someone.",
+        "idea": 55,
+        "type": "letter",
+        "style": "letter",
+        "to": "Someone I hurt",
+        "lines": 3
+      },
+      "words": [
+        "paralytic",
+        "forgive",
+        "scribes",
+        "authority",
+        "faith",
+        "mat"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT07_main.png",
+    "heart": "B_OT07_heart.png",
+    "icons": [
+      "icon_mat_bed.png",
+      "icon_house.png",
+      "icon_friends.png"
+    ],
+    "mainBrief": "Friends lowering a paralyzed man through the roof",
+    "heartBrief": "Four friends holding heart corners"
+  }
+}

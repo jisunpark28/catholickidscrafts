@@ -1,0 +1,95 @@
+{
+  "key": "C_LNT03",
+  "liturgicalName": "3rd Sunday of Lent (Year A readings may be used)",
+  "season": "Lent",
+  "gospelRef": "Luke 13:1-9",
+  "keyVerseDR": "\"Lord, let it alone this year also, until I dig about it...\" (Lk 13:8)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Another Chance",
+      "story": "A man had a fig tree with no figs. He wanted to cut it down. The gardener said, \"Give it one more year, and I will care for it.\" God gives us another chance!",
+      "keyLine": "God gives me another chance.",
+      "heartTitle": "Growing Fruit",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God is patient",
+      "heartLabelB": "I grow",
+      "questions": [
+        "What did the gardener ask for?",
+        "What good fruit can you grow?"
+      ],
+      "actions": [
+        "Say sorry and try again",
+        "Be patient",
+        "Do a good deed"
+      ],
+      "prayer": "God, thank You for another chance. Amen.",
+      "activity": {
+        "title": "Another chance",
+        "intro": "Stamp or draw a fig each day you do something good.",
+        "idea": 98,
+        "type": "tracker",
+        "rows": [
+          "My good fruit today"
+        ]
+      },
+      "words": [
+        "tree",
+        "fruit",
+        "chance",
+        "patient"
+      ]
+    },
+    "level2": {
+      "title": "The Barren Fig Tree",
+      "story": "Some people told Jesus about Galileans whom Pilate had killed. Jesus said, \"Unless you shall do penance, you shall all likewise perish.\" Then He told a parable: a man had a fig tree in his vineyard, and for three years it bore no fruit. He said, \"Cut it down therefore: why cumbereth it the ground?\" The gardener said, \"Lord, let it alone this year also, until I dig about it, and dung it,\" so that it may bear fruit.",
+      "keyLine": "Lord, let it alone this year also.",
+      "heartTitle": "Bearing Fruit",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What God tends",
+      "heartLabelB": "What fruit I bear",
+      "questions": [
+        "Who is the patient gardener?",
+        "What 'fruit' should Lent produce in you?"
+      ],
+      "actions": [
+        "Go to Confession",
+        "Pick one fruit to grow",
+        "Do a Lenten sacrifice"
+      ],
+      "prayer": "Lord, be patient with me and help me bear fruit. Amen.",
+      "activity": {
+        "title": "Time to grow",
+        "intro": "God gives us another chance. Check your heart this Lent.",
+        "idea": 130,
+        "type": "checklist",
+        "items": [
+          "Did I pray each day?",
+          "Did I say sorry when I was wrong?",
+          "Did I share with others?",
+          "Did I obey my parents?",
+          "Is there someone I need to forgive?"
+        ]
+      },
+      "words": [
+        "repent",
+        "fig tree",
+        "fruit",
+        "patience",
+        "mercy",
+        "conversion"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_LNT03_main.png",
+    "heart": "C_LNT03_heart.png",
+    "icons": [
+      "icon_fig_tree.png",
+      "icon_shovel.png",
+      "icon_soil.png"
+    ],
+    "mainBrief": "Gardener tending a fig tree with no fruit",
+    "heartBrief": "Fig tree growing in heart"
+  }
+}

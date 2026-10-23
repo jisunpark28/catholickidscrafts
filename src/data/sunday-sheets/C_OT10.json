@@ -1,0 +1,95 @@
+{
+  "key": "C_OT10",
+  "liturgicalName": "10th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 7:11-17",
+  "keyVerseDR": "\"Young man, I say to thee, arise.\" (Lk 7:14)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Helps a Mom",
+      "story": "Jesus saw a widow crying. Her only son had died. Jesus said, \"Do not cry,\" touched the coffin, and said, \"Young man, arise!\" He sat up and spoke!",
+      "keyLine": "Jesus gives life!",
+      "heartTitle": "Jesus Cares",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus helps",
+      "heartLabelB": "I comfort",
+      "questions": [
+        "Why was the mom sad?",
+        "How can you help someone sad?"
+      ],
+      "actions": [
+        "Comfort someone",
+        "Pray for the sad",
+        "Hug my mom"
+      ],
+      "prayer": "Jesus, comfort all who are sad. Amen.",
+      "activity": {
+        "title": "From sad to glad",
+        "intro": "Draw each face: sad before, joyful after Jesus came!",
+        "idea": 2,
+        "type": "faces",
+        "people": [
+          "The widow",
+          "Her son",
+          "The crowd"
+        ]
+      },
+      "words": [
+        "mom",
+        "son",
+        "sad",
+        "life"
+      ]
+    },
+    "level2": {
+      "title": "The Widow's Son at Nain",
+      "story": "Jesus went to a city called Naim with His disciples and a great crowd. Near the city gate, a dead man was being carried out, the only son of his mother, who was a widow. When Jesus saw her, He had compassion and said, \"Weep not.\" He touched the bier and said, \"Young man, I say to thee, arise.\" The dead man sat up and began to speak, and Jesus gave him to his mother, and all glorified God.",
+      "keyLine": "Young man, I say to thee, arise.",
+      "heartTitle": "Compassion",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who is grieving",
+      "heartLabelB": "How I can comfort",
+      "questions": [
+        "Why did Jesus have pity on the widow?",
+        "How can you comfort a grieving person?"
+      ],
+      "actions": [
+        "Write a card to someone sad",
+        "Pray for the dead",
+        "Help a widow or elder"
+      ],
+      "prayer": "Jesus, give comfort and new life. Amen.",
+      "activity": {
+        "title": "Thank You, Jesus",
+        "intro": "Jesus gave the widow her son back. Write a thank-you prayer.",
+        "idea": 61,
+        "type": "prayerframe",
+        "starters": [
+          "Thank You, Jesus, for...",
+          "Thank You for my family...",
+          "Comfort people who are sad..."
+        ]
+      },
+      "words": [
+        "Nain",
+        "widow",
+        "compassion",
+        "raise",
+        "prophet",
+        "glorify"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT10_main.png",
+    "heart": "C_OT10_heart.png",
+    "icons": [
+      "icon_hands_reaching.png",
+      "icon_mother_child.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus raising the widow's son at Nain",
+    "heartBrief": "Mother and son in heart"
+  }
+}

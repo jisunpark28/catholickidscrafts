@@ -1,0 +1,95 @@
+{
+  "key": "C_MARYMOTHER",
+  "liturgicalName": "Mary, the Holy Mother of God (Jan 1, optional)",
+  "season": "Christmas",
+  "gospelRef": "Luke 2:16-21",
+  "keyVerseDR": "\"But Mary kept all these words, pondering them in her heart.\" (Lk 2:19)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Mary, Our Mother",
+      "story": "The shepherds found Mary, Joseph, and Jesus. They told everyone what the angels had said. Mary treasured these things in her heart.",
+      "keyLine": "Mary loves Jesus.",
+      "heartTitle": "Mary's Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Mary loves",
+      "heartLabelB": "I love",
+      "questions": [
+        "What did the shepherds see?",
+        "How can you love like Mary?"
+      ],
+      "actions": [
+        "Pray a Hail Mary",
+        "Be gentle",
+        "Thank my mom"
+      ],
+      "prayer": "Mother Mary, help me love Jesus. Amen.",
+      "activity": {
+        "title": "Sing to Mary",
+        "intro": "Tap the rhythm and sing a hymn to Mary.",
+        "idea": 90,
+        "type": "checklist",
+        "items": [
+          "Tap the beat with my hands",
+          "Sing \"Immaculate Mary\"",
+          "Say, \"Mary, Mother of God, pray for us!\""
+        ]
+      },
+      "words": [
+        "Mary",
+        "mother",
+        "shepherds",
+        "heart"
+      ]
+    },
+    "level2": {
+      "title": "Mother of God",
+      "story": "The shepherds came with haste and found Mary and Joseph, and the infant lying in the manger. When they saw, they made known what had been told them about this child. All who heard wondered at what the shepherds told them. Mary kept all these words, pondering them in her heart. When eight days were done, His name was called Jesus.",
+      "keyLine": "Mary kept all these words, pondering them in her heart.",
+      "heartTitle": "Pondering Like Mary",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I treasure",
+      "heartLabelB": "What I ask God",
+      "questions": [
+        "Why do we call Mary the Mother of God?",
+        "What does it mean to ponder?"
+      ],
+      "actions": [
+        "Pray a decade of the Rosary",
+        "Start the year with a prayer",
+        "Write a thank-you"
+      ],
+      "prayer": "Holy Mary, Mother of God, pray for us. Amen.",
+      "activity": {
+        "title": "My baptismal name",
+        "intro": "Jesus was named on the eighth day. Write about your name saint.",
+        "idea": 73,
+        "type": "prayerframe",
+        "starters": [
+          "My baptismal name is...",
+          "My name saint is...",
+          "I want to be like my saint by..."
+        ]
+      },
+      "words": [
+        "Theotokos",
+        "ponder",
+        "treasure",
+        "shepherds",
+        "Bethlehem",
+        "name"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_MARYMOTHER_main.png",
+    "heart": "C_MARYMOTHER_heart.png",
+    "icons": [
+      "icon_sheep.png",
+      "icon_star.png",
+      "icon_mary_heart.png"
+    ],
+    "mainBrief": "Shepherds visit; Mary holds baby Jesus close, heart glow",
+    "heartBrief": "Mary's heart with roses; space to draw my family"
+  }
+}

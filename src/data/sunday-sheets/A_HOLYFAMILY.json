@@ -1,0 +1,95 @@
+{
+  "key": "A_HOLYFAMILY",
+  "liturgicalName": "The Holy Family of Jesus, Mary and Joseph",
+  "season": "Christmas",
+  "gospelRef": "Matthew 2:13-15, 19-23",
+  "keyVerseDR": "\"Who arose, and took the child and his mother by night, and retired into Egypt...\" (Mt 2:14)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Joseph Keeps Jesus Safe",
+      "story": "An angel told Joseph, \"Take Jesus and Mary to Egypt!\" Joseph kept them safe. Later they came home to Nazareth.",
+      "keyLine": "God loves my family.",
+      "heartTitle": "My Family",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "We love",
+      "heartLabelB": "We pray",
+      "questions": [
+        "Who keeps you safe?",
+        "How can you help your family?"
+      ],
+      "actions": [
+        "Hug my family",
+        "Help with chores",
+        "Pray together"
+      ],
+      "prayer": "Holy Family, bless my family. Amen.",
+      "activity": {
+        "title": "Love my family",
+        "intro": "Joseph kept his family safe. Show your family love!",
+        "idea": 124,
+        "type": "checklist",
+        "items": [
+          "Give Mom a hug",
+          "Give Dad a hug",
+          "Say \"I love you\" at bedtime"
+        ]
+      },
+      "words": [
+        "family",
+        "safe",
+        "Egypt",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "The Holy Family Flees",
+      "story": "After the wise men left, an angel appeared to Joseph in a dream. \"Rise, take the child and His mother, and flee to Egypt,\" the angel said, because King Herod wanted to harm Jesus. Joseph got up in the night and took them to Egypt. When Herod died, the angel told Joseph it was safe to go home. The Holy Family settled in Nazareth, where Jesus grew up.",
+      "keyLine": "Who arose, and took the child and his mother by night.",
+      "heartTitle": "Holy Families",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I help",
+      "heartLabelB": "How I forgive",
+      "questions": [
+        "How did Joseph protect his family?",
+        "What makes a family holy?"
+      ],
+      "actions": [
+        "Do a chore without being asked",
+        "Pray with my family",
+        "Forgive a sibling"
+      ],
+      "prayer": "Jesus, Mary and Joseph, make our home holy. Amen.",
+      "activity": {
+        "title": "Our family promises",
+        "intro": "The Holy Family loved and protected each other. Write 2 promises.",
+        "idea": 70,
+        "type": "prayerframe",
+        "starters": [
+          "Our family will pray together...",
+          "Our family will help each other...",
+          "Our family will forgive..."
+        ]
+      },
+      "words": [
+        "Holy Family",
+        "Herod",
+        "Egypt",
+        "Nazareth",
+        "obey",
+        "protect"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_HOLYFAMILY_main.png",
+    "heart": "A_HOLYFAMILY_heart.png",
+    "icons": [
+      "icon_donkey.png",
+      "icon_moon.png",
+      "icon_house.png"
+    ],
+    "mainBrief": "Holy Family on a donkey at night walking to Egypt",
+    "heartBrief": "Family figures holding hands inside heart"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "key": "A_OT11",
+  "liturgicalName": "11th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 9:36–10:8",
+  "keyVerseDR": "\"The harvest indeed is great, but the labourers are few.\" (Mt 9:37)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Sends Helpers",
+      "story": "Jesus saw the crowds were like lost sheep. He chose 12 Apostles to help Him. He sent them to heal and to share His love.",
+      "keyLine": "I can help Jesus.",
+      "heartTitle": "Jesus' Helper",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus cares",
+      "heartLabelB": "I help",
+      "questions": [
+        "How many helpers did Jesus choose?",
+        "How can you help Jesus?"
+      ],
+      "actions": [
+        "Help at home",
+        "Pray for priests",
+        "Be kind"
+      ],
+      "prayer": "Jesus, make me Your helper. Amen.",
+      "activity": {
+        "title": "The Apostles' symbols",
+        "intro": "Peter has keys, Andrew a cross, James a shell. Color and draw!",
+        "idea": 7,
+        "type": "drawscene",
+        "prompt": "St Peter with the keys, St Andrew with his X-shaped cross, St James with a shell"
+      },
+      "words": [
+        "twelve",
+        "helpers",
+        "send",
+        "care"
+      ]
+    },
+    "level2": {
+      "title": "The Twelve Are Sent",
+      "story": "Jesus saw the crowds and felt sorry for them, because they were like sheep without a shepherd. He said, \"The harvest is plentiful, but the laborers are few.\" Jesus called His twelve Apostles, Peter and Andrew, James and John, and the others. He gave them power to cure every disease. He sent them out saying, \"Without cost you have received; without cost you are to give.\"",
+      "keyLine": "The harvest indeed is great, but the labourers are few.",
+      "heartTitle": "Laborers for the Harvest",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who needs Jesus",
+      "heartLabelB": "What I can do",
+      "questions": [
+        "Can you name some of the Twelve?",
+        "How can you be a 'laborer' now?"
+      ],
+      "actions": [
+        "Pray for vocations",
+        "Learn the names of the Apostles",
+        "Serve at church"
+      ],
+      "prayer": "Lord of the harvest, send laborers. Amen.",
+      "activity": {
+        "title": "Saints and their symbols",
+        "intro": "Match each Apostle to his symbol.",
+        "idea": 44,
+        "type": "matchup",
+        "pairs": [
+          [
+            "St Peter",
+            "Keys of the kingdom"
+          ],
+          [
+            "St Andrew",
+            "X-shaped cross"
+          ],
+          [
+            "St James",
+            "Scallop shell"
+          ],
+          [
+            "St Matthew",
+            "Money bag"
+          ],
+          [
+            "St John",
+            "Eagle"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "apostles",
+        "harvest",
+        "laborers",
+        "compassion",
+        "mission",
+        "Twelve"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT11_main.png",
+    "heart": "A_OT11_heart.png",
+    "icons": [
+      "icon_wheat.png",
+      "icon_footprints.png",
+      "icon_crowd.png"
+    ],
+    "mainBrief": "Jesus sending the Twelve; wheat field ready for harvest",
+    "heartBrief": "Wheat stalks around heart"
+  }
+}

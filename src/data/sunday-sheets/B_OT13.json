@@ -1,0 +1,96 @@
+{
+  "key": "B_OT13",
+  "liturgicalName": "13th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 5:21-43",
+  "keyVerseDR": "\"Fear not, only believe.\" (Mk 5:36)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Little Girl, Get Up!",
+      "story": "Jairus begged Jesus to help his sick daughter. A sick woman touched Jesus' cloak and was healed. Then Jesus said to the girl, \"Little girl, arise!\" and she got up.",
+      "keyLine": "Only believe!",
+      "heartTitle": "Believe!",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I trust",
+      "heartLabelB": "Jesus helps",
+      "questions": [
+        "What did Jesus say to the girl?",
+        "Who can you pray for?"
+      ],
+      "actions": [
+        "Pray for someone sick",
+        "Trust Jesus",
+        "Help my family"
+      ],
+      "prayer": "Jesus, I believe in You. Amen.",
+      "activity": {
+        "title": "How did they feel?",
+        "intro": "Draw each face: worried before, joyful after!",
+        "idea": 2,
+        "type": "faces",
+        "people": [
+          "Jairus",
+          "The sick woman",
+          "Jairus' daughter"
+        ]
+      },
+      "words": [
+        "girl",
+        "hand",
+        "believe",
+        "heal"
+      ]
+    },
+    "level2": {
+      "title": "Jairus' Daughter and the Woman",
+      "story": "Jairus, a ruler of the synagogue, fell at Jesus' feet and begged Him to heal his little daughter. On the way, a woman who had been sick for twelve years touched His garment and was healed. Jesus said, \"Daughter, thy faith hath made thee whole.\" Then people came saying Jairus' daughter was dead, but Jesus said, \"Fear not, only believe.\" Taking the girl's hand, He said, \"Talitha cumi,\" which means, \"Damsel, arise,\" and she got up and walked.",
+      "keyLine": "Fear not, only believe.",
+      "heartTitle": "Faith That Touches",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How the woman believed",
+      "heartLabelB": "How Jairus believed",
+      "questions": [
+        "How did both people show faith?",
+        "Why did Jesus stop for the woman?"
+      ],
+      "actions": [
+        "Pray for someone sick",
+        "Keep trusting when it's hard",
+        "Be patient with others"
+      ],
+      "prayer": "Jesus, I reach out to You in faith. Amen.",
+      "activity": {
+        "title": "What happened next?",
+        "intro": "Number the story in order.",
+        "idea": 32,
+        "type": "sequence",
+        "scenes": [
+          "Jairus begs Jesus to heal his daughter",
+          "A sick woman touches Jesus' garment and is healed",
+          "Jesus says, Fear not, only believe",
+          "Jesus takes her hand: Talitha cumi!"
+        ]
+      },
+      "words": [
+        "Jairus",
+        "cloak",
+        "faith",
+        "Talitha koum",
+        "healing",
+        "trust"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT13_main.png",
+    "heart": "B_OT13_heart.png",
+    "icons": [
+      "icon_hands_reaching.png",
+      "icon_bed.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus raising Jairus's daughter by the hand",
+    "heartBrief": "Girl's hand in Jesus' hand"
+  }
+}

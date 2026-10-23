@@ -1,0 +1,92 @@
+{
+  "key": "C_OT03",
+  "liturgicalName": "3rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 1:1-4; 4:14-21",
+  "keyVerseDR": "\"The spirit of the Lord is upon me. Wherefore he hath anointed me to preach the gospel to the poor...\" (Lk 4:18)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Good News for All",
+      "story": "Jesus went to the synagogue in Nazareth. He read from the scroll of Isaiah: \"The Spirit of the Lord is upon Me.\" He said, \"Today this has come true!\"",
+      "keyLine": "Jesus brings good news!",
+      "heartTitle": "Good News",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus helps",
+      "heartLabelB": "I help",
+      "questions": [
+        "What did Jesus read?",
+        "Who can you bring good news to?"
+      ],
+      "actions": [
+        "Help someone in need",
+        "Read a Bible story",
+        "Pray"
+      ],
+      "prayer": "Jesus, help me share good news. Amen.",
+      "activity": {
+        "title": "Luke's Gospel",
+        "intro": "Luke wrote today's Gospel. Number the four Gospels in order.",
+        "idea": 109,
+        "type": "wordorder",
+        "pieces": [
+          "Matthew",
+          "Mark",
+          "Luke",
+          "John"
+        ]
+      },
+      "words": [
+        "scroll",
+        "read",
+        "good news",
+        "poor"
+      ]
+    },
+    "level2": {
+      "title": "Today This Is Fulfilled",
+      "story": "Luke wrote his Gospel so that we may know the truth of what we were taught. Jesus returned to Galilee in the power of the Spirit. In the synagogue at Nazareth, He opened the book of Isaiah and read, \"The Spirit of the Lord is upon Me. Wherefore He hath anointed Me to preach the gospel to the poor.\" He said He was sent to proclaim release to captives and sight to the blind. Rolling up the book, Jesus said, \"This day is fulfilled this scripture in your ears.\"",
+      "keyLine": "The spirit of the Lord is upon me.",
+      "heartTitle": "Jesus' Mission",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What Jesus came to do",
+      "heartLabelB": "What I can do",
+      "questions": [
+        "Who are 'the poor' and 'captives' today?",
+        "How can you share in Jesus' mission?"
+      ],
+      "actions": [
+        "Volunteer or donate",
+        "Read Luke 4",
+        "Pray for the poor"
+      ],
+      "prayer": "Jesus, anointed One, send me to the poor. Amen.",
+      "activity": {
+        "title": "The word that touched me",
+        "intro": "Copy the verse. Highlight the word that touched you most.",
+        "idea": 85,
+        "type": "copyverse",
+        "text": "The Spirit of the Lord is upon Me. Wherefore He hath anointed Me to preach the gospel to the poor."
+      },
+      "words": [
+        "Theophilus",
+        "synagogue",
+        "Isaiah",
+        "anointed",
+        "fulfilled",
+        "mission"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT03_main.png",
+    "heart": "C_OT03_heart.png",
+    "icons": [
+      "icon_scroll.png",
+      "icon_synagogue.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "Jesus reading the scroll of Isaiah in the synagogue",
+    "heartBrief": "Scroll unrolled across heart"
+  }
+}

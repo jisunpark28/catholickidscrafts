@@ -1,0 +1,99 @@
+{
+  "key": "C_EAS04",
+  "liturgicalName": "4th Sunday of Easter (Good Shepherd)",
+  "season": "Easter",
+  "gospelRef": "John 10:27-30",
+  "keyVerseDR": "\"My sheep hear my voice. And I know them: and they follow me.\" (Jn 10:27)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus, My Shepherd",
+      "story": "Jesus said, \"My sheep hear My voice. I know them, and they follow Me.\" No one can take them from His hand. Jesus and the Father are one.",
+      "keyLine": "I follow Jesus.",
+      "heartTitle": "His Little Lamb",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus leads",
+      "heartLabelB": "I follow",
+      "questions": [
+        "What do Jesus' sheep do?",
+        "How do you hear Jesus' voice?"
+      ],
+      "actions": [
+        "Pray for priests",
+        "Listen at Mass",
+        "Follow Jesus"
+      ],
+      "prayer": "Good Shepherd, I will follow You. Amen.",
+      "activity": {
+        "title": "I hear His voice",
+        "intro": "Color a heart each day you listen to Jesus in prayer.",
+        "idea": 79,
+        "type": "tracker",
+        "rows": [
+          "I listened to Jesus"
+        ]
+      },
+      "words": [
+        "shepherd",
+        "sheep",
+        "voice",
+        "follow"
+      ]
+    },
+    "level2": {
+      "title": "No One Can Take Them",
+      "story": "Jesus said, \"My sheep hear My voice: and I know them, and they follow Me.\" He said, \"I give them life everlasting; and they shall not perish for ever.\" No man shall snatch them out of His hand. Jesus said His Father, who gave them to Him, is greater than all. \"I and the Father are one.\"",
+      "keyLine": "My sheep hear my voice. And I know them: and they follow me.",
+      "heartTitle": "Safe in His Hand",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus keeps me",
+      "heartLabelB": "I follow Him",
+      "questions": [
+        "Why are we safe with Jesus?",
+        "What does 'The Father and I are one' mean?"
+      ],
+      "actions": [
+        "Pray for vocations",
+        "Spend quiet time listening",
+        "Thank a priest"
+      ],
+      "prayer": "Jesus, keep me safe in Your hand. Amen.",
+      "activity": {
+        "title": "A shepherd saint",
+        "intro": "Read the clues. Who is it?",
+        "idea": 103,
+        "type": "whoami",
+        "clues": [
+          "I was a parish priest in Ars, France.",
+          "I heard confessions for many hours each day.",
+          "I am the patron saint of parish priests."
+        ],
+        "answer": "St John Vianney",
+        "choices": [
+          "St John Vianney",
+          "St Francis",
+          "St Patrick"
+        ]
+      },
+      "words": [
+        "shepherd",
+        "voice",
+        "eternal life",
+        "hand",
+        "one",
+        "vocation"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_EAS04_main.png",
+    "heart": "C_EAS04_heart.png",
+    "icons": [
+      "icon_sheep.png",
+      "icon_shepherd_staff.png",
+      "icon_hands_reaching.png"
+    ],
+    "mainBrief": "Shepherd holding sheep safely in his hands",
+    "heartBrief": "Little sheep in heart; staff on side"
+  }
+}

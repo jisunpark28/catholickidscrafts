@@ -1,0 +1,110 @@
+{
+  "key": "B_OT31",
+  "liturgicalName": "31st Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 12:28b-34",
+  "keyVerseDR": "\"And thou shalt love the Lord thy God with thy whole heart and with thy whole soul and with thy whole mind and with thy whole strength.\" (Mk 12:30)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Most Important Rule",
+      "story": "A scribe asked Jesus which commandment is first. Jesus said, \"Love God with all your heart.\" The second is, \"Love your neighbor as yourself.\"",
+      "keyLine": "Love God. Love others.",
+      "heartTitle": "My Heart of Love",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love God",
+      "heartLabelB": "I love others",
+      "questions": [
+        "What is the most important rule?",
+        "How can you love someone today?"
+      ],
+      "actions": [
+        "Hug my family",
+        "Pray to God",
+        "Be kind"
+      ],
+      "prayer": "Jesus, help me love God and everyone. Amen.",
+      "activity": {
+        "title": "Love thermometer",
+        "intro": "Color up as you love with your whole heart.",
+        "idea": 94,
+        "type": "thermometer",
+        "levels": [
+          "I love God",
+          "I pray with my whole heart",
+          "I love my family",
+          "I love my neighbor"
+        ]
+      },
+      "words": [
+        "love",
+        "heart",
+        "God",
+        "neighbor"
+      ]
+    },
+    "level2": {
+      "title": "The First Commandment",
+      "story": "A scribe asked Jesus, \"Which is the first commandment of all?\" Jesus answered, \"Hear, O Israel: the Lord thy God is one God.\" He said, \"Thou shalt love the Lord thy God with thy whole heart, and with thy whole soul, and with thy whole mind, and with thy whole strength.\" The second is this: \"Thou shalt love thy neighbour as thyself.\" Jesus told the wise scribe, \"Thou art not far from the kingdom of God.\"",
+      "keyLine": "Thou shalt love the Lord thy God with thy whole heart.",
+      "heartTitle": "Whole-Hearted Love",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Heart, soul",
+      "heartLabelB": "Mind, strength",
+      "questions": [
+        "What does loving God with your mind look like?",
+        "Why are the two commandments joined?"
+      ],
+      "actions": [
+        "Pray the Act of Love",
+        "Help a neighbor",
+        "Study my faith"
+      ],
+      "prayer": "Lord, I love You with all my heart. Amen.",
+      "activity": {
+        "title": "Commandments in action",
+        "intro": "Match each commandment to a daily action.",
+        "idea": 47,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Love God with your whole heart",
+            "Pray every day"
+          ],
+          [
+            "Keep holy the Lord's Day",
+            "Go to Mass on Sunday"
+          ],
+          [
+            "Honor your father and mother",
+            "Obey with a smile"
+          ],
+          [
+            "Love your neighbour",
+            "Share and be kind"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Shema",
+        "commandment",
+        "scribe",
+        "strength",
+        "neighbor",
+        "kingdom"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT31_main.png",
+    "heart": "B_OT31_heart.png",
+    "icons": [
+      "icon_heart_hands.png",
+      "icon_praying_hands.png",
+      "icon_scroll.png"
+    ],
+    "mainBrief": "Jesus teaching the scribe; heart, soul, mind, strength",
+    "heartBrief": "Four quarters: heart, soul, mind, strength"
+  }
+}

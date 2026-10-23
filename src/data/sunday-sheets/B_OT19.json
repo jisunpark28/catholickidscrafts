@@ -1,0 +1,91 @@
+{
+  "key": "B_OT19",
+  "liturgicalName": "19th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 6:41-51",
+  "keyVerseDR": "\"I am the living bread which came down from heaven.\" (Jn 6:51 DR)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Living Bread",
+      "story": "Some people grumbled about Jesus. Jesus said, \"I am the living bread from heaven.\" Whoever eats this bread will live forever.",
+      "keyLine": "Jesus is the living bread.",
+      "heartTitle": "Bread From Heaven",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is the bread",
+      "heartLabelB": "I receive Him",
+      "questions": [
+        "Where did the living bread come from?",
+        "When do we receive Jesus?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Bow to the tabernacle",
+        "Pray"
+      ],
+      "prayer": "Jesus, You are the living bread. Amen.",
+      "activity": {
+        "title": "Read it 3 times",
+        "intro": "Point to each word as you read the verse 3 times.",
+        "idea": 77,
+        "type": "checklist",
+        "items": [
+          "I am the living bread.",
+          "I came down from heaven.",
+          "Whoever eats this bread will live forever."
+        ]
+      },
+      "words": [
+        "bread",
+        "heaven",
+        "forever",
+        "life"
+      ]
+    },
+    "level2": {
+      "title": "Bread From Heaven",
+      "story": "The people murmured because Jesus said, \"I am the bread which came down from heaven.\" They said, \"Is not this Jesus, the son of Joseph, whose father and mother we know?\" Jesus said no one can come to Him unless the Father draws him. He said, \"Your fathers did eat manna in the desert, and are dead.\" But Jesus said, \"I am the living bread which came down from heaven. If any man eat of this bread, he shall live for ever.\"",
+      "keyLine": "I am the living bread which came down from heaven.",
+      "heartTitle": "Drawn by the Father",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How God draws me",
+      "heartLabelB": "How I respond",
+      "questions": [
+        "Why did people grumble?",
+        "What does 'my flesh for the life of the world' point to?"
+      ],
+      "actions": [
+        "Make a spiritual communion",
+        "Learn about the Real Presence",
+        "Pray before Mass"
+      ],
+      "prayer": "Father, draw me to Your Son. Amen.",
+      "activity": {
+        "title": "The word that touched me",
+        "intro": "Copy the verse. Highlight the word that touched you most.",
+        "idea": 85,
+        "type": "copyverse",
+        "text": "I am the living bread which came down from heaven. If any man eat of this bread, he shall live for ever."
+      },
+      "words": [
+        "murmur",
+        "draw",
+        "living bread",
+        "flesh",
+        "eternal life",
+        "faith"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT19_main.png",
+    "heart": "B_OT19_heart.png",
+    "icons": [
+      "icon_host.png",
+      "icon_bread.png",
+      "icon_cloud.png"
+    ],
+    "mainBrief": "Jesus pointing to the sky, bread from heaven",
+    "heartBrief": "Host with rays in heart"
+  }
+}

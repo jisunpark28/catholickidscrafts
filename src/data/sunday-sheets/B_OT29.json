@@ -1,0 +1,91 @@
+{
+  "key": "B_OT29",
+  "liturgicalName": "29th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 10:35-45",
+  "keyVerseDR": "\"For the Son of man also is not come to be ministered unto: but to minister...\" (Mk 10:45)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Came to Serve",
+      "story": "James and John asked for the best seats in heaven. Jesus said, \"Whoever wants to be great must serve.\" Jesus came to serve and give His life for us.",
+      "keyLine": "I will serve like Jesus.",
+      "heartTitle": "Serving Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus serves",
+      "heartLabelB": "I serve",
+      "questions": [
+        "What did James and John want?",
+        "How can you serve someone?"
+      ],
+      "actions": [
+        "Help without being asked",
+        "Set the table",
+        "Let others go first"
+      ],
+      "prayer": "Jesus, help me serve like You. Amen.",
+      "activity": {
+        "title": "Servant stamps",
+        "intro": "Stamp or draw a star each time you serve someone.",
+        "idea": 98,
+        "type": "tracker",
+        "rows": [
+          "I served someone today"
+        ]
+      },
+      "words": [
+        "serve",
+        "help",
+        "great",
+        "seats"
+      ]
+    },
+    "level2": {
+      "title": "To Serve, Not to Be Served",
+      "story": "James and John came to Jesus and asked to sit at His right and left in His glory. Jesus asked, \"Can you drink of the chalice that I drink of?\" The other ten were angry at James and John. Jesus called them and said, \"Whosoever will be greater, shall be your minister.\" He said, \"For the Son of man also is not come to be ministered unto, but to minister, and to give His life a redemption for many.\"",
+      "keyLine": "The Son of man is not come to be ministered unto, but to minister.",
+      "heartTitle": "Great by Serving",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Seeking honor",
+      "heartLabelB": "Serving others",
+      "questions": [
+        "What 'cup' was Jesus talking about?",
+        "How can you serve without being noticed?"
+      ],
+      "actions": [
+        "Do a hidden service",
+        "Help a sibling",
+        "Volunteer"
+      ],
+      "prayer": "Jesus, teach me to serve and give. Amen.",
+      "activity": {
+        "title": "James' diary",
+        "intro": "Pretend you are James. Write in your diary after talking to Jesus.",
+        "idea": 68,
+        "type": "letter",
+        "style": "letter",
+        "to": "My diary",
+        "lines": 4
+      },
+      "words": [
+        "servant",
+        "ransom",
+        "cup",
+        "glory",
+        "ambition",
+        "sacrifice"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT29_main.png",
+    "heart": "B_OT29_heart.png",
+    "icons": [
+      "icon_towel_basin.png",
+      "icon_cup.png",
+      "icon_crown.png"
+    ],
+    "mainBrief": "Jesus washing feet image; James and John asking",
+    "heartBrief": "Towel & basin in heart"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "key": "B_OT26",
+  "liturgicalName": "26th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 9:38-43, 45, 47-48",
+  "keyVerseDR": "\"For whosoever shall give you to drink a cup of water in my name... he shall not lose his reward.\" (Mk 9:40 DR)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "A Cup of Water",
+      "story": "John said, \"Someone not with us was casting out demons in Your name.\" Jesus said, \"Whoever is not against us is for us.\" Even giving a cup of water in His name counts!",
+      "keyLine": "Small kindness counts.",
+      "heartTitle": "Little Kindness",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I give",
+      "heartLabelB": "I help",
+      "questions": [
+        "What small gift did Jesus talk about?",
+        "What kind thing can you do?"
+      ],
+      "actions": [
+        "Give someone a drink",
+        "Help a friend",
+        "Pray"
+      ],
+      "prayer": "Jesus, help me do small good things. Amen.",
+      "activity": {
+        "title": "Little kindnesses",
+        "intro": "Small acts of love count! Do one at home.",
+        "idea": 118,
+        "type": "checklist",
+        "items": [
+          "Tidy the home crucifix or Mary statue",
+          "Bring someone a cup of water",
+          "Say a kind word"
+        ]
+      },
+      "words": [
+        "water",
+        "cup",
+        "good",
+        "kind"
+      ]
+    },
+    "level2": {
+      "title": "Whoever Is Not Against Us",
+      "story": "John said, \"Master, we saw one casting out devils in Thy name, and we forbade him.\" Jesus said, \"Do not forbid him. For he that is not against you, is for you.\" He said that whoever gives you a cup of water in His name shall not lose his reward. Jesus warned against leading little ones into sin. He said it is better to give up anything that causes us to sin than to lose heaven.",
+      "keyLine": "Whosoever shall give you to drink a cup of water in my name, shall not lose his reward.",
+      "heartTitle": "Good & Harm",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Small goods I do",
+      "heartLabelB": "Harms I avoid",
+      "questions": [
+        "Why does Jesus take sin so seriously?",
+        "How can you help others do good?"
+      ],
+      "actions": [
+        "Be a good example",
+        "Avoid what leads me to sin",
+        "Do small kindnesses"
+      ],
+      "prayer": "Jesus, help me be a good example. Amen.",
+      "activity": {
+        "title": "God's gifts, my thanks",
+        "intro": "Weigh it up: God's gifts on one side, my thanks on the other.",
+        "idea": 95,
+        "type": "scale",
+        "left": "God gives me...",
+        "right": "I thank Him by..."
+      },
+      "words": [
+        "reward",
+        "scandal",
+        "sin",
+        "temptation",
+        "cup of water",
+        "serious"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT26_main.png",
+    "heart": "B_OT26_heart.png",
+    "icons": [
+      "icon_cup.png",
+      "icon_water_drop.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Cup of water being given; disciples watching",
+    "heartBrief": "Cup of water in heart"
+  }
+}

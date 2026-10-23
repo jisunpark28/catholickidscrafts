@@ -1,0 +1,108 @@
+{
+  "key": "A_OT09",
+  "liturgicalName": "9th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 7:21-27",
+  "keyVerseDR": "\"Every one therefore that heareth these my words, and doth them, shall be likened to a wise man that built his house upon a rock.\" (Mt 7:24)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "House on the Rock",
+      "story": "Jesus told a story about two houses. The wise man built on rock, and his house stood strong in the storm. The foolish man built on sand, and it fell.",
+      "keyLine": "Jesus is my Rock.",
+      "heartTitle": "Strong House",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I listen",
+      "heartLabelB": "I do",
+      "questions": [
+        "What happened to the house on sand?",
+        "How can you build on Jesus?"
+      ],
+      "actions": [
+        "Listen and obey",
+        "Pray",
+        "Read a Bible story"
+      ],
+      "prayer": "Jesus, You are my Rock. Amen.",
+      "activity": {
+        "title": "House on the rock",
+        "intro": "Draw the other half of the house built on rock.",
+        "idea": 3,
+        "type": "symmetry",
+        "shape": "house"
+      },
+      "words": [
+        "rock",
+        "house",
+        "storm",
+        "wise"
+      ]
+    },
+    "level2": {
+      "title": "The Wise and Foolish Builders",
+      "story": "Jesus said that not everyone who says \"Lord, Lord\" will enter the kingdom, but only those who do the Father's will. \"Everyone who listens to My words and acts on them is like a wise man who built his house on rock,\" He said. The rain fell, the floods came, and the winds blew, but the house did not fall. Whoever hears His words and does not act on them is like a fool who built on sand. When the storm came, that house collapsed completely.",
+      "keyLine": "A wise man that built his house upon a rock.",
+      "heartTitle": "Firm Foundation",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Hearing",
+      "heartLabelB": "Doing",
+      "questions": [
+        "Why is doing God's word more than just hearing it?",
+        "What 'storms' do kids face?"
+      ],
+      "actions": [
+        "Put one Gospel teaching into action",
+        "Pray daily",
+        "Help without being asked"
+      ],
+      "prayer": "Jesus, help me build my life on You. Amen.",
+      "activity": {
+        "title": "Rock or sand?",
+        "intro": "Solve the crossword from today's Gospel.",
+        "idea": 27,
+        "type": "crossword",
+        "entries": [
+          [
+            "ROCK",
+            "The wise man built his house on this"
+          ],
+          [
+            "SAND",
+            "The foolish man built on this"
+          ],
+          [
+            "WISE",
+            "The man who heard Jesus' words and did them"
+          ],
+          [
+            "FLOODS",
+            "They came and beat upon the house"
+          ],
+          [
+            "FOOLISH",
+            "The man who did not do Jesus' words"
+          ]
+        ]
+      },
+      "words": [
+        "wise",
+        "foolish",
+        "foundation",
+        "rock",
+        "will of God",
+        "storm"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT09_main.png",
+    "heart": "A_OT09_heart.png",
+    "icons": [
+      "icon_house.png",
+      "icon_rock.png",
+      "icon_rain_cloud.png"
+    ],
+    "mainBrief": "House on a rock standing in a rainstorm; another sliding on sand",
+    "heartBrief": "Rock foundation at heart bottom"
+  }
+}

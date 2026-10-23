@@ -1,0 +1,102 @@
+{
+  "key": "C_OT33",
+  "liturgicalName": "33rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 21:5-19",
+  "keyVerseDR": "\"In your patience you shall possess your souls.\" (Lk 21:19)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Don't Be Afraid",
+      "story": "People admired the beautiful Temple. Jesus said one day it would fall. He said, \"Do not be afraid. Not a hair of your head will be lost.\"",
+      "keyLine": "Jesus is with me.",
+      "heartTitle": "Brave Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Hard things",
+      "heartLabelB": "Jesus helps",
+      "questions": [
+        "What did Jesus say not to be?",
+        "When do you need to be brave?"
+      ],
+      "actions": [
+        "Pray when scared",
+        "Be patient",
+        "Help others"
+      ],
+      "prayer": "Jesus, keep me strong. Amen.",
+      "activity": {
+        "title": "Picture sudoku",
+        "intro": "Each row and column has each picture once.",
+        "idea": 42,
+        "type": "sudoku",
+        "symbols": [
+          "✚",
+          "♥",
+          "★",
+          "☀"
+        ],
+        "names": [
+          "Cross",
+          "Heart",
+          "Star",
+          "Sun"
+        ]
+      },
+      "words": [
+        "afraid",
+        "help",
+        "strong",
+        "hope"
+      ]
+    },
+    "level2": {
+      "title": "Stand Firm",
+      "story": "Some people were talking about the Temple, adorned with goodly stones and gifts. Jesus said, \"The days will come in which there shall not be left a stone upon a stone.\" He said there would be wars, earthquakes, and signs, and His followers would be persecuted. But He promised to give them words and wisdom. Jesus said, \"But a hair of your head shall not perish. In your patience you shall possess your souls.\"",
+      "keyLine": "In your patience you shall possess your souls.",
+      "heartTitle": "Perseverance",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What's hard",
+      "heartLabelB": "What keeps me going",
+      "questions": [
+        "Why did Jesus warn about hard times?",
+        "How can patience protect your soul?"
+      ],
+      "actions": [
+        "Keep a good habit going",
+        "Pray for persecuted Christians",
+        "Encourage someone"
+      ],
+      "prayer": "Jesus, help me persevere in faith. Amen.",
+      "activity": {
+        "title": "A brave saint",
+        "intro": "Jesus' friends were brave when times were hard. Write about a saint you want to be like.",
+        "idea": 72,
+        "type": "prayerframe",
+        "starters": [
+          "The saint I admire is...",
+          "This saint was brave when...",
+          "I want to be like this saint by..."
+        ]
+      },
+      "words": [
+        "Temple",
+        "persecution",
+        "perseverance",
+        "witness",
+        "endurance",
+        "hope"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT33_main.png",
+    "heart": "C_OT33_heart.png",
+    "icons": [
+      "icon_temple.png",
+      "icon_stone.png",
+      "icon_shield.png"
+    ],
+    "mainBrief": "Jesus encouraging disciples; Temple stones behind",
+    "heartBrief": "Shield of patience on heart"
+  }
+}

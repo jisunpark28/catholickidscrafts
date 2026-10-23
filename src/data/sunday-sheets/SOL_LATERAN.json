@@ -1,0 +1,105 @@
+{
+  "key": "SOL_LATERAN",
+  "liturgicalName": "Dedication of the Lateran Basilica",
+  "season": "Feast (treated as feast of the Lord)",
+  "gospelRef": "John 2:13-22",
+  "keyVerseDR": "\"Destroy this temple; and in three days I will raise it up.\" (Jn 2:19)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "God's House",
+      "story": "Jesus went to the Temple. People were selling animals there. Jesus drove them out and said, \"Do not make My Father's house a market!\"",
+      "keyLine": "Church is God's house.",
+      "heartTitle": "God's House",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "My church",
+      "heartLabelB": "I am God's temple",
+      "questions": [
+        "What is the name of your church?",
+        "How do you act in God's house?"
+      ],
+      "actions": [
+        "Genuflect in church",
+        "Pray for my parish",
+        "Help keep church clean"
+      ],
+      "prayer": "Jesus, make my heart Your home. Amen.",
+      "activity": {
+        "title": "Inside God's house",
+        "intro": "Draw the inside of your church: the altar, the tabernacle, and the cross.",
+        "idea": 6,
+        "type": "drawscene",
+        "prompt": "Inside my church: the altar, the tabernacle with its lamp, and the crucifix"
+      },
+      "words": [
+        "church",
+        "Rome",
+        "Pope",
+        "holy"
+      ]
+    },
+    "level2": {
+      "title": "Zeal for Your House",
+      "story": "The Passover was near, and Jesus went up to Jerusalem. In the Temple He found people selling oxen, sheep, and doves, and money changers at their tables. He made a whip of little cords and drove them all out, and overturned the tables. Jesus said, \"Make not the house of My Father a house of traffic.\" He said, \"Destroy this temple, and in three days I will raise it up,\" speaking of the temple of His body.",
+      "keyLine": "Destroy this temple; and in three days I will raise it up.",
+      "heartTitle": "Living Temple",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "My parish church",
+      "heartLabelB": "My body as temple",
+      "questions": [
+        "Why does the whole world celebrate a church in Rome?",
+        "How are we 'living stones' of the Church?"
+      ],
+      "actions": [
+        "Pray for the Pope",
+        "Learn my parish's patron",
+        "Be reverent at Mass"
+      ],
+      "prayer": "Lord, make me a living stone in Your Church. Amen.",
+      "activity": {
+        "title": "Around the altar",
+        "intro": "Match each item in God's house to where it is.",
+        "idea": 149,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Altar",
+            "Center of the sanctuary"
+          ],
+          [
+            "Ambo",
+            "Where the Word is proclaimed"
+          ],
+          [
+            "Tabernacle",
+            "Where Jesus is kept in the Eucharist"
+          ],
+          [
+            "Baptismal font",
+            "Where we are baptized"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Lateran",
+        "cathedral",
+        "Temple",
+        "zeal",
+        "body",
+        "Church"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_LATERAN_main.png",
+    "heart": "SOL_LATERAN_heart.png",
+    "icons": [
+      "icon_church.png",
+      "icon_temple.png",
+      "icon_keys.png"
+    ],
+    "mainBrief": "Front of a grand basilica with a cross; children entering with families",
+    "heartBrief": "Church building drawn inside heart"
+  }
+}

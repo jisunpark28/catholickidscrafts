@@ -1,0 +1,92 @@
+{
+  "key": "C_OT16",
+  "liturgicalName": "16th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 10:38-42",
+  "keyVerseDR": "\"Mary hath chosen the best part, which shall not be taken away from her.\" (Lk 10:42)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Mary and Martha",
+      "story": "Jesus visited Martha and Mary. Martha was busy working. Mary sat at Jesus' feet and listened. Jesus said Mary chose the better part.",
+      "keyLine": "I make time for Jesus.",
+      "heartTitle": "Time With Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I work",
+      "heartLabelB": "I listen",
+      "questions": [
+        "What did Mary do?",
+        "When can you sit with Jesus?"
+      ],
+      "actions": [
+        "Pray quietly",
+        "Listen to a Bible story",
+        "Help with joy"
+      ],
+      "prayer": "Jesus, I want to sit with You. Amen.",
+      "activity": {
+        "title": "Time with Jesus",
+        "intro": "Like Mary, make time to listen to Jesus. Draw your quiet time on the clock.",
+        "idea": 89,
+        "type": "clock",
+        "labels": [
+          "My time with Jesus"
+        ]
+      },
+      "words": [
+        "Mary",
+        "Martha",
+        "listen",
+        "busy"
+      ]
+    },
+    "level2": {
+      "title": "The Better Part",
+      "story": "Jesus entered a town, and a woman named Martha welcomed Him into her house. Her sister Mary sat at the Lord's feet, listening to His word. Martha was busy with much serving and said, \"Lord, hast Thou no care that my sister hath left me alone to serve?\" Jesus answered, \"Martha, Martha, thou art careful, and art troubled about many things.\" He said, \"But one thing is necessary. Mary hath chosen the best part, which shall not be taken away from her.\"",
+      "keyLine": "Mary hath chosen the best part.",
+      "heartTitle": "Martha & Mary",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Serving",
+      "heartLabelB": "Listening",
+      "questions": [
+        "Was Martha's work bad? Why or why not?",
+        "How can you choose 'the better part' this week?"
+      ],
+      "actions": [
+        "Spend 10 minutes with Jesus daily",
+        "Serve without complaining",
+        "Visit the Blessed Sacrament"
+      ],
+      "prayer": "Jesus, help me choose the better part. Amen.",
+      "activity": {
+        "title": "Family Bible time",
+        "intro": "Sit at Jesus' feet as a family. Take turns reading the Bible.",
+        "idea": 117,
+        "type": "tracker",
+        "rows": [
+          "Who read today?",
+          "What we read"
+        ]
+      },
+      "words": [
+        "Martha",
+        "Mary",
+        "anxious",
+        "listen",
+        "better part",
+        "prayer"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT16_main.png",
+    "heart": "C_OT16_heart.png",
+    "icons": [
+      "icon_house.png",
+      "icon_cup.png",
+      "icon_praying_hands.png"
+    ],
+    "mainBrief": "Mary sitting at Jesus' feet; Martha with dishes",
+    "heartBrief": "Top: listening; bottom: serving"
+  }
+}

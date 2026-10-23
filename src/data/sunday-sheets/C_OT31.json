@@ -1,0 +1,92 @@
+{
+  "key": "C_OT31",
+  "liturgicalName": "31st Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 19:1-10",
+  "keyVerseDR": "\"For the Son of man is come to seek and to save that which was lost.\" (Lk 19:10)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Zacchaeus Climbs a Tree",
+      "story": "Zacchaeus was a short man. He climbed a tree to see Jesus. Jesus said, \"Zacchaeus, come down! I will stay at your house today.\"",
+      "keyLine": "Jesus wants to be with me.",
+      "heartTitle": "Changed Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus comes",
+      "heartLabelB": "I change",
+      "questions": [
+        "Why did Zacchaeus climb a tree?",
+        "What did Zacchaeus do after?"
+      ],
+      "actions": [
+        "Say sorry and fix it",
+        "Share",
+        "Welcome Jesus"
+      ],
+      "prayer": "Jesus, come into my heart. Amen.",
+      "activity": {
+        "title": "My picture diary",
+        "intro": "Draw Zacchaeus up in the tree, and Jesus calling him.",
+        "idea": 5,
+        "type": "drawscene",
+        "prompt": "Zacchaeus in a sycamore tree looking down at Jesus, who calls him by name"
+      },
+      "words": [
+        "tree",
+        "short",
+        "house",
+        "change"
+      ]
+    },
+    "level2": {
+      "title": "Today Salvation Has Come",
+      "story": "Jesus was passing through Jericho, and a rich chief tax collector named Zacchaeus wanted to see Him. He was short, so he ran ahead and climbed a sycamore tree. When Jesus came, He looked up and said, \"Zacheus, make haste and come down; for this day I must abide in thy house.\" People grumbled, but Zacchaeus said, \"Behold, Lord, the half of my goods I give to the poor.\" Jesus said, \"This day is salvation come to this house... For the Son of man is come to seek and to save that which was lost.\"",
+      "keyLine": "The Son of man is come to seek and to save that which was lost.",
+      "heartTitle": "Conversion",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Before Jesus",
+      "heartLabelB": "After Jesus",
+      "questions": [
+        "How did meeting Jesus change Zacchaeus?",
+        "What can you make right this week?"
+      ],
+      "actions": [
+        "Repair something I broke or said",
+        "Give to the poor",
+        "Welcome Jesus at Communion"
+      ],
+      "prayer": "Jesus, seek me and save me. Amen.",
+      "activity": {
+        "title": "Zacchaeus in order",
+        "intro": "Number the story in order.",
+        "idea": 32,
+        "type": "sequence",
+        "scenes": [
+          "Zacchaeus wants to see Jesus",
+          "He climbs a sycamore tree",
+          "Jesus says, Come down!",
+          "He gives half his goods to the poor"
+        ]
+      },
+      "words": [
+        "Zacchaeus",
+        "sycamore",
+        "conversion",
+        "restitution",
+        "salvation",
+        "lost"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT31_main.png",
+    "heart": "C_OT31_heart.png",
+    "icons": [
+      "icon_tree_fruit.png",
+      "icon_coins.png",
+      "icon_house.png"
+    ],
+    "mainBrief": "Zacchaeus in a sycamore tree; Jesus looking up",
+    "heartBrief": "Tree with Zacchaeus inside heart"
+  }
+}

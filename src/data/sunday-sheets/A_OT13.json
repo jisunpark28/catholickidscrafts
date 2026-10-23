@@ -1,0 +1,93 @@
+{
+  "key": "A_OT13",
+  "liturgicalName": "13th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 10:37-42",
+  "keyVerseDR": "\"...whosoever shall give to drink to one of these little ones a cup of cold water... shall not lose his reward.\" (Mt 10:42)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "A Cup of Water",
+      "story": "Jesus said, \"Whoever welcomes you welcomes Me.\" Even a cup of cold water given in love counts. Small acts of love matter to God!",
+      "keyLine": "Small acts of love matter.",
+      "heartTitle": "Little Kindness",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I give",
+      "heartLabelB": "I help",
+      "questions": [
+        "What small gift did Jesus talk about?",
+        "What kind thing can you do?"
+      ],
+      "actions": [
+        "Give someone a drink",
+        "Help a friend",
+        "Pray"
+      ],
+      "prayer": "Jesus, help me show love in small ways. Amen.",
+      "activity": {
+        "title": "Cups of kindness",
+        "intro": "Stamp or draw a cup each time you help someone.",
+        "idea": 98,
+        "type": "tracker",
+        "rows": [
+          "I helped someone"
+        ]
+      },
+      "words": [
+        "water",
+        "cup",
+        "give",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Welcome and Reward",
+      "story": "Jesus said whoever loves father or mother more than Him is not worthy of Him. \"Whoever does not take up his cross and follow Me is not worthy of Me.\" He said, \"Whoever welcomes you welcomes Me.\" Whoever welcomes a prophet will receive a prophet's reward. Jesus promised that whoever gives even a cup of cold water to a little one will not lose their reward.",
+      "keyLine": "He shall not lose his reward.",
+      "heartTitle": "Loving Jesus First",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus first",
+      "heartLabelB": "Serving others",
+      "questions": [
+        "What does it mean to love Jesus most?",
+        "How can you welcome others like Jesus?"
+      ],
+      "actions": [
+        "Welcome a guest",
+        "Offer up something hard",
+        "Serve my family"
+      ],
+      "prayer": "Jesus, I love You above all things. Amen.",
+      "activity": {
+        "title": "Share with others",
+        "intro": "Even a cup of water counts! Plan what you can give.",
+        "idea": 115,
+        "type": "prayerframe",
+        "starters": [
+          "A toy I can share...",
+          "Clothes I can give...",
+          "Someone I can welcome..."
+        ]
+      },
+      "words": [
+        "cross",
+        "welcome",
+        "reward",
+        "prophet",
+        "disciple",
+        "hospitality"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT13_main.png",
+    "heart": "A_OT13_heart.png",
+    "icons": [
+      "icon_cup.png",
+      "icon_water_drop.png",
+      "icon_cross.png"
+    ],
+    "mainBrief": "Child giving a cup of water to a friend",
+    "heartBrief": "Cup of water in heart"
+  }
+}

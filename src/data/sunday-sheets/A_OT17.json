@@ -1,0 +1,88 @@
+{
+  "key": "A_OT17",
+  "liturgicalName": "17th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 13:44-52",
+  "keyVerseDR": "\"The kingdom of heaven is like unto a treasure hidden in a field.\" (Mt 13:44)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Hidden Treasure",
+      "story": "Jesus said the Kingdom is like a treasure hidden in a field. A man sold everything to buy that field. Jesus is our greatest treasure!",
+      "keyLine": "God is my treasure.",
+      "heartTitle": "My Treasure",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "What I love",
+      "heartLabelB": "God is best",
+      "questions": [
+        "What did the man find?",
+        "What is the best treasure?"
+      ],
+      "actions": [
+        "Thank God for my faith",
+        "Share a toy",
+        "Pray"
+      ],
+      "prayer": "Jesus, You are my treasure. Amen.",
+      "activity": {
+        "title": "The hidden treasure",
+        "intro": "Rub a coin under the paper, then draw the treasure chest.",
+        "idea": 83,
+        "type": "drawscene",
+        "prompt": "A treasure chest hidden in a field, full of shining coins"
+      },
+      "words": [
+        "treasure",
+        "pearl",
+        "happy",
+        "kingdom"
+      ]
+    },
+    "level2": {
+      "title": "The Pearl of Great Price",
+      "story": "Jesus said the kingdom of heaven is like a treasure buried in a field. A man found it, and out of joy he sold all he had and bought that field. The kingdom is also like a merchant searching for fine pearls. When he found one pearl of great price, he sold everything to buy it. Jesus also said the kingdom is like a net that gathers every kind of fish.",
+      "keyLine": "The kingdom of heaven is like unto a treasure hidden in a field.",
+      "heartTitle": "Worth Everything",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I'd give up",
+      "heartLabelB": "What I gain",
+      "questions": [
+        "Why did they give up everything with joy?",
+        "What is your 'pearl'?"
+      ],
+      "actions": [
+        "Give up a distraction for prayer",
+        "Donate a toy",
+        "Visit Jesus in church"
+      ],
+      "prayer": "Jesus, You are worth more than everything. Amen.",
+      "activity": {
+        "title": "What is my treasure?",
+        "intro": "Write what you would give up for Jesus, and what He gives you.",
+        "idea": 95,
+        "type": "scale",
+        "left": "What I could give up",
+        "right": "The treasure Jesus gives"
+      },
+      "words": [
+        "treasure",
+        "pearl",
+        "merchant",
+        "kingdom",
+        "joy",
+        "worth"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT17_main.png",
+    "heart": "A_OT17_heart.png",
+    "icons": [
+      "icon_treasure_chest.png",
+      "icon_pearl.png",
+      "icon_crown.png"
+    ],
+    "mainBrief": "Man digging up a treasure chest; merchant with a pearl",
+    "heartBrief": "Treasure chest inside heart"
+  }
+}

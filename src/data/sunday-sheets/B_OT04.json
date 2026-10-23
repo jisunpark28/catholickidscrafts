@@ -1,0 +1,109 @@
+{
+  "key": "B_OT04",
+  "liturgicalName": "4th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 1:21-28",
+  "keyVerseDR": "\"...for with power he commandeth even the unclean spirits, and they obey him.\" (Mk 1:27)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Has Power",
+      "story": "Jesus taught in the synagogue. A man with an evil spirit cried out. Jesus said, \"Be quiet! Come out of him!\" and the man was free.",
+      "keyLine": "Jesus is stronger than evil.",
+      "heartTitle": "Jesus Is Strong",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus protects",
+      "heartLabelB": "I trust",
+      "questions": [
+        "What did people say about Jesus?",
+        "When do you need Jesus' help?"
+      ],
+      "actions": [
+        "Pray to my guardian angel",
+        "Trust Jesus",
+        "Listen at church"
+      ],
+      "prayer": "Jesus, protect me from evil. Amen.",
+      "activity": {
+        "title": "Jesus is stronger than evil",
+        "intro": "Number where your hand goes when you make the Sign of the Cross.",
+        "idea": 93,
+        "type": "sequence",
+        "scenes": [
+          "In the name of the Father (forehead)",
+          "and of the Son (chest)",
+          "and of the Holy (left shoulder)",
+          "Spirit (right shoulder). Amen."
+        ]
+      },
+      "words": [
+        "teach",
+        "power",
+        "obey",
+        "amazed"
+      ]
+    },
+    "level2": {
+      "title": "Teaching With Authority",
+      "story": "Jesus went into the synagogue in Capernaum on the sabbath and taught. The people were amazed, because He taught as one having authority. A man with an unclean spirit cried out, \"I know who Thou art, the Holy One of God.\" Jesus said, \"Speak no more, and go out of the man,\" and the spirit came out of him. Everyone asked, \"What is this new teaching?\" and His fame spread through all Galilee.",
+      "keyLine": "With power he commandeth even the unclean spirits: and they obey him.",
+      "heartTitle": "Jesus' Authority",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What Jesus rules over",
+      "heartLabelB": "What I give Him",
+      "questions": [
+        "What made Jesus' teaching different?",
+        "How do we stay strong against temptation?"
+      ],
+      "actions": [
+        "Pray the St. Michael Prayer",
+        "Use holy water",
+        "Listen to the homily"
+      ],
+      "prayer": "St. Michael, defend us; Jesus, protect us. Amen.",
+      "activity": {
+        "title": "True or false?",
+        "intro": "Circle T or F.",
+        "idea": 102,
+        "type": "truefalse",
+        "items": [
+          [
+            "Jesus taught in the synagogue on the sabbath.",
+            true
+          ],
+          [
+            "The people were bored by His teaching.",
+            false
+          ],
+          [
+            "The evil spirit knew Jesus was the Holy One of God.",
+            true
+          ],
+          [
+            "Jesus told the spirit to come out, and it obeyed.",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "authority",
+        "synagogue",
+        "unclean spirit",
+        "sabbath",
+        "amazed",
+        "Capernaum"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT04_main.png",
+    "heart": "B_OT04_heart.png",
+    "icons": [
+      "icon_scroll.png",
+      "icon_synagogue.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "Jesus teaching in synagogue; people amazed",
+    "heartBrief": "Shield of protection on heart"
+  }
+}

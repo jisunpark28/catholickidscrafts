@@ -1,0 +1,94 @@
+{
+  "key": "B_EAS05",
+  "liturgicalName": "5th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 15:1-8",
+  "keyVerseDR": "\"I am the vine: you the branches. He that abideth in me, and I in him, the same beareth much fruit...\" (Jn 15:5)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "The Vine and Branches",
+      "story": "Jesus said, \"I am the vine, and you are the branches.\" Branches need to stay on the vine to grow grapes. We stay close to Jesus!",
+      "keyLine": "I stay close to Jesus.",
+      "heartTitle": "Growing Fruit",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is the vine",
+      "heartLabelB": "I am a branch",
+      "questions": [
+        "What did Jesus call Himself?",
+        "How can you stay close to Jesus?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Go to Mass",
+        "Do good deeds"
+      ],
+      "prayer": "Jesus, help me stay close to You. Amen.",
+      "activity": {
+        "title": "Fingerprint grapes",
+        "intro": "Make grapes on the vine with your fingerprints.",
+        "idea": 76,
+        "type": "drawscene",
+        "prompt": "A big vine with branches full of fingerprint grapes: Jesus is the vine"
+      },
+      "words": [
+        "vine",
+        "branch",
+        "fruit",
+        "stay"
+      ]
+    },
+    "level2": {
+      "title": "Remain in Me",
+      "story": "Jesus said, \"I am the true vine; and My Father is the husbandman.\" Every branch that bears fruit, He prunes so that it may bring forth more fruit. Jesus said, \"Abide in Me, and I in you.\" A branch cannot bear fruit by itself unless it stays on the vine. \"I am the vine: you the branches: he that abideth in Me, and I in him, the same beareth much fruit.\"",
+      "keyLine": "I am the vine: you the branches.",
+      "heartTitle": "Abiding in Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I stay connected",
+      "heartLabelB": "Fruit I bear",
+      "questions": [
+        "What does 'pruning' mean in our lives?",
+        "What fruit does Jesus want you to bear?"
+      ],
+      "actions": [
+        "Make a daily prayer time",
+        "Receive Communion with love",
+        "Do a work of mercy"
+      ],
+      "prayer": "Jesus, keep me connected to You. Amen.",
+      "activity": {
+        "title": "The vine and branches",
+        "intro": "Find the words from today's Gospel.",
+        "idea": 28,
+        "type": "wordfind",
+        "words": [
+          "VINE",
+          "BRANCH",
+          "FRUIT",
+          "ABIDE",
+          "PRUNE",
+          "FATHER"
+        ]
+      },
+      "words": [
+        "vine",
+        "branches",
+        "prune",
+        "remain",
+        "abide",
+        "fruit"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_EAS05_main.png",
+    "heart": "B_EAS05_heart.png",
+    "icons": [
+      "icon_grapes.png",
+      "icon_vine.png",
+      "icon_leaf.png"
+    ],
+    "mainBrief": "Grapevine with branches and grapes; children as branches",
+    "heartBrief": "Vine wrapping heart with grapes"
+  }
+}

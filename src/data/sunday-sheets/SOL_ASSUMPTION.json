@@ -1,0 +1,88 @@
+{
+  "key": "SOL_ASSUMPTION",
+  "liturgicalName": "Assumption of the Blessed Virgin Mary",
+  "season": "Solemnity",
+  "gospelRef": "Luke 1:39-56 (Mass during the Day; Vigil: Luke 11:27-28)",
+  "keyVerseDR": "\"...behold from henceforth all generations shall call me blessed.\" (Lk 1:48)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Mary Goes to Heaven",
+      "story": "Mary visited her cousin Elizabeth. Elizabeth said, \"Blessed are you among women!\" Mary sang a song praising God. Today we celebrate that God took Mary, body and soul, into heaven.",
+      "keyLine": "Mary, pray for us!",
+      "heartTitle": "Mary's Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Mary in heaven",
+      "heartLabelB": "I love Mary",
+      "questions": [
+        "Where is Mary now?",
+        "How can you honor Mary?"
+      ],
+      "actions": [
+        "Pray a Hail Mary",
+        "Bring flowers to Mary",
+        "Be kind like Mary"
+      ],
+      "prayer": "Holy Mary, pray for us. Amen.",
+      "activity": {
+        "title": "Rosary for Mary",
+        "intro": "Color 10 beads and pray a Hail Mary for each.",
+        "idea": 18,
+        "type": "beads",
+        "count": 10,
+        "label": "Mary, pray for us!"
+      },
+      "words": [
+        "Mary",
+        "heaven",
+        "body",
+        "soul"
+      ]
+    },
+    "level2": {
+      "title": "The Magnificat",
+      "story": "Mary went with haste to the hill country to visit her cousin Elizabeth. When Elizabeth heard Mary's greeting, the baby leaped in her womb, and she said, \"Blessed art thou among women.\" Mary said, \"My soul doth magnify the Lord. And my spirit hath rejoiced in God my Saviour.\" She said, \"For behold from henceforth all generations shall call me blessed.\" Today we celebrate that Mary was taken up body and soul into heaven.",
+      "keyLine": "All generations shall call me blessed.",
+      "heartTitle": "Magnificat",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What God did for Mary",
+      "heartLabelB": "What God does for me",
+      "questions": [
+        "What does the Assumption promise us?",
+        "Which line of the Magnificat do you like best?"
+      ],
+      "actions": [
+        "Pray the Magnificat",
+        "Pray a Rosary",
+        "Give flowers to Mary"
+      ],
+      "prayer": "Mary, assumed into heaven, pray for us. Amen.",
+      "activity": {
+        "title": "Mary's song",
+        "intro": "Fill in the missing words of the Magnificat.",
+        "idea": 52,
+        "type": "fillblank",
+        "text": "My soul doth [magnify] the Lord. And my spirit hath [rejoiced] in God my Saviour."
+      },
+      "words": [
+        "Assumption",
+        "Magnificat",
+        "body and soul",
+        "heaven",
+        "dogma",
+        "blessed"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_ASSUMPTION_main.png",
+    "heart": "SOL_ASSUMPTION_heart.png",
+    "icons": [
+      "icon_mary_heart.png",
+      "icon_cloud.png",
+      "icon_lily.png"
+    ],
+    "mainBrief": "Mary rising gently into soft clouds with angels, roses below",
+    "heartBrief": "Roses and stars around heart; crown on top"
+  }
+}

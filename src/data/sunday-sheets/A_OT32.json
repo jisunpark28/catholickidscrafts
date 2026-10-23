@@ -1,0 +1,93 @@
+{
+  "key": "A_OT32",
+  "liturgicalName": "32nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 25:1-13",
+  "keyVerseDR": "\"Watch ye therefore, because you know not the day nor the hour.\" (Mt 25:13)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Keep Your Lamp Lit",
+      "story": "Ten bridesmaids waited for the bridegroom with lamps. Five brought extra oil, and five did not. Jesus says, \"Be ready!\"",
+      "keyLine": "I will be ready.",
+      "heartTitle": "Ready Lamp",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I pray",
+      "heartLabelB": "I do good",
+      "questions": [
+        "Who was ready?",
+        "How can you be ready for Jesus?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Do good deeds",
+        "Light a candle and pray"
+      ],
+      "prayer": "Jesus, keep my lamp shining. Amen.",
+      "activity": {
+        "title": "Keep your lamp lit",
+        "intro": "Connect the dots to make a lamp full of oil.",
+        "idea": 31,
+        "type": "dottodot",
+        "shape": "lamp"
+      },
+      "words": [
+        "lamp",
+        "oil",
+        "ready",
+        "wait"
+      ]
+    },
+    "level2": {
+      "title": "The Ten Virgins",
+      "story": "Jesus told a parable about ten virgins who took their lamps to meet the bridegroom. Five were foolish and took no extra oil, but five were wise and brought flasks of oil. The bridegroom was late, and they all fell asleep. At midnight came the cry, \"Behold the bridegroom cometh!\" While the foolish went to buy oil, the wise went in to the wedding, and the door was shut. Jesus said, \"Watch ye therefore, because you know not the day nor the hour.\"",
+      "keyLine": "Watch ye, because you know not the day nor the hour.",
+      "heartTitle": "Oil for My Lamp",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What fills my lamp",
+      "heartLabelB": "What drains it",
+      "questions": [
+        "What might the oil stand for?",
+        "Why can't the wise share their oil?"
+      ],
+      "actions": [
+        "Daily prayer",
+        "Go to Confession",
+        "Pray for the souls in purgatory"
+      ],
+      "prayer": "Jesus, keep me ready for You. Amen.",
+      "activity": {
+        "title": "Is my lamp ready?",
+        "intro": "Check your heart each evening.",
+        "idea": 125,
+        "type": "checklist",
+        "items": [
+          "Thank God for today",
+          "Did I pray today?",
+          "Did I love others?",
+          "Say sorry for what I did wrong",
+          "Ask God to help me tomorrow"
+        ]
+      },
+      "words": [
+        "bridegroom",
+        "lamps",
+        "oil",
+        "wise",
+        "foolish",
+        "vigilant"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT32_main.png",
+    "heart": "A_OT32_heart.png",
+    "icons": [
+      "icon_lamp.png",
+      "icon_oil_jar.png",
+      "icon_moon.png"
+    ],
+    "mainBrief": "Five bridesmaids with bright lamps, five with dark ones",
+    "heartBrief": "Lamp flames around heart"
+  }
+}

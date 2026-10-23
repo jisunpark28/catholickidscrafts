@@ -1,0 +1,111 @@
+{
+  "key": "A_OT16",
+  "liturgicalName": "16th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 13:24-43",
+  "keyVerseDR": "\"...the wheat gather ye into my barn.\" (Mt 13:30)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Tiny Seed, Big Tree",
+      "story": "Jesus said the Kingdom is like a tiny mustard seed. It grows into a big tree! Birds come to rest in its branches.",
+      "keyLine": "God's kingdom grows!",
+      "heartTitle": "Growing Kingdom",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Small seed",
+      "heartLabelB": "Big tree",
+      "questions": [
+        "What did the tiny seed become?",
+        "How can you grow in love?"
+      ],
+      "actions": [
+        "Do a small good deed",
+        "Be patient",
+        "Pray"
+      ],
+      "prayer": "Jesus, help me grow in Your love. Amen.",
+      "activity": {
+        "title": "The mustard tree",
+        "intro": "Write or draw one thing you thank God for on each leaf.",
+        "idea": 53,
+        "type": "tree",
+        "leaves": 3,
+        "label": "From a tiny seed, a big tree!"
+      },
+      "words": [
+        "seed",
+        "tree",
+        "grow",
+        "kingdom"
+      ]
+    },
+    "level2": {
+      "title": "Wheat and Weeds",
+      "story": "Jesus told a parable about a man who sowed good seed in his field. While everyone slept, an enemy sowed weeds among the wheat. The servants asked if they should pull the weeds, but he said, \"Let them grow together until the harvest.\" Jesus also said the kingdom is like a tiny mustard seed that grows into a large tree, and like yeast that makes the dough rise. At the harvest, the wheat will be gathered into God's barn.",
+      "keyLine": "The wheat gather ye into my barn.",
+      "heartTitle": "Patient Growth",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "God's patience",
+      "heartLabelB": "My growth",
+      "questions": [
+        "Why did the farmer wait until harvest?",
+        "How is God patient with us?"
+      ],
+      "actions": [
+        "Be patient with someone",
+        "Pull a 'weed' habit",
+        "Pray for sinners"
+      ],
+      "prayer": "Lord, make me wheat for Your harvest. Amen.",
+      "activity": {
+        "title": "Wheat or weeds?",
+        "intro": "Sort each one: does it help God's kingdom grow or not?",
+        "idea": 9,
+        "type": "sorting",
+        "left": "Wheat (good)",
+        "right": "Weeds (not good)",
+        "items": [
+          [
+            "Telling the truth",
+            "L"
+          ],
+          [
+            "Sharing my snack",
+            "L"
+          ],
+          [
+            "Saying mean words",
+            "R"
+          ],
+          [
+            "Praying for others",
+            "L"
+          ],
+          [
+            "Cheating at a game",
+            "R"
+          ]
+        ]
+      },
+      "words": [
+        "wheat",
+        "weeds",
+        "harvest",
+        "patience",
+        "mustard seed",
+        "yeast"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT16_main.png",
+    "heart": "A_OT16_heart.png",
+    "icons": [
+      "icon_wheat.png",
+      "icon_mustard_tree.png",
+      "icon_seed.png"
+    ],
+    "mainBrief": "Wheat field with weeds; tiny mustard seed and big tree",
+    "heartBrief": "Mustard tree growing out of heart"
+  }
+}

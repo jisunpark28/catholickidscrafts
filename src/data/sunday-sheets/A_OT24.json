@@ -1,0 +1,91 @@
+{
+  "key": "A_OT24",
+  "liturgicalName": "24th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 18:21-35",
+  "keyVerseDR": "\"I say not to thee, till seven times; but till seventy times seven times.\" (Mt 18:22)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Forgive Again",
+      "story": "Peter asked, \"How many times must I forgive?\" Jesus said, \"Seventy times seven!\" God forgives us, so we forgive others.",
+      "keyLine": "I will forgive.",
+      "heartTitle": "Forgiving Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God forgives me",
+      "heartLabelB": "I forgive",
+      "questions": [
+        "How many times should we forgive?",
+        "Who can you forgive?"
+      ],
+      "actions": [
+        "Forgive someone",
+        "Say sorry",
+        "Pray the Our Father"
+      ],
+      "prayer": "Jesus, help me forgive. Amen.",
+      "activity": {
+        "title": "A message of peace",
+        "intro": "Forgive like Jesus. Write a note to a friend.",
+        "idea": 74,
+        "type": "letter",
+        "style": "card",
+        "to": "My friend",
+        "lines": 3
+      },
+      "words": [
+        "forgive",
+        "sorry",
+        "again",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Seventy Times Seven",
+      "story": "Peter asked, \"Lord, how often shall my brother offend against me, and I forgive him? Till seven times?\" Jesus said, \"Not till seven times; but till seventy times seven times.\" He told of a king who forgave his servant a huge debt. But that servant would not forgive a fellow servant who owed him a little, and the king was angry. Jesus said our heavenly Father wants us to forgive our brother from our hearts.",
+      "keyLine": "Till seventy times seven times.",
+      "heartTitle": "Forgiveness",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How God forgives me",
+      "heartLabelB": "How I forgive",
+      "questions": [
+        "Why was the servant wrong?",
+        "What makes forgiving hard?"
+      ],
+      "actions": [
+        "Forgive someone in my heart",
+        "Go to Confession",
+        "Pray 'forgive us as we forgive'"
+      ],
+      "prayer": "Father, forgive me as I forgive others. Amen.",
+      "activity": {
+        "title": "Diary of a forgiven servant",
+        "intro": "Pretend you are the servant the king forgave. Write in his diary.",
+        "idea": 68,
+        "type": "letter",
+        "style": "letter",
+        "to": "My diary",
+        "lines": 4
+      },
+      "words": [
+        "forgive",
+        "mercy",
+        "debt",
+        "servant",
+        "king",
+        "Our Father"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT24_main.png",
+    "heart": "A_OT24_heart.png",
+    "icons": [
+      "icon_scroll.png",
+      "icon_crown.png",
+      "icon_handshake.png"
+    ],
+    "mainBrief": "King forgiving a kneeling servant; scroll of debt torn",
+    "heartBrief": "Torn debt scroll in heart"
+  }
+}

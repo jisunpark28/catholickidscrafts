@@ -1,0 +1,90 @@
+{
+  "key": "B_EAS03",
+  "liturgicalName": "3rd Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "Luke 24:35-48",
+  "keyVerseDR": "\"Jesus stood in the midst of them and saith to them: Peace be to you. It is I: Fear not.\" (Lk 24:36)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Eats Fish",
+      "story": "Jesus came to His friends and said, \"Peace be with you!\" They were afraid, so He showed them His hands and feet. Jesus even ate some fish!",
+      "keyLine": "Peace be with you!",
+      "heartTitle": "Jesus Is Real",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is alive",
+      "heartLabelB": "I tell others",
+      "questions": [
+        "What did Jesus eat?",
+        "Why did Jesus show His hands?"
+      ],
+      "actions": [
+        "Share peace",
+        "Tell about Jesus",
+        "Pray"
+      ],
+      "prayer": "Risen Jesus, give me Your peace. Amen.",
+      "activity": {
+        "title": "Words of peace",
+        "intro": "Jesus said, \"Peace be with you.\" Write kind words for a friend.",
+        "idea": 120,
+        "type": "speech",
+        "characters": [
+          "Me",
+          "My friend"
+        ]
+      },
+      "words": [
+        "peace",
+        "fish",
+        "alive",
+        "hands"
+      ]
+    },
+    "level2": {
+      "title": "Touch and See",
+      "story": "The two disciples told how they had known Jesus in the breaking of the bread. While they were speaking, Jesus stood in the midst of them and said, \"Peace be to you.\" They were frightened and thought they saw a spirit. Jesus said, \"See My hands and feet, that it is I Myself,\" and He ate a piece of broiled fish before them. Then He opened their minds to understand the Scriptures and said they would be His witnesses.",
+      "keyLine": "Peace be to you. It is I: Fear not.",
+      "heartTitle": "Witness of Easter",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What they saw",
+      "heartLabelB": "What I share",
+      "questions": [
+        "Why did Jesus eat in front of them?",
+        "How are you a witness to Jesus?"
+      ],
+      "actions": [
+        "Share my faith with a friend",
+        "Read Luke 24",
+        "Pray for peace"
+      ],
+      "prayer": "Risen Lord, open my mind to Your word. Amen.",
+      "activity": {
+        "title": "Gospel acclamation",
+        "intro": "Copy these words neatly.",
+        "idea": 141,
+        "type": "copyverse",
+        "text": "Lord Jesus, open the Scriptures to us; make our hearts burn while You speak to us."
+      },
+      "words": [
+        "risen body",
+        "witnesses",
+        "Scriptures",
+        "repentance",
+        "peace",
+        "nations"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_EAS03_main.png",
+    "heart": "B_EAS03_heart.png",
+    "icons": [
+      "icon_fish.png",
+      "icon_hands_wounds.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "Risen Jesus eating fish with startled disciples",
+    "heartBrief": "Peace dove in heart"
+  }
+}

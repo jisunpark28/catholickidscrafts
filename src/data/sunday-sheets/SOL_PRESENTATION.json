@@ -1,0 +1,106 @@
+{
+  "key": "SOL_PRESENTATION",
+  "liturgicalName": "Presentation of the Lord",
+  "season": "Feast of the Lord",
+  "gospelRef": "Luke 2:22-40 (or 2:22-32)",
+  "keyVerseDR": "\"Because my eyes have seen thy salvation,\" (Lk 2:30)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is the Light",
+      "story": "Mary and Joseph brought Baby Jesus to the Temple. Simeon held Him and said, \"My eyes have seen the Savior!\" He called Jesus a light for all people.",
+      "keyLine": "Jesus is the Light.",
+      "heartTitle": "Candle Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is light",
+      "heartLabelB": "I give to God",
+      "questions": [
+        "Who held baby Jesus?",
+        "Why do we bless candles today?"
+      ],
+      "actions": [
+        "Light a blessed candle",
+        "Give thanks",
+        "Visit church"
+      ],
+      "prayer": "Jesus, Light of the world, shine in me. Amen.",
+      "activity": {
+        "title": "Candlemas candles",
+        "intro": "Today candles are blessed. Color them for Jesus, the Light!",
+        "idea": 97,
+        "type": "candles",
+        "candles": [
+          [
+            "Jesus, my Light",
+            "light"
+          ],
+          [
+            "Light for all people",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "Temple",
+        "Simeon",
+        "candle",
+        "light"
+      ]
+    },
+    "level2": {
+      "title": "The Presentation in the Temple",
+      "story": "Forty days after Jesus was born, Mary and Joseph brought Him to the Temple in Jerusalem to present Him to the Lord. They offered a pair of turtledoves, as the law said. Simeon, a just and devout man, took Jesus in his arms and blessed God. He said, \"Because my eyes have seen Thy salvation... a light to the revelation of the Gentiles.\" The prophetess Anna also gave thanks and spoke of Jesus to all who awaited redemption.",
+      "keyLine": "My eyes have seen thy salvation.",
+      "heartTitle": "Offering Myself",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I offer God",
+      "heartLabelB": "Where I bring light",
+      "questions": [
+        "Why is this called 'Candlemas'?",
+        "What did Simeon say Jesus would be?"
+      ],
+      "actions": [
+        "Bring candles to be blessed",
+        "Pray the Nunc Dimittis",
+        "Honor an elderly person"
+      ],
+      "prayer": "Lord, let my eyes see Your salvation. Amen.",
+      "activity": {
+        "title": "Who am I?",
+        "intro": "Read the clues and guess.",
+        "idea": 50,
+        "type": "whoami",
+        "clues": [
+          "I was a just and devout man in Jerusalem.",
+          "God promised I would see the Christ before I died.",
+          "I held Baby Jesus in my arms in the Temple."
+        ],
+        "answer": "Simeon",
+        "choices": [
+          "Zechariah",
+          "Simeon",
+          "Joseph"
+        ]
+      },
+      "words": [
+        "Presentation",
+        "Candlemas",
+        "Simeon",
+        "Anna",
+        "light",
+        "offering"
+      ]
+    }
+  },
+  "art": {
+    "main": "SOL_PRESENTATION_main.png",
+    "heart": "SOL_PRESENTATION_heart.png",
+    "icons": [
+      "icon_candle.png",
+      "icon_dove.png",
+      "icon_temple.png"
+    ],
+    "mainBrief": "Simeon holding baby Jesus in the Temple, Mary and Joseph with two doves, candles",
+    "heartBrief": "Candles around heart; two doves on top"
+  }
+}

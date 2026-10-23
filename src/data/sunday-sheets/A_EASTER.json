@@ -1,0 +1,104 @@
+{
+  "key": "A_EASTER",
+  "liturgicalName": "Easter Sunday: The Resurrection of the Lord",
+  "season": "Easter",
+  "gospelRef": "John 20:1-9",
+  "keyVerseDR": "\"...he saw and believed.\" (Jn 20:8)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Alive!",
+      "story": "Early on Sunday, Mary Magdalene went to the tomb. The stone was rolled away! Jesus is risen! Alleluia!",
+      "keyLine": "Jesus is risen!",
+      "heartTitle": "Easter Joy",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is alive",
+      "heartLabelB": "I am happy",
+      "questions": [
+        "What did Mary find?",
+        "How do you celebrate Easter?"
+      ],
+      "actions": [
+        "Say Alleluia!",
+        "Share Easter joy",
+        "Go to Mass"
+      ],
+      "prayer": "Risen Jesus, I am so happy! Alleluia! Amen.",
+      "activity": {
+        "title": "He is risen!",
+        "intro": "Decorate the Easter words.",
+        "idea": 135,
+        "type": "copyverse",
+        "text": "He is risen! Alleluia!"
+      },
+      "words": [
+        "tomb",
+        "empty",
+        "risen",
+        "Alleluia"
+      ]
+    },
+    "level2": {
+      "title": "The Empty Tomb",
+      "story": "Early on the first day of the week, while it was still dark, Mary Magdalene came to the tomb. She saw the stone rolled away and ran to tell Peter and John. The two disciples ran to the tomb, and John got there first. Inside they saw the burial cloths lying there, but Jesus was gone. John saw and believed: Jesus is risen from the dead!",
+      "keyLine": "He saw and believed.",
+      "heartTitle": "Easter People",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Why I believe",
+      "heartLabelB": "How I share it",
+      "questions": [
+        "Why is the Resurrection the most important day?",
+        "What did John see that made him believe?"
+      ],
+      "actions": [
+        "Greet people with 'He is risen!'",
+        "Pray the Regina Caeli",
+        "Do something joyful for others"
+      ],
+      "prayer": "Risen Lord, fill me with Easter faith. Alleluia! Amen.",
+      "activity": {
+        "title": "True or false?",
+        "intro": "Circle T or F.",
+        "idea": 102,
+        "type": "truefalse",
+        "items": [
+          [
+            "Mary Magdalene came to the tomb while it was dark.",
+            true
+          ],
+          [
+            "The stone was still in front of the tomb.",
+            false
+          ],
+          [
+            "Peter got to the tomb first.",
+            false
+          ],
+          [
+            "The burial cloths were left in the tomb.",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "Resurrection",
+        "tomb",
+        "burial cloths",
+        "believe",
+        "Alleluia",
+        "Easter"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_EASTER_main.png",
+    "heart": "A_EASTER_heart.png",
+    "icons": [
+      "icon_tomb.png",
+      "icon_sunrise.png",
+      "icon_lily.png"
+    ],
+    "mainBrief": "Empty tomb with stone rolled away at sunrise; Mary Magdalene running",
+    "heartBrief": "Easter lilies and 'Alleluia' around heart"
+  }
+}

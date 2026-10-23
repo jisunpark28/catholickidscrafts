@@ -1,0 +1,91 @@
+{
+  "key": "B_OT16",
+  "liturgicalName": "16th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 6:30-34",
+  "keyVerseDR": "\"...he had compassion on them, because they were as sheep not having a shepherd...\" (Mk 6:34)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Come and Rest",
+      "story": "The Apostles came back tired. Jesus said, \"Come and rest a while.\" But crowds came, and Jesus felt sorry for them and taught them.",
+      "keyLine": "Jesus cares for me.",
+      "heartTitle": "Rest & Care",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I rest with Jesus",
+      "heartLabelB": "I care for others",
+      "questions": [
+        "Where did Jesus take His friends?",
+        "When do you rest with Jesus?"
+      ],
+      "actions": [
+        "Rest and pray",
+        "Help someone",
+        "Be gentle"
+      ],
+      "prayer": "Jesus, my Shepherd, take care of me. Amen.",
+      "activity": {
+        "title": "A quiet place",
+        "intro": "Draw the quiet place by the lake where Jesus took His friends.",
+        "idea": 11,
+        "type": "drawscene",
+        "prompt": "A quiet hillside by the Sea of Galilee, with a boat and Jesus resting with His friends"
+      },
+      "words": [
+        "rest",
+        "crowd",
+        "shepherd",
+        "care"
+      ]
+    },
+    "level2": {
+      "title": "Sheep Without a Shepherd",
+      "story": "The Apostles gathered around Jesus and told Him all they had done and taught. He said, \"Come apart into a desert place, and rest a little.\" So many were coming and going that they did not even have time to eat. They went away in a boat, but the crowds ran ahead on foot and got there first. When Jesus saw the crowd, He had compassion, because they were as sheep without a shepherd, and He taught them many things.",
+      "keyLine": "He had compassion on them, because they were as sheep not having a shepherd.",
+      "heartTitle": "Rest & Compassion",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I rest",
+      "heartLabelB": "Who needs compassion",
+      "questions": [
+        "Why is rest important?",
+        "How did Jesus show compassion?"
+      ],
+      "actions": [
+        "Take a quiet prayer break daily",
+        "Help someone who needs it",
+        "Thank God for rest"
+      ],
+      "prayer": "Jesus, Good Shepherd, give me rest and a caring heart. Amen.",
+      "activity": {
+        "title": "Rest with Jesus",
+        "intro": "Jesus says, \"Come and rest.\" Draw your prayer times on the clocks.",
+        "idea": 106,
+        "type": "clock",
+        "labels": [
+          "Morning",
+          "Meals",
+          "Night"
+        ]
+      },
+      "words": [
+        "rest",
+        "deserted place",
+        "compassion",
+        "shepherd",
+        "apostles",
+        "teach"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT16_main.png",
+    "heart": "B_OT16_heart.png",
+    "icons": [
+      "icon_sheep.png",
+      "icon_boat.png",
+      "icon_shepherd_staff.png"
+    ],
+    "mainBrief": "Jesus in a boat looking at a crowd on shore with compassion",
+    "heartBrief": "Resting sheep in heart"
+  }
+}

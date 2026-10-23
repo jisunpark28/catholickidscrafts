@@ -1,0 +1,106 @@
+{
+  "key": "C_OT15",
+  "liturgicalName": "15th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 10:25-37",
+  "keyVerseDR": "\"Go, and do thou in like manner.\" (Lk 10:37)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Good Samaritan",
+      "story": "A man was hurt and left by the road. A priest and a Levite walked past. A Samaritan stopped, bandaged him, and took care of him. Jesus said, \"Go and do the same.\"",
+      "keyLine": "Go and help others.",
+      "heartTitle": "Good Neighbor",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I see",
+      "heartLabelB": "I help",
+      "questions": [
+        "Who helped the hurt man?",
+        "Who can you help?"
+      ],
+      "actions": [
+        "Help someone hurt",
+        "Be kind to someone different",
+        "Share"
+      ],
+      "prayer": "Jesus, help me be a good neighbor. Amen.",
+      "activity": {
+        "title": "Spot the difference",
+        "intro": "Find 5 differences between the two pictures of the Good Samaritan.",
+        "idea": 30,
+        "type": "spotdiff",
+        "count": 5,
+        "scene": "The Good Samaritan helping the hurt man by the road to Jericho"
+      },
+      "words": [
+        "help",
+        "hurt",
+        "neighbor",
+        "kind"
+      ]
+    },
+    "level2": {
+      "title": "Who Is My Neighbor?",
+      "story": "A lawyer asked Jesus, \"Master, what must I do to possess eternal life?\" Jesus asked what the law said, and he answered, love God with all your heart and your neighbour as yourself. \"And who is my neighbour?\" he asked. Jesus told of a man beaten by robbers; a priest and a Levite passed by, but a Samaritan had compassion, bound up his wounds, and took him to an inn. Jesus asked who was a neighbour, and the lawyer said, \"He that shewed mercy on him,\" and Jesus said, \"Go, and do thou in like manner.\"",
+      "keyLine": "Go, and do thou in like manner.",
+      "heartTitle": "Being a Neighbor",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who needs help",
+      "heartLabelB": "How I'll help",
+      "questions": [
+        "Why did the others pass by?",
+        "Who is hard for you to see as a neighbor?"
+      ],
+      "actions": [
+        "Help someone different from me",
+        "Donate first-aid items",
+        "Stop to help"
+      ],
+      "prayer": "Jesus, make me a good Samaritan. Amen.",
+      "activity": {
+        "title": "Be a good neighbour",
+        "intro": "Match each situation to a loving response.",
+        "idea": 60,
+        "type": "matchup",
+        "pairs": [
+          [
+            "A classmate falls and is hurt",
+            "Help them up and get a teacher"
+          ],
+          [
+            "A neighbor is sick",
+            "Make a card and visit"
+          ],
+          [
+            "Someone is new and alone",
+            "Sit with them and be a friend"
+          ],
+          [
+            "A family needs food",
+            "Share at the food drive"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "neighbor",
+        "Samaritan",
+        "Levite",
+        "compassion",
+        "mercy",
+        "eternal life"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT15_main.png",
+    "heart": "C_OT15_heart.png",
+    "icons": [
+      "icon_bandage.png",
+      "icon_donkey.png",
+      "icon_road.png"
+    ],
+    "mainBrief": "Good Samaritan bandaging a hurt man by the road",
+    "heartBrief": "Bandage & helping hands in heart"
+  }
+}

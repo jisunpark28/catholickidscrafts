@@ -1,0 +1,118 @@
+{
+  "key": "B_LNT03",
+  "liturgicalName": "3rd Sunday of Lent (Year A readings may be used)",
+  "season": "Lent",
+  "gospelRef": "John 2:13-25",
+  "keyVerseDR": "\"...make not the house of my Father a house of traffic.\" (Jn 2:16)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "God's House",
+      "story": "Jesus went to the Temple. People were selling animals and changing money there. Jesus drove them out and said, \"Do not make My Father's house a market!\"",
+      "keyLine": "Church is God's house.",
+      "heartTitle": "God's House",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I pray",
+      "heartLabelB": "I am quiet",
+      "questions": [
+        "What did Jesus say God's house is for?",
+        "How do you act in church?"
+      ],
+      "actions": [
+        "Be reverent in church",
+        "Genuflect",
+        "Pray"
+      ],
+      "prayer": "Jesus, I love Your house. Amen.",
+      "activity": {
+        "title": "Things in God's house",
+        "intro": "Match each picture to its name.",
+        "idea": 34,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Altar",
+            "Picture of an altar"
+          ],
+          [
+            "Tabernacle",
+            "Picture of a tabernacle"
+          ],
+          [
+            "Holy water font",
+            "Picture of a font"
+          ]
+        ]
+      },
+      "words": [
+        "temple",
+        "house",
+        "pray",
+        "holy"
+      ]
+    },
+    "level2": {
+      "title": "Cleansing the Temple",
+      "story": "When the Passover was near, Jesus went up to Jerusalem. In the Temple He found people selling oxen, sheep, and doves, and money changers sitting there. He made a whip of cords and drove them all out, overturning the tables. Jesus said, \"Make not the house of My Father a house of traffic.\" When the leaders asked for a sign, Jesus said, \"Destroy this temple, and in three days I will raise it up,\" speaking of the temple of His body.",
+      "keyLine": "Make not the house of my Father a house of traffic.",
+      "heartTitle": "Temple of God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Church as God's house",
+      "heartLabelB": "My body as a temple",
+      "questions": [
+        "Why was Jesus angry?",
+        "How is your body a temple of the Holy Spirit?"
+      ],
+      "actions": [
+        "Be reverent at Mass",
+        "Take care of my body",
+        "Clean out a bad habit"
+      ],
+      "prayer": "Jesus, cleanse my heart and make it Your temple. Amen.",
+      "activity": {
+        "title": "Around the altar",
+        "intro": "Church is God's house. Match each item to where it is.",
+        "idea": 149,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Altar",
+            "At the center of the sanctuary"
+          ],
+          [
+            "Ambo",
+            "Where the readings are proclaimed"
+          ],
+          [
+            "Tabernacle",
+            "Where the Blessed Sacrament is kept"
+          ],
+          [
+            "Sanctuary lamp",
+            "Burns beside the tabernacle"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Temple",
+        "zeal",
+        "marketplace",
+        "reverence",
+        "body",
+        "Resurrection"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_LNT03_main.png",
+    "heart": "B_LNT03_heart.png",
+    "icons": [
+      "icon_temple.png",
+      "icon_dove.png",
+      "icon_coins.png"
+    ],
+    "mainBrief": "Jesus overturning tables in the Temple, doves flying free",
+    "heartBrief": "Church shape inside heart"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "key": "A_OT23",
+  "liturgicalName": "23rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 18:15-20",
+  "keyVerseDR": "\"For where there are two or three gathered together in my name, there am I in the midst of them.\" (Mt 18:20)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is With Us",
+      "story": "Jesus said, \"If your brother hurts you, talk to him kindly.\" He said, \"Where two or three pray in My name, I am there!\" Jesus is with us when we pray together.",
+      "keyLine": "Jesus is with us!",
+      "heartTitle": "Praying Together",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "We pray",
+      "heartLabelB": "Jesus is here",
+      "questions": [
+        "Who is with us when we pray?",
+        "Who can you pray with?"
+      ],
+      "actions": [
+        "Pray with my family",
+        "Make peace",
+        "Go to Mass"
+      ],
+      "prayer": "Jesus, be with us when we pray. Amen.",
+      "activity": {
+        "title": "Pray together",
+        "intro": "Jesus is with us when we pray together!",
+        "idea": 99,
+        "type": "checklist",
+        "items": [
+          "Hold hands with my family",
+          "Pray an Our Father together",
+          "Say \"Jesus is with us!\""
+        ]
+      },
+      "words": [
+        "pray",
+        "together",
+        "two",
+        "three"
+      ]
+    },
+    "level2": {
+      "title": "Gathered in His Name",
+      "story": "Jesus said, \"If your brother sins against you, go and tell him his fault between you and him alone.\" If he listens, you have won back your brother. If not, bring one or two others along. Jesus said, \"If two of you agree on earth about anything you ask, it will be done by My Father.\" He promised, \"Where there are two or three gathered together in My name, there am I in the midst of them.\"",
+      "keyLine": "Where there are two or three gathered together in my name, there am I.",
+      "heartTitle": "Making Peace",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Talk gently",
+      "heartLabelB": "Pray together",
+      "questions": [
+        "How should we handle a fight with a friend?",
+        "Why is praying together powerful?"
+      ],
+      "actions": [
+        "Pray a family Rosary",
+        "Talk kindly about a problem",
+        "Join a prayer group"
+      ],
+      "prayer": "Jesus, be in the midst of our family. Amen.",
+      "activity": {
+        "title": "Gathered in His name",
+        "intro": "Take turns reading the Bible as a family this week.",
+        "idea": 117,
+        "type": "tracker",
+        "rows": [
+          "Who read today?",
+          "What we read",
+          "Our prayer"
+        ]
+      },
+      "words": [
+        "reconcile",
+        "correct",
+        "Church",
+        "bind",
+        "gather",
+        "community"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT23_main.png",
+    "heart": "A_OT23_heart.png",
+    "icons": [
+      "icon_praying_hands.png",
+      "icon_family.png",
+      "icon_candle.png"
+    ],
+    "mainBrief": "Family praying together in a circle; light above",
+    "heartBrief": "Family circle in heart"
+  }
+}

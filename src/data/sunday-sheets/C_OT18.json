@@ -1,0 +1,98 @@
+{
+  "key": "C_OT18",
+  "liturgicalName": "18th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 12:13-21",
+  "keyVerseDR": "\"...a man's life doth not consist in the abundance of things which he possesseth.\" (Lk 12:15)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Rich Toward God",
+      "story": "A man wanted Jesus to make his brother share money. Jesus told about a rich man who built bigger barns for his stuff. That night he died. Being rich toward God is what matters!",
+      "keyLine": "God is better than stuff.",
+      "heartTitle": "Rich in Love",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "What I have",
+      "heartLabelB": "What I share",
+      "questions": [
+        "What did the rich man build?",
+        "What can you share?"
+      ],
+      "actions": [
+        "Give a toy away",
+        "Share",
+        "Thank God"
+      ],
+      "prayer": "God, help me be rich in love. Amen.",
+      "activity": {
+        "title": "Mass bingo",
+        "intro": "God is better than stuff! Mark the words you hear at Mass.",
+        "idea": 81,
+        "type": "bingo",
+        "words": [
+          "Amen",
+          "Alleluia",
+          "Lord",
+          "Peace",
+          "Bread",
+          "Holy",
+          "Glory",
+          "Gospel",
+          "Blessed"
+        ]
+      },
+      "words": [
+        "barn",
+        "stuff",
+        "share",
+        "God"
+      ]
+    },
+    "level2": {
+      "title": "The Rich Fool",
+      "story": "A man in the crowd said, \"Master, speak to my brother that he divide the inheritance with me.\" Jesus said, \"Take heed and beware of all covetousness.\" He told of a rich man whose land produced plenty, who said, \"I will pull down my barns, and will build greater.\" He planned to rest, eat, drink, and make merry. But God said, \"Thou fool, this night do they require thy soul of thee,\" and so is he who is not rich towards God.",
+      "keyLine": "A man's life doth not consist in the abundance of things which he possesseth.",
+      "heartTitle": "True Riches",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Stuff I want",
+      "heartLabelB": "Treasure in heaven",
+      "questions": [
+        "Why did God call the man a fool?",
+        "What does it mean to be rich toward God?"
+      ],
+      "actions": [
+        "Donate things I don't use",
+        "Thank God daily",
+        "Give part of my allowance"
+      ],
+      "prayer": "Lord, make me rich toward You. Amen.",
+      "activity": {
+        "title": "A habit to drop",
+        "intro": "What 'stuff' takes my heart from God? Weigh it up.",
+        "idea": 67,
+        "type": "scale",
+        "left": "Something I want too much",
+        "right": "How I can be rich toward God"
+      },
+      "words": [
+        "greed",
+        "barns",
+        "fool",
+        "possessions",
+        "rich toward God",
+        "generosity"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT18_main.png",
+    "heart": "C_OT18_heart.png",
+    "icons": [
+      "icon_barn.png",
+      "icon_coins.png",
+      "icon_wheat.png"
+    ],
+    "mainBrief": "Rich man with big barns, worried; empty sky",
+    "heartBrief": "Barns vs. heart labeled 'God'"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "key": "A_LNT02",
+  "liturgicalName": "2nd Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "Matthew 17:1-9",
+  "keyVerseDR": "\"This is my beloved Son, in whom I am well pleased: hear ye him.\" (Mt 17:5)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Jesus Shines",
+      "story": "Jesus took His friends up a high mountain. His face shone like the sun! God said, \"This is My Son. Listen to Him!\"",
+      "keyLine": "Listen to Jesus!",
+      "heartTitle": "Shining Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I listen",
+      "heartLabelB": "I shine",
+      "questions": [
+        "What did Jesus look like?",
+        "How can you listen to Jesus?"
+      ],
+      "actions": [
+        "Read a Bible story",
+        "Be quiet and pray",
+        "Listen to my parents"
+      ],
+      "prayer": "Jesus, help me listen to You. Amen.",
+      "activity": {
+        "title": "On the high mountain",
+        "intro": "Draw Jesus shining on the mountain with His friends.",
+        "idea": 11,
+        "type": "drawscene",
+        "prompt": "Jesus shining bright as the sun on a high mountain, with Peter, James, and John"
+      },
+      "words": [
+        "mountain",
+        "shine",
+        "listen",
+        "cloud"
+      ]
+    },
+    "level2": {
+      "title": "The Transfiguration",
+      "story": "Jesus took Peter, James, and John up a high mountain. There He was transfigured: His face shone like the sun, and His clothes became white as light. Moses and Elijah appeared, talking with Him. A bright cloud covered them, and a voice said, \"This is My beloved Son. Listen to Him.\" The disciples fell down in fear, but Jesus touched them and said, \"Rise, and do not be afraid.\"",
+      "keyLine": "This is my beloved Son: hear ye him.",
+      "heartTitle": "Listening to Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Where I hear Him",
+      "heartLabelB": "How I obey",
+      "questions": [
+        "Why did Jesus show His glory to the disciples?",
+        "Where can you hear Jesus' voice?"
+      ],
+      "actions": [
+        "Spend 5 quiet minutes in prayer",
+        "Read the Sunday Gospel",
+        "Turn off screens one evening"
+      ],
+      "prayer": "Jesus, help me listen to You. Amen.",
+      "activity": {
+        "title": "Mysteries of light",
+        "intro": "The Transfiguration is a Luminous Mystery of the Rosary. Match each mystery.",
+        "idea": 138,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Baptism of Jesus",
+            "At the Jordan River"
+          ],
+          [
+            "Wedding at Cana",
+            "Water becomes wine"
+          ],
+          [
+            "Transfiguration",
+            "Jesus shines on the mountain"
+          ],
+          [
+            "Institution of the Eucharist",
+            "The Last Supper"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "Transfiguration",
+        "glory",
+        "Moses",
+        "Elijah",
+        "cloud",
+        "listen"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_LNT02_main.png",
+    "heart": "A_LNT02_heart.png",
+    "icons": [
+      "icon_mountain.png",
+      "icon_cloud.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Mountain top, Jesus in shining white robes, Peter/James/John bowed",
+    "heartBrief": "Sun rays radiating from heart; cloud at top"
+  }
+}

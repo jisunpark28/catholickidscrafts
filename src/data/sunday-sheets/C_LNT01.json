@@ -1,0 +1,91 @@
+{
+  "key": "C_LNT01",
+  "liturgicalName": "1st Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "Luke 4:1-13",
+  "keyVerseDR": "\"Thou shalt adore the Lord thy God, and him only shalt thou serve.\" (Lk 4:8)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Jesus Says No",
+      "story": "Jesus was in the desert for 40 days. The devil tempted Him three times. Each time, Jesus answered with God's word.",
+      "keyLine": "I choose God!",
+      "heartTitle": "Saying No",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say no to",
+      "heartLabelB": "I say yes to",
+      "questions": [
+        "Who did Jesus say no to?",
+        "When can you say no to wrong?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Give up a treat",
+        "Share with others"
+      ],
+      "prayer": "Jesus, help me choose what is good. Amen.",
+      "activity": {
+        "title": "I choose God",
+        "intro": "Color a heart each day you choose God over temptation.",
+        "idea": 79,
+        "type": "tracker",
+        "rows": [
+          "I chose God today"
+        ]
+      },
+      "words": [
+        "desert",
+        "40",
+        "say no",
+        "God"
+      ]
+    },
+    "level2": {
+      "title": "Tempted in the Desert",
+      "story": "Jesus, full of the Holy Spirit, was led into the desert for forty days, tempted by the devil. He ate nothing, and when the days ended He was hungry. The devil said, \"If Thou be the Son of God, say to this stone that it be made bread.\" Jesus answered, \"It is written, that Man liveth not by bread alone, but by every word of God.\" When the devil had ended all the temptation, he departed from Him for a time.",
+      "keyLine": "Thou shalt adore the Lord thy God.",
+      "heartTitle": "My Lent Plan",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Prayer & fasting",
+      "heartLabelB": "Almsgiving",
+      "questions": [
+        "How did Jesus fight temptation?",
+        "What will you do for prayer, fasting, and almsgiving?"
+      ],
+      "actions": [
+        "Choose a Lent sacrifice",
+        "Memorize a Bible verse",
+        "Give to the poor"
+      ],
+      "prayer": "Jesus, make me strong against temptation. Amen.",
+      "activity": {
+        "title": "Lent good deeds",
+        "intro": "Jesus chose God every time. Record a good choice each day.",
+        "idea": 108,
+        "type": "tracker",
+        "rows": [
+          "My good choice today"
+        ]
+      },
+      "words": [
+        "temptation",
+        "fast",
+        "Scripture",
+        "devil",
+        "Lent",
+        "resist"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_LNT01_main.png",
+    "heart": "C_LNT01_heart.png",
+    "icons": [
+      "icon_desert_rock.png",
+      "icon_cactus.png",
+      "icon_bread.png"
+    ],
+    "mainBrief": "Jesus in the desert, calm and praying; rocks and stones",
+    "heartBrief": "Top: 'No' sign over wrong; bottom: heart with cross"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "key": "C_EAS07",
+  "liturgicalName": "7th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 17:20-26",
+  "keyVerseDR": "\"That they all may be one, as thou, Father, in me, and I in thee...\" (Jn 17:21)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Prays for Us",
+      "story": "Jesus prayed for His friends and for us. He asked God that we would all be one. Jesus wants us to love each other like one family.",
+      "keyLine": "Jesus prays for me.",
+      "heartTitle": "One Family",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus prays",
+      "heartLabelB": "We are one",
+      "questions": [
+        "What did Jesus pray for?",
+        "How can you help your family get along?"
+      ],
+      "actions": [
+        "Make peace at home",
+        "Pray for Christians",
+        "Be kind"
+      ],
+      "prayer": "Jesus, help us all be one. Amen.",
+      "activity": {
+        "title": "Pray as one",
+        "intro": "Jesus prayed that we all be one.",
+        "idea": 99,
+        "type": "checklist",
+        "items": [
+          "Hold hands with my family",
+          "Pray the Our Father together",
+          "Pray for Christians everywhere"
+        ]
+      },
+      "words": [
+        "pray",
+        "one",
+        "family",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "That They May All Be One",
+      "story": "Jesus lifted up His eyes and prayed, \"Not for them only do I pray, but for them also who through their word shall believe in Me.\" He prayed that they all may be one, as the Father is in Him and He in the Father. Jesus said He gave them the glory the Father gave Him. He prayed that the world may know that the Father sent Him and loves them. Jesus said, \"Father, I will that where I am, they also whom Thou hast given Me may be with Me.\"",
+      "keyLine": "That they all may be one.",
+      "heartTitle": "Christian Unity",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What divides",
+      "heartLabelB": "What unites",
+      "questions": [
+        "Why does unity help others believe?",
+        "How can you build unity at home or school?"
+      ],
+      "actions": [
+        "Pray for Christian unity",
+        "Make peace with someone",
+        "Include someone different"
+      ],
+      "prayer": "Jesus, make us one in Your love. Amen.",
+      "activity": {
+        "title": "That all may be one",
+        "intro": "Write a family prayer for unity.",
+        "idea": 122,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, make our family one...",
+          "Help us forgive...",
+          "Bless all Christians..."
+        ]
+      },
+      "words": [
+        "unity",
+        "one",
+        "believe",
+        "glory",
+        "love",
+        "world"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_EAS07_main.png",
+    "heart": "C_EAS07_heart.png",
+    "icons": [
+      "icon_globe.png",
+      "icon_family.png",
+      "icon_praying_hands.png"
+    ],
+    "mainBrief": "Jesus praying; many people of all nations holding hands",
+    "heartBrief": "Joined hands around heart"
+  }
+}

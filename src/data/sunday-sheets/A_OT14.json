@@ -1,0 +1,91 @@
+{
+  "key": "A_OT14",
+  "liturgicalName": "14th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 11:25-30",
+  "keyVerseDR": "\"Come to me all you that labor and are burdened, and I will refresh you.\" (Mt 11:28)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Come Rest With Jesus",
+      "story": "Jesus thanked God His Father. He said, \"Come to Me when you are tired.\" Jesus gives us rest.",
+      "keyLine": "Jesus gives me rest.",
+      "heartTitle": "Rest in Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I'm tired",
+      "heartLabelB": "Jesus helps",
+      "questions": [
+        "What does Jesus give us?",
+        "When do you need Jesus' help?"
+      ],
+      "actions": [
+        "Pray before sleep",
+        "Be gentle",
+        "Rest on Sunday"
+      ],
+      "prayer": "Jesus, I come to You for rest. Amen.",
+      "activity": {
+        "title": "Time to rest with Jesus",
+        "intro": "Draw the time on the clock when you will pray quietly.",
+        "idea": 89,
+        "type": "clock",
+        "labels": [
+          "My quiet prayer time"
+        ]
+      },
+      "words": [
+        "rest",
+        "tired",
+        "come",
+        "gentle"
+      ]
+    },
+    "level2": {
+      "title": "My Yoke Is Easy",
+      "story": "Jesus prayed, \"I give praise to You, Father, Lord of heaven and earth.\" He thanked the Father for showing these things to little ones. Jesus said, \"Come to Me, all you who are tired and burdened, and I will give you rest.\" He said, \"Take My yoke upon you and learn from Me, for I am meek and humble of heart.\" Jesus said, \"My yoke is easy, and My burden light.\"",
+      "keyLine": "Come to me all you that labor, and I will refresh you.",
+      "heartTitle": "Burdens & Rest",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What weighs me down",
+      "heartLabelB": "What Jesus gives",
+      "questions": [
+        "What is a yoke?",
+        "Why does God show things to the 'little ones'?"
+      ],
+      "actions": [
+        "Bring my worries to Jesus",
+        "Keep Sunday holy",
+        "Be humble"
+      ],
+      "prayer": "Jesus, meek and humble of heart, make my heart like Yours. Amen.",
+      "activity": {
+        "title": "Dear Jesus",
+        "intro": "Jesus says, \"Come to Me.\" Write Him a short letter.",
+        "idea": 54,
+        "type": "letter",
+        "style": "letter",
+        "to": "Jesus",
+        "lines": 3
+      },
+      "words": [
+        "yoke",
+        "burden",
+        "meek",
+        "humble",
+        "rest",
+        "reveal"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT14_main.png",
+    "heart": "A_OT14_heart.png",
+    "icons": [
+      "icon_yoke.png",
+      "icon_lamb.png",
+      "icon_pillow_star.png"
+    ],
+    "mainBrief": "Jesus inviting tired people to rest; lamb on shoulders",
+    "heartBrief": "Yoke shape; restful moon & stars"
+  }
+}

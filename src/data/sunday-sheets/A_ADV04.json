@@ -1,0 +1,94 @@
+{
+  "key": "A_ADV04",
+  "liturgicalName": "4th Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Matthew 1:18-24",
+  "keyVerseDR": "\"...they shall call his name Emmanuel, which being interpreted is, God with us.\" (Mt 1:23)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "God With Us",
+      "story": "An angel came to Joseph in a dream. He said, \"Take Mary as your wife. Her Baby is from God!\" Joseph obeyed.",
+      "keyLine": "Jesus is God with us!",
+      "heartTitle": "Joseph Says Yes",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Joseph listens",
+      "heartLabelB": "I listen",
+      "questions": [
+        "Who talked to Joseph in a dream?",
+        "How can you listen to God?"
+      ],
+      "actions": [
+        "Listen the first time",
+        "Pray with my family",
+        "Thank God for Jesus"
+      ],
+      "prayer": "Jesus, You are always with me. Amen.",
+      "activity": {
+        "title": "What did they say?",
+        "intro": "Write or draw what each one said.",
+        "idea": 1,
+        "type": "speech",
+        "characters": [
+          "Angel",
+          "Joseph"
+        ]
+      },
+      "words": [
+        "Joseph",
+        "angel",
+        "dream",
+        "Emmanuel"
+      ]
+    },
+    "level2": {
+      "title": "Joseph's Yes",
+      "story": "Mary was engaged to Joseph, and she was going to have a baby by the Holy Spirit. Joseph was a good man and did not want to shame her. An angel came to him in a dream and said, \"Do not be afraid to take Mary as your wife.\" The angel said to name the baby Jesus, because He will save His people from their sins. Joseph woke up and did what the angel told him.",
+      "keyLine": "They shall call his name Emmanuel, God with us.",
+      "heartTitle": "Trusting Like Joseph",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "When I'm afraid",
+      "heartLabelB": "How I trust",
+      "questions": [
+        "Why was Joseph brave?",
+        "Where do you need God to be 'with you'?"
+      ],
+      "actions": [
+        "Obey quickly",
+        "Pray to St. Joseph",
+        "Help get ready for Christmas"
+      ],
+      "prayer": "St. Joseph, help me trust God like you. Amen.",
+      "activity": {
+        "title": "Joseph, I wonder...",
+        "intro": "Joseph trusted God's plan. Write what you wonder.",
+        "idea": 57,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, I wonder how Joseph felt...",
+          "Jesus, I wonder why You are called...",
+          "Help me trust You like Joseph..."
+        ]
+      },
+      "words": [
+        "Emmanuel",
+        "Holy Spirit",
+        "trust",
+        "obey",
+        "Joseph",
+        "dream"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_ADV04_main.png",
+    "heart": "A_ADV04_heart.png",
+    "icons": [
+      "icon_angel.png",
+      "icon_moon.png",
+      "icon_star.png"
+    ],
+    "mainBrief": "Joseph asleep, gentle angel above; Mary in the background",
+    "heartBrief": "Joseph's carpentry tools around heart; 'yes' banner"
+  }
+}

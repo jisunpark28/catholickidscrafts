@@ -1,0 +1,93 @@
+{
+  "key": "B_OT33",
+  "liturgicalName": "33rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 13:24-32",
+  "keyVerseDR": "\"Heaven and earth shall pass away: but my word shall not pass away.\" (Mk 13:31)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Will Come Again",
+      "story": "Jesus said one day the sun will grow dark and the stars will fall. Then He will come with power and glory! His words will never pass away.",
+      "keyLine": "Jesus' words last forever.",
+      "heartTitle": "Ready for Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus will come",
+      "heartLabelB": "I'm ready",
+      "questions": [
+        "What lasts forever?",
+        "How can you be ready for Jesus?"
+      ],
+      "actions": [
+        "Pray daily",
+        "Be kind",
+        "Read a Bible story"
+      ],
+      "prayer": "Jesus, I will be ready for You. Amen.",
+      "activity": {
+        "title": "Hidden symbols",
+        "intro": "Find the hidden symbols in the picture.",
+        "idea": 35,
+        "type": "findhidden",
+        "objects": [
+          "star",
+          "sun",
+          "moon",
+          "cross",
+          "cloud"
+        ]
+      },
+      "words": [
+        "come",
+        "again",
+        "forever",
+        "word"
+      ]
+    },
+    "level2": {
+      "title": "The Coming of the Son of Man",
+      "story": "Jesus said that in those days the sun shall be darkened, and the moon shall not give her light. The stars shall fall, and they shall see the Son of man coming in the clouds with great power and glory. He will send His angels to gather His elect from the four winds. Jesus said, \"Learn a parable of the fig tree,\" for when its branches are tender, summer is near. He said, \"Heaven and earth shall pass away, but My word shall not pass away.\"",
+      "keyLine": "Heaven and earth shall pass away: but my word shall not pass away.",
+      "heartTitle": "What Lasts",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Things that pass",
+      "heartLabelB": "Things that last",
+      "questions": [
+        "Why shouldn't we fear the end?",
+        "What in your life will last forever?"
+      ],
+      "actions": [
+        "Pray for the souls in purgatory",
+        "Go to Confession",
+        "Do something that lasts"
+      ],
+      "prayer": "Lord, keep me ready for Your coming. Amen.",
+      "activity": {
+        "title": "Words that last",
+        "intro": "Fill in the missing words.",
+        "idea": 52,
+        "type": "fillblank",
+        "text": "Heaven and [earth] shall pass away, but My [word] shall not pass away."
+      },
+      "words": [
+        "Second Coming",
+        "glory",
+        "fig tree",
+        "elect",
+        "hour",
+        "eternal"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT33_main.png",
+    "heart": "B_OT33_heart.png",
+    "icons": [
+      "icon_fig_tree.png",
+      "icon_cloud.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Fig tree budding; Jesus coming on clouds in glory",
+    "heartBrief": "Fig leaves around heart"
+  }
+}

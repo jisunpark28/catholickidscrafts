@@ -1,0 +1,108 @@
+{
+  "key": "A_ADV01",
+  "liturgicalName": "1st Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Matthew 24:37-44",
+  "keyVerseDR": "\"Watch ye therefore, because you know not what hour your Lord will come.\" (Mt 24:42)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Stay Awake for Jesus",
+      "story": "Jesus said, \"Stay awake! Be ready!\" In Noah's time, people did not get ready. We get ready for Jesus with love and prayer.",
+      "keyLine": "Be ready for Jesus!",
+      "heartTitle": "My Ready Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I pray",
+      "heartLabelB": "I am kind",
+      "questions": [
+        "How do you get ready for a party?",
+        "How can you get ready for Jesus?"
+      ],
+      "actions": [
+        "Say a morning prayer",
+        "Light the Advent wreath",
+        "Help at home"
+      ],
+      "prayer": "Jesus, help me be ready for You. Amen.",
+      "activity": {
+        "title": "Advent wreath",
+        "intro": "Color the first candle: Advent begins!",
+        "idea": 133,
+        "type": "candles",
+        "candles": [
+          [
+            "Hope",
+            "light"
+          ],
+          [
+            "Peace",
+            "dark"
+          ],
+          [
+            "Joy",
+            "dark"
+          ],
+          [
+            "Love",
+            "dark"
+          ]
+        ]
+      },
+      "words": [
+        "ready",
+        "watch",
+        "pray",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "Be Ready!",
+      "story": "Jesus told His disciples to stay awake, because no one knows the day He will come again. In Noah's time, people ate and drank and did not notice the flood coming. Two people may be working side by side, and one is taken. Jesus wants us to be ready, like a servant who keeps watch all night. In Advent, we get our hearts ready with prayer and good deeds.",
+      "keyLine": "Watch ye therefore, because you know not what hour your Lord will come.",
+      "heartTitle": "Getting Ready",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Ready in prayer",
+      "heartLabelB": "Ready in love",
+      "questions": [
+        "What does it mean to keep your heart awake?",
+        "What is one thing you can change this Advent?"
+      ],
+      "actions": [
+        "Pray before bed every night",
+        "Do a hidden kindness",
+        "Make an Advent plan"
+      ],
+      "prayer": "Lord Jesus, keep my heart awake and ready for You. Amen.",
+      "activity": {
+        "title": "Stay awake and pray",
+        "intro": "Jesus says, \"Be ready!\" Draw a time you will pray each day.",
+        "idea": 106,
+        "type": "clock",
+        "labels": [
+          "Morning",
+          "Meals",
+          "Bedtime"
+        ]
+      },
+      "words": [
+        "watch",
+        "ready",
+        "Advent",
+        "Noah",
+        "coming",
+        "hour"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_ADV01_main.png",
+    "heart": "A_ADV01_heart.png",
+    "icons": [
+      "icon_lamp.png",
+      "icon_star.png",
+      "icon_advent_wreath.png"
+    ],
+    "mainBrief": "Child at a night window with a lit lamp, looking at stars, waiting for Jesus",
+    "heartBrief": "Top: praying hands; bottom: helping hands; border of small stars"
+  }
+}

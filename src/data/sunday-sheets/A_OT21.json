@@ -1,0 +1,114 @@
+{
+  "key": "A_OT21",
+  "liturgicalName": "21st Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 16:13-20",
+  "keyVerseDR": "\"Thou art Christ, the Son of the living God.\" (Mt 16:16)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Who Is Jesus?",
+      "story": "Jesus asked, \"Who do you say that I am?\" Peter said, \"You are the Christ, the Son of God!\" Jesus gave Peter the keys of the Kingdom.",
+      "keyLine": "Jesus is the Son of God.",
+      "heartTitle": "Who Jesus Is",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is God's Son",
+      "heartLabelB": "I love Him",
+      "questions": [
+        "What did Peter say?",
+        "Who is Jesus to you?"
+      ],
+      "actions": [
+        "Pray for the Pope",
+        "Tell someone who Jesus is",
+        "Pray"
+      ],
+      "prayer": "Jesus, You are the Son of God. Amen.",
+      "activity": {
+        "title": "Guess the saint",
+        "intro": "Read the clues. Who is it?",
+        "idea": 103,
+        "type": "whoami",
+        "clues": [
+          "Jesus changed my name from Simon.",
+          "I said, \"You are the Christ!\"",
+          "Jesus gave me the keys of the kingdom."
+        ],
+        "answer": "St Peter",
+        "choices": [
+          "St Peter",
+          "St Paul",
+          "St John"
+        ]
+      },
+      "words": [
+        "Peter",
+        "rock",
+        "keys",
+        "Church"
+      ]
+    },
+    "level2": {
+      "title": "You Are Peter",
+      "story": "Jesus asked His disciples, \"Who do people say that the Son of Man is?\" They said some thought He was John the Baptist, Elijah, or Jeremiah. Then Jesus asked, \"But who do you say that I am?\" Simon Peter answered, \"Thou art Christ, the Son of the living God.\" Jesus said, \"Thou art Peter; and upon this rock I will build My Church,\" and He gave Peter the keys of the kingdom of heaven.",
+      "keyLine": "Thou art Christ, the Son of the living God.",
+      "heartTitle": "Built on Rock",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who Jesus is",
+      "heartLabelB": "What the Church is",
+      "questions": [
+        "Why did Jesus give Peter the keys?",
+        "How would you answer Jesus' question?"
+      ],
+      "actions": [
+        "Pray for the Pope",
+        "Learn the Apostles' Creed",
+        "Say who Jesus is to a friend"
+      ],
+      "prayer": "Jesus, I believe You are the Christ. Amen.",
+      "activity": {
+        "title": "What do we believe?",
+        "intro": "Circle T or F.",
+        "idea": 147,
+        "type": "truefalse",
+        "items": [
+          [
+            "Peter said Jesus is the Son of the living God.",
+            true
+          ],
+          [
+            "Jesus said He would build His Church on Peter.",
+            true
+          ],
+          [
+            "Everyone already knew Jesus was the Christ.",
+            false
+          ],
+          [
+            "Jesus gave Peter the keys of the kingdom.",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "Christ",
+        "rock",
+        "Church",
+        "keys",
+        "Pope",
+        "profession"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT21_main.png",
+    "heart": "A_OT21_heart.png",
+    "icons": [
+      "icon_keys.png",
+      "icon_rock.png",
+      "icon_church.png"
+    ],
+    "mainBrief": "Peter kneeling before Jesus; keys of the kingdom",
+    "heartBrief": "Keys crossed over heart"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "key": "A_OT04",
+  "liturgicalName": "4th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 5:1-12a",
+  "keyVerseDR": "\"Blessed are the clean of heart: they shall see God.\" (Mt 5:8)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Happy Are You",
+      "story": "Jesus taught on a mountain. He said, \"Blessed are the poor, the gentle, and the peacemakers!\" God makes them happy.",
+      "keyLine": "Blessed are the peacemakers.",
+      "heartTitle": "Blessed Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I am gentle",
+      "heartLabelB": "I make peace",
+      "questions": [
+        "Who did Jesus say is blessed?",
+        "How can you make peace?"
+      ],
+      "actions": [
+        "Make peace with a sibling",
+        "Be gentle",
+        "Help someone sad"
+      ],
+      "prayer": "Jesus, make my heart pure and kind. Amen.",
+      "activity": {
+        "title": "Peacemaker badge",
+        "intro": "\"Blessed are the peacemakers.\" Color your badge.",
+        "idea": 10,
+        "type": "badge",
+        "label": "Peacemaker"
+      },
+      "words": [
+        "blessed",
+        "gentle",
+        "peace",
+        "happy"
+      ]
+    },
+    "level2": {
+      "title": "The Beatitudes",
+      "story": "Jesus saw the crowds and went up the mountain to teach. He said, \"Blessed are the poor in spirit, for theirs is the kingdom of heaven.\" Blessed are those who mourn, the meek, and those who hunger for what is right. Blessed are the merciful, the clean of heart, and the peacemakers. Jesus said, \"Rejoice and be glad, for your reward will be great in heaven.\"",
+      "keyLine": "Blessed are the clean of heart: they shall see God.",
+      "heartTitle": "Living the Beatitudes",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Beatitude",
+      "heartLabelB": "How I live it",
+      "questions": [
+        "Which Beatitude is hardest for you?",
+        "Why are these the way to true happiness?"
+      ],
+      "actions": [
+        "Memorize one Beatitude",
+        "Be a peacemaker",
+        "Show mercy"
+      ],
+      "prayer": "Jesus, teach me the way of the Beatitudes. Amen.",
+      "activity": {
+        "title": "Blessed are...",
+        "intro": "Fill in the missing words of the Beatitude.",
+        "idea": 52,
+        "type": "fillblank",
+        "text": "Blessed are the [clean] of heart: they shall [see] God."
+      },
+      "words": [
+        "Beatitudes",
+        "blessed",
+        "meek",
+        "merciful",
+        "peacemaker",
+        "kingdom"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT04_main.png",
+    "heart": "A_OT04_heart.png",
+    "icons": [
+      "icon_mountain.png",
+      "icon_sun.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "Jesus seated on a hillside teaching a crowd",
+    "heartBrief": "Eight small hearts (Beatitudes) around border"
+  }
+}

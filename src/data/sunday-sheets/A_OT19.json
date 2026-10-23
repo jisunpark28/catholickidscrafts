@@ -1,0 +1,88 @@
+{
+  "key": "A_OT19",
+  "liturgicalName": "19th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 14:22-33",
+  "keyVerseDR": "\"Be of good heart: it is I, fear ye not.\" (Mt 14:27)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Walks on Water",
+      "story": "Jesus walked on the water to His friends' boat. Peter walked on the water too, but he got scared and began to sink. Jesus took his hand and saved him.",
+      "keyLine": "Jesus, save me!",
+      "heartTitle": "Trust Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "When I'm scared",
+      "heartLabelB": "Jesus helps",
+      "questions": [
+        "What happened when Peter got scared?",
+        "When do you need Jesus' hand?"
+      ],
+      "actions": [
+        "Pray when scared",
+        "Trust Jesus",
+        "Help a friend"
+      ],
+      "prayer": "Jesus, hold my hand. Amen.",
+      "activity": {
+        "title": "The boat on the sea",
+        "intro": "Color by number to finish the boat.",
+        "idea": 38,
+        "type": "colornum",
+        "shape": "boat",
+        "mode": "key"
+      },
+      "words": [
+        "water",
+        "walk",
+        "Peter",
+        "trust"
+      ]
+    },
+    "level2": {
+      "title": "Peter Walks on Water",
+      "story": "After feeding the crowd, Jesus sent the disciples ahead by boat and went up the mountain to pray. During the night, the wind was against them, and Jesus came walking on the sea. The disciples were terrified, but Jesus said, \"Be of good heart: it is I, fear ye not.\" Peter walked on the water toward Jesus, but when he saw the wind, he became afraid and began to sink. Jesus caught him and said, \"Why did you doubt?\" and they worshiped Him, saying, \"You are the Son of God.\"",
+      "keyLine": "Be of good heart: it is I, fear ye not.",
+      "heartTitle": "Eyes on Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "My storms",
+      "heartLabelB": "Keeping my eyes on Him",
+      "questions": [
+        "Why did Peter begin to sink?",
+        "How can you keep your eyes on Jesus?"
+      ],
+      "actions": [
+        "Pray 'Jesus, I trust in You'",
+        "Be brave in something hard",
+        "Encourage someone"
+      ],
+      "prayer": "Jesus, when I sink, catch me. Amen.",
+      "activity": {
+        "title": "Fix the words",
+        "intro": "Three words are wrong. Cross them out and write the right words.",
+        "idea": 39,
+        "type": "fixwords",
+        "text": "Be of good {cheer|heart}: it is {Peter|I}, {doubt|fear} ye not."
+      },
+      "words": [
+        "storm",
+        "faith",
+        "doubt",
+        "Son of God",
+        "courage",
+        "worship"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT19_main.png",
+    "heart": "A_OT19_heart.png",
+    "icons": [
+      "icon_boat.png",
+      "icon_wave.png",
+      "icon_hands_reaching.png"
+    ],
+    "mainBrief": "Jesus walking on water reaching for sinking Peter",
+    "heartBrief": "Waves at bottom, Jesus' hand reaching up"
+  }
+}

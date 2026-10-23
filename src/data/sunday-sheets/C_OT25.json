@@ -1,0 +1,107 @@
+{
+  "key": "C_OT25",
+  "liturgicalName": "25th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 16:1-13",
+  "keyVerseDR": "\"You cannot serve God and mammon.\" (Lk 16:13)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Be Faithful in Little Things",
+      "story": "Jesus told about a servant who was not honest with his master's money. Jesus said, \"Whoever is faithful in little things is faithful in big things.\" You cannot serve God and money.",
+      "keyLine": "Faithful in little things!",
+      "heartTitle": "Faithful Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Little things",
+      "heartLabelB": "Big things",
+      "questions": [
+        "What did Jesus say about little things?",
+        "What little thing can you do well?"
+      ],
+      "actions": [
+        "Do my chores well",
+        "Be honest",
+        "Take care of my things"
+      ],
+      "prayer": "Jesus, help me be faithful. Amen.",
+      "activity": {
+        "title": "Faithful in little things",
+        "intro": "Stamp or draw a star each time you do a small job well.",
+        "idea": 98,
+        "type": "tracker",
+        "rows": [
+          "A little thing I did well"
+        ]
+      },
+      "words": [
+        "little",
+        "big",
+        "faithful",
+        "honest"
+      ]
+    },
+    "level2": {
+      "title": "The Dishonest Steward",
+      "story": "Jesus told of a rich man's steward who was accused of wasting his goods. Knowing he would lose his job, the steward cleverly reduced what the debtors owed his master. Jesus said, \"He that is faithful in that which is least, is faithful also in that which is greater.\" If we are not faithful with earthly riches, who will trust us with true riches? Jesus said, \"You cannot serve God and mammon.\"",
+      "keyLine": "You cannot serve God and mammon.",
+      "heartTitle": "One Master",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Serving money",
+      "heartLabelB": "Serving God",
+      "questions": [
+        "Why does Jesus praise the steward's shrewdness, not his dishonesty?",
+        "How can you be faithful in small things?"
+      ],
+      "actions": [
+        "Be honest with money",
+        "Do small jobs well",
+        "Give part of my money to God"
+      ],
+      "prayer": "Lord, I choose to serve You alone. Amen.",
+      "activity": {
+        "title": "Commandments in action",
+        "intro": "Match each commandment to a daily action.",
+        "idea": 47,
+        "type": "matchup",
+        "pairs": [
+          [
+            "You shall not steal",
+            "Return what isn't mine"
+          ],
+          [
+            "You shall not lie",
+            "Tell the truth"
+          ],
+          [
+            "Honor your father and mother",
+            "Do my chores faithfully"
+          ],
+          [
+            "You shall not covet",
+            "Be happy with what I have"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "steward",
+        "shrewd",
+        "faithful",
+        "trustworthy",
+        "mammon",
+        "master"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT25_main.png",
+    "heart": "C_OT25_heart.png",
+    "icons": [
+      "icon_coins.png",
+      "icon_scroll.png",
+      "icon_scales.png"
+    ],
+    "mainBrief": "Steward with account book; two masters signpost",
+    "heartBrief": "Signpost: God / money"
+  }
+}

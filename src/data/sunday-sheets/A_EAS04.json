@@ -1,0 +1,91 @@
+{
+  "key": "A_EAS04",
+  "liturgicalName": "4th Sunday of Easter (Good Shepherd)",
+  "season": "Easter",
+  "gospelRef": "John 10:1-10",
+  "keyVerseDR": "\"I am come that they may have life and may have it more abundantly.\" (Jn 10:10)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus, My Shepherd",
+      "story": "Jesus is the Good Shepherd. He calls His sheep by name. They know His voice and follow Him.",
+      "keyLine": "Jesus is my Shepherd.",
+      "heartTitle": "His Little Lamb",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus leads",
+      "heartLabelB": "I follow",
+      "questions": [
+        "What do sheep do?",
+        "How can you follow Jesus?"
+      ],
+      "actions": [
+        "Listen to Jesus in prayer",
+        "Be gentle",
+        "Pray for priests"
+      ],
+      "prayer": "Good Shepherd, lead me. Amen.",
+      "activity": {
+        "title": "The Good Shepherd's sheep",
+        "intro": "Make fingerprint sheep following Jesus, the Good Shepherd.",
+        "idea": 76,
+        "type": "drawscene",
+        "prompt": "Jesus the Good Shepherd at the gate, with fingerprint sheep following His voice"
+      },
+      "words": [
+        "shepherd",
+        "sheep",
+        "voice",
+        "gate"
+      ]
+    },
+    "level2": {
+      "title": "The Gate for the Sheep",
+      "story": "Jesus said the shepherd enters by the gate, and the sheep hear his voice. He calls his own sheep by name and leads them out. The sheep follow him because they know his voice, but they run from strangers. Jesus said, \"I am the gate for the sheep. Whoever enters through Me will be saved.\" He said, \"I came so that they might have life and have it more abundantly.\"",
+      "keyLine": "I am come that they may have life and may have it more abundantly.",
+      "heartTitle": "Hearing His Voice",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Voices I hear",
+      "heartLabelB": "Jesus' voice",
+      "questions": [
+        "How can we tell Jesus' voice from other voices?",
+        "What does 'abundant life' mean?"
+      ],
+      "actions": [
+        "Pray for vocations",
+        "Spend quiet time with Jesus",
+        "Thank a priest"
+      ],
+      "prayer": "Jesus, Good Shepherd, call me by name. Amen.",
+      "activity": {
+        "title": "Pray for our shepherds",
+        "intro": "Good Shepherd Sunday is a day to pray for priests and religious.",
+        "idea": 59,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, bless our priest...",
+          "Help our sisters and brothers to...",
+          "Call young people to..."
+        ]
+      },
+      "words": [
+        "shepherd",
+        "sheepfold",
+        "gate",
+        "voice",
+        "abundant",
+        "vocation"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_EAS04_main.png",
+    "heart": "A_EAS04_heart.png",
+    "icons": [
+      "icon_sheep.png",
+      "icon_shepherd_staff.png",
+      "icon_gate.png"
+    ],
+    "mainBrief": "Shepherd at an open sheepfold gate, sheep following",
+    "heartBrief": "Little sheep in heart; staff on side"
+  }
+}

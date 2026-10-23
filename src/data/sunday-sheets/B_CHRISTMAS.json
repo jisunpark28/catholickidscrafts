@@ -1,0 +1,88 @@
+{
+  "key": "B_CHRISTMAS",
+  "liturgicalName": "The Nativity of the Lord (Christmas Day)",
+  "season": "Christmas",
+  "gospelRef": "John 1:1-18",
+  "keyVerseDR": "\"And the Word was made flesh and dwelt among us...\" (Jn 1:14)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Born!",
+      "story": "Before anything was made, Jesus, the Word, was with God. Jesus is God! At Christmas, the Word became a baby and lived with us.",
+      "keyLine": "Jesus came to us!",
+      "heartTitle": "Happy Birthday, Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love Jesus",
+      "heartLabelB": "Jesus loves me",
+      "questions": [
+        "Why did Jesus come?",
+        "What gift can you give Jesus?"
+      ],
+      "actions": [
+        "Sing Happy Birthday to Jesus",
+        "Give a gift",
+        "Visit the manger"
+      ],
+      "prayer": "Baby Jesus, thank You for coming. Amen.",
+      "activity": {
+        "title": "Jesus is born!",
+        "intro": "Decorate the letters for Jesus' birthday.",
+        "idea": 12,
+        "type": "copyverse",
+        "text": "JESUS"
+      },
+      "words": [
+        "baby",
+        "Jesus",
+        "light",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "The Word Became Flesh",
+      "story": "\"In the beginning was the Word, and the Word was with God, and the Word was God.\" All things were made by Him, and in Him was life, and the life was the light of men. The light shines in darkness, and the darkness did not overcome it. \"And the Word was made flesh, and dwelt among us.\" We have seen His glory, full of grace and truth.",
+      "keyLine": "The Word was made flesh and dwelt among us.",
+      "heartTitle": "Light of the World",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus is light",
+      "heartLabelB": "I share light",
+      "questions": [
+        "What does 'the Word was made flesh' mean?",
+        "How can you be a light to others?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Share with someone in need",
+        "Pray by the Nativity"
+      ],
+      "prayer": "Jesus, Word made flesh, shine in my heart. Amen.",
+      "activity": {
+        "title": "The Word became flesh",
+        "intro": "Read it, fold one line at a time, and say it from memory.",
+        "idea": 88,
+        "type": "foldreveal",
+        "question": "What happened at Christmas?",
+        "answer": "And the Word was made flesh, and dwelt among us."
+      },
+      "words": [
+        "Word",
+        "flesh",
+        "Incarnation",
+        "light",
+        "glory",
+        "grace"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_CHRISTMAS_main.png",
+    "heart": "B_CHRISTMAS_heart.png",
+    "icons": [
+      "icon_manger.png",
+      "icon_star.png",
+      "icon_sheep.png"
+    ],
+    "mainBrief": "Nativity: Mary and Joseph kneel by the manger, star above",
+    "heartBrief": "Baby Jesus' manger in the heart; little stars border"
+  }
+}

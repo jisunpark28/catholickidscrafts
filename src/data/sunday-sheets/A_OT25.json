@@ -1,0 +1,109 @@
+{
+  "key": "A_OT25",
+  "liturgicalName": "25th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 20:1-16a",
+  "keyVerseDR": "\"So shall the last be first and the first last.\" (Mt 20:16)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "God Is Generous",
+      "story": "A landowner hired workers for his vineyard. Some came early and some came late. He paid them all the same, because he was generous!",
+      "keyLine": "God is good to all.",
+      "heartTitle": "Generous Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God gives",
+      "heartLabelB": "I give",
+      "questions": [
+        "What did the late workers get?",
+        "How can you be generous?"
+      ],
+      "actions": [
+        "Share without complaining",
+        "Be happy for others",
+        "Thank God"
+      ],
+      "prayer": "God, thank You for being so good. Amen.",
+      "activity": {
+        "title": "Count the workers",
+        "intro": "Tally how many times you hear these words at Mass.",
+        "idea": 80,
+        "type": "tally",
+        "words": [
+          "Lord",
+          "Amen",
+          "Alleluia"
+        ]
+      },
+      "words": [
+        "workers",
+        "vineyard",
+        "generous",
+        "fair"
+      ]
+    },
+    "level2": {
+      "title": "Workers in the Vineyard",
+      "story": "Jesus said the kingdom of heaven is like a landowner who went out at dawn to hire workers for his vineyard. He went out again at nine, at noon, at three, and at five o'clock and hired more. In the evening, he paid everyone a full day's wage, starting with the last. Those who came first grumbled, but he said, \"Am I not free to be generous?\" Jesus said, \"So the last shall be first, and the first last.\"",
+      "keyLine": "So shall the last be first and the first last.",
+      "heartTitle": "God's Generosity",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Gifts I've received",
+      "heartLabelB": "Gifts I can give",
+      "questions": [
+        "Why did the first workers complain?",
+        "How is God's love a gift?"
+      ],
+      "actions": [
+        "Celebrate someone else's success",
+        "Give without keeping score",
+        "Thank God for grace"
+      ],
+      "prayer": "Lord, keep me from envy and make me generous. Amen.",
+      "activity": {
+        "title": "Who was hired when?",
+        "intro": "Match the time to the story.",
+        "idea": 36,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Early morning",
+            "First workers agree to a day's pay"
+          ],
+          [
+            "Nine o'clock",
+            "More workers stand idle in the market"
+          ],
+          [
+            "Five o'clock",
+            "The last workers are hired"
+          ],
+          [
+            "Evening",
+            "Everyone gets the same pay"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "vineyard",
+        "wage",
+        "grumble",
+        "generous",
+        "grace",
+        "envy"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT25_main.png",
+    "heart": "A_OT25_heart.png",
+    "icons": [
+      "icon_grapes.png",
+      "icon_coins.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Landowner paying workers at sunset in a vineyard",
+    "heartBrief": "Grapes cluster around heart"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "key": "C_OT28",
+  "liturgicalName": "28th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 17:11-19",
+  "keyVerseDR": "\"And one of them, when he saw that he was made clean, went back, with a loud voice glorifying God.\" (Lk 17:15)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Say Thank You!",
+      "story": "Ten lepers called out, \"Jesus, have mercy on us!\" Jesus healed all ten. Only one came back to say thank you.",
+      "keyLine": "Thank You, Jesus!",
+      "heartTitle": "Thankful Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God gives",
+      "heartLabelB": "I say thanks",
+      "questions": [
+        "How many came back to say thanks?",
+        "What can you thank God for?"
+      ],
+      "actions": [
+        "Say thank you",
+        "Write a thank-you card",
+        "Pray thanks"
+      ],
+      "prayer": "Thank You, Jesus, for everything. Amen.",
+      "activity": {
+        "title": "Thank-you portraits",
+        "intro": "Draw people you want to thank, like the leper who came back.",
+        "idea": 17,
+        "type": "faces",
+        "people": [
+          "Mom or Dad",
+          "A friend",
+          "A teacher"
+        ]
+      },
+      "words": [
+        "ten",
+        "heal",
+        "thank you",
+        "one"
+      ]
+    },
+    "level2": {
+      "title": "The Ten Lepers",
+      "story": "As Jesus entered a village, ten lepers stood far off and cried out, \"Jesus, Master, have mercy on us.\" Jesus said, \"Go, shew yourselves to the priests,\" and as they went, they were made clean. One of them, seeing that he was healed, came back, glorifying God with a loud voice. He fell on his face at Jesus' feet, giving thanks, and he was a Samaritan. Jesus asked, \"Were not ten made clean? And where are the nine?\" and said, \"Arise, go thy way; for thy faith hath made thee whole.\"",
+      "keyLine": "He went back, with a loud voice glorifying God.",
+      "heartTitle": "Gratitude",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Gifts God gave",
+      "heartLabelB": "How I thank Him",
+      "questions": [
+        "Why do you think only one came back?",
+        "'Eucharist' means thanksgiving. How is Mass a thank-you?"
+      ],
+      "actions": [
+        "Keep a gratitude list",
+        "Thank someone who helped me",
+        "Pray after Communion"
+      ],
+      "prayer": "Jesus, thank You for all Your gifts. Amen.",
+      "activity": {
+        "title": "Thank you!",
+        "intro": "Be the one who comes back to give thanks. Write a thank-you to your teacher.",
+        "idea": 69,
+        "type": "letter",
+        "style": "letter",
+        "to": "My Sunday school teacher",
+        "lines": 3
+      },
+      "words": [
+        "lepers",
+        "gratitude",
+        "Samaritan",
+        "faith",
+        "Eucharist",
+        "thanksgiving"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT28_main.png",
+    "heart": "C_OT28_heart.png",
+    "icons": [
+      "icon_heart_hands.png",
+      "icon_praying_hands.png",
+      "icon_bandage.png"
+    ],
+    "mainBrief": "One healed leper kneeling to thank Jesus; nine walk away",
+    "heartBrief": "'Thank you' notes around heart"
+  }
+}

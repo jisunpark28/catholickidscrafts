@@ -1,0 +1,92 @@
+{
+  "key": "C_OT17",
+  "liturgicalName": "17th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 11:1-13",
+  "keyVerseDR": "\"Ask, and it shall be given you: seek, and you shall find: knock, and it shall be opened to you.\" (Lk 11:9)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Teach Us to Pray",
+      "story": "A disciple said, \"Lord, teach us to pray.\" Jesus taught them the Our Father. He said, \"Ask, and you will receive. Seek, and you will find.\"",
+      "keyLine": "Jesus, teach me to pray.",
+      "heartTitle": "Praying Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I talk to God",
+      "heartLabelB": "God listens",
+      "questions": [
+        "What prayer did Jesus teach?",
+        "What can you ask God for?"
+      ],
+      "actions": [
+        "Pray the Our Father",
+        "Ask God for help",
+        "Thank God"
+      ],
+      "prayer": "Our Father, I love You. Amen.",
+      "activity": {
+        "title": "The Our Father",
+        "intro": "Number the phrases in order.",
+        "idea": 143,
+        "type": "wordorder",
+        "pieces": [
+          "Our Father,",
+          "who art in heaven,",
+          "hallowed be Thy name;",
+          "Thy kingdom come."
+        ]
+      },
+      "words": [
+        "pray",
+        "Father",
+        "ask",
+        "knock"
+      ]
+    },
+    "level2": {
+      "title": "Ask, Seek, Knock",
+      "story": "Jesus was praying, and when He finished, a disciple said, \"Lord, teach us to pray.\" Jesus said, \"When you pray, say: Father, hallowed be Thy name. Thy kingdom come.\" He told of a friend who knocks at midnight asking for three loaves and keeps asking until he gets them. Jesus said, \"Ask, and it shall be given you: seek, and you shall find: knock, and it shall be opened to you.\" How much more will the heavenly Father give the Holy Spirit to those who ask Him!",
+      "keyLine": "Ask, and it shall be given you.",
+      "heartTitle": "The Our Father",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I praise",
+      "heartLabelB": "What I ask",
+      "questions": [
+        "What does each part of the Our Father mean?",
+        "Why does God want us to keep asking?"
+      ],
+      "actions": [
+        "Pray the Our Father slowly",
+        "Keep a prayer list",
+        "Ask for the Holy Spirit"
+      ],
+      "prayer": "Our Father, teach me to pray. Amen.",
+      "activity": {
+        "title": "Ask, seek, knock",
+        "intro": "Fill in the missing words, then sing them!",
+        "idea": 104,
+        "type": "fillblank",
+        "text": "[Ask], and it shall be given you: [seek], and you shall find: [knock], and it shall be opened."
+      },
+      "words": [
+        "Our Father",
+        "persistence",
+        "ask",
+        "seek",
+        "knock",
+        "Holy Spirit"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT17_main.png",
+    "heart": "C_OT17_heart.png",
+    "icons": [
+      "icon_praying_hands.png",
+      "icon_door.png",
+      "icon_bread.png"
+    ],
+    "mainBrief": "Jesus teaching disciples the Our Father",
+    "heartBrief": "Door to knock on in heart"
+  }
+}

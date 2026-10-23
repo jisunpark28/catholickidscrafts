@@ -1,0 +1,111 @@
+{
+  "key": "C_OT08",
+  "liturgicalName": "8th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 6:39-45",
+  "keyVerseDR": "\"A good man out of the good treasure of his heart bringeth forth that which is good...\" (Lk 6:45)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Good Tree, Good Fruit",
+      "story": "Jesus said, \"A good tree bears good fruit.\" A good person has a good heart. Our words show what is in our hearts.",
+      "keyLine": "My heart is full of good.",
+      "heartTitle": "Good Fruit",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Good heart",
+      "heartLabelB": "Good words",
+      "questions": [
+        "What does a good tree grow?",
+        "What good words can you say?"
+      ],
+      "actions": [
+        "Say kind words",
+        "Don't tease",
+        "Pray"
+      ],
+      "prayer": "Jesus, fill my heart with good. Amen.",
+      "activity": {
+        "title": "A good tree",
+        "intro": "Write a good fruit on each leaf: kind words, helping, praying.",
+        "idea": 53,
+        "type": "tree",
+        "leaves": 3,
+        "label": "A good tree bears good fruit"
+      },
+      "words": [
+        "tree",
+        "fruit",
+        "heart",
+        "words"
+      ]
+    },
+    "level2": {
+      "title": "The Tree and Its Fruit",
+      "story": "Jesus told a parable: \"Can the blind lead the blind? Do they not both fall into the ditch?\" He asked why we see the speck in our brother's eye but not the beam in our own. \"For there is no good tree that bringeth forth evil fruit,\" Jesus said. Every tree is known by its fruit; figs are not gathered from thorns. \"A good man out of the good treasure of his heart bringeth forth that which is good.\"",
+      "keyLine": "A good man out of the good treasure of his heart bringeth forth that which is good.",
+      "heartTitle": "Words & Heart",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I say",
+      "heartLabelB": "What's in my heart",
+      "questions": [
+        "What is the 'beam' in our own eye?",
+        "How do our words show our heart?"
+      ],
+      "actions": [
+        "Avoid gossip",
+        "Examine my conscience",
+        "Speak encouragement"
+      ],
+      "prayer": "Lord, make my heart and words good. Amen.",
+      "activity": {
+        "title": "Good fruit or bad fruit?",
+        "intro": "Sort each one: does it come from a heart full of light or darkness?",
+        "idea": 9,
+        "type": "sorting",
+        "left": "Good fruit (light)",
+        "right": "Bad fruit (darkness)",
+        "items": [
+          [
+            "Saying thank you",
+            "L"
+          ],
+          [
+            "Gossiping",
+            "R"
+          ],
+          [
+            "Encouraging a friend",
+            "L"
+          ],
+          [
+            "Pointing out others' faults",
+            "R"
+          ],
+          [
+            "Telling the truth",
+            "L"
+          ]
+        ]
+      },
+      "words": [
+        "beam",
+        "splinter",
+        "hypocrite",
+        "fruit",
+        "heart",
+        "speech"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT08_main.png",
+    "heart": "C_OT08_heart.png",
+    "icons": [
+      "icon_tree_fruit.png",
+      "icon_eye.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Good tree with fruit, bad tree with none",
+    "heartBrief": "Fruit growing inside heart"
+  }
+}

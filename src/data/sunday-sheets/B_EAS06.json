@@ -1,0 +1,105 @@
+{
+  "key": "B_EAS06",
+  "liturgicalName": "6th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 15:9-17",
+  "keyVerseDR": "\"This is my commandment, that you love one another, as I have loved you.\" (Jn 15:12)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Love One Another",
+      "story": "Jesus said, \"Love one another as I have loved you.\" He calls us His friends. There is no greater love than to give your life for your friends.",
+      "keyLine": "Love one another.",
+      "heartTitle": "Friends of Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus loves me",
+      "heartLabelB": "I love others",
+      "questions": [
+        "What did Jesus call us?",
+        "How can you love like Jesus?"
+      ],
+      "actions": [
+        "Be a good friend",
+        "Share",
+        "Say kind words"
+      ],
+      "prayer": "Jesus, thank You for being my friend. Amen.",
+      "activity": {
+        "type": "heart",
+        "title": "Love one another",
+        "a": "Jesus loves me",
+        "b": "I love my friends",
+        "intro": "Fill the Sacred Heart with love."
+      },
+      "words": [
+        "love",
+        "friends",
+        "joy",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "You Are My Friends",
+      "story": "Jesus said, \"As the Father hath loved Me, I also have loved you. Abide in My love.\" If they kept His commandments, they would abide in His love, and their joy would be full. \"This is My commandment, that you love one another, as I have loved you.\" Jesus said, \"Greater love than this no man hath, that a man lay down his life for his friends.\" He said, \"You have not chosen Me: but I have chosen you.\"",
+      "keyLine": "Love one another, as I have loved you.",
+      "heartTitle": "Greater Love",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How Jesus loves",
+      "heartLabelB": "How I love",
+      "questions": [
+        "What is the greatest love?",
+        "How does keeping commandments bring joy?"
+      ],
+      "actions": [
+        "Make a sacrifice for a friend",
+        "Include someone",
+        "Pray for my friends"
+      ],
+      "prayer": "Jesus, teach me to love as You love. Amen.",
+      "activity": {
+        "title": "Love in action",
+        "intro": "Match each situation to a loving choice.",
+        "idea": 60,
+        "type": "matchup",
+        "pairs": [
+          [
+            "A friend is left out at recess",
+            "Invite them to play"
+          ],
+          [
+            "My sister is sad",
+            "Give her a hug and listen"
+          ],
+          [
+            "Someone drops their books",
+            "Help pick them up"
+          ],
+          [
+            "A new kid comes to class",
+            "Say hello and welcome them"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "friends",
+        "commandment",
+        "joy",
+        "lay down",
+        "chosen",
+        "remain"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_EAS06_main.png",
+    "heart": "B_EAS06_heart.png",
+    "icons": [
+      "icon_heart_hands.png",
+      "icon_family.png",
+      "icon_handshake.png"
+    ],
+    "mainBrief": "Jesus with friends, arms around them, smiling",
+    "heartBrief": "Friends holding hands around heart"
+  }
+}

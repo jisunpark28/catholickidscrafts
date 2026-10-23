@@ -1,0 +1,93 @@
+{
+  "key": "C_CHRISTMAS",
+  "liturgicalName": "The Nativity of the Lord (Christmas Day)",
+  "season": "Christmas",
+  "gospelRef": "John 1:1-18",
+  "keyVerseDR": "\"And the Word was made flesh and dwelt among us...\" (Jn 1:14)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Born!",
+      "story": "Jesus is the Word of God. He was with God from the beginning. At Christmas, He became a baby to live with us!",
+      "keyLine": "Jesus came to us!",
+      "heartTitle": "Happy Birthday, Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I love Jesus",
+      "heartLabelB": "Jesus loves me",
+      "questions": [
+        "Why did Jesus come?",
+        "What gift can you give Jesus?"
+      ],
+      "actions": [
+        "Sing Happy Birthday to Jesus",
+        "Give a gift",
+        "Visit the manger"
+      ],
+      "prayer": "Baby Jesus, thank You for coming. Amen.",
+      "activity": {
+        "title": "The Christmas star",
+        "intro": "Draw the other half of the star.",
+        "idea": 3,
+        "type": "symmetry",
+        "shape": "star"
+      },
+      "words": [
+        "baby",
+        "Jesus",
+        "light",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "The Word Became Flesh",
+      "story": "\"In the beginning was the Word, and the Word was with God, and the Word was God.\" All things were made by Him. In Him was life, and the life was the light of men. To all who received Him, He gave power to become children of God. \"And the Word was made flesh, and dwelt among us, and we saw His glory.\"",
+      "keyLine": "The Word was made flesh and dwelt among us.",
+      "heartTitle": "Light of the World",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus is light",
+      "heartLabelB": "I share light",
+      "questions": [
+        "What does 'the Word was made flesh' mean?",
+        "How can you be a light to others?"
+      ],
+      "actions": [
+        "Go to Mass",
+        "Share with someone in need",
+        "Pray by the Nativity"
+      ],
+      "prayer": "Jesus, Word made flesh, shine in my heart. Amen.",
+      "activity": {
+        "title": "Our Father",
+        "intro": "Jesus came to make us children of God. Number the phrases of the Our Father.",
+        "idea": 143,
+        "type": "wordorder",
+        "pieces": [
+          "Our Father, who art in heaven,",
+          "hallowed be Thy name;",
+          "Thy kingdom come,",
+          "Thy will be done",
+          "on earth as it is in heaven."
+        ]
+      },
+      "words": [
+        "Word",
+        "flesh",
+        "Incarnation",
+        "light",
+        "glory",
+        "grace"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_CHRISTMAS_main.png",
+    "heart": "C_CHRISTMAS_heart.png",
+    "icons": [
+      "icon_manger.png",
+      "icon_star.png",
+      "icon_sheep.png"
+    ],
+    "mainBrief": "Nativity: Mary and Joseph kneel by the manger, star above",
+    "heartBrief": "Baby Jesus' manger in the heart; little stars border"
+  }
+}

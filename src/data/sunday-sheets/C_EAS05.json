@@ -1,0 +1,92 @@
+{
+  "key": "C_EAS05",
+  "liturgicalName": "5th Sunday of Easter",
+  "season": "Easter",
+  "gospelRef": "John 13:31-33a, 34-35",
+  "keyVerseDR": "\"A new commandment I give unto you: That you love one another, as I have loved you...\" (Jn 13:34)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Love One Another",
+      "story": "After Judas left, Jesus gave His friends a new commandment. He said, \"Love one another as I have loved you.\" People will know we follow Jesus by our love.",
+      "keyLine": "Love one another.",
+      "heartTitle": "Big Love",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus loves me",
+      "heartLabelB": "I love others",
+      "questions": [
+        "What is Jesus' new rule?",
+        "How can you love someone today?"
+      ],
+      "actions": [
+        "Be kind",
+        "Share",
+        "Help a friend"
+      ],
+      "prayer": "Jesus, help me love like You. Amen.",
+      "activity": {
+        "type": "heart",
+        "title": "A new commandment",
+        "a": "Jesus loves me",
+        "b": "I love others",
+        "intro": "Fill the Sacred Heart with love."
+      },
+      "words": [
+        "love",
+        "new",
+        "rule",
+        "others"
+      ]
+    },
+    "level2": {
+      "title": "A New Commandment",
+      "story": "When Judas had gone out from the Last Supper, Jesus said, \"Now is the Son of man glorified, and God is glorified in Him.\" He said, \"Little children, yet a little while I am with you.\" Then Jesus said, \"A new commandment I give unto you: That you love one another, as I have loved you.\" He said this is how all would know they were His disciples. \"By this shall all men know that you are My disciples, if you have love one for another.\"",
+      "keyLine": "Love one another, as I have loved you.",
+      "heartTitle": "Known by Love",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How Jesus loved",
+      "heartLabelB": "How I love",
+      "questions": [
+        "Why is this commandment 'new'?",
+        "How will people know you follow Jesus?"
+      ],
+      "actions": [
+        "Do a kind act each day",
+        "Include someone",
+        "Forgive quickly"
+      ],
+      "prayer": "Jesus, let people see Your love in me. Amen.",
+      "activity": {
+        "title": "Love thermometer",
+        "intro": "Color up as you love like Jesus.",
+        "idea": 94,
+        "type": "thermometer",
+        "levels": [
+          "I love my family",
+          "I love my friends",
+          "I love those who are left out",
+          "I love like Jesus loves"
+        ]
+      },
+      "words": [
+        "commandment",
+        "glory",
+        "disciples",
+        "love",
+        "witness",
+        "Last Supper"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_EAS05_main.png",
+    "heart": "C_EAS05_heart.png",
+    "icons": [
+      "icon_heart_hands.png",
+      "icon_table.png",
+      "icon_cup.png"
+    ],
+    "mainBrief": "Jesus at the Last Supper, disciples together",
+    "heartBrief": "Linked hearts around border"
+  }
+}

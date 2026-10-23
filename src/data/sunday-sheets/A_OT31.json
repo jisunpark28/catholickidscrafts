@@ -1,0 +1,93 @@
+{
+  "key": "A_OT31",
+  "liturgicalName": "31st Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 23:1-12",
+  "keyVerseDR": "\"He that is the greatest among you shall be your servant.\" (Mt 23:11)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Be a Helper",
+      "story": "Jesus said some leaders liked to show off. He said, \"The greatest among you must be a servant.\" Jesus wants us to be humble helpers.",
+      "keyLine": "I will serve others.",
+      "heartTitle": "Serving Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I help",
+      "heartLabelB": "I am humble",
+      "questions": [
+        "Who is the greatest?",
+        "How can you help today?"
+      ],
+      "actions": [
+        "Help without being asked",
+        "Let others go first",
+        "Pray"
+      ],
+      "prayer": "Jesus, make me a good helper. Amen.",
+      "activity": {
+        "title": "A humble helper",
+        "intro": "Serve at home like Jesus asks.",
+        "idea": 118,
+        "type": "checklist",
+        "items": [
+          "Tidy our home crucifix or Mary statue",
+          "Set the table for my family",
+          "Help without being asked"
+        ]
+      },
+      "words": [
+        "helper",
+        "humble",
+        "serve",
+        "great"
+      ]
+    },
+    "level2": {
+      "title": "The Greatest Is the Servant",
+      "story": "Jesus spoke to the crowds and His disciples about the scribes and Pharisees. He said to do what they teach, but not what they do, for they do not practice what they preach. They do things to be seen, love the best seats, and like to be greeted with honor. Jesus said, \"He that is the greatest among you shall be your servant.\" Whoever exalts himself will be humbled, and whoever humbles himself will be exalted.",
+      "keyLine": "He that is the greatest among you shall be your servant.",
+      "heartTitle": "Humble Service",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Wanting attention",
+      "heartLabelB": "Serving quietly",
+      "questions": [
+        "Why does Jesus dislike showing off?",
+        "How can you serve without being noticed?"
+      ],
+      "actions": [
+        "Do a secret service",
+        "Let someone else win",
+        "Practice what I preach"
+      ],
+      "prayer": "Jesus, make me humble like You. Amen.",
+      "activity": {
+        "title": "Thank you, teacher",
+        "intro": "Write a thank-you note to someone who teaches you the faith by serving.",
+        "idea": 69,
+        "type": "letter",
+        "style": "letter",
+        "to": "My Sunday school teacher",
+        "lines": 3
+      },
+      "words": [
+        "humble",
+        "servant",
+        "exalt",
+        "Pharisee",
+        "hypocrite",
+        "honor"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT31_main.png",
+    "heart": "A_OT31_heart.png",
+    "icons": [
+      "icon_towel_basin.png",
+      "icon_crown.png",
+      "icon_child.png"
+    ],
+    "mainBrief": "Jesus washing hands of the humble; child serving",
+    "heartBrief": "Towel & basin in heart"
+  }
+}

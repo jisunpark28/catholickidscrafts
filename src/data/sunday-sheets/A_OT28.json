@@ -1,0 +1,102 @@
+{
+  "key": "A_OT28",
+  "liturgicalName": "28th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 22:1-14",
+  "keyVerseDR": "\"Go ye therefore into the highways; and as many as you shall find, call to the marriage.\" (Mt 22:9)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Come to the Party!",
+      "story": "A king gave a wedding feast for his son. Many people did not come. So he invited everyone from the streets to the party!",
+      "keyLine": "I say yes to God!",
+      "heartTitle": "God's Invitation",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God invites",
+      "heartLabelB": "I say yes",
+      "questions": [
+        "Who did the king invite?",
+        "How do you say yes to God?"
+      ],
+      "actions": [
+        "Go to Mass gladly",
+        "Invite a friend",
+        "Dress nicely for church"
+      ],
+      "prayer": "Jesus, I say yes to Your invitation. Amen.",
+      "activity": {
+        "title": "The great feast",
+        "intro": "Mass is the feast God invites us to! Mark each word you hear.",
+        "idea": 81,
+        "type": "bingo",
+        "words": [
+          "Lord",
+          "Amen",
+          "Alleluia",
+          "Holy",
+          "Peace",
+          "Glory",
+          "Bread",
+          "Cup",
+          "Blessed"
+        ]
+      },
+      "words": [
+        "king",
+        "party",
+        "invite",
+        "yes"
+      ]
+    },
+    "level2": {
+      "title": "The Wedding Feast",
+      "story": "Jesus said the kingdom of heaven is like a king who gave a wedding feast for his son. He sent servants to call the invited guests, but they would not come; some went to their farms or businesses. The king said, \"Go out to the roads and invite everyone you find.\" The hall was filled with guests, good and bad alike. But one man came without a wedding garment, for many are called, but few are chosen.",
+      "keyLine": "As many as you shall find, call to the marriage.",
+      "heartTitle": "Invited!",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Why I say yes",
+      "heartLabelB": "How I get ready",
+      "questions": [
+        "What is the 'wedding garment'?",
+        "How can you prepare for Mass?"
+      ],
+      "actions": [
+        "Prepare my heart before Mass",
+        "Invite someone",
+        "Go to Confession"
+      ],
+      "prayer": "Lord, make me ready for Your feast. Amen.",
+      "activity": {
+        "title": "Ready for the feast",
+        "intro": "Mass is a feast! Get ready to come on time.",
+        "idea": 116,
+        "type": "checklist",
+        "items": [
+          "Lay out my Sunday clothes the night before",
+          "Leave home early",
+          "Arrive 10 minutes before Mass",
+          "Kneel and pray quietly first"
+        ]
+      },
+      "words": [
+        "feast",
+        "invitation",
+        "guests",
+        "garment",
+        "kingdom",
+        "grace"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT28_main.png",
+    "heart": "A_OT28_heart.png",
+    "icons": [
+      "icon_crown.png",
+      "icon_table.png",
+      "icon_wedding_garment.png"
+    ],
+    "mainBrief": "King's wedding feast, servants inviting people from the road",
+    "heartBrief": "Invitation card inside heart"
+  }
+}

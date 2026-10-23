@@ -1,0 +1,108 @@
+{
+  "key": "B_OT17",
+  "liturgicalName": "17th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 6:1-15",
+  "keyVerseDR": "\"And Jesus took the loaves: and when he had given thanks, he distributed to them...\" (Jn 6:11)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "A Boy Shares His Lunch",
+      "story": "A big crowd was hungry. A boy shared five loaves and two fish. Jesus gave thanks, and there was enough for everyone!",
+      "keyLine": "Jesus uses what I share.",
+      "heartTitle": "Sharing Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I share",
+      "heartLabelB": "God gives",
+      "questions": [
+        "What did the boy share?",
+        "What can you share?"
+      ],
+      "actions": [
+        "Share my snack",
+        "Thank God for food",
+        "Help someone"
+      ],
+      "prayer": "Jesus, I give You what I have. Amen.",
+      "activity": {
+        "title": "Jesus gave thanks",
+        "intro": "Jesus gave thanks before the meal. Check each time you pray grace.",
+        "idea": 110,
+        "type": "tracker",
+        "rows": [
+          "Grace before meals",
+          "Grace after meals"
+        ]
+      },
+      "words": [
+        "boy",
+        "bread",
+        "fish",
+        "share"
+      ]
+    },
+    "level2": {
+      "title": "Five Loaves and Two Fish",
+      "story": "A great multitude followed Jesus, and He asked Philip, \"Whence shall we buy bread, that these may eat?\" Andrew said, \"There is a boy here that hath five barley loaves, and two fishes; but what are these among so many?\" Jesus had the people sit down, about five thousand men. He took the loaves, gave thanks, and distributed them, and the fish too, as much as they wanted. They gathered twelve baskets of leftover fragments.",
+      "keyLine": "Jesus took the loaves: and when he had given thanks, he distributed.",
+      "heartTitle": "Little Becomes Much",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I have",
+      "heartLabelB": "What Jesus can do",
+      "questions": [
+        "Why did Jesus test Philip?",
+        "How is this sign like the Eucharist?"
+      ],
+      "actions": [
+        "Donate food",
+        "Pray grace before meals",
+        "Offer my talents"
+      ],
+      "prayer": "Jesus, take my little and make it much. Amen.",
+      "activity": {
+        "title": "Gospel numbers",
+        "intro": "Match each number to the story.",
+        "idea": 107,
+        "type": "matchup",
+        "pairs": [
+          [
+            "5",
+            "Barley loaves"
+          ],
+          [
+            "2",
+            "Fish"
+          ],
+          [
+            "5,000",
+            "Men who sat down to eat"
+          ],
+          [
+            "12",
+            "Baskets of leftovers"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "barley loaves",
+        "give thanks",
+        "multiply",
+        "Philip",
+        "Andrew",
+        "Eucharist"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT17_main.png",
+    "heart": "B_OT17_heart.png",
+    "icons": [
+      "icon_bread.png",
+      "icon_fish.png",
+      "icon_basket.png"
+    ],
+    "mainBrief": "Boy offering 5 loaves and 2 fish to Andrew and Jesus",
+    "heartBrief": "Baskets of bread around heart"
+  }
+}

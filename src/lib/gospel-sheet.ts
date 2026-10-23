@@ -2,20 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { colorDot, formatSunday, parseDateInput, toDateInput } from "@/lib/weekly-content";
 import { z } from "zod";
 
-/** Content for one level of a Sunday Gospel sheet. Original retellings only (no NRSV/NABRE text). */
-export type GospelSheetLevel = {
-  title: string;
-  story: string;
-  keyLine: string;
-  heartTitle: string;
-  heartIntro: string;
-  /** Level 1: top / bottom halves. Level 2: left / right halves. */
-  heartLabelA: string;
-  heartLabelB: string;
-  questions: string[];
-  actions: string[];
-  prayer: string;
-};
+import { type GospelSheetLevel, gospelSheetLevelSchema } from "@/lib/gospel-sheet-schema";
+import { type SheetLevelNumber, parseLevelParam } from "@/lib/gospel-sheet-level";
+
+export { gospelSheetLevelSchema, parseLevelParam };
+export type { GospelSheetLevel, SheetLevelNumber };
 
 export type GospelSheetLevels = { level1: GospelSheetLevel; level2: GospelSheetLevel };
 
@@ -34,22 +25,8 @@ export type GospelSheetView = {
   levels: GospelSheetLevels;
 };
 
-export type SheetLevelNumber = 1 | 2;
 
 const line = (max: number) => z.string().trim().max(max);
-
-export const gospelSheetLevelSchema = z.object({
-  title: line(80).min(1, "Title is required"),
-  story: line(1200).min(1, "Story is required"),
-  keyLine: line(120).min(1, "Key line is required"),
-  heartTitle: line(60).min(1),
-  heartIntro: line(300),
-  heartLabelA: line(40).min(1),
-  heartLabelB: line(40).min(1),
-  questions: z.array(line(120)).length(2),
-  actions: z.array(line(60)).length(3),
-  prayer: line(200),
-});
 
 export const gospelSheetLevelsSchema = z.object({
   level1: gospelSheetLevelSchema,
@@ -97,11 +74,6 @@ export function parseLevels(raw: unknown): GospelSheetLevels {
   const parsed = gospelSheetLevelsSchema.safeParse(raw);
   if (parsed.success) return parsed.data;
   return { level1: emptyLevel(), level2: emptyLevel() };
-}
-
-export function parseLevelParam(value: string | string[] | undefined): SheetLevelNumber {
-  const v = Array.isArray(value) ? value[0] : value;
-  return v === "2" ? 2 : 1;
 }
 
 type SheetRow = {

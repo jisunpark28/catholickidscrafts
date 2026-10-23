@@ -1,0 +1,96 @@
+{
+  "key": "C_OT22",
+  "liturgicalName": "22nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 14:1, 7-14",
+  "keyVerseDR": "\"...he that humbleth himself shall be exalted.\" (Lk 14:11)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Take the Last Seat",
+      "story": "Jesus saw guests choosing the best seats at a dinner. He said, \"Take the lowest seat instead.\" He said to invite the poor, who cannot pay you back.",
+      "keyLine": "Let others go first.",
+      "heartTitle": "Humble Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I let others first",
+      "heartLabelB": "I invite",
+      "questions": [
+        "Which seat should we pick?",
+        "Who can you invite to play?"
+      ],
+      "actions": [
+        "Let others go first",
+        "Invite someone left out",
+        "Share"
+      ],
+      "prayer": "Jesus, make me humble. Amen.",
+      "activity": {
+        "title": "Let others go first",
+        "intro": "Be humble at home!",
+        "idea": 124,
+        "type": "checklist",
+        "items": [
+          "Let someone go first in line",
+          "Hug my parents",
+          "Serve others at dinner"
+        ]
+      },
+      "words": [
+        "seat",
+        "humble",
+        "party",
+        "invite"
+      ]
+    },
+    "level2": {
+      "title": "The Lowest Place",
+      "story": "Jesus went to dine at the house of a Pharisee on the sabbath, and He noticed how the guests chose the first seats. He said, \"When thou art invited to a wedding, sit not down in the first place.\" Instead, sit in the lowest place, so the host may say, \"Friend, go up higher.\" Jesus said, \"Every one that exalteth himself, shall be humbled; and he that humbleth himself, shall be exalted.\" He told the host to invite the poor, the lame, and the blind, who cannot repay him.",
+      "keyLine": "He that humbleth himself shall be exalted.",
+      "heartTitle": "Humble Hospitality",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Choosing last",
+      "heartLabelB": "Inviting the left out",
+      "questions": [
+        "Why does Jesus praise humility?",
+        "Who could you invite who can't repay you?"
+      ],
+      "actions": [
+        "Invite someone new",
+        "Let others have the best",
+        "Serve at a meal"
+      ],
+      "prayer": "Jesus, meek and humble, make me like You. Amen.",
+      "activity": {
+        "title": "Humble at Mass",
+        "intro": "Get to Mass early and pray humbly.",
+        "idea": 116,
+        "type": "checklist",
+        "items": [
+          "Lay out my clothes the night before",
+          "Arrive 10 minutes early",
+          "Kneel and pray quietly",
+          "Let others take the good seats"
+        ]
+      },
+      "words": [
+        "humble",
+        "exalt",
+        "honor",
+        "banquet",
+        "poor",
+        "repay"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT22_main.png",
+    "heart": "C_OT22_heart.png",
+    "icons": [
+      "icon_table.png",
+      "icon_crown.png",
+      "icon_cup.png"
+    ],
+    "mainBrief": "Banquet table; humble guest taking last seat",
+    "heartBrief": "Lowest seat chair in heart"
+  }
+}

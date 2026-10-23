@@ -1,0 +1,94 @@
+{
+  "key": "C_OT07",
+  "liturgicalName": "7th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 6:27-38",
+  "keyVerseDR": "\"Be ye therefore merciful, as your Father also is merciful.\" (Lk 6:36)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Be Kind to Everyone",
+      "story": "Jesus said, \"Love your enemies. Do good to people who hate you.\" Be merciful, just as God is merciful. Treat others the way you want to be treated.",
+      "keyLine": "Be merciful like God.",
+      "heartTitle": "Golden Rule",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "How I want to be treated",
+      "heartLabelB": "How I treat others",
+      "questions": [
+        "What is the Golden Rule?",
+        "Who can you be kind to?"
+      ],
+      "actions": [
+        "Be kind to someone mean",
+        "Share",
+        "Don't fight back"
+      ],
+      "prayer": "Jesus, help me be kind and merciful. Amen.",
+      "activity": {
+        "type": "heart",
+        "title": "Be merciful",
+        "a": "God is merciful to me",
+        "b": "I am merciful to others",
+        "intro": "Fill the Sacred Heart with mercy."
+      },
+      "words": [
+        "kind",
+        "mercy",
+        "enemy",
+        "golden rule"
+      ]
+    },
+    "level2": {
+      "title": "Love Your Enemies",
+      "story": "Jesus said, \"Love your enemies, do good to them that hate you. Bless them that curse you, and pray for them that calumniate you.\" He said to give to everyone who asks of you. \"And as you would that men should do to you, do you also to them in like manner.\" Jesus said, \"Be ye therefore merciful, as your Father also is merciful.\" He said, \"Forgive, and you shall be forgiven. Give, and it shall be given to you.\"",
+      "keyLine": "Be ye therefore merciful, as your Father also is merciful.",
+      "heartTitle": "Mercy",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Mercy I've received",
+      "heartLabelB": "Mercy I'll give",
+      "questions": [
+        "Why should we love our enemies?",
+        "What does 'the measure you give' mean?"
+      ],
+      "actions": [
+        "Pray for someone who hurt me",
+        "Don't judge",
+        "Give generously"
+      ],
+      "prayer": "Merciful Father, make me merciful. Amen.",
+      "activity": {
+        "title": "The Golden Rule",
+        "intro": "Number the word cards in order.",
+        "idea": 40,
+        "type": "wordorder",
+        "pieces": [
+          "And as",
+          "you would",
+          "that men",
+          "should do to you,",
+          "do you also",
+          "to them."
+        ]
+      },
+      "words": [
+        "mercy",
+        "enemy",
+        "golden rule",
+        "judge",
+        "forgive",
+        "generous"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT07_main.png",
+    "heart": "C_OT07_heart.png",
+    "icons": [
+      "icon_handshake.png",
+      "icon_heart_hands.png",
+      "icon_scales.png"
+    ],
+    "mainBrief": "Child sharing with someone who was unkind",
+    "heartBrief": "Golden Rule: two hands in heart"
+  }
+}

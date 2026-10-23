@@ -1,0 +1,89 @@
+{
+  "key": "B_OT21",
+  "liturgicalName": "21st Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "John 6:60-69",
+  "keyVerseDR": "\"Lord, to whom shall we go? Thou hast the words of eternal life.\" (Jn 6:69 DR)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Peter Stays With Jesus",
+      "story": "Some followers said, \"This teaching is hard!\" and left Jesus. Jesus asked the Twelve, \"Will you also go away?\" Peter said, \"Lord, to whom shall we go?\"",
+      "keyLine": "I will stay with Jesus.",
+      "heartTitle": "Staying Close",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus stays",
+      "heartLabelB": "I stay",
+      "questions": [
+        "What did Peter say?",
+        "How can you stay close to Jesus?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Go to Mass",
+        "Listen to Jesus"
+      ],
+      "prayer": "Jesus, I will always stay with You. Amen.",
+      "activity": {
+        "title": "I will stay with Jesus",
+        "intro": "Put your thumbprint on the cross as a promise.",
+        "idea": 92,
+        "type": "shapecraft",
+        "shape": "cross",
+        "label": "I stay with Jesus"
+      },
+      "words": [
+        "Peter",
+        "stay",
+        "words",
+        "life"
+      ]
+    },
+    "level2": {
+      "title": "To Whom Shall We Go?",
+      "story": "Many of Jesus' disciples said, \"This saying is hard, and who can hear it?\" Jesus said, \"It is the spirit that quickeneth; the words that I have spoken to you, are spirit and life.\" After this, many of His disciples went back and walked no more with Him. Jesus asked the Twelve, \"Will you also go away?\" Simon Peter answered, \"Lord, to whom shall we go? Thou hast the words of eternal life.\"",
+      "keyLine": "Lord, to whom shall we go? Thou hast the words of eternal life.",
+      "heartTitle": "Staying Faithful",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "When faith is hard",
+      "heartLabelB": "Why I stay",
+      "questions": [
+        "Why did some disciples leave?",
+        "When is it hard to follow Jesus?"
+      ],
+      "actions": [
+        "Pray the Act of Faith",
+        "Stay faithful in something hard",
+        "Encourage a friend in faith"
+      ],
+      "prayer": "Lord, You have the words of eternal life. Amen.",
+      "activity": {
+        "title": "Mirror message",
+        "intro": "Hold this up to a mirror, then copy it the right way.",
+        "idea": 45,
+        "type": "copyverse",
+        "text": "Lord, to whom shall we go? Thou hast the words of eternal life.",
+        "mirror": true
+      },
+      "words": [
+        "disciples",
+        "hard saying",
+        "faith",
+        "eternal life",
+        "Holy One",
+        "loyalty"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT21_main.png",
+    "heart": "B_OT21_heart.png",
+    "icons": [
+      "icon_footprints.png",
+      "icon_keys.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Peter staying beside Jesus while others walk away",
+    "heartBrief": "Peter's keys on heart"
+  }
+}

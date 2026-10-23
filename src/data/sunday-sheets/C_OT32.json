@@ -1,0 +1,117 @@
+{
+  "key": "C_OT32",
+  "liturgicalName": "32nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 20:27-38",
+  "keyVerseDR": "\"For he is not the God of the dead, but of the living: for all live to him.\" (Lk 20:38)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "God of the Living",
+      "story": "Some men asked Jesus a tricky question about heaven. Jesus said people in heaven live like angels. God is the God of the living!",
+      "keyLine": "God gives life forever.",
+      "heartTitle": "Forever With God",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Heaven",
+      "heartLabelB": "Hope",
+      "questions": [
+        "What did Jesus say about God?",
+        "Who do you hope to see in heaven?"
+      ],
+      "actions": [
+        "Pray for people who died",
+        "Thank God for life",
+        "Be kind"
+      ],
+      "prayer": "God, bring me to heaven with You. Amen.",
+      "activity": {
+        "title": "Candles of life",
+        "intro": "Color a candle for people in your family who have died. Pray for them.",
+        "idea": 97,
+        "type": "candles",
+        "candles": [
+          [
+            "Grandparents",
+            "light"
+          ],
+          [
+            "Family",
+            "light"
+          ],
+          [
+            "Friends",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "life",
+        "heaven",
+        "forever",
+        "God"
+      ]
+    },
+    "level2": {
+      "title": "The Resurrection of the Dead",
+      "story": "Some Sadducees, who said there is no resurrection, came to Jesus with a question. They told of a woman who had married seven brothers one after another, and asked whose wife she would be in the resurrection. Jesus said those counted worthy of the resurrection do not marry, for they are equal to the angels. He said even Moses called the Lord \"the God of Abraham, and the God of Isaac, and the God of Jacob.\" Jesus said, \"For He is not the God of the dead, but of the living: for all live to Him.\"",
+      "keyLine": "He is not the God of the dead, but of the living.",
+      "heartTitle": "Hope of Heaven",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What we believe",
+      "heartLabelB": "How we live",
+      "questions": [
+        "Why did the Sadducees ask this question?",
+        "How does belief in the resurrection change how we live?"
+      ],
+      "actions": [
+        "Pray for the faithful departed",
+        "Visit a cemetery and pray",
+        "Pray the Creed"
+      ],
+      "prayer": "Lord, God of the living, give me hope. Amen.",
+      "activity": {
+        "title": "What do we believe?",
+        "intro": "Circle T or F.",
+        "idea": 147,
+        "type": "truefalse",
+        "items": [
+          [
+            "We believe in the resurrection of the body.",
+            true
+          ],
+          [
+            "Jesus said there is no life after death.",
+            false
+          ],
+          [
+            "God is the God of the living.",
+            true
+          ],
+          [
+            "In heaven we are like the angels.",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "Sadducees",
+        "resurrection",
+        "eternal life",
+        "Moses",
+        "living",
+        "hope"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT32_main.png",
+    "heart": "C_OT32_heart.png",
+    "icons": [
+      "icon_cloud.png",
+      "icon_sun.png",
+      "icon_lily.png"
+    ],
+    "mainBrief": "Jesus teaching about heaven; joyful light",
+    "heartBrief": "Heaven clouds and sun in heart"
+  }
+}

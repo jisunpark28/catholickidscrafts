@@ -1,0 +1,104 @@
+{
+  "key": "C_OT12",
+  "liturgicalName": "12th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 9:18-24",
+  "keyVerseDR": "\"But whom do you say that I am? Simon Peter answering, said: The Christ of God.\" (Lk 9:20)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Who Is Jesus?",
+      "story": "Jesus prayed alone. Then He asked, \"Who do you say I am?\" Peter said, \"You are the Christ of God!\"",
+      "keyLine": "Jesus is the Christ.",
+      "heartTitle": "Who Jesus Is",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is the Christ",
+      "heartLabelB": "I follow Him",
+      "questions": [
+        "What did Peter say?",
+        "Who is Jesus to you?"
+      ],
+      "actions": [
+        "Tell someone who Jesus is",
+        "Do a hard thing with love",
+        "Pray"
+      ],
+      "prayer": "Jesus, You are the Christ. Amen.",
+      "activity": {
+        "title": "Guess the saint",
+        "intro": "Read the clues. Who is it?",
+        "idea": 103,
+        "type": "whoami",
+        "clues": [
+          "I was a fisherman named Simon.",
+          "I said Jesus is the Christ of God.",
+          "I became the first Pope."
+        ],
+        "answer": "St Peter",
+        "choices": [
+          "St Andrew",
+          "St Peter",
+          "St James"
+        ]
+      },
+      "words": [
+        "Peter",
+        "Christ",
+        "cross",
+        "follow"
+      ]
+    },
+    "level2": {
+      "title": "The Christ of God",
+      "story": "Once when Jesus was praying alone with His disciples, He asked, \"Whom do the people say that I am?\" They said John the Baptist, Elijah, or one of the old prophets risen again. He asked, \"But whom do you say that I am?\" Peter answered, \"The Christ of God.\" Jesus said, \"If any man will come after Me, let him deny himself, and take up his cross daily, and follow Me.\"",
+      "keyLine": "Whom do you say that I am? The Christ of God.",
+      "heartTitle": "Daily Cross",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "My cross today",
+      "heartLabelB": "How Jesus helps",
+      "questions": [
+        "Why does Jesus say 'daily'?",
+        "How would you answer Jesus?"
+      ],
+      "actions": [
+        "Offer up something hard each day",
+        "Pray the Creed",
+        "Profess my faith"
+      ],
+      "prayer": "Jesus, Christ of God, I take up my cross. Amen.",
+      "activity": {
+        "title": "Who is Jesus?",
+        "intro": "Find the words from today's Gospel.",
+        "idea": 28,
+        "type": "wordfind",
+        "words": [
+          "CHRIST",
+          "PETER",
+          "PRAYING",
+          "CROSS",
+          "DAILY",
+          "FOLLOW"
+        ]
+      },
+      "words": [
+        "Christ",
+        "profession",
+        "suffer",
+        "cross",
+        "daily",
+        "disciple"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT12_main.png",
+    "heart": "C_OT12_heart.png",
+    "icons": [
+      "icon_cross.png",
+      "icon_praying_hands.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Jesus praying, then asking 'Who do you say I am?'",
+    "heartBrief": "Small cross in heart"
+  }
+}

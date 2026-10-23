@@ -1,0 +1,98 @@
+{
+  "key": "B_OT03",
+  "liturgicalName": "3rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 1:14-20",
+  "keyVerseDR": "\"Come after me, and I will make you to become fishers of men.\" (Mk 1:17)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Follow Me!",
+      "story": "Jesus said, \"The Kingdom of God is near!\" He saw Simon and Andrew fishing. He said, \"Come, follow Me!\" and they followed Him right away.",
+      "keyLine": "I will follow Jesus!",
+      "heartTitle": "Fishers of People",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus calls",
+      "heartLabelB": "I follow",
+      "questions": [
+        "What did the fishermen leave?",
+        "How can you follow Jesus?"
+      ],
+      "actions": [
+        "Say yes to Jesus",
+        "Invite a friend",
+        "Pray"
+      ],
+      "prayer": "Jesus, I will follow You. Amen.",
+      "activity": {
+        "title": "Fishermen sudoku",
+        "intro": "Each row and column has each picture once.",
+        "idea": 42,
+        "type": "sudoku",
+        "symbols": [
+          "✚",
+          "★",
+          "♥",
+          "☀"
+        ],
+        "names": [
+          "Cross",
+          "Star",
+          "Heart",
+          "Sun"
+        ]
+      },
+      "words": [
+        "fish",
+        "boat",
+        "follow",
+        "net"
+      ]
+    },
+    "level2": {
+      "title": "Fishers of Men",
+      "story": "After John was arrested, Jesus came into Galilee preaching the gospel of God. He said, \"The time is accomplished, and the kingdom of God is at hand: repent, and believe the gospel.\" Passing by the sea, He saw Simon and Andrew casting nets. Jesus said, \"Come after Me, and I will make you to become fishers of men,\" and they left their nets and followed Him. He also called James and John, who left their father Zebedee in the boat.",
+      "keyLine": "I will make you to become fishers of men.",
+      "heartTitle": "Answering the Call",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I leave",
+      "heartLabelB": "What I follow",
+      "questions": [
+        "Why did they follow right away?",
+        "What might Jesus be calling you to?"
+      ],
+      "actions": [
+        "Pray about my vocation",
+        "Leave a bad habit",
+        "Invite someone to know Jesus"
+      ],
+      "prayer": "Jesus, help me follow You right away. Amen.",
+      "activity": {
+        "title": "Fix the words",
+        "intro": "Three words are wrong. Cross them out and write the right ones.",
+        "idea": 39,
+        "type": "fixwords",
+        "text": "Come after Me; and I will make you to become {farmers|fishers} of {fish|men}. And {later|immediately} leaving their nets, they followed Him."
+      },
+      "words": [
+        "kingdom",
+        "repent",
+        "call",
+        "nets",
+        "disciples",
+        "Galilee"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT03_main.png",
+    "heart": "B_OT03_heart.png",
+    "icons": [
+      "icon_boat.png",
+      "icon_fish.png",
+      "icon_net.png"
+    ],
+    "mainBrief": "Jesus calling fishermen by the Sea of Galilee",
+    "heartBrief": "Net with fish in heart"
+  }
+}

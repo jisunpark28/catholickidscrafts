@@ -1,0 +1,111 @@
+{
+  "key": "XMAS2",
+  "liturgicalName": "2nd Sunday after Christmas",
+  "season": "Sunday (Christmas season)",
+  "gospelRef": "John 1:1-18 (or 1:1-5, 9-14)",
+  "keyVerseDR": "\"And the light shineth in darkness: and the darkness did not comprehend it.\" (Jn 1:5)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is the Light",
+      "story": "Jesus is the Word of God. He is the Light that shines in the dark. He came to live with us, full of grace and truth!",
+      "keyLine": "Jesus is my light.",
+      "heartTitle": "Light in the Dark",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus shines",
+      "heartLabelB": "I shine",
+      "questions": [
+        "What can't stop Jesus' light?",
+        "How can you shine for Jesus?"
+      ],
+      "actions": [
+        "Light a candle and pray",
+        "Be kind",
+        "Smile at someone"
+      ],
+      "prayer": "Jesus, shine in my heart. Amen.",
+      "activity": {
+        "title": "Light in the darkness",
+        "intro": "Color by number to make the Christmas star.",
+        "idea": 38,
+        "type": "colornum",
+        "shape": "star",
+        "mode": "key"
+      },
+      "words": [
+        "light",
+        "dark",
+        "Word",
+        "shine"
+      ]
+    },
+    "level2": {
+      "title": "The Light Shines in the Darkness",
+      "story": "\"In the beginning was the Word, and the Word was with God, and the Word was God.\" He was the true light, which enlightens every man that comes into the world. He came unto His own, and His own did not receive Him. But to as many as received Him, He gave power to become the sons of God. \"And the Word was made flesh, and dwelt among us, full of grace and truth.\"",
+      "keyLine": "The light shineth in darkness.",
+      "heartTitle": "Children of Light",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Darkness I face",
+      "heartLabelB": "Light I bring",
+      "questions": [
+        "What does 'the darkness did not overcome it' mean?",
+        "How do you 'receive' Jesus?"
+      ],
+      "actions": [
+        "Read John 1:1-14",
+        "Bring light to someone sad",
+        "Pray by the Nativity"
+      ],
+      "prayer": "Jesus, Light of the world, make me a child of God. Amen.",
+      "activity": {
+        "title": "Light or darkness?",
+        "intro": "Jesus is the Light. Sort each one.",
+        "idea": 9,
+        "type": "sorting",
+        "left": "Light",
+        "right": "Darkness",
+        "items": [
+          [
+            "Sharing my toys",
+            "L"
+          ],
+          [
+            "Telling a lie",
+            "R"
+          ],
+          [
+            "Praying to Jesus",
+            "L"
+          ],
+          [
+            "Being selfish",
+            "R"
+          ],
+          [
+            "Forgiving a friend",
+            "L"
+          ]
+        ]
+      },
+      "words": [
+        "Word",
+        "light",
+        "darkness",
+        "flesh",
+        "grace",
+        "children of God"
+      ]
+    }
+  },
+  "art": {
+    "main": "XMAS2_main.png",
+    "heart": "XMAS2_heart.png",
+    "icons": [
+      "icon_candle.png",
+      "icon_star.png",
+      "icon_scroll.png"
+    ],
+    "mainBrief": "Candle glowing in a dark room, scroll with 'In the beginning was the Word'",
+    "heartBrief": "Rays of light from the heart into darkness"
+  }
+}

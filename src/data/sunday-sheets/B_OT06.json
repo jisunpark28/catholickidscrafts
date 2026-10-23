@@ -1,0 +1,97 @@
+{
+  "key": "B_OT06",
+  "liturgicalName": "6th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 1:40-45",
+  "keyVerseDR": "\"I will. Be thou made clean.\" (Mk 1:41)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Touches a Sick Man",
+      "story": "A man with leprosy knelt before Jesus. He said, \"If You want to, You can make me clean.\" Jesus touched him and said, \"I will. Be clean!\"",
+      "keyLine": "Jesus cares for me.",
+      "heartTitle": "Caring Hands",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus helps",
+      "heartLabelB": "I help",
+      "questions": [
+        "What did Jesus do for the man?",
+        "Who can you help who feels left out?"
+      ],
+      "actions": [
+        "Be kind to someone left out",
+        "Pray for the sick",
+        "Help"
+      ],
+      "prayer": "Jesus, heal my heart. Amen.",
+      "activity": {
+        "title": "Jesus' healing hand",
+        "intro": "Jesus reached out His hand. Trace yours and write a prayer on each finger.",
+        "idea": 14,
+        "type": "hand",
+        "fingers": [
+          "Heal the sick",
+          "Help the lonely",
+          "Bless my family",
+          "Thank You, Jesus",
+          "I love You"
+        ]
+      },
+      "words": [
+        "touch",
+        "heal",
+        "clean",
+        "care"
+      ]
+    },
+    "level2": {
+      "title": "Healing the Leper",
+      "story": "A leper came to Jesus, knelt down, and begged, \"If Thou wilt, Thou canst make me clean.\" Moved with compassion, Jesus stretched out His hand and touched him. Jesus said, \"I will. Be thou made clean,\" and the leprosy left him at once. Jesus told him to tell no one but to show himself to the priest. But the man went out and told everyone, so that people came to Jesus from every side.",
+      "keyLine": "I will. Be thou made clean.",
+      "heartTitle": "Reaching Out",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who is left out",
+      "heartLabelB": "How I can include them",
+      "questions": [
+        "Why was touching a leper so surprising?",
+        "Who are the 'outcasts' today?"
+      ],
+      "actions": [
+        "Sit with someone alone",
+        "Pray for the sick",
+        "Visit someone lonely"
+      ],
+      "prayer": "Jesus, make me clean and make me kind. Amen.",
+      "activity": {
+        "title": "Jesus, I wonder...",
+        "intro": "Jesus touched the leper. Write what you wonder.",
+        "idea": 57,
+        "type": "prayerframe",
+        "starters": [
+          "Jesus, I wonder how the man felt...",
+          "I wonder why You touched him...",
+          "Jesus, help me care for..."
+        ]
+      },
+      "words": [
+        "leprosy",
+        "outcast",
+        "pity",
+        "compassion",
+        "clean",
+        "touch"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT06_main.png",
+    "heart": "B_OT06_heart.png",
+    "icons": [
+      "icon_hands_reaching.png",
+      "icon_heart_hands.png",
+      "icon_bandage.png"
+    ],
+    "mainBrief": "Jesus touching a man with leprosy gently",
+    "heartBrief": "Gentle hands inside heart"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "key": "C_BAPTISM",
+  "liturgicalName": "The Baptism of the Lord",
+  "season": "Christmas",
+  "gospelRef": "Luke 3:15-16, 21-22",
+  "keyVerseDR": "\"Thou art my beloved Son. In thee I am well pleased.\" (Lk 3:22)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Is Baptized",
+      "story": "People wondered if John was the Christ. John said, \"Someone greater is coming.\" When Jesus was baptized and praying, the Holy Spirit came like a dove.",
+      "keyLine": "I am God's child!",
+      "heartTitle": "My Baptism",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God's child",
+      "heartLabelB": "I am loved",
+      "questions": [
+        "What came down like a dove?",
+        "When were you baptized?"
+      ],
+      "actions": [
+        "Ask about my baptism",
+        "Bless myself with holy water",
+        "Thank God"
+      ],
+      "prayer": "Jesus, thank You for my baptism. Amen.",
+      "activity": {
+        "title": "The dove",
+        "intro": "Color the dove's feathers. The Holy Spirit came down on Jesus!",
+        "idea": 19,
+        "type": "drawscene",
+        "prompt": "A white dove coming down from heaven over Jesus praying after His baptism"
+      },
+      "words": [
+        "baptism",
+        "pray",
+        "dove",
+        "Son"
+      ]
+    },
+    "level2": {
+      "title": "Heaven Opened",
+      "story": "The people were wondering whether John might be the Christ. John said, \"I indeed baptize you with water; but there shall come One mightier than I.\" When all the people were baptized, Jesus also was baptized. While He was praying, heaven was opened, and the Holy Spirit descended in bodily shape like a dove upon Him. A voice came from heaven: \"Thou art My beloved Son; in Thee I am well pleased.\"",
+      "keyLine": "Thou art my beloved Son. In thee I am well pleased.",
+      "heartTitle": "Child of God",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What baptism gives",
+      "heartLabelB": "How I live it",
+      "questions": [
+        "Why does Luke mention that Jesus was praying?",
+        "How are you God's beloved child?"
+      ],
+      "actions": [
+        "Learn my baptism date",
+        "Renew my baptismal promises",
+        "Pray daily"
+      ],
+      "prayer": "Father, thank You for calling me Your beloved. Amen.",
+      "activity": {
+        "title": "True or false?",
+        "intro": "Circle T or F.",
+        "idea": 147,
+        "type": "truefalse",
+        "items": [
+          [
+            "Some people wondered if John was the Christ.",
+            true
+          ],
+          [
+            "John said he was mightier than Jesus.",
+            false
+          ],
+          [
+            "The Spirit came down while Jesus was praying.",
+            true
+          ],
+          [
+            "The Father said, Thou art My beloved Son.",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "baptism",
+        "Spirit",
+        "fire",
+        "prayer",
+        "beloved",
+        "Trinity"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_BAPTISM_main.png",
+    "heart": "C_BAPTISM_heart.png",
+    "icons": [
+      "icon_dove.png",
+      "icon_water_shell.png",
+      "icon_river.png"
+    ],
+    "mainBrief": "Jesus praying after baptism, heaven open, dove above",
+    "heartBrief": "Shell and water drops; dove on top of heart"
+  }
+}

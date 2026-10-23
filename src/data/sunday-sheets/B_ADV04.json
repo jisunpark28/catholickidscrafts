@@ -1,0 +1,93 @@
+{
+  "key": "B_ADV04",
+  "liturgicalName": "4th Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Luke 1:26-38",
+  "keyVerseDR": "\"Behold the handmaid of the Lord: be it done to me according to thy word.\" (Lk 1:38)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Mary Says Yes",
+      "story": "The angel Gabriel came to Mary. He said, \"You will have a baby, the Son of God!\" Mary said, \"Yes! Let it be done to me.\"",
+      "keyLine": "I say yes to God.",
+      "heartTitle": "Mary's Yes",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Mary says yes",
+      "heartLabelB": "I say yes",
+      "questions": [
+        "Who visited Mary?",
+        "How can you say yes to God?"
+      ],
+      "actions": [
+        "Pray the Hail Mary",
+        "Obey cheerfully",
+        "Help at home"
+      ],
+      "prayer": "Mary, help me say yes to God. Amen.",
+      "activity": {
+        "title": "Hail, full of grace!",
+        "intro": "Fill in the missing words of the angel's greeting.",
+        "idea": 144,
+        "type": "fillblank",
+        "text": "Hail, full of [grace], the [Lord] is with thee."
+      },
+      "words": [
+        "Mary",
+        "angel",
+        "Gabriel",
+        "yes"
+      ]
+    },
+    "level2": {
+      "title": "The Annunciation",
+      "story": "God sent the angel Gabriel to a virgin named Mary in Nazareth. The angel said, \"Hail, full of grace, the Lord is with thee.\" Mary was troubled, but the angel said, \"Fear not, Mary,\" for she would bear a son and call His name Jesus. Mary asked how this could be, and the angel said the Holy Spirit would come upon her. Mary said, \"Behold the handmaid of the Lord; be it done to me according to thy word.\"",
+      "keyLine": "Be it done to me according to thy word.",
+      "heartTitle": "My Fiat",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What God asks",
+      "heartLabelB": "How I say yes",
+      "questions": [
+        "Why is Mary's yes so important?",
+        "Where in the Hail Mary do we hear Gabriel's words?"
+      ],
+      "actions": [
+        "Pray the Angelus",
+        "Say yes to a hard request",
+        "Prepare a gift for Jesus"
+      ],
+      "prayer": "Hail Mary, full of grace, help me say yes. Amen.",
+      "activity": {
+        "title": "Mary's yes",
+        "intro": "Number the word cards to make Mary's answer.",
+        "idea": 40,
+        "type": "wordorder",
+        "pieces": [
+          "Behold",
+          "the handmaid",
+          "of the Lord;",
+          "be it done to me",
+          "according to thy word."
+        ]
+      },
+      "words": [
+        "Annunciation",
+        "Gabriel",
+        "full of grace",
+        "handmaid",
+        "Incarnation",
+        "fiat"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_ADV04_main.png",
+    "heart": "B_ADV04_heart.png",
+    "icons": [
+      "icon_angel.png",
+      "icon_lily.png",
+      "icon_dove.png"
+    ],
+    "mainBrief": "Angel Gabriel greeting Mary in her home, lily nearby",
+    "heartBrief": "Mary's 'yes' banner; lilies around heart"
+  }
+}

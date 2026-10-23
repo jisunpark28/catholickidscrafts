@@ -1,0 +1,94 @@
+{
+  "key": "C_OT30",
+  "liturgicalName": "30th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 18:9-14",
+  "keyVerseDR": "\"O God, be merciful to me a sinner.\" (Lk 18:13)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Two Prayers",
+      "story": "Two men went to pray in the Temple. A proud man bragged about himself. A tax collector prayed, \"God, be merciful to me, a sinner.\" God heard the humble man.",
+      "keyLine": "God, be merciful to me.",
+      "heartTitle": "Humble Prayer",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say sorry",
+      "heartLabelB": "God forgives",
+      "questions": [
+        "Whose prayer did God like?",
+        "How can you pray humbly?"
+      ],
+      "actions": [
+        "Say sorry to God",
+        "Don't brag",
+        "Pray quietly"
+      ],
+      "prayer": "God, be merciful to me. Amen.",
+      "activity": {
+        "title": "The humble prayer",
+        "intro": "Fold the page, guess, then open to check.",
+        "idea": 78,
+        "type": "foldreveal",
+        "question": "What did the tax collector pray?",
+        "answer": "O God, be merciful to me a sinner."
+      },
+      "words": [
+        "pray",
+        "humble",
+        "sorry",
+        "mercy"
+      ]
+    },
+    "level2": {
+      "title": "The Pharisee and the Tax Collector",
+      "story": "Jesus told this parable to some who trusted in themselves and despised others. Two men went up into the temple to pray, a Pharisee and a tax collector. The Pharisee stood and prayed, \"O God, I give Thee thanks that I am not as the rest of men.\" The tax collector, standing far off, would not even lift his eyes, but struck his breast, saying, \"O God, be merciful to me a sinner.\" Jesus said this man went home justified, for he that humbles himself shall be exalted.",
+      "keyLine": "O God, be merciful to me a sinner.",
+      "heartTitle": "Pride & Humility",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Proud prayer",
+      "heartLabelB": "Humble prayer",
+      "questions": [
+        "Why was the Pharisee's prayer wrong?",
+        "How can you pray like the tax collector?"
+      ],
+      "actions": [
+        "Pray the Jesus Prayer",
+        "Go to Confession",
+        "Don't compare myself"
+      ],
+      "prayer": "O God, be merciful to me, a sinner. Amen.",
+      "activity": {
+        "title": "Evening examen",
+        "intro": "Pray humbly like the tax collector each night.",
+        "idea": 125,
+        "type": "checklist",
+        "items": [
+          "Thank God for today",
+          "Where did I show love?",
+          "Where did I sin?",
+          "God, be merciful to me",
+          "Help me tomorrow"
+        ]
+      },
+      "words": [
+        "Pharisee",
+        "tax collector",
+        "humble",
+        "justified",
+        "pride",
+        "mercy"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT30_main.png",
+    "heart": "C_OT30_heart.png",
+    "icons": [
+      "icon_praying_hands.png",
+      "icon_temple.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Pharisee standing proud; tax collector bowing head",
+    "heartBrief": "Bowed head praying in heart"
+  }
+}

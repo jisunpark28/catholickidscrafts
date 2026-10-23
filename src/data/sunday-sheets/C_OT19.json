@@ -1,0 +1,89 @@
+{
+  "key": "C_OT19",
+  "liturgicalName": "19th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 12:32-48",
+  "keyVerseDR": "\"For where your treasure is, there will your heart be also.\" (Lk 12:34)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Be Ready",
+      "story": "Jesus said, \"Do not be afraid, little flock. Where your treasure is, your heart will be too.\" Be like servants waiting with lamps lit for their master.",
+      "keyLine": "My treasure is Jesus.",
+      "heartTitle": "Ready Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "My treasure",
+      "heartLabelB": "I'm ready",
+      "questions": [
+        "Where is your heart?",
+        "How can you be ready for Jesus?"
+      ],
+      "actions": [
+        "Pray every day",
+        "Do good deeds",
+        "Share"
+      ],
+      "prayer": "Jesus, You are my treasure. Amen.",
+      "activity": {
+        "title": "My treasure",
+        "intro": "Color 10 beads and pray a Hail Mary for each.",
+        "idea": 18,
+        "type": "beads",
+        "count": 10,
+        "label": "My treasure is Jesus"
+      },
+      "words": [
+        "ready",
+        "lamp",
+        "treasure",
+        "heart"
+      ]
+    },
+    "level2": {
+      "title": "Faithful Servants",
+      "story": "Jesus said, \"Fear not, little flock, for it hath pleased your Father to give you a kingdom.\" He told them to make purses that do not grow old, a treasure in heaven. \"For where your treasure is, there will your heart be also.\" Jesus said to be like servants waiting for their master to return from a wedding, with lamps burning. He said, \"Be you then also ready: for at what hour you think not, the Son of man will come.\"",
+      "keyLine": "Where your treasure is, there will your heart be also.",
+      "heartTitle": "Faithful Steward",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I've been given",
+      "heartLabelB": "How I use it",
+      "questions": [
+        "What does your heart treasure most?",
+        "What has God given you to care for?"
+      ],
+      "actions": [
+        "Do my chores faithfully",
+        "Store treasure in heaven with a kind act",
+        "Pray daily"
+      ],
+      "prayer": "Lord, make me a faithful servant. Amen.",
+      "activity": {
+        "title": "Say it in one line",
+        "intro": "Think about the Gospel, then open to read a summary.",
+        "idea": 75,
+        "type": "foldreveal",
+        "question": "Can you tell today's Gospel in one sentence?",
+        "answer": "Store up treasure in heaven and stay ready like servants with lamps lit for their master."
+      },
+      "words": [
+        "little flock",
+        "treasure",
+        "vigilant",
+        "steward",
+        "faithful",
+        "lamps"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT19_main.png",
+    "heart": "C_OT19_heart.png",
+    "icons": [
+      "icon_lamp.png",
+      "icon_treasure_chest.png",
+      "icon_door.png"
+    ],
+    "mainBrief": "Servants with lamps waiting for master; treasure",
+    "heartBrief": "Treasure chest inside heart"
+  }
+}

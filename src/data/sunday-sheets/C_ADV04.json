@@ -1,0 +1,114 @@
+{
+  "key": "C_ADV04",
+  "liturgicalName": "4th Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Luke 1:39-45",
+  "keyVerseDR": "\"Blessed art thou among women and blessed is the fruit of thy womb.\" (Lk 1:42)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Mary Visits Elizabeth",
+      "story": "Mary went to visit Elizabeth. Elizabeth's baby, John, jumped for joy! Elizabeth said, \"Blessed are you, Mary!\"",
+      "keyLine": "Blessed are you, Mary!",
+      "heartTitle": "Visiting with Love",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I visit",
+      "heartLabelB": "I help",
+      "questions": [
+        "Who jumped for joy?",
+        "Who can you visit or call?"
+      ],
+      "actions": [
+        "Visit or call a relative",
+        "Pray the Hail Mary",
+        "Help someone"
+      ],
+      "prayer": "Mary, help me bring Jesus to others. Amen.",
+      "activity": {
+        "title": "Advent wreath",
+        "intro": "Fourth week of Advent! Color all four candles.",
+        "idea": 133,
+        "type": "candles",
+        "candles": [
+          [
+            "Hope",
+            "light"
+          ],
+          [
+            "Peace",
+            "light"
+          ],
+          [
+            "Joy",
+            "light"
+          ],
+          [
+            "Love",
+            "light"
+          ]
+        ]
+      },
+      "words": [
+        "Mary",
+        "Elizabeth",
+        "visit",
+        "joy"
+      ]
+    },
+    "level2": {
+      "title": "The Visitation",
+      "story": "Mary rose up and went with haste into the hill country, to a city of Judah. She entered the house of Zechariah and greeted Elizabeth. When Elizabeth heard Mary's greeting, the baby leaped in her womb, and she was filled with the Holy Spirit. Elizabeth cried out, \"Blessed art thou among women, and blessed is the fruit of thy womb.\" She said, \"Blessed art thou that hast believed.\"",
+      "keyLine": "Blessed art thou among women and blessed is the fruit of thy womb.",
+      "heartTitle": "Bringing Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Who I can visit",
+      "heartLabelB": "How I bring Jesus",
+      "questions": [
+        "Which words of the Hail Mary come from Elizabeth?",
+        "Why did Mary hurry?"
+      ],
+      "actions": [
+        "Pray the Hail Mary slowly",
+        "Visit someone elderly",
+        "Help a pregnant mom or family"
+      ],
+      "prayer": "Mary, help me carry Jesus to others. Amen.",
+      "activity": {
+        "title": "Who am I?",
+        "intro": "Read the clues and guess.",
+        "idea": 50,
+        "type": "whoami",
+        "clues": [
+          "I was Mary's cousin.",
+          "My baby leaped for joy when Mary greeted me.",
+          "I said, Blessed art thou among women."
+        ],
+        "answer": "Elizabeth",
+        "choices": [
+          "Anna",
+          "Elizabeth",
+          "Martha"
+        ]
+      },
+      "words": [
+        "Visitation",
+        "Elizabeth",
+        "leaped",
+        "Holy Spirit",
+        "blessed",
+        "believed"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_ADV04_main.png",
+    "heart": "C_ADV04_heart.png",
+    "icons": [
+      "icon_mary_heart.png",
+      "icon_house.png",
+      "icon_lily.png"
+    ],
+    "mainBrief": "Mary visiting Elizabeth, both joyful, embracing",
+    "heartBrief": "Two mothers hugging in heart"
+  }
+}

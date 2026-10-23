@@ -1,0 +1,104 @@
+{
+  "key": "B_PALM",
+  "liturgicalName": "Palm Sunday of the Passion of the Lord",
+  "season": "Holy Week",
+  "gospelRef": "Mark 11:1-10 (procession); Mark 14:1–15:47",
+  "keyVerseDR": "\"Hosanna: Blessed is he that cometh in the name of the Lord.\" (Mk 11:9)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "Hosanna!",
+      "story": "Jesus rode a young donkey into Jerusalem. People spread cloaks and branches on the road. They shouted, \"Hosanna! Blessed is He who comes!\"",
+      "keyLine": "Hosanna to Jesus!",
+      "heartTitle": "Hosanna Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I praise",
+      "heartLabelB": "I love",
+      "questions": [
+        "What did people put on the road?",
+        "How can you praise Jesus?"
+      ],
+      "actions": [
+        "Wave a palm",
+        "Sing Hosanna",
+        "Pray at the cross"
+      ],
+      "prayer": "Jesus, my King, I love You. Amen.",
+      "activity": {
+        "title": "My picture diary",
+        "intro": "Draw yourself waving a palm to welcome Jesus.",
+        "idea": 5,
+        "type": "drawscene",
+        "prompt": "Me waving a palm branch as Jesus rides into Jerusalem on a young donkey"
+      },
+      "words": [
+        "palm",
+        "donkey",
+        "Hosanna",
+        "king"
+      ]
+    },
+    "level2": {
+      "title": "Hosanna to the Cross",
+      "story": "As Jesus came near Jerusalem, He sent two disciples to bring a colt that no one had ever ridden. They put their cloaks on it, and Jesus sat on it. Many spread their garments on the road, and others cut down leafy branches from the fields. Those who went before and followed cried, \"Hosanna, blessed is He that cometh in the name of the Lord.\" This Holy Week we remember Jesus' Passion, death, and Resurrection.",
+      "keyLine": "Blessed is he that cometh in the name of the Lord.",
+      "heartTitle": "Holy Week",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus gave",
+      "heartLabelB": "I give",
+      "questions": [
+        "Why did the centurion believe?",
+        "How will you walk with Jesus this week?"
+      ],
+      "actions": [
+        "Attend Holy Week services",
+        "Pray before a crucifix",
+        "Do a hidden sacrifice"
+      ],
+      "prayer": "Jesus, thank You for dying for me. Amen.",
+      "activity": {
+        "title": "True or false?",
+        "intro": "Circle T or F.",
+        "idea": 102,
+        "type": "truefalse",
+        "items": [
+          [
+            "Jesus rode a colt that no one had ridden.",
+            true
+          ],
+          [
+            "The people threw stones on the road.",
+            false
+          ],
+          [
+            "They spread garments and leafy branches.",
+            true
+          ],
+          [
+            "They cried, Hosanna!",
+            true
+          ]
+        ]
+      },
+      "words": [
+        "Hosanna",
+        "Passion",
+        "Gethsemane",
+        "centurion",
+        "cross",
+        "Holy Week"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_PALM_main.png",
+    "heart": "B_PALM_heart.png",
+    "icons": [
+      "icon_palm.png",
+      "icon_donkey.png",
+      "icon_cross.png"
+    ],
+    "mainBrief": "Jesus on a young donkey, cloaks and palms on road",
+    "heartBrief": "Palm branches framing heart; small cross"
+  }
+}

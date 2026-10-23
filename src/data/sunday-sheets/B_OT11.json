@@ -1,0 +1,87 @@
+{
+  "key": "B_OT11",
+  "liturgicalName": "11th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 4:26-34",
+  "keyVerseDR": "\"...it is as a grain of mustard seed...\" (Mk 4:31)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Tiny Seed",
+      "story": "Jesus said God's Kingdom grows like a seed. The mustard seed is tiny, but it grows big! Birds rest in its branches.",
+      "keyLine": "God makes small things grow.",
+      "heartTitle": "Growing Kingdom",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Small seed",
+      "heartLabelB": "Big plant",
+      "questions": [
+        "What did the tiny seed grow into?",
+        "What small good thing can you do?"
+      ],
+      "actions": [
+        "Plant a seed",
+        "Do a small kindness",
+        "Pray"
+      ],
+      "prayer": "Jesus, help Your kingdom grow in me. Amen.",
+      "activity": {
+        "title": "Tiny seed, big tree",
+        "intro": "Connect the dots to see the house where the birds can rest.",
+        "idea": 31,
+        "type": "dottodot",
+        "shape": "house"
+      },
+      "words": [
+        "seed",
+        "grow",
+        "big",
+        "birds"
+      ]
+    },
+    "level2": {
+      "title": "The Seed Grows by Itself",
+      "story": "Jesus said the kingdom of God is like a man who casts seed into the earth. He sleeps and rises night and day, and the seed springs up and grows while he does not know how. The earth brings forth first the blade, then the ear, then the full corn. Jesus also said the kingdom is like a grain of mustard seed, the smallest of all seeds. When it is sown, it grows up and shoots out great branches, so the birds can dwell under its shadow.",
+      "keyLine": "It is as a grain of mustard seed.",
+      "heartTitle": "God Grows It",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I plant",
+      "heartLabelB": "What God grows",
+      "questions": [
+        "Who makes the seed grow?",
+        "What small 'seed' of faith can you plant?"
+      ],
+      "actions": [
+        "Do one small act of faith daily",
+        "Be patient with my growth",
+        "Pray for someone"
+      ],
+      "prayer": "Lord, make the seed of faith grow in me. Amen.",
+      "activity": {
+        "title": "Imagine the Kingdom",
+        "intro": "Draw the Kingdom of God growing like a great mustard tree.",
+        "idea": 21,
+        "type": "drawscene",
+        "prompt": "A huge mustard tree grown from a tiny seed, with birds nesting in its branches"
+      },
+      "words": [
+        "kingdom",
+        "mustard seed",
+        "growth",
+        "harvest",
+        "patience",
+        "grace"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT11_main.png",
+    "heart": "B_OT11_heart.png",
+    "icons": [
+      "icon_seed.png",
+      "icon_mustard_tree.png",
+      "icon_bird.png"
+    ],
+    "mainBrief": "Tiny mustard seed growing into a big plant with birds",
+    "heartBrief": "Mustard tree growing out of heart"
+  }
+}

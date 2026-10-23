@@ -1,0 +1,95 @@
+{
+  "key": "A_OT15",
+  "liturgicalName": "15th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 13:1-23",
+  "keyVerseDR": "\"...he that received the seed upon good ground, is he that heareth the word, and understandeth, and beareth fruit...\" (Mt 13:23)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Sower",
+      "story": "A farmer scattered seeds. Some fell on the path, on rocks, and in thorns. Some fell on good soil and grew big!",
+      "keyLine": "My heart is good soil.",
+      "heartTitle": "Good Soil",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I listen",
+      "heartLabelB": "I grow",
+      "questions": [
+        "Where did the seeds grow best?",
+        "How can your heart be good soil?"
+      ],
+      "actions": [
+        "Plant a seed",
+        "Listen at Mass",
+        "Pray"
+      ],
+      "prayer": "Jesus, help Your word grow in me. Amen.",
+      "activity": {
+        "title": "Plant a seed",
+        "intro": "God's word grows in good soil. Care for creation this week!",
+        "idea": 113,
+        "type": "checklist",
+        "items": [
+          "Plant a seed or water a plant",
+          "Pick up litter outside",
+          "Thank God for the earth"
+        ]
+      },
+      "words": [
+        "seed",
+        "soil",
+        "grow",
+        "farmer"
+      ]
+    },
+    "level2": {
+      "title": "The Parable of the Sower",
+      "story": "Jesus sat in a boat and told the crowd a parable. A sower went out to sow, and some seed fell on the path, where birds ate it. Some fell on rocky ground and dried up, and some fell among thorns, which choked it. But some fell on rich soil and produced grain, a hundred or sixty or thirtyfold. Jesus explained that the seed is God's word, and the good soil is the one who hears it and understands.",
+      "keyLine": "He that heareth the word, and understandeth, and beareth fruit.",
+      "heartTitle": "What Soil Am I?",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What blocks God's word",
+      "heartLabelB": "What helps it grow",
+      "questions": [
+        "What are the 'thorns' in a kid's life?",
+        "How can you help God's word grow in you?"
+      ],
+      "actions": [
+        "Read the Gospel daily",
+        "Limit distractions",
+        "Do what I hear"
+      ],
+      "prayer": "Lord, make my heart good soil. Amen.",
+      "activity": {
+        "title": "Family talk",
+        "intro": "Talk about these questions together.",
+        "idea": 101,
+        "type": "checklist",
+        "items": [
+          "What kind of soil is my heart today?",
+          "What 'thorns' choke God's word in our home?",
+          "How can we help God's word grow?"
+        ]
+      },
+      "words": [
+        "parable",
+        "sower",
+        "soil",
+        "thorns",
+        "fruit",
+        "Word"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT15_main.png",
+    "heart": "A_OT15_heart.png",
+    "icons": [
+      "icon_seed.png",
+      "icon_soil.png",
+      "icon_wheat.png"
+    ],
+    "mainBrief": "Farmer scattering seeds on path, rocks, thorns, and good soil",
+    "heartBrief": "Seeds sprouting in heart soil"
+  }
+}

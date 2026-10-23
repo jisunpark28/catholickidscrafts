@@ -1,0 +1,99 @@
+{
+  "key": "A_OT10",
+  "liturgicalName": "10th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 9:9-13",
+  "keyVerseDR": "\"I will have mercy and not sacrifice. For I am not come to call the just, but sinners.\" (Mt 9:13)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Calls Matthew",
+      "story": "Matthew was a tax collector. Jesus said, \"Follow Me!\" Matthew got up and followed Him.",
+      "keyLine": "Jesus loves everyone.",
+      "heartTitle": "Welcome Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus welcomes",
+      "heartLabelB": "I welcome",
+      "questions": [
+        "Who did Jesus call?",
+        "Who can you include?"
+      ],
+      "actions": [
+        "Sit with someone alone",
+        "Be friendly",
+        "Pray"
+      ],
+      "prayer": "Jesus, thank You for loving me. Amen.",
+      "activity": {
+        "title": "Tell my parents",
+        "intro": "Write one line about today's Gospel to tell your family.",
+        "idea": 111,
+        "type": "letter",
+        "style": "card",
+        "to": "Mom and Dad",
+        "lines": 3
+      },
+      "words": [
+        "Matthew",
+        "follow",
+        "eat",
+        "everyone"
+      ]
+    },
+    "level2": {
+      "title": "Mercy, Not Sacrifice",
+      "story": "Jesus saw a man named Matthew sitting at the tax booth and said, \"Follow Me.\" Matthew got up and followed Him. Later, Jesus ate at Matthew's house with many tax collectors and sinners. The Pharisees asked, \"Why does your teacher eat with tax collectors and sinners?\" Jesus said, \"Those who are well do not need a doctor, but the sick do. I came to call sinners.\"",
+      "keyLine": "I will have mercy and not sacrifice.",
+      "heartTitle": "Doctor of Souls",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Jesus heals",
+      "heartLabelB": "I show mercy",
+      "questions": [
+        "Why did the Pharisees complain?",
+        "How can you show mercy to someone left out?"
+      ],
+      "actions": [
+        "Include someone",
+        "Go to Confession",
+        "Don't judge others"
+      ],
+      "prayer": "Jesus, Divine Physician, heal my heart. Amen.",
+      "activity": {
+        "title": "Who am I?",
+        "intro": "Read the clues and guess.",
+        "idea": 50,
+        "type": "whoami",
+        "clues": [
+          "I sat at a tax booth collecting money.",
+          "Jesus said to me, \"Follow Me.\"",
+          "I hosted a dinner for Jesus and sinners."
+        ],
+        "answer": "Matthew",
+        "choices": [
+          "Peter",
+          "Matthew",
+          "Zacchaeus"
+        ]
+      },
+      "words": [
+        "tax collector",
+        "sinners",
+        "mercy",
+        "physician",
+        "call",
+        "Pharisees"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT10_main.png",
+    "heart": "A_OT10_heart.png",
+    "icons": [
+      "icon_coins.png",
+      "icon_table.png",
+      "icon_cup.png"
+    ],
+    "mainBrief": "Jesus at table with Matthew and tax collectors",
+    "heartBrief": "Table with friends inside heart"
+  }
+}

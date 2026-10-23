@@ -1,0 +1,88 @@
+{
+  "key": "C_LNT05",
+  "liturgicalName": "5th Sunday of Lent (Year A readings may be used)",
+  "season": "Lent",
+  "gospelRef": "John 8:1-11",
+  "keyVerseDR": "\"Neither will I condemn thee. Go, and now sin no more.\" (Jn 8:11)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Jesus Forgives",
+      "story": "Some leaders brought a woman to Jesus to trap Him. Jesus said, \"Whoever has no sin can throw the first stone.\" They all left. Jesus said, \"Go, and sin no more.\"",
+      "keyLine": "Jesus forgives me.",
+      "heartTitle": "Forgiving Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus forgives",
+      "heartLabelB": "I forgive",
+      "questions": [
+        "What did Jesus write on the ground?",
+        "Who can you forgive?"
+      ],
+      "actions": [
+        "Don't judge others",
+        "Forgive someone",
+        "Say sorry"
+      ],
+      "prayer": "Jesus, forgive me and help me forgive. Amen.",
+      "activity": {
+        "title": "Jesus forgives me",
+        "intro": "Fill the cross with fingerprints. Jesus forgives!",
+        "idea": 82,
+        "type": "shapecraft",
+        "shape": "cross",
+        "label": "Jesus forgives me"
+      },
+      "words": [
+        "stone",
+        "forgive",
+        "sin",
+        "kind"
+      ]
+    },
+    "level2": {
+      "title": "Go and Sin No More",
+      "story": "The scribes and Pharisees brought a woman caught in sin and set her before Jesus. They said, \"Moses commanded us to stone such a one. But what sayest Thou?\" Jesus bent down and wrote with His finger on the ground. He said, \"He that is without sin among you, let him first cast a stone at her.\" One by one they all went away, and Jesus said, \"Neither will I condemn thee. Go, and now sin no more.\"",
+      "keyLine": "Neither will I condemn thee. Go, and now sin no more.",
+      "heartTitle": "Mercy & Change",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Mercy Jesus gives",
+      "heartLabelB": "Change I make",
+      "questions": [
+        "Why did the accusers walk away?",
+        "Why did Jesus say 'sin no more' too?"
+      ],
+      "actions": [
+        "Don't gossip or judge",
+        "Go to Confession",
+        "Show mercy"
+      ],
+      "prayer": "Jesus, have mercy on me and help me change. Amen.",
+      "activity": {
+        "title": "MERCY acrostic",
+        "intro": "Jesus showed mercy. Write a line for each letter.",
+        "idea": 62,
+        "type": "acrostic",
+        "word": "MERCY"
+      },
+      "words": [
+        "mercy",
+        "condemn",
+        "stone",
+        "judge",
+        "conversion",
+        "sin"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_LNT05_main.png",
+    "heart": "C_LNT05_heart.png",
+    "icons": [
+      "icon_stone.png",
+      "icon_hands_reaching.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Jesus writing in the sand; men walking away, stones dropped",
+    "heartBrief": "Dropped stones around heart"
+  }
+}

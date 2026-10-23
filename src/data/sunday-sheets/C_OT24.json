@@ -1,0 +1,102 @@
+{
+  "key": "C_OT24",
+  "liturgicalName": "24th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 15:1-32",
+  "keyVerseDR": "\"...there shall be joy in heaven upon one sinner that doth penance...\" (Lk 15:7)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Lost Sheep",
+      "story": "A shepherd lost one sheep. He left the 99 and searched until he found it. God looks for us and rejoices when we come back!",
+      "keyLine": "God looks for me.",
+      "heartTitle": "Found!",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "God finds me",
+      "heartLabelB": "Heaven rejoices",
+      "questions": [
+        "What did the shepherd do?",
+        "How does God show He loves us?"
+      ],
+      "actions": [
+        "Say sorry",
+        "Help someone lost",
+        "Thank God"
+      ],
+      "prayer": "Jesus, thank You for finding me. Amen.",
+      "activity": {
+        "title": "Find the lost",
+        "intro": "Find the hidden lost sheep and coin in the picture.",
+        "idea": 16,
+        "type": "findhidden",
+        "objects": [
+          "sheep",
+          "coin",
+          "lamp",
+          "broom"
+        ]
+      },
+      "words": [
+        "lost",
+        "sheep",
+        "found",
+        "joy"
+      ]
+    },
+    "level2": {
+      "title": "Lost and Found",
+      "story": "Tax collectors and sinners came to listen to Jesus, and the Pharisees grumbled. Jesus told of a shepherd with a hundred sheep who leaves the ninety-nine to find the one that is lost. When he finds it, he lays it on his shoulders, rejoicing. He told of a woman who lost a silver coin and swept the house until she found it. Jesus said, \"There shall be joy before the angels of God upon one sinner doing penance.\"",
+      "keyLine": "There shall be joy in heaven upon one sinner that doth penance.",
+      "heartTitle": "God Seeks Me",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "When I'm lost",
+      "heartLabelB": "How God finds me",
+      "questions": [
+        "What do the three parables have in common?",
+        "How can you help someone 'come home'?"
+      ],
+      "actions": [
+        "Go to Confession",
+        "Welcome someone back",
+        "Pray for someone far from God"
+      ],
+      "prayer": "Good Shepherd, bring me home. Amen.",
+      "activity": {
+        "title": "Lost and found game",
+        "intro": "Roll a die, move, and answer a question.",
+        "idea": 87,
+        "type": "bingo",
+        "words": [
+          "Start",
+          "100 sheep",
+          "1 lost",
+          "Search",
+          "Found!",
+          "Coin",
+          "Sweep",
+          "Rejoice",
+          "Finish"
+        ]
+      },
+      "words": [
+        "lost sheep",
+        "lost coin",
+        "prodigal",
+        "repent",
+        "rejoice",
+        "mercy"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT24_main.png",
+    "heart": "C_OT24_heart.png",
+    "icons": [
+      "icon_sheep.png",
+      "icon_coins.png",
+      "icon_lamp.png"
+    ],
+    "mainBrief": "Shepherd carrying lost sheep home; woman with coin",
+    "heartBrief": "Lost sheep found inside heart"
+  }
+}

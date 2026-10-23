@@ -1,0 +1,107 @@
+{
+  "key": "C_OT11",
+  "liturgicalName": "11th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 7:36–8:3",
+  "keyVerseDR": "\"Many sins are forgiven her, because she hath loved much.\" (Lk 7:47)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Big Love, Big Forgiveness",
+      "story": "A woman came to Jesus crying. She washed His feet with her tears and anointed them with oil. Jesus said, \"Your sins are forgiven. Go in peace.\"",
+      "keyLine": "Jesus forgives me.",
+      "heartTitle": "Thankful Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus forgives",
+      "heartLabelB": "I love Him",
+      "questions": [
+        "What did the woman do for Jesus?",
+        "How can you say thank You to Jesus?"
+      ],
+      "actions": [
+        "Say sorry",
+        "Thank Jesus",
+        "Do something kind"
+      ],
+      "prayer": "Jesus, thank You for forgiving me. Amen.",
+      "activity": {
+        "title": "Go in peace",
+        "intro": "Make a sign of peace card for someone.",
+        "idea": 142,
+        "type": "letter",
+        "style": "card",
+        "to": "Someone special",
+        "lines": 2
+      },
+      "words": [
+        "feet",
+        "tears",
+        "love",
+        "forgive"
+      ]
+    },
+    "level2": {
+      "title": "The Forgiven Woman",
+      "story": "A Pharisee named Simon invited Jesus to dinner. A woman who was a sinner came with an alabaster box of ointment. She stood at His feet weeping, washed His feet with her tears, wiped them with her hair, and anointed them. Jesus told Simon a parable of two debtors, and said, \"Many sins are forgiven her, because she hath loved much.\" To the woman He said, \"Thy faith hath made thee safe, go in peace.\"",
+      "keyLine": "Many sins are forgiven her, because she hath loved much.",
+      "heartTitle": "Forgiven Much",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I'm forgiven",
+      "heartLabelB": "How I love back",
+      "questions": [
+        "How are forgiveness and love connected?",
+        "Why did Simon miss the point?"
+      ],
+      "actions": [
+        "Go to Confession",
+        "Thank God for His mercy",
+        "Do a loving act"
+      ],
+      "prayer": "Jesus, I love You for forgiving me. Amen.",
+      "activity": {
+        "title": "Vestment colors",
+        "intro": "The priest wears colors that mean something. Match each color.",
+        "idea": 127,
+        "type": "matchup",
+        "pairs": [
+          [
+            "Violet",
+            "Penance and waiting"
+          ],
+          [
+            "White",
+            "Joy and purity"
+          ],
+          [
+            "Green",
+            "Hope and growth"
+          ],
+          [
+            "Red",
+            "Holy Spirit and martyrs"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "anoint",
+        "debtors",
+        "forgiven",
+        "Pharisee",
+        "gratitude",
+        "love"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT11_main.png",
+    "heart": "C_OT11_heart.png",
+    "icons": [
+      "icon_oil_jar.png",
+      "icon_heart_hands.png",
+      "icon_tear_drop.png"
+    ],
+    "mainBrief": "Woman anointing Jesus' feet with jar of oil",
+    "heartBrief": "Jar of perfume in heart"
+  }
+}

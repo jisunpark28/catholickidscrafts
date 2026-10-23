@@ -1,0 +1,92 @@
+{
+  "key": "A_EAS02",
+  "liturgicalName": "2nd Sunday of Easter (Divine Mercy)",
+  "season": "Easter",
+  "gospelRef": "John 20:19-31",
+  "keyVerseDR": "\"...blessed are they that have not seen and have believed.\" (Jn 20:29)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Thomas Believes",
+      "story": "Jesus came to His friends and said, \"Peace be with you!\" Thomas was not there and did not believe. Then Jesus showed him His hands. Thomas said, \"My Lord and my God!\"",
+      "keyLine": "My Lord and my God!",
+      "heartTitle": "I Believe",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I trust Jesus",
+      "heartLabelB": "Jesus gives peace",
+      "questions": [
+        "What did Thomas say?",
+        "How do you know Jesus loves you?"
+      ],
+      "actions": [
+        "Say 'Jesus, I trust in You'",
+        "Forgive someone",
+        "Pray"
+      ],
+      "prayer": "Jesus, I trust in You. Amen.",
+      "activity": {
+        "title": "What did they say?",
+        "intro": "Write what Jesus and Thomas said.",
+        "idea": 1,
+        "type": "speech",
+        "characters": [
+          "Jesus",
+          "Thomas"
+        ]
+      },
+      "words": [
+        "Thomas",
+        "believe",
+        "peace",
+        "hands"
+      ]
+    },
+    "level2": {
+      "title": "Peace Be With You",
+      "story": "On Easter evening, the disciples were behind locked doors, and Jesus stood among them saying, \"Peace be with you.\" He breathed on them and gave them power to forgive sins. Thomas was not there and said, \"Unless I see the marks in His hands, I will not believe.\" A week later, Jesus came again and told Thomas to touch His wounds. Thomas said, \"My Lord and my God!\" Jesus said, \"Blessed are those who have not seen and have believed.\"",
+      "keyLine": "Blessed are they that have not seen and have believed.",
+      "heartTitle": "Divine Mercy",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Mercy I receive",
+      "heartLabelB": "Mercy I give",
+      "questions": [
+        "How did Jesus help Thomas believe?",
+        "How does Jesus give us mercy today?"
+      ],
+      "actions": [
+        "Pray the Divine Mercy Chaplet",
+        "Go to Confession",
+        "Show mercy to someone"
+      ],
+      "prayer": "Jesus, I trust in You. Amen.",
+      "activity": {
+        "title": "God forgives",
+        "intro": "Jesus gave the Apostles power to forgive sins. Write a note to someone you want to make peace with.",
+        "idea": 55,
+        "type": "letter",
+        "style": "letter",
+        "to": "Someone I hurt",
+        "lines": 4
+      },
+      "words": [
+        "mercy",
+        "doubt",
+        "wounds",
+        "forgive",
+        "peace",
+        "faith"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_EAS02_main.png",
+    "heart": "A_EAS02_heart.png",
+    "icons": [
+      "icon_hands_wounds.png",
+      "icon_dove.png",
+      "icon_rays_divine_mercy.png"
+    ],
+    "mainBrief": "Risen Jesus showing hands to Thomas in a room",
+    "heartBrief": "Divine Mercy red & pale rays from heart"
+  }
+}

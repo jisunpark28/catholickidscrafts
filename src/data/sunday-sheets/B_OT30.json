@@ -1,0 +1,98 @@
+{
+  "key": "B_OT30",
+  "liturgicalName": "30th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 10:46-52",
+  "keyVerseDR": "\"Thy faith hath made thee whole. And immediately he saw and followed him in the way.\" (Mk 10:52)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Bartimaeus Sees!",
+      "story": "Blind Bartimaeus sat by the road. He shouted, \"Jesus, have mercy on me!\" Jesus healed him, and he followed Jesus.",
+      "keyLine": "Jesus, have mercy on me!",
+      "heartTitle": "Calling to Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I call",
+      "heartLabelB": "Jesus answers",
+      "questions": [
+        "What did Bartimaeus shout?",
+        "What can you ask Jesus?"
+      ],
+      "actions": [
+        "Pray the Jesus Prayer",
+        "Follow Jesus",
+        "Help someone"
+      ],
+      "prayer": "Jesus, have mercy on me. Amen.",
+      "activity": {
+        "title": "Bartimaeus comes to Jesus",
+        "intro": "Trace Bartimaeus' path from the roadside to Jesus.",
+        "idea": 100,
+        "type": "maze",
+        "start": "Bartimaeus by the road",
+        "goal": "Jesus"
+      },
+      "words": [
+        "blind",
+        "shout",
+        "see",
+        "follow"
+      ]
+    },
+    "level2": {
+      "title": "Blind Bartimaeus",
+      "story": "As Jesus was leaving Jericho, blind Bartimaeus, the son of Timaeus, sat by the wayside begging. He heard it was Jesus of Nazareth and began to cry out, \"Jesus, son of David, have mercy on me.\" Many told him to be quiet, but he cried out even more. Jesus called him, and casting off his cloak, he jumped up and came. Jesus asked, \"What wilt thou that I should do to thee?\" He said, \"Rabboni, that I may see,\" and he received his sight and followed Jesus.",
+      "keyLine": "Thy faith hath made thee whole.",
+      "heartTitle": "Persistent Faith",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I ask Jesus",
+      "heartLabelB": "How I follow",
+      "questions": [
+        "Why did Bartimaeus keep shouting?",
+        "What would you ask if Jesus said, 'What do you want me to do for you?'"
+      ],
+      "actions": [
+        "Pray 'Jesus, have mercy' daily",
+        "Don't give up in prayer",
+        "Follow Jesus in a choice"
+      ],
+      "prayer": "Jesus, Son of David, have mercy on me. Amen.",
+      "activity": {
+        "title": "Who am I?",
+        "intro": "Read the clues and guess.",
+        "idea": 50,
+        "type": "whoami",
+        "clues": [
+          "I sat by the road near Jericho, begging.",
+          "I cried, \"Jesus, son of David, have mercy on me!\"",
+          "I threw off my cloak and asked to see."
+        ],
+        "answer": "Bartimaeus",
+        "choices": [
+          "Zacchaeus",
+          "Bartimaeus",
+          "Jairus"
+        ]
+      },
+      "words": [
+        "Bartimaeus",
+        "Jericho",
+        "mercy",
+        "faith",
+        "Son of David",
+        "follow"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT30_main.png",
+    "heart": "B_OT30_heart.png",
+    "icons": [
+      "icon_eye.png",
+      "icon_cloak.png",
+      "icon_road.png"
+    ],
+    "mainBrief": "Bartimaeus throwing off his cloak, running to Jesus",
+    "heartBrief": "Eyes opening in heart"
+  }
+}

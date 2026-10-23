@@ -1,0 +1,89 @@
+{
+  "key": "B_LNT02",
+  "liturgicalName": "2nd Sunday of Lent",
+  "season": "Lent",
+  "gospelRef": "Mark 9:2-10",
+  "keyVerseDR": "\"This is my most beloved Son. Hear ye him.\" (Mk 9:6 DR)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Jesus Shines",
+      "story": "Jesus went up a mountain with Peter, James, and John. His clothes became shining white! A voice said, \"This is My Son. Listen to Him!\"",
+      "keyLine": "Listen to Jesus!",
+      "heartTitle": "Shining Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I listen",
+      "heartLabelB": "I shine",
+      "questions": [
+        "What color were Jesus' clothes?",
+        "How can you listen to Jesus?"
+      ],
+      "actions": [
+        "Read a Bible story",
+        "Pray quietly",
+        "Listen to my parents"
+      ],
+      "prayer": "Jesus, help me listen to You. Amen.",
+      "activity": {
+        "title": "Shining like light",
+        "intro": "Color the stained-glass window of the Transfiguration.",
+        "idea": 148,
+        "type": "colornum",
+        "shape": "star",
+        "mode": "key"
+      },
+      "words": [
+        "mountain",
+        "white",
+        "shine",
+        "listen"
+      ]
+    },
+    "level2": {
+      "title": "The Transfiguration",
+      "story": "Jesus took Peter, James, and John up a high mountain alone. He was transfigured before them, and His garments became shining and exceeding white as snow. Elijah and Moses appeared, talking with Jesus. Peter said, \"Rabbi, it is good for us to be here: let us make three tabernacles.\" A cloud overshadowed them, and a voice said, \"This is My most beloved Son; hear ye Him.\"",
+      "keyLine": "This is my most beloved Son. Hear ye him.",
+      "heartTitle": "Listening to Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Where I hear Him",
+      "heartLabelB": "How I obey",
+      "questions": [
+        "Why did Peter want to build tents?",
+        "How does this glory help us during Lent?"
+      ],
+      "actions": [
+        "Spend quiet time with Jesus",
+        "Read the Gospel",
+        "Fast from screens"
+      ],
+      "prayer": "Jesus, let me see Your glory and listen. Amen.",
+      "activity": {
+        "title": "Say it in one line",
+        "intro": "Think about the Gospel, then open to read a summary.",
+        "idea": 75,
+        "type": "foldreveal",
+        "question": "Can you tell today's Gospel in one sentence?",
+        "answer": "On the mountain Jesus shone with glory, and the Father said, \"This is My beloved Son; hear Him.\""
+      },
+      "words": [
+        "Transfiguration",
+        "dazzling",
+        "Elijah",
+        "Moses",
+        "cloud",
+        "glory"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_LNT02_main.png",
+    "heart": "B_LNT02_heart.png",
+    "icons": [
+      "icon_mountain.png",
+      "icon_cloud.png",
+      "icon_sun.png"
+    ],
+    "mainBrief": "Jesus in dazzling white on mountain, Elijah and Moses",
+    "heartBrief": "Sun rays radiating from heart; cloud at top"
+  }
+}

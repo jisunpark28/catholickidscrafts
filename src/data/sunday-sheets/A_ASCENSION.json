@@ -1,0 +1,87 @@
+{
+  "key": "A_ASCENSION",
+  "liturgicalName": "The Ascension of the Lord (Thursday or 7th Sunday of Easter where transferred)",
+  "season": "Easter",
+  "gospelRef": "Matthew 28:16-20",
+  "keyVerseDR": "\"...behold I am with you all days, even to the consummation of the world.\" (Mt 28:20)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Goes to Heaven",
+      "story": "Jesus met His friends on a mountain. He said, \"Go and tell everyone about Me.\" Jesus promised, \"I am with you always.\"",
+      "keyLine": "Jesus is always with me.",
+      "heartTitle": "Tell the World",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is with me",
+      "heartLabelB": "I tell others",
+      "questions": [
+        "Where did Jesus go?",
+        "Who can you tell about Jesus?"
+      ],
+      "actions": [
+        "Tell a friend about Jesus",
+        "Look up and pray",
+        "Be brave"
+      ],
+      "prayer": "Jesus, thank You for staying with me. Amen.",
+      "activity": {
+        "title": "My mission badge",
+        "intro": "Jesus sends us out! Color your mission badge.",
+        "idea": 84,
+        "type": "badge",
+        "label": "I tell about Jesus"
+      },
+      "words": [
+        "heaven",
+        "up",
+        "tell",
+        "always"
+      ]
+    },
+    "level2": {
+      "title": "The Great Commission",
+      "story": "The eleven disciples went to the mountain in Galilee where Jesus had told them to go. When they saw Him, they worshiped Him. Jesus said, \"All power in heaven and on earth has been given to Me.\" He told them, \"Go and make disciples of all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Spirit.\" He promised, \"I am with you always, until the end of the age.\"",
+      "keyLine": "Behold I am with you all days.",
+      "heartTitle": "Sent by Jesus",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Where I can go",
+      "heartLabelB": "What I can share",
+      "questions": [
+        "What job did Jesus give His disciples?",
+        "How can a kid be a missionary?"
+      ],
+      "actions": [
+        "Invite a friend to church",
+        "Pray for missionaries",
+        "Share my faith"
+      ],
+      "prayer": "Jesus, send me to share Your love. Amen.",
+      "activity": {
+        "title": "Go and make disciples",
+        "intro": "Design your sending badge, then share Jesus this week.",
+        "idea": 150,
+        "type": "badge",
+        "label": "Sent by Jesus"
+      },
+      "words": [
+        "Ascension",
+        "commission",
+        "nations",
+        "baptize",
+        "disciple",
+        "Trinity"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_ASCENSION_main.png",
+    "heart": "A_ASCENSION_heart.png",
+    "icons": [
+      "icon_cloud.png",
+      "icon_globe.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Jesus on a mountain with apostles, rising into clouds, hands blessing",
+    "heartBrief": "Globe in heart, arrows going out"
+  }
+}

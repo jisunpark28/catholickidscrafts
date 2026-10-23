@@ -1,0 +1,87 @@
+{
+  "key": "B_ADV02",
+  "liturgicalName": "2nd Sunday of Advent",
+  "season": "Advent",
+  "gospelRef": "Mark 1:1-8",
+  "keyVerseDR": "\"Prepare ye the way of the Lord; make straight his paths.\" (Mk 1:3)",
+  "color": "violet",
+  "levels": {
+    "level1": {
+      "title": "Get Ready!",
+      "story": "John the Baptist lived in the desert. He told people, \"Get your hearts ready! Someone greater is coming!\" People came to be baptized in the river.",
+      "keyLine": "Prepare the way!",
+      "heartTitle": "Clean Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say sorry",
+      "heartLabelB": "I start new",
+      "questions": [
+        "Where did John baptize?",
+        "How can you get your heart ready?"
+      ],
+      "actions": [
+        "Say sorry",
+        "Clean up a mess",
+        "Pray"
+      ],
+      "prayer": "Jesus, make my heart ready. Amen.",
+      "activity": {
+        "title": "John at the river",
+        "intro": "Finish the picture: add the river, John, and the people coming to be baptized.",
+        "idea": 4,
+        "type": "drawscene",
+        "prompt": "John the Baptist in camel hair at the Jordan River, with people coming to him"
+      },
+      "words": [
+        "John",
+        "river",
+        "sorry",
+        "ready"
+      ]
+    },
+    "level2": {
+      "title": "The Beginning of the Gospel",
+      "story": "\"The beginning of the gospel of Jesus Christ, the Son of God.\" The prophet Isaiah had written, \"Prepare ye the way of the Lord, make straight His paths.\" John the Baptist appeared in the desert, preaching a baptism of repentance. People from all Judea came to be baptized in the Jordan River, confessing their sins. John said, \"There cometh after me One mightier than I; He shall baptize you with the Holy Ghost.\"",
+      "keyLine": "Prepare ye the way of the Lord.",
+      "heartTitle": "Preparing the Way",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What to clear away",
+      "heartLabelB": "What to make ready",
+      "questions": [
+        "Why did John say he wasn't worthy?",
+        "What does it mean to repent?"
+      ],
+      "actions": [
+        "Go to Confession",
+        "Fix a bad habit",
+        "Read Mark 1"
+      ],
+      "prayer": "Lord, help me prepare Your way. Amen.",
+      "activity": {
+        "title": "Sing it!",
+        "intro": "Fill in the missing words of the Advent song.",
+        "idea": 104,
+        "type": "fillblank",
+        "text": "[Prepare] ye the way of the Lord, make [straight] His paths."
+      },
+      "words": [
+        "Gospel",
+        "repent",
+        "Jordan",
+        "baptize",
+        "mightier",
+        "Holy Spirit"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_ADV02_main.png",
+    "heart": "B_ADV02_heart.png",
+    "icons": [
+      "icon_river.png",
+      "icon_path.png",
+      "icon_camel.png"
+    ],
+    "mainBrief": "John baptizing people in the Jordan, desert behind",
+    "heartBrief": "Heart drawn as a path with stones; footprints"
+  }
+}

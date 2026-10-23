@@ -1,0 +1,94 @@
+{
+  "key": "A_OT26",
+  "liturgicalName": "26th Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 21:28-32",
+  "keyVerseDR": "\"Which of the two did the father's will? They say to him: The first.\" (Mt 21:31)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Two Sons",
+      "story": "A father asked his two sons to work in the vineyard. One said no, but then he went. The other said yes, but did not go.",
+      "keyLine": "I will say yes and do it.",
+      "heartTitle": "Saying Yes",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say yes",
+      "heartLabelB": "I do it",
+      "questions": [
+        "Which son obeyed?",
+        "How can you obey right away?"
+      ],
+      "actions": [
+        "Do what I'm asked",
+        "Say sorry and change",
+        "Help"
+      ],
+      "prayer": "Jesus, help me say yes and do it. Amen.",
+      "activity": {
+        "title": "Saying yes to God",
+        "intro": "Draw yourself saying yes and helping your family.",
+        "idea": 17,
+        "type": "faces",
+        "people": [
+          "Me helping",
+          "My family"
+        ]
+      },
+      "words": [
+        "yes",
+        "no",
+        "obey",
+        "sons"
+      ]
+    },
+    "level2": {
+      "title": "The Parable of the Two Sons",
+      "story": "Jesus told the leaders a parable: a man had two sons. He said to the first, \"Son, go work in the vineyard today.\" The son said, \"I will not,\" but later he changed his mind and went. The second son said, \"I go, sir,\" but he did not go. Jesus asked which son did his father's will, and said tax collectors and sinners who believed John were entering God's kingdom first.",
+      "keyLine": "Which of the two did the father's will?",
+      "heartTitle": "Words & Actions",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I say",
+      "heartLabelB": "What I do",
+      "questions": [
+        "Which son are you more like?",
+        "Why is changing your mind for good brave?"
+      ],
+      "actions": [
+        "Keep a promise",
+        "Fix something I said no to",
+        "Go to Confession"
+      ],
+      "prayer": "Father, help my actions match my words. Amen.",
+      "activity": {
+        "title": "My 3 resolutions",
+        "intro": "Like the son who went, turn your 'no' into 'yes'.",
+        "idea": 56,
+        "type": "prayerframe",
+        "starters": [
+          "This week I will obey by...",
+          "I will help at home by...",
+          "I will say yes to God by..."
+        ]
+      },
+      "words": [
+        "obedience",
+        "repent",
+        "will",
+        "vineyard",
+        "actions",
+        "change"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT26_main.png",
+    "heart": "A_OT26_heart.png",
+    "icons": [
+      "icon_grapes.png",
+      "icon_basket.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "Father asking two sons to work in the vineyard",
+    "heartBrief": "Two sons; one heading to vineyard"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "key": "B_OT32",
+  "liturgicalName": "32nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 12:38-44",
+  "keyVerseDR": "\"...this poor widow hath cast in more than all they who have cast into the treasury.\" (Mk 12:43)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "The Widow's Gift",
+      "story": "Jesus watched people put money in the Temple box. Rich people gave a lot. A poor widow gave two small coins, all she had. Jesus said she gave the most!",
+      "keyLine": "I give God my all.",
+      "heartTitle": "Giving Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "What I give",
+      "heartLabelB": "I give with love",
+      "questions": [
+        "How many coins did the woman give?",
+        "What can you give God?"
+      ],
+      "actions": [
+        "Give to the collection",
+        "Share a toy",
+        "Pray"
+      ],
+      "prayer": "God, I give You everything. Amen.",
+      "activity": {
+        "title": "I give God my all",
+        "intro": "The widow gave everything. Fill the heart with fingerprints.",
+        "idea": 82,
+        "type": "shapecraft",
+        "shape": "heart",
+        "label": "I give God my all"
+      },
+      "words": [
+        "coins",
+        "give",
+        "widow",
+        "heart"
+      ]
+    },
+    "level2": {
+      "title": "The Widow's Mite",
+      "story": "Jesus warned the people to beware of the scribes who love to walk in long robes and have the first seats. Then He sat near the treasury and watched the crowd putting in money. Many rich people put in a lot. A poor widow came and put in two mites, which make a farthing. Jesus said, \"This poor widow hath cast in more than all,\" because she gave out of her poverty all that she had.",
+      "keyLine": "This poor widow hath cast in more than all.",
+      "heartTitle": "Giving My All",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What I give",
+      "heartLabelB": "How I give it",
+      "questions": [
+        "Why did her small gift count most?",
+        "What can you give that costs you something?"
+      ],
+      "actions": [
+        "Give part of my allowance",
+        "Give my time",
+        "Pray for the poor"
+      ],
+      "prayer": "Lord, help me give with my whole heart. Amen.",
+      "activity": {
+        "title": "My blessings",
+        "intro": "The widow gave all to God. Write 5 blessings God gave you.",
+        "idea": 66,
+        "type": "prayerframe",
+        "starters": [
+          "God gave me...",
+          "I am thankful for...",
+          "My family gives me...",
+          "God helps me with...",
+          "I can give God..."
+        ]
+      },
+      "words": [
+        "widow",
+        "mite",
+        "treasury",
+        "generous",
+        "sacrifice",
+        "trust"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT32_main.png",
+    "heart": "B_OT32_heart.png",
+    "icons": [
+      "icon_coins.png",
+      "icon_temple.png",
+      "icon_heart_hands.png"
+    ],
+    "mainBrief": "Poor widow dropping two coins in the Temple box",
+    "heartBrief": "Two small coins inside heart"
+  }
+}

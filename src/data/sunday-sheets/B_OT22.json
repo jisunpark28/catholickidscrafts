@@ -1,0 +1,112 @@
+{
+  "key": "B_OT22",
+  "liturgicalName": "22nd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 7:1-8, 14-15, 21-23",
+  "keyVerseDR": "\"This people honoureth me with their lips, but their heart is far from me.\" (Mk 7:6)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "A Clean Heart",
+      "story": "Some leaders cared only about washing hands the right way. Jesus said, \"God looks at your heart!\" Bad things come from inside, not outside.",
+      "keyLine": "God looks at my heart.",
+      "heartTitle": "Clean Heart",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Good inside",
+      "heartLabelB": "Good outside",
+      "questions": [
+        "What did Jesus say matters most?",
+        "How can you keep your heart clean?"
+      ],
+      "actions": [
+        "Say sorry",
+        "Think kind thoughts",
+        "Pray"
+      ],
+      "prayer": "Jesus, give me a clean heart. Amen.",
+      "activity": {
+        "title": "A clean heart",
+        "intro": "Sort each one: does it come from a heart full of light or darkness?",
+        "idea": 9,
+        "type": "sorting",
+        "left": "Light",
+        "right": "Darkness",
+        "items": [
+          [
+            "Kind words",
+            "L"
+          ],
+          [
+            "Telling a lie",
+            "R"
+          ],
+          [
+            "Helping Mom",
+            "L"
+          ],
+          [
+            "Being jealous",
+            "R"
+          ]
+        ]
+      },
+      "words": [
+        "heart",
+        "clean",
+        "hands",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Lips and Hearts",
+      "story": "The Pharisees saw some of Jesus' disciples eating without washing their hands as tradition required. Jesus said Isaiah was right: \"This people honoureth Me with their lips, but their heart is far from Me.\" He called the crowd and said, \"Hear ye Me all, and understand.\" Nothing from outside a person can defile him. Jesus said it is from within, out of the heart, that evil thoughts come.",
+      "keyLine": "This people honoureth me with their lips, but their heart is far from me.",
+      "heartTitle": "Inside & Outside",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What others see",
+      "heartLabelB": "What God sees",
+      "questions": [
+        "Why does God care most about the heart?",
+        "How can prayer be more than words?"
+      ],
+      "actions": [
+        "Pray slowly with my heart",
+        "Make an examination of conscience",
+        "Go to Confession"
+      ],
+      "prayer": "Lord, make my heart close to You. Amen.",
+      "activity": {
+        "title": "Look at my heart",
+        "intro": "God looks at the heart. Check yours this week.",
+        "idea": 130,
+        "type": "checklist",
+        "items": [
+          "Did I pray with my heart?",
+          "Did I think kind thoughts?",
+          "Did I tell the truth?",
+          "Was I jealous or greedy?",
+          "Did I say sorry?"
+        ]
+      },
+      "words": [
+        "tradition",
+        "hypocrite",
+        "Isaiah",
+        "heart",
+        "defile",
+        "sincere"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_OT22_main.png",
+    "heart": "B_OT22_heart.png",
+    "icons": [
+      "icon_water_drop.png",
+      "icon_heart_hands.png",
+      "icon_cup.png"
+    ],
+    "mainBrief": "Child washing hands while heart glows",
+    "heartBrief": "Clean heart with sparkles"
+  }
+}

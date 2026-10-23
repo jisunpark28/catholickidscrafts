@@ -1,0 +1,92 @@
+{
+  "key": "B_CORPUSCHRISTI",
+  "liturgicalName": "The Most Holy Body and Blood of Christ (Corpus Christi)",
+  "season": "Ordinary Time",
+  "gospelRef": "Mark 14:12-16, 22-26",
+  "keyVerseDR": "\"Jesus took bread; and blessing, broke and gave to them and said: Take ye. This is my body.\" (Mk 14:22)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "This Is My Body",
+      "story": "Jesus ate the Last Supper with His friends. He took bread and said, \"This is My Body.\" He took the cup and said, \"This is My Blood.\"",
+      "keyLine": "Jesus gives me Himself.",
+      "heartTitle": "Jesus in the Eucharist",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus is here",
+      "heartLabelB": "I adore",
+      "questions": [
+        "What did Jesus say about the bread?",
+        "Where do we see this today?"
+      ],
+      "actions": [
+        "Bow to the tabernacle",
+        "Go to Mass",
+        "Pray thank You"
+      ],
+      "prayer": "Jesus, You are truly here. Amen.",
+      "activity": {
+        "title": "What I saw on the altar",
+        "intro": "Draw what you saw on the altar at Mass today.",
+        "idea": 119,
+        "type": "drawscene",
+        "prompt": "The altar at Mass with the chalice, the host, candles, and the priest"
+      },
+      "words": [
+        "bread",
+        "cup",
+        "supper",
+        "Jesus"
+      ]
+    },
+    "level2": {
+      "title": "The Last Supper",
+      "story": "On the first day of the Unleavened Bread, the disciples asked Jesus where to prepare the Passover. He sent two of them into the city, where they found a large upper room ready. While they were eating, Jesus took bread, blessed it, broke it, and said, \"Take ye. This is My body.\" Taking the chalice, He gave thanks and said, \"This is My blood of the new testament, which shall be shed for many.\" After singing a hymn, they went out to the Mount of Olives.",
+      "keyLine": "Take ye. This is my body.",
+      "heartTitle": "Real Presence",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "How I prepare",
+      "heartLabelB": "How I give thanks",
+      "questions": [
+        "Why did Jesus give us the Eucharist?",
+        "How can you prepare for Holy Communion?"
+      ],
+      "actions": [
+        "Visit Eucharistic Adoration",
+        "Fast before Mass",
+        "Make a thanksgiving after Communion"
+      ],
+      "prayer": "Jesus in the Blessed Sacrament, I adore You. Amen.",
+      "activity": {
+        "title": "The Order of Mass",
+        "intro": "Number the parts of the Mass in order.",
+        "idea": 41,
+        "type": "sequence",
+        "scenes": [
+          "Entrance and Sign of the Cross",
+          "Readings and Gospel",
+          "Consecration: This is My Body",
+          "Holy Communion and sending forth"
+        ]
+      },
+      "words": [
+        "Passover",
+        "covenant",
+        "Body",
+        "Blood",
+        "Eucharist",
+        "Real Presence"
+      ]
+    }
+  },
+  "art": {
+    "main": "B_CORPUSCHRISTI_main.png",
+    "heart": "B_CORPUSCHRISTI_heart.png",
+    "icons": [
+      "icon_host.png",
+      "icon_chalice.png",
+      "icon_bread.png"
+    ],
+    "mainBrief": "Last Supper table: bread and cup, Jesus blessing",
+    "heartBrief": "Host and chalice inside heart"
+  }
+}

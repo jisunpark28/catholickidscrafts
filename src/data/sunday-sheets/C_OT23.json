@@ -1,0 +1,91 @@
+{
+  "key": "C_OT23",
+  "liturgicalName": "23rd Sunday in Ordinary Time",
+  "season": "Ordinary Time",
+  "gospelRef": "Luke 14:25-33",
+  "keyVerseDR": "\"And whosoever doth not carry his cross and come after me cannot be my disciple.\" (Lk 14:27)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Jesus Comes First",
+      "story": "Big crowds followed Jesus. He said, \"Whoever follows Me must carry their cross.\" He said to plan carefully, like a builder making a tower.",
+      "keyLine": "Jesus comes first.",
+      "heartTitle": "Jesus First",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "Jesus first",
+      "heartLabelB": "Others next",
+      "questions": [
+        "What should we love most?",
+        "How can Jesus come first today?"
+      ],
+      "actions": [
+        "Pray first in the morning",
+        "Do a hard thing with love",
+        "Help"
+      ],
+      "prayer": "Jesus, You come first in my life. Amen.",
+      "activity": {
+        "title": "Build a tower",
+        "intro": "Plan carefully like the builder! Draw the other half of the house.",
+        "idea": 3,
+        "type": "symmetry",
+        "shape": "house"
+      },
+      "words": [
+        "first",
+        "cross",
+        "follow",
+        "plan"
+      ]
+    },
+    "level2": {
+      "title": "The Cost of Discipleship",
+      "story": "Great crowds were traveling with Jesus, and He turned and said that whoever would be His disciple must love Him more than anyone. \"And whosoever doth not carry his cross and come after Me, cannot be My disciple.\" He said that a man building a tower first sits down to count the cost. A king going to war first considers whether he can win. Jesus said, \"Every one of you that doth not renounce all that he possesseth, cannot be My disciple.\"",
+      "keyLine": "Whosoever doth not carry his cross and come after me cannot be my disciple.",
+      "heartTitle": "Counting the Cost",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "What it costs",
+      "heartLabelB": "What I gain",
+      "questions": [
+        "Why does Jesus want us to count the cost?",
+        "What might you need to put second to follow Jesus?"
+      ],
+      "actions": [
+        "Give up a distraction for prayer",
+        "Offer up something hard",
+        "Make a faith plan"
+      ],
+      "prayer": "Jesus, I choose You above all. Amen.",
+      "activity": {
+        "title": "Jesus comes first",
+        "intro": "Write family promises to put Jesus first.",
+        "idea": 70,
+        "type": "prayerframe",
+        "starters": [
+          "Our family puts Jesus first by...",
+          "We will pray together...",
+          "We will give up..."
+        ]
+      },
+      "words": [
+        "disciple",
+        "cost",
+        "cross",
+        "tower",
+        "renounce",
+        "commitment"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_OT23_main.png",
+    "heart": "C_OT23_heart.png",
+    "icons": [
+      "icon_tower.png",
+      "icon_cross.png",
+      "icon_footprints.png"
+    ],
+    "mainBrief": "Builder counting the cost of a tower; cross",
+    "heartBrief": "Small cross in heart"
+  }
+}

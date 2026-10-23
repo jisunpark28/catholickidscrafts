@@ -1,0 +1,109 @@
+{
+  "key": "A_OT34",
+  "liturgicalName": "34th Sunday: Our Lord Jesus Christ, King of the Universe",
+  "season": "Ordinary Time",
+  "gospelRef": "Matthew 25:31-46",
+  "keyVerseDR": "\"...as long as you did it to one of these my least brethren, you did it to me.\" (Mt 25:40)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Jesus Our King",
+      "story": "Jesus is our King. He said, \"When you help people who are hungry, thirsty, or sick, you help Me!\" We serve Jesus by serving others.",
+      "keyLine": "When I help, I love Jesus.",
+      "heartTitle": "Helping Jesus",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I feed",
+      "heartLabelB": "I visit",
+      "questions": [
+        "Who do we help when we help others?",
+        "Who can you help?"
+      ],
+      "actions": [
+        "Give food to the hungry",
+        "Visit someone",
+        "Be kind"
+      ],
+      "prayer": "Jesus, my King, I serve You. Amen.",
+      "activity": {
+        "title": "Christ the King",
+        "intro": "Draw the other half of the King's crown.",
+        "idea": 3,
+        "type": "symmetry",
+        "shape": "crown"
+      },
+      "words": [
+        "king",
+        "help",
+        "hungry",
+        "love"
+      ]
+    },
+    "level2": {
+      "title": "Christ the King",
+      "story": "Jesus said that when the Son of Man comes in glory, He will sit on His throne, and all the nations will be gathered before Him. He will separate them as a shepherd separates sheep from goats. To those on His right He will say, \"I was hungry and you gave Me food; I was thirsty and you gave Me drink.\" They will ask, \"Lord, when did we do this?\" The King will answer, \"As long as you did it to one of these My least brethren, you did it to Me.\"",
+      "keyLine": "As long as you did it to one of these my least brethren, you did it to me.",
+      "heartTitle": "Works of Mercy",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "Corporal",
+      "heartLabelB": "Spiritual",
+      "questions": [
+        "Why does Jesus say helping others is helping Him?",
+        "Which work of mercy can you do this week?"
+      ],
+      "actions": [
+        "Donate food or clothes",
+        "Visit an elderly neighbor",
+        "Pray for the sick"
+      ],
+      "prayer": "Christ the King, reign in my heart. Amen.",
+      "activity": {
+        "title": "Serving the King",
+        "intro": "Match each need to a work of mercy.",
+        "idea": 60,
+        "type": "matchup",
+        "pairs": [
+          [
+            "I was hungry",
+            "You gave Me food"
+          ],
+          [
+            "I was thirsty",
+            "You gave Me drink"
+          ],
+          [
+            "I was a stranger",
+            "You welcomed Me"
+          ],
+          [
+            "I was sick",
+            "You visited Me"
+          ],
+          [
+            "I was in prison",
+            "You came to Me"
+          ]
+        ],
+        "text": true
+      },
+      "words": [
+        "King",
+        "judgment",
+        "works of mercy",
+        "least",
+        "sheep",
+        "goats"
+      ]
+    }
+  },
+  "art": {
+    "main": "A_OT34_main.png",
+    "heart": "A_OT34_heart.png",
+    "icons": [
+      "icon_crown.png",
+      "icon_bread.png",
+      "icon_sheep.png"
+    ],
+    "mainBrief": "Christ the King on a simple throne; children feeding, visiting",
+    "heartBrief": "Six works of mercy icons around heart"
+  }
+}

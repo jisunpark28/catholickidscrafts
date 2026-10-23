@@ -1,0 +1,90 @@
+{
+  "key": "C_LNT04",
+  "liturgicalName": "4th Sunday of Lent (Laetare; Year A readings may be used)",
+  "season": "Lent",
+  "gospelRef": "Luke 15:1-3, 11-32",
+  "keyVerseDR": "\"...his father saw him and was moved with compassion and running to him fell upon his neck and kissed him.\" (Lk 15:20)",
+  "color": "rose",
+  "levels": {
+    "level1": {
+      "title": "The Loving Father",
+      "story": "A son took his money and left home. He wasted it all and became hungry. When he came home, his father ran to hug him and gave a big party!",
+      "keyLine": "God always loves me.",
+      "heartTitle": "Welcome Home",
+      "heartIntro": "Draw inside the heart, then color it!",
+      "heartLabelA": "I say sorry",
+      "heartLabelB": "God forgives",
+      "questions": [
+        "What did the father do?",
+        "How does God forgive us?"
+      ],
+      "actions": [
+        "Say sorry",
+        "Forgive someone",
+        "Give a hug"
+      ],
+      "prayer": "Father, thank You for always loving me. Amen.",
+      "activity": {
+        "title": "Coming home",
+        "intro": "Help the son find the way back to his father.",
+        "idea": 26,
+        "type": "maze",
+        "start": "The lost son",
+        "goal": "Father's open arms"
+      },
+      "words": [
+        "son",
+        "father",
+        "home",
+        "hug"
+      ]
+    },
+    "level2": {
+      "title": "The Prodigal Son",
+      "story": "Jesus told a parable about a man with two sons. The younger son took his share and went to a far country, where he wasted it all. Hungry and alone, he said, \"I will arise, and will go to my father.\" His father saw him far off, ran to him, embraced him, and kissed him, and he called for a robe, a ring, and a feast. When the older son was angry, the father said, \"Thy brother was dead, and is come to life again; he was lost, and is found.\"",
+      "keyLine": "His father saw him and was moved with compassion.",
+      "heartTitle": "Coming Home",
+      "heartIntro": "Write 3 ways you can do each, then color the border!",
+      "heartLabelA": "The younger son",
+      "heartLabelB": "The older son",
+      "questions": [
+        "Which son do you relate to more?",
+        "How is the father like God?"
+      ],
+      "actions": [
+        "Go to Confession",
+        "Forgive someone",
+        "Celebrate someone else's good news"
+      ],
+      "prayer": "Merciful Father, welcome me home. Amen.",
+      "activity": {
+        "title": "The son's diary",
+        "intro": "Pretend you are the son who came home. Write in your diary.",
+        "idea": 68,
+        "type": "letter",
+        "style": "letter",
+        "to": "My diary",
+        "lines": 4
+      },
+      "words": [
+        "prodigal",
+        "inheritance",
+        "repent",
+        "compassion",
+        "feast",
+        "forgiveness"
+      ]
+    }
+  },
+  "art": {
+    "main": "C_LNT04_main.png",
+    "heart": "C_LNT04_heart.png",
+    "icons": [
+      "icon_family.png",
+      "icon_house.png",
+      "icon_ring.png"
+    ],
+    "mainBrief": "Father running to hug the returning son",
+    "heartBrief": "Father & son hugging in heart"
+  }
+}
