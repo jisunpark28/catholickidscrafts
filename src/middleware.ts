@@ -1,10 +1,17 @@
 import { authConfig } from "@/auth.config";
-import { getCanonicalRedirectTarget } from "@/lib/canonical-host";
+import {
+  getCanonicalRedirectTarget,
+  isVercelDeploymentHost,
+} from "@/lib/canonical-host";
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const { auth } = NextAuth(authConfig);
+
+function requestHostname(request: NextRequest): string {
+  return request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "";
+}
 
 function canonicalRedirect(request: NextRequest): NextResponse | null {
   const hostHeader = request.headers.get("host") ?? "";
@@ -23,13 +30,21 @@ function canonicalRedirect(request: NextRequest): NextResponse | null {
   return NextResponse.redirect(url, 308);
 }
 
+/** Mark *.vercel.app responses as non-indexable without breaking previews. */
+function withVercelNoIndex(request: NextRequest, response: NextResponse): NextResponse {
+  if (isVercelDeploymentHost(requestHostname(request))) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
+  return response;
+}
+
 const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
 
 /** Block cross-site writes to admin APIs (defense in depth on top of SameSite cookies). */
 function crossSiteAdminWrite(request: NextRequest): NextResponse | null {
   if (!request.nextUrl.pathname.startsWith("/api/admin") || SAFE_METHODS.has(request.method)) return null;
   const origin = request.headers.get("origin");
-  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const host = requestHostname(request);
   if (!origin) return null;
   try {
     if (new URL(origin).host === host) return null;
@@ -41,10 +56,10 @@ function crossSiteAdminWrite(request: NextRequest): NextResponse | null {
 
 export default auth((request) => {
   const redirect = canonicalRedirect(request);
-  if (redirect) return redirect;
+  if (redirect) return withVercelNoIndex(request, redirect);
   const blocked = crossSiteAdminWrite(request);
-  if (blocked) return blocked;
-  return NextResponse.next();
+  if (blocked) return withVercelNoIndex(request, blocked);
+  return withVercelNoIndex(request, NextResponse.next());
 });
 
 export const config = {
