@@ -80,8 +80,8 @@ export function GospelSheet({
             <div className="gs-copy" data-sheet-field="keyLine" style={hide}>
               {c.keyLine}
             </div>
-            <div className="gs-wl" />
-            <div className="gs-wl" />
+            <div className="gs-wl" data-sheet-chrome="writeline" />
+            <div className="gs-wl" data-sheet-chrome="writeline" />
           </div>
         )}
 
@@ -103,12 +103,14 @@ export function GospelSheet({
             {c.questions.map((q, i) => (
               <div key={i}>
                 <p className="gs-q">
-                  <span aria-hidden>{i + 1}. </span>
+                  <span data-sheet-field={`qnum${i}`} style={hide}>
+                    {i + 1}.{" "}
+                  </span>
                   <span data-sheet-field={`q${i}` as "q0" | "q1"} style={hide}>
                     {q}
                   </span>
                 </p>
-                <div className="gs-wl" />
+                <div className="gs-wl" data-sheet-chrome="writeline" />
               </div>
             ))}
           </div>
@@ -119,6 +121,7 @@ export function GospelSheet({
             <ul className="gs-chk">
               {c.actions.map((a, i) => (
                 <li key={i}>
+                  <span className="gs-chk-box" data-sheet-chrome="checkbox" aria-hidden />
                   <span data-sheet-field={`action${i}` as "action0" | "action1" | "action2"} style={hide}>
                     {a}
                   </span>
