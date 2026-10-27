@@ -2,7 +2,6 @@
 
 import {
   defaultTextForField,
-  type SheetEditField,
   type SheetLayout,
 } from "@/lib/resource/sheet-base";
 import type { SundaySheetContent } from "@/lib/sunday-sheet-content";
@@ -24,9 +23,9 @@ type Props = {
  */
 export function SheetBaseViewer({ sheet, level, layout, basePngUrl, editable = false }: Props) {
   const initial = useMemo(() => {
-    const o: Partial<Record<SheetEditField, string>> = {};
+    const o: Record<string, string> = {};
     for (const box of layout.boxes) {
-      o[box.id] = defaultTextForField(sheet, level, box.id);
+      o[box.id] = box.text || defaultTextForField(sheet, level, box.id);
     }
     return o;
   }, [sheet, level, layout.boxes]);

@@ -45,19 +45,20 @@ class EditorErrorBoundary extends Component<
 }
 
 /**
- * Opens Fabric even without `public/sheet-bases` files.
- * Static PNG+JSON when present; otherwise HTML underlay + fallback box layout.
+ * Opens Fabric with a live GospelSheet HTML underlay so every text node
+ * (headers, activity copy, chrome) can be measured and edited — not only
+ * the core SHEET_EDIT_FIELDS baked into static sheet-bases JSON.
  */
 export function SheetFabricLiveBase({
   sheet,
   level,
   layout: staticLayout,
-  basePngUrl: staticPng,
+  basePngUrl: _staticPng,
   baseRev,
   isPlus,
   initialCustomId = null,
 }: Props) {
-  const useStatic = Boolean(staticLayout && staticPng);
+  void _staticPng;
   const layout = useMemo(
     () => staticLayout ?? fallbackSheetLayout(sheet.key, level, baseRev),
     [staticLayout, sheet.key, level, baseRev],
@@ -69,11 +70,11 @@ export function SheetFabricLiveBase({
         sheet={sheet}
         level={level}
         layout={layout}
-        basePngUrl={useStatic ? staticPng : null}
+        basePngUrl={null}
         baseRev={baseRev}
         isPlus={isPlus}
         initialCustomId={initialCustomId}
-        liveHtmlBase={!useStatic}
+        liveHtmlBase
       />
     </EditorErrorBoundary>
   );

@@ -34,11 +34,15 @@ export function GospelSheet({
             <p className="gs-title" data-sheet-field="title" style={hide}>
               {c.title}
             </p>
-            <div className="gs-sub">
+            <div className="gs-sub" data-sheet-field="subtitle" style={hide}>
               {sheet.liturgicalName} · Level {level}
             </div>
           </div>
-          <div className={sheet.gospelRef.length > 48 ? "gs-meta gs-meta-long" : "gs-meta"}>
+          <div
+            className={sheet.gospelRef.length > 48 ? "gs-meta gs-meta-long" : "gs-meta"}
+            data-sheet-field="meta"
+            style={hide}
+          >
             <span className="gs-dot" style={{ background: sheet.dotColor }} />
             {sheet.sundayLabel}
             <br />
@@ -48,7 +52,9 @@ export function GospelSheet({
 
         <div className="gs-box gs-story">
           {art ? <div className="gs-ph gs-ph-main">{art.main}</div> : null}
-          <h2>Today&apos;s Story</h2>
+          <h2 data-sheet-field="h2_story" style={hide}>
+            Today&apos;s Story
+          </h2>
           <p data-sheet-field="story" style={hide}>
             {c.story}
           </p>
@@ -56,7 +62,9 @@ export function GospelSheet({
 
         {level === 1 ? (
           <div className="gs-box">
-            <h2>Trace the words</h2>
+            <h2 data-sheet-field="h2_key" style={hide}>
+              Trace the words
+            </h2>
             <div className="gs-trace" data-sheet-field="keyLine" style={hide}>
               {c.keyLine}
             </div>
@@ -66,7 +74,9 @@ export function GospelSheet({
           </div>
         ) : (
           <div className="gs-box">
-            <h2>Copy the key line</h2>
+            <h2 data-sheet-field="h2_key" style={hide}>
+              Copy the key line
+            </h2>
             <div className="gs-copy" data-sheet-field="keyLine" style={hide}>
               {c.keyLine}
             </div>
@@ -76,12 +86,20 @@ export function GospelSheet({
         )}
 
         <div data-sheet-activity>
-          <ActivityBlock activity={activityFor(c)} level={level} seed={`${sheet.slug}-${level}`} artFile={art?.heart} />
+          <ActivityBlock
+            activity={activityFor(c)}
+            level={level}
+            seed={`${sheet.slug}-${level}`}
+            artFile={art?.heart}
+            hideEditableText={base}
+          />
         </div>
 
         <div className="gs-row">
           <div className="gs-box">
-            <h2>{level === 1 ? "Let's talk" : "Think about it"}</h2>
+            <h2 data-sheet-field="h2_talk" style={hide}>
+              {level === 1 ? "Let's talk" : "Think about it"}
+            </h2>
             {c.questions.map((q, i) => (
               <div key={i}>
                 <p className="gs-q">
@@ -95,7 +113,9 @@ export function GospelSheet({
             ))}
           </div>
           <div className="gs-box" style={level === 2 ? { flex: 0.7 } : undefined}>
-            <h2>This week I will…</h2>
+            <h2 data-sheet-field="h2_actions" style={hide}>
+              This week I will…
+            </h2>
             <ul className="gs-chk">
               {c.actions.map((a, i) => (
                 <li key={i}>
@@ -122,7 +142,9 @@ export function GospelSheet({
             &ldquo;{c.prayer}&rdquo;
           </div>
         ) : null}
-        <footer>New free sheet every week at catholickidscrafts.com</footer>
+        <footer data-sheet-field="footer" style={hide}>
+          New free sheet every week at catholickidscrafts.com
+        </footer>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import { SHEET_EDIT_FIELDS } from "@/lib/resource/sheet-base";
 import { z } from "zod";
 
 const editFieldSchema = z.object({
@@ -75,10 +74,11 @@ export function parseCustomSheetData(raw: unknown): CustomSheetData | string {
   if (!parsed.success) return parsed.error.issues[0]?.message ?? "Invalid sheet data";
   const size = new TextEncoder().encode(JSON.stringify(parsed.data)).length;
   if (size > CUSTOM_SHEET_MAX_JSON_BYTES) return "Sheet data is too large (max 200KB)";
-  // Drop unknown edit keys
+  // Keep core + dynamic field ids (auto_*, actTitle, …); drop empty keys
   const edits: CustomSheetData["edits"] = {};
   for (const [k, v] of Object.entries(parsed.data.edits)) {
-    if ((SHEET_EDIT_FIELDS as readonly string[]).includes(k)) edits[k] = v;
+    if (!/^[\w.-]{1,64}$/.test(k)) continue;
+    edits[k] = v;
   }
   return { ...parsed.data, edits };
 }
