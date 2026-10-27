@@ -3,7 +3,7 @@ import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SundaySheetHero } from "@/components/home/SundaySheetHero";
 import { emailConfigured } from "@/lib/email";
-import { loadFeaturedSheet } from "@/lib/gospel-sheet";
+import { loadHomeSundaySheet } from "@/lib/home-sunday-sheet";
 import { getPublicContactEmail } from "@/lib/site-contact";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
@@ -130,7 +130,7 @@ export default async function HomePage() {
   const [copy, sections, sheet] = await Promise.all([
     getSiteCopyMap(),
     getPublishedHomeSections(),
-    loadFeaturedSheet(),
+    loadHomeSundaySheet(),
   ]);
   const contactEmail = getPublicContactEmail();
   const groupInquiryHref = contactEmail
@@ -172,7 +172,7 @@ export default async function HomePage() {
   const lead: HomeLeadSlide | null = sheet
     ? {
         id: "sunday-sheet",
-        title: sheet.levels.level1.title || sheet.liturgicalName,
+        title: sheet.title,
         chipLabel: copyText(copy, "home.features.sheet.chip", "Sunday Sheet"),
         icon: "🖨",
         color: "#2e7d32",
@@ -181,10 +181,11 @@ export default async function HomePage() {
           <SundaySheetHero
             position={`1 / ${FEATURES.length + 1}`}
             slug={sheet.slug}
-            title={sheet.levels.level1.title || sheet.liturgicalName}
+            title={sheet.title}
             liturgicalName={sheet.liturgicalName}
             sundayLabel={sheet.sundayLabel}
             gospelRef={sheet.gospelRef}
+            printBasePath={sheet.printBasePath}
             seasonHref={seasonHref}
             seasonLabel={seasonLabel}
             groupInquiryHref={groupInquiryHref}
@@ -200,11 +201,10 @@ export default async function HomePage() {
         <JsonLd
           nodes={[
             worksheetNode({
-              name: sheet.levels.level1.title || sheet.liturgicalName,
+              name: sheet.title,
               gospelRef: sheet.gospelRef,
               description: `Free printable Sunday Gospel sheet for ${sheet.liturgicalName} (${sheet.gospelRef}), in two levels.`,
               pagePath: "/",
-              // Both levels print from /print/[slug] with no Plus check.
               isAccessibleForFree: true,
             }),
           ]}
