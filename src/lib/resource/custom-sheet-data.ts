@@ -45,6 +45,9 @@ const userObjectSchema = z.object({
   section: z.boolean().optional(),
   /** Promoted from base HTML `.gs-box` (`bs_0` …). */
   baseSectionId: z.string().max(40).optional(),
+  /** Promoted write-line / checkbox (`wl_0`, `chk_0`). */
+  baseChromeId: z.string().max(40).optional(),
+  chromeKind: z.enum(["writeline", "checkbox"]).optional(),
   stickerId: z.string().max(40).optional(),
   src: allowedImageSrc.optional(),
   opacity: z.number().min(0).max(1).optional(),
