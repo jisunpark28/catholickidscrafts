@@ -53,7 +53,6 @@ function writeEmailState(value: "subscribed" | "dismissed") {
 
 /** Homepage hero: this Sunday's sheet, one big Print button, then an inline email opt-in. */
 export function SundaySheetHero({
-  slug,
   title,
   liturgicalName,
   sundayLabel,

@@ -28,6 +28,7 @@ import {
   Textbox,
   type FabricObject,
 } from "fabric";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 type SavedSheet = {
@@ -1022,9 +1023,9 @@ export function SheetFabricEditor({
           )}
         </ul>
         <p className="mb-0 mt-2 text-xs text-[#6b7280]">
-          <a href="/resource?view=custom" className="text-[#d35400] no-underline hover:underline">
+          <Link href="/resource?view=custom" className="text-[#d35400] no-underline hover:underline">
             See all custom sheets →
-          </a>
+          </Link>
         </p>
       </aside>
     </div>
