@@ -10,6 +10,7 @@ import {
 } from "@/lib/resource/custom-sheet-data";
 import { downloadSheetPdf, downloadSheetPng } from "@/lib/resource/export-sheet-pdf";
 import { loadEditorFonts } from "@/lib/resource/load-editor-fonts";
+import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import {
   defaultTextForField,
   type SheetEditField,
@@ -396,6 +397,169 @@ export function SheetFabricEditor({
       })
       .catch(() => undefined);
   }, [isPlus]);
+
+  /** Apply a saved CustomSheet diff onto the live canvas (base textboxes + user objects). */
+  const applyCustomData = async (data: CustomSheetData) => {
+    const c = fabricRef.current;
+    if (!c) return;
+    applyingRef.current = true;
+    try {
+      for (const obj of c.getObjects()) {
+        const m = metaOf(obj);
+        if (m.kind === "base-edit" && m.fieldId && obj instanceof Textbox) {
+          const edit = data.edits[m.fieldId];
+          if (!edit) continue;
+          obj.set({
+            text: edit.text,
+            fontFamily: edit.fontFamily ?? obj.fontFamily,
+            fontSize: edit.fontSize ?? obj.fontSize,
+            fill: edit.fill ?? obj.fill,
+            fontWeight: edit.fontWeight ?? obj.fontWeight,
+            fontStyle: edit.fontStyle ?? obj.fontStyle,
+            underline: edit.underline ?? obj.underline,
+          });
+        } else if (m.kind === "user") {
+          c.remove(obj);
+        }
+      }
+
+      for (const o of data.objects) {
+        if (o.type === "textbox" || o.type === "sticker") {
+          const tb = new Textbox(o.text ?? (o.type === "sticker" ? "⭐" : "Text"), {
+            left: o.left,
+            top: o.top,
+            width: o.width ?? 160,
+            scaleX: o.scaleX ?? 1,
+            scaleY: o.scaleY ?? 1,
+            angle: o.angle ?? 0,
+            fontFamily: o.fontFamily ?? "Fredoka",
+            fontSize: o.fontSize ?? (o.type === "sticker" ? 42 : 18),
+            fill: o.fill ?? "#111",
+            opacity: o.opacity ?? 1,
+            editable: o.type !== "sticker" && isPlus,
+          });
+          setMeta(tb, {
+            kind: "user",
+            id: o.id,
+            stickerId: o.type === "sticker" ? o.stickerId : undefined,
+          });
+          c.add(tb);
+        } else if (o.type === "rect") {
+          const r = new Rect({
+            left: o.left,
+            top: o.top,
+            width: o.width ?? 120,
+            height: o.height ?? 80,
+            scaleX: o.scaleX ?? 1,
+            scaleY: o.scaleY ?? 1,
+            angle: o.angle ?? 0,
+            fill: o.fill ?? "transparent",
+            stroke: o.stroke ?? "#111",
+            strokeWidth: o.strokeWidth ?? 3,
+            opacity: o.opacity ?? 1,
+          });
+          setMeta(r, { kind: "user", id: o.id });
+          c.add(r);
+        } else if (o.type === "circle") {
+          const cir = new Circle({
+            left: o.left,
+            top: o.top,
+            radius: (o.width ?? 80) / 2,
+            scaleX: o.scaleX ?? 1,
+            scaleY: o.scaleY ?? 1,
+            angle: o.angle ?? 0,
+            fill: o.fill ?? "transparent",
+            stroke: o.stroke ?? "#111",
+            strokeWidth: o.strokeWidth ?? 3,
+            opacity: o.opacity ?? 1,
+          });
+          setMeta(cir, { kind: "user", id: o.id });
+          c.add(cir);
+        } else if (o.type === "ellipse") {
+          const el = new Ellipse({
+            left: o.left,
+            top: o.top,
+            rx: (o.width ?? 100) / 2,
+            ry: (o.height ?? 60) / 2,
+            scaleX: o.scaleX ?? 1,
+            scaleY: o.scaleY ?? 1,
+            angle: o.angle ?? 0,
+            fill: o.fill ?? "transparent",
+            stroke: o.stroke ?? "#111",
+            strokeWidth: o.strokeWidth ?? 3,
+            opacity: o.opacity ?? 1,
+          });
+          setMeta(el, { kind: "user", id: o.id });
+          c.add(el);
+        } else if (o.type === "line") {
+          const ln = new Line([0, 0, o.width ?? 120, 0], {
+            left: o.left,
+            top: o.top,
+            scaleX: o.scaleX ?? 1,
+            scaleY: o.scaleY ?? 1,
+            angle: o.angle ?? 0,
+            stroke: o.stroke ?? "#111",
+            strokeWidth: o.strokeWidth ?? 4,
+            opacity: o.opacity ?? 1,
+          });
+          setMeta(ln, { kind: "user", id: o.id });
+          c.add(ln);
+        } else if (o.type === "image" && o.src) {
+          try {
+            const img = await FabricImage.fromURL(o.src, { crossOrigin: "anonymous" });
+            img.set({
+              left: o.left,
+              top: o.top,
+              scaleX: o.scaleX ?? 1,
+              scaleY: o.scaleY ?? 1,
+              angle: o.angle ?? 0,
+              opacity: o.opacity ?? 1,
+            });
+            setMeta(img, { kind: "user", id: o.id, photoId: o.id });
+            c.add(img);
+          } catch (e) {
+            console.warn("[SheetFabricEditor] image restore failed", e);
+          }
+        }
+      }
+      c.requestRenderAll();
+      refreshLayersRef.current();
+    } finally {
+      applyingRef.current = false;
+    }
+  };
+
+  useEffect(() => {
+    if (!ready || !initialCustomId || !isPlus) return;
+    let cancelled = false;
+    (async () => {
+      setStatus("Loading saved sheet…");
+      try {
+        const res = await fetch(`/api/resource/custom-sheets/${initialCustomId}`);
+        const json = await res.json().catch(() => ({}));
+        if (cancelled) return;
+        if (!res.ok) {
+          setStatus(json.error ?? "Could not load saved sheet");
+          return;
+        }
+        const row = json.sheet as { name?: string; data?: CustomSheetData } | undefined;
+        if (!row?.data) {
+          setStatus("Saved sheet had no data");
+          return;
+        }
+        setCustomId(initialCustomId);
+        if (row.name) setName(row.name);
+        await applyCustomData(row.data);
+        if (!cancelled) setStatus(`Loaded “${row.name ?? "custom sheet"}”`);
+      } catch {
+        if (!cancelled) setStatus("Could not load saved sheet");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, initialCustomId, isPlus]);
 
   const applyStyleToActive = () => {
     const c = fabricRef.current;
@@ -845,23 +1009,23 @@ export function SheetFabricEditor({
           ) : (
             savedList.slice(0, 8).map((s) => (
               <li key={s.id}>
-                <button
-                  type="button"
-                  className={`w-full rounded-lg border px-2 py-1.5 text-left ${
+                <a
+                  href={resourceEditPath(s.baseKey, s.level, s.id)}
+                  className={`block w-full rounded-lg border px-2 py-1.5 text-left no-underline ${
                     s.id === customId ? "border-[#d35400] bg-[#fff6ef]" : "border-[#ece7e1] bg-white"
                   }`}
-                  onClick={() => {
-                    setCustomId(s.id);
-                    setName(s.name);
-                    setStatus(`Loaded name “${s.name}” — reopen editor to apply full canvas state in a later pass`);
-                  }}
                 >
                   {s.name}
-                </button>
+                </a>
               </li>
             ))
           )}
         </ul>
+        <p className="mb-0 mt-2 text-xs text-[#6b7280]">
+          <a href="/resource?view=custom" className="text-[#d35400] no-underline hover:underline">
+            See all custom sheets →
+          </a>
+        </p>
       </aside>
     </div>
   );
