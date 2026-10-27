@@ -30,9 +30,10 @@ export function GospelSheet({
       <div className="gs-page" data-sheet-page>
         <header>
           <div>
-            <h1 data-sheet-field="title" style={hide}>
+            {/* p.gs-title keeps print styling; avoid a second page <h1> on resource landings. */}
+            <p className="gs-title" data-sheet-field="title" style={hide}>
               {c.title}
-            </h1>
+            </p>
             <div className="gs-sub">
               {sheet.liturgicalName} · Level {level}
             </div>

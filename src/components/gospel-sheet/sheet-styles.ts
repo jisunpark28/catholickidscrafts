@@ -6,7 +6,7 @@ export const GOSPEL_SHEET_CSS = `
 /* Base capture: slightly tighter so footer/prayer stay on the letter page. */
 .gs.gs-base .gs-page{gap:6px}
 .gs header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #111;padding-bottom:6px}
-.gs h1{margin:0;font-size:24px;font-weight:700;line-height:1.2}
+.gs h1,.gs .gs-title{margin:0;font-size:24px;font-weight:700;line-height:1.2}
 .gs .gs-sub{font-size:14px}
 .gs .gs-meta{font-size:14px;text-align:right}
 .gs header>div:first-child{flex:1 1 auto;min-width:48%;padding-right:10px}
