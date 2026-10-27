@@ -41,7 +41,8 @@ Capture host: `/dev/sheet-base/[slug]?level=1` (disabled in production unless `A
 
 ## Consume
 
-- Edit UI: `/resource/edit/[slug]` → Fabric editor (`SheetFabricEditor`, SSR off)
+- Access: Free = browse/search + open/print **this Sunday only**; Plus = full library + edit
+- Edit UI: `/resource/edit/[slug]` → Fabric editor. Uses `public/sheet-bases` when present; otherwise **live browser capture** of `GospelSheet variant=base` (`SheetFabricLiveBase`)
 - Save API: `POST/PATCH /api/resource/custom-sheets` — `familyHasPlus()` every write
 - Diff JSON stored in `CustomSheet` (migration `20261027010000_custom_sheets`)
 - Photos: `POST /api/resource/photos` — Plus only; sharp resize ≤2400px, EXIF strip → WebP; family 200MB + 30/day (`SheetPhoto`, migration `20261027020000_sheet_photos`)

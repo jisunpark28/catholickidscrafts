@@ -16,12 +16,22 @@ type Props = {
   heading: React.ReactNode;
   subheading: React.ReactNode;
   headingLevel?: "h1" | "h2";
+  /** When false, Edit links to /subscribe instead of the Fabric editor. */
+  isPlus?: boolean;
 };
 
 const btn =
   "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-medium no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
-function ActionButtons({ sheetKey, level }: { sheetKey: string; level: 1 | 2 }) {
+function ActionButtons({
+  sheetKey,
+  level,
+  isPlus = false,
+}: {
+  sheetKey: string;
+  level: 1 | 2;
+  isPlus?: boolean;
+}) {
   const printHref = resourcePrintPath(sheetKey, level, true);
   return (
     <>
@@ -43,9 +53,9 @@ function ActionButtons({ sheetKey, level }: { sheetKey: string; level: 1 | 2 }) 
         ⬇ PDF
       </a>
       <Link
-        href={resourceEditPath(sheetKey, level)}
+        href={isPlus ? resourceEditPath(sheetKey, level) : "/subscribe"}
         className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`}
-        title="Edit on the locked base sheet (Plus)"
+        title={isPlus ? "Edit on the locked base sheet" : "Editing needs Plus"}
       >
         <span aria-hidden>🔒</span> Edit
         <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
@@ -63,6 +73,7 @@ export function ResourceSheetPanel({
   heading,
   subheading,
   headingLevel = "h2",
+  isPlus = false,
 }: Props) {
   const H = headingLevel;
   return (
@@ -92,7 +103,7 @@ export function ResourceSheetPanel({
               ))}
             </div>
           ) : null}
-          <ActionButtons sheetKey={sheet.key} level={level} />
+          <ActionButtons sheetKey={sheet.key} level={level} isPlus={isPlus} />
         </div>
       </div>
       <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
@@ -110,7 +121,7 @@ export function ResourceSheetPanel({
       {/* Mobile mockup: sticky Print / PDF / Edit */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#e8e0d6] bg-white/95 p-3 backdrop-blur sm:hidden">
         <div className="mx-auto grid max-w-lg grid-cols-3 gap-2">
-          <ActionButtons sheetKey={sheet.key} level={level} />
+          <ActionButtons sheetKey={sheet.key} level={level} isPlus={isPlus} />
         </div>
       </div>
     </section>

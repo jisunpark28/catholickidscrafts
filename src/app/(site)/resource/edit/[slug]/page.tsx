@@ -1,7 +1,8 @@
 import { HomePdfShell } from "@/components/home/HomePdfShell";
-import { SheetFabricEditorLazy } from "@/components/resource/SheetFabricEditorLazy";
+import { SheetFabricLiveBase } from "@/components/resource/SheetFabricLiveBase";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
 import { getResourceNav } from "@/lib/resource/nav";
+import { sheetOpenAllowed, resolveResourceViewer } from "@/lib/resource/resolve-access";
 import {
   sheetBasePublicPaths,
   sheetBaseRev,
@@ -9,8 +10,6 @@ import {
 } from "@/lib/resource/sheet-base";
 import { resourcePath, slugToKey, yearLabel } from "@/lib/resource/sheets";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
-import { familyHasPlus } from "@/lib/subscription/entitlements";
-import { requireParentActive } from "@/lib/family-auth";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -39,20 +38,31 @@ async function loadLayout(key: string, level: 1 | 2) {
   }
 }
 
-/** Plus Fabric editor (Phase 3): locked base PNG + editable text/stickers + save diff. */
+async function hasPng(key: string, level: 1 | 2) {
+  const { fsPng } = sheetBasePublicPaths(key, level);
+  try {
+    await readFile(path.join(process.cwd(), fsPng));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Plus Fabric editor: static base when present, otherwise live browser capture. */
 export default async function ResourceEditPage({ params, searchParams }: Props) {
-  const [{ slug }, sp, nav, session] = await Promise.all([
+  const [{ slug }, sp, nav, viewer] = await Promise.all([
     params,
     searchParams,
     getResourceNav(),
-    requireParentActive(),
+    resolveResourceViewer(),
   ]);
   const key = slugToKey(slug);
   const sheet = key ? getSundaySheet(key) : null;
   if (!key || !sheet) notFound();
   const level = parseLevelParam(sp.level);
-  const isPlus = session ? await familyHasPlus(session.familyAccountId) : false;
+  const allowed = sheetOpenAllowed(viewer, key);
   const layout = await loadLayout(key, level);
+  const pngOk = layout ? await hasPng(key, level) : false;
   const paths = sheetBasePublicPaths(key, level);
   const rev = sheetBaseRev(sheet, level);
   const customId = typeof one(sp.id) === "string" ? one(sp.id) : null;
@@ -77,8 +87,7 @@ export default async function ResourceEditPage({ params, searchParams }: Props) 
           </h1>
           <p className="mb-0 mt-1 text-sm text-[#6b7280]">
             {key} · {yearLabel(key)} · Level {level}
-            {layout ? ` · base rev ${layout.rev}` : null}
-            {layout && layout.rev !== rev ? " · ⚠ sheet content changed — regenerate base" : null}
+            {layout ? ` · base rev ${layout.rev}` : " · live base"}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -88,7 +97,7 @@ export default async function ResourceEditPage({ params, searchParams }: Props) 
           >
             Back to sheet
           </Link>
-          {!isPlus ? (
+          {!viewer.isPlus ? (
             <Link
               href="/subscribe"
               className="rounded-full border border-[#d35400] bg-[#d35400] px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-[#b8470a]"
@@ -99,21 +108,30 @@ export default async function ResourceEditPage({ params, searchParams }: Props) 
         </div>
       </div>
 
-      {!layout ? (
-        <div className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm text-[#6b7280]">
-          Base assets for this sheet are not generated yet:
-          <pre className="mt-2 overflow-x-auto rounded-lg bg-[#1c1c1c] p-3 text-xs text-[#f5ebe0]">
-            npx tsx scripts/generate-sheet-bases.ts --key {key} --levels {level}
-          </pre>
+      {!allowed ? (
+        <div className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-6 text-sm text-[#4b5563]">
+          Free accounts can only open this Sunday&apos;s sheet.{" "}
+          <Link href="/subscribe" className="font-semibold text-[#d35400]">
+            Plus
+          </Link>{" "}
+          unlocks the full library and the editor.
+          {viewer.thisSundayKey ? (
+            <>
+              {" "}
+              <Link href={resourcePath(viewer.thisSundayKey, level)} className="text-[#335599]">
+                Go to this Sunday
+              </Link>
+            </>
+          ) : null}
         </div>
       ) : (
-        <SheetFabricEditorLazy
+        <SheetFabricLiveBase
           sheet={sheet}
           level={level}
           layout={layout}
-          basePngUrl={paths.png}
+          basePngUrl={pngOk ? paths.png : null}
           baseRev={rev}
-          isPlus={Boolean(isPlus)}
+          isPlus={viewer.isPlus}
           initialCustomId={customId}
         />
       )}
