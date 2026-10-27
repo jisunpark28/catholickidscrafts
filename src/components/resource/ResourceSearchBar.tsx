@@ -1,25 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-type Option = { value: string; label: string };
-
 export type ResourceSearchState = {
   q: string;
-  year: string; // "" = all
   season: string; // "" = all
-  country: string;
   level: 1 | 2;
+  /** "" = this Sunday, "all" = library, "custom" = saved sheets */
+  view: "" | "all" | "custom";
 };
 
 type Props = {
   state: ResourceSearchState;
   seasons: readonly { id: string; label: string }[];
-  countries: Option[];
-  countryCookie: string;
-  /** True on the default "this Sunday" view (highlights the button). */
-  thisSundayActive: boolean;
+  isPlus: boolean;
 };
 
 const pill =
@@ -34,21 +30,24 @@ const selectCls =
 
 function href(s: ResourceSearchState): string {
   const p = new URLSearchParams();
+  if (s.view === "all" || s.view === "custom") p.set("view", s.view);
   if (s.q.trim()) p.set("q", s.q.trim());
-  if (s.year) p.set("year", s.year);
   if (s.season) p.set("season", s.season);
-  if (s.country) p.set("country", s.country);
   if (s.level === 2) p.set("level", "2");
   const qs = p.toString();
   return `/resource${qs ? `?${qs}` : ""}`;
 }
 
-/** Horizontal search + filter bar for /resource. Every change updates the URL (shareable, crawl-safe). */
-export function ResourceSearchBar({ state, seasons, countries, countryCookie, thisSundayActive }: Props) {
+/** Horizontal search + filter bar for /resource. */
+export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
   const router = useRouter();
   const [q, setQ] = useState(state.q);
 
   const go = (patch: Partial<ResourceSearchState>) => router.push(href({ ...state, q, ...patch }));
+
+  const thisSundayActive = state.view === "" && !state.q.trim() && !state.season;
+  const allActive = state.view === "all" || Boolean(state.q.trim() || state.season);
+  const customActive = state.view === "custom";
 
   return (
     <form
@@ -56,7 +55,7 @@ export function ResourceSearchBar({ state, seasons, countries, countryCookie, th
       className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3"
       onSubmit={(e) => {
         e.preventDefault();
-        go({});
+        go({ view: "all" });
       }}
     >
       <label className="flex min-w-[15rem] flex-1 items-center gap-2 rounded-full border border-[#e7e3de] bg-white px-4 py-2">
@@ -72,11 +71,12 @@ export function ResourceSearchBar({ state, seasons, countries, countryCookie, th
           maxLength={80}
         />
       </label>
+
       <button
         type="button"
         onClick={() => {
           setQ("");
-          router.push(href({ q: "", year: "", season: "", country: state.country, level: state.level }));
+          router.push(href({ q: "", season: "", level: state.level, view: "" }));
         }}
         className={`${pill} ${
           thisSundayActive
@@ -87,55 +87,65 @@ export function ResourceSearchBar({ state, seasons, countries, countryCookie, th
         ★ This Sunday
       </button>
 
-      <div className={segWrap} role="group" aria-label="Liturgical year">
-        {[
-          ["", "All"],
-          ["A", "Year A"],
-          ["B", "Year B"],
-          ["C", "Year C"],
-        ].map(([v, label]) => (
-          <button
-            key={v}
-            type="button"
-            className={segBtn(state.year === v)}
-            aria-pressed={state.year === v}
-            onClick={() => go({ year: v })}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <button
+        type="button"
+        onClick={() => {
+          setQ("");
+          go({ q: "", season: "", view: "all" });
+        }}
+        className={`${pill} ${
+          allActive && !customActive
+            ? "border-[#1c1c1c] bg-[#1c1c1c] text-white"
+            : "border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]"
+        }`}
+      >
+        All
+      </button>
 
-      <label className="inline-flex">
-        <span className="sr-only">Season</span>
-        <select className={selectCls} value={state.season} onChange={(e) => go({ season: e.target.value })}>
-          <option value="">Season: All</option>
-          {seasons.map((s) => (
-            <option key={s.id} value={s.id}>
-              Season: {s.label}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label className="inline-flex">
-        <span className="sr-only">Country calendar</span>
-        <select
-          className={selectCls}
-          value={state.country}
-          onChange={(e) => {
-            const v = e.target.value;
-            document.cookie = `${countryCookie}=${encodeURIComponent(v)}; path=/; max-age=31536000; samesite=lax`;
-            go({ country: v });
+      {isPlus ? (
+        <button
+          type="button"
+          onClick={() => {
+            setQ("");
+            go({ q: "", season: "", view: "custom" });
           }}
+          className={`${pill} ${
+            customActive
+              ? "border-[#d35400] bg-[#fff6ef] text-[#d35400]"
+              : "border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]"
+          }`}
         >
-          {countries.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </select>
-      </label>
+          Custom
+          <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
+        </button>
+      ) : (
+        <Link
+          href="/subscribe"
+          className={`${pill} border-[#e7e3de] bg-white text-[#1c1c1c] no-underline hover:bg-[#fffdfb]`}
+          title="Save and reopen your edited sheets with Plus"
+        >
+          Custom
+          <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
+        </Link>
+      )}
+
+      {(allActive || state.view === "all") && state.view !== "custom" ? (
+        <label className="inline-flex">
+          <span className="sr-only">Season</span>
+          <select
+            className={selectCls}
+            value={state.season}
+            onChange={(e) => go({ season: e.target.value, view: "all" })}
+          >
+            <option value="">Season: All</option>
+            {seasons.map((s) => (
+              <option key={s.id} value={s.id}>
+                Season: {s.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
 
       <div className={segWrap} role="group" aria-label="Level">
         {([1, 2] as const).map((n) => (
