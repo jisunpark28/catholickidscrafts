@@ -1246,28 +1246,9 @@ export function SheetFabricEditor({
             ― Line
           </button>
         </div>
-        <p className="mt-2 text-[11px] leading-snug text-[#6b7280]">
-          Base section frames become editable Fabric boxes (resize / Delete). Add Section box for
-          extras, or Cover to blank an area. Save keeps your changes.
-        </p>
-        <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wide text-[#6b7280]">Faith</p>
+        <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wide text-[#6b7280]">Stickers</p>
         <div className="grid grid-cols-4 gap-1">
-          {EDITOR_STICKERS.filter((s) => s.group === "faith").map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              title={s.label}
-              className="rounded-lg border border-[#e7e3de] bg-white py-1 text-xl hover:bg-white disabled:opacity-40"
-              disabled={!isPlus || !ready}
-              onClick={() => addSticker(s.id, s.emoji)}
-            >
-              {s.emoji}
-            </button>
-          ))}
-        </div>
-        <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wide text-[#6b7280]">Fun</p>
-        <div className="grid grid-cols-4 gap-1">
-          {EDITOR_STICKERS.filter((s) => s.group === "fun").map((s) => (
+          {EDITOR_STICKERS.map((s) => (
             <button
               key={s.id}
               type="button"
