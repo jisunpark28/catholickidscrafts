@@ -1,7 +1,7 @@
 /**
- * Free vs Plus access for Sunday Resource sheets.
- * - Free / signed-out: browse & search OK; open/print only this Sunday's sheet.
- * - Plus: open/print any sheet + Fabric edit.
+ * Free vs Plus access for Sunday Resource sheets (Print / Edit / print route).
+ * - Free / signed-out: read full landing text on any sheet; print only this Sunday.
+ * - Plus: print any sheet + Fabric edit.
  */
 export function canOpenResourceSheet(opts: {
   isPlus: boolean;

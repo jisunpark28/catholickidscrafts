@@ -1,5 +1,4 @@
 import { HomePdfShell } from "@/components/home/HomePdfShell";
-import { ResourceLockedPanel } from "@/components/resource/ResourceLockedPanel";
 import { ResourceSheetPanel } from "@/components/resource/ResourceSheetPanel";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
@@ -9,8 +8,13 @@ import {
   keyToSlug,
   resourcePath,
   seasonLabel,
+  seasonPath,
   sheetDescription,
+  sheetNeighbors,
   sheetSeason,
+  sheetSeoH1,
+  sheetSeoH2,
+  sheetSeoTitle,
   slugToKey,
   yearLabel,
 } from "@/lib/resource/sheets";
@@ -39,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const sheet = key ? getSundaySheet(key) : null;
   if (!sheet) return {};
   return pageMetadata({
-    title: `${sheet.levels.level1.title}: ${sheet.liturgicalName}, ${yearLabel(sheet.key)}`,
+    title: sheetSeoTitle(sheet),
     description: sheetDescription(sheet),
     path: resourcePath(sheet.key),
   });
@@ -60,10 +64,17 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
   const l1 = sheet.levels.level1;
   const l2 = sheet.levels.level2;
   const path = resourcePath(key);
-  const canOpen = sheetOpenAllowed(viewer, key);
+  const canPrint = sheetOpenAllowed(viewer, key);
+  const season = sheetSeason(sheet);
+  const seasonHref = seasonPath(season);
   const thisSundayHref = viewer.thisSundayKey
     ? resourcePath(viewer.thisSundayKey, level)
     : "/resource";
+  const sundayDate =
+    viewer.thisSundayKey === key && viewer.thisSundayDate ? viewer.thisSundayDate : undefined;
+  const { prev, next } = sheetNeighbors(key);
+  const prevSheet = prev ? getSundaySheet(prev) : null;
+  const nextSheet = next ? getSundaySheet(next) : null;
 
   return (
     <HomePdfShell groups={nav.groups} dailyMassLabel={nav.dailyMassLabel}>
@@ -71,14 +82,15 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         nodes={[
           breadcrumbNode([
             { name: "Resource", path: "/resource" },
+            { name: seasonLabel(season), path: seasonHref },
             { name: `${sheet.liturgicalName} (${yearLabel(key)})`, path },
           ]),
           worksheetNode({
-            name: `${l1.title}: ${sheet.liturgicalName}`,
+            name: sheetSeoTitle(sheet),
             gospelRef: sheet.gospelRef,
             description: sheetDescription(sheet),
             pagePath: path,
-            isAccessibleForFree: canOpen && !viewer.isPlus,
+            isAccessibleForFree: true,
           }),
         ]}
       />
@@ -86,59 +98,145 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         <Link href="/resource" className="text-[#335599]">
           Resource
         </Link>{" "}
+        ›{" "}
+        <Link href={seasonHref} className="text-[#335599]">
+          {seasonLabel(season)}
+        </Link>{" "}
         › {sheet.liturgicalName}
       </nav>
 
-      {!canOpen ? (
-        <ResourceLockedPanel
-          liturgicalName={sheet.liturgicalName}
-          gospelRef={sheet.gospelRef}
-          yearLabel={yearLabel(key)}
-          thisSundayHref={thisSundayHref}
-        />
-      ) : (
-        <>
-          <ResourceSheetPanel
-            sheet={sheet}
-            level={level}
-            headingLevel="h1"
-            isPlus={viewer.isPlus}
-            levelHref={(n) => (n === 2 ? `${path}?level=2` : path)}
-            heading={`${level === 2 ? l2.title : l1.title}`}
-            subheading={
-              <>
-                {sheet.liturgicalName} · {yearLabel(key)} · {seasonLabel(sheetSeason(sheet))} ·{" "}
-                {sheet.gospelRef}
-              </>
-            }
-          />
+      <header className="mt-4 max-w-3xl">
+        <h1 className="m-0 text-2xl font-bold leading-tight text-[#1c1c1c] sm:text-3xl">
+          {sheetSeoH1(sheet)}
+        </h1>
+        <h2 className="mt-2 text-lg font-semibold text-[#4b5563]">{sheetSeoH2(sheet)}</h2>
+      </header>
 
-          <article className="mx-auto mt-8 max-w-3xl text-[15px] leading-relaxed text-[#1c1c1c]">
-            <h2 className="text-lg font-bold">About this Sunday&apos;s Gospel</h2>
-            <p className="text-[#4b5563]">
-              {sheet.liturgicalName} · {yearLabel(key)} · Gospel: {sheet.gospelRef}
-            </p>
-            <blockquote className="my-3 border-l-[3px] border-[#d35400] pl-4 italic text-[#4b5563]">
-              {sheet.keyVerseDR}
-            </blockquote>
-            <h3 className="mt-5 text-base font-bold">Level 1: {l1.title}</h3>
-            <p>{l1.story}</p>
-            <p>
-              <strong>Key line:</strong> {l1.keyLine}
-            </p>
-            <h3 className="mt-5 text-base font-bold">Level 2: {l2.title}</h3>
-            <p>{l2.story}</p>
-            <h3 className="mt-5 text-base font-bold">Talk about it</h3>
+      {!canPrint ? (
+        <p className="mt-4 max-w-2xl rounded-xl border border-[#efe6da] bg-[#fdfaf7] px-4 py-3 text-sm text-[#4b5563]">
+          Read the full Level 1 &amp; Level 2 text below.{" "}
+          <strong className="text-[#1c1c1c]">Print and Edit</strong> need Plus (this Sunday stays
+          free).{" "}
+          <Link href="/subscribe" className="font-semibold text-[#d35400] hover:underline">
+            Unlock with Plus
+          </Link>
+          {viewer.thisSundayKey ? (
+            <>
+              {" · "}
+              <Link href={thisSundayHref} className="font-semibold text-[#335599] hover:underline">
+                This Sunday&apos;s sheet
+              </Link>
+            </>
+          ) : null}
+        </p>
+      ) : null}
+
+      <ResourceSheetPanel
+        sheet={sheet}
+        level={level}
+        sundayDate={sundayDate}
+        headingLevel="h3"
+        isPlus={viewer.isPlus}
+        canPrint={canPrint}
+        thisSundayHref={thisSundayHref}
+        levelHref={(n) => (n === 2 ? `${path}?level=2` : path)}
+        heading={`${level === 2 ? l2.title : l1.title}`}
+        subheading={
+          <>
+            {sheet.liturgicalName} · {yearLabel(key)} · {seasonLabel(season)} · {sheet.gospelRef}
+          </>
+        }
+      />
+
+      <article className="mx-auto mt-8 max-w-3xl text-[15px] leading-relaxed text-[#1c1c1c]">
+        <h2 className="text-lg font-bold">About this Sunday&apos;s Gospel</h2>
+        <p className="text-[#4b5563]">
+          {sheet.liturgicalName} · {yearLabel(key)} · Gospel: {sheet.gospelRef}
+        </p>
+        <blockquote className="my-3 border-l-[3px] border-[#d35400] pl-4 italic text-[#4b5563]">
+          {sheet.keyVerseDR}
+        </blockquote>
+
+        <h3 className="mt-5 text-base font-bold">Level 1: {l1.title}</h3>
+        <p>{l1.story}</p>
+        <p>
+          <strong>Key line:</strong> {l1.keyLine}
+        </p>
+        {l1.activity?.title ? (
+          <p>
+            <strong>Activity:</strong> {l1.activity.title}
+            {l1.activity.intro ? ` — ${l1.activity.intro}` : null}
+          </p>
+        ) : null}
+        {l1.actions?.length ? (
+          <>
+            <p className="mb-1 font-semibold">Try this</p>
             <ul>
-              {[...l1.questions, ...l2.questions].map((qq) => (
-                <li key={qq}>{qq}</li>
+              {l1.actions.map((a) => (
+                <li key={a}>{a}</li>
               ))}
             </ul>
-            <h3 className="mt-5 text-base font-bold">Prayer</h3>
-            <p className="italic">{l2.prayer || l1.prayer}</p>
-          </article>
-        </>
-      )}
+          </>
+        ) : null}
+        <p className="italic">{l1.prayer}</p>
+
+        <h3 className="mt-5 text-base font-bold">Level 2: {l2.title}</h3>
+        <p>{l2.story}</p>
+        <p>
+          <strong>Key line:</strong> {l2.keyLine}
+        </p>
+        {l2.activity?.title ? (
+          <p>
+            <strong>Activity:</strong> {l2.activity.title}
+            {l2.activity.intro ? ` — ${l2.activity.intro}` : null}
+          </p>
+        ) : null}
+        {l2.actions?.length ? (
+          <>
+            <p className="mb-1 font-semibold">Try this</p>
+            <ul>
+              {l2.actions.map((a) => (
+                <li key={a}>{a}</li>
+              ))}
+            </ul>
+          </>
+        ) : null}
+
+        <h3 className="mt-5 text-base font-bold">Talk about it</h3>
+        <ul>
+          {[...l1.questions, ...l2.questions].map((qq) => (
+            <li key={qq}>{qq}</li>
+          ))}
+        </ul>
+        <h3 className="mt-5 text-base font-bold">Prayer</h3>
+        <p className="italic">{l2.prayer || l1.prayer}</p>
+      </article>
+
+      {prevSheet || nextSheet ? (
+        <nav
+          aria-label="Adjacent Sunday sheets"
+          className="mx-auto mt-10 flex max-w-3xl flex-col gap-3 border-t border-[#efe6da] pt-6 text-sm sm:flex-row sm:justify-between"
+        >
+          {prevSheet ? (
+            <Link
+              href={resourcePath(prevSheet.key, level)}
+              className="font-semibold text-[#335599] hover:underline"
+            >
+              ← Previous: {yearLabel(prevSheet.key)} {prevSheet.liturgicalName}
+            </Link>
+          ) : (
+            <span />
+          )}
+          {nextSheet ? (
+            <Link
+              href={resourcePath(nextSheet.key, level)}
+              className="font-semibold text-[#335599] hover:underline sm:text-right"
+            >
+              Next: {yearLabel(nextSheet.key)} {nextSheet.liturgicalName} →
+            </Link>
+          ) : null}
+        </nav>
+      ) : null}
     </HomePdfShell>
   );
 }

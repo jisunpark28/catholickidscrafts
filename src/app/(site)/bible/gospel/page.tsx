@@ -13,6 +13,8 @@ import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { resolveResourceViewer } from "@/lib/resource/resolve-access";
+import { resourcePath } from "@/lib/resource/sheets";
 import { breadcrumbNode } from "@/lib/structured-data";
 
 export const metadata: Metadata = pageMetadata({
@@ -30,10 +32,11 @@ export default async function TodaysGospelPage() {
   const year = today.getUTCFullYear();
   const month = today.getUTCMonth() + 1;
 
-  const [key, sections, copy] = await Promise.all([
+  const [key, sections, copy, viewer] = await Promise.all([
     getReaderKey(),
     getPublishedHomeSections(),
     getSiteCopyMap(),
+    resolveResourceViewer(),
   ]);
   const signedIn = isSignedInReader(key);
   const initialCompleted = signedIn
@@ -45,6 +48,7 @@ export default async function TodaysGospelPage() {
     resources: copyText(copy, "home.hub.cta_resources", "Kids Resources"),
     play: copyText(copy, "global.nav.play_learn", "Play & Learn"),
   });
+  const thisWeekSheetHref = viewer.thisSundayKey ? resourcePath(viewer.thisSundayKey) : "/resource";
 
   return (
     <HomePdfShell groups={groups}>
@@ -57,10 +61,14 @@ export default async function TodaysGospelPage() {
       />
       <RelatedLinks
         links={[
-          { href: "/", label: "Print this Sunday's Gospel sheet", hint: "Free printable sheet in two levels." },
+          {
+            href: thisWeekSheetHref,
+            label: "This week's Gospel sheet →",
+            hint: "Free printable Sunday worksheet in Level 1 and Level 2.",
+          },
           { href: "/daily-mass", label: "Read today's Mass readings", hint: "All the readings with questions to talk about." },
+          { href: "/resources", label: "Browse sheets by season", hint: "Advent, Lent, Ordinary Time and feasts." },
           { href: "/prayers", label: "Learn the prayers we say at Mass", hint: "Our Father, Hail Mary and more on flip cards." },
-          { href: "/liturgy/mass", label: "What happens at Mass?", hint: "Kid-friendly questions and answers." },
         ]}
       />
     </HomePdfShell>

@@ -1,5 +1,6 @@
 // Resource library: search and URL helpers over the static Sunday sheets.
 // DB-free and romcal-free, so it is safe for static pages and the sitemap.
+import { SHARED_KEYS, SUNDAY_KEYS } from "@/lib/sheet-keys/keys";
 import { getSundaySheet, listSundaySheetKeys, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 
 export const RESOURCE_PATH = "/resource";
@@ -12,7 +13,7 @@ export const RESOURCE_SEASONS = [
   { id: "christmas", label: "Christmas" },
   { id: "lent", label: "Lent" },
   { id: "easter", label: "Easter" },
-  { id: "ordinary", label: "Ordinary Time" },
+  { id: "ordinary-time", label: "Ordinary Time" },
   { id: "feasts", label: "Feasts & Solemnities" },
 ] as const;
 export type ResourceSeason = (typeof RESOURCE_SEASONS)[number]["id"];
@@ -23,7 +24,7 @@ const SEASON_ORDER: Record<ResourceSeason, number> = {
   christmas: 1,
   lent: 2,
   easter: 3,
-  ordinary: 4,
+  "ordinary-time": 4,
   feasts: 5,
 };
 
@@ -67,12 +68,17 @@ export function sheetSeason(sheet: SundaySheetContent): ResourceSeason {
     case "Easter":
       return "easter";
     default:
-      return "ordinary";
+      return "ordinary-time";
   }
 }
 
 export function seasonLabel(id: ResourceSeason): string {
   return RESOURCE_SEASONS.find((s) => s.id === id)?.label ?? "";
+}
+
+/** Indexable season hub: `/resources/lent`, `/resources/advent`, … */
+export function seasonPath(id: ResourceSeason): string {
+  return `/resources/${id}`;
 }
 
 export function yearLabel(key: string): string {
@@ -85,8 +91,16 @@ export function parseYear(v: string | undefined): ResourceYear | null {
   return u === "A" || u === "B" || u === "C" ? u : null;
 }
 
+/** Accepts canonical ids plus legacy `ordinary` → `ordinary-time`. */
 export function parseSeason(v: string | undefined): ResourceSeason | null {
+  if (!v) return null;
+  if (v === "ordinary") return "ordinary-time";
   return RESOURCE_SEASONS.some((s) => s.id === v) ? (v as ResourceSeason) : null;
+}
+
+/** Level 1 title stands in for gospel theme (no separate theme column in sheet JSON). */
+export function sheetGospelTheme(sheet: SundaySheetContent): string {
+  return sheet.levels.level1.title;
 }
 
 export type ResourceCard = {
@@ -166,10 +180,61 @@ export function searchSheets({ q, year, season }: ResourceQuery): SundaySheetCon
     .map((r) => r.sheet);
 }
 
-/** Plain-language page description for SEO (no ages). */
+/**
+ * Meta description, e.g.
+ * Free printable Catholic Sunday worksheet for 30th Sunday… Includes Matthew 22:34-40 (Love God…) …
+ */
 export function sheetDescription(sheet: SundaySheetContent): string {
-  const t = sheet.levels.level1.title;
-  return `Free printable Catholic kids activity sheet "${t}" for the ${sheet.liturgicalName} (${yearLabel(
+  const theme = sheetGospelTheme(sheet);
+  return `Free printable Catholic Sunday worksheet for ${sheet.liturgicalName} (${yearLabel(
     sheet.key,
-  )}), ${sheet.gospelRef}. Gospel story, key line, activity, questions and prayer in Level 1 and Level 2.`;
+  )}). Includes ${sheet.gospelRef} (${theme}) story, Level 1 & Level 2 reflection questions for CCD teachers & homeschooling.`;
+}
+
+/**
+ * Meta title, e.g.
+ * Free Catholic Sunday Gospel Sheet: 30th Sunday in Ordinary Time (Year A) - Matthew 22:34-40
+ */
+export function sheetSeoTitle(sheet: SundaySheetContent): string {
+  return `Free Catholic Sunday Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)}) - ${sheet.gospelRef}`;
+}
+
+/** Visible H1 (spec: no gospel ref in H1). */
+export function sheetSeoH1(sheet: SundaySheetContent): string {
+  return `Free Catholic Sunday Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)})`;
+}
+
+/** Visible H2 under the H1. */
+export function sheetSeoH2(sheet: SundaySheetContent): string {
+  return `Gospel Reading: ${sheet.gospelRef} - ${sheetGospelTheme(sheet)}`;
+}
+
+/**
+ * Previous / next sheet in TOC order (same cycle, or shared-feast list).
+ * Neighbors only exist when that key is in the static content map.
+ */
+export function sheetNeighbors(key: string): { prev: string | null; next: string | null } {
+  const year = sheetYear(key);
+  const chain =
+    year != null
+      ? SUNDAY_KEYS.map((k) => `${year}_${k}`).filter((k) => getSundaySheet(k))
+      : SHARED_KEYS.filter((k) => getSundaySheet(k));
+  const i = chain.indexOf(key);
+  if (i < 0) return { prev: null, next: null };
+  return {
+    prev: i > 0 ? chain[i - 1]! : null,
+    next: i < chain.length - 1 ? chain[i + 1]! : null,
+  };
+}
+
+/**
+ * Season hub title, e.g. "Lent Gospel Worksheet for Kids Level 1 & Level 2"
+ */
+export function seasonSeoTitle(id: ResourceSeason): string {
+  return `${seasonLabel(id)} Gospel Worksheet for Kids Level 1 & Level 2`;
+}
+
+export function seasonSeoDescription(id: ResourceSeason, sheetCount: number): string {
+  const label = seasonLabel(id);
+  return `Free printable ${label} Gospel worksheets for Catholic kids and catechists. Browse ${sheetCount} Sunday and feast sheets with Level 1 and Level 2 — story, activity, questions and prayer. Print this Sunday free; Plus unlocks the full library.`;
 }

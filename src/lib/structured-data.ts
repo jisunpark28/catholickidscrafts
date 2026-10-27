@@ -92,17 +92,19 @@ export type WorksheetInput = {
   offer?: { price: number; priceCurrency: string };
 };
 
-/** LearningResource for a printable worksheet. No educationalLevel (no age/grade guidance). */
+/** LearningResource for a printable worksheet (rich-result oriented). */
 export function worksheetNode(input: WorksheetInput): JsonLdNode {
   return {
     "@type": "LearningResource",
     name: input.name,
     description: input.description,
     learningResourceType: "Worksheet",
+    educationalLevel: ["Kindergarten", "Elementary School"],
     about: input.gospelRef ? { "@type": "Thing", name: input.gospelRef } : undefined,
     isAccessibleForFree: input.isAccessibleForFree,
     inLanguage: "en",
     url: absoluteSiteUrl(input.pagePath),
+    author: { "@type": "Organization", name: SITE_NAME, url: absoluteSiteUrl("/") },
     provider: { "@id": organizationId() },
     offers: input.offer
       ? { "@type": "Offer", price: input.offer.price, priceCurrency: input.offer.priceCurrency }
