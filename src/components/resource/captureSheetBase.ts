@@ -67,6 +67,94 @@ export type MeasuredTextField = {
   fontSize: number;
 };
 
+export type MeasuredChrome = {
+  /** Stable id: `wl_0`, `chk_0`, … */
+  id: string;
+  kind: "writeline" | "checkbox";
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+};
+
+function scaleOrigin(originEl: HTMLElement | null | undefined, page: HTMLElement) {
+  const origin = pageRect(originEl && originEl.isConnected ? originEl : page);
+  const ow = Math.max(1, origin.width);
+  const oh = Math.max(1, origin.height);
+  return {
+    origin,
+    scaleX: SHEET_PAGE.width / ow,
+    scaleY: SHEET_PAGE.height / oh,
+  };
+}
+
+/**
+ * Measure printable chrome that isn't text: dotted write-lines and checklist boxes.
+ * Hides sources via `.gs-edit-chrome` (caller) / visibility so Fabric can replace them.
+ */
+export function collectSheetChrome(
+  page: HTMLElement,
+  originEl?: HTMLElement | null,
+): MeasuredChrome[] {
+  const { origin, scaleX, scaleY } = scaleOrigin(originEl, page);
+  const out: MeasuredChrome[] = [];
+  let wi = 0;
+  let ci = 0;
+
+  page.querySelectorAll<HTMLElement>(".gs-wl, [data-sheet-chrome='writeline']").forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (r.width < 8) return;
+    const left = Math.round((r.left - origin.left) * scaleX);
+    const top = Math.round((r.top - origin.top + Math.max(r.height - 2, 0)) * scaleY);
+    const width = Math.round(r.width * scaleX);
+    const box = clampBox(left, top - 1, width, 4);
+    if (!box) return;
+    el.style.visibility = "hidden";
+    el.style.borderColor = "transparent";
+    out.push({
+      id: `wl_${wi++}`,
+      kind: "writeline",
+      left: box.left,
+      top: box.top,
+      width: box.width,
+      height: 2,
+    });
+  });
+
+  // Explicit checkbox nodes (preferred) or legacy ::before on .gs-chk > li
+  const chkNodes = page.querySelectorAll<HTMLElement>(".gs-chk-box, [data-sheet-chrome='checkbox']");
+  if (chkNodes.length) {
+    chkNodes.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const size = Math.max(12, Math.round(Math.min(r.width || 16, r.height || 16) * scaleX));
+      const box = clampBox(
+        Math.round((r.left - origin.left) * scaleX),
+        Math.round((r.top - origin.top) * scaleY),
+        size,
+        size,
+      );
+      if (!box) return;
+      el.style.visibility = "hidden";
+      out.push({ id: `chk_${ci++}`, kind: "checkbox", ...box });
+    });
+  } else {
+    page.querySelectorAll<HTMLElement>(".gs-chk > li").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const size = Math.round(16 * scaleX);
+      const box = clampBox(
+        Math.round((r.left - origin.left) * scaleX),
+        Math.round((r.top - origin.top) * scaleY) + 2,
+        size,
+        size,
+      );
+      if (!box) return;
+      out.push({ id: `chk_${ci++}`, kind: "checkbox", ...box });
+    });
+  }
+
+  return out;
+}
+
 /** HTML selectors for chrome + activity copy not always pre-tagged. */
 const AUTO_TEXT_SELECTORS = [
   ".gs-sub",

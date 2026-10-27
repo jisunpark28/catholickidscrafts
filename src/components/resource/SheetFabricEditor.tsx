@@ -2,6 +2,7 @@
 
 import {
   collectEditableTextFields,
+  collectSheetChrome,
   measureSheetSectionBoxes,
 } from "@/components/resource/captureSheetBase";
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
@@ -66,6 +67,9 @@ type ObjMeta = {
   section?: boolean;
   /** When set, this Rect replaced a locked HTML `.gs-box` (`bs_0` …). */
   baseSectionId?: string;
+  /** Promoted write-line / checkbox from base HTML (`wl_0`, `chk_0`). */
+  baseChromeId?: string;
+  chromeKind?: "writeline" | "checkbox";
 };
 
 /** Content width inside letter margins (~0.5in pad each side on 8.5in). */
@@ -108,8 +112,12 @@ export function SheetFabricEditor({
   const refreshLayersRef = useRef<() => void>(() => undefined);
   const pushUndoRef = useRef<() => void>(() => undefined);
   const hiddenBaseSectionsRef = useRef<string[]>([]);
+  /** Deleted base text field ids + chrome ids (`wl_0`, `chk_0`) — do not re-install. */
+  const hiddenFieldsRef = useRef<string[]>([]);
   const promoteBaseSectionsRef = useRef<() => void>(() => undefined);
   const installLiveTextRef = useRef<() => void>(() => undefined);
+  const installLiveChromeRef = useRef<() => void>(() => undefined);
+  const removeActiveRef = useRef<() => void>(() => undefined);
 
   const [ready, setReady] = useState(false);
   const [fontFamily, setFontFamily] = useState<EditorFontId>("Fredoka");
@@ -157,21 +165,27 @@ export function SheetFabricEditor({
           const label =
             m.kind === "base-edit"
               ? `T ${m.fieldId}`
-              : m.baseSectionId
-                ? `Base box ${m.baseSectionId.replace(/^bs_/, "")}`
-                : m.section || (o instanceof Rect && (o.rx ?? 0) >= 8)
-                  ? "Section box"
-                  : m.stickerId
-                    ? `Sticker ${m.stickerId}`
-                    : m.photoId || o.type === "image"
-                      ? "Photo"
-                      : o.type === "textbox"
-                        ? `T ${(o as Textbox).text?.slice(0, 24) || "Text"}`
-                        : o.type === "rect"
-                          ? "Rect"
-                          : (o.type ?? `obj${i}`);
+              : m.chromeKind === "writeline"
+                ? `Line ${m.baseChromeId?.replace(/^wl_/, "") ?? ""}`
+                : m.chromeKind === "checkbox"
+                  ? `Checkbox ${m.baseChromeId?.replace(/^chk_/, "") ?? ""}`
+                  : m.baseSectionId
+                    ? `Base box ${m.baseSectionId.replace(/^bs_/, "")}`
+                    : m.section || (o instanceof Rect && (o.rx ?? 0) >= 8)
+                      ? "Section box"
+                      : m.stickerId
+                        ? `Sticker ${m.stickerId}`
+                        : m.photoId || o.type === "image"
+                          ? "Photo"
+                          : o.type === "textbox"
+                            ? `T ${(o as Textbox).text?.slice(0, 24) || "Text"}`
+                            : o.type === "rect"
+                              ? "Rect"
+                              : o.type === "line"
+                                ? "Line"
+                                : (o.type ?? `obj${i}`);
           return {
-            key: `${canvasIndex}:${m.id ?? m.fieldId ?? o.type ?? "obj"}`,
+            key: `${canvasIndex}:${m.id ?? m.fieldId ?? m.baseChromeId ?? o.type ?? "obj"}`,
             label,
             locked: false,
             canvasIndex,
@@ -297,6 +311,8 @@ export function SheetFabricEditor({
             ry: Number(obj.ry ?? 0) || undefined,
             section: m.section || Boolean(m.baseSectionId) || undefined,
             baseSectionId: m.baseSectionId,
+            baseChromeId: m.baseChromeId,
+            chromeKind: m.chromeKind,
             opacity: obj.opacity ?? 1,
           });
         } else if (obj instanceof Circle) {
@@ -337,6 +353,8 @@ export function SheetFabricEditor({
             top: obj.top ?? 0,
             width: Math.abs((obj.x2 ?? 0) - (obj.x1 ?? 0)) || 100,
             height: Math.abs((obj.y2 ?? 0) - (obj.y1 ?? 0)) || 0,
+            baseChromeId: m.baseChromeId,
+            chromeKind: m.chromeKind,
             scaleX: obj.scaleX ?? 1,
             scaleY: obj.scaleY ?? 1,
             angle: obj.angle ?? 0,
@@ -368,7 +386,7 @@ export function SheetFabricEditor({
       v: 1,
       base: { key: sheet.key, level, paper: "letter", rev: baseRev },
       edits,
-      hidden: [],
+      hidden: [...hiddenFieldsRef.current],
       hiddenBaseSections: [...hiddenBaseSectionsRef.current],
       objects,
     };
@@ -447,9 +465,10 @@ export function SheetFabricEditor({
         if (!cancelled) {
           if (liveHtmlBase && isPlus) {
             const finishLive = (attempt: number) => {
-              if (cancelled) return;
-              installLiveTextRef.current();
-              promoteBaseSectionsRef.current();
+                if (cancelled) return;
+                installLiveTextRef.current();
+                installLiveChromeRef.current();
+                promoteBaseSectionsRef.current();
               const ids = new Set(
                 fabricRef.current
                   ?.getObjects()
@@ -495,6 +514,7 @@ export function SheetFabricEditor({
       }
       fabricRef.current = null;
       hiddenBaseSectionsRef.current = [];
+      hiddenFieldsRef.current = [];
     };
     // layout.boxes identity changes often; key off rev + count
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -525,6 +545,7 @@ export function SheetFabricEditor({
 
     const fields = collectEditableTextFields(page, level, host);
     if (!fields.length) return;
+    const hidden = new Set(hiddenFieldsRef.current);
 
     applyingRef.current = true;
     try {
@@ -536,7 +557,15 @@ export function SheetFabricEditor({
         }
       }
 
+      for (const [id, tb] of [...existing]) {
+        if (hidden.has(id)) {
+          c.remove(tb);
+          existing.delete(id);
+        }
+      }
+
       for (const f of fields) {
+        if (hidden.has(f.id)) continue;
         const prev = existing.get(f.id);
         if (prev) {
           const keepText =
@@ -579,6 +608,83 @@ export function SheetFabricEditor({
     refreshLayers();
   };
   installLiveTextRef.current = installLiveTextFields;
+
+  /** Promote dotted write-lines and checklist boxes from the live underlay. */
+  const installLiveChrome = () => {
+    if (!liveHtmlBase || !isPlus) return;
+    const c = fabricRef.current;
+    const host = liveHostRef.current;
+    const page = host?.querySelector("[data-sheet-page]") as HTMLElement | null;
+    const root = host?.querySelector(".gs") as HTMLElement | null;
+    if (!c || !host || !page || !root) return;
+
+    root.classList.add("gs-edit-chrome");
+    const measured = collectSheetChrome(page, host);
+    const hidden = new Set(hiddenFieldsRef.current);
+    const existing = new Set(
+      c
+        .getObjects()
+        .map((o) => metaOf(o).baseChromeId)
+        .filter((id): id is string => Boolean(id)),
+    );
+
+    applyingRef.current = true;
+    try {
+      let added = 0;
+      for (const ch of measured) {
+        if (hidden.has(ch.id) || existing.has(ch.id)) continue;
+        if (ch.kind === "writeline") {
+          const ln = new Line([0, 0, Math.max(24, ch.width), 0], {
+            left: ch.left,
+            top: ch.top,
+            stroke: "#777777",
+            strokeWidth: 2,
+            strokeDashArray: [2, 4],
+            objectCaching: false,
+            // Easier hit target than a 2px stroke.
+            padding: 10,
+          });
+          setMeta(ln, {
+            kind: "user",
+            id: `chrome_${ch.id}`,
+            baseChromeId: ch.id,
+            chromeKind: "writeline",
+          });
+          c.add(ln);
+          added += 1;
+        } else {
+          const box = new Rect({
+            left: ch.left,
+            top: ch.top,
+            width: Math.max(12, ch.width),
+            height: Math.max(12, ch.height),
+            fill: "rgba(255,255,255,0.01)",
+            stroke: "#111111",
+            strokeWidth: 2,
+            rx: 3,
+            ry: 3,
+            objectCaching: false,
+            padding: 4,
+          });
+          setMeta(box, {
+            kind: "user",
+            id: `chrome_${ch.id}`,
+            baseChromeId: ch.id,
+            chromeKind: "checkbox",
+          });
+          c.add(box);
+          added += 1;
+        }
+      }
+      if (added) {
+        c.requestRenderAll();
+        refreshLayers();
+      }
+    } finally {
+      applyingRef.current = false;
+    }
+  };
+  installLiveChromeRef.current = installLiveChrome;
 
   /**
    * Hide HTML `.gs-box` borders and ensure each visible base section has a Fabric Rect
@@ -639,12 +745,20 @@ export function SheetFabricEditor({
     if (!c) return;
     applyingRef.current = true;
     hiddenBaseSectionsRef.current = [...(data.hiddenBaseSections ?? [])];
+    hiddenFieldsRef.current = [...(data.hidden ?? [])];
     try {
-      if (liveHtmlBase) installLiveTextFields();
+      if (liveHtmlBase) {
+        installLiveTextFields();
+        installLiveChrome();
+      }
 
-      for (const obj of c.getObjects()) {
+      for (const obj of [...c.getObjects()]) {
         const m = metaOf(obj);
         if (m.kind === "base-edit" && m.fieldId && obj instanceof Textbox) {
+          if (hiddenFieldsRef.current.includes(m.fieldId)) {
+            c.remove(obj);
+            continue;
+          }
           const edit = data.edits[m.fieldId];
           if (!edit) continue;
           obj.set({
@@ -703,6 +817,8 @@ export function SheetFabricEditor({
             id: o.id,
             section: o.section || Boolean(o.baseSectionId),
             baseSectionId: o.baseSectionId,
+            baseChromeId: o.baseChromeId,
+            chromeKind: o.chromeKind,
           });
           c.add(r);
           if (o.baseSectionId || o.section) c.sendObjectToBack(r);
@@ -746,9 +862,15 @@ export function SheetFabricEditor({
             angle: o.angle ?? 0,
             stroke: o.stroke ?? "#111",
             strokeWidth: o.strokeWidth ?? 4,
+            strokeDashArray: o.chromeKind === "writeline" ? [2, 4] : undefined,
             opacity: o.opacity ?? 1,
           });
-          setMeta(ln, { kind: "user", id: o.id });
+          setMeta(ln, {
+            kind: "user",
+            id: o.id,
+            baseChromeId: o.baseChromeId,
+            chromeKind: o.chromeKind,
+          });
           c.add(ln);
         } else if (o.type === "image" && o.src) {
           try {
@@ -770,11 +892,56 @@ export function SheetFabricEditor({
       }
       c.requestRenderAll();
       refreshLayersRef.current();
-      if (liveHtmlBase) promoteBaseSections();
+      if (liveHtmlBase) {
+        installLiveChrome();
+        promoteBaseSections();
+      }
     } finally {
       applyingRef.current = false;
     }
   };
+
+  useEffect(() => {
+    if (!isPlus || !ready) return;
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+        return;
+      }
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        void undo();
+        return;
+      }
+      if (mod && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
+        e.preventDefault();
+        // redo stack exists via undoRef/redoRef — call undo's sibling if present
+        void (async () => {
+          const c = fabricRef.current;
+          if (!c || redoRef.current.length < 1) return;
+          const next = redoRef.current.pop()!;
+          undoRef.current.push(next);
+          applyingRef.current = true;
+          await c.loadFromJSON(JSON.parse(next));
+          applyingRef.current = false;
+          c.requestRenderAll();
+          refreshLayers();
+        })();
+        return;
+      }
+      if (!mod && (e.key === "Delete" || e.key === "Backspace")) {
+        const active = fabricRef.current?.getActiveObject();
+        if (active instanceof Textbox && active.isEditing) return;
+        if (!active) return;
+        e.preventDefault();
+        removeActiveRef.current();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlus, ready]);
 
   useEffect(() => {
     if (!ready || !initialCustomId || !isPlus) return;
@@ -1021,19 +1188,38 @@ export function SheetFabricEditor({
     const c = fabricRef.current;
     const obj = c?.getActiveObject();
     if (!c || !obj || !isPlus) return;
-    const m = metaOf(obj);
-    if (m.kind === "base-edit") {
-      setStatus("Base text can’t be deleted — clear or edit it instead");
-      return;
-    }
+    // Typing inside a textbox: Delete/Backspace should edit characters (keyboard handler skips).
+    if (obj instanceof Textbox && obj.isEditing) return;
+
     pushUndo();
-    if (m.baseSectionId && !hiddenBaseSectionsRef.current.includes(m.baseSectionId)) {
-      hiddenBaseSectionsRef.current = [...hiddenBaseSectionsRef.current, m.baseSectionId];
+    const removeOne = (o: FabricObject) => {
+      const m = metaOf(o);
+      if (m.kind === "base-edit" && m.fieldId && !hiddenFieldsRef.current.includes(m.fieldId)) {
+        hiddenFieldsRef.current = [...hiddenFieldsRef.current, m.fieldId];
+      }
+      if (m.baseChromeId && !hiddenFieldsRef.current.includes(m.baseChromeId)) {
+        hiddenFieldsRef.current = [...hiddenFieldsRef.current, m.baseChromeId];
+      }
+      if (m.baseSectionId && !hiddenBaseSectionsRef.current.includes(m.baseSectionId)) {
+        hiddenBaseSectionsRef.current = [...hiddenBaseSectionsRef.current, m.baseSectionId];
+      }
+      c.remove(o);
+    };
+
+    // Multi-select
+    const anyObj = obj as FabricObject & { getObjects?: () => FabricObject[]; type?: string };
+    if (anyObj.type === "activeSelection" && typeof anyObj.getObjects === "function") {
+      const items = [...anyObj.getObjects()];
+      c.discardActiveObject();
+      for (const o of items) removeOne(o);
+    } else {
+      removeOne(obj);
     }
-    c.remove(obj);
     c.requestRenderAll();
     refreshLayers();
+    setStatus("");
   };
+  removeActiveRef.current = removeActive;
 
   const undo = async () => {
     const c = fabricRef.current;
@@ -1239,7 +1425,13 @@ export function SheetFabricEditor({
           <button type="button" className={toolBtn} disabled={!isPlus} onClick={() => void undo()}>
             Undo
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus} onClick={removeActive}>
+          <button
+            type="button"
+            className={toolBtn}
+            disabled={!isPlus}
+            onClick={removeActive}
+            title="Delete selected (Delete / Backspace)"
+          >
             Delete
           </button>
           <div className="ml-auto flex flex-wrap items-center gap-2">

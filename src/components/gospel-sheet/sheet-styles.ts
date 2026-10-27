@@ -22,6 +22,10 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-trace{font-size:30px;letter-spacing:2px;border-bottom:2px dashed #999;line-height:1.5;color:transparent;-webkit-text-stroke:1.3px #888;font-weight:700}
 .gs .gs-copy{font-size:17px;font-weight:700}
 .gs .gs-wl{border-bottom:2px dotted #777;height:30px}
+/* Editor: write-lines / checkbox ::before hidden once Fabric chrome is installed. */
+.gs.gs-base.gs-edit-chrome .gs-wl{visibility:hidden!important;border-color:transparent!important}
+.gs.gs-base.gs-edit-chrome .gs-chk li:before{visibility:hidden!important}
+.gs.gs-base.gs-edit-chrome .gs-chk-box{visibility:hidden!important}
 .gs .gs-row{display:flex;gap:10px}.gs .gs-row>*{flex:1}
 .gs .gs-heart{flex:1;min-height:0;display:flex;flex-direction:column}
 .gs svg{display:block;width:100%;height:auto}
@@ -30,6 +34,8 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-q{font-size:14px;margin:4px 0 0}
 .gs .gs-chk{list-style:none;padding:0;margin:0;font-size:15px}.gs .gs-chk li{margin:3px 0}
 .gs .gs-chk li:before{content:"";display:inline-block;width:16px;height:16px;border:2px solid #111;border-radius:3px;margin-right:8px;vertical-align:-3px}
+.gs .gs-chk li:has(.gs-chk-box):before{content:none;display:none;margin:0;border:0;width:0;height:0}
+.gs .gs-chk-box{display:inline-block;width:16px;height:16px;border:2px solid #111;border-radius:3px;margin-right:8px;vertical-align:-3px;flex:none}
 .gs .gs-prayer{text-align:center;font-size:16px;font-style:italic}
 .gs footer{margin-top:auto;text-align:center;font-size:11px;color:#444;border-top:1px solid #999;padding-top:4px}
 .gs .gs-ph{border:2px dashed #a58bc9;border-radius:10px;color:#6b4f99;background:#f7f3fc;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px;word-break:break-all}
