@@ -9,6 +9,11 @@ type Props = {
   liturgicalName: string;
   sundayLabel: string;
   gospelRef: string;
+  /**
+   * Print page without query, e.g. `/print/resource/a-ot30` (auto weekly)
+   * or `/print/2026-10-25` (legacy DB featured fallback).
+   */
+  printBasePath: string;
   /** Liturgy page for the current season, e.g. "/liturgy/ordinary-time". */
   seasonHref: string;
   seasonLabel: string;
@@ -47,7 +52,19 @@ function writeEmailState(value: "subscribed" | "dismissed") {
 }
 
 /** Homepage hero: this Sunday's sheet, one big Print button, then an inline email opt-in. */
-export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gospelRef, seasonHref, seasonLabel, groupInquiryHref, emailEnabled, position }: Props) {
+export function SundaySheetHero({
+  slug,
+  title,
+  liturgicalName,
+  sundayLabel,
+  gospelRef,
+  printBasePath,
+  seasonHref,
+  seasonLabel,
+  groupInquiryHref,
+  emailEnabled,
+  position,
+}: Props) {
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
@@ -56,7 +73,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
   const wrapRef = useRef<HTMLDivElement>(null);
   const awaitingReturn = useRef(false);
 
-  const src = `/print/${slug}?level=${level}&embed=1`;
+  const src = `${printBasePath}?level=${level}&embed=1`;
 
   useEffect(() => {
     setEmailState(readEmailState());
@@ -106,7 +123,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
     const frameWin = frameRef.current?.contentWindow;
     if (isMobileDevice() || !frameWin) {
       awaitingReturn.current = true;
-      window.open(`/print/${slug}?level=${level}&autoprint=1`, "_blank", "noopener");
+      window.open(`${printBasePath}?level=${level}&autoprint=1`, "_blank", "noopener");
       return;
     }
     const done = () => setPrinted(true);
@@ -115,7 +132,7 @@ export function SundaySheetHero({ slug, title, liturgicalName, sundayLabel, gosp
     frameWin.print();
     // Some browsers block in print() and never fire afterprint on the frame.
     window.setTimeout(done, 500);
-  }, [slug, level]);
+  }, [printBasePath, level]);
 
   const choose = (value: "subscribed" | "dismissed") => {
     writeEmailState(value);

@@ -32,6 +32,8 @@ export default async function ResourcePrintPage({ params, searchParams }: Props)
   const sheet = key ? getSundaySheet(key) : null;
   if (!key || !sheet) notFound();
   const level = parseLevelParam(query.level);
+  const embed = query.embed === "1";
+  const autoPrint = query.autoprint === "1";
   const canOpen = sheetOpenAllowed(viewer, key);
 
   if (!canOpen) {
@@ -59,20 +61,25 @@ export default async function ResourcePrintPage({ params, searchParams }: Props)
     );
   }
 
-  const view = { ...toGospelSheetView(sheet), sundayLabel: yearLabel(key) };
+  const view =
+    viewer.thisSundayKey === key && viewer.thisSundayDate
+      ? toGospelSheetView(sheet, viewer.thisSundayDate)
+      : { ...toGospelSheetView(sheet), sundayLabel: yearLabel(key) };
 
   return (
-    <div style={{ background: "#eee", minHeight: "100vh" }}>
+    <div style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
       <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS }} />
-      <PrintToolbar
-        slug={keyToSlug(key)}
-        level={level}
-        gospelRef={sheet.gospelRef}
-        usccbUrl=""
-        autoPrint={query.autoprint === "1"}
-        basePath={`/print/resource/${keyToSlug(key)}`}
-        backHref={resourcePath(key, level)}
-      />
+      {embed ? null : (
+        <PrintToolbar
+          slug={keyToSlug(key)}
+          level={level}
+          gospelRef={sheet.gospelRef}
+          usccbUrl=""
+          autoPrint={autoPrint}
+          basePath={`/print/resource/${keyToSlug(key)}`}
+          backHref={resourcePath(key, level)}
+        />
+      )}
       <GospelSheet sheet={view} level={level} />
     </div>
   );
