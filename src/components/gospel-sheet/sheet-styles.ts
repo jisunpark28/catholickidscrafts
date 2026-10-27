@@ -3,6 +3,8 @@ export const GOSPEL_SHEET_CSS = `
 .gs, .gs *{box-sizing:border-box}
 .gs{font-family:"Comic Sans MS","Chalkboard SE","Trebuchet MS",sans-serif;color:#111}
 .gs-page{width:8.5in;height:11in;margin:16px auto;background:#fff;padding:.5in;box-shadow:0 2px 8px #0003;overflow:hidden;display:flex;flex-direction:column;gap:10px}
+/* Base capture: slightly tighter so footer/prayer stay on the letter page. */
+.gs.gs-base .gs-page{gap:6px}
 .gs header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #111;padding-bottom:6px}
 .gs h1{margin:0;font-size:24px;font-weight:700;line-height:1.2}
 .gs .gs-sub{font-size:14px}

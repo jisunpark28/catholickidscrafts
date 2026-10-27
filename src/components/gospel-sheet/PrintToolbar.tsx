@@ -9,6 +9,10 @@ type Props = {
   gospelRef: string;
   usccbUrl: string;
   autoPrint: boolean;
+  /** Level links go to `${basePath}?level=N`. Defaults to the DB sheet route /print/<slug>. */
+  basePath?: string;
+  /** Optional "Back" link (e.g. to the Resource page). */
+  backHref?: string;
 };
 
 const btn: React.CSSProperties = {
@@ -22,7 +26,7 @@ const btn: React.CSSProperties = {
 };
 
 /** Screen-only bar on the print page (hidden when printing). */
-export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint }: Props) {
+export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint, basePath, backHref }: Props) {
   useEffect(() => {
     if (!autoPrint) return;
     const t = window.setTimeout(() => window.print(), 400);
@@ -65,7 +69,7 @@ export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint }: Pr
       {([1, 2] as const).map((n) => (
         <Link
           key={n}
-          href={`/print/${slug}?level=${n}`}
+          href={`${basePath ?? `/print/${slug}`}?level=${n}`}
           replace
           style={n === level ? { ...btn, background: "#111", color: "#fff" } : btn}
           aria-current={n === level ? "page" : undefined}
@@ -73,6 +77,11 @@ export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint }: Pr
           Level {n}
         </Link>
       ))}
+      {backHref ? (
+        <Link href={backHref} style={btn}>
+          ← Back
+        </Link>
+      ) : null}
       {usccbUrl ? (
         <span style={{ marginLeft: "auto", fontSize: 13 }}>
           Read the Gospel:{" "}

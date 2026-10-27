@@ -1,0 +1,85 @@
+{
+  "v": 1,
+  "key": "A_OT30",
+  "level": 2,
+  "paper": "letter",
+  "rev": "32d6849c",
+  "page": {
+    "width": 816,
+    "height": 1056
+  },
+  "boxes": [
+    {
+      "id": "title",
+      "left": 48,
+      "top": 48,
+      "width": 586,
+      "height": 29,
+      "fontSize": 24
+    },
+    {
+      "id": "story",
+      "left": 62,
+      "top": 149,
+      "width": 692,
+      "height": 109,
+      "fontSize": 15
+    },
+    {
+      "id": "keyLine",
+      "left": 62,
+      "top": 311,
+      "width": 692,
+      "height": 26,
+      "fontSize": 17
+    },
+    {
+      "id": "q0",
+      "left": 76,
+      "top": 619,
+      "width": 285,
+      "height": 19,
+      "fontSize": 14
+    },
+    {
+      "id": "q1",
+      "left": 78,
+      "top": 674,
+      "width": 337,
+      "height": 19,
+      "fontSize": 14
+    },
+    {
+      "id": "action0",
+      "left": 509,
+      "top": 618,
+      "width": 239,
+      "height": 21,
+      "fontSize": 15
+    },
+    {
+      "id": "action1",
+      "left": 509,
+      "top": 643,
+      "width": 126,
+      "height": 21,
+      "fontSize": 15
+    },
+    {
+      "id": "action2",
+      "left": 509,
+      "top": 669,
+      "width": 175,
+      "height": 21,
+      "fontSize": 15
+    },
+    {
+      "id": "prayer",
+      "left": 48,
+      "top": 740,
+      "width": 720,
+      "height": 24,
+      "fontSize": 16
+    }
+  ]
+}

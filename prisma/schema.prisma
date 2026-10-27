@@ -333,6 +333,41 @@ model FamilyAccount {
   passageMemos       BiblePassageMemo[]       @relation("OwnerPassageMemos")
   gallerySubmissions CraftGallerySubmission[]
   billingCustomer    BillingCustomer?
+  customSheets       CustomSheet[]
+  sheetPhotos        SheetPhoto[]
+}
+
+/// Plus member edited Sunday sheet (diff over a locked base PNG). See docs/SHEET_BASES.md.
+model CustomSheet {
+  id              String        @id @default(cuid())
+  familyAccountId String
+  name            String
+  baseKey         String
+  level           Int
+  baseRev         String
+  /// Diff JSON: { v, base, edits, hidden, objects } — max ~200KB enforced in API.
+  data            Json
+  thumbUrl        String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  familyAccount   FamilyAccount @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+
+  @@index([familyAccountId, updatedAt])
+  @@index([familyAccountId, baseKey, level])
+}
+
+/// Plus member photo for custom Sunday sheets (EXIF-stripped WebP on Blob).
+model SheetPhoto {
+  id              String        @id @default(cuid())
+  familyAccountId String
+  url             String
+  sizeBytes       Int
+  width           Int?
+  height          Int?
+  createdAt       DateTime      @default(now())
+  familyAccount   FamilyAccount @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+
+  @@index([familyAccountId, createdAt])
 }
 
 /// Student profile under a teacher account (Access ID login); max per account in access-code config.
