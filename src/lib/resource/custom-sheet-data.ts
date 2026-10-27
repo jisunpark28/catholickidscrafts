@@ -44,6 +44,8 @@ const userObjectSchema = z.object({
   ry: z.number().min(0).max(200).optional(),
   /** True when added via “Section box” (layer label). */
   section: z.boolean().optional(),
+  /** Promoted from base HTML `.gs-box` (`bs_0` …). */
+  baseSectionId: z.string().max(40).optional(),
   stickerId: z.string().max(40).optional(),
   src: allowedImageSrc.optional(),
   opacity: z.number().min(0).max(1).optional(),
@@ -59,6 +61,8 @@ export const customSheetDataSchema = z.object({
   }),
   edits: z.record(z.string(), editFieldSchema).default({}),
   hidden: z.array(z.string().max(40)).default([]),
+  /** Base section ids the user deleted (do not re-promote from HTML). */
+  hiddenBaseSections: z.array(z.string().max(40)).default([]),
   objects: z.array(userObjectSchema).max(100).default([]),
 });
 

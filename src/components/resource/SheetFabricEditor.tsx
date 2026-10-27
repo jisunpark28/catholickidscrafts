@@ -1,5 +1,6 @@
 "use client";
 
+import { measureSheetSectionBoxes } from "@/components/resource/captureSheetBase";
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import {
@@ -60,6 +61,8 @@ type ObjMeta = {
   id?: string;
   /** Fabric section frame matching printable `.gs-box` chrome. */
   section?: boolean;
+  /** When set, this Rect replaced a locked HTML `.gs-box` (`bs_0` …). */
+  baseSectionId?: string;
 };
 
 /** Content width inside letter margins (~0.5in pad each side on 8.5in). */
@@ -101,6 +104,8 @@ export function SheetFabricEditor({
   const applyingRef = useRef(false);
   const refreshLayersRef = useRef<() => void>(() => undefined);
   const pushUndoRef = useRef<() => void>(() => undefined);
+  const hiddenBaseSectionsRef = useRef<string[]>([]);
+  const promoteBaseSectionsRef = useRef<() => void>(() => undefined);
 
   const [ready, setReady] = useState(false);
   const [fontFamily, setFontFamily] = useState<EditorFontId>("Fredoka");
@@ -134,17 +139,19 @@ export function SheetFabricEditor({
           const label =
             m.kind === "base-edit"
               ? `T ${m.fieldId}`
-              : m.section || (o instanceof Rect && (o.rx ?? 0) >= 8)
-                ? "Section box"
-                : m.stickerId
-                  ? `Sticker ${m.stickerId}`
-                  : m.photoId || o.type === "image"
-                    ? "Photo"
-                    : o.type === "textbox"
-                      ? `T ${(o as Textbox).text?.slice(0, 24) || "Text"}`
-                      : o.type === "rect"
-                        ? "Rect"
-                        : (o.type ?? `obj${i}`);
+              : m.baseSectionId
+                ? `Base box ${m.baseSectionId.replace(/^bs_/, "")}`
+                : m.section || (o instanceof Rect && (o.rx ?? 0) >= 8)
+                  ? "Section box"
+                  : m.stickerId
+                    ? `Sticker ${m.stickerId}`
+                    : m.photoId || o.type === "image"
+                      ? "Photo"
+                      : o.type === "textbox"
+                        ? `T ${(o as Textbox).text?.slice(0, 24) || "Text"}`
+                        : o.type === "rect"
+                          ? "Rect"
+                          : (o.type ?? `obj${i}`);
           return {
             key: m.id ?? m.fieldId ?? `i${i}`,
             label,
@@ -242,7 +249,8 @@ export function SheetFabricEditor({
             strokeWidth: Number(obj.strokeWidth ?? 2),
             rx: Number(obj.rx ?? 0) || undefined,
             ry: Number(obj.ry ?? 0) || undefined,
-            section: m.section || undefined,
+            section: m.section || Boolean(m.baseSectionId) || undefined,
+            baseSectionId: m.baseSectionId,
             opacity: obj.opacity ?? 1,
           });
         } else if (obj instanceof Circle) {
@@ -315,6 +323,7 @@ export function SheetFabricEditor({
       base: { key: sheet.key, level, paper: "letter", rev: baseRev },
       edits,
       hidden: [],
+      hiddenBaseSections: [...hiddenBaseSectionsRef.current],
       objects,
     };
   };
@@ -384,7 +393,16 @@ export function SheetFabricEditor({
         canvas.requestRenderAll();
         pushUndoRef.current();
         refreshLayersRef.current();
-        if (!cancelled) setReady(true);
+        if (!cancelled) {
+          setReady(true);
+          if (liveHtmlBase && isPlus) {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                if (!cancelled) promoteBaseSectionsRef.current();
+              });
+            });
+          }
+        }
       } catch (e) {
         console.error("[SheetFabricEditor]", e);
         if (!cancelled) setStatus("Could not start editor");
@@ -399,6 +417,7 @@ export function SheetFabricEditor({
         /* ignore */
       }
       fabricRef.current = null;
+      hiddenBaseSectionsRef.current = [];
     };
     // layout.boxes identity changes often; key off rev + count
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -414,11 +433,65 @@ export function SheetFabricEditor({
       .catch(() => undefined);
   }, [isPlus]);
 
+  /**
+   * Hide HTML `.gs-box` borders and ensure each visible base section has a Fabric Rect
+   * (unless the user deleted it — tracked in hiddenBaseSections).
+   */
+  const promoteBaseSections = () => {
+    if (!liveHtmlBase || !isPlus) return;
+    const c = fabricRef.current;
+    const host = liveHostRef.current;
+    const page = host?.querySelector("[data-sheet-page]") as HTMLElement | null;
+    const root = host?.querySelector(".gs") as HTMLElement | null;
+    if (!c || !page || !root) return;
+
+    root.classList.add("gs-edit-sections");
+    const measured = measureSheetSectionBoxes(page);
+    const existing = new Set(
+      c
+        .getObjects()
+        .map((o) => metaOf(o).baseSectionId)
+        .filter((id): id is string => Boolean(id)),
+    );
+    const hidden = new Set(hiddenBaseSectionsRef.current);
+    let added = 0;
+    for (const s of measured) {
+      if (hidden.has(s.id) || existing.has(s.id)) continue;
+      const obj = new Rect({
+        left: s.left,
+        top: s.top,
+        width: s.width,
+        height: s.height,
+        fill: "transparent",
+        stroke: "#111111",
+        strokeWidth: 2,
+        rx: SECTION_RX,
+        ry: SECTION_RX,
+        objectCaching: false,
+      });
+      setMeta(obj, {
+        kind: "user",
+        id: `base_sec_${s.id}`,
+        section: true,
+        baseSectionId: s.id,
+      });
+      c.add(obj);
+      c.sendObjectToBack(obj);
+      added += 1;
+    }
+    if (added) {
+      c.requestRenderAll();
+      refreshLayers();
+    }
+  };
+  promoteBaseSectionsRef.current = promoteBaseSections;
+
   /** Apply a saved CustomSheet diff onto the live canvas (base textboxes + user objects). */
   const applyCustomData = async (data: CustomSheetData) => {
     const c = fabricRef.current;
     if (!c) return;
     applyingRef.current = true;
+    hiddenBaseSectionsRef.current = [...(data.hiddenBaseSections ?? [])];
     try {
       for (const obj of c.getObjects()) {
         const m = metaOf(obj);
@@ -476,8 +549,14 @@ export function SheetFabricEditor({
             ry: o.ry ?? o.rx ?? 0,
             opacity: o.opacity ?? 1,
           });
-          setMeta(r, { kind: "user", id: o.id, section: o.section });
+          setMeta(r, {
+            kind: "user",
+            id: o.id,
+            section: o.section || Boolean(o.baseSectionId),
+            baseSectionId: o.baseSectionId,
+          });
           c.add(r);
+          if (o.baseSectionId || o.section) c.sendObjectToBack(r);
         } else if (o.type === "circle") {
           const cir = new Circle({
             left: o.left,
@@ -542,6 +621,11 @@ export function SheetFabricEditor({
       }
       c.requestRenderAll();
       refreshLayersRef.current();
+      if (liveHtmlBase) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => promoteBaseSectionsRef.current());
+        });
+      }
     } finally {
       applyingRef.current = false;
     }
@@ -792,13 +876,18 @@ export function SheetFabricEditor({
     const c = fabricRef.current;
     const obj = c?.getActiveObject();
     if (!c || !obj || !isPlus) return;
-    if (metaOf(obj).kind === "base-edit") {
+    const m = metaOf(obj);
+    if (m.kind === "base-edit") {
       setStatus("Base text can’t be deleted — clear or edit it instead");
       return;
     }
     pushUndo();
+    if (m.baseSectionId && !hiddenBaseSectionsRef.current.includes(m.baseSectionId)) {
+      hiddenBaseSectionsRef.current = [...hiddenBaseSectionsRef.current, m.baseSectionId];
+    }
     c.remove(obj);
     c.requestRenderAll();
+    refreshLayers();
   };
 
   const undo = async () => {
@@ -913,8 +1002,8 @@ export function SheetFabricEditor({
           </button>
         </div>
         <p className="mt-2 text-[11px] leading-snug text-[#6b7280]">
-          Base sheet boxes stay locked. Add a Section box (or Cover) to draw frames you can resize or
-          Delete.
+          Base section frames become editable Fabric boxes (resize / Delete). Add Section box for
+          extras, or Cover to blank an area. Save keeps your changes.
         </p>
         <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wide text-[#6b7280]">Faith</p>
         <div className="grid grid-cols-4 gap-1">
@@ -1072,8 +1161,9 @@ export function SheetFabricEditor({
               style={{ background: liveHtmlBase ? "transparent" : undefined }}
             />
             <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 -translate-x-1/2 rounded bg-black/70 px-3 py-1 text-[11px] text-white">
-              🔒 Base sheet locked · {sheet.key}
-              {liveHtmlBase ? " · live" : ""}
+              {liveHtmlBase
+                ? `Section boxes editable · ${sheet.key}`
+                : `🔒 Base image locked · ${sheet.key}`}
             </div>
           </div>
         </div>
