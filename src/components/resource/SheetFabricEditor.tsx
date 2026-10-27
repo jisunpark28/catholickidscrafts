@@ -15,7 +15,6 @@ import {
 } from "@/lib/resource/custom-sheet-data";
 import { downloadSheetPdf, downloadSheetPng } from "@/lib/resource/export-sheet-pdf";
 import { loadEditorFonts } from "@/lib/resource/load-editor-fonts";
-import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import {
   defaultTextForField,
   type SheetLayout,
@@ -34,14 +33,6 @@ import {
 } from "fabric";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
-type SavedSheet = {
-  id: string;
-  name: string;
-  baseKey: string;
-  level: 1 | 2;
-  updatedAt: string;
-};
 
 type Props = {
   sheet: SundaySheetContent;
@@ -129,24 +120,10 @@ export function SheetFabricEditor({
   const [italic, setItalic] = useState(false);
   const [underline, setUnderline] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState<string>("");
-  const [layers, setLayers] = useState<
-    { key: string; label: string; locked: boolean; canvasIndex: number }[]
-  >([]);
-  const [layerDragFrom, setLayerDragFrom] = useState<number | null>(null);
-  const [layerDragOver, setLayerDragOver] = useState<number | null>(null);
-  const layerDragFromRef = useRef<number | null>(null);
-  const layerDragOverRef = useRef<number | null>(null);
-  const layerPointerRef = useRef<{
-    from: number;
-    pointerId: number;
-    startY: number;
-    dragging: boolean;
-  } | null>(null);
   const [name, setName] = useState(
     `${(level === 2 ? sheet.levels.level2 : sheet.levels.level1).title} — my sheet`,
   );
   const [customId, setCustomId] = useState<string | null>(initialCustomId);
-  const [savedList, setSavedList] = useState<SavedSheet[]>([]);
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -160,47 +137,10 @@ export function SheetFabricEditor({
     setCanRedo(redoRef.current.length >= 1);
   };
 
+  /** Sync toolbar fields from the active Fabric selection. */
   const refreshLayers = () => {
     const c = fabricRef.current;
     if (!c) return;
-    const objs = c.getObjects();
-    // UI top = frontmost (reverse of Fabric stack: back → front).
-    setLayers(
-      [...objs]
-        .map((o, canvasIndex) => ({ o, canvasIndex }))
-        .reverse()
-        .map(({ o, canvasIndex }, i) => {
-          const m = metaOf(o);
-          const label =
-            m.kind === "base-edit"
-              ? `T ${m.fieldId}`
-              : m.chromeKind === "writeline"
-                ? `Line ${m.baseChromeId?.replace(/^wl_/, "") ?? ""}`
-                : m.chromeKind === "checkbox"
-                  ? `Checkbox ${m.baseChromeId?.replace(/^chk_/, "") ?? ""}`
-                  : m.baseSectionId
-                    ? `Base box ${m.baseSectionId.replace(/^bs_/, "")}`
-                    : m.section || (o instanceof Rect && (o.rx ?? 0) >= 8)
-                      ? "Section box"
-                      : m.stickerId
-                        ? `Sticker ${m.stickerId}`
-                        : m.photoId || o.type === "image"
-                          ? "Photo"
-                          : o.type === "textbox"
-                            ? `T ${(o as Textbox).text?.slice(0, 24) || "Text"}`
-                            : o.type === "rect"
-                              ? "Rect"
-                              : o.type === "line"
-                                ? "Line"
-                                : (o.type ?? `obj${i}`);
-          return {
-            key: `${canvasIndex}:${m.id ?? m.fieldId ?? m.baseChromeId ?? o.type ?? "obj"}`,
-            label,
-            locked: false,
-            canvasIndex,
-          };
-        }),
-    );
     const active = c.getActiveObject();
     if (active) {
       const m = metaOf(active);
@@ -216,34 +156,6 @@ export function SheetFabricEditor({
     } else setSelectedLabel("");
   };
   refreshLayersRef.current = refreshLayers;
-
-  /** Reorder canvas z-stack from Layers list indices (0 = front / top of list). */
-  const reorderLayer = (fromUi: number, toUi: number) => {
-    const c = fabricRef.current;
-    if (!c || !isPlus || fromUi === toUi || fromUi < 0 || toUi < 0) return;
-    const objs = c.getObjects();
-    if (fromUi >= objs.length || toUi >= objs.length) return;
-
-    const uiOrder = [...objs].reverse();
-    const [moved] = uiOrder.splice(fromUi, 1);
-    if (!moved) return;
-    uiOrder.splice(toUi, 0, moved);
-    // uiOrder is front→back; Fabric stack is back→front.
-    const newStack = [...uiOrder].reverse();
-
-    pushUndo();
-    applyingRef.current = true;
-    try {
-      // bringObjectToFront in back→front order rebuilds the stack reliably.
-      for (const obj of newStack) {
-        c.bringObjectToFront(obj);
-      }
-    } finally {
-      applyingRef.current = false;
-    }
-    c.requestRenderAll();
-    refreshLayers();
-  };
 
   const pushUndo = () => {
     const c = fabricRef.current;
@@ -529,16 +441,6 @@ export function SheetFabricEditor({
     // layout.boxes identity changes often; key off rev + count
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basePngUrl, baseRev, isPlus, level, sheet.key, liveHtmlBase, layout.boxes.length]);
-
-  useEffect(() => {
-    if (!isPlus) return;
-    void fetch("/api/resource/custom-sheets")
-      .then((r) => r.json())
-      .then((j) => {
-        if (Array.isArray(j.sheets)) setSavedList(j.sheets);
-      })
-      .catch(() => undefined);
-  }, [isPlus]);
 
   /**
    * Measure every visible text node on the live GospelSheet underlay and install
@@ -1282,10 +1184,6 @@ export function SheetFabricEditor({
       }
       setCustomId(json.sheet.id);
       setStatus("Saved");
-      setSavedList((prev) => {
-        const next = prev.filter((s) => s.id !== json.sheet.id);
-        return [json.sheet, ...next];
-      });
     } catch {
       setStatus("Save failed");
     } finally {
@@ -1294,7 +1192,7 @@ export function SheetFabricEditor({
   };
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[14rem_minmax(0,1fr)_14rem]">
+    <div className="grid gap-4 lg:grid-cols-[14rem_minmax(0,1fr)]">
       {/* Left: elements */}
       <aside className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3">
         <h2 className="m-0 text-sm font-bold text-[#1c1c1c]">Elements</h2>
@@ -1545,143 +1443,6 @@ export function SheetFabricEditor({
         {status ? <p className="mt-2 text-sm text-[#6b7280]">{status}</p> : null}
         {selectedLabel ? <p className="mt-1 text-xs text-[#9ca3af]">Selected: {selectedLabel}</p> : null}
       </div>
-
-      {/* Right: layers + saved */}
-      <aside className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3">
-        <h2 className="m-0 text-sm font-bold text-[#1c1c1c]">Layers</h2>
-        <p className="mb-0 mt-1 text-[11px] text-[#9ca3af]">Drag ⠿ to reorder (top = front)</p>
-        <ul className="mt-2 max-h-64 list-none space-y-1 overflow-y-auto p-0 text-sm">
-          {layers.map((l, i) => (
-            <li
-              key={l.key}
-              data-layer-index={i}
-              className={`flex items-center gap-1.5 rounded-lg border bg-white px-2 py-1.5 select-none ${
-                layerDragFrom === i
-                  ? "border-[#d35400] opacity-50"
-                  : layerDragOver === i
-                    ? "border-[#d35400] bg-[#fff6ef]"
-                    : "border-[#ece7e1]"
-              }`}
-              title={isPlus ? "Drag ⠿ to reorder · click label to select" : l.label}
-            >
-              <span
-                className={`touch-none text-[#c4bbb0] ${isPlus ? "cursor-grab active:cursor-grabbing" : ""}`}
-                aria-label="Drag to reorder"
-                onPointerDown={(e) => {
-                  if (!isPlus || e.button !== 0) return;
-                  e.preventDefault();
-                  e.stopPropagation();
-                  const handle = e.currentTarget as HTMLElement;
-                  handle.setPointerCapture(e.pointerId);
-                  layerPointerRef.current = {
-                    from: i,
-                    pointerId: e.pointerId,
-                    startY: e.clientY,
-                    dragging: false,
-                  };
-                  layerDragFromRef.current = i;
-                  layerDragOverRef.current = i;
-                  setLayerDragFrom(i);
-                  setLayerDragOver(i);
-                }}
-                onPointerMove={(e) => {
-                  const st = layerPointerRef.current;
-                  if (!st || st.pointerId !== e.pointerId) return;
-                  if (!st.dragging && Math.abs(e.clientY - st.startY) >= 3) {
-                    st.dragging = true;
-                  }
-                  if (!st.dragging) return;
-                  const list = (e.currentTarget as HTMLElement).closest("ul");
-                  if (!list) return;
-                  const items = [...list.querySelectorAll<HTMLElement>("[data-layer-index]")];
-                  let over = st.from;
-                  for (const el of items) {
-                    const r = el.getBoundingClientRect();
-                    if (e.clientY >= r.top && e.clientY <= r.bottom) {
-                      over = Number(el.dataset.layerIndex);
-                      break;
-                    }
-                  }
-                  if (layerDragOverRef.current !== over) {
-                    layerDragOverRef.current = over;
-                    setLayerDragOver(over);
-                  }
-                }}
-                onPointerUp={(e) => {
-                  const st = layerPointerRef.current;
-                  if (!st || st.pointerId !== e.pointerId) return;
-                  try {
-                    (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-                  } catch {
-                    /* ignore */
-                  }
-                  const from = st.from;
-                  const over = layerDragOverRef.current;
-                  const wasDragging = st.dragging;
-                  layerPointerRef.current = null;
-                  layerDragFromRef.current = null;
-                  layerDragOverRef.current = null;
-                  setLayerDragFrom(null);
-                  setLayerDragOver(null);
-                  if (wasDragging && over !== null && over !== from) {
-                    reorderLayer(from, over);
-                  }
-                }}
-                onPointerCancel={() => {
-                  layerPointerRef.current = null;
-                  layerDragFromRef.current = null;
-                  layerDragOverRef.current = null;
-                  setLayerDragFrom(null);
-                  setLayerDragOver(null);
-                }}
-              >
-                ⠿
-              </span>
-              <button
-                type="button"
-                className="min-w-0 flex-1 truncate border-0 bg-transparent p-0 text-left text-inherit"
-                onClick={() => {
-                  if (!isPlus) return;
-                  const c = fabricRef.current;
-                  const obj = c?.getObjects()[l.canvasIndex];
-                  if (!c || !obj) return;
-                  c.setActiveObject(obj);
-                  c.requestRenderAll();
-                  refreshLayers();
-                }}
-              >
-                {l.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <h2 className="mb-0 mt-4 text-sm font-bold text-[#1c1c1c]">
-          My custom sheets <span className="rounded bg-[#d35400] px-1.5 py-0.5 text-[10px] text-white">PLUS</span>
-        </h2>
-        <ul className="mt-2 list-none space-y-1 p-0 text-sm">
-          {savedList.length === 0 ? (
-            <li className="text-xs text-[#6b7280]">No saved sheets yet</li>
-          ) : (
-            savedList.slice(0, 8).map((s) => (
-              <li key={s.id}>
-                <Link
-                  href={resourceEditPath(s.baseKey, s.level, s.id)}
-                  className={`block w-full rounded-lg border px-2 py-1.5 text-left no-underline ${
-                    s.id === customId ? "border-[#d35400] bg-[#fff6ef]" : "border-[#ece7e1] bg-white"
-                  }`}
-                >
-                  {s.name}
-                </Link>
-              </li>
-            ))
-          )}
-        </ul>
-        <p className="mb-0 mt-2 text-xs text-[#6b7280]">
-          <Link href="/resource?view=custom" className="text-[#d35400] no-underline hover:underline">
-            See all custom sheets →
-          </Link>
-        </p>
-      </aside>
     </div>
   );
 }
