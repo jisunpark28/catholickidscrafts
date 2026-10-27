@@ -862,7 +862,11 @@ export function SheetFabricEditor({
         </div>
         {!isPlus ? (
           <p className="mt-3 text-xs text-[#6b7280]">
-            Preview only. <a href="/subscribe" className="text-[#d35400]">Plus</a> unlocks editing & save.
+            Preview only.{" "}
+            <Link href="/subscribe" className="text-[#d35400]">
+              Plus
+            </Link>{" "}
+            unlocks editing & save.
           </p>
         ) : null}
       </aside>
@@ -1010,14 +1014,14 @@ export function SheetFabricEditor({
           ) : (
             savedList.slice(0, 8).map((s) => (
               <li key={s.id}>
-                <a
+                <Link
                   href={resourceEditPath(s.baseKey, s.level, s.id)}
                   className={`block w-full rounded-lg border px-2 py-1.5 text-left no-underline ${
                     s.id === customId ? "border-[#d35400] bg-[#fff6ef]" : "border-[#ece7e1] bg-white"
                   }`}
                 >
                   {s.name}
-                </a>
+                </Link>
               </li>
             ))
           )}
