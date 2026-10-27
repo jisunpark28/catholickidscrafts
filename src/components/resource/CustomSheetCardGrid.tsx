@@ -1,5 +1,8 @@
+import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
+import { SheetThumb } from "@/components/resource/SheetThumb";
 import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import { keyToSlug } from "@/lib/resource/sheets";
+import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 
 export type CustomSheetCard = {
@@ -23,7 +26,7 @@ function formatUpdated(iso: string) {
   }
 }
 
-/** Plus member saved custom sheets — Open resumes Fabric edit with ?id=. */
+/** Plus saved sheets — same paper thumb style as the All library grid. */
 export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
   if (sheets.length === 0) {
     return (
@@ -35,35 +38,47 @@ export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
   }
 
   return (
-    <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-      {sheets.map((s) => {
-        const editHref = resourceEditPath(s.baseKey, s.level, s.id);
-        return (
-          <li
-            key={s.id}
-            className="flex flex-col overflow-hidden rounded-2xl border border-[#e7e3de] bg-white shadow-[0_1px_3px_rgba(28,28,28,0.04)]"
-          >
-            <Link href={editHref} className="block aspect-[8.5/11] bg-[#f5ebe0] no-underline" tabIndex={-1}>
-              {s.thumbUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={s.thumbUrl} alt="" className="h-full w-full object-cover object-top" />
-              ) : (
-                <div className="flex h-full items-center justify-center p-4 text-center text-sm text-[#9ca3af]">
-                  {s.name}
-                </div>
-              )}
-            </Link>
-            <div className="flex flex-1 flex-col gap-1 p-3">
-              <div className="text-xs font-bold tracking-wide text-[#d35400]">
+    <>
+      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
+      <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {sheets.map((s) => {
+          const editHref = resourceEditPath(s.baseKey, s.level, s.id);
+          const base = getSundaySheet(s.baseKey);
+          const view = base
+            ? { ...toGospelSheetView(base), sundayLabel: s.baseKey }
+            : null;
+          return (
+            <li
+              key={s.id}
+              className="flex flex-col rounded-2xl border border-[#e7e3de] bg-white p-3 shadow-[0_1px_3px_rgba(28,28,28,0.04)]"
+            >
+              <Link href={editHref} className="relative block no-underline" tabIndex={-1}>
+                {view ? (
+                  <SheetThumb sheet={view} level={s.level} />
+                ) : s.thumbUrl?.startsWith("data:image/") ? (
+                  <div className="overflow-hidden rounded-xl border border-[#ece7e1] bg-white shadow-[0_1px_2px_rgba(28,28,28,0.04)]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={s.thumbUrl} alt="" className="block w-full object-cover object-top" />
+                  </div>
+                ) : (
+                  <div className="flex aspect-[8.5/11] items-center justify-center rounded-xl border border-[#ece7e1] bg-white text-sm text-[#9ca3af]">
+                    {s.name}
+                  </div>
+                )}
+                <span className="absolute left-2 top-2 rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white shadow">
+                  CUSTOM
+                </span>
+              </Link>
+              <div className="mt-3 px-1 text-xs font-bold tracking-wide text-[#d35400]">
                 {s.baseKey} · L{s.level}
               </div>
-              <h3 className="m-0 text-base font-bold leading-snug text-[#1c1c1c]">
+              <h3 className="mb-0.5 mt-0.5 px-1 text-base font-bold leading-snug text-[#1c1c1c]">
                 <Link href={editHref} className="text-inherit no-underline hover:underline">
                   {s.name}
                 </Link>
               </h3>
-              <p className="mb-0 mt-auto text-xs text-[#6b7280]">Updated {formatUpdated(s.updatedAt)}</p>
-              <div className="mt-2 flex gap-2">
+              <p className="mb-0 mt-auto px-1 text-xs text-[#6b7280]">Updated {formatUpdated(s.updatedAt)}</p>
+              <div className="mt-2 flex gap-2 px-1 pb-1 pt-1">
                 <Link
                   href={editHref}
                   className="rounded-full bg-[#d35400] px-4 py-1.5 text-sm font-semibold text-white no-underline hover:bg-[#b8470a]"
@@ -77,10 +92,10 @@ export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
                   Base sheet
                 </Link>
               </div>
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }

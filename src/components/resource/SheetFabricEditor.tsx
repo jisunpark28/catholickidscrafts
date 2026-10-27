@@ -765,7 +765,16 @@ export function SheetFabricEditor({
     setStatus("Saving…");
     try {
       const data = buildDiff();
-      const thumbUrl = fabricRef.current?.toDataURL({ format: "png", multiplier: 0.25 }) ?? null;
+      // Live HTML base uses a transparent canvas — force white so thumbs aren't empty/beige text-only.
+      const c = fabricRef.current;
+      const prevBg = c?.backgroundColor;
+      if (c && (liveHtmlBase || !basePngUrl)) c.backgroundColor = "#ffffff";
+      c?.requestRenderAll();
+      const thumbUrl = c?.toDataURL({ format: "png", multiplier: 0.25 }) ?? null;
+      if (c && prevBg !== undefined) {
+        c.backgroundColor = prevBg;
+        c.requestRenderAll();
+      }
       const payload = { name: name.trim() || "My sheet", data, thumbUrl };
       const res = await fetch(
         customId ? `/api/resource/custom-sheets/${customId}` : "/api/resource/custom-sheets",
