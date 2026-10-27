@@ -24,7 +24,8 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       userAgent: "*",
       allow: "/",
       // /print/ stays crawlable so Google can read its noindex tag.
-      disallow: ["/admin/", "/api/"],
+      // Account, reader, and sheet editor are app surfaces (also noindex where set).
+      disallow: ["/admin/", "/api/", "/account/", "/reader/", "/resource/edit/"],
     },
     sitemap: `${base}/sitemap.xml`,
   };
