@@ -58,7 +58,14 @@ type ObjMeta = {
   stickerId?: string;
   photoId?: string;
   id?: string;
+  /** Fabric section frame matching printable `.gs-box` chrome. */
+  section?: boolean;
 };
+
+/** Content width inside letter margins (~0.5in pad each side on 8.5in). */
+const SECTION_BOX_W = 700;
+const SECTION_BOX_H = 110;
+const SECTION_RX = 12;
 
 function metaOf(obj: FabricObject): ObjMeta {
   return ((obj as FabricObject & { data?: ObjMeta }).data ?? { kind: "user" }) as ObjMeta;
@@ -127,13 +134,17 @@ export function SheetFabricEditor({
           const label =
             m.kind === "base-edit"
               ? `T ${m.fieldId}`
-              : m.stickerId
-                ? `Sticker ${m.stickerId}`
-                : m.photoId || o.type === "image"
-                  ? "Photo"
-                  : o.type === "textbox"
-                    ? `T ${(o as Textbox).text?.slice(0, 24) || "Text"}`
-                    : o.type ?? `obj${i}`;
+              : m.section || (o instanceof Rect && (o.rx ?? 0) >= 8)
+                ? "Section box"
+                : m.stickerId
+                  ? `Sticker ${m.stickerId}`
+                  : m.photoId || o.type === "image"
+                    ? "Photo"
+                    : o.type === "textbox"
+                      ? `T ${(o as Textbox).text?.slice(0, 24) || "Text"}`
+                      : o.type === "rect"
+                        ? "Rect"
+                        : (o.type ?? `obj${i}`);
           return {
             key: m.id ?? m.fieldId ?? `i${i}`,
             label,
@@ -228,6 +239,10 @@ export function SheetFabricEditor({
             angle: obj.angle ?? 0,
             fill: String(obj.fill ?? "transparent"),
             stroke: String(obj.stroke ?? "#111"),
+            strokeWidth: Number(obj.strokeWidth ?? 2),
+            rx: Number(obj.rx ?? 0) || undefined,
+            ry: Number(obj.ry ?? 0) || undefined,
+            section: m.section || undefined,
             opacity: obj.opacity ?? 1,
           });
         } else if (obj instanceof Circle) {
@@ -456,10 +471,12 @@ export function SheetFabricEditor({
             angle: o.angle ?? 0,
             fill: o.fill ?? "transparent",
             stroke: o.stroke ?? "#111",
-            strokeWidth: o.strokeWidth ?? 3,
+            strokeWidth: o.strokeWidth ?? 2,
+            rx: o.rx ?? 0,
+            ry: o.ry ?? o.rx ?? 0,
             opacity: o.opacity ?? 1,
           });
-          setMeta(r, { kind: "user", id: o.id });
+          setMeta(r, { kind: "user", id: o.id, section: o.section });
           c.add(r);
         } else if (o.type === "circle") {
           const cir = new Circle({
@@ -616,21 +633,59 @@ export function SheetFabricEditor({
     c.requestRenderAll();
   };
 
+  /** Sheet-style rounded section frame (resize / delete like other objects). */
+  const addSectionBox = (opts?: { cover?: boolean }) => {
+    const c = fabricRef.current;
+    if (!c || !isPlus) return;
+    pushUndo();
+    const cover = Boolean(opts?.cover);
+    const obj = new Rect({
+      left: (SHEET_PAGE.width - SECTION_BOX_W) / 2,
+      top: 160 + (c.getObjects().filter((o) => metaOf(o).section).length % 5) * 24,
+      width: SECTION_BOX_W,
+      height: SECTION_BOX_H,
+      fill: cover ? "#ffffff" : "transparent",
+      stroke: "#111111",
+      strokeWidth: 2,
+      rx: SECTION_RX,
+      ry: SECTION_RX,
+      objectCaching: false,
+    });
+    setMeta(obj, { kind: "user", id: uid(), section: true });
+    c.add(obj);
+    // Keep frames under text / stickers.
+    c.sendObjectToBack(obj);
+    c.setActiveObject(obj);
+    c.requestRenderAll();
+    refreshLayers();
+  };
+
   const addShape = (kind: "rect" | "circle" | "ellipse" | "line") => {
     const c = fabricRef.current;
     if (!c || !isPlus) return;
     pushUndo();
     let obj: FabricObject;
     if (kind === "rect") {
+      // Same chrome as printable .gs-box; drag corners to resize.
       obj = new Rect({
-        left: 240,
-        top: 220,
-        width: 120,
-        height: 80,
+        left: (SHEET_PAGE.width - SECTION_BOX_W) / 2,
+        top: 200,
+        width: SECTION_BOX_W,
+        height: SECTION_BOX_H,
         fill: "transparent",
-        stroke: fill,
-        strokeWidth: 3,
+        stroke: "#111111",
+        strokeWidth: 2,
+        rx: SECTION_RX,
+        ry: SECTION_RX,
+        objectCaching: false,
       });
+      setMeta(obj, { kind: "user", id: uid(), section: true });
+      c.add(obj);
+      c.sendObjectToBack(obj);
+      c.setActiveObject(obj);
+      c.requestRenderAll();
+      refreshLayers();
+      return;
     } else if (kind === "circle") {
       obj = new Circle({
         left: 260,
@@ -825,6 +880,24 @@ export function SheetFabricEditor({
         >
           {uploading ? "Uploading…" : "Add photo"}
         </button>
+        <button
+          type="button"
+          className={`${toolBtn} mt-2 w-full`}
+          disabled={!isPlus || !ready}
+          onClick={() => addSectionBox()}
+          title="Add a rounded section frame you can resize or delete"
+        >
+          □ Section box
+        </button>
+        <button
+          type="button"
+          className={`${toolBtn} mt-1 w-full`}
+          disabled={!isPlus || !ready}
+          onClick={() => addSectionBox({ cover: true })}
+          title="White rounded box to cover a locked base section, then resize or Delete"
+        >
+          □ Cover base box
+        </button>
         <div className="mt-2 grid grid-cols-2 gap-1">
           <button type="button" className={toolBtn} disabled={!isPlus || !ready} onClick={() => addShape("rect")}>
             □ Rect
@@ -839,6 +912,10 @@ export function SheetFabricEditor({
             ― Line
           </button>
         </div>
+        <p className="mt-2 text-[11px] leading-snug text-[#6b7280]">
+          Base sheet boxes stay locked. Add a Section box (or Cover) to draw frames you can resize or
+          Delete.
+        </p>
         <p className="mb-1 mt-3 text-xs font-semibold uppercase tracking-wide text-[#6b7280]">Faith</p>
         <div className="grid grid-cols-4 gap-1">
           {EDITOR_STICKERS.filter((s) => s.group === "faith").map((s) => (
