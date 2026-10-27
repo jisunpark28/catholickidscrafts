@@ -85,6 +85,8 @@ function uid() {
 const toolBtn =
   "rounded-lg border border-[#e7e3de] bg-white px-2.5 py-1.5 text-sm font-medium text-[#1c1c1c] hover:bg-[#fffdfb] disabled:opacity-40";
 const toolBtnOn = "border-[#d35400] bg-[#fff6ef] text-[#d35400]";
+/** Snapshots kept for Undo (includes current → ~10 steps back). */
+const HISTORY_MAX = 11;
 
 export function SheetFabricEditor({
   sheet,
@@ -125,7 +127,14 @@ export function SheetFabricEditor({
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const syncHistoryButtons = () => {
+    setCanUndo(undoRef.current.length >= 2);
+    setCanRedo(redoRef.current.length >= 1);
+  };
 
   const refreshLayers = () => {
     const c = fabricRef.current;
@@ -181,8 +190,9 @@ export function SheetFabricEditor({
     if (!c || applyingRef.current) return;
     const json = JSON.stringify(c.toJSON());
     undoRef.current.push(json);
-    if (undoRef.current.length > 50) undoRef.current.shift();
+    while (undoRef.current.length > HISTORY_MAX) undoRef.current.shift();
     redoRef.current = [];
+    syncHistoryButtons();
   };
   pushUndoRef.current = pushUndo;
 
@@ -895,13 +905,61 @@ export function SheetFabricEditor({
     if (!c || undoRef.current.length < 2) return;
     const current = undoRef.current.pop()!;
     redoRef.current.push(current);
+    while (redoRef.current.length > HISTORY_MAX - 1) redoRef.current.shift();
     const prev = undoRef.current[undoRef.current.length - 1];
     applyingRef.current = true;
     await c.loadFromJSON(JSON.parse(prev));
     applyingRef.current = false;
     c.requestRenderAll();
     refreshLayers();
+    syncHistoryButtons();
   };
+
+  const redo = async () => {
+    const c = fabricRef.current;
+    if (!c || redoRef.current.length < 1) return;
+    const next = redoRef.current.pop()!;
+    undoRef.current.push(next);
+    while (undoRef.current.length > HISTORY_MAX) undoRef.current.shift();
+    applyingRef.current = true;
+    await c.loadFromJSON(JSON.parse(next));
+    applyingRef.current = false;
+    c.requestRenderAll();
+    refreshLayers();
+    syncHistoryButtons();
+  };
+
+  useEffect(() => {
+    if (!isPlus || !ready) return;
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+        return;
+      }
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        void undo();
+        return;
+      }
+      if (mod && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
+        e.preventDefault();
+        void redo();
+        return;
+      }
+      if (!mod && (e.key === "Delete" || e.key === "Backspace")) {
+        const active = fabricRef.current?.getActiveObject();
+        // Typing inside a textbox: let Backspace/Delete edit characters.
+        if (active instanceof Textbox && active.isEditing) return;
+        if (!active) return;
+        e.preventDefault();
+        removeActive();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlus, ready]);
 
   const save = async () => {
     if (!isPlus) return;
@@ -1091,10 +1149,31 @@ export function SheetFabricEditor({
           <button type="button" className={toolBtn} disabled={!isPlus} onClick={applyStyleToActive}>
             Apply
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus} onClick={() => void undo()}>
-            Undo
+          <button
+            type="button"
+            className={toolBtn}
+            disabled={!isPlus || !canUndo}
+            onClick={() => void undo()}
+            title="Undo (Ctrl+Z) · last ~10 steps"
+          >
+            ← Undo
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus} onClick={removeActive}>
+          <button
+            type="button"
+            className={toolBtn}
+            disabled={!isPlus || !canRedo}
+            onClick={() => void redo()}
+            title="Redo (Ctrl+Y) · last ~10 steps"
+          >
+            Redo →
+          </button>
+          <button
+            type="button"
+            className={toolBtn}
+            disabled={!isPlus}
+            onClick={removeActive}
+            title="Delete selected (Delete / Backspace)"
+          >
             Delete
           </button>
           <div className="ml-auto flex flex-wrap items-center gap-2">
