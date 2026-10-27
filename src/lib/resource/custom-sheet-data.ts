@@ -39,6 +39,11 @@ const userObjectSchema = z.object({
   fill: z.string().max(40).optional(),
   stroke: z.string().max(40).optional(),
   strokeWidth: z.number().optional(),
+  /** Rounded corner radii (section boxes match `.gs-box`). */
+  rx: z.number().min(0).max(200).optional(),
+  ry: z.number().min(0).max(200).optional(),
+  /** True when added via “Section box” (layer label). */
+  section: z.boolean().optional(),
   stickerId: z.string().max(40).optional(),
   src: allowedImageSrc.optional(),
   opacity: z.number().min(0).max(1).optional(),
