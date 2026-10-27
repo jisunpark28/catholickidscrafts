@@ -15,6 +15,8 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-dot{display:inline-block;width:12px;height:12px;border-radius:50%;border:1.5px solid #111;vertical-align:middle;margin-right:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .gs h2{font-size:15px;margin:0 0 4px;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
 .gs .gs-box{border:2px solid #111;border-radius:12px;padding:8px 12px}
+/* Editor: HTML section chrome hidden — Fabric Rects replace the borders. */
+.gs.gs-base.gs-edit-sections .gs-box{border-color:transparent!important;background:transparent!important}
 .gs .gs-story p{margin:0;font-size:15px;line-height:1.45}
 .gs.gs-l1 .gs-story p{font-size:18px}
 .gs .gs-trace{font-size:30px;letter-spacing:2px;border-bottom:2px dashed #999;line-height:1.5;color:transparent;-webkit-text-stroke:1.3px #888;font-weight:700}

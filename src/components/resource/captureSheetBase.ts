@@ -18,6 +18,41 @@ function pageRect(page: HTMLElement): DOMRect {
   return page.getBoundingClientRect();
 }
 
+export type MeasuredSectionBox = {
+  /** Stable id for hide/restore: `bs_0`, `bs_1`, … in DOM order. */
+  id: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+};
+
+/**
+ * Measure printable section frames (`.gs-box`) in letter CSS-px relative to `.gs-page`.
+ * Used to promote locked HTML chrome into editable Fabric Rects.
+ */
+export function measureSheetSectionBoxes(page: HTMLElement): MeasuredSectionBox[] {
+  const origin = pageRect(page);
+  const scaleX = SHEET_PAGE.width / origin.width;
+  const scaleY = SHEET_PAGE.height / origin.height;
+  const nodes = [...page.querySelectorAll<HTMLElement>(".gs-box")];
+  const out: MeasuredSectionBox[] = [];
+  nodes.forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    let left = Math.round((r.left - origin.left) * scaleX);
+    let top = Math.round((r.top - origin.top) * scaleY);
+    let width = Math.round(r.width * scaleX);
+    let height = Math.round(Math.max(r.height, 24) * scaleY);
+    if (top >= SHEET_PAGE.height - 8) return;
+    width = Math.max(40, Math.min(width, SHEET_PAGE.width - left));
+    height = Math.max(24, Math.min(height, SHEET_PAGE.height - top));
+    left = Math.max(0, Math.min(left, SHEET_PAGE.width - width));
+    top = Math.max(0, Math.min(top, SHEET_PAGE.height - height));
+    out.push({ id: `bs_${i}`, left, top, width, height });
+  });
+  return out;
+}
+
 /** Measure `[data-sheet-field]` boxes in letter CSS-px relative to `.gs-page`. */
 export function measureSheetLayout(
   page: HTMLElement,
