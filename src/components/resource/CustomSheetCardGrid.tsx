@@ -1,9 +1,13 @@
+"use client";
+
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { SheetThumb } from "@/components/resource/SheetThumb";
 import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import { keyToSlug } from "@/lib/resource/sheets";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export type CustomSheetCard = {
   id: string;
@@ -26,6 +30,47 @@ function formatUpdated(iso: string) {
   }
 }
 
+function DeleteButton({ id, name }: { id: string; name: string }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onDelete = async () => {
+    if (busy) return;
+    const ok = window.confirm(`Delete “${name}”? This cannot be undone.`);
+    if (!ok) return;
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/resource/custom-sheets/${id}`, { method: "DELETE" });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(json.error ?? `Delete failed (${res.status})`);
+        setBusy(false);
+        return;
+      }
+      router.refresh();
+    } catch {
+      setError("Delete failed");
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <button
+        type="button"
+        onClick={() => void onDelete()}
+        disabled={busy}
+        className="rounded-full border border-[#e7e3de] bg-white px-4 py-1.5 text-sm font-medium text-[#9b1c1c] hover:border-[#f5c2c2] hover:bg-[#fff5f5] disabled:opacity-50"
+      >
+        {busy ? "Deleting…" : "Delete"}
+      </button>
+      {error ? <span className="text-xs text-[#9b1c1c]">{error}</span> : null}
+    </div>
+  );
+}
+
 /** Plus saved sheets — same paper thumb style as the All library grid. */
 export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
   if (sheets.length === 0) {
@@ -44,9 +89,7 @@ export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
         {sheets.map((s) => {
           const editHref = resourceEditPath(s.baseKey, s.level, s.id);
           const base = getSundaySheet(s.baseKey);
-          const view = base
-            ? { ...toGospelSheetView(base), sundayLabel: s.baseKey }
-            : null;
+          const view = base ? { ...toGospelSheetView(base), sundayLabel: s.baseKey } : null;
           return (
             <li
               key={s.id}
@@ -78,7 +121,7 @@ export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
                 </Link>
               </h3>
               <p className="mb-0 mt-auto px-1 text-xs text-[#6b7280]">Updated {formatUpdated(s.updatedAt)}</p>
-              <div className="mt-2 flex gap-2 px-1 pb-1 pt-1">
+              <div className="mt-2 flex flex-wrap gap-2 px-1 pb-1 pt-1">
                 <Link
                   href={editHref}
                   className="rounded-full bg-[#d35400] px-4 py-1.5 text-sm font-semibold text-white no-underline hover:bg-[#b8470a]"
@@ -91,6 +134,7 @@ export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
                 >
                   Base sheet
                 </Link>
+                <DeleteButton id={s.id} name={s.name} />
               </div>
             </li>
           );
