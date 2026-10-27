@@ -1,11 +1,10 @@
 "use client";
 
-import { measureSheetLayout } from "@/components/resource/captureSheetBase";
 import { SheetFabricEditorLazy } from "@/components/resource/SheetFabricEditorLazy";
 import { fallbackSheetLayout } from "@/lib/resource/fallback-layout";
 import type { SheetLayout } from "@/lib/resource/sheet-base";
 import type { SundaySheetContent } from "@/lib/sunday-sheet-content";
-import { useEffect, useEffectEvent, useRef, useState } from "react";
+import { Component, type ErrorInfo, type ReactNode, useMemo } from "react";
 
 type Props = {
   sheet: SundaySheetContent;
@@ -17,9 +16,37 @@ type Props = {
   initialCustomId?: string | null;
 };
 
+class EditorErrorBoundary extends Component<
+  { children: ReactNode },
+  { error: string | null }
+> {
+  state: { error: string | null } = { error: null };
+
+  static getDerivedStateFromError(err: Error) {
+    return { error: err?.message || "Editor crashed" };
+  }
+
+  componentDidCatch(err: Error, info: ErrorInfo) {
+    console.error("[SheetFabricLiveBase]", err, info.componentStack);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-6 text-sm text-[#4b5563]">
+          <p className="m-0 font-semibold text-[#1c1c1c]">Could not open the editor</p>
+          <p className="mb-0 mt-2">{this.state.error}</p>
+          <p className="mb-0 mt-3 text-xs text-[#6b7280]">Try refreshing the page. If it keeps happening, use Print on the sheet page instead.</p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 /**
  * Opens Fabric even without `public/sheet-bases` files.
- * Static PNG+JSON when present; otherwise HTML GospelSheet underlay + measured/fallback boxes.
+ * Static PNG+JSON when present; otherwise HTML underlay + fallback box layout.
  */
 export function SheetFabricLiveBase({
   sheet,
@@ -31,46 +58,23 @@ export function SheetFabricLiveBase({
   initialCustomId = null,
 }: Props) {
   const useStatic = Boolean(staticLayout && staticPng);
-  const measuredOnce = useRef(false);
-  const [layout, setLayout] = useState<SheetLayout>(
-    staticLayout ?? fallbackSheetLayout(sheet.key, level, baseRev),
+  const layout = useMemo(
+    () => staticLayout ?? fallbackSheetLayout(sheet.key, level, baseRev),
+    [staticLayout, sheet.key, level, baseRev],
   );
 
-  useEffect(() => {
-    measuredOnce.current = false;
-    if (useStatic && staticLayout) {
-      setLayout(staticLayout);
-      return;
-    }
-    setLayout(fallbackSheetLayout(sheet.key, level, baseRev));
-  }, [useStatic, staticLayout, sheet.key, level, baseRev]);
-
-  const onBasePageReady = useEffectEvent((page: HTMLElement) => {
-    if (useStatic || measuredOnce.current) return;
-    measuredOnce.current = true;
-    try {
-      const measured = measureSheetLayout(page, {
-        key: sheet.key,
-        level,
-        rev: baseRev,
-      });
-      if (measured.boxes.length > 0) setLayout(measured);
-    } catch (e) {
-      console.warn("[SheetFabricLiveBase] measure failed", e);
-    }
-  });
-
   return (
-    <SheetFabricEditorLazy
-      sheet={sheet}
-      level={level}
-      layout={layout}
-      basePngUrl={useStatic ? staticPng : null}
-      baseRev={baseRev}
-      isPlus={isPlus}
-      initialCustomId={initialCustomId}
-      liveHtmlBase={!useStatic}
-      onLiveBasePageReady={useStatic ? undefined : onBasePageReady}
-    />
+    <EditorErrorBoundary>
+      <SheetFabricEditorLazy
+        sheet={sheet}
+        level={level}
+        layout={layout}
+        basePngUrl={useStatic ? staticPng : null}
+        baseRev={baseRev}
+        isPlus={isPlus}
+        initialCustomId={initialCustomId}
+        liveHtmlBase={!useStatic}
+      />
+    </EditorErrorBoundary>
   );
 }

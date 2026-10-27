@@ -76,7 +76,13 @@ export function buildCspValue(options: CspBuildOptions = {}): string {
     ["script-src", scriptSrc],
     [
       "style-src",
-      ["'self'", "'unsafe-inline'", "https://hangeul.pstatic.net"],
+      [
+        "'self'",
+        "'unsafe-inline'",
+        "https://hangeul.pstatic.net",
+        // Resource Fabric editor (loadEditorFonts)
+        "https://fonts.googleapis.com",
+      ],
     ],
     [
       "img-src",
@@ -97,7 +103,12 @@ export function buildCspValue(options: CspBuildOptions = {}): string {
     ],
     [
       "font-src",
-      ["'self'", "data:", "https://hangeul.pstatic.net"],
+      [
+        "'self'",
+        "data:",
+        "https://hangeul.pstatic.net",
+        "https://fonts.gstatic.com",
+      ],
     ],
     [
       "frame-src",
