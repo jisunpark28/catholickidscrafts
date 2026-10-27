@@ -15,6 +15,7 @@ import {
   resourcePath,
   searchSheets,
   seasonLabel,
+  seasonPath,
   sheetSeason,
   yearLabel,
 } from "@/lib/resource/sheets";
@@ -105,6 +106,14 @@ export default async function ResourcePage({ searchParams }: Props) {
         seasons={RESOURCE_SEASONS}
         isPlus={viewer.isPlus}
       />
+      <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-[#6b7280]">
+        <span>Season pages:</span>
+        {RESOURCE_SEASONS.map((s) => (
+          <Link key={s.id} href={seasonPath(s.id)} className="font-semibold text-[#335599] hover:underline">
+            {s.label}
+          </Link>
+        ))}
+      </p>
 
       {view === "custom" ? (
         <section aria-label="Custom sheets" className="mt-5">

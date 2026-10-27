@@ -75,6 +75,11 @@ export function seasonLabel(id: ResourceSeason): string {
   return RESOURCE_SEASONS.find((s) => s.id === id)?.label ?? "";
 }
 
+/** Indexable season hub: `/resources/lent`, `/resources/advent`, … */
+export function seasonPath(id: ResourceSeason): string {
+  return `/resources/${id}`;
+}
+
 export function yearLabel(key: string): string {
   const y = sheetYear(key);
   return y ? `Year ${y}` : "Every year";
@@ -168,8 +173,34 @@ export function searchSheets({ q, year, season }: ResourceQuery): SundaySheetCon
 
 /** Plain-language page description for SEO (no ages). */
 export function sheetDescription(sheet: SundaySheetContent): string {
-  const t = sheet.levels.level1.title;
-  return `Free printable Catholic kids activity sheet "${t}" for the ${sheet.liturgicalName} (${yearLabel(
+  const l1 = sheet.levels.level1.title;
+  const l2 = sheet.levels.level2.title;
+  return `Free printable Gospel worksheet for Catholic kids: ${sheet.liturgicalName} (${yearLabel(
     sheet.key,
-  )}), ${sheet.gospelRef}. Gospel story, key line, activity, questions and prayer in Level 1 and Level 2.`;
+  )}), ${sheet.gospelRef}. Level 1 “${l1}” and Level 2 “${l2}” with Gospel story, key line, activity, questions and prayer.`;
+}
+
+/**
+ * Keyword title for weekly landings, e.g.
+ * "Free Printable Gospel Sheet - Year A 30th Sunday in Ordinary Time"
+ */
+export function sheetSeoTitle(sheet: SundaySheetContent): string {
+  return `Free Printable Gospel Sheet - ${yearLabel(sheet.key)} ${sheet.liturgicalName}`;
+}
+
+/** Visible H1 aligned with the title (liturgical name first for scanability). */
+export function sheetSeoH1(sheet: SundaySheetContent): string {
+  return `Free Printable Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)})`;
+}
+
+/**
+ * Season hub title, e.g. "Lent Gospel Worksheet for Kids Level 1 & Level 2"
+ */
+export function seasonSeoTitle(id: ResourceSeason): string {
+  return `${seasonLabel(id)} Gospel Worksheet for Kids Level 1 & Level 2`;
+}
+
+export function seasonSeoDescription(id: ResourceSeason, sheetCount: number): string {
+  const label = seasonLabel(id);
+  return `Free printable ${label} Gospel worksheets for Catholic kids and catechists. Browse ${sheetCount} Sunday and feast sheets with Level 1 and Level 2 — story, activity, questions and prayer. Print this Sunday free; Plus unlocks the full library.`;
 }

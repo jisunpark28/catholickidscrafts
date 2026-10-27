@@ -2,7 +2,7 @@ import { fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
-import { keyToSlug } from "@/lib/resource/sheets";
+import { keyToSlug, RESOURCE_SEASONS, seasonPath } from "@/lib/resource/sheets";
 import { getSiteUrl } from "@/lib/site-url";
 import { listSundaySheetKeys } from "@/lib/sunday-sheet-content";
 import type { MetadataRoute } from "next";
@@ -13,7 +13,7 @@ type SitemapEntry = MetadataRoute.Sitemap[number];
  * Stable lastmod for code-defined pages. Bump this when page content changes
  * meaningfully, and never use request time, which makes Google ignore lastmod.
  */
-export const SITEMAP_CONTENT_DATE = new Date("2026-10-23T00:00:00.000Z");
+export const SITEMAP_CONTENT_DATE = new Date("2026-10-27T00:00:00.000Z");
 
 /** Child sitemaps listed by the /sitemap.xml index. */
 export const CHILD_SITEMAP_PATHS = ["/sitemaps/pages/sitemap.xml", "/sitemaps/bible/sitemap.xml"] as const;
@@ -75,6 +75,11 @@ function resourceEntries(): SitemapEntry[] {
   return listSundaySheetKeys().map((key) => entry(`/resource/${keyToSlug(key)}`, "yearly", 0.7));
 }
 
+/** Season hubs: /resources/lent, /resources/advent, … */
+function resourceSeasonEntries(): SitemapEntry[] {
+  return RESOURCE_SEASONS.map((s) => entry(seasonPath(s.id), "monthly", 0.8));
+}
+
 function liturgyEntries(): SitemapEntry[] {
   return LITURGY_TOPICS.map((topic) => entry(`/liturgy/${topic}`, "weekly", 0.75));
 }
@@ -124,6 +129,7 @@ export async function buildPagesSitemap(): Promise<MetadataRoute.Sitemap> {
     ...playEntries(),
     ...liturgyEntries(),
     ...resourceEntries(),
+    ...resourceSeasonEntries(),
     ...bookHubs,
     ...recommendations,
   ];
