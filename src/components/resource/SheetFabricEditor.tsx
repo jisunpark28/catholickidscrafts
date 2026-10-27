@@ -848,13 +848,23 @@ export function SheetFabricEditor({
         return;
       }
       const mod = e.metaKey || e.ctrlKey;
-      if (!mod) return;
-      if (e.key === "z" && !e.shiftKey) {
+      if (mod && e.key === "z" && !e.shiftKey) {
         e.preventDefault();
         void undo();
-      } else if (e.key === "y" || (e.key === "z" && e.shiftKey)) {
+        return;
+      }
+      if (mod && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
         e.preventDefault();
         void redo();
+        return;
+      }
+      if (!mod && (e.key === "Delete" || e.key === "Backspace")) {
+        const active = fabricRef.current?.getActiveObject();
+        // Typing inside a textbox: let Backspace/Delete edit characters.
+        if (active instanceof Textbox && active.isEditing) return;
+        if (!active) return;
+        e.preventDefault();
+        removeActive();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -1068,7 +1078,13 @@ export function SheetFabricEditor({
           >
             Redo →
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus} onClick={removeActive}>
+          <button
+            type="button"
+            className={toolBtn}
+            disabled={!isPlus}
+            onClick={removeActive}
+            title="Delete selected (Delete / Backspace)"
+          >
             Delete
           </button>
           <div className="ml-auto flex flex-wrap items-center gap-2">
