@@ -15,6 +15,7 @@ import {
   sheetSeason,
   yearLabel,
 } from "@/lib/resource/sheets";
+import { resolveResourceViewer } from "@/lib/resource/resolve-access";
 import {
   COUNTRY_COOKIE,
   COUNTRY_LABELS,
@@ -50,7 +51,13 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function ResourcePage({ searchParams }: Props) {
-  const [sp, cookieStore, h, nav] = await Promise.all([searchParams, cookies(), headers(), getResourceNav()]);
+  const [sp, cookieStore, h, nav, viewer] = await Promise.all([
+    searchParams,
+    cookies(),
+    headers(),
+    getResourceNav(),
+    resolveResourceViewer(),
+  ]);
   const q = (one(sp.q) ?? "").slice(0, 80);
   const year = parseYear(one(sp.year));
   const season = parseSeason(one(sp.season));
@@ -61,6 +68,7 @@ export default async function ResourcePage({ searchParams }: Props) {
   const sunday = searching ? null : thisSunday(country);
   const sheet = sunday ? getSundaySheet(sunday.key) : null;
   const results = searching ? searchSheets({ q, year, season }) : [];
+  const thisSundayKey = viewer.thisSundayKey ?? sunday?.key ?? null;
 
   const keep = (patch: Record<string, string | undefined>) => {
     const p = new URLSearchParams();
@@ -106,7 +114,12 @@ export default async function ResourcePage({ searchParams }: Props) {
             </div>
           </div>
           {results.length ? (
-            <ResourceCardGrid sheets={results} level={level} />
+            <ResourceCardGrid
+              sheets={results}
+              level={level}
+              isPlus={viewer.isPlus}
+              thisSundayKey={thisSundayKey}
+            />
           ) : (
             <p className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm text-[#6b7280]">
               No sheets match. Try a Gospel name (e.g. “Luke”), a story (e.g. “lost sheep”) or{" "}
@@ -122,6 +135,7 @@ export default async function ResourcePage({ searchParams }: Props) {
           sheet={sheet}
           level={level}
           sundayDate={sunday.date}
+          isPlus={viewer.isPlus}
           heading={<>This Sunday · {formatSundayDate(sunday.date)}</>}
           subheading={
             <>

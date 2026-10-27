@@ -1,5 +1,7 @@
 "use client";
 
+import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
+import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import {
   EDITOR_FONTS,
   EDITOR_STICKERS,
@@ -14,7 +16,7 @@ import {
   type SheetLayout,
   SHEET_PAGE,
 } from "@/lib/resource/sheet-base";
-import type { SundaySheetContent } from "@/lib/sunday-sheet-content";
+import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import {
   Canvas,
   Circle,
@@ -39,10 +41,14 @@ type Props = {
   sheet: SundaySheetContent;
   level: 1 | 2;
   layout: SheetLayout;
-  basePngUrl: string;
+  /** Static base PNG URL, or null when a live HTML GospelSheet underlay is used. */
+  basePngUrl: string | null;
   baseRev: string;
   isPlus: boolean;
   initialCustomId?: string | null;
+  /** Render GospelSheet(variant=base) under a transparent Fabric canvas. */
+  liveHtmlBase?: boolean;
+  onLiveBasePageReady?: (page: HTMLElement) => void;
 };
 
 type ObjMeta = {
@@ -77,7 +83,10 @@ export function SheetFabricEditor({
   baseRev,
   isPlus,
   initialCustomId = null,
+  liveHtmlBase = false,
+  onLiveBasePageReady,
 }: Props) {
+  const liveHostRef = useRef<HTMLDivElement>(null);
   const canvasEl = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<Canvas | null>(null);
   const undoRef = useRef<string[]>([]);
@@ -302,22 +311,24 @@ export function SheetFabricEditor({
       canvas = new Canvas(canvasEl.current, {
         width: SHEET_PAGE.width,
         height: SHEET_PAGE.height,
-        backgroundColor: "#ffffff",
+        backgroundColor: liveHtmlBase || !basePngUrl ? "" : "#ffffff",
         preserveObjectStacking: true,
         selection: isPlus,
       });
       fabricRef.current = canvas;
 
-      const bg = await FabricImage.fromURL(basePngUrl, { crossOrigin: "anonymous" });
-      bg.set({
-        selectable: false,
-        evented: false,
-        left: 0,
-        top: 0,
-        scaleX: SHEET_PAGE.width / (bg.width || SHEET_PAGE.width),
-        scaleY: SHEET_PAGE.height / (bg.height || SHEET_PAGE.height),
-      });
-      canvas.backgroundImage = bg;
+      if (basePngUrl) {
+        const bg = await FabricImage.fromURL(basePngUrl, { crossOrigin: "anonymous" });
+        bg.set({
+          selectable: false,
+          evented: false,
+          left: 0,
+          top: 0,
+          scaleX: SHEET_PAGE.width / (bg.width || SHEET_PAGE.width),
+          scaleY: SHEET_PAGE.height / (bg.height || SHEET_PAGE.height),
+        });
+        canvas.backgroundImage = bg;
+      }
 
       for (const box of layout.boxes) {
         const text = defaultTextForField(sheet, level, box.id);
@@ -360,7 +371,15 @@ export function SheetFabricEditor({
       canvas?.dispose();
       fabricRef.current = null;
     };
-  }, [basePngUrl, baseRev, isPlus, layout.boxes, level, sheet, pushUndo, refreshLayers]);
+  }, [basePngUrl, baseRev, isPlus, layout.boxes, level, sheet, liveHtmlBase, pushUndo, refreshLayers]);
+
+  useEffect(() => {
+    if (!liveHtmlBase || !onLiveBasePageReady) return;
+    const page = liveHostRef.current?.querySelector(".gs-page") as HTMLElement | null;
+    if (!page) return;
+    const t = window.setTimeout(() => onLiveBasePageReady(page), 40);
+    return () => window.clearTimeout(t);
+  }, [liveHtmlBase, onLiveBasePageReady, sheet.key, level]);
 
   useEffect(() => {
     if (!isPlus) return;
@@ -766,10 +785,34 @@ export function SheetFabricEditor({
         </div>
 
         <div className="overflow-auto rounded-sm border border-[#ddd] bg-[#eee] p-3">
-          <div className="relative mx-auto" style={{ width: SHEET_PAGE.width }}>
-            <canvas ref={canvasEl} />
-            <div className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded bg-black/70 px-3 py-1 text-[11px] text-white">
+          <div
+            className="relative mx-auto"
+            style={{ width: SHEET_PAGE.width, height: SHEET_PAGE.height }}
+          >
+            {liveHtmlBase ? (
+              <>
+                <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
+                <div
+                  ref={liveHostRef}
+                  className="pointer-events-none absolute inset-0 origin-top-left"
+                  aria-hidden
+                >
+                  <GospelSheet
+                    sheet={{ ...toGospelSheetView(sheet), sundayLabel: sheet.key }}
+                    level={level}
+                    variant="base"
+                  />
+                </div>
+              </>
+            ) : null}
+            <canvas
+              ref={canvasEl}
+              className="relative z-10 block"
+              style={{ background: liveHtmlBase ? "transparent" : undefined }}
+            />
+            <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 -translate-x-1/2 rounded bg-black/70 px-3 py-1 text-[11px] text-white">
               🔒 Base sheet locked · {sheet.key}
+              {liveHtmlBase ? " · live" : ""}
             </div>
           </div>
         </div>
