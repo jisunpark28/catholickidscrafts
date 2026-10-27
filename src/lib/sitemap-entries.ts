@@ -16,7 +16,11 @@ type SitemapEntry = MetadataRoute.Sitemap[number];
 export const SITEMAP_CONTENT_DATE = new Date("2026-10-27T00:00:00.000Z");
 
 /** Child sitemaps listed by the /sitemap.xml index. */
-export const CHILD_SITEMAP_PATHS = ["/sitemaps/pages/sitemap.xml", "/sitemaps/bible/sitemap.xml"] as const;
+export const CHILD_SITEMAP_PATHS = [
+  "/sitemaps/pages/sitemap.xml",
+  "/sitemaps/resources/sitemap.xml",
+  "/sitemaps/bible/sitemap.xml",
+] as const;
 
 /**
  * Play slugs that are canonical aliases of another page (same as /play/[slug] canonicalForPath).
@@ -30,6 +34,7 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/mass", "daily", 0.95],
   ["/daily-mass", "daily", 0.95],
   ["/resource", "weekly", 0.9],
+  ["/resources", "weekly", 0.85],
   ["/bible/gospel", "daily", 0.9],
   ["/bible/old-testament", "monthly", 0.8],
   ["/bible/new-testament", "monthly", 0.8],
@@ -70,14 +75,13 @@ function playEntries(): SitemapEntry[] {
   return [...paths].map((p) => entry(p, "weekly", 0.7));
 }
 
-/** One indexable page per Sunday/feast sheet key (188, static data). */
-function resourceEntries(): SitemapEntry[] {
-  return listSundaySheetKeys().map((key) => entry(`/resource/${keyToSlug(key)}`, "yearly", 0.7));
-}
-
-/** Season hubs: /resources/lent, /resources/advent, … */
-function resourceSeasonEntries(): SitemapEntry[] {
-  return RESOURCE_SEASONS.map((s) => entry(seasonPath(s.id), "monthly", 0.8));
+/** Week sheets + season hubs for the dedicated resources sitemap. */
+export function buildResourcesSitemap(): MetadataRoute.Sitemap {
+  const weeks = listSundaySheetKeys().map((key) =>
+    entry(`/resource/${keyToSlug(key)}`, "weekly", 0.8),
+  );
+  const seasons = RESOURCE_SEASONS.map((s) => entry(seasonPath(s.id), "monthly", 0.85));
+  return [...seasons, ...weeks];
 }
 
 function liturgyEntries(): SitemapEntry[] {
@@ -128,8 +132,6 @@ export async function buildPagesSitemap(): Promise<MetadataRoute.Sitemap> {
     ...STATIC_PAGES.map(([p, f, pr]) => entry(p, f, pr)),
     ...playEntries(),
     ...liturgyEntries(),
-    ...resourceEntries(),
-    ...resourceSeasonEntries(),
     ...bookHubs,
     ...recommendations,
   ];

@@ -10,8 +10,10 @@ import {
   seasonLabel,
   seasonPath,
   sheetDescription,
+  sheetNeighbors,
   sheetSeason,
   sheetSeoH1,
+  sheetSeoH2,
   sheetSeoTitle,
   slugToKey,
   yearLabel,
@@ -70,6 +72,9 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
     : "/resource";
   const sundayDate =
     viewer.thisSundayKey === key && viewer.thisSundayDate ? viewer.thisSundayDate : undefined;
+  const { prev, next } = sheetNeighbors(key);
+  const prevSheet = prev ? getSundaySheet(prev) : null;
+  const nextSheet = next ? getSundaySheet(next) : null;
 
   return (
     <HomePdfShell groups={nav.groups} dailyMassLabel={nav.dailyMassLabel}>
@@ -85,7 +90,7 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
             gospelRef: sheet.gospelRef,
             description: sheetDescription(sheet),
             pagePath: path,
-            isAccessibleForFree: canPrint && !viewer.isPlus,
+            isAccessibleForFree: true,
           }),
         ]}
       />
@@ -104,10 +109,7 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         <h1 className="m-0 text-2xl font-bold leading-tight text-[#1c1c1c] sm:text-3xl">
           {sheetSeoH1(sheet)}
         </h1>
-        <p className="mt-2 text-base text-[#4b5563]">
-          {sheet.gospelRef} · Level 1 &amp; Level 2 printable Gospel worksheet for Catholic kids and
-          catechists.
-        </p>
+        <h2 className="mt-2 text-lg font-semibold text-[#4b5563]">{sheetSeoH2(sheet)}</h2>
       </header>
 
       {!canPrint ? (
@@ -133,7 +135,7 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         sheet={sheet}
         level={level}
         sundayDate={sundayDate}
-        headingLevel="h2"
+        headingLevel="h3"
         isPlus={viewer.isPlus}
         canPrint={canPrint}
         thisSundayHref={thisSundayHref}
@@ -209,6 +211,32 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         <h3 className="mt-5 text-base font-bold">Prayer</h3>
         <p className="italic">{l2.prayer || l1.prayer}</p>
       </article>
+
+      {prevSheet || nextSheet ? (
+        <nav
+          aria-label="Adjacent Sunday sheets"
+          className="mx-auto mt-10 flex max-w-3xl flex-col gap-3 border-t border-[#efe6da] pt-6 text-sm sm:flex-row sm:justify-between"
+        >
+          {prevSheet ? (
+            <Link
+              href={resourcePath(prevSheet.key, level)}
+              className="font-semibold text-[#335599] hover:underline"
+            >
+              ← Previous: {yearLabel(prevSheet.key)} {prevSheet.liturgicalName}
+            </Link>
+          ) : (
+            <span />
+          )}
+          {nextSheet ? (
+            <Link
+              href={resourcePath(nextSheet.key, level)}
+              className="font-semibold text-[#335599] hover:underline sm:text-right"
+            >
+              Next: {yearLabel(nextSheet.key)} {nextSheet.liturgicalName} →
+            </Link>
+          ) : null}
+        </nav>
+      ) : null}
     </HomePdfShell>
   );
 }

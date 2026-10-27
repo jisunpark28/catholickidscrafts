@@ -20,7 +20,7 @@ import { breadcrumbNode } from "@/lib/structured-data";
 import type { SundaySheetContent } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 type Props = { params: Promise<{ season: string }> };
 
@@ -70,8 +70,10 @@ function groupByYear(sheets: SundaySheetContent[]): {
 
 export default async function ResourcesSeasonPage({ params }: Props) {
   const { season: raw } = await params;
+  if (raw === "ordinary") permanentRedirect("/resources/ordinary-time");
   const season = parseSeason(raw);
   if (!season) notFound();
+  if (raw !== season) permanentRedirect(seasonPath(season));
 
   const [nav, sheets] = await Promise.all([getResourceNav(), Promise.resolve(searchSheets({ season }))]);
   const groups = groupByYear(sheets);

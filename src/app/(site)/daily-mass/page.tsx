@@ -17,6 +17,9 @@ import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import type { MassDay, MassDaySummary, MonthCalendar } from "@/types/mass";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { resolveResourceViewer } from "@/lib/resource/resolve-access";
+import { resourcePath } from "@/lib/resource/sheets";
 import { breadcrumbNode } from "@/lib/structured-data";
 import "@/styles/daily-mass.css";
 
@@ -78,7 +81,7 @@ export default async function DailyMassPage({
   const sunday = addDays(date, dow === 0 ? 7 : 7 - dow);
   const sundayKey = toDateKey(sunday);
 
-  const [calendar, sundayCalendar, day, sundayDay, copy, sections] = await Promise.all([
+  const [calendar, sundayCalendar, day, sundayDay, copy, sections, viewer] = await Promise.all([
     fetchMonthCalendar(date.getUTCFullYear(), date.getUTCMonth() + 1),
     sunday.getUTCMonth() === date.getUTCMonth()
       ? Promise.resolve(null)
@@ -87,7 +90,9 @@ export default async function DailyMassPage({
     fetchMassDay(sunday).catch(() => null),
     getSiteCopyMap(),
     getPublishedHomeSections(),
+    resolveResourceViewer(),
   ]);
+  const thisWeekSheetHref = viewer.thisSundayKey ? resourcePath(viewer.thisSundayKey) : "/resource";
 
   const { groups } = buildHomePdfNav(sections, {
     gallery: "Gallery",
@@ -141,6 +146,25 @@ export default async function DailyMassPage({
           lwcUrl: livingWithChristReadingUrl(sundayKey),
         }}
         calendar={calendar}
+      />
+      <RelatedLinks
+        links={[
+          {
+            href: thisWeekSheetHref,
+            label: "This week's Gospel sheet →",
+            hint: "Free printable Sunday worksheet in Level 1 and Level 2.",
+          },
+          {
+            href: "/bible/gospel",
+            label: "Type today's Gospel",
+            hint: "Word-by-word typing with praise stickers.",
+          },
+          {
+            href: "/resources",
+            label: "Browse sheets by season",
+            hint: "Advent, Lent, Ordinary Time and more.",
+          },
+        ]}
       />
     </HomePdfShell>
   );

@@ -15,7 +15,7 @@ type Props = {
   levelHref?: (level: 1 | 2) => string;
   heading: React.ReactNode;
   subheading: React.ReactNode;
-  headingLevel?: "h1" | "h2";
+  headingLevel?: "h1" | "h2" | "h3";
   /** When false, Edit links to /subscribe instead of the Fabric editor. */
   isPlus?: boolean;
   /**

@@ -1,5 +1,6 @@
 // Resource library: search and URL helpers over the static Sunday sheets.
 // DB-free and romcal-free, so it is safe for static pages and the sitemap.
+import { SHARED_KEYS, SUNDAY_KEYS } from "@/lib/sheet-keys/keys";
 import { getSundaySheet, listSundaySheetKeys, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 
 export const RESOURCE_PATH = "/resource";
@@ -12,7 +13,7 @@ export const RESOURCE_SEASONS = [
   { id: "christmas", label: "Christmas" },
   { id: "lent", label: "Lent" },
   { id: "easter", label: "Easter" },
-  { id: "ordinary", label: "Ordinary Time" },
+  { id: "ordinary-time", label: "Ordinary Time" },
   { id: "feasts", label: "Feasts & Solemnities" },
 ] as const;
 export type ResourceSeason = (typeof RESOURCE_SEASONS)[number]["id"];
@@ -23,7 +24,7 @@ const SEASON_ORDER: Record<ResourceSeason, number> = {
   christmas: 1,
   lent: 2,
   easter: 3,
-  ordinary: 4,
+  "ordinary-time": 4,
   feasts: 5,
 };
 
@@ -67,7 +68,7 @@ export function sheetSeason(sheet: SundaySheetContent): ResourceSeason {
     case "Easter":
       return "easter";
     default:
-      return "ordinary";
+      return "ordinary-time";
   }
 }
 
@@ -90,8 +91,16 @@ export function parseYear(v: string | undefined): ResourceYear | null {
   return u === "A" || u === "B" || u === "C" ? u : null;
 }
 
+/** Accepts canonical ids plus legacy `ordinary` → `ordinary-time`. */
 export function parseSeason(v: string | undefined): ResourceSeason | null {
+  if (!v) return null;
+  if (v === "ordinary") return "ordinary-time";
   return RESOURCE_SEASONS.some((s) => s.id === v) ? (v as ResourceSeason) : null;
+}
+
+/** Level 1 title stands in for gospel theme (no separate theme column in sheet JSON). */
+export function sheetGospelTheme(sheet: SundaySheetContent): string {
+  return sheet.levels.level1.title;
 }
 
 export type ResourceCard = {
@@ -171,26 +180,51 @@ export function searchSheets({ q, year, season }: ResourceQuery): SundaySheetCon
     .map((r) => r.sheet);
 }
 
-/** Plain-language page description for SEO (no ages). */
+/**
+ * Meta description, e.g.
+ * Free printable Catholic Sunday worksheet for 30th Sunday… Includes Matthew 22:34-40 (Love God…) …
+ */
 export function sheetDescription(sheet: SundaySheetContent): string {
-  const l1 = sheet.levels.level1.title;
-  const l2 = sheet.levels.level2.title;
-  return `Free printable Gospel worksheet for Catholic kids: ${sheet.liturgicalName} (${yearLabel(
+  const theme = sheetGospelTheme(sheet);
+  return `Free printable Catholic Sunday worksheet for ${sheet.liturgicalName} (${yearLabel(
     sheet.key,
-  )}), ${sheet.gospelRef}. Level 1 “${l1}” and Level 2 “${l2}” with Gospel story, key line, activity, questions and prayer.`;
+  )}). Includes ${sheet.gospelRef} (${theme}) story, Level 1 & Level 2 reflection questions for CCD teachers & homeschooling.`;
 }
 
 /**
- * Keyword title for weekly landings, e.g.
- * "Free Printable Gospel Sheet - Year A 30th Sunday in Ordinary Time"
+ * Meta title, e.g.
+ * Free Catholic Sunday Gospel Sheet: 30th Sunday in Ordinary Time (Year A) - Matthew 22:34-40
  */
 export function sheetSeoTitle(sheet: SundaySheetContent): string {
-  return `Free Printable Gospel Sheet - ${yearLabel(sheet.key)} ${sheet.liturgicalName}`;
+  return `Free Catholic Sunday Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)}) - ${sheet.gospelRef}`;
 }
 
-/** Visible H1 aligned with the title (liturgical name first for scanability). */
+/** Visible H1 (spec: no gospel ref in H1). */
 export function sheetSeoH1(sheet: SundaySheetContent): string {
-  return `Free Printable Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)})`;
+  return `Free Catholic Sunday Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)})`;
+}
+
+/** Visible H2 under the H1. */
+export function sheetSeoH2(sheet: SundaySheetContent): string {
+  return `Gospel Reading: ${sheet.gospelRef} - ${sheetGospelTheme(sheet)}`;
+}
+
+/**
+ * Previous / next sheet in TOC order (same cycle, or shared-feast list).
+ * Neighbors only exist when that key is in the static content map.
+ */
+export function sheetNeighbors(key: string): { prev: string | null; next: string | null } {
+  const year = sheetYear(key);
+  const chain =
+    year != null
+      ? SUNDAY_KEYS.map((k) => `${year}_${k}`).filter((k) => getSundaySheet(k))
+      : SHARED_KEYS.filter((k) => getSundaySheet(k));
+  const i = chain.indexOf(key);
+  if (i < 0) return { prev: null, next: null };
+  return {
+    prev: i > 0 ? chain[i - 1]! : null,
+    next: i < chain.length - 1 ? chain[i + 1]! : null,
+  };
 }
 
 /**
