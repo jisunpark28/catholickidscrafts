@@ -1,6 +1,9 @@
 "use client";
 
-import { measureSheetSectionBoxes } from "@/components/resource/captureSheetBase";
+import {
+  collectEditableTextFields,
+  measureSheetSectionBoxes,
+} from "@/components/resource/captureSheetBase";
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import {
@@ -14,7 +17,6 @@ import { loadEditorFonts } from "@/lib/resource/load-editor-fonts";
 import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import {
   defaultTextForField,
-  type SheetEditField,
   type SheetLayout,
   SHEET_PAGE,
 } from "@/lib/resource/sheet-base";
@@ -55,7 +57,8 @@ type Props = {
 
 type ObjMeta = {
   kind: "base-edit" | "user";
-  fieldId?: SheetEditField;
+  /** Core field id (`title`) or live DOM id (`actTitle`, `auto_3`, …). */
+  fieldId?: string;
   stickerId?: string;
   photoId?: string;
   id?: string;
@@ -108,6 +111,7 @@ export function SheetFabricEditor({
   const pushUndoRef = useRef<() => void>(() => undefined);
   const hiddenBaseSectionsRef = useRef<string[]>([]);
   const promoteBaseSectionsRef = useRef<() => void>(() => undefined);
+  const installLiveTextRef = useRef<() => void>(() => undefined);
 
   const [ready, setReady] = useState(false);
   const [fontFamily, setFontFamily] = useState<EditorFontId>("Fredoka");
@@ -117,7 +121,19 @@ export function SheetFabricEditor({
   const [italic, setItalic] = useState(false);
   const [underline, setUnderline] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState<string>("");
-  const [layers, setLayers] = useState<{ key: string; label: string; locked: boolean }[]>([]);
+  const [layers, setLayers] = useState<
+    { key: string; label: string; locked: boolean; canvasIndex: number }[]
+  >([]);
+  const [layerDragFrom, setLayerDragFrom] = useState<number | null>(null);
+  const [layerDragOver, setLayerDragOver] = useState<number | null>(null);
+  const layerDragFromRef = useRef<number | null>(null);
+  const layerDragOverRef = useRef<number | null>(null);
+  const layerPointerRef = useRef<{
+    from: number;
+    pointerId: number;
+    startY: number;
+    dragging: boolean;
+  } | null>(null);
   const [name, setName] = useState(
     `${(level === 2 ? sheet.levels.level2 : sheet.levels.level1).title} — my sheet`,
   );
@@ -140,10 +156,12 @@ export function SheetFabricEditor({
     const c = fabricRef.current;
     if (!c) return;
     const objs = c.getObjects();
+    // UI top = frontmost (reverse of Fabric stack: back → front).
     setLayers(
       [...objs]
+        .map((o, canvasIndex) => ({ o, canvasIndex }))
         .reverse()
-        .map((o, i) => {
+        .map(({ o, canvasIndex }, i) => {
           const m = metaOf(o);
           const label =
             m.kind === "base-edit"
@@ -162,12 +180,12 @@ export function SheetFabricEditor({
                           ? "Rect"
                           : (o.type ?? `obj${i}`);
           return {
-            key: m.id ?? m.fieldId ?? `i${i}`,
+            key: `${canvasIndex}:${m.id ?? m.fieldId ?? o.type ?? "obj"}`,
             label,
             locked: false,
+            canvasIndex,
           };
-        })
-        .filter((l) => l.key !== "base"),
+        }),
     );
     const active = c.getActiveObject();
     if (active) {
@@ -184,6 +202,34 @@ export function SheetFabricEditor({
     } else setSelectedLabel("");
   };
   refreshLayersRef.current = refreshLayers;
+
+  /** Reorder canvas z-stack from Layers list indices (0 = front / top of list). */
+  const reorderLayer = (fromUi: number, toUi: number) => {
+    const c = fabricRef.current;
+    if (!c || !isPlus || fromUi === toUi || fromUi < 0 || toUi < 0) return;
+    const objs = c.getObjects();
+    if (fromUi >= objs.length || toUi >= objs.length) return;
+
+    const uiOrder = [...objs].reverse();
+    const [moved] = uiOrder.splice(fromUi, 1);
+    if (!moved) return;
+    uiOrder.splice(toUi, 0, moved);
+    // uiOrder is front→back; Fabric stack is back→front.
+    const newStack = [...uiOrder].reverse();
+
+    pushUndo();
+    applyingRef.current = true;
+    try {
+      // bringObjectToFront in back→front order rebuilds the stack reliably.
+      for (const obj of newStack) {
+        c.bringObjectToFront(obj);
+      }
+    } finally {
+      applyingRef.current = false;
+    }
+    c.requestRenderAll();
+    refreshLayers();
+  };
 
   const pushUndo = () => {
     const c = fabricRef.current;
@@ -373,8 +419,10 @@ export function SheetFabricEditor({
           canvas.backgroundImage = bg;
         }
 
+        // Seed from layout JSON (core fields). Live HTML then measures/adds the rest.
         for (const box of layout.boxes) {
-          const text = defaultTextForField(sheet, level, box.id);
+          const text = box.text || defaultTextForField(sheet, level, box.id);
+          if (!text && liveHtmlBase) continue;
           const tb = new Textbox(text, {
             left: box.left,
             top: box.top,
@@ -391,26 +439,55 @@ export function SheetFabricEditor({
         }
 
         canvas.on("object:modified", () => {
+          if (applyingRef.current) return;
           pushUndoRef.current();
           refreshLayersRef.current();
         });
         canvas.on("selection:created", () => refreshLayersRef.current());
         canvas.on("selection:updated", () => refreshLayersRef.current());
         canvas.on("selection:cleared", () => refreshLayersRef.current());
-        canvas.on("object:added", () => refreshLayersRef.current());
-        canvas.on("object:removed", () => refreshLayersRef.current());
+        canvas.on("object:added", () => {
+          if (!applyingRef.current) refreshLayersRef.current();
+        });
+        canvas.on("object:removed", () => {
+          if (!applyingRef.current) refreshLayersRef.current();
+        });
 
         canvas.requestRenderAll();
-        pushUndoRef.current();
-        refreshLayersRef.current();
         if (!cancelled) {
-          setReady(true);
           if (liveHtmlBase && isPlus) {
+            const finishLive = (attempt: number) => {
+              if (cancelled) return;
+              installLiveTextRef.current();
+              promoteBaseSectionsRef.current();
+              const ids = new Set(
+                fabricRef.current
+                  ?.getObjects()
+                  .map((o) => metaOf(o).fieldId)
+                  .filter(Boolean),
+              );
+              // Wait until chrome/activity fields appear (not only layout seed).
+              const rich =
+                ids.has("subtitle") ||
+                ids.has("actTitle") ||
+                ids.has("h2_story") ||
+                ids.has("footer") ||
+                [...ids].some((id) => String(id).startsWith("auto_") || String(id).startsWith("svg_"));
+              if (!rich && attempt < 10) {
+                window.setTimeout(() => finishLive(attempt + 1), 50 + attempt * 40);
+                return;
+              }
+              pushUndoRef.current();
+              refreshLayersRef.current();
+              setReady(true);
+            };
             requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                if (!cancelled) promoteBaseSectionsRef.current();
-              });
+              requestAnimationFrame(() => finishLive(0));
             });
+          } else {
+            pushUndoRef.current();
+            refreshLayersRef.current();
+            setReady(true);
           }
         }
       } catch (e) {
@@ -444,6 +521,76 @@ export function SheetFabricEditor({
   }, [isPlus]);
 
   /**
+   * Measure every visible text node on the live GospelSheet underlay and install
+   * (or reposition) Fabric Textboxes so headers, activity copy, and chrome are editable.
+   */
+  const installLiveTextFields = () => {
+    if (!liveHtmlBase || !isPlus) return;
+    const c = fabricRef.current;
+    const host = liveHostRef.current;
+    const page = host?.querySelector("[data-sheet-page]") as HTMLElement | null;
+    if (!c || !host || !page) return;
+    const pageBox = page.getBoundingClientRect();
+    if (pageBox.width < 40 || pageBox.height < 40) return;
+
+    const fields = collectEditableTextFields(page, level, host);
+    if (!fields.length) return;
+
+    applyingRef.current = true;
+    try {
+      const existing = new Map<string, Textbox>();
+      for (const obj of c.getObjects()) {
+        const m = metaOf(obj);
+        if (m.kind === "base-edit" && m.fieldId && obj instanceof Textbox) {
+          existing.set(m.fieldId, obj);
+        }
+      }
+
+      for (const f of fields) {
+        const prev = existing.get(f.id);
+        if (prev) {
+          const keepText =
+            Boolean(prev.text) && prev.text !== f.text && prev.text !== defaultTextForField(sheet, level, f.id);
+          prev.set({
+            left: f.left,
+            top: f.top,
+            width: Math.max(40, f.width),
+            fontSize: f.fontSize,
+            text: keepText ? prev.text : f.text,
+            selectable: true,
+            evented: true,
+            editable: true,
+          });
+          existing.delete(f.id);
+          continue;
+        }
+        const tb = new Textbox(f.text, {
+          left: f.left,
+          top: f.top,
+          width: Math.max(40, f.width),
+          fontSize: f.fontSize,
+          fontFamily: "Fredoka",
+          fill: "#111111",
+          editable: true,
+          selectable: true,
+          evented: true,
+        });
+        setMeta(tb, { kind: "base-edit", fieldId: f.id, id: `base_${f.id}` });
+        c.add(tb);
+      }
+
+      // Keep layout-only fields that DOM didn't re-measure (still useful).
+      // Only drop ones that were clearly replaced by a measured id already handled.
+    } finally {
+      applyingRef.current = false;
+    }
+
+    c.requestRenderAll();
+    refreshLayers();
+  };
+  installLiveTextRef.current = installLiveTextFields;
+
+  /**
    * Hide HTML `.gs-box` borders and ensure each visible base section has a Fabric Rect
    * (unless the user deleted it — tracked in hiddenBaseSections).
    */
@@ -456,7 +603,7 @@ export function SheetFabricEditor({
     if (!c || !page || !root) return;
 
     root.classList.add("gs-edit-sections");
-    const measured = measureSheetSectionBoxes(page);
+    const measured = measureSheetSectionBoxes(page, host);
     const existing = new Set(
       c
         .getObjects()
@@ -503,6 +650,8 @@ export function SheetFabricEditor({
     applyingRef.current = true;
     hiddenBaseSectionsRef.current = [...(data.hiddenBaseSections ?? [])];
     try {
+      if (liveHtmlBase) installLiveTextFields();
+
       for (const obj of c.getObjects()) {
         const m = metaOf(obj);
         if (m.kind === "base-edit" && m.fieldId && obj instanceof Textbox) {
@@ -631,11 +780,7 @@ export function SheetFabricEditor({
       }
       c.requestRenderAll();
       refreshLayersRef.current();
-      if (liveHtmlBase) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => promoteBaseSectionsRef.current());
-        });
-      }
+      if (liveHtmlBase) promoteBaseSections();
     } finally {
       applyingRef.current = false;
     }
@@ -1220,10 +1365,17 @@ export function SheetFabricEditor({
           >
             {liveHtmlBase ? (
               <>
-                <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
+                <style
+                  dangerouslySetInnerHTML={{
+                    __html: `${GOSPEL_SHEET_CSS}
+/* Editor host: pin letter page to canvas (0,0) — no margin/shadow offset. */
+.gs.gs-base .gs-page{margin:0!important;box-shadow:none!important;width:8.5in!important;height:11in!important;}
+`,
+                  }}
+                />
                 <div
                   ref={liveHostRef}
-                  className="pointer-events-none absolute inset-0 origin-top-left"
+                  className="pointer-events-none absolute inset-0 origin-top-left overflow-hidden"
                   aria-hidden
                 >
                   <GospelSheet
@@ -1241,7 +1393,7 @@ export function SheetFabricEditor({
             />
             <div className="pointer-events-none absolute bottom-3 left-1/2 z-20 -translate-x-1/2 rounded bg-black/70 px-3 py-1 text-[11px] text-white">
               {liveHtmlBase
-                ? `Section boxes editable · ${sheet.key}`
+                ? `All text + sections editable · ${sheet.key}`
                 : `🔒 Base image locked · ${sheet.key}`}
             </div>
           </div>
@@ -1253,10 +1405,109 @@ export function SheetFabricEditor({
       {/* Right: layers + saved */}
       <aside className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3">
         <h2 className="m-0 text-sm font-bold text-[#1c1c1c]">Layers</h2>
+        <p className="mb-0 mt-1 text-[11px] text-[#9ca3af]">Drag ⠿ to reorder (top = front)</p>
         <ul className="mt-2 max-h-64 list-none space-y-1 overflow-y-auto p-0 text-sm">
-          {layers.map((l) => (
-            <li key={l.key} className="rounded-lg border border-[#ece7e1] bg-white px-2 py-1.5">
-              {l.label}
+          {layers.map((l, i) => (
+            <li
+              key={l.key}
+              data-layer-index={i}
+              className={`flex items-center gap-1.5 rounded-lg border bg-white px-2 py-1.5 select-none ${
+                layerDragFrom === i
+                  ? "border-[#d35400] opacity-50"
+                  : layerDragOver === i
+                    ? "border-[#d35400] bg-[#fff6ef]"
+                    : "border-[#ece7e1]"
+              }`}
+              title={isPlus ? "Drag ⠿ to reorder · click label to select" : l.label}
+            >
+              <span
+                className={`touch-none text-[#c4bbb0] ${isPlus ? "cursor-grab active:cursor-grabbing" : ""}`}
+                aria-label="Drag to reorder"
+                onPointerDown={(e) => {
+                  if (!isPlus || e.button !== 0) return;
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const handle = e.currentTarget as HTMLElement;
+                  handle.setPointerCapture(e.pointerId);
+                  layerPointerRef.current = {
+                    from: i,
+                    pointerId: e.pointerId,
+                    startY: e.clientY,
+                    dragging: false,
+                  };
+                  layerDragFromRef.current = i;
+                  layerDragOverRef.current = i;
+                  setLayerDragFrom(i);
+                  setLayerDragOver(i);
+                }}
+                onPointerMove={(e) => {
+                  const st = layerPointerRef.current;
+                  if (!st || st.pointerId !== e.pointerId) return;
+                  if (!st.dragging && Math.abs(e.clientY - st.startY) >= 3) {
+                    st.dragging = true;
+                  }
+                  if (!st.dragging) return;
+                  const list = (e.currentTarget as HTMLElement).closest("ul");
+                  if (!list) return;
+                  const items = [...list.querySelectorAll<HTMLElement>("[data-layer-index]")];
+                  let over = st.from;
+                  for (const el of items) {
+                    const r = el.getBoundingClientRect();
+                    if (e.clientY >= r.top && e.clientY <= r.bottom) {
+                      over = Number(el.dataset.layerIndex);
+                      break;
+                    }
+                  }
+                  if (layerDragOverRef.current !== over) {
+                    layerDragOverRef.current = over;
+                    setLayerDragOver(over);
+                  }
+                }}
+                onPointerUp={(e) => {
+                  const st = layerPointerRef.current;
+                  if (!st || st.pointerId !== e.pointerId) return;
+                  try {
+                    (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+                  } catch {
+                    /* ignore */
+                  }
+                  const from = st.from;
+                  const over = layerDragOverRef.current;
+                  const wasDragging = st.dragging;
+                  layerPointerRef.current = null;
+                  layerDragFromRef.current = null;
+                  layerDragOverRef.current = null;
+                  setLayerDragFrom(null);
+                  setLayerDragOver(null);
+                  if (wasDragging && over !== null && over !== from) {
+                    reorderLayer(from, over);
+                  }
+                }}
+                onPointerCancel={() => {
+                  layerPointerRef.current = null;
+                  layerDragFromRef.current = null;
+                  layerDragOverRef.current = null;
+                  setLayerDragFrom(null);
+                  setLayerDragOver(null);
+                }}
+              >
+                ⠿
+              </span>
+              <button
+                type="button"
+                className="min-w-0 flex-1 truncate border-0 bg-transparent p-0 text-left text-inherit"
+                onClick={() => {
+                  if (!isPlus) return;
+                  const c = fabricRef.current;
+                  const obj = c?.getObjects()[l.canvasIndex];
+                  if (!c || !obj) return;
+                  c.setActiveObject(obj);
+                  c.requestRenderAll();
+                  refreshLayers();
+                }}
+              >
+                {l.label}
+              </button>
             </li>
           ))}
         </ul>

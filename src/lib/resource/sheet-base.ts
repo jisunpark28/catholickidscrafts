@@ -31,13 +31,16 @@ export const SHEET_EDIT_FIELDS = [
 export type SheetEditField = (typeof SHEET_EDIT_FIELDS)[number];
 
 export const sheetBoxSchema = z.object({
-  id: z.enum(SHEET_EDIT_FIELDS),
+  /** Core field id or dynamic id from live DOM (`auto_*`, `actTitle`, …). */
+  id: z.string().min(1).max(64),
   left: z.number(),
   top: z.number(),
   width: z.number(),
   height: z.number(),
   /** Default font size hint for Fabric Textbox. */
   fontSize: z.number().optional(),
+  /** Captured plain text when measured from the live HTML underlay. */
+  text: z.string().max(2000).optional(),
 });
 
 export const sheetLayoutSchema = z.object({
@@ -84,7 +87,7 @@ export function sheetBasePublicPaths(key: string, level: 1 | 2) {
   };
 }
 
-export function defaultTextForField(sheet: SundaySheetContent, level: 1 | 2, id: SheetEditField): string {
+export function defaultTextForField(sheet: SundaySheetContent, level: 1 | 2, id: string): string {
   const c = level === 2 ? sheet.levels.level2 : sheet.levels.level1;
   switch (id) {
     case "title":
@@ -105,14 +108,34 @@ export function defaultTextForField(sheet: SundaySheetContent, level: 1 | 2, id:
       return c.actions[2] ?? "";
     case "prayer":
       return c.prayer;
+    case "subtitle":
+      return `${sheet.liturgicalName} · Level ${level}`;
+    case "meta":
+      return `${sheet.key}\n${sheet.gospelRef}`;
+    case "h2_story":
+      return "Today's Story";
+    case "h2_key":
+      return level === 1 ? "Trace the words" : "Copy the key line";
+    case "h2_talk":
+      return level === 1 ? "Let's talk" : "Think about it";
+    case "h2_actions":
+      return "This week I will…";
+    case "footer":
+      return "New free sheet every week at catholickidscrafts.com";
+    default:
+      return "";
   }
 }
 
-export function fontSizeHint(level: 1 | 2, id: SheetEditField): number {
+export function fontSizeHint(level: 1 | 2, id: string): number {
   if (id === "title") return 24;
   if (id === "story") return level === 1 ? 18 : 15;
   if (id === "keyLine") return level === 1 ? 30 : 17;
   if (id === "prayer") return 16;
+  if (id === "subtitle" || id === "meta") return 14;
+  if (id === "actTitle" || id.startsWith("h2_")) return 15;
+  if (id === "actIntro") return level === 1 ? 15 : 13;
+  if (id === "footer") return 11;
   if (id.startsWith("q")) return 14;
   return 15;
 }

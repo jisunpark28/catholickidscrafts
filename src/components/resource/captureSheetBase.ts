@@ -4,7 +4,6 @@ import {
   SHEET_EDIT_FIELDS,
   SHEET_PAGE,
   fontSizeHint,
-  type SheetEditField,
   type SheetLayout,
 } from "@/lib/resource/sheet-base";
 
@@ -31,10 +30,15 @@ export type MeasuredSectionBox = {
  * Measure printable section frames (`.gs-box`) in letter CSS-px relative to `.gs-page`.
  * Used to promote locked HTML chrome into editable Fabric Rects.
  */
-export function measureSheetSectionBoxes(page: HTMLElement): MeasuredSectionBox[] {
-  const origin = pageRect(page);
-  const scaleX = SHEET_PAGE.width / origin.width;
-  const scaleY = SHEET_PAGE.height / origin.height;
+export function measureSheetSectionBoxes(
+  page: HTMLElement,
+  originEl?: HTMLElement | null,
+): MeasuredSectionBox[] {
+  const origin = pageRect(originEl && originEl.isConnected ? originEl : page);
+  const ow = Math.max(1, origin.width);
+  const oh = Math.max(1, origin.height);
+  const scaleX = SHEET_PAGE.width / ow;
+  const scaleY = SHEET_PAGE.height / oh;
   const nodes = [...page.querySelectorAll<HTMLElement>(".gs-box")];
   const out: MeasuredSectionBox[] = [];
   nodes.forEach((el, i) => {
@@ -53,39 +57,187 @@ export function measureSheetSectionBoxes(page: HTMLElement): MeasuredSectionBox[
   return out;
 }
 
+export type MeasuredTextField = {
+  id: string;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  text: string;
+  fontSize: number;
+};
+
+/** HTML selectors for chrome + activity copy not always pre-tagged. */
+const AUTO_TEXT_SELECTORS = [
+  ".gs-sub",
+  ".gs-meta",
+  ".gs-box > h2",
+  ".gs-act > h2",
+  ".gs-act > [data-sheet-field='actIntro']",
+  ".gs-act p",
+  ".gs-act li",
+  ".gs-act .gs-act-chip",
+  ".gs-act .gs-act-bingo > div",
+  ".gs-act .gs-act-find",
+  ".gs-act .gs-act-letters",
+  ".gs-act .gs-act-mitem",
+  ".gs-act .gs-act-prompt",
+  ".gs-act .gs-act-basket",
+  ".gs-act .gs-act-frame > p",
+  ".gs-act .gs-act-pline",
+  ".gs-act th",
+  ".gs-act td",
+  ".gs-act .gs-act-keycell",
+  ".gs-act b",
+  "footer",
+] as const;
+
+const SKIP_CLASS = /\b(gs-ph|gs-wl|gs-act-fill|gs-act-blank|gs-act-draw|gs-act-drawscene|gs-dot|gs-act-num)\b/;
+
+function clampBox(
+  left: number,
+  top: number,
+  width: number,
+  height: number,
+): { left: number; top: number; width: number; height: number } | null {
+  if (top >= SHEET_PAGE.height - 8) return null;
+  width = Math.max(24, Math.min(width, SHEET_PAGE.width - left));
+  height = Math.max(14, Math.min(height, SHEET_PAGE.height - top));
+  left = Math.max(0, Math.min(left, SHEET_PAGE.width - width));
+  top = Math.max(0, Math.min(top, SHEET_PAGE.height - height));
+  return { left, top, width, height };
+}
+
+function plainText(el: Element): string {
+  return (el.textContent || "").replace(/\s+/g, " ").trim();
+}
+
+function readFontSize(el: Element, level: 1 | 2, id: string): number {
+  try {
+    const raw = getComputedStyle(el).fontSize;
+    const n = parseFloat(raw);
+    if (Number.isFinite(n) && n >= 8 && n <= 96) return Math.round(n);
+  } catch {
+    /* ignore */
+  }
+  return fontSizeHint(level, id);
+}
+
+function shouldSkip(el: HTMLElement): boolean {
+  if (SKIP_CLASS.test(el.className?.toString?.() ?? "")) return true;
+  if (el.getAttribute("aria-hidden") === "true") return true;
+  if (el.closest(".gs-ph")) return true;
+  return false;
+}
+
+/**
+ * Discover every editable text node on the live sheet underlay: explicit
+ * `[data-sheet-field]` plus common chrome/activity labels and SVG labels.
+ * Hides each source element so Fabric Textboxes can replace them.
+ *
+ * @param originEl Optional element whose top-left maps to Fabric (0,0).
+ *   Prefer the editor host (same box as the canvas) so page margins don't shift overlays.
+ */
+export function collectEditableTextFields(
+  page: HTMLElement,
+  level: 1 | 2,
+  originEl?: HTMLElement | null,
+): MeasuredTextField[] {
+  const origin = pageRect(originEl && originEl.isConnected ? originEl : page);
+  const ow = Math.max(1, origin.width);
+  const oh = Math.max(1, origin.height);
+  const scaleX = SHEET_PAGE.width / ow;
+  const scaleY = SHEET_PAGE.height / oh;
+  const seen = new Set<Element>();
+  const tagged: { el: Element; id: string }[] = [];
+
+  page.querySelectorAll("[data-sheet-field]").forEach((el) => {
+    const id = el.getAttribute("data-sheet-field")?.trim();
+    if (!id || seen.has(el)) return;
+    if (el instanceof HTMLElement && shouldSkip(el)) return;
+    seen.add(el);
+    tagged.push({ el, id });
+  });
+
+  let auto = 0;
+  for (const sel of AUTO_TEXT_SELECTORS) {
+    page.querySelectorAll(sel).forEach((el) => {
+      if (seen.has(el)) return;
+      if (!(el instanceof HTMLElement)) return;
+      if (shouldSkip(el)) return;
+      if (el.closest("svg")) return;
+      // Skip wrappers that already contain a tagged field (avoid double boxes).
+      if (el.querySelector("[data-sheet-field]")) return;
+      if (el.closest("[data-sheet-field]") && !el.hasAttribute("data-sheet-field")) return;
+      const text = plainText(el);
+      if (text.length < 1) return;
+      const id = el.getAttribute("data-sheet-field")?.trim() || `auto_${auto++}`;
+      if (!el.hasAttribute("data-sheet-field")) el.setAttribute("data-sheet-field", id);
+      seen.add(el);
+      tagged.push({ el, id });
+    });
+  }
+
+  // SVG labels (speech bubbles, faces, etc.)
+  page.querySelectorAll("svg text").forEach((el) => {
+    if (seen.has(el)) return;
+    const text = plainText(el);
+    if (text.length < 1) return;
+    const id = el.getAttribute("data-sheet-field")?.trim() || `svg_${auto++}`;
+    if (!el.hasAttribute("data-sheet-field")) el.setAttribute("data-sheet-field", id);
+    seen.add(el);
+    tagged.push({ el, id });
+  });
+
+  const out: MeasuredTextField[] = [];
+  for (const { el, id } of tagged) {
+    const r = el.getBoundingClientRect();
+    if (r.width < 2 && r.height < 2) continue;
+    const box = clampBox(
+      Math.round((r.left - origin.left) * scaleX),
+      Math.round((r.top - origin.top) * scaleY),
+      Math.round(Math.max(r.width, 24) * scaleX),
+      Math.round(Math.max(r.height, 12) * scaleY),
+    );
+    if (!box) continue;
+    const text = plainText(el);
+    if (!text) continue;
+    if (el instanceof HTMLElement) {
+      el.style.visibility = "hidden";
+    } else if (el instanceof SVGElement) {
+      el.style.visibility = "hidden";
+    }
+    out.push({
+      id,
+      ...box,
+      text,
+      fontSize: readFontSize(el, level, id),
+    });
+  }
+  return out;
+}
+
 /** Measure `[data-sheet-field]` boxes in letter CSS-px relative to `.gs-page`. */
 export function measureSheetLayout(
   page: HTMLElement,
   meta: Pick<SheetLayout, "key" | "level" | "rev">,
 ): SheetLayout {
-  const origin = pageRect(page);
-  const scaleX = SHEET_PAGE.width / origin.width;
-  const scaleY = SHEET_PAGE.height / origin.height;
-  const boxes: SheetLayout["boxes"] = [];
-
-  for (const id of SHEET_EDIT_FIELDS) {
-    const el = page.querySelector(`[data-sheet-field="${id}"]`) as HTMLElement | null;
-    if (!el) continue;
-    const r = el.getBoundingClientRect();
-    let left = Math.round((r.left - origin.left) * scaleX);
-    let top = Math.round((r.top - origin.top) * scaleY);
-    let width = Math.round(r.width * scaleX);
-    let height = Math.round(Math.max(r.height, 12) * scaleY);
-    // Keep overlays on the letter page (clipped content is not editable in v1).
-    if (top >= SHEET_PAGE.height - 8) continue;
-    width = Math.max(24, Math.min(width, SHEET_PAGE.width - left));
-    height = Math.max(14, Math.min(height, SHEET_PAGE.height - top));
-    left = Math.max(0, Math.min(left, SHEET_PAGE.width - width));
-    top = Math.max(0, Math.min(top, SHEET_PAGE.height - height));
-    boxes.push({
-      id,
-      left,
-      top,
-      width,
-      height,
-      fontSize: fontSizeHint(meta.level, id as SheetEditField),
-    });
-  }
+  const fields = collectEditableTextFields(page, meta.level);
+  const core = new Set<string>(SHEET_EDIT_FIELDS);
+  const boxes: SheetLayout["boxes"] = fields.map((f) => ({
+    id: f.id,
+    left: f.left,
+    top: f.top,
+    width: f.width,
+    height: f.height,
+    fontSize: f.fontSize,
+    text: f.text,
+  }));
+  boxes.sort((a, b) => {
+    const ac = core.has(a.id) ? 0 : 1;
+    const bc = core.has(b.id) ? 0 : 1;
+    return ac - bc || a.id.localeCompare(b.id);
+  });
 
   return {
     v: 1,
@@ -111,14 +263,11 @@ export async function rasterizeSheetPage(page: HTMLElement): Promise<string> {
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, SHEET_PAGE.width, SHEET_PAGE.height);
 
-  // Draw via SVG foreignObject snapshot of the page HTML + computed styles is heavy;
-  // use html2canvas-free path: clone into SVG foreignObject.
   const clone = page.cloneNode(true) as HTMLElement;
   clone.style.transform = "none";
   clone.style.margin = "0";
   clone.style.boxShadow = "none";
   const xhtml = new XMLSerializer().serializeToString(clone);
-  // Pull inlined sheet CSS from the live document when present.
   const styleTags = [...document.querySelectorAll("style")]
     .map((s) => s.textContent ?? "")
     .filter((t) => t.includes(".gs-page") || t.includes(".gs,"))
@@ -139,7 +288,6 @@ export async function rasterizeSheetPage(page: HTMLElement): Promise<string> {
   try {
     const img = await loadImage(url);
     ctx.drawImage(img, 0, 0, SHEET_PAGE.width, SHEET_PAGE.height);
-    // If foreignObject failed (blank), fall back to scaled screenshot via drawWindow-less path:
     if (isMostlyWhite(ctx, canvas.width, canvas.height)) {
       return await rasterizeViaHtml2CanvasFallback(page, canvas, ctx, rect, dpr);
     }
@@ -163,10 +311,6 @@ function isMostlyWhite(ctx: CanvasRenderingContext2D, w: number, h: number): boo
   return sample[0] > 250 && sample[1] > 250 && sample[2] > 250;
 }
 
-/**
- * Fallback: scale the live DOM node via css → canvas using browser's SVG still blank.
- * Uses Offscreen-free approach: temporary larger SVG with encoded HTML from outerHTML + styles.
- */
 async function rasterizeViaHtml2CanvasFallback(
   page: HTMLElement,
   canvas: HTMLCanvasElement,
@@ -174,7 +318,6 @@ async function rasterizeViaHtml2CanvasFallback(
   _rect: DOMRect,
   dpr: number,
 ): Promise<string> {
-  // Last-resort: fill white and note failure — caller should use Playwright generator.
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.scale(dpr, dpr);
   ctx.fillStyle = "#ffffff";

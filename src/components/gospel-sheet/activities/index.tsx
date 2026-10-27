@@ -237,21 +237,31 @@ export function ActivityBlock({
   level,
   seed,
   artFile,
+  hideEditableText = false,
 }: {
   activity: SheetActivity;
   level: SheetLevelNumber;
   seed: string;
   /** Planned art file name, shown as a placeholder label when art is not ready. */
   artFile?: string;
+  /** When true (Fabric base underlay), hide title/intro so overlays can replace them. */
+  hideEditableText?: boolean;
 }) {
   const idx = level - 1;
   const title = activity.type === "heart" ? activity.title : (activity.title ?? TITLES[activity.type][idx]);
   const intro = activity.intro ?? INTROS[activity.type][idx];
+  const hide = hideEditableText ? ({ visibility: "hidden" } as const) : undefined;
   return (
     <div className={`gs-box gs-heart gs-act gs-act-t-${activity.type}`}>
-      <h2>{title}</h2>
+      <h2 data-sheet-field="actTitle" style={hide}>
+        {title}
+      </h2>
       {artFile && activity.type !== "findhidden" && activity.type !== "spotdiff" ? <div className="gs-ph gs-ph-heart">{artFile}</div> : null}
-      {intro ? <div style={{ fontSize: level === 1 ? 15 : 13 }}>{intro}</div> : null}
+      {intro ? (
+        <div data-sheet-field="actIntro" style={{ fontSize: level === 1 ? 15 : 13, ...hide }}>
+          {intro}
+        </div>
+      ) : null}
       <Body activity={activity} level={level} seed={seed} artFile={artFile ?? "find-art.png"} />
     </div>
   );
