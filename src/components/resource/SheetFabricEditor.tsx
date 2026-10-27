@@ -27,7 +27,7 @@ import {
   Textbox,
   type FabricObject,
 } from "fabric";
-import { useEffect, useRef, useState, useEffectEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type SavedSheet = {
   id: string;
@@ -48,7 +48,6 @@ type Props = {
   initialCustomId?: string | null;
   /** Render GospelSheet(variant=base) under a transparent Fabric canvas. */
   liveHtmlBase?: boolean;
-  onLiveBasePageReady?: (page: HTMLElement) => void;
 };
 
 type ObjMeta = {
@@ -84,7 +83,6 @@ export function SheetFabricEditor({
   isPlus,
   initialCustomId = null,
   liveHtmlBase = false,
-  onLiveBasePageReady,
 }: Props) {
   const liveHostRef = useRef<HTMLDivElement>(null);
   const canvasEl = useRef<HTMLCanvasElement>(null);
@@ -92,6 +90,8 @@ export function SheetFabricEditor({
   const undoRef = useRef<string[]>([]);
   const redoRef = useRef<string[]>([]);
   const applyingRef = useRef(false);
+  const refreshLayersRef = useRef<() => void>(() => undefined);
+  const pushUndoRef = useRef<() => void>(() => undefined);
 
   const [ready, setReady] = useState(false);
   const [fontFamily, setFontFamily] = useState<EditorFontId>("Fredoka");
@@ -113,7 +113,7 @@ export function SheetFabricEditor({
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const refreshLayers = useEffectEvent(() => {
+  const refreshLayers = () => {
     const c = fabricRef.current;
     if (!c) return;
     const objs = c.getObjects();
@@ -135,7 +135,7 @@ export function SheetFabricEditor({
           return {
             key: m.id ?? m.fieldId ?? `i${i}`,
             label,
-            locked: m.kind === "base-edit" ? false : false,
+            locked: false,
           };
         })
         .filter((l) => l.key !== "base"),
@@ -153,18 +153,20 @@ export function SheetFabricEditor({
         setUnderline(Boolean(active.underline));
       }
     } else setSelectedLabel("");
-  });
+  };
+  refreshLayersRef.current = refreshLayers;
 
-  const pushUndo = useEffectEvent(() => {
+  const pushUndo = () => {
     const c = fabricRef.current;
     if (!c || applyingRef.current) return;
     const json = JSON.stringify(c.toJSON());
     undoRef.current.push(json);
     if (undoRef.current.length > 50) undoRef.current.shift();
     redoRef.current = [];
-  });
+  };
+  pushUndoRef.current = pushUndo;
 
-  const buildDiff = useEffectEvent((): CustomSheetData => {
+  const buildDiff = (): CustomSheetData => {
     const c = fabricRef.current!;
     const edits: CustomSheetData["edits"] = {};
     const objects: CustomSheetData["objects"] = [];
@@ -298,88 +300,92 @@ export function SheetFabricEditor({
       hidden: [],
       objects,
     };
-  });
+  };
 
   useEffect(() => {
     let cancelled = false;
     let canvas: Canvas | null = null;
 
     (async () => {
-      await loadEditorFonts();
+      try {
+        await loadEditorFonts();
+      } catch (e) {
+        console.warn("[SheetFabricEditor] fonts", e);
+      }
       if (cancelled || !canvasEl.current) return;
 
-      canvas = new Canvas(canvasEl.current, {
-        width: SHEET_PAGE.width,
-        height: SHEET_PAGE.height,
-        backgroundColor: liveHtmlBase || !basePngUrl ? "" : "#ffffff",
-        preserveObjectStacking: true,
-        selection: isPlus,
-      });
-      fabricRef.current = canvas;
-
-      if (basePngUrl) {
-        const bg = await FabricImage.fromURL(basePngUrl, { crossOrigin: "anonymous" });
-        bg.set({
-          selectable: false,
-          evented: false,
-          left: 0,
-          top: 0,
-          scaleX: SHEET_PAGE.width / (bg.width || SHEET_PAGE.width),
-          scaleY: SHEET_PAGE.height / (bg.height || SHEET_PAGE.height),
+      try {
+        canvas = new Canvas(canvasEl.current, {
+          width: SHEET_PAGE.width,
+          height: SHEET_PAGE.height,
+          backgroundColor: liveHtmlBase || !basePngUrl ? "transparent" : "#ffffff",
+          preserveObjectStacking: true,
+          selection: isPlus,
         });
-        canvas.backgroundImage = bg;
-      }
+        fabricRef.current = canvas;
 
-      for (const box of layout.boxes) {
-        const text = defaultTextForField(sheet, level, box.id);
-        const tb = new Textbox(text, {
-          left: box.left,
-          top: box.top,
-          width: Math.max(40, box.width),
-          fontSize: box.fontSize ?? 16,
-          fontFamily: "Fredoka",
-          fill: "#111111",
-          editable: isPlus,
-          selectable: isPlus,
-          evented: isPlus,
+        if (basePngUrl) {
+          const bg = await FabricImage.fromURL(basePngUrl, { crossOrigin: "anonymous" });
+          bg.set({
+            selectable: false,
+            evented: false,
+            left: 0,
+            top: 0,
+            scaleX: SHEET_PAGE.width / (bg.width || SHEET_PAGE.width),
+            scaleY: SHEET_PAGE.height / (bg.height || SHEET_PAGE.height),
+          });
+          canvas.backgroundImage = bg;
+        }
+
+        for (const box of layout.boxes) {
+          const text = defaultTextForField(sheet, level, box.id);
+          const tb = new Textbox(text, {
+            left: box.left,
+            top: box.top,
+            width: Math.max(40, box.width),
+            fontSize: box.fontSize ?? 16,
+            fontFamily: "Fredoka",
+            fill: "#111111",
+            editable: isPlus,
+            selectable: isPlus,
+            evented: isPlus,
+          });
+          setMeta(tb, { kind: "base-edit", fieldId: box.id, id: `base_${box.id}` });
+          canvas.add(tb);
+        }
+
+        canvas.on("object:modified", () => {
+          pushUndoRef.current();
+          refreshLayersRef.current();
         });
-        setMeta(tb, { kind: "base-edit", fieldId: box.id, id: `base_${box.id}` });
-        canvas.add(tb);
+        canvas.on("selection:created", () => refreshLayersRef.current());
+        canvas.on("selection:updated", () => refreshLayersRef.current());
+        canvas.on("selection:cleared", () => refreshLayersRef.current());
+        canvas.on("object:added", () => refreshLayersRef.current());
+        canvas.on("object:removed", () => refreshLayersRef.current());
+
+        canvas.requestRenderAll();
+        pushUndoRef.current();
+        refreshLayersRef.current();
+        if (!cancelled) setReady(true);
+      } catch (e) {
+        console.error("[SheetFabricEditor]", e);
+        if (!cancelled) setStatus("Could not start editor");
       }
-
-      canvas.on("object:modified", () => {
-        pushUndo();
-        refreshLayers();
-      });
-      canvas.on("selection:created", () => refreshLayers());
-      canvas.on("selection:updated", () => refreshLayers());
-      canvas.on("selection:cleared", () => refreshLayers());
-      canvas.on("object:added", () => refreshLayers());
-      canvas.on("object:removed", () => refreshLayers());
-
-      canvas.requestRenderAll();
-      pushUndo();
-      refreshLayers();
-      if (!cancelled) setReady(true);
-    })().catch((e) => {
-      console.error("[SheetFabricEditor]", e);
-      setStatus("Could not start editor");
-    });
+    })();
 
     return () => {
       cancelled = true;
-      canvas?.dispose();
+      try {
+        canvas?.dispose();
+      } catch {
+        /* ignore */
+      }
       fabricRef.current = null;
     };
-  }, [basePngUrl, baseRev, isPlus, layout.boxes, level, sheet, liveHtmlBase, pushUndo, refreshLayers]);
-
-  useEffect(() => {
-    if (!liveHtmlBase || !onLiveBasePageReady) return;
-    const page = liveHostRef.current?.querySelector(".gs-page") as HTMLElement | null;
-    if (!page) return;
-    const t = window.setTimeout(() => onLiveBasePageReady(page), 40);
-    return () => window.clearTimeout(t);
-  }, [liveHtmlBase, onLiveBasePageReady, sheet.key, level]);
+    // layout.boxes identity changes often; key off rev + count
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [basePngUrl, baseRev, isPlus, level, sheet.key, liveHtmlBase, layout.boxes.length]);
 
   useEffect(() => {
     if (!isPlus) return;

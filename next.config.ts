@@ -29,6 +29,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  transpilePackages: ["fabric"],
   serverExternalPackages: ["@prisma/client", "prisma", "romcal"],
   async headers() {
     return [
