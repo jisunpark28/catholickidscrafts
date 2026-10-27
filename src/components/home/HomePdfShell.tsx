@@ -24,6 +24,7 @@ type Props = {
 };
 
 export const DAILY_MASS_HREF = "/daily-mass";
+export const RESOURCE_HREF = "/resource";
 
 function dailyMassClass(active: boolean): string {
   return [
@@ -40,6 +41,15 @@ function CalendarIcon() {
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
       <rect x="3" y="5" width="18" height="16" rx="2" />
       <path d="M3 10h18M8 3v4M16 3v4" />
+    </svg>
+  );
+}
+
+function ResourceIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 3v5h5M9 13h6M9 17h4" />
     </svg>
   );
 }
@@ -112,6 +122,7 @@ function NavAnchor({
 export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass" }: Props) {
   const pathname = usePathname() ?? "";
   const navId = useId();
+  const resourceActive = pathname === RESOURCE_HREF || pathname.startsWith(`${RESOURCE_HREF}/`);
   const [desktopOpen, setDesktopOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -158,6 +169,15 @@ export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass" }
               >
                 <CalendarIcon />
                 {dailyMassLabel}
+              </Link>
+              <Link
+                href={RESOURCE_HREF}
+                className={`mt-2.5 ${dailyMassClass(resourceActive)}`}
+                aria-current={resourceActive ? "page" : undefined}
+                onClick={() => setMobileOpen(false)}
+              >
+                <ResourceIcon />
+                Resource
               </Link>
             </div>
             {groups.map((group) => (

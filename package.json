@@ -29,7 +29,8 @@
     "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs",
     "generate:favicons": "python3 scripts/generate-favicons.py",
     "export:mass-participation": "tsx scripts/export-mass-participation-bundle.ts",
-    "test:sheet-keys": "tsx scripts/test-sheet-keys.ts"
+    "test:sheet-keys": "tsx scripts/test-sheet-keys.ts",
+    "generate:sheet-bases": "tsx scripts/generate-sheet-bases.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
@@ -43,9 +44,11 @@
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.4.0",
     "bcryptjs": "^3.0.3",
+    "fabric": "^6.7.1",
     "gray-matter": "^4.0.3",
     "isomorphic-dompurify": "^3.15.0",
     "jose": "^6.2.3",
+    "jspdf": "^4.2.1",
     "next": "^15.5.7",
     "next-auth": "5.0.0-beta.29",
     "prisma": "5.22.0",
@@ -69,6 +72,7 @@
     "dotenv": "^17.4.2",
     "eslint": "^9.27.0",
     "eslint-config-next": "^15.5.7",
+    "playwright": "^1.56.1",
     "tailwindcss": "^4.1.8",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
