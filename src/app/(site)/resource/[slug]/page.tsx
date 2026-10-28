@@ -114,9 +114,8 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
 
       {!canPrint ? (
         <p className="mt-4 max-w-2xl rounded-xl border border-[#efe6da] bg-[#fdfaf7] px-4 py-3 text-sm text-[#4b5563]">
-          Read the full Level 1 &amp; Level 2 text below.{" "}
-          <strong className="text-[#1c1c1c]">Print and Edit</strong> need Plus (this Sunday stays
-          free).{" "}
+          Preview the sheet below. <strong className="text-[#1c1c1c]">Print and Edit</strong> need
+          Plus (this Sunday stays free).{" "}
           <Link href="/subscribe" className="font-semibold text-[#d35400] hover:underline">
             Unlock with Plus
           </Link>
@@ -148,6 +147,7 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         }
       />
 
+      {/* Short visible teaser + collapsed body keeps the page sheet-first; text remains in HTML for SEO. */}
       <article className="mx-auto mt-8 max-w-3xl text-[15px] leading-relaxed text-[#1c1c1c]">
         <h2 className="text-lg font-bold">About this Sunday&apos;s Gospel</h2>
         <p className="text-[#4b5563]">
@@ -157,59 +157,66 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
           {sheet.keyVerseDR}
         </blockquote>
 
-        <h3 className="mt-5 text-base font-bold">Level 1: {l1.title}</h3>
-        <p>{l1.story}</p>
-        <p>
-          <strong>Key line:</strong> {l1.keyLine}
-        </p>
-        {l1.activity?.title ? (
-          <p>
-            <strong>Activity:</strong> {l1.activity.title}
-            {l1.activity.intro ? ` — ${l1.activity.intro}` : null}
-          </p>
-        ) : null}
-        {l1.actions?.length ? (
-          <>
-            <p className="mb-1 font-semibold">Try this</p>
+        <details className="mt-4 rounded-xl border border-[#efe6da] bg-[#fdfaf7] px-4 py-3">
+          <summary className="cursor-pointer select-none text-sm font-semibold text-[#1c1c1c]">
+            Level 1 &amp; Level 2 text (story, activity, questions)
+          </summary>
+          <div className="mt-3 border-t border-[#efe6da] pt-3">
+            <h3 className="mt-0 text-base font-bold">Level 1: {l1.title}</h3>
+            <p>{l1.story}</p>
+            <p>
+              <strong>Key line:</strong> {l1.keyLine}
+            </p>
+            {l1.activity?.title ? (
+              <p>
+                <strong>Activity:</strong> {l1.activity.title}
+                {l1.activity.intro ? ` — ${l1.activity.intro}` : null}
+              </p>
+            ) : null}
+            {l1.actions?.length ? (
+              <>
+                <p className="mb-1 font-semibold">Try this</p>
+                <ul>
+                  {l1.actions.map((a) => (
+                    <li key={a}>{a}</li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+            <p className="italic">{l1.prayer}</p>
+
+            <h3 className="mt-5 text-base font-bold">Level 2: {l2.title}</h3>
+            <p>{l2.story}</p>
+            <p>
+              <strong>Key line:</strong> {l2.keyLine}
+            </p>
+            {l2.activity?.title ? (
+              <p>
+                <strong>Activity:</strong> {l2.activity.title}
+                {l2.activity.intro ? ` — ${l2.activity.intro}` : null}
+              </p>
+            ) : null}
+            {l2.actions?.length ? (
+              <>
+                <p className="mb-1 font-semibold">Try this</p>
+                <ul>
+                  {l2.actions.map((a) => (
+                    <li key={a}>{a}</li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+
+            <h3 className="mt-5 text-base font-bold">Talk about it</h3>
             <ul>
-              {l1.actions.map((a) => (
-                <li key={a}>{a}</li>
+              {[...l1.questions, ...l2.questions].map((qq) => (
+                <li key={qq}>{qq}</li>
               ))}
             </ul>
-          </>
-        ) : null}
-        <p className="italic">{l1.prayer}</p>
-
-        <h3 className="mt-5 text-base font-bold">Level 2: {l2.title}</h3>
-        <p>{l2.story}</p>
-        <p>
-          <strong>Key line:</strong> {l2.keyLine}
-        </p>
-        {l2.activity?.title ? (
-          <p>
-            <strong>Activity:</strong> {l2.activity.title}
-            {l2.activity.intro ? ` — ${l2.activity.intro}` : null}
-          </p>
-        ) : null}
-        {l2.actions?.length ? (
-          <>
-            <p className="mb-1 font-semibold">Try this</p>
-            <ul>
-              {l2.actions.map((a) => (
-                <li key={a}>{a}</li>
-              ))}
-            </ul>
-          </>
-        ) : null}
-
-        <h3 className="mt-5 text-base font-bold">Talk about it</h3>
-        <ul>
-          {[...l1.questions, ...l2.questions].map((qq) => (
-            <li key={qq}>{qq}</li>
-          ))}
-        </ul>
-        <h3 className="mt-5 text-base font-bold">Prayer</h3>
-        <p className="italic">{l2.prayer || l1.prayer}</p>
+            <h3 className="mt-5 text-base font-bold">Prayer</h3>
+            <p className="italic">{l2.prayer || l1.prayer}</p>
+          </div>
+        </details>
       </article>
 
       {prevSheet || nextSheet ? (
