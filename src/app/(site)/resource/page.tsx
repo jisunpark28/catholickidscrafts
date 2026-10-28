@@ -15,7 +15,6 @@ import {
   resourcePath,
   searchSheets,
   seasonLabel,
-  seasonPath,
   sheetSeason,
   yearLabel,
 } from "@/lib/resource/sheets";
@@ -93,10 +92,6 @@ export default async function ResourcePage({ searchParams }: Props) {
     }
   }
 
-  const filterText = [q.trim() ? `“${q.trim()}”` : "", season ? seasonLabel(season) : ""]
-    .filter(Boolean)
-    .join(" · ");
-
   return (
     <HomePdfShell groups={nav.groups} dailyMassLabel={nav.dailyMassLabel}>
       <JsonLd nodes={[breadcrumbNode([{ name: "Resource", path: "/resource" }])]} />
@@ -106,14 +101,6 @@ export default async function ResourcePage({ searchParams }: Props) {
         seasons={RESOURCE_SEASONS}
         isPlus={viewer.isPlus}
       />
-      <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-[#6b7280]">
-        <span>Season pages:</span>
-        {RESOURCE_SEASONS.map((s) => (
-          <Link key={s.id} href={seasonPath(s.id)} className="font-semibold text-[#335599] hover:underline">
-            {s.label}
-          </Link>
-        ))}
-      </p>
 
       {view === "custom" ? (
         <section aria-label="Custom sheets" className="mt-5">
@@ -159,18 +146,6 @@ export default async function ResourcePage({ searchParams }: Props) {
         </section>
       ) : view === "all" ? (
         <section aria-label="Search results" className="mt-5">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="m-0 text-xl font-bold text-[#1c1c1c]">
-                {results.length} {results.length === 1 ? "sheet" : "sheets"}
-                {filterText ? <> match {filterText}</> : null}
-              </h2>
-              <p className="mb-0 mt-1 text-sm text-[#6b7280]">
-                Showing {results.length} · Level {level}
-                {!filterText ? " · full library" : " · sorted by relevance"}
-              </p>
-            </div>
-          </div>
           {results.length ? (
             <ResourceCardGrid
               sheets={results}
