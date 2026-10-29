@@ -84,6 +84,10 @@ export type WorksheetInput = {
   /** e.g. "Matthew 22:34-40" */
   gospelRef?: string;
   description?: string;
+  /** Short plain-text summary of the worksheet's story (also printed on the sheet). */
+  abstract?: string;
+  /** Key Gospel verse quoted on the sheet. */
+  keyVerse?: string;
   /** Page where the worksheet is shown (canonical). */
   pagePath: string;
   /** True only when every level can be printed without Plus or a purchase. */
@@ -98,9 +102,12 @@ export function worksheetNode(input: WorksheetInput): JsonLdNode {
     "@type": "LearningResource",
     name: input.name,
     description: input.description,
+    abstract: input.abstract,
     learningResourceType: "Worksheet",
     educationalLevel: ["Kindergarten", "Elementary School"],
-    about: input.gospelRef ? { "@type": "Thing", name: input.gospelRef } : undefined,
+    about: input.gospelRef
+      ? { "@type": "Thing", name: input.gospelRef, ...(input.keyVerse ? { description: input.keyVerse } : {}) }
+      : undefined,
     isAccessibleForFree: input.isAccessibleForFree,
     inLanguage: "en",
     url: absoluteSiteUrl(input.pagePath),

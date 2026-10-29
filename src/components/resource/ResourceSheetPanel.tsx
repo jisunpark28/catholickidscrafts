@@ -13,8 +13,9 @@ type Props = {
   sundayDate?: string;
   /** Builds the href for the Level 1 / Level 2 toggle. Omit when the page already has one. */
   levelHref?: (level: 1 | 2) => string;
-  heading: React.ReactNode;
-  subheading: React.ReactNode;
+  /** Optional title row above the sheet (omit when the page header already names the sheet). */
+  heading?: React.ReactNode;
+  subheading?: React.ReactNode;
   headingLevel?: "h1" | "h2" | "h3";
   /** When false, Edit links to /subscribe instead of the Fabric editor. */
   isPlus?: boolean;
@@ -134,11 +135,15 @@ export function ResourceSheetPanel({
   );
   return (
     <section aria-label="Sunday sheet" className="pb-24 sm:pb-0">
-      <div className="mb-4 mt-5 flex flex-wrap items-end justify-between gap-3">
-        <div className="min-w-0">
-          <H className="m-0 text-xl font-bold text-[#1c1c1c] sm:text-2xl">{heading}</H>
-          <div className="mt-1 text-sm text-[#6b7280]">{subheading}</div>
-        </div>
+      <div
+        className={`mb-4 mt-5 flex flex-wrap items-end gap-3 ${heading ? "justify-between" : "justify-end"}`}
+      >
+        {heading ? (
+          <div className="min-w-0">
+            <H className="m-0 text-xl font-bold text-[#1c1c1c] sm:text-2xl">{heading}</H>
+            {subheading ? <div className="mt-1 text-sm text-[#6b7280]">{subheading}</div> : null}
+          </div>
+        ) : null}
         <div className="hidden flex-wrap items-center gap-2 sm:flex">
           {levelHref ? (
             <div

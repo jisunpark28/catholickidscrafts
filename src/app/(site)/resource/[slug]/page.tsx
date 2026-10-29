@@ -9,8 +9,8 @@ import {
   resourcePath,
   seasonLabel,
   seasonPath,
+  sheetAbstract,
   sheetDescription,
-  sheetNeighbors,
   sheetSeason,
   sheetSeoH1,
   sheetSeoH2,
@@ -58,8 +58,6 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
   if (!key || !sheet) notFound();
   if (slug !== keyToSlug(key)) permanentRedirect(resourcePath(key));
   const level = parseLevelParam(sp.level);
-  const l1 = sheet.levels.level1;
-  const l2 = sheet.levels.level2;
   const path = resourcePath(key);
   const canPrint = sheetOpenAllowed(viewer, key);
   const season = sheetSeason(sheet);
@@ -69,9 +67,6 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
     : "/resource";
   const sundayDate =
     viewer.thisSundayKey === key && viewer.thisSundayDate ? viewer.thisSundayDate : undefined;
-  const { prev, next } = sheetNeighbors(key);
-  const prevSheet = prev ? getSundaySheet(prev) : null;
-  const nextSheet = next ? getSundaySheet(next) : null;
 
   return (
     <HomePdfShell groups={nav.groups} dailyMassLabel={nav.dailyMassLabel}>
@@ -86,6 +81,8 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
             name: sheetSeoTitle(sheet),
             gospelRef: sheet.gospelRef,
             description: sheetDescription(sheet),
+            abstract: sheetAbstract(sheet),
+            keyVerse: sheet.keyVerseDR,
             pagePath: path,
             isAccessibleForFree: true,
           }),
@@ -102,8 +99,8 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         › {sheet.liturgicalName}
       </nav>
 
-      <header className="mt-4 max-w-3xl">
-        <h1 className="m-0 text-2xl font-bold leading-tight text-[#1c1c1c] sm:text-3xl">
+      <header className="mt-4 min-w-0">
+        <h1 className="m-0 break-words text-2xl font-bold leading-tight text-[#1c1c1c] sm:text-3xl">
           {sheetSeoH1(sheet)}
         </h1>
         <h2 className="mt-2 text-lg font-semibold text-[#4b5563]">{sheetSeoH2(sheet)}</h2>
@@ -131,116 +128,11 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         sheet={sheet}
         level={level}
         sundayDate={sundayDate}
-        headingLevel="h3"
         isPlus={viewer.isPlus}
         canPrint={canPrint}
         thisSundayHref={thisSundayHref}
         levelHref={(n) => (n === 2 ? `${path}?level=2` : path)}
-        heading={`${level === 2 ? l2.title : l1.title}`}
-        subheading={
-          <>
-            {sheet.liturgicalName} · {yearLabel(key)} · {seasonLabel(season)} · {sheet.gospelRef}
-          </>
-        }
       />
-
-      {/* Short visible teaser + collapsed body keeps the page sheet-first; text remains in HTML for SEO. */}
-      <article className="mx-auto mt-8 max-w-3xl text-[15px] leading-relaxed text-[#1c1c1c]">
-        <h2 className="text-lg font-bold">About this Sunday&apos;s Gospel</h2>
-        <p className="text-[#4b5563]">
-          {sheet.liturgicalName} · {yearLabel(key)} · Gospel: {sheet.gospelRef}
-        </p>
-        <blockquote className="my-3 border-l-[3px] border-[#d35400] pl-4 italic text-[#4b5563]">
-          {sheet.keyVerseDR}
-        </blockquote>
-
-        <details className="mt-4 rounded-xl border border-[#efe6da] bg-[#fdfaf7] px-4 py-3">
-          <summary className="cursor-pointer select-none text-sm font-semibold text-[#1c1c1c]">
-            Level 1 &amp; Level 2 text (story, activity, questions)
-          </summary>
-          <div className="mt-3 border-t border-[#efe6da] pt-3">
-            <h3 className="mt-0 text-base font-bold">Level 1: {l1.title}</h3>
-            <p>{l1.story}</p>
-            <p>
-              <strong>Key line:</strong> {l1.keyLine}
-            </p>
-            {l1.activity?.title ? (
-              <p>
-                <strong>Activity:</strong> {l1.activity.title}
-                {l1.activity.intro ? ` — ${l1.activity.intro}` : null}
-              </p>
-            ) : null}
-            {l1.actions?.length ? (
-              <>
-                <p className="mb-1 font-semibold">Try this</p>
-                <ul>
-                  {l1.actions.map((a) => (
-                    <li key={a}>{a}</li>
-                  ))}
-                </ul>
-              </>
-            ) : null}
-            <p className="italic">{l1.prayer}</p>
-
-            <h3 className="mt-5 text-base font-bold">Level 2: {l2.title}</h3>
-            <p>{l2.story}</p>
-            <p>
-              <strong>Key line:</strong> {l2.keyLine}
-            </p>
-            {l2.activity?.title ? (
-              <p>
-                <strong>Activity:</strong> {l2.activity.title}
-                {l2.activity.intro ? ` — ${l2.activity.intro}` : null}
-              </p>
-            ) : null}
-            {l2.actions?.length ? (
-              <>
-                <p className="mb-1 font-semibold">Try this</p>
-                <ul>
-                  {l2.actions.map((a) => (
-                    <li key={a}>{a}</li>
-                  ))}
-                </ul>
-              </>
-            ) : null}
-
-            <h3 className="mt-5 text-base font-bold">Talk about it</h3>
-            <ul>
-              {[...l1.questions, ...l2.questions].map((qq) => (
-                <li key={qq}>{qq}</li>
-              ))}
-            </ul>
-            <h3 className="mt-5 text-base font-bold">Prayer</h3>
-            <p className="italic">{l2.prayer || l1.prayer}</p>
-          </div>
-        </details>
-      </article>
-
-      {prevSheet || nextSheet ? (
-        <nav
-          aria-label="Adjacent Sunday sheets"
-          className="mx-auto mt-10 flex max-w-3xl flex-col gap-3 border-t border-[#efe6da] pt-6 text-sm sm:flex-row sm:justify-between"
-        >
-          {prevSheet ? (
-            <Link
-              href={resourcePath(prevSheet.key, level)}
-              className="font-semibold text-[#335599] hover:underline"
-            >
-              ← Previous: {yearLabel(prevSheet.key)} {prevSheet.liturgicalName}
-            </Link>
-          ) : (
-            <span />
-          )}
-          {nextSheet ? (
-            <Link
-              href={resourcePath(nextSheet.key, level)}
-              className="font-semibold text-[#335599] hover:underline sm:text-right"
-            >
-              Next: {yearLabel(nextSheet.key)} {nextSheet.liturgicalName} →
-            </Link>
-          ) : null}
-        </nav>
-      ) : null}
     </HomePdfShell>
   );
 }

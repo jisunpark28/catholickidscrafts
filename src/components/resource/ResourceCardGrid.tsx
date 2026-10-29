@@ -7,7 +7,7 @@ import { SheetThumb } from "./SheetThumb";
 type Props = {
   sheets: SundaySheetContent[];
   level: 1 | 2;
-  /** Plus members can open any card; free only thisSundayKey. */
+  /** Server-resolved: Plus members can open any card; free (and signed-out) only thisSundayKey. */
   isPlus?: boolean;
   thisSundayKey?: string | null;
 };
@@ -26,32 +26,51 @@ export function ResourceCardGrid({
         {sheets.map((sheet) => {
           const title = level === 2 ? sheet.levels.level2.title : sheet.levels.level1.title;
           const view = toGospelSheetView(sheet);
-          const canPrint = isPlus || (thisSundayKey != null && sheet.key === thisSundayKey);
+          // Free (incl. signed-out) visitors: only this Sunday's card (server-resolved) is usable.
+          const unlocked = isPlus || (thisSundayKey != null && sheet.key === thisSundayKey);
           const openHref = resourcePath(sheet.key, level);
+          const lockedTitle = "Plus members only (this Sunday's sheet is free)";
           return (
             <li
               key={sheet.key}
-              className="flex flex-col rounded-2xl border border-[#e7e3de] bg-white p-3 shadow-[0_1px_3px_rgba(28,28,28,0.04)]"
+              className={`relative flex flex-col rounded-2xl border border-[#e7e3de] bg-white p-3 shadow-[0_1px_3px_rgba(28,28,28,0.04)] ${unlocked ? "" : "cursor-not-allowed"}`}
+              aria-disabled={unlocked ? undefined : true}
+              title={unlocked ? undefined : lockedTitle}
             >
-              <Link href={openHref} className="block no-underline" tabIndex={-1}>
-                <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
-              </Link>
+              {unlocked ? (
+                <Link href={openHref} className="block no-underline" tabIndex={-1}>
+                  <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
+                </Link>
+              ) : (
+                <div className="relative select-none opacity-60" aria-hidden>
+                  <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
+                </div>
+              )}
+              {unlocked ? null : (
+                <span className="pointer-events-none absolute right-5 top-5 rounded-full bg-[#1c1c1c]/80 px-2.5 py-1 text-xs font-semibold text-white">
+                  🔒 Plus
+                </span>
+              )}
               <div className="mt-3 px-1 text-xs font-bold tracking-wide text-[#d35400]">{sheet.key}</div>
               <h3 className="mb-0.5 mt-0.5 px-1 text-base font-bold leading-snug text-[#1c1c1c]">
-                <Link href={openHref} className="text-inherit no-underline hover:underline">
-                  {title}
-                </Link>
+                {unlocked ? (
+                  <Link href={openHref} className="text-inherit no-underline hover:underline">
+                    {title}
+                  </Link>
+                ) : (
+                  <span className="text-[#4b5563]">{title}</span>
+                )}
               </h3>
               <div className="px-1 text-sm text-[#6b7280]">{sheet.liturgicalName}</div>
               <div className="px-1 text-sm text-[#6b7280]">{sheet.gospelRef}</div>
-              <div className="mt-auto flex gap-2 px-1 pb-1 pt-3">
-                <Link
-                  href={openHref}
-                  className="rounded-full bg-[#d35400] px-4 py-1.5 text-sm font-semibold text-white no-underline hover:bg-[#b8470a]"
-                >
-                  Open
-                </Link>
-                {canPrint ? (
+              {unlocked ? (
+                <div className="mt-auto flex gap-2 px-1 pb-1 pt-3">
+                  <Link
+                    href={openHref}
+                    className="rounded-full bg-[#d35400] px-4 py-1.5 text-sm font-semibold text-white no-underline hover:bg-[#b8470a]"
+                  >
+                    Open
+                  </Link>
                   <a
                     href={resourcePrintPath(sheet.key, level, true)}
                     target="_blank"
@@ -60,16 +79,35 @@ export function ResourceCardGrid({
                   >
                     🖨 Print
                   </a>
-                ) : (
-                  <Link
-                    href="/subscribe"
-                    className="rounded-full border border-[#e7e3de] px-4 py-1.5 text-sm font-medium text-[#6b7280] no-underline hover:bg-[#fffdfb]"
-                    title="Print needs Plus (this Sunday is free)"
-                  >
-                    🖨 Print · Plus
-                  </Link>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div className="mt-auto px-1 pb-1 pt-3">
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      disabled
+                      aria-disabled="true"
+                      className="cursor-not-allowed rounded-full bg-[#e7e3de] px-4 py-1.5 text-sm font-semibold text-[#6b7280]"
+                    >
+                      Open
+                    </button>
+                    <button
+                      type="button"
+                      disabled
+                      aria-disabled="true"
+                      className="cursor-not-allowed rounded-full border border-[#e7e3de] px-4 py-1.5 text-sm font-medium text-[#9ca3af]"
+                    >
+                      🖨 Print
+                    </button>
+                  </div>
+                  <p className="m-0 mt-2 text-xs text-[#6b7280]">
+                    🔒 Plus members only ·{" "}
+                    <Link href="/subscribe" className="cursor-pointer font-semibold text-[#d35400] hover:underline">
+                      Get Plus
+                    </Link>
+                  </p>
+                </div>
+              )}
             </li>
           );
         })}
