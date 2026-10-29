@@ -8,8 +8,8 @@ export type ResourceSearchState = {
   q: string;
   season: string; // "" = all
   level: 1 | 2;
-  /** "" = this Sunday, "all" = library, "custom" = saved sheets */
-  view: "" | "all" | "custom";
+  /** "" = this Sunday, "all" = library, "custom" = saved sheets, "cards" = picture cards */
+  view: "" | "all" | "custom" | "cards";
 };
 
 type Props = {
@@ -30,7 +30,7 @@ const selectCls =
 
 function href(s: ResourceSearchState): string {
   const p = new URLSearchParams();
-  if (s.view === "all" || s.view === "custom") p.set("view", s.view);
+  if (s.view === "all" || s.view === "custom" || s.view === "cards") p.set("view", s.view);
   if (s.q.trim()) p.set("q", s.q.trim());
   if (s.season) p.set("season", s.season);
   if (s.level === 2) p.set("level", "2");
@@ -46,7 +46,8 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
   const go = (patch: Partial<ResourceSearchState>) => router.push(href({ ...state, q, ...patch }));
 
   const thisSundayActive = state.view === "" && !state.q.trim() && !state.season;
-  const allActive = state.view === "all" || Boolean(state.q.trim() || state.season);
+  const cardsActive = state.view === "cards";
+  const allActive = !cardsActive && (state.view === "all" || Boolean(state.q.trim() || state.season));
   const customActive = state.view === "custom";
 
   return (
@@ -55,7 +56,8 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
       className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3"
       onSubmit={(e) => {
         e.preventDefault();
-        go({ view: "all" });
+        // Cards tab searches cards; everywhere else searches sheets.
+        go({ view: state.view === "cards" ? "cards" : "all" });
       }}
     >
       <label className="flex min-w-[15rem] flex-1 items-center gap-2 rounded-full border border-[#e7e3de] bg-white px-4 py-2">
@@ -66,7 +68,11 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
           name="q"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search topic, Gospel or keyword — e.g. 'Good Shepherd'"
+          placeholder={
+            cardsActive
+              ? "Search cards — e.g. 'Rosary', 'Saint Joseph', 'Advent'"
+              : "Search topic, Gospel or keyword — e.g. 'Good Shepherd'"
+          }
           className="w-full bg-transparent text-sm text-[#1c1c1c] outline-none placeholder:text-[#6b7280]"
           maxLength={80}
         />
@@ -129,7 +135,7 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         </Link>
       )}
 
-      {(allActive || state.view === "all") && state.view !== "custom" ? (
+      {(allActive || state.view === "all") && state.view !== "custom" && !cardsActive ? (
         <label className="inline-flex">
           <span className="sr-only">Season</span>
           <select

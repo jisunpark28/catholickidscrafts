@@ -26,6 +26,8 @@ type Props = {
   canPrint?: boolean;
   /** Optional fallback when print is locked (e.g. this Sunday’s sheet). */
   thisSundayHref?: string | null;
+  /** Optional block between the title row and the sheet (e.g. this Sunday's picture card). */
+  beforeSheet?: React.ReactNode;
 };
 
 /**
@@ -122,6 +124,7 @@ export function ResourceSheetPanel({
   isPlus = false,
   canPrint = true,
   thisSundayHref = null,
+  beforeSheet = null,
 }: Props) {
   const H = headingLevel;
   const actions = (
@@ -167,6 +170,7 @@ export function ResourceSheetPanel({
           {actions}
         </div>
       </div>
+      {beforeSheet ? <div className="mb-5 print:hidden">{beforeSheet}</div> : null}
       <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS + (canPrint ? "" : PRINT_LOCK_CSS) }} />
       <div className={canPrint ? undefined : "ckc-print-locked-sheet"}>
         <SheetFit>

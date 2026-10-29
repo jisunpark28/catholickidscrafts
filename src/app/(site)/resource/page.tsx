@@ -1,11 +1,22 @@
 import { HomePdfShell } from "@/components/home/HomePdfShell";
+import { CardsBrowser } from "@/components/resource/CardsBrowser";
 import { CustomSheetCardGrid } from "@/components/resource/CustomSheetCardGrid";
 import { ResourceCardGrid } from "@/components/resource/ResourceCardGrid";
 import { ResourceSearchBar } from "@/components/resource/ResourceSearchBar";
 import { ResourceSheetPanel } from "@/components/resource/ResourceSheetPanel";
+import { ResourceTabs } from "@/components/resource/ResourceTabs";
+import { ThisSundayCards } from "@/components/resource/ThisSundayCards";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { requireFamilySession } from "@/lib/family-auth";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
+import { upcomingCardDates } from "@/lib/resource/card-calendar";
+import {
+  cardsForSunday,
+  getPictureCard,
+  parseCardCategory,
+  PICTURE_CARDS,
+  toCardListItem,
+} from "@/lib/resource/cards";
 import { getResourceNav } from "@/lib/resource/nav";
 import { listCustomSheets } from "@/lib/resource/custom-sheet-db";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
@@ -24,10 +35,12 @@ import {
   formatSundayDate,
   pickCountry,
   thisSunday,
+  todayIn,
 } from "@/lib/resource/this-sunday";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode } from "@/lib/structured-data";
-import { getSundaySheet } from "@/lib/sunday-sheet-content";
+import { getSiteUrl } from "@/lib/site-url";
+import { getSundaySheet, listSundaySheetKeys } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import Link from "next/link";
@@ -38,14 +51,24 @@ export const dynamic = "force-dynamic";
 
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 
-function parseView(raw: string | undefined): "" | "all" | "custom" {
-  if (raw === "all" || raw === "custom") return raw;
+type ResourceView = "" | "all" | "custom" | "cards";
+
+function parseView(raw: string | undefined): ResourceView {
+  if (raw === "all" || raw === "custom" || raw === "cards") return raw;
   return "";
+}
+
+/** "Nov 1" from YYYY-MM-DD. */
+function shortDate(ymd: string): string {
+  return new Date(`${ymd}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", month: "short", day: "numeric" });
 }
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const sp = await searchParams;
-  const filtered = Boolean(one(sp.q) || one(sp.season) || one(sp.view) || one(sp.level));
+  // Any filtered / tab / card view (incl. the Plus-gated Cards tab) stays out of the index.
+  const filtered = Boolean(
+    one(sp.q) || one(sp.season) || one(sp.view) || one(sp.level) || one(sp.card) || one(sp.cat),
+  );
   return pageMetadata({
     title: "Sunday Gospel Activity Sheets for Catholic Kids",
     description:
@@ -70,13 +93,21 @@ export default async function ResourcePage({ searchParams }: Props) {
   const country = pickCountry(undefined, cookieStore.get(COUNTRY_COOKIE)?.value, h.get("x-vercel-ip-country"));
 
   const searching = Boolean(q.trim() || season);
-  const view: "" | "all" | "custom" =
-    viewParam === "custom" ? "custom" : searching || viewParam === "all" ? "all" : "";
+  const view: ResourceView =
+    viewParam === "custom" || viewParam === "cards"
+      ? viewParam
+      : searching || viewParam === "all"
+        ? "all"
+        : "";
 
-  const sunday = view === "" ? thisSunday(country) : null;
+  const sunday = view === "" || view === "cards" ? thisSunday(country) : null;
   const sheet = sunday ? getSundaySheet(sunday.key) : null;
   const results = view === "all" ? searchSheets({ q, season }) : [];
   const thisSundayKey = viewer.thisSundayKey ?? sunday?.key ?? null;
+  const siteUrl = getSiteUrl();
+  const sundayCards = sunday ? cardsForSunday(sunday.key) : { primary: null, more: [] };
+  const cardDates = view === "cards" && sunday ? upcomingCardDates(todayIn(country, new Date()), sunday.date, country) : {};
+  const sheetCount = listSundaySheetKeys().length * 2;
 
   let customSheets: Awaited<ReturnType<typeof listCustomSheets>> = [];
   let customError: string | null = null;
@@ -101,8 +132,24 @@ export default async function ResourcePage({ searchParams }: Props) {
         seasons={RESOURCE_SEASONS}
         isPlus={viewer.isPlus}
       />
+      <ResourceTabs
+        active={view === "" ? "sunday" : view === "all" ? "sheets" : view}
+        sheetCount={sheetCount}
+        cardCount={PICTURE_CARDS.length}
+        level={level}
+      />
 
-      {view === "custom" ? (
+      {view === "cards" ? (
+        <CardsBrowser
+          cards={PICTURE_CARDS.map((c) => toCardListItem(c, cardDates[c.id]))}
+          isPlus={viewer.isPlus}
+          siteUrl={siteUrl}
+          featuredIds={[sundayCards.primary, ...sundayCards.more].filter((c) => c != null).map((c) => c.id)}
+          initialCat={parseCardCategory(one(sp.cat))}
+          initialQ={q}
+          initialCardId={getPictureCard(one(sp.card))?.id ?? sundayCards.primary?.id ?? null}
+        />
+      ) : view === "custom" ? (
         <section aria-label="Custom sheets" className="mt-5">
           <div className="mb-4">
             <h2 className="m-0 text-xl font-bold text-[#1c1c1c]">
@@ -165,6 +212,18 @@ export default async function ResourcePage({ searchParams }: Props) {
         </section>
       ) : sunday && sheet ? (
         <ResourceSheetPanel
+          beforeSheet={
+            sundayCards.primary ? (
+              <ThisSundayCards
+                primary={sundayCards.primary}
+                more={sundayCards.more}
+                totalCards={PICTURE_CARDS.length}
+                isPlus={viewer.isPlus}
+                siteUrl={siteUrl}
+                dateLabel={sundayCards.primary.md ? sundayCards.primary.when : shortDate(sunday.date)}
+              />
+            ) : null
+          }
           sheet={sheet}
           level={level}
           sundayDate={sunday.date}

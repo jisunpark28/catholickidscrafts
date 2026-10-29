@@ -30,7 +30,9 @@
     "generate:favicons": "python3 scripts/generate-favicons.py",
     "export:mass-participation": "tsx scripts/export-mass-participation-bundle.ts",
     "test:sheet-keys": "tsx scripts/test-sheet-keys.ts",
-    "generate:sheet-bases": "tsx scripts/generate-sheet-bases.ts"
+    "generate:sheet-bases": "tsx scripts/generate-sheet-bases.ts",
+    "cards:thumbs": "tsx scripts/build-card-thumbs.ts",
+    "cards:upload": "tsx scripts/upload-cards.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
