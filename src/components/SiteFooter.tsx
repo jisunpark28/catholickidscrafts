@@ -37,6 +37,12 @@ export function SiteFooter() {
         </div>
         <div className="mt-8 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)]">
           <p>{SITE_LITURGY_FOOTER}</p>
+          <p className="mt-2">
+            Scripture texts in this work are taken from the New American Bible, revised edition © 2010, 1991, 1986,
+            1970 Confraternity of Christian Doctrine, Washington, D.C., and are used by permission of the copyright
+            owner. All Rights Reserved. Excerpts from the English translation of The Roman Missal © 2010, International
+            Commission on English in the Liturgy Corporation. All rights reserved.
+          </p>
           <p className="mt-2">© 2026 Catholic Kids Crafts. All rights reserved.</p>
         </div>
       </div>

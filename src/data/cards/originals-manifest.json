@@ -1,0 +1,3762 @@
+{
+  "version": 1,
+  "access": "private",
+  "items": {
+    "BIB-001": {
+      "pathname": "cards/originals/BIB-001-7b31d35836.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-001-7b31d35836.png",
+      "size": 716030,
+      "sha256": "7b31d35836bdf5ef9d45e0ca0edad55e5332c41f24cd006052aaa6206aa74edf"
+    },
+    "BIB-002": {
+      "pathname": "cards/originals/BIB-002-d96c436745.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-002-d96c436745.png",
+      "size": 1340541,
+      "sha256": "d96c4367459d718ddec73ee3f266d3d9de826f61734bf88af2085e444622ddc7"
+    },
+    "BIB-003": {
+      "pathname": "cards/originals/BIB-003-602691908b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-003-602691908b.png",
+      "size": 696911,
+      "sha256": "602691908be0f2feff4aba9963825ced7383059356649cca6604a40692933dd3"
+    },
+    "BIB-004": {
+      "pathname": "cards/originals/BIB-004-5985d4b20d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-004-5985d4b20d.png",
+      "size": 869663,
+      "sha256": "5985d4b20d4cfe50587dd452bddbc57e1ef40afb79f898cb45f4b49d5339bfdf"
+    },
+    "BIB-005": {
+      "pathname": "cards/originals/BIB-005-e29cf1fb7c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-005-e29cf1fb7c.png",
+      "size": 918025,
+      "sha256": "e29cf1fb7c1d138f3a37e1c6389eb33e5c0696d905d7bb76e8cf8510f05bfe79"
+    },
+    "BIB-006": {
+      "pathname": "cards/originals/BIB-006-bb6dc3b4c5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-006-bb6dc3b4c5.png",
+      "size": 926455,
+      "sha256": "bb6dc3b4c588cc43bb8157c6d033d4f28e402b6a20095e878086b2c7ccfb3c23"
+    },
+    "BIB-007": {
+      "pathname": "cards/originals/BIB-007-1a5c5501f2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-007-1a5c5501f2.png",
+      "size": 1162568,
+      "sha256": "1a5c5501f20985a36dea98f1ecd3347bd685af1ebb45fd9b0c5be0b3d24caef0"
+    },
+    "BIB-008": {
+      "pathname": "cards/originals/BIB-008-a0ec2e3c58.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-008-a0ec2e3c58.png",
+      "size": 777390,
+      "sha256": "a0ec2e3c5833bdb5fc5552c133b351ffda276bc7c5406967002af02c964dcaae"
+    },
+    "BIB-009": {
+      "pathname": "cards/originals/BIB-009-13f89b1793.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-009-13f89b1793.png",
+      "size": 996662,
+      "sha256": "13f89b17937475473ff2ff216bd27f53abf6da18661b8d655e2d00a3f46930d9"
+    },
+    "BIB-010": {
+      "pathname": "cards/originals/BIB-010-113eb6465d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-010-113eb6465d.png",
+      "size": 1386475,
+      "sha256": "113eb6465d2e1bb78d2dc6b9e7132052d4231dfef9ed83f2b4cfbd6d59c80ad9"
+    },
+    "BIB-011": {
+      "pathname": "cards/originals/BIB-011-c128863680.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-011-c128863680.png",
+      "size": 795636,
+      "sha256": "c1288636805167ca5eb4cbda4b20ebe0170e032ddf573ea3a1fcaedf20a8fe61"
+    },
+    "BIB-012": {
+      "pathname": "cards/originals/BIB-012-3f42427391.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-012-3f42427391.png",
+      "size": 956083,
+      "sha256": "3f424273912bd108d66740f7ee57517ed7d05898d8451e7ca6ba3ab9d0133f29"
+    },
+    "BIB-013": {
+      "pathname": "cards/originals/BIB-013-114071fcbe.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-013-114071fcbe.png",
+      "size": 812287,
+      "sha256": "114071fcbee76be27dc546dc1097ef82915ffd1f2b06ac4611519290cc710abe"
+    },
+    "BIB-014": {
+      "pathname": "cards/originals/BIB-014-362f756784.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-014-362f756784.png",
+      "size": 913191,
+      "sha256": "362f7567840ad7b7d9b1ae6e4d1bda5445aa7c566a44f12688e3dd182325db9d"
+    },
+    "BIB-015": {
+      "pathname": "cards/originals/BIB-015-97382844cb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-015-97382844cb.png",
+      "size": 962371,
+      "sha256": "97382844cb58d18e1db1af3144bf15f21238dbe1c3537939699f2bda615992be"
+    },
+    "BIB-016": {
+      "pathname": "cards/originals/BIB-016-f427d05177.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-016-f427d05177.png",
+      "size": 734850,
+      "sha256": "f427d0517729de407cca380624aadb90e7179695fa3b4dde42f82a8f17fb64d9"
+    },
+    "BIB-017": {
+      "pathname": "cards/originals/BIB-017-a4ed84e720.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-017-a4ed84e720.png",
+      "size": 995462,
+      "sha256": "a4ed84e720033b3bc1c627126d197c275f54e3c43992bf5d1b0be4520d8e4fbe"
+    },
+    "BIB-018": {
+      "pathname": "cards/originals/BIB-018-d0c2bcf53d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-018-d0c2bcf53d.png",
+      "size": 663411,
+      "sha256": "d0c2bcf53db38a0568ed677d6181de127e4b8437d687fcaa04f057c6bf97d331"
+    },
+    "BIB-019": {
+      "pathname": "cards/originals/BIB-019-e72e6d7993.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-019-e72e6d7993.png",
+      "size": 1091779,
+      "sha256": "e72e6d7993cbd50b318ad6e5849b3183d86d5bd0fc2e7c94d9a33e3db2aa8f0f"
+    },
+    "BIB-020": {
+      "pathname": "cards/originals/BIB-020-9120d8eeb3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-020-9120d8eeb3.png",
+      "size": 986823,
+      "sha256": "9120d8eeb33346dbfa08e26c8da3b0c01e25ddc17c6537ff4a50945aaac0ac16"
+    },
+    "BIB-021": {
+      "pathname": "cards/originals/BIB-021-470f783026.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-021-470f783026.png",
+      "size": 860035,
+      "sha256": "470f7830265f0e65b8561018b294ec1e30cd6d3885d39e7058440c05e1e6e2b7"
+    },
+    "BIB-022": {
+      "pathname": "cards/originals/BIB-022-17ebe7eea5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-022-17ebe7eea5.png",
+      "size": 971183,
+      "sha256": "17ebe7eea5b4ff51243771e1eb30f68d7568c80d46745982ec5868b4e6ef98db"
+    },
+    "BIB-023": {
+      "pathname": "cards/originals/BIB-023-697ab871bb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-023-697ab871bb.png",
+      "size": 1175900,
+      "sha256": "697ab871bbd84e103bc23fe9f5e8f27399e524e8d0151b798f2197dc094d8722"
+    },
+    "BIB-024": {
+      "pathname": "cards/originals/BIB-024-31b2d34c0f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-024-31b2d34c0f.png",
+      "size": 951312,
+      "sha256": "31b2d34c0f6cb65452590761c78a11fa73ba9db9e3a333245ecbcb10de571cda"
+    },
+    "BIB-025": {
+      "pathname": "cards/originals/BIB-025-19f57ff40c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-025-19f57ff40c.png",
+      "size": 1220738,
+      "sha256": "19f57ff40c5bc43cf10b3c5bcd4a2190d2716c9cb32bed977d3a8ba9a3c02151"
+    },
+    "BIB-026": {
+      "pathname": "cards/originals/BIB-026-e8f32e0ba7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-026-e8f32e0ba7.png",
+      "size": 925807,
+      "sha256": "e8f32e0ba7712c50f2bb7be69c202cc96527d78d41cccffceb42e3c6830d52c0"
+    },
+    "BIB-027": {
+      "pathname": "cards/originals/BIB-027-99ae70f055.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-027-99ae70f055.png",
+      "size": 1051487,
+      "sha256": "99ae70f05589781da86b300d999637da734d71f9d437eb3bf89c5c0a1b947d84"
+    },
+    "BIB-028": {
+      "pathname": "cards/originals/BIB-028-b2bc0a9892.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-028-b2bc0a9892.png",
+      "size": 934892,
+      "sha256": "b2bc0a98928bf78ca3a98928f1f69198bc0481bec83d8ff69274897c14bc8704"
+    },
+    "BIB-029": {
+      "pathname": "cards/originals/BIB-029-1071cce9a6.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-029-1071cce9a6.png",
+      "size": 844712,
+      "sha256": "1071cce9a638267aa5a13cfc1fa391e6f56e86a43f48400f4cb2b07dfa180953"
+    },
+    "BIB-030": {
+      "pathname": "cards/originals/BIB-030-bc79dcae86.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-030-bc79dcae86.png",
+      "size": 865212,
+      "sha256": "bc79dcae865b8935b3a8fff45a18a8aa764e7d808f076619d30e6c8ad570e7be"
+    },
+    "BIB-031": {
+      "pathname": "cards/originals/BIB-031-619c2731fc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-031-619c2731fc.png",
+      "size": 931217,
+      "sha256": "619c2731fcdad9f3e66c0283a39ab0a73dcf62b04227be2cb21b46f8c1ed291b"
+    },
+    "BIB-032": {
+      "pathname": "cards/originals/BIB-032-88469e2b96.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-032-88469e2b96.png",
+      "size": 1037483,
+      "sha256": "88469e2b960b4c1d0bda690148ea8e0c9e12e68c437ed6821e31cc59bd8e8b3e"
+    },
+    "BIB-033": {
+      "pathname": "cards/originals/BIB-033-c9000974f0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-033-c9000974f0.png",
+      "size": 968158,
+      "sha256": "c9000974f086f060c9af2a276237779392dc82e4b90e661b42edc8825c891b34"
+    },
+    "BIB-034": {
+      "pathname": "cards/originals/BIB-034-931ac5f598.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-034-931ac5f598.png",
+      "size": 1050937,
+      "sha256": "931ac5f59867e5e3437eac6a3ec5184c8aca69f953aa0349fe39ed3c86a91902"
+    },
+    "BIB-035": {
+      "pathname": "cards/originals/BIB-035-6025b14a12.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-035-6025b14a12.png",
+      "size": 697223,
+      "sha256": "6025b14a1252418c270030a9f7507eb34c5908908d6090e79568628199212ae6"
+    },
+    "BIB-036": {
+      "pathname": "cards/originals/BIB-036-14e3aad318.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-036-14e3aad318.png",
+      "size": 830303,
+      "sha256": "14e3aad318b3b2f9d230c3df331d7a577c8f024125979766485c54ac6d422c1f"
+    },
+    "BIB-037": {
+      "pathname": "cards/originals/BIB-037-9418b109b7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-037-9418b109b7.png",
+      "size": 707725,
+      "sha256": "9418b109b788c35f5502f1918b2583afbfd319559d3d8b9070556c0aa3128fa1"
+    },
+    "BIB-038": {
+      "pathname": "cards/originals/BIB-038-65e6185a97.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-038-65e6185a97.png",
+      "size": 987530,
+      "sha256": "65e6185a973b54f2828ca5bae1279f2cf356835c51cd31c0d255bb1edf2f898b"
+    },
+    "BIB-039": {
+      "pathname": "cards/originals/BIB-039-9065c27207.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-039-9065c27207.png",
+      "size": 992423,
+      "sha256": "9065c27207678cbbf753c739eabc07bbd81919470587f84483158c7c849d31eb"
+    },
+    "BIB-040": {
+      "pathname": "cards/originals/BIB-040-225f249009.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-040-225f249009.png",
+      "size": 909274,
+      "sha256": "225f24900988e646ffb84d4689cf1db0ad19b73dc2c6a5a7da233a116dbe067a"
+    },
+    "BIB-041": {
+      "pathname": "cards/originals/BIB-041-4b022692d2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-041-4b022692d2.png",
+      "size": 842473,
+      "sha256": "4b022692d2e991f1e72482b63dd1dd74f132663c3188bfb9329dcd88cb19e13c"
+    },
+    "BIB-042": {
+      "pathname": "cards/originals/BIB-042-e4cf937d76.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-042-e4cf937d76.png",
+      "size": 1163719,
+      "sha256": "e4cf937d76dba87e1cc61c90d02f9d133d36f1d867b26e5c11f2c157b1d80a12"
+    },
+    "BIB-043": {
+      "pathname": "cards/originals/BIB-043-fde74b3809.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-043-fde74b3809.png",
+      "size": 816603,
+      "sha256": "fde74b3809bf2c47cd86cabf69b927cbd77e39bb38a026a533486af310041d1b"
+    },
+    "BIB-044": {
+      "pathname": "cards/originals/BIB-044-7ee26dbf43.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-044-7ee26dbf43.png",
+      "size": 908686,
+      "sha256": "7ee26dbf43fd6702c068a4eb56554c699079da3ff4a3b7bfd0e7cf0cd38d9e4d"
+    },
+    "BIB-045": {
+      "pathname": "cards/originals/BIB-045-3fb4712f95.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-045-3fb4712f95.png",
+      "size": 872660,
+      "sha256": "3fb4712f9554fed3062a62a1a3c5c04d324b8fdaeecebe7b556182538ed510af"
+    },
+    "BIB-046": {
+      "pathname": "cards/originals/BIB-046-8c069af1b9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-046-8c069af1b9.png",
+      "size": 1222918,
+      "sha256": "8c069af1b956cc4d671d653614359869ff595d1dd4161321dc9e2352853d110a"
+    },
+    "BIB-047": {
+      "pathname": "cards/originals/BIB-047-5fce704532.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-047-5fce704532.png",
+      "size": 990377,
+      "sha256": "5fce70453289bcaac5c7e14643e32d8fdb7ea81dd6a0c17ab8b0401e88a61eb6"
+    },
+    "BIB-048": {
+      "pathname": "cards/originals/BIB-048-c0b003aa6e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-048-c0b003aa6e.png",
+      "size": 635447,
+      "sha256": "c0b003aa6ef3739acdcb475a6e40cc5cc91ed75a185cc18fcd201a8db5570050"
+    },
+    "BIB-049": {
+      "pathname": "cards/originals/BIB-049-7f75f5df04.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-049-7f75f5df04.png",
+      "size": 1024915,
+      "sha256": "7f75f5df04b144ff663068af5a7f052658a99579d9594233307fedd8978a4ebb"
+    },
+    "BIB-050": {
+      "pathname": "cards/originals/BIB-050-59a0f05c17.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-050-59a0f05c17.png",
+      "size": 729812,
+      "sha256": "59a0f05c17d93b26c211199ed62a34f8a0c4602672b87148dddc172cee2246c9"
+    },
+    "BIB-051": {
+      "pathname": "cards/originals/BIB-051-42ace51505.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-051-42ace51505.png",
+      "size": 1156282,
+      "sha256": "42ace5150570e476d44c5b2ac8382be77a072e614e3beced975832223dcdf262"
+    },
+    "BIB-052": {
+      "pathname": "cards/originals/BIB-052-f0f760c9ee.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/BIB-052-f0f760c9ee.png",
+      "size": 963067,
+      "sha256": "f0f760c9eee6414f12e04467deb0e0fb849fbdb8c3e316cacd151aec5b8443b7"
+    },
+    "FEA-001": {
+      "pathname": "cards/originals/FEA-001-2add5200f3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-001-2add5200f3.png",
+      "size": 830764,
+      "sha256": "2add5200f37d366aa8bf22e76787b97060b007db00d5ccaf9853eb5cae13b3ec"
+    },
+    "FEA-002": {
+      "pathname": "cards/originals/FEA-002-84a8e64333.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-002-84a8e64333.png",
+      "size": 975071,
+      "sha256": "84a8e64333c1308d36e3d15267c55b715f61773295a25c005bb10d7d8afd46f9"
+    },
+    "FEA-003": {
+      "pathname": "cards/originals/FEA-003-4c8c1cbb42.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-003-4c8c1cbb42.png",
+      "size": 553711,
+      "sha256": "4c8c1cbb42865226a7e5b993eeb8847ba14ddc7db8abb1afe327c8f0e70237f1"
+    },
+    "FEA-004": {
+      "pathname": "cards/originals/FEA-004-a1d5004844.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-004-a1d5004844.png",
+      "size": 981908,
+      "sha256": "a1d5004844c53397a7b7b5226c4743ee2c7007cc79f12cee732358b8e73a4d34"
+    },
+    "FEA-005": {
+      "pathname": "cards/originals/FEA-005-26a649555a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-005-26a649555a.png",
+      "size": 781063,
+      "sha256": "26a649555a60885dc2eb7bc42c3ac7e3f94ceac8a0c5f8b58273813beb62814b"
+    },
+    "FEA-006": {
+      "pathname": "cards/originals/FEA-006-b756355855.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-006-b756355855.png",
+      "size": 673795,
+      "sha256": "b756355855d7fac60f3e7983a0e5cf6ed4aed69aa5c8b2e70d12fa1d96cf2fc7"
+    },
+    "FEA-007": {
+      "pathname": "cards/originals/FEA-007-f0feb0ec3d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-007-f0feb0ec3d.png",
+      "size": 737610,
+      "sha256": "f0feb0ec3d375b72e8c4019542ed2f092e0ad4c94f6649cb48e80025ca822a1e"
+    },
+    "FEA-008": {
+      "pathname": "cards/originals/FEA-008-5a2497201e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-008-5a2497201e.png",
+      "size": 793946,
+      "sha256": "5a2497201e4c01ee8bba24a82721caaec3d6d8ba1f087a9feac5c402f9acc695"
+    },
+    "FEA-009": {
+      "pathname": "cards/originals/FEA-009-3908133042.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-009-3908133042.png",
+      "size": 785684,
+      "sha256": "3908133042cbbbbebc0f2676f012c77020a1a8cec91ae3925621e41198082348"
+    },
+    "FEA-010": {
+      "pathname": "cards/originals/FEA-010-ce821744ce.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-010-ce821744ce.png",
+      "size": 694652,
+      "sha256": "ce821744ce656ab9e09d53b84b0da7573770d0113eb9ce5a539cdd45f8c72611"
+    },
+    "FEA-011": {
+      "pathname": "cards/originals/FEA-011-9389c009ce.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-011-9389c009ce.png",
+      "size": 541214,
+      "sha256": "9389c009ce6006a371403175e1a402f6539a453cf745a8e7091198d7bd35cbf5"
+    },
+    "FEA-012": {
+      "pathname": "cards/originals/FEA-012-5e7e86ac98.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-012-5e7e86ac98.png",
+      "size": 964568,
+      "sha256": "5e7e86ac989a5918ff00651c08276b46fa8dae5b9d5989d1be6eb982d106c280"
+    },
+    "FEA-013": {
+      "pathname": "cards/originals/FEA-013-e0bdde5654.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-013-e0bdde5654.png",
+      "size": 713906,
+      "sha256": "e0bdde5654ef3a720f4d30bbd9a5efbd5451c89915c138a00ac343c59b37f925"
+    },
+    "FEA-014": {
+      "pathname": "cards/originals/FEA-014-c693033af7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-014-c693033af7.png",
+      "size": 794553,
+      "sha256": "c693033af788da30cfca94efcd25b8fb757c68f794dfaa906cae5d49b8708c31"
+    },
+    "FEA-015": {
+      "pathname": "cards/originals/FEA-015-03b00ef617.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-015-03b00ef617.png",
+      "size": 660861,
+      "sha256": "03b00ef6170767b384233215e85b3cb6ebd0aa9807034cd3f40d171952ef243b"
+    },
+    "FEA-016": {
+      "pathname": "cards/originals/FEA-016-62f4ed4e33.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-016-62f4ed4e33.png",
+      "size": 735154,
+      "sha256": "62f4ed4e33621bdceb752e9580af76dea3ac96bdc3d2059162dc3466611fcbcd"
+    },
+    "FEA-017": {
+      "pathname": "cards/originals/FEA-017-9418164806.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-017-9418164806.png",
+      "size": 1070534,
+      "sha256": "9418164806a399701a9aa1e4451cd99a146b3b88b99c593ba1311131d141052f"
+    },
+    "FEA-018": {
+      "pathname": "cards/originals/FEA-018-b86605aea8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-018-b86605aea8.png",
+      "size": 607959,
+      "sha256": "b86605aea8a8e0c768eed88976b3559cace020c60d6ccc774f95522ae68d6675"
+    },
+    "FEA-019": {
+      "pathname": "cards/originals/FEA-019-ea961148b6.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-019-ea961148b6.png",
+      "size": 664127,
+      "sha256": "ea961148b6132d6c4c455ddf6ec743cf052fd67b973df6e6f6f567b330361f19"
+    },
+    "FEA-020": {
+      "pathname": "cards/originals/FEA-020-507994b97e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-020-507994b97e.png",
+      "size": 685590,
+      "sha256": "507994b97e6e28f8d1b86a3b7bdab26c69214d32f32d45349108b8d34b8e8284"
+    },
+    "FEA-021": {
+      "pathname": "cards/originals/FEA-021-416ba99620.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-021-416ba99620.png",
+      "size": 911674,
+      "sha256": "416ba996202e4052dc4a9837ceb8d9f4c8110a7ec613952ba6fef3d4e8062107"
+    },
+    "FEA-022": {
+      "pathname": "cards/originals/FEA-022-52fa927d55.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-022-52fa927d55.png",
+      "size": 698553,
+      "sha256": "52fa927d55f959eee0b297c00d098b583878a0c7402924ab97d7f8a6d8fba80a"
+    },
+    "FEA-023": {
+      "pathname": "cards/originals/FEA-023-8c08fc39a0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-023-8c08fc39a0.png",
+      "size": 614798,
+      "sha256": "8c08fc39a02d3fdd1d3617493209f18d909884b6bb023d743566c607d81e2a4c"
+    },
+    "FEA-024": {
+      "pathname": "cards/originals/FEA-024-4591fc4a24.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-024-4591fc4a24.png",
+      "size": 729332,
+      "sha256": "4591fc4a2423307fecce43d20883f1e1bd278044d33cb77f57ae1f5fdba83066"
+    },
+    "FEA-025": {
+      "pathname": "cards/originals/FEA-025-89ee30786c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-025-89ee30786c.png",
+      "size": 790997,
+      "sha256": "89ee30786cbcced5a1ec4541ca0570d897e370ba05cc878c7a71404981ae7b5c"
+    },
+    "FEA-026": {
+      "pathname": "cards/originals/FEA-026-4824bcffca.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-026-4824bcffca.png",
+      "size": 874311,
+      "sha256": "4824bcffcac4d6de5b7615a06b868af2be8642cc10d345c65fdc7ffb4f07f8bb"
+    },
+    "FEA-027": {
+      "pathname": "cards/originals/FEA-027-efc4860f1a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-027-efc4860f1a.png",
+      "size": 719182,
+      "sha256": "efc4860f1a1330753ffa3ab5464c276eb7790198a92eb278b0cdcc1c6eadf54c"
+    },
+    "FEA-028": {
+      "pathname": "cards/originals/FEA-028-095164a252.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-028-095164a252.png",
+      "size": 695446,
+      "sha256": "095164a25241d2c279ad8beef1933f73e2918ec59e08623f1ec35dc0d2297cb6"
+    },
+    "FEA-029": {
+      "pathname": "cards/originals/FEA-029-e4f852b7d7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-029-e4f852b7d7.png",
+      "size": 893539,
+      "sha256": "e4f852b7d7462ef555ffc8cc8e07b2861a72e295c527c19f9a56ef94588b5156"
+    },
+    "FEA-030": {
+      "pathname": "cards/originals/FEA-030-6d0aac5d01.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-030-6d0aac5d01.png",
+      "size": 1073786,
+      "sha256": "6d0aac5d01fe542089067ff28d13e313350be4dca6f82716d72ae91d9cc5445c"
+    },
+    "FEA-031": {
+      "pathname": "cards/originals/FEA-031-c25bca4814.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-031-c25bca4814.png",
+      "size": 648566,
+      "sha256": "c25bca481471c9800288accb361c7f2f1b4f02922e7b88bb6728f975aaa71ac6"
+    },
+    "FEA-032": {
+      "pathname": "cards/originals/FEA-032-f5b21865ae.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-032-f5b21865ae.png",
+      "size": 552770,
+      "sha256": "f5b21865aeeea874af7a24111dc43993cc11b6cd04bedd4d4f00c165022282ed"
+    },
+    "FEA-033": {
+      "pathname": "cards/originals/FEA-033-c940561739.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-033-c940561739.png",
+      "size": 744663,
+      "sha256": "c94056173994d539c798cf7195cd0e6a61169c176a5a9032af28cc3e799870de"
+    },
+    "FEA-034": {
+      "pathname": "cards/originals/FEA-034-64ccb2af26.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-034-64ccb2af26.png",
+      "size": 616092,
+      "sha256": "64ccb2af265f925cc97221054715a8027e3936f1d90ffe657a7d965882f5d5da"
+    },
+    "FEA-035": {
+      "pathname": "cards/originals/FEA-035-bbb15a4e0a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-035-bbb15a4e0a.png",
+      "size": 952221,
+      "sha256": "bbb15a4e0a21ab84e57d1d95a700eb74026a5b014a141cc254977e67eefdd2e4"
+    },
+    "FEA-036": {
+      "pathname": "cards/originals/FEA-036-ba33037f43.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-036-ba33037f43.png",
+      "size": 828533,
+      "sha256": "ba33037f43c1b08411f4c2234fea6a00ddaa9034ffac3b75ff3adfd0a6c472db"
+    },
+    "FEA-037": {
+      "pathname": "cards/originals/FEA-037-0d67b1e369.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-037-0d67b1e369.png",
+      "size": 785655,
+      "sha256": "0d67b1e36974d7b6214712b7879ed5009535bdfe5241c971fbd39e4c1567749f"
+    },
+    "FEA-038": {
+      "pathname": "cards/originals/FEA-038-93522347bc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-038-93522347bc.png",
+      "size": 792182,
+      "sha256": "93522347bc553820f1e820b2fb3769c634714e151fc998d767471e869f96dff3"
+    },
+    "FEA-039": {
+      "pathname": "cards/originals/FEA-039-bb0c79f250.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-039-bb0c79f250.png",
+      "size": 825123,
+      "sha256": "bb0c79f2505cc7d9437a948080de8b4e577ed6665016e1d2f5f0d1619a03c1bc"
+    },
+    "FEA-040": {
+      "pathname": "cards/originals/FEA-040-0ab88de1c4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-040-0ab88de1c4.png",
+      "size": 757887,
+      "sha256": "0ab88de1c421dbf4cbe7659baa036ae3df0431cf571ab8a96785be23e7183756"
+    },
+    "FEA-041": {
+      "pathname": "cards/originals/FEA-041-88e90380f0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-041-88e90380f0.png",
+      "size": 645007,
+      "sha256": "88e90380f0e0b6903f6895fe59e1975788873e9d7fbf83c343c02b3bf690cd5c"
+    },
+    "FEA-042": {
+      "pathname": "cards/originals/FEA-042-5511fd7984.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FEA-042-5511fd7984.png",
+      "size": 726075,
+      "sha256": "5511fd7984d64750fd3b9a592dea30e212d9ac8b4b94e020b22f429167337f3c"
+    },
+    "FUN-001": {
+      "pathname": "cards/originals/FUN-001-ba6c7c2839.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-001-ba6c7c2839.png",
+      "size": 661353,
+      "sha256": "ba6c7c2839a5a069b73e6c7ba3cf46752b8177c6f8b9d008ba2479e80e655a34"
+    },
+    "FUN-002": {
+      "pathname": "cards/originals/FUN-002-10a18c53a7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-002-10a18c53a7.png",
+      "size": 868410,
+      "sha256": "10a18c53a7ba4e6344eeb4fcdd474b291515100d60c874117d94411d7c795822"
+    },
+    "FUN-003": {
+      "pathname": "cards/originals/FUN-003-9505c92109.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-003-9505c92109.png",
+      "size": 587267,
+      "sha256": "9505c92109d3599a9e2d01e6579b59f901ed5d2e926da0ddbefc58b17f787fe5"
+    },
+    "FUN-004": {
+      "pathname": "cards/originals/FUN-004-4f246f21da.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-004-4f246f21da.png",
+      "size": 693162,
+      "sha256": "4f246f21dab79f6ec5e9f5bce09e4c755c0d4b0c2a0eb7c50a96430ac949dc6d"
+    },
+    "FUN-005": {
+      "pathname": "cards/originals/FUN-005-ca3dfdfc92.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-005-ca3dfdfc92.png",
+      "size": 754018,
+      "sha256": "ca3dfdfc92b3827a5be655990d350e1ec74ecb3273be0b0085a3b7d61c3fdd8d"
+    },
+    "FUN-006": {
+      "pathname": "cards/originals/FUN-006-0ae771ac6a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-006-0ae771ac6a.png",
+      "size": 710645,
+      "sha256": "0ae771ac6a2a6ba67483319b34c906c0c3cf509cfe5d7efad603295e5cf00f88"
+    },
+    "FUN-007": {
+      "pathname": "cards/originals/FUN-007-882c984b2e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-007-882c984b2e.png",
+      "size": 784705,
+      "sha256": "882c984b2e03995f0c015632e0b2314ed012072bca28fb75f899e900a1ee3b85"
+    },
+    "FUN-008": {
+      "pathname": "cards/originals/FUN-008-53415e8a78.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-008-53415e8a78.png",
+      "size": 831177,
+      "sha256": "53415e8a78cc80bd547a4a08731e7d27a74c35e2ae4978e489dfa7b0809ff3ed"
+    },
+    "FUN-009": {
+      "pathname": "cards/originals/FUN-009-4376d552a2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-009-4376d552a2.png",
+      "size": 739271,
+      "sha256": "4376d552a2983e843c28646e92bc7f782e9477db343875471a9e87765d683d3b"
+    },
+    "FUN-010": {
+      "pathname": "cards/originals/FUN-010-a66e07310e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-010-a66e07310e.png",
+      "size": 731993,
+      "sha256": "a66e07310e1e085eaab2b3599caa00d77f9ff1c7f9afe95caf3bdf969ae01e53"
+    },
+    "FUN-011": {
+      "pathname": "cards/originals/FUN-011-a4028d1900.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-011-a4028d1900.png",
+      "size": 457398,
+      "sha256": "a4028d1900cede32d9028699eadd070c67f0c37d27e0007a36a69668b999c672"
+    },
+    "FUN-012": {
+      "pathname": "cards/originals/FUN-012-ebad1310dc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-012-ebad1310dc.png",
+      "size": 526106,
+      "sha256": "ebad1310dcfb4cc96070e7a72e13c0f0bad6c3b595037e801888e5751a7364ef"
+    },
+    "FUN-013": {
+      "pathname": "cards/originals/FUN-013-3f5cbc0c83.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-013-3f5cbc0c83.png",
+      "size": 422266,
+      "sha256": "3f5cbc0c83626dfbc14e228d60fcbac1a7f43d552065202aab1645115cc426d9"
+    },
+    "FUN-014": {
+      "pathname": "cards/originals/FUN-014-feb4be0245.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-014-feb4be0245.png",
+      "size": 472087,
+      "sha256": "feb4be0245ed9af69651ae6a822803725c6a97c0701f7ff7da2a79fa19a91604"
+    },
+    "FUN-015": {
+      "pathname": "cards/originals/FUN-015-20cdafd443.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-015-20cdafd443.png",
+      "size": 324492,
+      "sha256": "20cdafd4432a86f2e44a3de1df778a105e9ae9f1365aa943be68797034b79856"
+    },
+    "FUN-016": {
+      "pathname": "cards/originals/FUN-016-5ca1330e64.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-016-5ca1330e64.png",
+      "size": 386950,
+      "sha256": "5ca1330e64804418555a9e5528cc53e33419d598224d8922a1958e120699c6cf"
+    },
+    "FUN-017": {
+      "pathname": "cards/originals/FUN-017-bdbf622f08.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-017-bdbf622f08.png",
+      "size": 473135,
+      "sha256": "bdbf622f08e0674709751783fc677987e7bd74f91144a0cdc2bff1e8e4422ad5"
+    },
+    "FUN-018": {
+      "pathname": "cards/originals/FUN-018-8469c473e1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-018-8469c473e1.png",
+      "size": 509934,
+      "sha256": "8469c473e17a7c616241f15bfe97579263bf4d825c76e01aa9e7d16d982b90b6"
+    },
+    "FUN-019": {
+      "pathname": "cards/originals/FUN-019-7e4c234ee1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-019-7e4c234ee1.png",
+      "size": 544634,
+      "sha256": "7e4c234ee1cc0a6433f4433cf9fd46ac6551743ac71748c0e31b1c47a00ce639"
+    },
+    "FUN-020": {
+      "pathname": "cards/originals/FUN-020-a75d0ef422.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-020-a75d0ef422.png",
+      "size": 555704,
+      "sha256": "a75d0ef422104a1d046bdafcb3664fa76ce12fbe730b93be052fcc2947fc11a5"
+    },
+    "FUN-021": {
+      "pathname": "cards/originals/FUN-021-d9cf7d1de4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-021-d9cf7d1de4.png",
+      "size": 534393,
+      "sha256": "d9cf7d1de46e6ca55538f0c28d31362d29e7055ba20c392556cabc0d6010bd3c"
+    },
+    "FUN-022": {
+      "pathname": "cards/originals/FUN-022-5d9ed263ec.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-022-5d9ed263ec.png",
+      "size": 509621,
+      "sha256": "5d9ed263ec3c46f5a009cb943d3e74f6cc413b7374cdf09f38bd87b690463b61"
+    },
+    "FUN-023": {
+      "pathname": "cards/originals/FUN-023-d249415a71.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-023-d249415a71.png",
+      "size": 532656,
+      "sha256": "d249415a71c78f54a37916944961c9c8cbfaeda8688d7a55d54e679c11a84809"
+    },
+    "FUN-024": {
+      "pathname": "cards/originals/FUN-024-ac676224e4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-024-ac676224e4.png",
+      "size": 470379,
+      "sha256": "ac676224e46fc97343fd6e96aaea9f265efa9cc3c8a79a2bf0856d417a8e3ddb"
+    },
+    "FUN-025": {
+      "pathname": "cards/originals/FUN-025-e515a069bd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-025-e515a069bd.png",
+      "size": 591891,
+      "sha256": "e515a069bd279845f0e1a2fd89f7467b4dafd9389357bdf63715333bc9f0a0ed"
+    },
+    "FUN-026": {
+      "pathname": "cards/originals/FUN-026-2da3c2e6c8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-026-2da3c2e6c8.png",
+      "size": 460283,
+      "sha256": "2da3c2e6c8726c9d171629a02ba2a54daaeda139650bd0004b1ec8a8fafb2ff7"
+    },
+    "FUN-027": {
+      "pathname": "cards/originals/FUN-027-6d58120b29.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-027-6d58120b29.png",
+      "size": 596473,
+      "sha256": "6d58120b29e779a8ca66b8a054ce59ca4f4cf74821bf55f207733e36bffe6ede"
+    },
+    "FUN-028": {
+      "pathname": "cards/originals/FUN-028-72f3362dc0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-028-72f3362dc0.png",
+      "size": 626945,
+      "sha256": "72f3362dc0fd26b7f72f043be114d6ff651b4377ddf583d94194c2bcf1f5eb4c"
+    },
+    "FUN-029": {
+      "pathname": "cards/originals/FUN-029-d9e5de0cec.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-029-d9e5de0cec.png",
+      "size": 496750,
+      "sha256": "d9e5de0cecc19046f7332ff9a82a62e0a8dfe6bba6fddecab775a31fa063e555"
+    },
+    "FUN-030": {
+      "pathname": "cards/originals/FUN-030-b7c7357cc4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-030-b7c7357cc4.png",
+      "size": 575247,
+      "sha256": "b7c7357cc444654d663271b7b360a92d897f0dc523cfc59f719e10144bf6a637"
+    },
+    "FUN-031": {
+      "pathname": "cards/originals/FUN-031-4a9d81fc52.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-031-4a9d81fc52.png",
+      "size": 741278,
+      "sha256": "4a9d81fc52782ed431613a716999fcbe56b41234b2c6aa61d80c05a83f080b58"
+    },
+    "FUN-032": {
+      "pathname": "cards/originals/FUN-032-3e1f92df95.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-032-3e1f92df95.png",
+      "size": 529453,
+      "sha256": "3e1f92df9565a71f73d5069502bb1117c1c18bc30f90e3de2e9ab0d5e2f86ff7"
+    },
+    "FUN-033": {
+      "pathname": "cards/originals/FUN-033-2067385dac.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-033-2067385dac.png",
+      "size": 1041092,
+      "sha256": "2067385dac90f3cfa706d14f1585bc9e336d01f620da64411af79c90d7937cd3"
+    },
+    "FUN-034": {
+      "pathname": "cards/originals/FUN-034-eaa2390707.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-034-eaa2390707.png",
+      "size": 229732,
+      "sha256": "eaa239070711dde1343c30e73d86a8788802d5548e2a32d6252797a8e4a50c39"
+    },
+    "FUN-035": {
+      "pathname": "cards/originals/FUN-035-0441d31b4d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-035-0441d31b4d.png",
+      "size": 731978,
+      "sha256": "0441d31b4d7ae47befde3dc25e60731186b02ff29dc884c8fa16b6bfe89a14c4"
+    },
+    "FUN-036": {
+      "pathname": "cards/originals/FUN-036-a3da5f4463.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-036-a3da5f4463.png",
+      "size": 312915,
+      "sha256": "a3da5f446363b57c34800bb0cf1a0cbcf9336c7c141cb9bdd39446f59a9a2a5b"
+    },
+    "FUN-037": {
+      "pathname": "cards/originals/FUN-037-c4d74fa3c9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-037-c4d74fa3c9.png",
+      "size": 949454,
+      "sha256": "c4d74fa3c9732f5ae631d123448fed9c4de724a783bb6be0bf759610ab933c4c"
+    },
+    "FUN-038": {
+      "pathname": "cards/originals/FUN-038-44620f18e9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-038-44620f18e9.png",
+      "size": 770352,
+      "sha256": "44620f18e9dc9b417a62ff5e5d211739ecc658f460270668c96804f68984634a"
+    },
+    "FUN-039": {
+      "pathname": "cards/originals/FUN-039-d69949a6f8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-039-d69949a6f8.png",
+      "size": 848045,
+      "sha256": "d69949a6f8ef0e8786e5d9efc5b6cec7c22e2c70ff860c11314fb54e24293422"
+    },
+    "FUN-040": {
+      "pathname": "cards/originals/FUN-040-db96b300d4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-040-db96b300d4.png",
+      "size": 1132347,
+      "sha256": "db96b300d4e98515c75df67546c327cb599f13210eacb8ee9f1ee77eb9dab4d0"
+    },
+    "FUN-041": {
+      "pathname": "cards/originals/FUN-041-537e1d462c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-041-537e1d462c.png",
+      "size": 1150608,
+      "sha256": "537e1d462c5cf282966fe4b1aea0c4c1398a66ae00d633853d3109122bc77eaa"
+    },
+    "FUN-042": {
+      "pathname": "cards/originals/FUN-042-ef0411b50f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-042-ef0411b50f.png",
+      "size": 475980,
+      "sha256": "ef0411b50f6daed5dfa55dcec9858a0038c9e08f97fe14e97f2bd13507cdf827"
+    },
+    "FUN-043": {
+      "pathname": "cards/originals/FUN-043-5443fe4789.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-043-5443fe4789.png",
+      "size": 1073425,
+      "sha256": "5443fe47891a84157a3761c96cc7a9de48ffa48dc38f1ba399897da701fda358"
+    },
+    "FUN-044": {
+      "pathname": "cards/originals/FUN-044-b2e9b9d290.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-044-b2e9b9d290.png",
+      "size": 265542,
+      "sha256": "b2e9b9d29058faf93c1dc6050807a52268912f1dc475ebe2ee16b48bcc05d777"
+    },
+    "FUN-045": {
+      "pathname": "cards/originals/FUN-045-d2359f50df.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-045-d2359f50df.png",
+      "size": 550694,
+      "sha256": "d2359f50df1ef8527129a04f57e6fd40894074605e2290b553bc77c3bf80e628"
+    },
+    "FUN-046": {
+      "pathname": "cards/originals/FUN-046-2735540a44.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-046-2735540a44.png",
+      "size": 890531,
+      "sha256": "2735540a4449ba1ecae53d670fe309968e4294e91aefa6840f9dcb03930f0519"
+    },
+    "FUN-047": {
+      "pathname": "cards/originals/FUN-047-cc1f6ccbc5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-047-cc1f6ccbc5.png",
+      "size": 714650,
+      "sha256": "cc1f6ccbc5156adcf64b39ad8fa09764ffad30a6f59160d05c655d607e315cd0"
+    },
+    "FUN-048": {
+      "pathname": "cards/originals/FUN-048-920a4790f0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-048-920a4790f0.png",
+      "size": 904410,
+      "sha256": "920a4790f007e3f6142826632ea62707d086085b52b8e43a666ebcbccc4a0fb3"
+    },
+    "FUN-049": {
+      "pathname": "cards/originals/FUN-049-83a234ad99.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/FUN-049-83a234ad99.png",
+      "size": 1494633,
+      "sha256": "83a234ad992c68b7992c97092059f692c7f12e24aec87c864b59867dfd3507c4"
+    },
+    "LIT-001": {
+      "pathname": "cards/originals/LIT-001-820428726a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-001-820428726a.png",
+      "size": 362288,
+      "sha256": "820428726a2a4fc9f1c885b80f09bb078eba5c0e01b85463b57df3491f34caf8"
+    },
+    "LIT-002": {
+      "pathname": "cards/originals/LIT-002-29155308b9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-002-29155308b9.png",
+      "size": 760788,
+      "sha256": "29155308b94e01ac59478811f50ea95fec289b46260103b6e4f2de13e856d615"
+    },
+    "LIT-003": {
+      "pathname": "cards/originals/LIT-003-794bd629c4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-003-794bd629c4.png",
+      "size": 837319,
+      "sha256": "794bd629c4f8916c6c6be1e584cc39c644f1c944baa4b778da120d95ebef10ab"
+    },
+    "LIT-004": {
+      "pathname": "cards/originals/LIT-004-d9c3631824.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-004-d9c3631824.png",
+      "size": 681369,
+      "sha256": "d9c3631824a1caf2541abb4b30dc31f371a477cca1dc3412972940ab1e98b959"
+    },
+    "LIT-005": {
+      "pathname": "cards/originals/LIT-005-3a9572d923.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-005-3a9572d923.png",
+      "size": 759957,
+      "sha256": "3a9572d923407906067acfce002ba484f7f8ad2fd7b8b075452ee4474ea918f8"
+    },
+    "LIT-006": {
+      "pathname": "cards/originals/LIT-006-8cdb5ec977.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-006-8cdb5ec977.png",
+      "size": 778524,
+      "sha256": "8cdb5ec97739cf3f59e0f49c00275cc1d4a9987606b32db124bf20939fc27ff1"
+    },
+    "LIT-007": {
+      "pathname": "cards/originals/LIT-007-ec11ec3611.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-007-ec11ec3611.png",
+      "size": 670479,
+      "sha256": "ec11ec36118d51178088341dc705ce46c668f083f67806390b5f9c66e093a071"
+    },
+    "LIT-008": {
+      "pathname": "cards/originals/LIT-008-b6322a04df.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-008-b6322a04df.png",
+      "size": 584201,
+      "sha256": "b6322a04dfca4c1944b774e56bf875470fe521af2f67065532e68a756212612e"
+    },
+    "LIT-009": {
+      "pathname": "cards/originals/LIT-009-4cdafca967.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-009-4cdafca967.png",
+      "size": 603994,
+      "sha256": "4cdafca967f1a969eac15067766e3c40f71de75ebafe9d227099584808b71254"
+    },
+    "LIT-010": {
+      "pathname": "cards/originals/LIT-010-3e4190a69f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-010-3e4190a69f.png",
+      "size": 749510,
+      "sha256": "3e4190a69f3d80f0783ea28ce96f80c4daa1ad2d244124cbfcb608c1c95371d2"
+    },
+    "LIT-011": {
+      "pathname": "cards/originals/LIT-011-6c520b88dc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-011-6c520b88dc.png",
+      "size": 743664,
+      "sha256": "6c520b88dc4ffff08520f50edaf27140c46e98138c1e61231fc87829e2324468"
+    },
+    "LIT-012": {
+      "pathname": "cards/originals/LIT-012-8317c1d9bf.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-012-8317c1d9bf.png",
+      "size": 597293,
+      "sha256": "8317c1d9bf6cfcdba2fa22d7f8b37ac65bded2f385ba40e79cb75d5e70253a94"
+    },
+    "LIT-013": {
+      "pathname": "cards/originals/LIT-013-e6d777aa15.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-013-e6d777aa15.png",
+      "size": 790207,
+      "sha256": "e6d777aa15fe8258ceea302665a6c28265afdb532c3959f6ebfecc113d8a0a2f"
+    },
+    "LIT-014": {
+      "pathname": "cards/originals/LIT-014-1536a71ae0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-014-1536a71ae0.png",
+      "size": 827461,
+      "sha256": "1536a71ae0d4e1bed741db4355af6663c74b8d4f9fc40baa54bcc79ebe0b9f0f"
+    },
+    "LIT-015": {
+      "pathname": "cards/originals/LIT-015-052893ad87.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-015-052893ad87.png",
+      "size": 601520,
+      "sha256": "052893ad87e990bc79d238dbd05d3fefc5baec1a844edf0bbfdaa5c9c78d903e"
+    },
+    "LIT-016": {
+      "pathname": "cards/originals/LIT-016-bce2280088.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-016-bce2280088.png",
+      "size": 617854,
+      "sha256": "bce2280088e6ed3553ad97430aa91da59323a45f94a4dbe9a54cf6e6c092c154"
+    },
+    "LIT-017": {
+      "pathname": "cards/originals/LIT-017-b02e650495.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-017-b02e650495.png",
+      "size": 659669,
+      "sha256": "b02e650495a212bddb17c37c881c8aca94fcb46a9b24f9f089acd717ee03aed7"
+    },
+    "LIT-018": {
+      "pathname": "cards/originals/LIT-018-68d11ffb61.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-018-68d11ffb61.png",
+      "size": 808243,
+      "sha256": "68d11ffb61e9aa6f6fc2e8c797ff7ca812f63149e4e92bd208921691e569a5f8"
+    },
+    "LIT-019": {
+      "pathname": "cards/originals/LIT-019-05f7c69ac8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-019-05f7c69ac8.png",
+      "size": 500565,
+      "sha256": "05f7c69ac89cc790373622cece829946535f5ec48c1ca538545081c5ac796f66"
+    },
+    "LIT-020": {
+      "pathname": "cards/originals/LIT-020-fdc0997eef.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-020-fdc0997eef.png",
+      "size": 599021,
+      "sha256": "fdc0997eefa8e33a2bf0269ab256456574b3309cecdabf08c31f2873748e8490"
+    },
+    "LIT-021": {
+      "pathname": "cards/originals/LIT-021-4fa7c6fb08.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-021-4fa7c6fb08.png",
+      "size": 620695,
+      "sha256": "4fa7c6fb08beaf527fa87acffcf8eb0f08cd6817393c7da2aad3e2f7e43bf2d3"
+    },
+    "LIT-022": {
+      "pathname": "cards/originals/LIT-022-8284bdf5d7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-022-8284bdf5d7.png",
+      "size": 744012,
+      "sha256": "8284bdf5d74cd1f07c46173623d70784ddd03007b41ca4ab2b09c9bcd1b7ad5d"
+    },
+    "LIT-023": {
+      "pathname": "cards/originals/LIT-023-d96dc8f722.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-023-d96dc8f722.png",
+      "size": 894660,
+      "sha256": "d96dc8f7220a91f0edffdf52955e04692abd084f15309a4f36e8737564586f87"
+    },
+    "LIT-024": {
+      "pathname": "cards/originals/LIT-024-4f319e06d7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-024-4f319e06d7.png",
+      "size": 943857,
+      "sha256": "4f319e06d7fd71ae64653b13102b4a512ba955e29d88df72bfacaef54cfa541b"
+    },
+    "LIT-025": {
+      "pathname": "cards/originals/LIT-025-54e0f50d15.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-025-54e0f50d15.png",
+      "size": 905038,
+      "sha256": "54e0f50d157be04ed7d04a6e3047834385138490e6441330fb2d65170cb5e321"
+    },
+    "LIT-026": {
+      "pathname": "cards/originals/LIT-026-4c2914dda5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-026-4c2914dda5.png",
+      "size": 826019,
+      "sha256": "4c2914dda5f592713c1f43c925b627fd2d3edf588a826bad1b95572272025f6c"
+    },
+    "LIT-027": {
+      "pathname": "cards/originals/LIT-027-56bf57dc51.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-027-56bf57dc51.png",
+      "size": 817248,
+      "sha256": "56bf57dc5180da48635776f95f5db98d74cffe9ebeec7252eb4c7d75abf23ed5"
+    },
+    "LIT-028": {
+      "pathname": "cards/originals/LIT-028-c7fc18589a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-028-c7fc18589a.png",
+      "size": 847015,
+      "sha256": "c7fc18589a35d72243fdd0f2bc7b7d1724d514d9a6fd0f5e9db256c2951d3272"
+    },
+    "LIT-029": {
+      "pathname": "cards/originals/LIT-029-50d54a38d5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-029-50d54a38d5.png",
+      "size": 872063,
+      "sha256": "50d54a38d5ff97545cbacac04a1bfec689250e95163619ef70694ab709301a8f"
+    },
+    "LIT-030": {
+      "pathname": "cards/originals/LIT-030-b0a7312ba2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-030-b0a7312ba2.png",
+      "size": 851576,
+      "sha256": "b0a7312ba213655034b19fc0b9f8ef30703981bbbc79f19770b940423eb33ec3"
+    },
+    "LIT-031": {
+      "pathname": "cards/originals/LIT-031-5bf4037569.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-031-5bf4037569.png",
+      "size": 855365,
+      "sha256": "5bf40375697056073c91f82eb250a22d65a520de89f01297bca840cdf8576a9a"
+    },
+    "LIT-032": {
+      "pathname": "cards/originals/LIT-032-bc98bccf9e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-032-bc98bccf9e.png",
+      "size": 754487,
+      "sha256": "bc98bccf9ec4d90aa1c1dbb03ae9841765ece4156221fb1b9c89cf1e14022cac"
+    },
+    "LIT-033": {
+      "pathname": "cards/originals/LIT-033-f295e793b9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-033-f295e793b9.png",
+      "size": 816591,
+      "sha256": "f295e793b9ed355390ed6318b1051a8219fa9efcb43ec4a506dd8e939c60e820"
+    },
+    "LIT-034": {
+      "pathname": "cards/originals/LIT-034-85fc534966.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-034-85fc534966.png",
+      "size": 915134,
+      "sha256": "85fc534966134728a74ae66f5845d023bc9a513c8914b46d50fd0b281ef46758"
+    },
+    "LIT-035": {
+      "pathname": "cards/originals/LIT-035-189c201093.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-035-189c201093.png",
+      "size": 859294,
+      "sha256": "189c201093f0c02d61538bd9d6d79ecfd346f68315b66cf91d3b9df8ba9ccdf4"
+    },
+    "LIT-036": {
+      "pathname": "cards/originals/LIT-036-5b6400813a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-036-5b6400813a.png",
+      "size": 683947,
+      "sha256": "5b6400813aa50e139cf0fcfe45d1574374b3b302388ebbd30715574cba4e1289"
+    },
+    "LIT-037": {
+      "pathname": "cards/originals/LIT-037-3197f9f79a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-037-3197f9f79a.png",
+      "size": 1015961,
+      "sha256": "3197f9f79a58fc45911b7abd423e4919852056c6eeefb30952c850a793dbfb65"
+    },
+    "LIT-038": {
+      "pathname": "cards/originals/LIT-038-31d4886106.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-038-31d4886106.png",
+      "size": 995600,
+      "sha256": "31d488610603fa42de0ca9e3c52a2f2521aa2ec0ceba59ecd68b22d5dedb34b5"
+    },
+    "LIT-039": {
+      "pathname": "cards/originals/LIT-039-fd4de4c30c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-039-fd4de4c30c.png",
+      "size": 739101,
+      "sha256": "fd4de4c30cd3f6d99b64b7ea20f27078b2603f402e3a05e234bef7145fceb502"
+    },
+    "LIT-040": {
+      "pathname": "cards/originals/LIT-040-a48358c3ea.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-040-a48358c3ea.png",
+      "size": 745589,
+      "sha256": "a48358c3ead3e144c8c140162ab857c4da2ed397720fa2a1f8f7d7e2965ce555"
+    },
+    "LIT-041": {
+      "pathname": "cards/originals/LIT-041-c4e3ce3dbf.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-041-c4e3ce3dbf.png",
+      "size": 867729,
+      "sha256": "c4e3ce3dbfb4707a5f74fd3efcb72c420f300b1c9ddaef2fb7ce891c2b860d9b"
+    },
+    "LIT-042": {
+      "pathname": "cards/originals/LIT-042-12a7aadd8f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-042-12a7aadd8f.png",
+      "size": 832601,
+      "sha256": "12a7aadd8fe081435be25ef63330c1fb07d837411ea321d202fa5d4fc746c373"
+    },
+    "LIT-043": {
+      "pathname": "cards/originals/LIT-043-6ce2e34d26.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-043-6ce2e34d26.png",
+      "size": 713372,
+      "sha256": "6ce2e34d265feee0bf3f6dae98b17fd9fcf723f8a4cea47c27bb6f6f6676fc7e"
+    },
+    "LIT-044": {
+      "pathname": "cards/originals/LIT-044-1e9da60075.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-044-1e9da60075.png",
+      "size": 650166,
+      "sha256": "1e9da60075e4f0c4de052bdf6b54a9ff1eefb25923ecf62852b17c44cf62fe63"
+    },
+    "LIT-045": {
+      "pathname": "cards/originals/LIT-045-3da248fe0f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-045-3da248fe0f.png",
+      "size": 552073,
+      "sha256": "3da248fe0f1d9b7eb4560f982ce115dc6e7f14ca9dab652f1f85878fc60fb29f"
+    },
+    "LIT-046": {
+      "pathname": "cards/originals/LIT-046-c7a8ef0fd8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-046-c7a8ef0fd8.png",
+      "size": 855681,
+      "sha256": "c7a8ef0fd8f0a7104b25a0e49118e39332e83acf706f3e56b55de43635bf8863"
+    },
+    "LIT-047": {
+      "pathname": "cards/originals/LIT-047-9686e55d2e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-047-9686e55d2e.png",
+      "size": 636453,
+      "sha256": "9686e55d2e248f6c98f42126c8dd207f69d93359bf25eae64fb473510d0cd482"
+    },
+    "MAR-001": {
+      "pathname": "cards/originals/MAR-001-d705b8747d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-001-d705b8747d.png",
+      "size": 988434,
+      "sha256": "d705b8747d2e805c8032cf6b52eeb0b488c195ec03ba3aa69d669b6d8a6aa092"
+    },
+    "MAR-002": {
+      "pathname": "cards/originals/MAR-002-c47c745a4f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-002-c47c745a4f.png",
+      "size": 946988,
+      "sha256": "c47c745a4fa230fe94358bab8865ae553332782ff1d1a77941f209d7d7431424"
+    },
+    "MAR-003": {
+      "pathname": "cards/originals/MAR-003-cffe325b23.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-003-cffe325b23.png",
+      "size": 896913,
+      "sha256": "cffe325b2350381e15cee959ccf21ea4b7395c51f10a95bbbb92241864d09f66"
+    },
+    "MAR-004": {
+      "pathname": "cards/originals/MAR-004-9083ac64c5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-004-9083ac64c5.png",
+      "size": 664027,
+      "sha256": "9083ac64c5104edb1d99ed99aea0a104cb8dbe65f80c125537c503365e03c7d5"
+    },
+    "MAR-005": {
+      "pathname": "cards/originals/MAR-005-31adcdfaa9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-005-31adcdfaa9.png",
+      "size": 840345,
+      "sha256": "31adcdfaa94a862261396cac9a1feaf0f74aebc2da847934783eada94298d053"
+    },
+    "MAR-006": {
+      "pathname": "cards/originals/MAR-006-9d6c44470f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-006-9d6c44470f.png",
+      "size": 928959,
+      "sha256": "9d6c44470f19c99bf7e53189911698106ea52ee0727527b39749e397637bdbd9"
+    },
+    "MAR-007": {
+      "pathname": "cards/originals/MAR-007-ad4e845d21.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-007-ad4e845d21.png",
+      "size": 666632,
+      "sha256": "ad4e845d21d1fa7dd2f61f92db6ba769fe727e0ef93523d814799e3c6228ff38"
+    },
+    "MAR-008": {
+      "pathname": "cards/originals/MAR-008-1a80de933c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-008-1a80de933c.png",
+      "size": 768990,
+      "sha256": "1a80de933cda247793c85ee33bcb3223e1066e57f6d5bcf08065a9ebbd270a2b"
+    },
+    "MAR-009": {
+      "pathname": "cards/originals/MAR-009-f762f1fdf0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-009-f762f1fdf0.png",
+      "size": 697708,
+      "sha256": "f762f1fdf046fbf8195b1c9b81249aae750809e621b29eea524fd39f42bf4438"
+    },
+    "MAR-010": {
+      "pathname": "cards/originals/MAR-010-5a382699b1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-010-5a382699b1.png",
+      "size": 1066292,
+      "sha256": "5a382699b10c104b63d46ac21d0e07bb200c317537924f5689fc713b0d33108c"
+    },
+    "MAR-011": {
+      "pathname": "cards/originals/MAR-011-45ed40a5c7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-011-45ed40a5c7.png",
+      "size": 932611,
+      "sha256": "45ed40a5c71854e6b68b20823ccedc5c8d03c689a4a5e17b83572c870290663c"
+    },
+    "MAR-012": {
+      "pathname": "cards/originals/MAR-012-bdfe03fa76.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-012-bdfe03fa76.png",
+      "size": 893902,
+      "sha256": "bdfe03fa76e6c6b19d20866ba4a75150acaf55310c676a64c512b4fa99629643"
+    },
+    "MAR-013": {
+      "pathname": "cards/originals/MAR-013-347642c700.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-013-347642c700.png",
+      "size": 671614,
+      "sha256": "347642c700d4e51adc26a7813b7be08e3e240a4f2979471f8f8339a0d6f636dd"
+    },
+    "MAR-014": {
+      "pathname": "cards/originals/MAR-014-963c708ac2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-014-963c708ac2.png",
+      "size": 975234,
+      "sha256": "963c708ac2a9695f2924a4008c619d8aea9b2b5867c6437be6de4200e71d8f61"
+    },
+    "MAR-015": {
+      "pathname": "cards/originals/MAR-015-3d52c6cb5b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-015-3d52c6cb5b.png",
+      "size": 751108,
+      "sha256": "3d52c6cb5bb54dc3e57c8bafc18018974684c7f52683f587a2d203a4296b62e1"
+    },
+    "MAR-016": {
+      "pathname": "cards/originals/MAR-016-6f9b0234cc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-016-6f9b0234cc.png",
+      "size": 1011018,
+      "sha256": "6f9b0234cc2d623747543fda2d5abedd2cea5b6baca6a3cd367f6bd97d088bb3"
+    },
+    "MAR-017": {
+      "pathname": "cards/originals/MAR-017-ad923ef31c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-017-ad923ef31c.png",
+      "size": 1231440,
+      "sha256": "ad923ef31cc0c663564720651acd475dc86a4a225878e199cb3b4bef6dc1049c"
+    },
+    "MAR-018": {
+      "pathname": "cards/originals/MAR-018-d2ea5648ff.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-018-d2ea5648ff.png",
+      "size": 986177,
+      "sha256": "d2ea5648ff678baef28c355f93c0630419fb732bdc0f3d7eaec03a21df6230fc"
+    },
+    "MAR-019": {
+      "pathname": "cards/originals/MAR-019-36ff413fd6.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-019-36ff413fd6.png",
+      "size": 1004116,
+      "sha256": "36ff413fd6454b16395a9e27ffb6a696b708d3988676d1a242f534a4f837ab92"
+    },
+    "MAR-020": {
+      "pathname": "cards/originals/MAR-020-c349f84c05.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-020-c349f84c05.png",
+      "size": 663133,
+      "sha256": "c349f84c05797799a4b31b90ed76386e8269c6724f9fe190efa159cab2bad03e"
+    },
+    "MAR-021": {
+      "pathname": "cards/originals/MAR-021-c18b2b43dd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-021-c18b2b43dd.png",
+      "size": 869621,
+      "sha256": "c18b2b43dddcaff87b1d2102f0e6ac2a7fa164f910586ef0ac374eadc5932714"
+    },
+    "MAR-022": {
+      "pathname": "cards/originals/MAR-022-b63fb8136c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-022-b63fb8136c.png",
+      "size": 694293,
+      "sha256": "b63fb8136ce4a6fa4f1bfb7634787b08d79fea88676bccfddb6c84bca79bf312"
+    },
+    "MAR-023": {
+      "pathname": "cards/originals/MAR-023-cfecfb988a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-023-cfecfb988a.png",
+      "size": 1066781,
+      "sha256": "cfecfb988ae4e48eaa4d7b2e2d064478bdf6621eb664546158029e8dac3c9b8b"
+    },
+    "MAR-024": {
+      "pathname": "cards/originals/MAR-024-1155a803a9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-024-1155a803a9.png",
+      "size": 1073821,
+      "sha256": "1155a803a9117ea30b677bb36638baf96a4d5908dcf6e23967d852fd7690e42f"
+    },
+    "MAR-025": {
+      "pathname": "cards/originals/MAR-025-0ccdf8597f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-025-0ccdf8597f.png",
+      "size": 965978,
+      "sha256": "0ccdf8597f0b0aa30921039c1d53a7a9ed62816dbc13340e915531a165e987f3"
+    },
+    "MAR-026": {
+      "pathname": "cards/originals/MAR-026-c2cac9447c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-026-c2cac9447c.png",
+      "size": 1357847,
+      "sha256": "c2cac9447c8649d3061817443d94b4633a9a46a658cead5754501a9ede20d806"
+    },
+    "MAR-027": {
+      "pathname": "cards/originals/MAR-027-a53a0843f5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-027-a53a0843f5.png",
+      "size": 888076,
+      "sha256": "a53a0843f5b48b47615a597f53bcb91fbda806e87e2bcecedc6a101798078676"
+    },
+    "MAR-028": {
+      "pathname": "cards/originals/MAR-028-76f972e38b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-028-76f972e38b.png",
+      "size": 1034921,
+      "sha256": "76f972e38be7c39bbd901e1da7c6bf109117f226e39ee60ad3e3ba828f47b02c"
+    },
+    "MAR-029": {
+      "pathname": "cards/originals/MAR-029-a2235c4cab.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-029-a2235c4cab.png",
+      "size": 1005087,
+      "sha256": "a2235c4cab212cbd1f3b314244a01d91b2cc7aa592dcd63b01a75056ac662915"
+    },
+    "MAR-030": {
+      "pathname": "cards/originals/MAR-030-8eb5997283.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-030-8eb5997283.png",
+      "size": 905186,
+      "sha256": "8eb5997283136d3942e7c04749dff3389eb2da0bd4c4111888893b8b87b12a22"
+    },
+    "MAR-031": {
+      "pathname": "cards/originals/MAR-031-66a1dc6f77.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-031-66a1dc6f77.png",
+      "size": 816729,
+      "sha256": "66a1dc6f77f3cbaa097813bce31f8c268b6ab03306361e34b0a64924b3f94e93"
+    },
+    "MAR-032": {
+      "pathname": "cards/originals/MAR-032-aa66555d48.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-032-aa66555d48.png",
+      "size": 1202717,
+      "sha256": "aa66555d48080f272dd539e7f63a6b0c58ce66da435041fa436dda88295e4d99"
+    },
+    "MAR-033": {
+      "pathname": "cards/originals/MAR-033-441e3b614b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-033-441e3b614b.png",
+      "size": 704023,
+      "sha256": "441e3b614b9152004aeda7056f2d268e3e89b4f605daf428975e9c41a724e677"
+    },
+    "MAR-034": {
+      "pathname": "cards/originals/MAR-034-b6db35e76f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-034-b6db35e76f.png",
+      "size": 1165898,
+      "sha256": "b6db35e76f166fbc9ec6cb951cf1c270d2b60db0cd6293c35cc0e6fa0ed76422"
+    },
+    "MAR-035": {
+      "pathname": "cards/originals/MAR-035-8d145cfd90.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-035-8d145cfd90.png",
+      "size": 752782,
+      "sha256": "8d145cfd9050caeb5597a09e0e53229654109b9849f447f729336c7acf284013"
+    },
+    "MAR-036": {
+      "pathname": "cards/originals/MAR-036-0c51e69a80.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-036-0c51e69a80.png",
+      "size": 824015,
+      "sha256": "0c51e69a801623303cd594c0df460d874166cc97c102ea2b91601409d931b633"
+    },
+    "MAR-037": {
+      "pathname": "cards/originals/MAR-037-abd631130f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-037-abd631130f.png",
+      "size": 781247,
+      "sha256": "abd631130fe0c033c6ce824d9958d3824594b26549617a7d222fc593dde9f4fe"
+    },
+    "MAR-038": {
+      "pathname": "cards/originals/MAR-038-dc9236d6ea.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-038-dc9236d6ea.png",
+      "size": 703424,
+      "sha256": "dc9236d6ea57334df07e3a57ee7316362e4abfce35d2655974fdc2f6c1be0173"
+    },
+    "MAR-039": {
+      "pathname": "cards/originals/MAR-039-52a8c114d2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-039-52a8c114d2.png",
+      "size": 852519,
+      "sha256": "52a8c114d2bfca2fcc67a6287321652f0c2570451acd189f1b99a2eda6b312d1"
+    },
+    "MAR-040": {
+      "pathname": "cards/originals/MAR-040-0d1075229b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-040-0d1075229b.png",
+      "size": 645173,
+      "sha256": "0d1075229b2c20d88b720cb40b212cb47ad275226c4d67b7639faff05c0f20a5"
+    },
+    "MAR-041": {
+      "pathname": "cards/originals/MAR-041-60605748be.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-041-60605748be.png",
+      "size": 954772,
+      "sha256": "60605748be85da9b11152dcafa1ba1bb8a241b0745c46647b2684330485c0997"
+    },
+    "MAR-042": {
+      "pathname": "cards/originals/MAR-042-dfa3bf3f80.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-042-dfa3bf3f80.png",
+      "size": 779450,
+      "sha256": "dfa3bf3f809cb8a8b6a921f509bb91dd8301386f7bc6c91a8e8fb9250e89ffd1"
+    },
+    "MAR-043": {
+      "pathname": "cards/originals/MAR-043-62db5e5ea1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-043-62db5e5ea1.png",
+      "size": 816159,
+      "sha256": "62db5e5ea150caaa6788e265b188da6e1ddebeb26ad3a28e23a995f1394b5ba6"
+    },
+    "MAR-044": {
+      "pathname": "cards/originals/MAR-044-d3a17f7b79.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-044-d3a17f7b79.png",
+      "size": 1002980,
+      "sha256": "d3a17f7b79002578625485afb318c0802df398e478e3acceb6d692ef02ef428e"
+    },
+    "MAR-045": {
+      "pathname": "cards/originals/MAR-045-0148288efe.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-045-0148288efe.png",
+      "size": 850383,
+      "sha256": "0148288efe3a3a9bc11171dcbcfa89d91e5b870f96852dfd0b47823539e7ad2f"
+    },
+    "MAR-046": {
+      "pathname": "cards/originals/MAR-046-8d9fbc797e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAR-046-8d9fbc797e.png",
+      "size": 1228548,
+      "sha256": "8d9fbc797e4f4f89a3353f58fcff7bef4bd8e30629ad445c3b7ee992246fb163"
+    },
+    "MAS-001": {
+      "pathname": "cards/originals/MAS-001-cf0786e1ad.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-001-cf0786e1ad.png",
+      "size": 773567,
+      "sha256": "cf0786e1adeb1c283d8ff914d16bd0207630abda548206a54e46e6598ca9e4cd"
+    },
+    "MAS-002": {
+      "pathname": "cards/originals/MAS-002-7ae3333bee.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-002-7ae3333bee.png",
+      "size": 863872,
+      "sha256": "7ae3333bee885433327312e8ff1544fb5a20db59b4795092aaaa2e1ae1d56091"
+    },
+    "MAS-003": {
+      "pathname": "cards/originals/MAS-003-73384ca68a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-003-73384ca68a.png",
+      "size": 958039,
+      "sha256": "73384ca68a73d381c6178c862cd538f9015bbe1c02443f2098f720792e1d5a3e"
+    },
+    "MAS-004": {
+      "pathname": "cards/originals/MAS-004-f4d6ea5165.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-004-f4d6ea5165.png",
+      "size": 730995,
+      "sha256": "f4d6ea51653cf4fb20c5273bfb927ff2b842316621a2e54fa9e0f3f1645c1d52"
+    },
+    "MAS-005": {
+      "pathname": "cards/originals/MAS-005-1e88819419.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-005-1e88819419.png",
+      "size": 861763,
+      "sha256": "1e88819419f2c2ccff7bc936248f9f1628913d1e030c24ab4b55745702d8ce7a"
+    },
+    "MAS-006": {
+      "pathname": "cards/originals/MAS-006-be678cf0c0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-006-be678cf0c0.png",
+      "size": 846916,
+      "sha256": "be678cf0c025c4e3889795490cb5335642d9d73cda3fe8b6c0c4675c80bbfc54"
+    },
+    "MAS-007": {
+      "pathname": "cards/originals/MAS-007-c64784ec9b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-007-c64784ec9b.png",
+      "size": 654725,
+      "sha256": "c64784ec9b28eecf8e24658642f8e24f1c0ebfe3d196ba24200192e683e109c3"
+    },
+    "MAS-008": {
+      "pathname": "cards/originals/MAS-008-9727c7a196.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-008-9727c7a196.png",
+      "size": 557151,
+      "sha256": "9727c7a196f21d03ac86693769398bf68f852c3acf1353346c1bde6e64311314"
+    },
+    "MAS-009": {
+      "pathname": "cards/originals/MAS-009-92e8e311a3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-009-92e8e311a3.png",
+      "size": 699117,
+      "sha256": "92e8e311a3c1afe9f91a1332991ee5c91bb206cc9b1419ecf4516206b342d835"
+    },
+    "MAS-010": {
+      "pathname": "cards/originals/MAS-010-cebdec6401.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-010-cebdec6401.png",
+      "size": 1087023,
+      "sha256": "cebdec640139cdcdda99a40a406238eabbd3c2fec306627a1e2ff7445df3c3e3"
+    },
+    "MAS-011": {
+      "pathname": "cards/originals/MAS-011-a17c5724ae.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-011-a17c5724ae.png",
+      "size": 792783,
+      "sha256": "a17c5724ae22dbab55bfb5239f2eb8364d97faeaf4991d1997ad2e2c2a294b77"
+    },
+    "MAS-012": {
+      "pathname": "cards/originals/MAS-012-19f231f9f2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-012-19f231f9f2.png",
+      "size": 747743,
+      "sha256": "19f231f9f2c50e8208b8827c254501a9fb39b5e1e99fe3f96bacb1f029ea7a01"
+    },
+    "MAS-013": {
+      "pathname": "cards/originals/MAS-013-977ceb55b5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-013-977ceb55b5.png",
+      "size": 702534,
+      "sha256": "977ceb55b56a6cf22252d3fc9ee74bd181a5da74a1bd8a904ce6f3461e5dbe36"
+    },
+    "MAS-014": {
+      "pathname": "cards/originals/MAS-014-817bbcf31b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-014-817bbcf31b.png",
+      "size": 859836,
+      "sha256": "817bbcf31bcf891971c730ce81048604798d0d1be7e707cb46e3006ca527764c"
+    },
+    "MAS-015": {
+      "pathname": "cards/originals/MAS-015-61eea4dec8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-015-61eea4dec8.png",
+      "size": 944821,
+      "sha256": "61eea4dec804ea0d5656c038de0e5cc2f970d69c2f9045ae2f72d0a15df44c5a"
+    },
+    "MAS-016": {
+      "pathname": "cards/originals/MAS-016-cade847ac5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-016-cade847ac5.png",
+      "size": 572368,
+      "sha256": "cade847ac5d8849237a2041b09f0e9a81f5213a9a4d4944ae6026a072c3989f4"
+    },
+    "MAS-017": {
+      "pathname": "cards/originals/MAS-017-444e8c0f3e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-017-444e8c0f3e.png",
+      "size": 616610,
+      "sha256": "444e8c0f3eb9a5f52e4ff0404bf6b34fdaeda91cb334c18c9d41b8f0ffae51a5"
+    },
+    "MAS-018": {
+      "pathname": "cards/originals/MAS-018-cf76062c8a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-018-cf76062c8a.png",
+      "size": 716793,
+      "sha256": "cf76062c8a404b2da9fd73f351cd480def556b8e916a294e64aab9bfa4465de4"
+    },
+    "MAS-019": {
+      "pathname": "cards/originals/MAS-019-c502fd15e6.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-019-c502fd15e6.png",
+      "size": 765847,
+      "sha256": "c502fd15e6baa351e2e1d0ef0c3e6fefb42d80339d41415c597ba898950038e5"
+    },
+    "MAS-020": {
+      "pathname": "cards/originals/MAS-020-955aa72478.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-020-955aa72478.png",
+      "size": 923803,
+      "sha256": "955aa72478d853bcd623035c1507ee0ae410a5b7b7b724fc249daf492852eea6"
+    },
+    "MAS-021": {
+      "pathname": "cards/originals/MAS-021-cee6aec901.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-021-cee6aec901.png",
+      "size": 775597,
+      "sha256": "cee6aec90120c6f2475bf44c0c1c65218fdafe8529b35c2c1d249215e6cd04b1"
+    },
+    "MAS-022": {
+      "pathname": "cards/originals/MAS-022-4509dac4f8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-022-4509dac4f8.png",
+      "size": 660339,
+      "sha256": "4509dac4f87189e5af2e5ceaf3b0329d6a2afbf213809a404e5c8c528e68909f"
+    },
+    "MAS-023": {
+      "pathname": "cards/originals/MAS-023-60d244091d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-023-60d244091d.png",
+      "size": 780769,
+      "sha256": "60d244091d1d643b113809ec2eb287ad307a20ba802852f778301c13278a2ba4"
+    },
+    "MAS-024": {
+      "pathname": "cards/originals/MAS-024-493962a271.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-024-493962a271.png",
+      "size": 1083090,
+      "sha256": "493962a271313489688dda68eea1f8fcc07e947d1f8c48954bfe7954eeea6ee9"
+    },
+    "MAS-025": {
+      "pathname": "cards/originals/MAS-025-fb72031b26.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-025-fb72031b26.png",
+      "size": 533017,
+      "sha256": "fb72031b265bcd06b3e7d478bbed1c83d7e0f415f8078a155e8ac1a53f0a007b"
+    },
+    "MAS-026": {
+      "pathname": "cards/originals/MAS-026-95866b1683.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-026-95866b1683.png",
+      "size": 500218,
+      "sha256": "95866b16837b2ab3e9375632dff5fa35b87dad8a40d65a99844cc7420d9214dd"
+    },
+    "MAS-027": {
+      "pathname": "cards/originals/MAS-027-e2851a7ae9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-027-e2851a7ae9.png",
+      "size": 716382,
+      "sha256": "e2851a7ae90390071a43dfcbca0aa629cd4ca44178bc1e4ed99e683c7b149083"
+    },
+    "MAS-028": {
+      "pathname": "cards/originals/MAS-028-445f3ccea8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-028-445f3ccea8.png",
+      "size": 644683,
+      "sha256": "445f3ccea8e42dcfb1c4682a49a7bd0756035d29f2cf21806e287fdf9652574c"
+    },
+    "MAS-029": {
+      "pathname": "cards/originals/MAS-029-28cf622b4a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-029-28cf622b4a.png",
+      "size": 627739,
+      "sha256": "28cf622b4a65140ebfaa3e66d0f3a52e2dcca1cde7305e0520822726b56dcbba"
+    },
+    "MAS-030": {
+      "pathname": "cards/originals/MAS-030-3ff54ad2d7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-030-3ff54ad2d7.png",
+      "size": 557532,
+      "sha256": "3ff54ad2d7136229db149537ebd3904f7654c235a6ec090603770e06e00f0cc9"
+    },
+    "MAS-031": {
+      "pathname": "cards/originals/MAS-031-5d2d8af367.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-031-5d2d8af367.png",
+      "size": 698183,
+      "sha256": "5d2d8af367323021ae939b79dd65a002f6929a2b527743770855f30cb2cae6c3"
+    },
+    "MAS-032": {
+      "pathname": "cards/originals/MAS-032-3c543266aa.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-032-3c543266aa.png",
+      "size": 871881,
+      "sha256": "3c543266aa846a382b1b62fc1d567b78a46307c07a9f25fe471edebde84f08d5"
+    },
+    "MAS-033": {
+      "pathname": "cards/originals/MAS-033-d6f14f82d3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-033-d6f14f82d3.png",
+      "size": 791866,
+      "sha256": "d6f14f82d3211c9df43c6d84c234f37626d6881b1558ad039d7c986a57e6a70e"
+    },
+    "MAS-034": {
+      "pathname": "cards/originals/MAS-034-2235c5455a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-034-2235c5455a.png",
+      "size": 706092,
+      "sha256": "2235c5455a55c906c1483f22a56c0a19b85c53b63a40fa7bc6c87c90c4806712"
+    },
+    "MAS-035": {
+      "pathname": "cards/originals/MAS-035-34777a31a8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-035-34777a31a8.png",
+      "size": 1068371,
+      "sha256": "34777a31a890abb588f4d16b28276ea3c4fe1b507e35e16ae342959544a54455"
+    },
+    "MAS-036": {
+      "pathname": "cards/originals/MAS-036-ffd1deccac.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-036-ffd1deccac.png",
+      "size": 845387,
+      "sha256": "ffd1deccac54eb4a4a98da5802d994e66ab72841217ce39e056668a6097fc7d1"
+    },
+    "MAS-037": {
+      "pathname": "cards/originals/MAS-037-d6749a8d1b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-037-d6749a8d1b.png",
+      "size": 1034414,
+      "sha256": "d6749a8d1be09b911f906088fe5515074bcf4443b91cb8b651b58fc7af36aaab"
+    },
+    "MAS-038": {
+      "pathname": "cards/originals/MAS-038-bb6b2e6746.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-038-bb6b2e6746.png",
+      "size": 908458,
+      "sha256": "bb6b2e67468b5701e19aea822c684b80ada950a32b9a3fb4b0610e4a5b0a5d4f"
+    },
+    "MAS-039": {
+      "pathname": "cards/originals/MAS-039-723636b94e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-039-723636b94e.png",
+      "size": 739044,
+      "sha256": "723636b94e99a1fdb6ffd958dfcc43b2314e277286ffb06347c9eb15ed3f623d"
+    },
+    "MAS-040": {
+      "pathname": "cards/originals/MAS-040-de11dac730.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-040-de11dac730.png",
+      "size": 601750,
+      "sha256": "de11dac730f1f911af838a0c00372aef1f6e057ad26996e8143565fb53aff952"
+    },
+    "MAS-041": {
+      "pathname": "cards/originals/MAS-041-44e7a08b30.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-041-44e7a08b30.png",
+      "size": 661361,
+      "sha256": "44e7a08b30e0b18506c7e82ab342439e96961a1a7b62dd754b900e421b7beaa3"
+    },
+    "MAS-042": {
+      "pathname": "cards/originals/MAS-042-19ebe5cc32.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-042-19ebe5cc32.png",
+      "size": 581074,
+      "sha256": "19ebe5cc32a7e3468bb5d02cdafafa48565ce7bb3228534084d8c4b95bb63571"
+    },
+    "MAS-043": {
+      "pathname": "cards/originals/MAS-043-c1d8132881.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-043-c1d8132881.png",
+      "size": 711776,
+      "sha256": "c1d8132881e75a0ea32d29c62fc154499bf329315d3ab96bc7341844b646e188"
+    },
+    "MAS-044": {
+      "pathname": "cards/originals/MAS-044-83581ca755.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-044-83581ca755.png",
+      "size": 443599,
+      "sha256": "83581ca7551cb91e59e119832fe9545ff8fab1e7d3ba800e1bd3094ab021450f"
+    },
+    "MAS-045": {
+      "pathname": "cards/originals/MAS-045-6c0f7c7f27.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-045-6c0f7c7f27.png",
+      "size": 576551,
+      "sha256": "6c0f7c7f27e6cd3e35180222a35b110e8f5ccf0cca344873086f8e5bcf68cda6"
+    },
+    "MAS-046": {
+      "pathname": "cards/originals/MAS-046-42b99dabd8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-046-42b99dabd8.png",
+      "size": 802792,
+      "sha256": "42b99dabd841f44d3dead0bf460aacaffcb2a77715fcb743b555b6b7c9e08402"
+    },
+    "MAS-047": {
+      "pathname": "cards/originals/MAS-047-cc800e9947.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-047-cc800e9947.png",
+      "size": 616120,
+      "sha256": "cc800e99473abc7009b6bf02eb07a562be06da825bb0f45142bece4a1b3565ca"
+    },
+    "MAS-048": {
+      "pathname": "cards/originals/MAS-048-4caa1572ee.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-048-4caa1572ee.png",
+      "size": 749820,
+      "sha256": "4caa1572ee3804ec4a84b845979fcd6567ad85e38a6ef17de9c0d64f74d6d9d7"
+    },
+    "MAS-049": {
+      "pathname": "cards/originals/MAS-049-43b05afd4f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-049-43b05afd4f.png",
+      "size": 661673,
+      "sha256": "43b05afd4fb23ddcae4aa131617416821d3f2decae0367448fd9e05fd5b761c2"
+    },
+    "MAS-050": {
+      "pathname": "cards/originals/MAS-050-fbb3682372.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-050-fbb3682372.png",
+      "size": 520169,
+      "sha256": "fbb36823727274c7fb86b11a40ee9f14b533fb5c98ebb5921b02f1f6ab862136"
+    },
+    "MAS-051": {
+      "pathname": "cards/originals/MAS-051-3d4a9127e0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-051-3d4a9127e0.png",
+      "size": 523337,
+      "sha256": "3d4a9127e05e94d3dbeb8921e5578504ba7843695a202c9181536cb6dcf29873"
+    },
+    "MAS-052": {
+      "pathname": "cards/originals/MAS-052-c8ee096f58.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-052-c8ee096f58.png",
+      "size": 665888,
+      "sha256": "c8ee096f58dd8e43a4cc8efeaa9cf6190768a9b082e7278ffcc0cb6335ab1b80"
+    },
+    "MAS-053": {
+      "pathname": "cards/originals/MAS-053-472dd5c645.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-053-472dd5c645.png",
+      "size": 501010,
+      "sha256": "472dd5c645005b48c33ba4f6ce258bd59e531421e31ac3f5846f90dd72e4553c"
+    },
+    "MAS-054": {
+      "pathname": "cards/originals/MAS-054-fd5a8436aa.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-054-fd5a8436aa.png",
+      "size": 624212,
+      "sha256": "fd5a8436aace06070e11e1e9dd78d56454259522ab613555fb5996c479dec27f"
+    },
+    "MAS-055": {
+      "pathname": "cards/originals/MAS-055-18aac98c61.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-055-18aac98c61.png",
+      "size": 631513,
+      "sha256": "18aac98c619fa50be855e849795f20a880d6a312d7bd8b766e11343145cd2ead"
+    },
+    "MAS-056": {
+      "pathname": "cards/originals/MAS-056-a0fd2d9070.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-056-a0fd2d9070.png",
+      "size": 934638,
+      "sha256": "a0fd2d907021c7dde1e6d63a5b86b70fbcb38372a52568fae4840a8514a367b8"
+    },
+    "MAS-057": {
+      "pathname": "cards/originals/MAS-057-ea360c6da0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-057-ea360c6da0.png",
+      "size": 773248,
+      "sha256": "ea360c6da07d0037a9325e6abb2439c49673cf3ed999e3112298067ac9507ed4"
+    },
+    "MAS-058": {
+      "pathname": "cards/originals/MAS-058-6793ed966c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-058-6793ed966c.png",
+      "size": 1063456,
+      "sha256": "6793ed966c61fa6205fd129d9a7b49db728369432503be80f11b09d58a6364a2"
+    },
+    "MAS-059": {
+      "pathname": "cards/originals/MAS-059-ad570deb14.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-059-ad570deb14.png",
+      "size": 540342,
+      "sha256": "ad570deb1409e6c0455301d14bd7f2cf0983363fef1b9ee4778241cdb6d462b6"
+    },
+    "MAS-060": {
+      "pathname": "cards/originals/MAS-060-e5c619d566.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-060-e5c619d566.png",
+      "size": 701812,
+      "sha256": "e5c619d56621aa98528347974901f003c51e12df7ce1877078bc270900907b81"
+    },
+    "MAS-061": {
+      "pathname": "cards/originals/MAS-061-0cba0f6a0b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-061-0cba0f6a0b.png",
+      "size": 949896,
+      "sha256": "0cba0f6a0bde4dd1ff287194f0909140571eb122b2d14efab9591ae94d9f1268"
+    },
+    "MAS-062": {
+      "pathname": "cards/originals/MAS-062-8e6b764334.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-062-8e6b764334.png",
+      "size": 538797,
+      "sha256": "8e6b764334ca8b05c9fb1ee1409c19a46fae67be868522da23c1d10890d332dd"
+    },
+    "MAS-063": {
+      "pathname": "cards/originals/MAS-063-ce5cc54573.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-063-ce5cc54573.png",
+      "size": 883886,
+      "sha256": "ce5cc5457354920a40022dc707df3e923054d668d0dd7c0e22db90e1087917da"
+    },
+    "MAS-064": {
+      "pathname": "cards/originals/MAS-064-80650473a1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-064-80650473a1.png",
+      "size": 496548,
+      "sha256": "80650473a12c605b42c7c489e37452cb77c3ad0f555b0f2b7e7f82a280d4c111"
+    },
+    "MAS-065": {
+      "pathname": "cards/originals/MAS-065-b1cb73a708.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MAS-065-b1cb73a708.png",
+      "size": 724149,
+      "sha256": "b1cb73a7086d1a63e0602d517f61dad5c0da9ad96a9701429d9aff869bd30491"
+    },
+    "MST-001": {
+      "pathname": "cards/originals/MST-001-7471094431.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-001-7471094431.png",
+      "size": 1356134,
+      "sha256": "74710944318c840c2a4f6f54889836d2f940469dc0783cb200fb5c59eb47b7e2"
+    },
+    "MST-002": {
+      "pathname": "cards/originals/MST-002-746afe3b0f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-002-746afe3b0f.png",
+      "size": 1076002,
+      "sha256": "746afe3b0fca31a6c080f3eb3be4506197ba446e564db1ea0610b2b4c87f3ccd"
+    },
+    "MST-003": {
+      "pathname": "cards/originals/MST-003-c81199947c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-003-c81199947c.png",
+      "size": 970212,
+      "sha256": "c81199947cf730dd57720f731ee60dc9543953f20eca3e75f59daee751e21b17"
+    },
+    "MST-004": {
+      "pathname": "cards/originals/MST-004-4a29aaf725.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-004-4a29aaf725.png",
+      "size": 745678,
+      "sha256": "4a29aaf725894a9c4ad152852a0171f8959548a2c4b0406f52c4caa6c0efc6f3"
+    },
+    "MST-005": {
+      "pathname": "cards/originals/MST-005-32d6cdd154.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-005-32d6cdd154.png",
+      "size": 1349005,
+      "sha256": "32d6cdd154736b16aab421612f0c7e1ab177926b89ca84181a60d521608b78f5"
+    },
+    "MST-006": {
+      "pathname": "cards/originals/MST-006-c95eb5b07f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-006-c95eb5b07f.png",
+      "size": 1164169,
+      "sha256": "c95eb5b07fb4fef673000cdac80414d5b447fd588f0119874e70343214ffa9b5"
+    },
+    "MST-007": {
+      "pathname": "cards/originals/MST-007-efdfdc434a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-007-efdfdc434a.png",
+      "size": 1185688,
+      "sha256": "efdfdc434ad562a6d3229759ab66babcd7d143ce3969614ec821b244dbe5a47f"
+    },
+    "MST-008": {
+      "pathname": "cards/originals/MST-008-bc3321799f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-008-bc3321799f.png",
+      "size": 1220200,
+      "sha256": "bc3321799f55ecfcdd05455b677ae54e352e47b5fa4d9480fcfa31db39d635ed"
+    },
+    "MST-009": {
+      "pathname": "cards/originals/MST-009-616688836f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-009-616688836f.png",
+      "size": 1243518,
+      "sha256": "616688836f754c7aa357c4660a1254cea055c959f58608c41793a53cfd27f47c"
+    },
+    "MST-010": {
+      "pathname": "cards/originals/MST-010-639375a71c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-010-639375a71c.png",
+      "size": 1128474,
+      "sha256": "639375a71c9749e94e614d60b5a0d20490477be655d5050535912e433cf2c532"
+    },
+    "MST-011": {
+      "pathname": "cards/originals/MST-011-0cad4a6fd1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-011-0cad4a6fd1.png",
+      "size": 1111698,
+      "sha256": "0cad4a6fd1cbfbab7f42185c07a0e091478927cd79ecfc81166fdee8374335cd"
+    },
+    "MST-012": {
+      "pathname": "cards/originals/MST-012-d321645db0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-012-d321645db0.png",
+      "size": 1317763,
+      "sha256": "d321645db02e5bc11ca780c2ea459acb75a9fc387c927eeb8a73cab75ed593b3"
+    },
+    "MST-013": {
+      "pathname": "cards/originals/MST-013-b883a5e381.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-013-b883a5e381.png",
+      "size": 1045008,
+      "sha256": "b883a5e381c239fc73c5932f1b3d454b8d19ca568449ebfff2842f384c0ed174"
+    },
+    "MST-014": {
+      "pathname": "cards/originals/MST-014-a6e68af9d5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-014-a6e68af9d5.png",
+      "size": 1158654,
+      "sha256": "a6e68af9d5b5d49afb7ac32fdfb507c08b6112b3c94782ec78cc5a64c60239d2"
+    },
+    "MST-015": {
+      "pathname": "cards/originals/MST-015-c8f38491bd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-015-c8f38491bd.png",
+      "size": 927871,
+      "sha256": "c8f38491bd2b5672b03be321202ae8cef85ef959e832feb7663dbe8609fd0f74"
+    },
+    "MST-016": {
+      "pathname": "cards/originals/MST-016-c6a4b0b3b8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-016-c6a4b0b3b8.png",
+      "size": 921664,
+      "sha256": "c6a4b0b3b82c31d2ab91da49fad5272402c672806686bd83882b05a7408477e6"
+    },
+    "MST-017": {
+      "pathname": "cards/originals/MST-017-0ab1d507ba.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-017-0ab1d507ba.png",
+      "size": 756607,
+      "sha256": "0ab1d507ba878ef55386f240d434a6860003bd6f003ee66572ed14bcd8cbb595"
+    },
+    "MST-018": {
+      "pathname": "cards/originals/MST-018-cf0c39703e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-018-cf0c39703e.png",
+      "size": 818691,
+      "sha256": "cf0c39703e5bb462f4fcd33753c601e17e7d70aae82c432e70d29e5d9c109b25"
+    },
+    "MST-019": {
+      "pathname": "cards/originals/MST-019-242d9c47ee.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-019-242d9c47ee.png",
+      "size": 1568654,
+      "sha256": "242d9c47ee78fdd54617d00721d9be9ca24979a75959c473e5cf281a7cbc995b"
+    },
+    "MST-020": {
+      "pathname": "cards/originals/MST-020-6b00948f82.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-020-6b00948f82.png",
+      "size": 789273,
+      "sha256": "6b00948f8211c4945b0804e752467156c02e66470fb984771a596a4edbd05fdf"
+    },
+    "MST-021": {
+      "pathname": "cards/originals/MST-021-715447df9d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-021-715447df9d.png",
+      "size": 806928,
+      "sha256": "715447df9d0d44c2ed08566823c409a2b15021d0b4b5238cbbd5ac954fee055d"
+    },
+    "MST-022": {
+      "pathname": "cards/originals/MST-022-af3ebe0348.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-022-af3ebe0348.png",
+      "size": 1093447,
+      "sha256": "af3ebe03489a5aee6a7d079b9fc1a9ca1723a1ef4a64dd73376669160be8ef58"
+    },
+    "MST-023": {
+      "pathname": "cards/originals/MST-023-e586280bc9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-023-e586280bc9.png",
+      "size": 705709,
+      "sha256": "e586280bc92793e19891061118af678c4693c15a1ec2c3bff0a2ba9fec30383e"
+    },
+    "MST-024": {
+      "pathname": "cards/originals/MST-024-0609b3c240.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-024-0609b3c240.png",
+      "size": 1147306,
+      "sha256": "0609b3c2404e944c35abeae8207a4f7fc73b995351ea1deb321fd725b8abd217"
+    },
+    "MST-025": {
+      "pathname": "cards/originals/MST-025-9d464d6ce3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-025-9d464d6ce3.png",
+      "size": 906027,
+      "sha256": "9d464d6ce30d40b92b07b02d4dfc26b811771801feaaf3209f1a0c1064d359e9"
+    },
+    "MST-026": {
+      "pathname": "cards/originals/MST-026-05886acd79.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-026-05886acd79.png",
+      "size": 1142882,
+      "sha256": "05886acd798f17e1501d8277e0ef6468fcd59da7e93f7069ddd359843a54e4da"
+    },
+    "MST-027": {
+      "pathname": "cards/originals/MST-027-f32caf9bfe.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-027-f32caf9bfe.png",
+      "size": 683392,
+      "sha256": "f32caf9bfe15173519c483a81c8180ff15780832a5ea4ae6df713b33e26f4915"
+    },
+    "MST-028": {
+      "pathname": "cards/originals/MST-028-09ee177aeb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-028-09ee177aeb.png",
+      "size": 975680,
+      "sha256": "09ee177aeb513a1ca801a8dd3adf3bc783b981a4a7946a8c022d21a1fd5460df"
+    },
+    "MST-029": {
+      "pathname": "cards/originals/MST-029-b052dcbf2e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-029-b052dcbf2e.png",
+      "size": 1264192,
+      "sha256": "b052dcbf2ecc984dd9045635ab862562e7d2501cafaec64080d7cf14a015ff91"
+    },
+    "MST-030": {
+      "pathname": "cards/originals/MST-030-11bad5f73d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-030-11bad5f73d.png",
+      "size": 717971,
+      "sha256": "11bad5f73d3dbaf79b01f336a3cae2801853a75796b2f4effe13a065e8a5cb00"
+    },
+    "MST-031": {
+      "pathname": "cards/originals/MST-031-d7a1860e44.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-031-d7a1860e44.png",
+      "size": 994156,
+      "sha256": "d7a1860e440c6afb9ffa27f574b219179e1a9fbfb3514d02418204aa05df07f9"
+    },
+    "MST-032": {
+      "pathname": "cards/originals/MST-032-05cbbac775.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-032-05cbbac775.png",
+      "size": 966552,
+      "sha256": "05cbbac77587b492ce73560f57a719119efc2eb81fbcb3df36afef72f4423514"
+    },
+    "MST-033": {
+      "pathname": "cards/originals/MST-033-43fcdd0819.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-033-43fcdd0819.png",
+      "size": 1025342,
+      "sha256": "43fcdd08193a14e3b01f28687652981896d983c8fe91dfcae975e06f43a6b53e"
+    },
+    "MST-034": {
+      "pathname": "cards/originals/MST-034-94f3a0bd09.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-034-94f3a0bd09.png",
+      "size": 565436,
+      "sha256": "94f3a0bd0959609149b4ec071f6ba5ec75c471f85547e1be0ca30fffbb4290ad"
+    },
+    "MST-035": {
+      "pathname": "cards/originals/MST-035-522be5b2be.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-035-522be5b2be.png",
+      "size": 729259,
+      "sha256": "522be5b2beb9007e0ef013bbb07384ff83c5cfa7bcbbad0dc29b2e33a9944d5f"
+    },
+    "MST-036": {
+      "pathname": "cards/originals/MST-036-0af2ec1d4e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-036-0af2ec1d4e.png",
+      "size": 1054020,
+      "sha256": "0af2ec1d4e9765daf1b8fb400fe389bfb7bd03251f713d5a18aecbca3b29af94"
+    },
+    "MST-037": {
+      "pathname": "cards/originals/MST-037-f8447210ac.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-037-f8447210ac.png",
+      "size": 1370277,
+      "sha256": "f8447210acdd0f2b1cfa6e8b6b1b5c1ec2f78f4adab5cf712f36898c8f4322b3"
+    },
+    "MST-038": {
+      "pathname": "cards/originals/MST-038-9ab3e1b941.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-038-9ab3e1b941.png",
+      "size": 1417806,
+      "sha256": "9ab3e1b941aa77d89035e5ecbf158a9348fb277951c4c8979cc64d538dba5c88"
+    },
+    "MST-039": {
+      "pathname": "cards/originals/MST-039-d5aabe20bb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-039-d5aabe20bb.png",
+      "size": 991174,
+      "sha256": "d5aabe20bb7e766d2185a75d99af06a7437bdb2cb3cea9eaed9aa196447a635f"
+    },
+    "MST-040": {
+      "pathname": "cards/originals/MST-040-605f1fec64.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-040-605f1fec64.png",
+      "size": 903138,
+      "sha256": "605f1fec649e325eaa3a77069e52506000c8514e7f4bafef0528256308e2285f"
+    },
+    "MST-041": {
+      "pathname": "cards/originals/MST-041-baa850a1d8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-041-baa850a1d8.png",
+      "size": 996077,
+      "sha256": "baa850a1d8a65abba95249c035fbb14f20a349110e148ed269ed00a3aea9080b"
+    },
+    "MST-042": {
+      "pathname": "cards/originals/MST-042-79062984d9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-042-79062984d9.png",
+      "size": 995851,
+      "sha256": "79062984d937f84eff3d3037eba64d7e8df04264830656f12d196e92235e0d3b"
+    },
+    "MST-043": {
+      "pathname": "cards/originals/MST-043-20715296ef.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-043-20715296ef.png",
+      "size": 767210,
+      "sha256": "20715296ef8dab13e1963fa187b6ca025bd8d07c3f41cf04d86991fc785f237f"
+    },
+    "MST-044": {
+      "pathname": "cards/originals/MST-044-0200a1fd3f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-044-0200a1fd3f.png",
+      "size": 1009570,
+      "sha256": "0200a1fd3fbb91411a1afde88807ab8dac00686ae7f5212d1d5ca924e6457a5f"
+    },
+    "MST-045": {
+      "pathname": "cards/originals/MST-045-7968729c1d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-045-7968729c1d.png",
+      "size": 903786,
+      "sha256": "7968729c1d6a4e7ae3008554e1625d57e9b89d3407b4a4ebcf085e44da10ac7f"
+    },
+    "MST-046": {
+      "pathname": "cards/originals/MST-046-7cfed661c2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-046-7cfed661c2.png",
+      "size": 1096445,
+      "sha256": "7cfed661c2cf00752b28e10c5c8bc40e0d272ec53840bb08ecc7dc74412876ea"
+    },
+    "MST-047": {
+      "pathname": "cards/originals/MST-047-c36057be37.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/MST-047-c36057be37.png",
+      "size": 983016,
+      "sha256": "c36057be37c3cc9bee7ba1178ef52e60a26b6631710c0460eda1c6350e102e35"
+    },
+    "PRY-001": {
+      "pathname": "cards/originals/PRY-001-ac34c7d0cb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-001-ac34c7d0cb.png",
+      "size": 536519,
+      "sha256": "ac34c7d0cb6ba03f9eada209f1c6f338c0b9f8f0b4042a60db6291570ae04610"
+    },
+    "PRY-002": {
+      "pathname": "cards/originals/PRY-002-8010f4225d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-002-8010f4225d.png",
+      "size": 751743,
+      "sha256": "8010f4225dcaa6cf6facbcaaac2f5a1eff3d0b5ad492507fabf8883f719f6578"
+    },
+    "PRY-003": {
+      "pathname": "cards/originals/PRY-003-6abcf2947e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-003-6abcf2947e.png",
+      "size": 716654,
+      "sha256": "6abcf2947eaf5a95cac5e7e4cecb991f7087cbee47debd4dda603f833ec6ce45"
+    },
+    "PRY-004": {
+      "pathname": "cards/originals/PRY-004-e9180d150d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-004-e9180d150d.png",
+      "size": 695387,
+      "sha256": "e9180d150d5fa05a6622edf591da0fc33f5de10d585294413fed0f8d7084d99e"
+    },
+    "PRY-005": {
+      "pathname": "cards/originals/PRY-005-b133dad582.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-005-b133dad582.png",
+      "size": 679346,
+      "sha256": "b133dad5823643385e2fc89d105910a08da3344dbcde5a85afc63362b028fd28"
+    },
+    "PRY-006": {
+      "pathname": "cards/originals/PRY-006-ebd45d0781.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-006-ebd45d0781.png",
+      "size": 464661,
+      "sha256": "ebd45d0781a908a440d5d3eea83c8232733ec5e0471f53e9c759c78bd5cb8eb6"
+    },
+    "PRY-007": {
+      "pathname": "cards/originals/PRY-007-d5154c58dd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-007-d5154c58dd.png",
+      "size": 747705,
+      "sha256": "d5154c58dd3b51239aa28eca9311e0c93c6502b1b4d647ade58763a44d223ade"
+    },
+    "PRY-008": {
+      "pathname": "cards/originals/PRY-008-1dbb2c62b5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-008-1dbb2c62b5.png",
+      "size": 801598,
+      "sha256": "1dbb2c62b5558fe1da675947df45afa339a5ee7d1abbf4212854189f792d9ad4"
+    },
+    "PRY-009": {
+      "pathname": "cards/originals/PRY-009-5d22045a1c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-009-5d22045a1c.png",
+      "size": 565167,
+      "sha256": "5d22045a1c45648c4380beba6cfa704a4a529c5b08d9168d1648a3476d359e8f"
+    },
+    "PRY-010": {
+      "pathname": "cards/originals/PRY-010-40673fdf26.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-010-40673fdf26.png",
+      "size": 831707,
+      "sha256": "40673fdf26b722e541cf363204c41b41c12796089c9dd8e1a7eeded5a3c7ea9f"
+    },
+    "PRY-011": {
+      "pathname": "cards/originals/PRY-011-2412a72cf9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-011-2412a72cf9.png",
+      "size": 710566,
+      "sha256": "2412a72cf9c6af9ea54618143ad3d96f3371c5855def39eb869fad1b36080b3b"
+    },
+    "PRY-012": {
+      "pathname": "cards/originals/PRY-012-a62e7f077b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-012-a62e7f077b.png",
+      "size": 746064,
+      "sha256": "a62e7f077bf048cac34a13808cc4056c14b61a9b9d5703471d53237eee76fff6"
+    },
+    "PRY-013": {
+      "pathname": "cards/originals/PRY-013-2781ed640b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-013-2781ed640b.png",
+      "size": 481614,
+      "sha256": "2781ed640bd2d5ebbbab3568e41af210aacc3ef04f845f910142e2b17bdfab09"
+    },
+    "PRY-014": {
+      "pathname": "cards/originals/PRY-014-edb381a315.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-014-edb381a315.png",
+      "size": 607873,
+      "sha256": "edb381a315661e7f0bb6a463560858bbb1da34c62406bfbadc2fc0b4229965cf"
+    },
+    "PRY-015": {
+      "pathname": "cards/originals/PRY-015-1242a5c77d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-015-1242a5c77d.png",
+      "size": 681513,
+      "sha256": "1242a5c77d29e3e7f63185489098dde70c856096f6cb6e565e93974960cb5c7c"
+    },
+    "PRY-016": {
+      "pathname": "cards/originals/PRY-016-e9c28dd6a9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-016-e9c28dd6a9.png",
+      "size": 595390,
+      "sha256": "e9c28dd6a9c260ed6e6eaba499fbf21c986e5d61f2b688a8b4546f57547903fc"
+    },
+    "PRY-017": {
+      "pathname": "cards/originals/PRY-017-7b2eb10f81.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-017-7b2eb10f81.png",
+      "size": 493877,
+      "sha256": "7b2eb10f81bde193eb26781b89057b11b22991cee9d102fe337521697fabd3c6"
+    },
+    "PRY-018": {
+      "pathname": "cards/originals/PRY-018-c608a73019.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-018-c608a73019.png",
+      "size": 573871,
+      "sha256": "c608a7301928cd0ff5340115d7fe58820db1ad35e19ccff0c96c61f81d47518b"
+    },
+    "PRY-019": {
+      "pathname": "cards/originals/PRY-019-1775e597a8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-019-1775e597a8.png",
+      "size": 841811,
+      "sha256": "1775e597a83e9324dd6b794ab25e8611a0a8ad238b5d07ac2ebcb5db5ef4cf96"
+    },
+    "PRY-020": {
+      "pathname": "cards/originals/PRY-020-85b6701c03.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-020-85b6701c03.png",
+      "size": 539634,
+      "sha256": "85b6701c036631fb5a58271f5f414c6da26e13d049b6061923c7e67cf9eca6ed"
+    },
+    "PRY-021": {
+      "pathname": "cards/originals/PRY-021-0977d39f2f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-021-0977d39f2f.png",
+      "size": 476571,
+      "sha256": "0977d39f2f6d30276a1cbf3b6b147fbe79ec6d14b47e81bab3fa35377da8012f"
+    },
+    "PRY-022": {
+      "pathname": "cards/originals/PRY-022-a0ecd2c928.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-022-a0ecd2c928.png",
+      "size": 538418,
+      "sha256": "a0ecd2c928197e4229c1400fc433c18ad98bfd1b4cfedeaeb3661ac76a0c3e3e"
+    },
+    "PRY-023": {
+      "pathname": "cards/originals/PRY-023-e8d5f0e6c3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-023-e8d5f0e6c3.png",
+      "size": 535133,
+      "sha256": "e8d5f0e6c32277728fb55791a2a22227632e21556cd27a231377e30662d4472a"
+    },
+    "PRY-024": {
+      "pathname": "cards/originals/PRY-024-734ac906dd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-024-734ac906dd.png",
+      "size": 566293,
+      "sha256": "734ac906dde579937565fdc054573d49282b28c423ff2195fb25c162775adcf5"
+    },
+    "PRY-025": {
+      "pathname": "cards/originals/PRY-025-843f182784.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-025-843f182784.png",
+      "size": 737722,
+      "sha256": "843f18278406eb9bb379a6eb86b993f500c28043a33aea0f3068b79a0952c2ab"
+    },
+    "PRY-026": {
+      "pathname": "cards/originals/PRY-026-15972a022e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-026-15972a022e.png",
+      "size": 749788,
+      "sha256": "15972a022e061391fe2e5f4a48c8f5d853b796b7ae57b9680625f96d18f94df4"
+    },
+    "PRY-027": {
+      "pathname": "cards/originals/PRY-027-c18f220672.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-027-c18f220672.png",
+      "size": 720798,
+      "sha256": "c18f2206724ca6278b5ec696a700c8d3911ed3e97ffdbe06b3c75eb0db8942d9"
+    },
+    "PRY-028": {
+      "pathname": "cards/originals/PRY-028-d8fbffcb68.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-028-d8fbffcb68.png",
+      "size": 761079,
+      "sha256": "d8fbffcb681d03f89d0534be00a3857bba5eb84db660b38dff7bb27a9160da18"
+    },
+    "PRY-029": {
+      "pathname": "cards/originals/PRY-029-1f17729b32.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-029-1f17729b32.png",
+      "size": 723693,
+      "sha256": "1f17729b32f84ac4d61247f317f35fbf6580a2fe0c447d531135a6f38f153611"
+    },
+    "PRY-030": {
+      "pathname": "cards/originals/PRY-030-ab6663e19a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-030-ab6663e19a.png",
+      "size": 828680,
+      "sha256": "ab6663e19a5aee25677c4e9ba2d14c008067c3f10d524452b3e8c77f97c446d2"
+    },
+    "PRY-031": {
+      "pathname": "cards/originals/PRY-031-80fbcad1fa.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-031-80fbcad1fa.png",
+      "size": 942999,
+      "sha256": "80fbcad1faaa7ffe596e992ddd32a350b44cb0b879d2919c4ca02f57da3abecf"
+    },
+    "PRY-032": {
+      "pathname": "cards/originals/PRY-032-962ee3c901.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-032-962ee3c901.png",
+      "size": 538298,
+      "sha256": "962ee3c901362c815f418650ef173994ea44c8e93474225a17d25bf85aa2414f"
+    },
+    "PRY-033": {
+      "pathname": "cards/originals/PRY-033-0c13e9d351.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-033-0c13e9d351.png",
+      "size": 246962,
+      "sha256": "0c13e9d351b9844567b9d873a7c6d9b4778b8f171ea94306516ce5f48887d6b8"
+    },
+    "PRY-034": {
+      "pathname": "cards/originals/PRY-034-d93b2bbcfb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-034-d93b2bbcfb.png",
+      "size": 740800,
+      "sha256": "d93b2bbcfb3be56e2f0790d50b4769f5ebfb1e2831f8a59b4c01fecdacca5378"
+    },
+    "PRY-035": {
+      "pathname": "cards/originals/PRY-035-32f9a637ea.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-035-32f9a637ea.png",
+      "size": 1193849,
+      "sha256": "32f9a637ea8f55c7bb3a058a1e3526a42c4eb8f61c93ed65461131eb49fa6c77"
+    },
+    "PRY-036": {
+      "pathname": "cards/originals/PRY-036-33739b399a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-036-33739b399a.png",
+      "size": 897398,
+      "sha256": "33739b399ae532f1bdd35a0c05cb91f5face2823383e81aabff9302fea182593"
+    },
+    "PRY-037": {
+      "pathname": "cards/originals/PRY-037-5145ca92ff.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-037-5145ca92ff.png",
+      "size": 903679,
+      "sha256": "5145ca92ffa9e8dd56b7abd4a454db26abb6a35e112af287d2cbd21e6577cbd9"
+    },
+    "PRY-038": {
+      "pathname": "cards/originals/PRY-038-6b0e004622.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-038-6b0e004622.png",
+      "size": 870675,
+      "sha256": "6b0e004622c83513f0b1d94f69ff15370a37b686160bf13c91f30cbdb7098899"
+    },
+    "PRY-039": {
+      "pathname": "cards/originals/PRY-039-da5f5c27f0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-039-da5f5c27f0.png",
+      "size": 826315,
+      "sha256": "da5f5c27f033c3565054dc0a8928bfe6380abb2a07fef08b0e7cc7e618f34d92"
+    },
+    "PRY-040": {
+      "pathname": "cards/originals/PRY-040-c7820599ab.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-040-c7820599ab.png",
+      "size": 773298,
+      "sha256": "c7820599ab52f63e5ebf546c1fe95438aee51262b428db8d1b60509d521e4b39"
+    },
+    "PRY-041": {
+      "pathname": "cards/originals/PRY-041-212a5b50ea.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-041-212a5b50ea.png",
+      "size": 835030,
+      "sha256": "212a5b50ea56a37d8695092633f2c655e21a3d2183965f6a0c671fa38c305d5f"
+    },
+    "PRY-042": {
+      "pathname": "cards/originals/PRY-042-c3ca28191c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-042-c3ca28191c.png",
+      "size": 781714,
+      "sha256": "c3ca28191c23b1d949b1870bfed6987b10f5894759d8434c8d17f0670509822a"
+    },
+    "PRY-043": {
+      "pathname": "cards/originals/PRY-043-e808c348d4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-043-e808c348d4.png",
+      "size": 723761,
+      "sha256": "e808c348d4871884aa46a5e5056e9753e5ced71a6bb7deb1930df17acbeb3bc2"
+    },
+    "PRY-044": {
+      "pathname": "cards/originals/PRY-044-3c2e44679e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-044-3c2e44679e.png",
+      "size": 1001579,
+      "sha256": "3c2e44679ef70621b1c4f4502d8ec14571308cc984c2501829d53543ae66dcc1"
+    },
+    "PRY-045": {
+      "pathname": "cards/originals/PRY-045-12b00cabc4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-045-12b00cabc4.png",
+      "size": 541373,
+      "sha256": "12b00cabc4d575bc8bee64c5ce5543e2fabd9dc81191824d778c2b3040b64cb9"
+    },
+    "PRY-046": {
+      "pathname": "cards/originals/PRY-046-da2f0cb39c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-046-da2f0cb39c.png",
+      "size": 549228,
+      "sha256": "da2f0cb39ced767c5680bb028f781a9398ae4faaf405f8a62d0d4d0c54093201"
+    },
+    "PRY-047": {
+      "pathname": "cards/originals/PRY-047-a46138d693.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-047-a46138d693.png",
+      "size": 793323,
+      "sha256": "a46138d69375ce5480551cf912ccb9509cc96529763498e95c7c0aca2f0c7adf"
+    },
+    "PRY-048": {
+      "pathname": "cards/originals/PRY-048-d3bf0b36b7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-048-d3bf0b36b7.png",
+      "size": 851091,
+      "sha256": "d3bf0b36b72d1645ca8a4370c970bd483fe3c5e24fbe579abda8d31a2e1f8a4b"
+    },
+    "PRY-049": {
+      "pathname": "cards/originals/PRY-049-d790868b5f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-049-d790868b5f.png",
+      "size": 1044608,
+      "sha256": "d790868b5f1c95df3fdb2cd28620fa9aeb626ad4038257175445b3b615124f32"
+    },
+    "PRY-050": {
+      "pathname": "cards/originals/PRY-050-8de0b51e18.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-050-8de0b51e18.png",
+      "size": 955676,
+      "sha256": "8de0b51e18015dd30fcb7288150e3054c4dfd34cad5414a5f59b3d8fdd3b5007"
+    },
+    "PRY-051": {
+      "pathname": "cards/originals/PRY-051-0d6995ff38.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-051-0d6995ff38.png",
+      "size": 844465,
+      "sha256": "0d6995ff385794eebf095bd3cd3efc2da3202d938e7479343822acffacbc90e9"
+    },
+    "PRY-052": {
+      "pathname": "cards/originals/PRY-052-5a3c9cdb01.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-052-5a3c9cdb01.png",
+      "size": 809265,
+      "sha256": "5a3c9cdb01241bdc2b6c062adda785853c33b3533bfa17af4aefedf35484de25"
+    },
+    "PRY-053": {
+      "pathname": "cards/originals/PRY-053-74177b9f62.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-053-74177b9f62.png",
+      "size": 644958,
+      "sha256": "74177b9f62ab55140d162cab8813fdc099f63f79b47765dbd3fc848ade546a6b"
+    },
+    "PRY-054": {
+      "pathname": "cards/originals/PRY-054-603bf6fd68.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-054-603bf6fd68.png",
+      "size": 968295,
+      "sha256": "603bf6fd6874d3e79cba1dade66d6d8eedc6f03d58c8280347a161561dc5fe70"
+    },
+    "PRY-055": {
+      "pathname": "cards/originals/PRY-055-069372381d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-055-069372381d.png",
+      "size": 689190,
+      "sha256": "069372381df7e8448738420f3bb02378b16fdf9aedf0cdf522e18e7704dfab2e"
+    },
+    "PRY-056": {
+      "pathname": "cards/originals/PRY-056-d40e2758df.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-056-d40e2758df.png",
+      "size": 829680,
+      "sha256": "d40e2758dfb27c24173fe62fcc235ca097332f434ef6ca3d417730fccd9c8384"
+    },
+    "PRY-057": {
+      "pathname": "cards/originals/PRY-057-a4e0693a61.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-057-a4e0693a61.png",
+      "size": 872086,
+      "sha256": "a4e0693a6155359e231fdef1abc241650ae025e4a24bb8c6c9d6b9ec59f6339c"
+    },
+    "PRY-058": {
+      "pathname": "cards/originals/PRY-058-cd109caa0e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-058-cd109caa0e.png",
+      "size": 1056049,
+      "sha256": "cd109caa0eadcf7cd3c5a42e6aebb4fc53cb6ae09d64d0447b17466b2b8ebbed"
+    },
+    "PRY-059": {
+      "pathname": "cards/originals/PRY-059-cbf85f6685.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-059-cbf85f6685.png",
+      "size": 768133,
+      "sha256": "cbf85f66858f316043c3a6f1173d286ed73d30445d6681466c339dd5fabc022b"
+    },
+    "PRY-060": {
+      "pathname": "cards/originals/PRY-060-d066dacc1d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-060-d066dacc1d.png",
+      "size": 915389,
+      "sha256": "d066dacc1df9566ed8ba271578b38a833f2a9180422234afc3ff575627a12716"
+    },
+    "PRY-061": {
+      "pathname": "cards/originals/PRY-061-a910ff2691.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-061-a910ff2691.png",
+      "size": 676935,
+      "sha256": "a910ff269144621eaf9fa8f94d4516cee8c36e55f641e0715924beb83fcf0c6c"
+    },
+    "PRY-062": {
+      "pathname": "cards/originals/PRY-062-5c88a7b9eb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-062-5c88a7b9eb.png",
+      "size": 894030,
+      "sha256": "5c88a7b9ebacb2aa7c9007ef37c5b223521942c0854706ff7bc17bfc60634941"
+    },
+    "PRY-063": {
+      "pathname": "cards/originals/PRY-063-a068196b90.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-063-a068196b90.png",
+      "size": 594369,
+      "sha256": "a068196b9002df677e648f53c91bf6a80b5677bef993ef905bfc90d5db01ab8e"
+    },
+    "PRY-064": {
+      "pathname": "cards/originals/PRY-064-e1d34078af.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-064-e1d34078af.png",
+      "size": 845426,
+      "sha256": "e1d34078af521e15083b03216e19a60c97f3e3ed66b8692da849244b73ae73bd"
+    },
+    "PRY-065": {
+      "pathname": "cards/originals/PRY-065-4a81fde376.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-065-4a81fde376.png",
+      "size": 637046,
+      "sha256": "4a81fde376d5531a8c95389828fca6cf0f1acfa6e0d7e4e3423517ab093eb7aa"
+    },
+    "PRY-066": {
+      "pathname": "cards/originals/PRY-066-f943f3c21d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/PRY-066-f943f3c21d.png",
+      "size": 418310,
+      "sha256": "f943f3c21da9a8c2fc2abd7c576066aba218fb532d2aaff175119edcadfccacf"
+    },
+    "SAC-001": {
+      "pathname": "cards/originals/SAC-001-c116c901f5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-001-c116c901f5.png",
+      "size": 680896,
+      "sha256": "c116c901f5fb3d4cc6e905f8123b30ba4bd5e377b1827d7693e3515b781fdb45"
+    },
+    "SAC-002": {
+      "pathname": "cards/originals/SAC-002-a5d8771f31.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-002-a5d8771f31.png",
+      "size": 794836,
+      "sha256": "a5d8771f31356d2bdbe2456d5a45eb912b79f01323e827217c6497368900ec2b"
+    },
+    "SAC-003": {
+      "pathname": "cards/originals/SAC-003-04af43a7c4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-003-04af43a7c4.png",
+      "size": 806389,
+      "sha256": "04af43a7c4ba9ce463dd0c515b38b6f27b9af915c92bd4860918207bff593cce"
+    },
+    "SAC-004": {
+      "pathname": "cards/originals/SAC-004-d84313c640.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-004-d84313c640.png",
+      "size": 920156,
+      "sha256": "d84313c640461b54ace5cee150bb2b9324785c5d2a09e6475a9dda31b1fec156"
+    },
+    "SAC-005": {
+      "pathname": "cards/originals/SAC-005-8b3406ef98.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-005-8b3406ef98.png",
+      "size": 781954,
+      "sha256": "8b3406ef98117917895a8b7be3e3e9eeeac6a540110e8f4552517eeba0f43145"
+    },
+    "SAC-006": {
+      "pathname": "cards/originals/SAC-006-8595ac0980.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-006-8595ac0980.png",
+      "size": 970291,
+      "sha256": "8595ac098078365cbae9b8749be0266168c69895b55befb8f951fcddaedb8666"
+    },
+    "SAC-007": {
+      "pathname": "cards/originals/SAC-007-c26bf0a157.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-007-c26bf0a157.png",
+      "size": 799159,
+      "sha256": "c26bf0a15731c7485d19872a1c2bcbb7fcd23ea926a46784a65555290970421b"
+    },
+    "SAC-008": {
+      "pathname": "cards/originals/SAC-008-217269ee7b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-008-217269ee7b.png",
+      "size": 733818,
+      "sha256": "217269ee7b9528c444f11935fd38c9684074faa2ce4787e805927ec34a95f88b"
+    },
+    "SAC-009": {
+      "pathname": "cards/originals/SAC-009-6fcf2d0f51.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-009-6fcf2d0f51.png",
+      "size": 421676,
+      "sha256": "6fcf2d0f51b14724b34c287011268e94c1adb3c3a9bc55af78e6f8befe8f1597"
+    },
+    "SAC-010": {
+      "pathname": "cards/originals/SAC-010-745deef4b2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-010-745deef4b2.png",
+      "size": 773476,
+      "sha256": "745deef4b2b0ad38554e32b073b988258f7c11b824ff9648fcfd032c2dd7b68a"
+    },
+    "SAC-011": {
+      "pathname": "cards/originals/SAC-011-6288e7cd06.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-011-6288e7cd06.png",
+      "size": 815860,
+      "sha256": "6288e7cd06af65a2e5ecf777b1f319effd56f558bef4c1086b8cd6ca69aea3c5"
+    },
+    "SAC-012": {
+      "pathname": "cards/originals/SAC-012-06e55237b7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-012-06e55237b7.png",
+      "size": 758189,
+      "sha256": "06e55237b7840de25351b73f0734e5346f72dffa3379192aaf59f505a3712aed"
+    },
+    "SAC-013": {
+      "pathname": "cards/originals/SAC-013-dc8978e5ab.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-013-dc8978e5ab.png",
+      "size": 819921,
+      "sha256": "dc8978e5ab8ebac7a67e0ec433acc2cc9b4001c459f26ebedeeb60a9c2e98064"
+    },
+    "SAC-014": {
+      "pathname": "cards/originals/SAC-014-3fb8d17060.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-014-3fb8d17060.png",
+      "size": 830703,
+      "sha256": "3fb8d17060fa17848ec0169486ec8bf2427fa1f5a711d456ddcec8f69eb7cee8"
+    },
+    "SAC-015": {
+      "pathname": "cards/originals/SAC-015-e6b1a940ac.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-015-e6b1a940ac.png",
+      "size": 681655,
+      "sha256": "e6b1a940acb5d2605ceb4c29423481e4315d84717a0958f669f2d25392cb46ec"
+    },
+    "SAC-016": {
+      "pathname": "cards/originals/SAC-016-72c77b7913.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-016-72c77b7913.png",
+      "size": 570699,
+      "sha256": "72c77b79135d5ffe381f2d31dc11701c0d7f92d34d5437b5f6a1d63d99965849"
+    },
+    "SAC-017": {
+      "pathname": "cards/originals/SAC-017-301db7154d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-017-301db7154d.png",
+      "size": 528464,
+      "sha256": "301db7154da7f48cc2d315931bd2008df78a79b7d331d5c2bd4bdc058b3f769f"
+    },
+    "SAC-018": {
+      "pathname": "cards/originals/SAC-018-5057437e74.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-018-5057437e74.png",
+      "size": 837458,
+      "sha256": "5057437e74e3602c786e01b68c3632039a6268b2205f96cf727300d87bf6d8aa"
+    },
+    "SAC-019": {
+      "pathname": "cards/originals/SAC-019-93b855e9c9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-019-93b855e9c9.png",
+      "size": 988280,
+      "sha256": "93b855e9c9f06384649efd3c276f40234b788c2665f88ebf3281b3dfef4e8fef"
+    },
+    "SAC-020": {
+      "pathname": "cards/originals/SAC-020-990a46e4be.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-020-990a46e4be.png",
+      "size": 930861,
+      "sha256": "990a46e4bedda09674f3602e8293c51cefe081907a04072133deedeb235982d7"
+    },
+    "SAC-021": {
+      "pathname": "cards/originals/SAC-021-0f63060117.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-021-0f63060117.png",
+      "size": 681006,
+      "sha256": "0f63060117e6a37ae3ecef151d9170bd62fb478fb0c3a1edc12c8ad1d51f69f0"
+    },
+    "SAC-022": {
+      "pathname": "cards/originals/SAC-022-0789b526a9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-022-0789b526a9.png",
+      "size": 881244,
+      "sha256": "0789b526a9cc6ee8da1a03376f1597de75525868db209f0bfaf9492169d6da88"
+    },
+    "SAC-023": {
+      "pathname": "cards/originals/SAC-023-dc24bd233f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-023-dc24bd233f.png",
+      "size": 989940,
+      "sha256": "dc24bd233f4b086703a753c2dbff349d43ec1adc262ae5912d487d34b6f0f966"
+    },
+    "SAC-024": {
+      "pathname": "cards/originals/SAC-024-7b2e978934.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SAC-024-7b2e978934.png",
+      "size": 762225,
+      "sha256": "7b2e97893487aecd83fbdf1b9426df5f54610fdfbc43757beab4743099d004a3"
+    },
+    "SNT-001": {
+      "pathname": "cards/originals/SNT-001-fa3938125f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-001-fa3938125f.png",
+      "size": 764971,
+      "sha256": "fa3938125f29f61ef4202aebfc49331dd227d11c37eeb11c44f48f3a20a64ad9"
+    },
+    "SNT-002": {
+      "pathname": "cards/originals/SNT-002-d1d3c0edbd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-002-d1d3c0edbd.png",
+      "size": 971312,
+      "sha256": "d1d3c0edbdb02d15c75a999b4aad0666a15df800b2ca44b13a907e7ca4b301bc"
+    },
+    "SNT-003": {
+      "pathname": "cards/originals/SNT-003-a31e135a59.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-003-a31e135a59.png",
+      "size": 879965,
+      "sha256": "a31e135a5975eaabc77c84553e3e98c0c9461d3f4973f34351f040dd99e5b2c6"
+    },
+    "SNT-004": {
+      "pathname": "cards/originals/SNT-004-b2dd840e19.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-004-b2dd840e19.png",
+      "size": 743276,
+      "sha256": "b2dd840e1964c071ea018f042db1cecc0debc4cc45fb8f9c56dc434f3eb73769"
+    },
+    "SNT-005": {
+      "pathname": "cards/originals/SNT-005-aec7932532.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-005-aec7932532.png",
+      "size": 740537,
+      "sha256": "aec79325323fde3f7a3c80c5a0b7537916f3fda055a47179b94e08da5775aaa4"
+    },
+    "SNT-006": {
+      "pathname": "cards/originals/SNT-006-5d397baa36.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-006-5d397baa36.png",
+      "size": 835854,
+      "sha256": "5d397baa3691db2f52da256a14c940acef4cdb25260fa7eceb716fdb6f6021cf"
+    },
+    "SNT-007": {
+      "pathname": "cards/originals/SNT-007-6c748e2637.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-007-6c748e2637.png",
+      "size": 717100,
+      "sha256": "6c748e2637505d0e09b8f41168f0eb50cf637866b53575f11d125c12dc24d620"
+    },
+    "SNT-008": {
+      "pathname": "cards/originals/SNT-008-09278006ee.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-008-09278006ee.png",
+      "size": 720470,
+      "sha256": "09278006ee31a278aee880a8d2c21fe3c43015f48053a70c80428ec8e9abfae0"
+    },
+    "SNT-009": {
+      "pathname": "cards/originals/SNT-009-ae37d5b79b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-009-ae37d5b79b.png",
+      "size": 650569,
+      "sha256": "ae37d5b79bf1c0fa5ebad574213299ef2749cb687998062db442f808c1a77e63"
+    },
+    "SNT-010": {
+      "pathname": "cards/originals/SNT-010-1f6aba8e08.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-010-1f6aba8e08.png",
+      "size": 672158,
+      "sha256": "1f6aba8e088c72cecb999b304b764a32747768b1efa24152327525e69e50941b"
+    },
+    "SNT-011": {
+      "pathname": "cards/originals/SNT-011-9b5b96aca9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-011-9b5b96aca9.png",
+      "size": 830011,
+      "sha256": "9b5b96aca9615da4fc3b81c6b490b6e471d29a1d29e826fa2aa1107ab137a77b"
+    },
+    "SNT-012": {
+      "pathname": "cards/originals/SNT-012-cf17212077.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-012-cf17212077.png",
+      "size": 670894,
+      "sha256": "cf172120775ee550ced1fdf9fad0ad14a0ee5c8a7b88ef877af16099c402fd86"
+    },
+    "SNT-013": {
+      "pathname": "cards/originals/SNT-013-76a3cd6e84.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-013-76a3cd6e84.png",
+      "size": 752098,
+      "sha256": "76a3cd6e84a9cfe8a5f1309fdcfe07695f32176da8689874f7b0b4a8ca8eff58"
+    },
+    "SNT-014": {
+      "pathname": "cards/originals/SNT-014-c19e22b8f3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-014-c19e22b8f3.png",
+      "size": 828238,
+      "sha256": "c19e22b8f3478dbf843c8e54e5360548f91595d37eb5c67d01fc592d02981ea1"
+    },
+    "SNT-015": {
+      "pathname": "cards/originals/SNT-015-535101ba1c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-015-535101ba1c.png",
+      "size": 851440,
+      "sha256": "535101ba1cc941f843e62569cc9db8325828164d01cd5fd2415e28dd62d68249"
+    },
+    "SNT-016": {
+      "pathname": "cards/originals/SNT-016-86a2ffd6b9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-016-86a2ffd6b9.png",
+      "size": 906613,
+      "sha256": "86a2ffd6b9e3b5a57014cf6ef3456cb13175bb11f0b46e0a11ddd23783dcdffe"
+    },
+    "SNT-017": {
+      "pathname": "cards/originals/SNT-017-e4d59e15dc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-017-e4d59e15dc.png",
+      "size": 847177,
+      "sha256": "e4d59e15dce74a34fc17d2a60cb1cb37dca3e58ea9730d3bd57141312947634e"
+    },
+    "SNT-018": {
+      "pathname": "cards/originals/SNT-018-6800e75f41.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-018-6800e75f41.png",
+      "size": 848832,
+      "sha256": "6800e75f419ffb2357ad8ee43439297e7371f2e056d5186ac888be381689ca7d"
+    },
+    "SNT-019": {
+      "pathname": "cards/originals/SNT-019-85ed676fa8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-019-85ed676fa8.png",
+      "size": 769608,
+      "sha256": "85ed676fa872b03a9812e93ba26834d9bbcad6b9a2669af61797e15dd86265e3"
+    },
+    "SNT-020": {
+      "pathname": "cards/originals/SNT-020-8187052061.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-020-8187052061.png",
+      "size": 660155,
+      "sha256": "8187052061f4126c8138bb3272499beff5677d4a0695eb081c255f04834526b3"
+    },
+    "SNT-021": {
+      "pathname": "cards/originals/SNT-021-552f3d77eb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-021-552f3d77eb.png",
+      "size": 895653,
+      "sha256": "552f3d77eb0a1384498d5f2ebe58034a9ac703a8ca4315dadc52d1a064bf86f6"
+    },
+    "SNT-022": {
+      "pathname": "cards/originals/SNT-022-bb6912ed7d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-022-bb6912ed7d.png",
+      "size": 848489,
+      "sha256": "bb6912ed7d470c8fad40402a2051fdb1b9d2405d9ace80ae047b9d464986c02f"
+    },
+    "SNT-023": {
+      "pathname": "cards/originals/SNT-023-1b3e1e6507.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-023-1b3e1e6507.png",
+      "size": 973240,
+      "sha256": "1b3e1e650758922697aff5cfe1de43b812d6a068fbe680f6f930b6ced4a6edd1"
+    },
+    "SNT-024": {
+      "pathname": "cards/originals/SNT-024-fb38273bca.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-024-fb38273bca.png",
+      "size": 753324,
+      "sha256": "fb38273bca8c1cdd907ecbeaa14a81ba6054ed927025cc5024f06ea51e27a35c"
+    },
+    "SNT-025": {
+      "pathname": "cards/originals/SNT-025-27d3d10207.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-025-27d3d10207.png",
+      "size": 1003843,
+      "sha256": "27d3d10207fab0f4257ab05d75c37d9f4f4f9cf073ed692661238c5e181746ae"
+    },
+    "SNT-026": {
+      "pathname": "cards/originals/SNT-026-e40235d586.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-026-e40235d586.png",
+      "size": 902527,
+      "sha256": "e40235d58607f2e0cdde410467644546f2549feb73c561fcf4b079499164c7dd"
+    },
+    "SNT-027": {
+      "pathname": "cards/originals/SNT-027-68d9080793.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-027-68d9080793.png",
+      "size": 806213,
+      "sha256": "68d90807932e307ecc21989d0bd74b1cf6cce360d305fcb5a95ee74288e21dab"
+    },
+    "SNT-028": {
+      "pathname": "cards/originals/SNT-028-e237f6bfc7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-028-e237f6bfc7.png",
+      "size": 742996,
+      "sha256": "e237f6bfc7a51a15d991616fc2a4db8ffdf6604edc86644e65f78b8e5b7c0286"
+    },
+    "SNT-029": {
+      "pathname": "cards/originals/SNT-029-07642efb91.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-029-07642efb91.png",
+      "size": 843917,
+      "sha256": "07642efb91d11897182d08b51e7aff3a21c5216b1f0f3976f392b2b26cb4f97a"
+    },
+    "SNT-030": {
+      "pathname": "cards/originals/SNT-030-814c0999ac.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-030-814c0999ac.png",
+      "size": 744944,
+      "sha256": "814c0999ac7a8ed2f213d67fe96d2e87465f6e0076c3a27b5b31e87f4ce13725"
+    },
+    "SNT-031": {
+      "pathname": "cards/originals/SNT-031-696fa95ec0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-031-696fa95ec0.png",
+      "size": 1015792,
+      "sha256": "696fa95ec0dce9b3b09514d5fd27dbdd48337c8883ae0920af867b85d2f4cdab"
+    },
+    "SNT-032": {
+      "pathname": "cards/originals/SNT-032-98946b729f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-032-98946b729f.png",
+      "size": 859264,
+      "sha256": "98946b729f0e29461c93469fab1205ec77a02164039171e817faef2ee27262a6"
+    },
+    "SNT-033": {
+      "pathname": "cards/originals/SNT-033-c38d59ce13.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-033-c38d59ce13.png",
+      "size": 798687,
+      "sha256": "c38d59ce13fbd1f9e63acf740fb1491bddac48c91cd9aa118d485d4733401ccb"
+    },
+    "SNT-034": {
+      "pathname": "cards/originals/SNT-034-e716f366f1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-034-e716f366f1.png",
+      "size": 935328,
+      "sha256": "e716f366f137b7f7c3a69bee4b310da9802fc7b34565ef1e59cdbae367a68d67"
+    },
+    "SNT-035": {
+      "pathname": "cards/originals/SNT-035-fe8a5939ac.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-035-fe8a5939ac.png",
+      "size": 973888,
+      "sha256": "fe8a5939ac66f0953d40e9c4ce45c02e78007dc3eafbb7aea2ae07fe0e9c931d"
+    },
+    "SNT-036": {
+      "pathname": "cards/originals/SNT-036-1407c3aa8d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-036-1407c3aa8d.png",
+      "size": 955582,
+      "sha256": "1407c3aa8d51a7c179d6235a44093abe4ab087d8118688e05393dcb0716c778f"
+    },
+    "SNT-037": {
+      "pathname": "cards/originals/SNT-037-9a3463dc44.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-037-9a3463dc44.png",
+      "size": 878929,
+      "sha256": "9a3463dc44ec00c974528dd739f81d82e34e1e5dd016105a4988ae27f4fb1d5d"
+    },
+    "SNT-038": {
+      "pathname": "cards/originals/SNT-038-b2378e396e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-038-b2378e396e.png",
+      "size": 1022605,
+      "sha256": "b2378e396ec3df4ad5a92e3aa9223ca38b1113aa192128867d8ccfa5f40ccb6c"
+    },
+    "SNT-039": {
+      "pathname": "cards/originals/SNT-039-cfaac447ac.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-039-cfaac447ac.png",
+      "size": 758086,
+      "sha256": "cfaac447ac7d0147ec72f62017da572e42c6f837a62565c071127ac94dbe3f64"
+    },
+    "SNT-040": {
+      "pathname": "cards/originals/SNT-040-2941ebb3d3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-040-2941ebb3d3.png",
+      "size": 645824,
+      "sha256": "2941ebb3d3a259e968040aecfe005e757d43a9f9413cdd185a70a7f45162116d"
+    },
+    "SNT-041": {
+      "pathname": "cards/originals/SNT-041-76ae72c38e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-041-76ae72c38e.png",
+      "size": 601317,
+      "sha256": "76ae72c38e23e0738bf50b2a14f64e6c15ec95daab83868f7585e0240f2d45a3"
+    },
+    "SNT-042": {
+      "pathname": "cards/originals/SNT-042-c1eb8b53d5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-042-c1eb8b53d5.png",
+      "size": 914346,
+      "sha256": "c1eb8b53d5c5c7125c666189968a21a76a4688b3111cdf8aac5f8ba224054789"
+    },
+    "SNT-043": {
+      "pathname": "cards/originals/SNT-043-f44c43a005.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-043-f44c43a005.png",
+      "size": 662058,
+      "sha256": "f44c43a00543ceed6755add1f60effe3de59b691650f874e4c853ad482920755"
+    },
+    "SNT-044": {
+      "pathname": "cards/originals/SNT-044-a87099e122.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-044-a87099e122.png",
+      "size": 937099,
+      "sha256": "a87099e12227f02d115c49d605ff1c3af32b17e07b108f7ffce25e00217400cc"
+    },
+    "SNT-045": {
+      "pathname": "cards/originals/SNT-045-3854e497e3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-045-3854e497e3.png",
+      "size": 585635,
+      "sha256": "3854e497e35df0b218f18dba756af0744ae1a99e681902865e7d11841182a7b1"
+    },
+    "SNT-046": {
+      "pathname": "cards/originals/SNT-046-da288b69db.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-046-da288b69db.png",
+      "size": 652626,
+      "sha256": "da288b69db551ee02b6044d572f8e5aca4de1653190789c4b0ce7ddd62ba46ad"
+    },
+    "SNT-047": {
+      "pathname": "cards/originals/SNT-047-1e3b5475ee.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-047-1e3b5475ee.png",
+      "size": 707163,
+      "sha256": "1e3b5475eee86c1184b9051c41da70358f6125f21d3d624e71484bb9f2bdaa73"
+    },
+    "SNT-048": {
+      "pathname": "cards/originals/SNT-048-990e97393f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-048-990e97393f.png",
+      "size": 598073,
+      "sha256": "990e97393fb956dba0f9aef36807ea2e0c14869605e17774afef5cbccf8350e1"
+    },
+    "SNT-049": {
+      "pathname": "cards/originals/SNT-049-66fd0bdcb5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-049-66fd0bdcb5.png",
+      "size": 704343,
+      "sha256": "66fd0bdcb537cf998f9ef07c52a451cf83f0fb2f866f3ae478066312bbdd38db"
+    },
+    "SNT-050": {
+      "pathname": "cards/originals/SNT-050-634247bd37.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-050-634247bd37.png",
+      "size": 672861,
+      "sha256": "634247bd370a3f158b43a192b6e0fc8e7c02a0cf9d205479b3dfa48075fea898"
+    },
+    "SNT-051": {
+      "pathname": "cards/originals/SNT-051-3c1f8724e5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-051-3c1f8724e5.png",
+      "size": 755472,
+      "sha256": "3c1f8724e57e9cd417a8182fda99a2809b70699961738f0016c8869a63dcca44"
+    },
+    "SNT-052": {
+      "pathname": "cards/originals/SNT-052-8c440e611e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-052-8c440e611e.png",
+      "size": 746905,
+      "sha256": "8c440e611e8c552e9547229a735af1d610347e0d518268e02a936281dd79608c"
+    },
+    "SNT-053": {
+      "pathname": "cards/originals/SNT-053-bc3b904c7c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-053-bc3b904c7c.png",
+      "size": 703358,
+      "sha256": "bc3b904c7c6db1a0ac7f20564963017b43d17ca1fa5a410e593b41095f74b212"
+    },
+    "SNT-054": {
+      "pathname": "cards/originals/SNT-054-9058851f41.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-054-9058851f41.png",
+      "size": 564193,
+      "sha256": "9058851f4191a63616910257faf848954357a5e6421c97034dc7b3ccd65f6b8c"
+    },
+    "SNT-055": {
+      "pathname": "cards/originals/SNT-055-32f05de92d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-055-32f05de92d.png",
+      "size": 564090,
+      "sha256": "32f05de92da55d55eaa40940738ba786043968af8bce5a011c514e7b046d4c0b"
+    },
+    "SNT-056": {
+      "pathname": "cards/originals/SNT-056-ee7de4b4ee.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-056-ee7de4b4ee.png",
+      "size": 699866,
+      "sha256": "ee7de4b4ee3b450fc200a6970734df8d9de515cd1f661cfe5b377fa3916076fa"
+    },
+    "SNT-057": {
+      "pathname": "cards/originals/SNT-057-0b04aace4b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-057-0b04aace4b.png",
+      "size": 832972,
+      "sha256": "0b04aace4b617383442306dad993ac5ab723a8c0424b0f28b3f37e58a140067d"
+    },
+    "SNT-058": {
+      "pathname": "cards/originals/SNT-058-10ba9afbde.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-058-10ba9afbde.png",
+      "size": 740730,
+      "sha256": "10ba9afbdeae1d619b180701f6660f746d36a925c23b677c8fbb6518c7111d66"
+    },
+    "SNT-059": {
+      "pathname": "cards/originals/SNT-059-8b6aa72e50.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-059-8b6aa72e50.png",
+      "size": 776348,
+      "sha256": "8b6aa72e5067bb35049860bfafd7444d2b468afb071374e097825f15b43f55b4"
+    },
+    "SNT-060": {
+      "pathname": "cards/originals/SNT-060-93cd11a026.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-060-93cd11a026.png",
+      "size": 961756,
+      "sha256": "93cd11a026d80fe4356f003aaa70041ba454f343380f5657963a75bccb33b671"
+    },
+    "SNT-061": {
+      "pathname": "cards/originals/SNT-061-cf2b351cc0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-061-cf2b351cc0.png",
+      "size": 790360,
+      "sha256": "cf2b351cc095b00debb2ec0dd43254f8baa1db13a9e8588a0eedfd2dab04e806"
+    },
+    "SNT-062": {
+      "pathname": "cards/originals/SNT-062-be563b638a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-062-be563b638a.png",
+      "size": 787828,
+      "sha256": "be563b638a90403494b411513dc4a3cab39818d3a82bac023910694cd6f2cd90"
+    },
+    "SNT-063": {
+      "pathname": "cards/originals/SNT-063-8db4823e70.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-063-8db4823e70.png",
+      "size": 921706,
+      "sha256": "8db4823e70b0dbcb12e905db60500f7240f38434d0bc4084850c553f95cda7ae"
+    },
+    "SNT-064": {
+      "pathname": "cards/originals/SNT-064-814fcecdc2.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-064-814fcecdc2.png",
+      "size": 853067,
+      "sha256": "814fcecdc208c91916f70a02e3a93c8cbecd1d0253fb691b7203bf0b6d7e0290"
+    },
+    "SNT-065": {
+      "pathname": "cards/originals/SNT-065-2459015b45.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-065-2459015b45.png",
+      "size": 1001130,
+      "sha256": "2459015b450d20f96af0e1bee5a4c2df3d39a8c7c056eeb94df7a7bc1dbddbd4"
+    },
+    "SNT-066": {
+      "pathname": "cards/originals/SNT-066-273b0101f3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-066-273b0101f3.png",
+      "size": 698669,
+      "sha256": "273b0101f3734d43d286d06b0436563032af9c0af7585719c060acc522667d7f"
+    },
+    "SNT-067": {
+      "pathname": "cards/originals/SNT-067-c4593925d8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-067-c4593925d8.png",
+      "size": 749698,
+      "sha256": "c4593925d84929a02cd98d9ce812f8eb1ca6f6432daa6f3f23c10b062c7f20e5"
+    },
+    "SNT-068": {
+      "pathname": "cards/originals/SNT-068-8351f5ded8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-068-8351f5ded8.png",
+      "size": 561827,
+      "sha256": "8351f5ded857e4495726a7814b9181353ba2d1c5476425954c14479bcf40ce45"
+    },
+    "SNT-069": {
+      "pathname": "cards/originals/SNT-069-8cf03934bb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-069-8cf03934bb.png",
+      "size": 682878,
+      "sha256": "8cf03934bb76f8adc990c825bf95a290080995994405556f1b47c23453ba173c"
+    },
+    "SNT-070": {
+      "pathname": "cards/originals/SNT-070-e228a3f771.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-070-e228a3f771.png",
+      "size": 743367,
+      "sha256": "e228a3f771b34bcf92e12ae8687f92bffc8d3b483b7157c1b72acdf5dfbf3d62"
+    },
+    "SNT-071": {
+      "pathname": "cards/originals/SNT-071-dfbb964704.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-071-dfbb964704.png",
+      "size": 868090,
+      "sha256": "dfbb9647048fcd8f8a21eee1c92e5ac709784a74a71d99cd9d6e2bd6da9d6d3d"
+    },
+    "SNT-072": {
+      "pathname": "cards/originals/SNT-072-2707135c0f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-072-2707135c0f.png",
+      "size": 938199,
+      "sha256": "2707135c0f07410d824b7a49aa31fb9b3411682b6cd7616d5068fab0aac823b0"
+    },
+    "SNT-073": {
+      "pathname": "cards/originals/SNT-073-635b8c2b3c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-073-635b8c2b3c.png",
+      "size": 949139,
+      "sha256": "635b8c2b3c9e89a690e3f437ca6a27e633b3c9a62453219c440b94d7be87e2e5"
+    },
+    "SNT-074": {
+      "pathname": "cards/originals/SNT-074-d6a21a9536.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-074-d6a21a9536.png",
+      "size": 789766,
+      "sha256": "d6a21a95360b2288b74f5d190d75bf83c4cac5723de91822bee038d854e1ce0c"
+    },
+    "SNT-075": {
+      "pathname": "cards/originals/SNT-075-d8c8d9e167.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-075-d8c8d9e167.png",
+      "size": 889821,
+      "sha256": "d8c8d9e167081465c068fd5c4194db89c7a31db4a4fc7c2b1a24e9d579e02b2b"
+    },
+    "SNT-076": {
+      "pathname": "cards/originals/SNT-076-126bdf34aa.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-076-126bdf34aa.png",
+      "size": 592881,
+      "sha256": "126bdf34aa52e88389faaeb8b221e41eec6d07d88f59cceaca68935d58b3a72f"
+    },
+    "SNT-077": {
+      "pathname": "cards/originals/SNT-077-b2a23eb848.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-077-b2a23eb848.png",
+      "size": 737503,
+      "sha256": "b2a23eb848172705c14d95abd3bd54a096209a53b0826388f40bd775b6eb170b"
+    },
+    "SNT-078": {
+      "pathname": "cards/originals/SNT-078-b08457b7d1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-078-b08457b7d1.png",
+      "size": 851526,
+      "sha256": "b08457b7d19816a4ec632a4ac46794b4f213c2b41453f98b579d0c37d61abbb8"
+    },
+    "SNT-079": {
+      "pathname": "cards/originals/SNT-079-3f9d817442.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-079-3f9d817442.png",
+      "size": 855030,
+      "sha256": "3f9d817442c2136b8fd61c96fb2eccf78468d1e7da3179c115f984e237eaa5cc"
+    },
+    "SNT-080": {
+      "pathname": "cards/originals/SNT-080-abecacb15f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-080-abecacb15f.png",
+      "size": 856448,
+      "sha256": "abecacb15f846c44f6a2b59726ae3bc9517600f9391ebb5e34ba0a77cd12e614"
+    },
+    "SNT-081": {
+      "pathname": "cards/originals/SNT-081-4258841188.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-081-4258841188.png",
+      "size": 737371,
+      "sha256": "4258841188afd6dbf561f41ddf2ed3503d9315a25342c1b2f0e32fab12d5e7cf"
+    },
+    "SNT-082": {
+      "pathname": "cards/originals/SNT-082-0edd7b6037.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-082-0edd7b6037.png",
+      "size": 946588,
+      "sha256": "0edd7b603734b7a8da3e0c9118d8552f479cb5c989d31bd779246699b8de70e2"
+    },
+    "SNT-083": {
+      "pathname": "cards/originals/SNT-083-2f57e754dd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-083-2f57e754dd.png",
+      "size": 837992,
+      "sha256": "2f57e754dd4cacabe6f5fabd38f2ff177d7928dc86b77bee798c651e9e4fe208"
+    },
+    "SNT-084": {
+      "pathname": "cards/originals/SNT-084-97fc475632.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-084-97fc475632.png",
+      "size": 857927,
+      "sha256": "97fc47563263cecc157aeca25961a1850e148f485bb6ba744f30fb730e664289"
+    },
+    "SNT-085": {
+      "pathname": "cards/originals/SNT-085-e4d96ac955.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-085-e4d96ac955.png",
+      "size": 797830,
+      "sha256": "e4d96ac9550b5b7248284e1edab8e25c236deb98837647882cd4763838645fed"
+    },
+    "SNT-086": {
+      "pathname": "cards/originals/SNT-086-8fd041880c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-086-8fd041880c.png",
+      "size": 787019,
+      "sha256": "8fd041880c0a10bf506a29c0224a7cef3cb9422d4e60c7278580f702f03bf600"
+    },
+    "SNT-087": {
+      "pathname": "cards/originals/SNT-087-2130513078.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-087-2130513078.png",
+      "size": 727632,
+      "sha256": "213051307843b82bbe98e06fa994cd6063e1271d380c138b3413b05da83998ea"
+    },
+    "SNT-088": {
+      "pathname": "cards/originals/SNT-088-1e0c86b6c4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-088-1e0c86b6c4.png",
+      "size": 740222,
+      "sha256": "1e0c86b6c4557ce631fe92fd598ee1cd9c46450dff7fa417388723346cd880c8"
+    },
+    "SNT-089": {
+      "pathname": "cards/originals/SNT-089-32c912c5e9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-089-32c912c5e9.png",
+      "size": 1131753,
+      "sha256": "32c912c5e9ef30d959447f93cb0cc168c7fa33a76a37be8a2d1e1f82f31f1cfa"
+    },
+    "SNT-090": {
+      "pathname": "cards/originals/SNT-090-2bea828b3b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-090-2bea828b3b.png",
+      "size": 750574,
+      "sha256": "2bea828b3ba4e61e152598088fee67d44ed72f2068db6bf7ec7700d747eb4199"
+    },
+    "SNT-091": {
+      "pathname": "cards/originals/SNT-091-c71ab0a8fb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-091-c71ab0a8fb.png",
+      "size": 883168,
+      "sha256": "c71ab0a8fbfd0b7d4718607dcf64aa4f2cb7d0670e7cf1dde2a0283069ba1bc6"
+    },
+    "SNT-092": {
+      "pathname": "cards/originals/SNT-092-ad4f393a22.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-092-ad4f393a22.png",
+      "size": 763702,
+      "sha256": "ad4f393a22622c2829eceb6c9f0028ed00476a79d0b495df0eab0ef78f3ea105"
+    },
+    "SNT-093": {
+      "pathname": "cards/originals/SNT-093-edaeca6dbf.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-093-edaeca6dbf.png",
+      "size": 812395,
+      "sha256": "edaeca6dbf71365b0d4e769d9e294b3372882ed005c5b70ee6dbc1f013211ded"
+    },
+    "SNT-094": {
+      "pathname": "cards/originals/SNT-094-1670597265.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-094-1670597265.png",
+      "size": 783265,
+      "sha256": "1670597265ffbf3227abe1c29ac9c9da6840f21e10e2e79b589ef4e651a4de02"
+    },
+    "SNT-095": {
+      "pathname": "cards/originals/SNT-095-fbc15bd85b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-095-fbc15bd85b.png",
+      "size": 860485,
+      "sha256": "fbc15bd85bfec151e8bc65dab56784b3d9e238a0931b860df2f6f3877385e573"
+    },
+    "SNT-096": {
+      "pathname": "cards/originals/SNT-096-0ec3e9b7aa.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-096-0ec3e9b7aa.png",
+      "size": 788991,
+      "sha256": "0ec3e9b7aac22dcb1b1b67d3d007169aa3a511dc1aad13ec8bc1e273de7f2e76"
+    },
+    "SNT-097": {
+      "pathname": "cards/originals/SNT-097-392a31e680.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-097-392a31e680.png",
+      "size": 706676,
+      "sha256": "392a31e680778ce36e1ef439722d13b2779364f76384d0955b8f8d70bf4ab2f9"
+    },
+    "SNT-098": {
+      "pathname": "cards/originals/SNT-098-6ef750e797.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-098-6ef750e797.png",
+      "size": 901681,
+      "sha256": "6ef750e79736b6d40005d22332b38a51e930c5a90223bb3865244bc0d40b6bae"
+    },
+    "SNT-099": {
+      "pathname": "cards/originals/SNT-099-21091ec1b1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-099-21091ec1b1.png",
+      "size": 977138,
+      "sha256": "21091ec1b15deb2989305f0feee1197d94fd4f1f151b99ab8dfbe99e50fd7c6b"
+    },
+    "SNT-100": {
+      "pathname": "cards/originals/SNT-100-cd3e50b366.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-100-cd3e50b366.png",
+      "size": 831855,
+      "sha256": "cd3e50b366b322140f59e5ede0c8af6d089deb5dac1d964cd7a00c8d17789cd8"
+    },
+    "SNT-101": {
+      "pathname": "cards/originals/SNT-101-1124af9128.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-101-1124af9128.png",
+      "size": 809752,
+      "sha256": "1124af912879462421bca60b6e6af1905899c56154788e019a8aba0d7abb8ae8"
+    },
+    "SNT-102": {
+      "pathname": "cards/originals/SNT-102-04d7632d74.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-102-04d7632d74.png",
+      "size": 785263,
+      "sha256": "04d7632d74653bf64c9a88e92dcab745cc5eade5a380a9829d24437ed795bf9e"
+    },
+    "SNT-103": {
+      "pathname": "cards/originals/SNT-103-7017b7a669.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-103-7017b7a669.png",
+      "size": 892208,
+      "sha256": "7017b7a6690ebf52af2c4c19084b95197a700a0150a4b9f773adb96116e34dac"
+    },
+    "SNT-104": {
+      "pathname": "cards/originals/SNT-104-6b23970da9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-104-6b23970da9.png",
+      "size": 816943,
+      "sha256": "6b23970da99f3db2f7ae4e3483a5fab199428152cdbbe84caebd8ea0d9b58d48"
+    },
+    "SNT-105": {
+      "pathname": "cards/originals/SNT-105-e3a9153b4a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-105-e3a9153b4a.png",
+      "size": 817235,
+      "sha256": "e3a9153b4a861dc22aeec686841a9c476c0c30147e9b7827813b239efb22b293"
+    },
+    "SNT-106": {
+      "pathname": "cards/originals/SNT-106-a59b5d9b84.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-106-a59b5d9b84.png",
+      "size": 711098,
+      "sha256": "a59b5d9b8438ef0d8f18935abcbeefea2b4b5b4074870ee2f9e1bbb7648dc6f8"
+    },
+    "SNT-107": {
+      "pathname": "cards/originals/SNT-107-59c628d71d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-107-59c628d71d.png",
+      "size": 759222,
+      "sha256": "59c628d71d2a71c56c124fe3bc3edc1ad385fe0ab3e1918298fe31c0763bb408"
+    },
+    "SNT-108": {
+      "pathname": "cards/originals/SNT-108-4c3a2dd560.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-108-4c3a2dd560.png",
+      "size": 741615,
+      "sha256": "4c3a2dd5604553cdac216f1505d0c550044c0096f95add995466c5b90b94da8a"
+    },
+    "SNT-109": {
+      "pathname": "cards/originals/SNT-109-88df1a21d1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-109-88df1a21d1.png",
+      "size": 817363,
+      "sha256": "88df1a21d1a102bfe02b04efbc8fb232e51ff9c834f52dcd3f2e4c421351258d"
+    },
+    "SNT-110": {
+      "pathname": "cards/originals/SNT-110-20609d72fa.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-110-20609d72fa.png",
+      "size": 851535,
+      "sha256": "20609d72fab4ed2fa4a2f75d60867246e2a916083a0d20956f1f53485fda55aa"
+    },
+    "SNT-111": {
+      "pathname": "cards/originals/SNT-111-037837eb19.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-111-037837eb19.png",
+      "size": 868014,
+      "sha256": "037837eb19f9db1224cddaf2f2c0e6cbb01d3a22a076b3162bff6df0b63f8398"
+    },
+    "SNT-112": {
+      "pathname": "cards/originals/SNT-112-c8d9a9bf0b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-112-c8d9a9bf0b.png",
+      "size": 708863,
+      "sha256": "c8d9a9bf0b708167f105aac4cd32f3f98df09047f7386b87d6040e04b7fd1aba"
+    },
+    "SNT-113": {
+      "pathname": "cards/originals/SNT-113-fff2e8d2a0.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-113-fff2e8d2a0.png",
+      "size": 722905,
+      "sha256": "fff2e8d2a0bd423454036f6270c743e43d9abd27e70552d046858a1a15cca097"
+    },
+    "SNT-114": {
+      "pathname": "cards/originals/SNT-114-b02b208b86.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-114-b02b208b86.png",
+      "size": 759656,
+      "sha256": "b02b208b86b9b645ec95e05ea36e93c1eb8b88163c27524a61d279a4e09bdc37"
+    },
+    "SNT-115": {
+      "pathname": "cards/originals/SNT-115-bbbc9db851.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-115-bbbc9db851.png",
+      "size": 882378,
+      "sha256": "bbbc9db85151258a88737a8fd321555203e1d9e93a7f8639639df4af199ee219"
+    },
+    "SNT-116": {
+      "pathname": "cards/originals/SNT-116-e0f32bdc1b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-116-e0f32bdc1b.png",
+      "size": 747609,
+      "sha256": "e0f32bdc1b9fcefb6f545beb9cdf3c9337c2fb4eb866e42a90b309364356df18"
+    },
+    "SNT-117": {
+      "pathname": "cards/originals/SNT-117-2dfb184321.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-117-2dfb184321.png",
+      "size": 823897,
+      "sha256": "2dfb1843219df9c16937908a9c115e6cf1b612f5e0eeb2048868f02f60532b97"
+    },
+    "SNT-118": {
+      "pathname": "cards/originals/SNT-118-24e3dd6665.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-118-24e3dd6665.png",
+      "size": 630539,
+      "sha256": "24e3dd6665d9a6c4838cece321259178e3f08a9031c0d0fac71c089eab0f463d"
+    },
+    "SNT-119": {
+      "pathname": "cards/originals/SNT-119-cfa37b9a9a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-119-cfa37b9a9a.png",
+      "size": 1105879,
+      "sha256": "cfa37b9a9af215179b0c0c7111eb4c7f9c2424f0e068237f0a72f53506f48b37"
+    },
+    "SNT-120": {
+      "pathname": "cards/originals/SNT-120-4839c3efcd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-120-4839c3efcd.png",
+      "size": 762573,
+      "sha256": "4839c3efcd5ee7ca9a2af196a0482348d6f901444a8f847cf0f0273d543df0a8"
+    },
+    "SNT-121": {
+      "pathname": "cards/originals/SNT-121-6662045694.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-121-6662045694.png",
+      "size": 601222,
+      "sha256": "6662045694a7f3a6f7c2936f10b71bc1868151b08686b3ba14d1baf871c2b65d"
+    },
+    "SNT-122": {
+      "pathname": "cards/originals/SNT-122-b091ba7226.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-122-b091ba7226.png",
+      "size": 602985,
+      "sha256": "b091ba722656fa84be0074cbded72b6f6b97e8865e7935056e0243ae0cee0a8b"
+    },
+    "SNT-123": {
+      "pathname": "cards/originals/SNT-123-536e3ebf56.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-123-536e3ebf56.png",
+      "size": 779670,
+      "sha256": "536e3ebf56467e4953dffd880c85a0fe2537e91be05ea4d0b69a2527626349f7"
+    },
+    "SNT-124": {
+      "pathname": "cards/originals/SNT-124-cb14adee7b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-124-cb14adee7b.png",
+      "size": 763187,
+      "sha256": "cb14adee7b3134b704704eab01bd97349f54df5a438c2ea0b5f6e6fba0a2ffd1"
+    },
+    "SNT-125": {
+      "pathname": "cards/originals/SNT-125-226f00d7c5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-125-226f00d7c5.png",
+      "size": 648105,
+      "sha256": "226f00d7c5fbe38362da355ca053ed5f99bda2b329b08b2806e253139dc37ef9"
+    },
+    "SNT-126": {
+      "pathname": "cards/originals/SNT-126-3121c7ba51.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-126-3121c7ba51.png",
+      "size": 742199,
+      "sha256": "3121c7ba51832f8c99d9b9f23b1ef1165030b77ae37e6df35c6a1e51311f1325"
+    },
+    "SNT-127": {
+      "pathname": "cards/originals/SNT-127-1c51b8c8e7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-127-1c51b8c8e7.png",
+      "size": 962945,
+      "sha256": "1c51b8c8e7cef850615ed50b2f8069f75931f742b82f5e9e28511482568927c1"
+    },
+    "SNT-128": {
+      "pathname": "cards/originals/SNT-128-ab914c97f7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-128-ab914c97f7.png",
+      "size": 942293,
+      "sha256": "ab914c97f7bf2df35871c64438777da7944ee159085d0a3dfd084e0f86792113"
+    },
+    "SNT-129": {
+      "pathname": "cards/originals/SNT-129-c66b45cda9.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-129-c66b45cda9.png",
+      "size": 803858,
+      "sha256": "c66b45cda951e8d3b5b90b47a181e9c25ffb4bdf5e4405ef0821d6d39a387c3e"
+    },
+    "SNT-130": {
+      "pathname": "cards/originals/SNT-130-424855d17e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-130-424855d17e.png",
+      "size": 741349,
+      "sha256": "424855d17ebb859e3b5b9e5146004a8607417cd6cf76d8fefad1828da3cd9d88"
+    },
+    "SNT-131": {
+      "pathname": "cards/originals/SNT-131-bde0839794.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-131-bde0839794.png",
+      "size": 908940,
+      "sha256": "bde0839794329330298fc86cca85b9546e823e348f31cd4a7730274897dcb813"
+    },
+    "SNT-132": {
+      "pathname": "cards/originals/SNT-132-aac3d4c1fe.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-132-aac3d4c1fe.png",
+      "size": 737625,
+      "sha256": "aac3d4c1fec468b1b088e3d92ac15e3d4af293b00e04e307d58f1eafdf593e24"
+    },
+    "SNT-133": {
+      "pathname": "cards/originals/SNT-133-236bf5fe5c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-133-236bf5fe5c.png",
+      "size": 716929,
+      "sha256": "236bf5fe5cbf857521050a092740e452a93425676e5afdb1f91ad837a0148269"
+    },
+    "SNT-134": {
+      "pathname": "cards/originals/SNT-134-3a366d0548.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-134-3a366d0548.png",
+      "size": 1136853,
+      "sha256": "3a366d054834633db88b8740f4c4e35d210c05a0d6ab21b2fd490559ae66cff6"
+    },
+    "SNT-135": {
+      "pathname": "cards/originals/SNT-135-8875e333eb.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/SNT-135-8875e333eb.png",
+      "size": 874807,
+      "sha256": "8875e333eb3727e68980f4e143a0b2ddc77cfb36cdc551e46a3f8363aa9fc8b6"
+    },
+    "VIR-001": {
+      "pathname": "cards/originals/VIR-001-199ebf77d5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-001-199ebf77d5.png",
+      "size": 802457,
+      "sha256": "199ebf77d59667a9bbc0316960d43befe55a484b43feb2039d0945bdcaff9c25"
+    },
+    "VIR-002": {
+      "pathname": "cards/originals/VIR-002-6ef6156683.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-002-6ef6156683.png",
+      "size": 501294,
+      "sha256": "6ef6156683e2158e996e35e7f2e20026be9d7620b0f6f1abd08e14ee4c20905c"
+    },
+    "VIR-003": {
+      "pathname": "cards/originals/VIR-003-f76f0c449f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-003-f76f0c449f.png",
+      "size": 1206980,
+      "sha256": "f76f0c449f57852997fe441032fde6852439357f363b878a224d9491d72e7a94"
+    },
+    "VIR-004": {
+      "pathname": "cards/originals/VIR-004-170d8ca936.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-004-170d8ca936.png",
+      "size": 1042681,
+      "sha256": "170d8ca936f138ec153abaac972d454811597657fb4684b06e18b8e4e61cc629"
+    },
+    "VIR-005": {
+      "pathname": "cards/originals/VIR-005-86517a1ec1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-005-86517a1ec1.png",
+      "size": 892121,
+      "sha256": "86517a1ec1ad1e86490627c7f9e3c10713fa7840e68e02533d6c6438ed67db3f"
+    },
+    "VIR-006": {
+      "pathname": "cards/originals/VIR-006-29fa1a8c99.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-006-29fa1a8c99.png",
+      "size": 950346,
+      "sha256": "29fa1a8c9939194784dbe0ead9c3e24c87d41eb28ff3f52ea4304f3464694d03"
+    },
+    "VIR-007": {
+      "pathname": "cards/originals/VIR-007-0d2f3fdb0d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-007-0d2f3fdb0d.png",
+      "size": 673766,
+      "sha256": "0d2f3fdb0dd567459ead737534845cfabf5459f403200dc4cf435dffb54c26fd"
+    },
+    "VIR-008": {
+      "pathname": "cards/originals/VIR-008-1d3ed10460.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-008-1d3ed10460.png",
+      "size": 798905,
+      "sha256": "1d3ed10460da1f3eec2e16669efc006e26d4503ad9f692684ed723d803a40398"
+    },
+    "VIR-009": {
+      "pathname": "cards/originals/VIR-009-c953c9cb3c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-009-c953c9cb3c.png",
+      "size": 551431,
+      "sha256": "c953c9cb3c2e9176cc19da3f760dd2102c5f6ca7c421f210faa91478ec9060db"
+    },
+    "VIR-010": {
+      "pathname": "cards/originals/VIR-010-87dd39d81b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-010-87dd39d81b.png",
+      "size": 756278,
+      "sha256": "87dd39d81bd3f658d8b15bb7cc7f1922ad220923a801be8d0944e135323422e3"
+    },
+    "VIR-011": {
+      "pathname": "cards/originals/VIR-011-794f602015.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-011-794f602015.png",
+      "size": 660314,
+      "sha256": "794f6020153bf6b39f0ecb19e2bc0b8e6b1bb8347ec964ff5a4589cf9835788b"
+    },
+    "VIR-012": {
+      "pathname": "cards/originals/VIR-012-0f2ca9c8e7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-012-0f2ca9c8e7.png",
+      "size": 622539,
+      "sha256": "0f2ca9c8e7c033ad664ac4af787939bc2d02cf12feb3ad4505bd13f07c12cc28"
+    },
+    "VIR-013": {
+      "pathname": "cards/originals/VIR-013-a3364162dc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-013-a3364162dc.png",
+      "size": 667617,
+      "sha256": "a3364162dc66ebe11a81aac5e01e124522e50421ef666f756e3717997a4fc387"
+    },
+    "VIR-014": {
+      "pathname": "cards/originals/VIR-014-039e08a566.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-014-039e08a566.png",
+      "size": 727475,
+      "sha256": "039e08a5665bad22d3d34a6b80fc5adb63cba665ee0b8c69acda77426fd2c97b"
+    },
+    "VIR-015": {
+      "pathname": "cards/originals/VIR-015-3104e5e72a.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-015-3104e5e72a.png",
+      "size": 748821,
+      "sha256": "3104e5e72a263757846c26c601cad7d14fa2447b3399d9194b46b4d48f8d60de"
+    },
+    "VIR-016": {
+      "pathname": "cards/originals/VIR-016-e06ca432ef.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-016-e06ca432ef.png",
+      "size": 779841,
+      "sha256": "e06ca432efe7e6b7d6eb430c2f2e9de6db91d2d44d4e340cba465f90eca7efc9"
+    },
+    "VIR-017": {
+      "pathname": "cards/originals/VIR-017-f54af2810b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-017-f54af2810b.png",
+      "size": 721865,
+      "sha256": "f54af2810b0d0d4fa791b3f2d7a405e5299ba3911bf1b6f0f23389dbd0dd7880"
+    },
+    "VIR-018": {
+      "pathname": "cards/originals/VIR-018-9e56a8c277.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-018-9e56a8c277.png",
+      "size": 694399,
+      "sha256": "9e56a8c277aa52a33027a54b8a0c6cebea1343d173585434a09346b0e1404dd0"
+    },
+    "VIR-019": {
+      "pathname": "cards/originals/VIR-019-b9c9c8c856.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-019-b9c9c8c856.png",
+      "size": 564016,
+      "sha256": "b9c9c8c856dc61c27489a5118bb0788d8e102b5e7988e5e424f95ea763029d5f"
+    },
+    "VIR-020": {
+      "pathname": "cards/originals/VIR-020-16cebf0d5d.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-020-16cebf0d5d.png",
+      "size": 1038067,
+      "sha256": "16cebf0d5d9b3f19c9a876b1177a9149c13007b47fedc4749cdbfeb3604509ed"
+    },
+    "VIR-021": {
+      "pathname": "cards/originals/VIR-021-23cda9ed02.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-021-23cda9ed02.png",
+      "size": 820414,
+      "sha256": "23cda9ed02c2822c00b32721ce0d4f70fc3844ea53e969917dc94b43353b8b37"
+    },
+    "VIR-022": {
+      "pathname": "cards/originals/VIR-022-ef88f18884.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-022-ef88f18884.png",
+      "size": 723891,
+      "sha256": "ef88f18884c9861dfe0f46ff8bb714cf72d83fa22250da6cb11fe536c20d55f4"
+    },
+    "VIR-023": {
+      "pathname": "cards/originals/VIR-023-4b54c18d67.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-023-4b54c18d67.png",
+      "size": 859994,
+      "sha256": "4b54c18d67a5dc646f544d7236ee539ef99c0133d01afaaad96102ba77b2772d"
+    },
+    "VIR-024": {
+      "pathname": "cards/originals/VIR-024-8c53143c99.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-024-8c53143c99.png",
+      "size": 786484,
+      "sha256": "8c53143c99fd07d92febd1c87b0df8dfd8a06f99753fc35857d6c56ba39a0a5d"
+    },
+    "VIR-025": {
+      "pathname": "cards/originals/VIR-025-2865b85e09.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-025-2865b85e09.png",
+      "size": 835444,
+      "sha256": "2865b85e097e88858f4e12b0f40fe84dabb66c5c6a4dc4f064c5be1e25a754b4"
+    },
+    "VIR-026": {
+      "pathname": "cards/originals/VIR-026-1081c149a8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-026-1081c149a8.png",
+      "size": 908086,
+      "sha256": "1081c149a82cf1d485654d6d3d71ab00e6de7e9cd27784422f1262d8eb023d6d"
+    },
+    "VIR-027": {
+      "pathname": "cards/originals/VIR-027-78280bf95f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-027-78280bf95f.png",
+      "size": 728174,
+      "sha256": "78280bf95fa8d1cea6637623156d236fcca5e4005cc1dc41a82e9fafd5caf2e7"
+    },
+    "VIR-028": {
+      "pathname": "cards/originals/VIR-028-5c2616e406.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-028-5c2616e406.png",
+      "size": 923845,
+      "sha256": "5c2616e406b1a00d07a7f3aab2373aaf866fda7af910ea18ec9869b1a6fea24d"
+    },
+    "VIR-029": {
+      "pathname": "cards/originals/VIR-029-2fc70db9e8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-029-2fc70db9e8.png",
+      "size": 791443,
+      "sha256": "2fc70db9e8ad032a7e62ff01fae9224dcc8b424a908dcbedbd65f185ae984318"
+    },
+    "VIR-030": {
+      "pathname": "cards/originals/VIR-030-fee095ca46.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-030-fee095ca46.png",
+      "size": 788421,
+      "sha256": "fee095ca46b2e6fb4ce1076ffd91d9018d3c8abf0d90ea55cc4d1fd42d89dd5e"
+    },
+    "VIR-031": {
+      "pathname": "cards/originals/VIR-031-59958f4b5f.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-031-59958f4b5f.png",
+      "size": 784251,
+      "sha256": "59958f4b5f3c3598d6348d56f57839f4b737c1f910191115838aed8ec6336bb8"
+    },
+    "VIR-032": {
+      "pathname": "cards/originals/VIR-032-261a93785e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-032-261a93785e.png",
+      "size": 758124,
+      "sha256": "261a93785e297b0d69ac511d0fa5202e0018b6c25b3b5e4fc32a4fcd6efecba5"
+    },
+    "VIR-033": {
+      "pathname": "cards/originals/VIR-033-e7fb9fa0c8.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-033-e7fb9fa0c8.png",
+      "size": 720867,
+      "sha256": "e7fb9fa0c8db9aebd9edd9bd9f0eed3a535403cb670091fbef622e0ec8bff652"
+    },
+    "VIR-034": {
+      "pathname": "cards/originals/VIR-034-fe09922f92.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-034-fe09922f92.png",
+      "size": 917566,
+      "sha256": "fe09922f923c199b10d916ee8676496338ee7edbe7257d44463ec931777fbc6d"
+    },
+    "VIR-035": {
+      "pathname": "cards/originals/VIR-035-020a98c086.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-035-020a98c086.png",
+      "size": 604903,
+      "sha256": "020a98c0861a0a2585645dcd0bb7194e6c16746e174ef9ca5e462bac7a288282"
+    },
+    "VIR-036": {
+      "pathname": "cards/originals/VIR-036-aa2cca2fb1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-036-aa2cca2fb1.png",
+      "size": 963503,
+      "sha256": "aa2cca2fb1b68e5ffae416e74ffd2f4418adbf6a40d75a25663487c122ad776b"
+    },
+    "VIR-037": {
+      "pathname": "cards/originals/VIR-037-2c3a7563fa.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-037-2c3a7563fa.png",
+      "size": 597885,
+      "sha256": "2c3a7563fa7e4d8888ed845c1c7fd376acf638ee44b7b83c29e74dd9e00e37e8"
+    },
+    "VIR-038": {
+      "pathname": "cards/originals/VIR-038-e58a5df5c4.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-038-e58a5df5c4.png",
+      "size": 999485,
+      "sha256": "e58a5df5c43f280e1c0b87447d5c398c9c416e984f3fc2f0c87e31f397d90b6b"
+    },
+    "VIR-039": {
+      "pathname": "cards/originals/VIR-039-dd02ccf71b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-039-dd02ccf71b.png",
+      "size": 715510,
+      "sha256": "dd02ccf71ba7f36b6d6dbe455dc286ef806754316fa47c300e4732585628bf81"
+    },
+    "VIR-040": {
+      "pathname": "cards/originals/VIR-040-bf1694cfdc.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-040-bf1694cfdc.png",
+      "size": 857189,
+      "sha256": "bf1694cfdc9e1bf20f1bb0bb9781ab2b90d1dc7b0c46d23f2b884584f22133a1"
+    },
+    "VIR-041": {
+      "pathname": "cards/originals/VIR-041-409d8876a6.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-041-409d8876a6.png",
+      "size": 925590,
+      "sha256": "409d8876a6eb305da99222137818125be5ca30711bae83960ed05032dfdecf2e"
+    },
+    "VIR-042": {
+      "pathname": "cards/originals/VIR-042-a41aa75ffd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-042-a41aa75ffd.png",
+      "size": 797696,
+      "sha256": "a41aa75ffd8835fbfdd20869d14d0e963fe553986969a4acc24ca2cadebefb20"
+    },
+    "VIR-043": {
+      "pathname": "cards/originals/VIR-043-c254ed648c.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-043-c254ed648c.png",
+      "size": 704105,
+      "sha256": "c254ed648c189d394e683cc9ee78edbf94d7dbd946e7463904018540aec0c2e0"
+    },
+    "VIR-044": {
+      "pathname": "cards/originals/VIR-044-ac8f269ad1.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-044-ac8f269ad1.png",
+      "size": 634042,
+      "sha256": "ac8f269ad1966065a2076b7dcc8f77105da15135f3320eff0cfa7090a541a15d"
+    },
+    "VIR-045": {
+      "pathname": "cards/originals/VIR-045-7e97f7d99e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-045-7e97f7d99e.png",
+      "size": 733364,
+      "sha256": "7e97f7d99ea145b4026243a95e9124e5d7b28266a254de9dbe801cd5e4bda900"
+    },
+    "VIR-046": {
+      "pathname": "cards/originals/VIR-046-2897c34fdd.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-046-2897c34fdd.png",
+      "size": 698359,
+      "sha256": "2897c34fdd483ed0423c9af839874058cc86a6713c50083675ec79b410458f01"
+    },
+    "VIR-047": {
+      "pathname": "cards/originals/VIR-047-5692d00caf.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-047-5692d00caf.png",
+      "size": 827214,
+      "sha256": "5692d00caf92b0e0b72a5c3ae3b9a292fb42272bbfcab317e8c755afa01fddea"
+    },
+    "VIR-048": {
+      "pathname": "cards/originals/VIR-048-76122b5600.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-048-76122b5600.png",
+      "size": 675408,
+      "sha256": "76122b5600a310f69a4fe1a9c60e13e9bcaf4e8b3f03fc7ebb1459a0b7b15cdb"
+    },
+    "VIR-049": {
+      "pathname": "cards/originals/VIR-049-2601910d87.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-049-2601910d87.png",
+      "size": 718848,
+      "sha256": "2601910d87f87fc9eadf2ddc4298996e54daa7b48e73ac0d43b18ec46c1c2679"
+    },
+    "VIR-050": {
+      "pathname": "cards/originals/VIR-050-9c469bd6a7.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-050-9c469bd6a7.png",
+      "size": 719187,
+      "sha256": "9c469bd6a76270f002dc415b1aee78189a84aeb045f13b114db88e0a1d210fa6"
+    },
+    "VIR-051": {
+      "pathname": "cards/originals/VIR-051-3c97585051.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-051-3c97585051.png",
+      "size": 711809,
+      "sha256": "3c97585051736c7579b2bbd28260fd7eb7775b23f6239983ec3522dbc675da5a"
+    },
+    "VIR-052": {
+      "pathname": "cards/originals/VIR-052-622ca13b2b.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-052-622ca13b2b.png",
+      "size": 550826,
+      "sha256": "622ca13b2b5fa9660b6983c9c42398a0a884cd10a08fafaefe0cf875621c8708"
+    },
+    "VIR-053": {
+      "pathname": "cards/originals/VIR-053-1aad82c91e.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/VIR-053-1aad82c91e.png",
+      "size": 967833,
+      "sha256": "1aad82c91eef0f9a31588ac8bc85f7e384ec75b94bc0a1976b5fc3aeeb9a0007"
+    }
+  }
+}

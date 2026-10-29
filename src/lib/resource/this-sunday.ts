@@ -27,7 +27,7 @@ export function pickCountry(
 const ZONE: Partial<Record<RomcalCountry, string>> = { canada: "America/Toronto", unitedStates: "America/New_York" };
 
 /** Today's calendar date in the country's main time zone, as YYYY-MM-DD. */
-function todayIn(country: RomcalCountry, now: Date): string {
+export function todayIn(country: RomcalCountry, now: Date): string {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: ZONE[country] ?? "UTC",
     year: "numeric",
