@@ -41,7 +41,12 @@ export type CardListItem = Pick<PictureCard, "id" | "cat" | "set" | "title" | "r
   date?: string;
   /** True when the date comes from a Sunday sheet. */
   sunday?: boolean;
+  /** Liturgical season ids (same ids as the Weekly Sheet "Season" filter). */
+  seasons?: CardSeason[];
 };
+
+/** Same ids as RESOURCE_SEASONS in lib/resource/sheets. */
+export type CardSeason = "advent" | "christmas" | "lent" | "easter" | "ordinary-time" | "feasts";
 
 /** Strict ID shape: three-letter prefix + three digits. */
 export const CARD_ID_RE = /^(FEA|PRY|SNT|MAR|SAC|MAS|LIT|BIB|VIR|FUN|MST)-\d{3}$/;
@@ -94,4 +99,26 @@ export function cardFileName(card: Pick<PictureCard, "id" | "title">): string {
 /** "Feast card", "Saint card" … */
 export function cardKindLabel(cat: CardCategory): string {
   return `${cat} card`;
+}
+
+/** Plus-only print page: just the full-size 4:5 card fitted to one Letter/A4 page. */
+export function cardPrintPath(id: string): string {
+  return `/print/resource/card/${id}`;
+}
+
+/** Share targets for a card link (same list as the detail panel). */
+export function cardShareTargets(card: Pick<PictureCard, "id" | "title">, siteUrl: string) {
+  const url = `${siteUrl.replace(/\/$/, "")}${cardSharePath(card.id)}`;
+  const text = `${card.title} — a Little Light picture card from Catholic Kids Crafts`;
+  const enc = encodeURIComponent;
+  return {
+    url,
+    text,
+    links: [
+      { label: "Messages", href: `sms:?&body=${enc(`${text} ${url}`)}` },
+      { label: "WhatsApp", href: `https://wa.me/?text=${enc(`${text} ${url}`)}` },
+      { label: "Facebook", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}` },
+      { label: "Email", href: `mailto:?subject=${enc(card.title)}&body=${enc(`${text}\n${url}`)}` },
+    ],
+  };
 }

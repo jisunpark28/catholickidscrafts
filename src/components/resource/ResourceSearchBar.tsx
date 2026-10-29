@@ -10,6 +10,8 @@ export type ResourceSearchState = {
   level: 1 | 2;
   /** "" = this Sunday, "all" = library, "custom" = saved sheets, "cards" = picture cards */
   view: "" | "all" | "custom" | "cards";
+  /** Cards tab only: show just this Sunday's card(s). */
+  sunday?: boolean;
 };
 
 type Props = {
@@ -31,6 +33,7 @@ const selectCls =
 function href(s: ResourceSearchState): string {
   const p = new URLSearchParams();
   if (s.view === "all" || s.view === "custom" || s.view === "cards") p.set("view", s.view);
+  if (s.view === "cards" && s.sunday) p.set("sunday", "1");
   if (s.q.trim()) p.set("q", s.q.trim());
   if (s.season) p.set("season", s.season);
   if (s.level === 2) p.set("level", "2");
@@ -38,16 +41,22 @@ function href(s: ResourceSearchState): string {
   return `/resource${qs ? `?${qs}` : ""}`;
 }
 
-/** Horizontal search + filter bar for /resource. */
+/**
+ * One search + filter bar for every Resource tab (same controls everywhere):
+ * search · ★ This Sunday · All · Custom (Plus) · Season · Level 1/2.
+ * On the Cards tab the controls filter cards; elsewhere they drive the Sunday sheets.
+ */
 export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
   const router = useRouter();
   const [q, setQ] = useState(state.q);
+  const cards = state.view === "cards";
 
   const go = (patch: Partial<ResourceSearchState>) => router.push(href({ ...state, q, ...patch }));
 
-  const thisSundayActive = state.view === "" && !state.q.trim() && !state.season;
-  const cardsActive = state.view === "cards";
-  const allActive = !cardsActive && (state.view === "all" || Boolean(state.q.trim() || state.season));
+  const searching = Boolean(state.q.trim());
+  const thisSundayActive = !searching && (cards ? Boolean(state.sunday) : state.view === "" && !state.season);
+  const allActive =
+    !searching && (cards ? !state.sunday && !state.season : state.view === "all" || (state.view === "" && Boolean(state.season)));
   const customActive = state.view === "custom";
 
   return (
@@ -56,22 +65,22 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
       className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3"
       onSubmit={(e) => {
         e.preventDefault();
-        // Cards tab searches cards; everywhere else searches sheets.
-        go({ view: state.view === "cards" ? "cards" : "all" });
+        // One unified results view (sheets + cards) from any tab; clearing returns to this tab.
+        go({ sunday: false });
       }}
     >
       <label className="flex min-w-[15rem] flex-1 items-center gap-2 rounded-full border border-[#e7e3de] bg-white px-4 py-2">
         <span aria-hidden>🔍</span>
-        <span className="sr-only">Search sheets</span>
+        <span className="sr-only">Search sheets and cards</span>
         <input
           type="search"
           name="q"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder={
-            cardsActive
-              ? "Search cards — e.g. 'Rosary', 'Saint Joseph', 'Advent'"
-              : "Search topic, Gospel or keyword — e.g. 'Good Shepherd'"
+            cards
+              ? "Search sheets and cards — e.g. 'Rosary', 'Saint Joseph'"
+              : "Search sheets and cards — Gospel, saint, feast or keyword"
           }
           className="w-full bg-transparent text-sm text-[#1c1c1c] outline-none placeholder:text-[#6b7280]"
           maxLength={80}
@@ -82,13 +91,21 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         type="button"
         onClick={() => {
           setQ("");
-          router.push(href({ q: "", season: "", level: state.level, view: "" }));
+          router.push(
+            href(
+              cards
+                ? { q: "", season: "", level: state.level, view: "cards", sunday: true }
+                : { q: "", season: "", level: state.level, view: "" },
+            ),
+          );
         }}
+        aria-pressed={thisSundayActive}
         className={`${pill} ${
           thisSundayActive
             ? "border-[#d35400] bg-[#d35400] text-white shadow-[0_2px_6px_rgba(211,84,0,0.3)]"
             : "border-2 border-[#d35400] bg-white text-[#d35400] hover:bg-[#fff6ef]"
         }`}
+        title={cards ? "Show this Sunday's card(s)" : "This Sunday's bundle"}
       >
         ★ This Sunday
       </button>
@@ -97,8 +114,9 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         type="button"
         onClick={() => {
           setQ("");
-          go({ q: "", season: "", view: "all" });
+          go({ q: "", season: "", view: cards ? "cards" : "all", sunday: false });
         }}
+        aria-pressed={allActive}
         className={`${pill} ${
           allActive && !customActive
             ? "border-[#1c1c1c] bg-[#1c1c1c] text-white"
@@ -113,8 +131,10 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
           type="button"
           onClick={() => {
             setQ("");
-            go({ q: "", season: "", view: "custom" });
+            go({ q: "", season: "", view: "custom", sunday: false });
           }}
+          aria-pressed={customActive}
+          title="Your saved, edited sheets"
           className={`${pill} ${
             customActive
               ? "border-[#d35400] bg-[#fff6ef] text-[#d35400]"
@@ -135,23 +155,27 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         </Link>
       )}
 
-      {(allActive || state.view === "all") && state.view !== "custom" && !cardsActive ? (
-        <label className="inline-flex">
-          <span className="sr-only">Season</span>
-          <select
-            className={selectCls}
-            value={state.season}
-            onChange={(e) => go({ season: e.target.value, view: "all" })}
-          >
-            <option value="">Season: All</option>
-            {seasons.map((s) => (
-              <option key={s.id} value={s.id}>
-                Season: {s.label}
-              </option>
-            ))}
-          </select>
-        </label>
-      ) : null}
+      <label className="inline-flex">
+        <span className="sr-only">Season</span>
+        <select
+          className={selectCls}
+          value={state.season}
+          onChange={(e) =>
+            go(
+              cards || state.q.trim()
+                ? { season: e.target.value, sunday: false }
+                : { season: e.target.value, view: state.view === "custom" ? "all" : state.view || "all" },
+            )
+          }
+        >
+          <option value="">Season: All</option>
+          {seasons.map((s) => (
+            <option key={s.id} value={s.id}>
+              Season: {s.label}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <div className={segWrap} role="group" aria-label="Level">
         {([1, 2] as const).map((n) => (

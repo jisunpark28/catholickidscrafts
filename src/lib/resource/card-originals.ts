@@ -47,6 +47,13 @@ async function localOriginalPath(id: string): Promise<string | null> {
   return localIndex.get(id) ?? null;
 }
 
+/** True when a full-size original can be served (uploaded to Blob, or found in the dev folder). */
+export async function hasCardOriginal(id: string): Promise<boolean> {
+  if (!getPictureCard(id)) return false;
+  if (MANIFEST.access && MANIFEST.items[id]) return true;
+  return (await localOriginalPath(id)) != null;
+}
+
 /** Full 1080×1350 PNG for a card id that already passed `getPictureCard`. */
 export async function readCardOriginal(id: string): Promise<CardOriginal | null> {
   if (!getPictureCard(id)) return null;
