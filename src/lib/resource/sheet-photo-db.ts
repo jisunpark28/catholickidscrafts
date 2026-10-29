@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { ensureSheetPhotoSchema } from "@/lib/resource/ensure-sheet-photo-schema";
 import {
   SHEET_PHOTO_DAILY_LIMIT,
   SHEET_PHOTO_FAMILY_QUOTA_BYTES,
@@ -22,8 +21,8 @@ export class SheetPhotoQuotaError extends Error {
   }
 }
 
+/** Table comes from migration 20261027020000_sheet_photos (no runtime DDL). */
 async function withDb<T>(fn: () => Promise<T>): Promise<T> {
-  await ensureSheetPhotoSchema();
   return fn();
 }
 
@@ -73,7 +72,6 @@ export async function createSheetPhoto(input: {
   height: number;
 }): Promise<SheetPhotoRow> {
   return withDb(async () => {
-    await assertPhotoQuota(input.familyAccountId, input.sizeBytes);
     const id = `sp_${crypto.randomUUID().replace(/-/g, "").slice(0, 24)}`;
     const now = new Date();
     await prisma.$executeRawUnsafe(
@@ -97,5 +95,33 @@ export async function createSheetPhoto(input: {
       height: input.height,
       createdAt: now,
     };
+  });
+}
+
+export async function listFamilyPhotos(familyAccountId: string, limit = 60): Promise<SheetPhotoRow[]> {
+  return withDb(() =>
+    prisma.$queryRawUnsafe<SheetPhotoRow[]>(
+      `SELECT "id", "familyAccountId", "url", "sizeBytes", "width", "height", "createdAt"
+       FROM "SheetPhoto" WHERE "familyAccountId" = $1
+       ORDER BY "createdAt" DESC LIMIT $2`,
+      familyAccountId,
+      limit,
+    ),
+  );
+}
+
+/** Delete a photo row only when it belongs to the family; returns the removed row. */
+export async function deleteFamilyPhoto(
+  familyAccountId: string,
+  id: string,
+): Promise<SheetPhotoRow | null> {
+  return withDb(async () => {
+    const rows = await prisma.$queryRawUnsafe<SheetPhotoRow[]>(
+      `DELETE FROM "SheetPhoto" WHERE "id" = $1 AND "familyAccountId" = $2
+       RETURNING "id", "familyAccountId", "url", "sizeBytes", "width", "height", "createdAt"`,
+      id,
+      familyAccountId,
+    );
+    return rows[0] ?? null;
   });
 }

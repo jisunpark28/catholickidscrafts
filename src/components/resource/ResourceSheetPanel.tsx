@@ -27,6 +27,17 @@ type Props = {
   thisSundayHref?: string | null;
 };
 
+/**
+ * Print deterrent for sheets the viewer may not print (free account, not this Sunday).
+ * Browser Ctrl+P is not blocked (by design); the printout shows a notice instead of the sheet.
+ */
+const PRINT_LOCK_CSS = `
+.ckc-print-lock-msg{display:none}
+@media print{
+  .ckc-print-locked-sheet{display:none!important}
+  .ckc-print-lock-msg{display:block!important;margin:1in auto;max-width:6.5in;padding:24px;border:2px solid #d35400;border-radius:12px;font:16px/1.5 system-ui,sans-serif;color:#1c1c1c;text-align:center}
+}`;
+
 const btn =
   "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-medium no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
@@ -151,17 +162,27 @@ export function ResourceSheetPanel({
           {actions}
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
-      <SheetFit>
-        <GospelSheet
-          sheet={
-            sundayDate
-              ? toGospelSheetView(sheet, sundayDate)
-              : { ...toGospelSheetView(sheet), sundayLabel: yearLabel(sheet.key) }
-          }
-          level={level}
-        />
-      </SheetFit>
+      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS + (canPrint ? "" : PRINT_LOCK_CSS) }} />
+      <div className={canPrint ? undefined : "ckc-print-locked-sheet"}>
+        <SheetFit>
+          <GospelSheet
+            sheet={
+              sundayDate
+                ? toGospelSheetView(sheet, sundayDate)
+                : { ...toGospelSheetView(sheet), sundayLabel: yearLabel(sheet.key) }
+            }
+            level={level}
+          />
+        </SheetFit>
+      </div>
+      {canPrint ? null : (
+        <div className="ckc-print-lock-msg" role="note">
+          <p>
+            <strong>Printing this sheet is a Plus feature — this Sunday&apos;s sheet is free.</strong>
+          </p>
+          <p>Print this Sunday&apos;s sheet or unlock the full library at catholickidscrafts.com/resource</p>
+        </div>
+      )}
 
       {/* Mobile mockup: sticky Print / PDF / Edit */}
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#e8e0d6] bg-white/95 p-3 backdrop-blur sm:hidden">

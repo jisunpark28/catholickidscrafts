@@ -10,17 +10,50 @@ const editFieldSchema = z.object({
   underline: z.boolean().optional(),
 });
 
+const LOCAL_PHOTO_RE = /^\/uploads\/sheet-photos\/[\w-]+\/[\w.-]+\.(?:webp|jpe?g|png)$/i;
+const LOCAL_PHOTO_FLAT_RE = /^\/uploads\/sheet-photos\/[\w.-]+\.(?:webp|jpe?g|png)$/i;
+
+/** Only our own photo storage: local dev uploads or a Vercel Blob public URL under `sheet-photos/`. */
+export function isAllowedSheetPhotoSrc(src: string): boolean {
+  if (src.startsWith("/")) {
+    if (src.includes("..")) return false;
+    return LOCAL_PHOTO_RE.test(src) || LOCAL_PHOTO_FLAT_RE.test(src);
+  }
+  let u: URL;
+  try {
+    u = new URL(src);
+  } catch {
+    return false;
+  }
+  return (
+    u.protocol === "https:" &&
+    !u.username &&
+    !u.password &&
+    !u.port &&
+    /^[a-z0-9-]+\.public\.blob\.vercel-storage\.com$/i.test(u.hostname) &&
+    u.pathname.startsWith("/sheet-photos/") &&
+    !u.pathname.includes("..")
+  );
+}
+
+/** Family id segment of a sheet photo URL (`sheet-photos/<familyId>/…`), if present. */
+export function sheetPhotoFamilyId(src: string): string | null {
+  let path = src;
+  if (!src.startsWith("/")) {
+    try {
+      path = new URL(src).pathname;
+    } catch {
+      return null;
+    }
+  }
+  const m = /\/sheet-photos\/([\w-]+)\//.exec(path);
+  return m?.[1] ?? null;
+}
+
 const allowedImageSrc = z
   .string()
   .max(2048)
-  .refine(
-    (src) =>
-      src.startsWith("/uploads/sheet-photos/") ||
-      src.includes("blob.vercel-storage.com") ||
-      src.includes(".public.blob.vercel-storage.com") ||
-      /^https:\/\/[a-z0-9.-]+\.blob\.vercel-storage\.com\//i.test(src),
-    "Image src must be a sheet photo upload URL",
-  );
+  .refine(isAllowedSheetPhotoSrc, "Image src must be a sheet photo upload URL");
 
 const userObjectSchema = z.object({
   id: z.string().max(64),
@@ -72,9 +105,23 @@ export type CustomSheetData = z.infer<typeof customSheetDataSchema>;
 
 export const CUSTOM_SHEET_MAX_JSON_BYTES = 200_000;
 
-export function parseCustomSheetData(raw: unknown): CustomSheetData | string {
+/**
+ * Validate sheet JSON. Pass `familyAccountId` on writes so photo objects can only reference
+ * that family's uploads (not another family's Blob URLs).
+ */
+export function parseCustomSheetData(
+  raw: unknown,
+  opts: { familyAccountId?: string } = {},
+): CustomSheetData | string {
   const parsed = customSheetDataSchema.safeParse(raw);
   if (!parsed.success) return parsed.error.issues[0]?.message ?? "Invalid sheet data";
+  if (opts.familyAccountId) {
+    for (const o of parsed.data.objects) {
+      if (!o.src) continue;
+      const fam = sheetPhotoFamilyId(o.src);
+      if (fam && fam !== opts.familyAccountId) return "Photo belongs to another account";
+    }
+  }
   const size = new TextEncoder().encode(JSON.stringify(parsed.data)).length;
   if (size > CUSTOM_SHEET_MAX_JSON_BYTES) return "Sheet data is too large (max 200KB)";
   // Keep core + dynamic field ids (auto_*, actTitle, …); drop empty keys

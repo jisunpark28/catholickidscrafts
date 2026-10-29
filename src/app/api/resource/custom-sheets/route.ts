@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   const body = raw as { name?: unknown; data?: unknown; thumbUrl?: unknown };
   const name = typeof body.name === "string" ? body.name.trim().slice(0, 80) : "";
   if (!name) return NextResponse.json({ error: "Name is required" }, { status: 400 });
-  const data = parseCustomSheetData(body.data);
+  const data = parseCustomSheetData(body.data, { familyAccountId: guard.session.familyAccountId });
   if (typeof data === "string") return NextResponse.json({ error: data }, { status: 400 });
   const thumbUrl =
     typeof body.thumbUrl === "string" && body.thumbUrl.startsWith("data:image/")

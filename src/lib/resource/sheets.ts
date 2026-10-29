@@ -191,12 +191,46 @@ export function sheetDescription(sheet: SundaySheetContent): string {
   )}). Includes ${sheet.gospelRef} (${theme}) story, Level 1 & Level 2 reflection questions for CCD teachers & homeschooling.`;
 }
 
+export const SEO_TITLE_MAX = 60;
+const SITE_SUFFIX = " | Catholic Kids Crafts";
+
+/** Liturgical name without parenthetical notes, e.g. "2nd Sunday of Easter (Divine Mercy)" → "2nd Sunday of Easter". */
+function shortLiturgicalName(name: string): string {
+  const plain = name.replace(/\s*\([^)]*\)/g, "").replace(/\s+/g, " ").trim();
+  // "34th Sunday: Our Lord Jesus Christ, King of the Universe" → the feast name.
+  const m = /^\d+\w* Sunday: (.+)$/.exec(plain);
+  return m ? m[1]! : plain;
+}
+
+function truncateWords(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const i = cut.lastIndexOf(" ");
+  return `${(i > 20 ? cut.slice(0, i) : cut).replace(/[\s,:;–-]+$/, "")}…`;
+}
+
+/** First candidate that fits the SERP limit; adds the site name when there is room. */
+function fitTitle(candidates: string[]): string {
+  const best = candidates.find((c) => c.length <= SEO_TITLE_MAX);
+  if (!best) return truncateWords(candidates[candidates.length - 1]!, SEO_TITLE_MAX);
+  return best.length + SITE_SUFFIX.length <= SEO_TITLE_MAX ? best + SITE_SUFFIX : best;
+}
+
 /**
- * Meta title, e.g.
- * Free Catholic Sunday Gospel Sheet: 30th Sunday in Ordinary Time (Year A) - Matthew 22:34-40
+ * Absolute meta title ≤ 60 chars (use with `absoluteTitle: true`), e.g.
+ * "1st Sunday of Advent (Year A) Gospel Worksheet for Kids"
  */
 export function sheetSeoTitle(sheet: SundaySheetContent): string {
-  return `Free Catholic Sunday Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)}) - ${sheet.gospelRef}`;
+  const name = shortLiturgicalName(sheet.liturgicalName);
+  const y = sheetYear(sheet.key);
+  const withYear = y ? `${name} (Year ${y})` : name;
+  return fitTitle([
+    `${withYear} Gospel Worksheet for Kids`,
+    `${withYear} Gospel Worksheet`,
+    `${withYear} Kids Worksheet`,
+    `${name} Gospel Worksheet`,
+    withYear,
+  ]);
 }
 
 /** Visible H1 (spec: no gospel ref in H1). */
@@ -227,11 +261,17 @@ export function sheetNeighbors(key: string): { prev: string | null; next: string
   };
 }
 
-/**
- * Season hub title, e.g. "Lent Gospel Worksheet for Kids Level 1 & Level 2"
- */
+/** Season hub heading, e.g. "Lent Gospel Worksheets for Kids". */
 export function seasonSeoTitle(id: ResourceSeason): string {
-  return `${seasonLabel(id)} Gospel Worksheet for Kids Level 1 & Level 2`;
+  return `${seasonLabel(id)} Gospel Worksheets for Kids`;
+}
+
+/** Absolute meta title ≤ 60 chars for a season hub (use with `absoluteTitle: true`). */
+export function seasonMetaTitle(id: ResourceSeason): string {
+  return fitTitle([
+    `${seasonLabel(id)} Gospel Worksheets for Kids, Levels 1 & 2`,
+    seasonSeoTitle(id),
+  ]);
 }
 
 export function seasonSeoDescription(id: ResourceSeason, sheetCount: number): string {

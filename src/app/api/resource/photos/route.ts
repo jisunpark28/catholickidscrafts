@@ -1,10 +1,13 @@
 import { parentApiGuard } from "@/lib/family-auth";
 import {
+  assertPhotoQuota,
   createSheetPhoto,
   getFamilyPhotoUsage,
+  listFamilyPhotos,
   SheetPhotoQuotaError,
 } from "@/lib/resource/sheet-photo-db";
 import {
+  deleteStoredSheetPhoto,
   processSheetPhoto,
   saveProcessedSheetPhoto,
   validateSheetPhotoFile,
@@ -21,8 +24,20 @@ export async function GET() {
   if (guard.error) return guard.error;
   if (!(await familyHasPlus(guard.session.familyAccountId))) return plusRequiredResponse();
   try {
-    const usage = await getFamilyPhotoUsage(guard.session.familyAccountId);
-    return NextResponse.json({ usage });
+    const [usage, rows] = await Promise.all([
+      getFamilyPhotoUsage(guard.session.familyAccountId),
+      listFamilyPhotos(guard.session.familyAccountId),
+    ]);
+    return NextResponse.json({
+      usage,
+      photos: rows.map((r) => ({
+        id: r.id,
+        url: r.url,
+        width: r.width,
+        height: r.height,
+        sizeBytes: Number(r.sizeBytes),
+      })),
+    });
   } catch (e) {
     console.error("[sheet-photos] usage", e);
     return NextResponse.json({ error: "Database not ready" }, { status: 503 });
@@ -52,14 +67,22 @@ export async function POST(request: Request) {
   try {
     const raw = Buffer.from(await file.arrayBuffer());
     const processed = await processSheetPhoto(raw);
+    // Check quota before writing to storage so rejected uploads never leave orphan blobs.
+    await assertPhotoQuota(guard.session.familyAccountId, processed.buffer.length);
     const saved = await saveProcessedSheetPhoto(guard.session.familyAccountId, processed.buffer);
-    const row = await createSheetPhoto({
-      familyAccountId: guard.session.familyAccountId,
-      url: saved.url,
-      sizeBytes: saved.sizeBytes,
-      width: processed.width,
-      height: processed.height,
-    });
+    let row;
+    try {
+      row = await createSheetPhoto({
+        familyAccountId: guard.session.familyAccountId,
+        url: saved.url,
+        sizeBytes: saved.sizeBytes,
+        width: processed.width,
+        height: processed.height,
+      });
+    } catch (e) {
+      await deleteStoredSheetPhoto(saved.url).catch(() => undefined);
+      throw e;
+    }
     return NextResponse.json(
       {
         photo: {

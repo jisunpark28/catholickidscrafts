@@ -14,6 +14,8 @@ type Props = {
   baseRev: string;
   isPlus: boolean;
   initialCustomId?: string | null;
+  /** Header label for the base sheet, e.g. "Year A". */
+  sundayLabel?: string;
 };
 
 class EditorErrorBoundary extends Component<
@@ -57,6 +59,7 @@ export function SheetFabricLiveBase({
   baseRev,
   isPlus,
   initialCustomId = null,
+  sundayLabel,
 }: Props) {
   void _staticPng;
   const layout = useMemo(
@@ -74,6 +77,7 @@ export function SheetFabricLiveBase({
         baseRev={baseRev}
         isPlus={isPlus}
         initialCustomId={initialCustomId}
+        sundayLabel={sundayLabel}
         liveHtmlBase
       />
     </EditorErrorBoundary>

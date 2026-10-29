@@ -13,7 +13,7 @@ import { getSundaySheet } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 
 type Props = {
@@ -41,7 +41,7 @@ async function loadLayout(key: string, level: 1 | 2) {
 async function hasPng(key: string, level: 1 | 2) {
   const { fsPng } = sheetBasePublicPaths(key, level);
   try {
-    await readFile(path.join(process.cwd(), fsPng));
+    await access(path.join(process.cwd(), fsPng));
     return true;
   } catch {
     return false;
@@ -133,6 +133,7 @@ export default async function ResourceEditPage({ params, searchParams }: Props) 
           baseRev={rev}
           isPlus={viewer.isPlus}
           initialCustomId={customId}
+          sundayLabel={yearLabel(key)}
         />
       )}
     </HomePdfShell>

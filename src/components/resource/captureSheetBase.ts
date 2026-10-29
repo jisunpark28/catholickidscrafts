@@ -57,6 +57,21 @@ export function measureSheetSectionBoxes(
   return out;
 }
 
+export type MeasuredTextStyle = {
+  fontFamily: string;
+  fontWeight: string;
+  fontStyle: string;
+  fill: string;
+  /** Outline text (e.g. Level 1 trace words: transparent fill + text stroke). */
+  stroke?: string;
+  strokeWidth?: number;
+  textAlign: "left" | "center" | "right" | "justify";
+  /** Fabric line-height multiplier. */
+  lineHeight: number;
+  /** Fabric charSpacing (1/1000 em). */
+  charSpacing: number;
+};
+
 export type MeasuredTextField = {
   id: string;
   left: number;
@@ -65,6 +80,7 @@ export type MeasuredTextField = {
   height: number;
   text: string;
   fontSize: number;
+  style: MeasuredTextStyle;
 };
 
 export type MeasuredChrome = {
@@ -165,20 +181,21 @@ const AUTO_TEXT_SELECTORS = [
   ".gs-act p",
   ".gs-act li",
   ".gs-act .gs-act-chip",
-  ".gs-act .gs-act-bingo > div",
   ".gs-act .gs-act-find",
-  ".gs-act .gs-act-letters",
   ".gs-act .gs-act-mitem",
   ".gs-act .gs-act-prompt",
   ".gs-act .gs-act-basket",
   ".gs-act .gs-act-frame > p",
   ".gs-act .gs-act-pline",
-  ".gs-act th",
-  ".gs-act td",
-  ".gs-act .gs-act-keycell",
   ".gs-act b",
   "footer",
 ] as const;
+
+/**
+ * Puzzle grids (word search letters, bingo, tables, cipher keys) stay part of the locked
+ * underlay: one Textbox per cell would mean hundreds of Fabric objects and heavy undo.
+ */
+const GRID_SKIP = "table, .gs-act-letters, .gs-act-bingo, .gs-act-keycell";
 
 const SKIP_CLASS = /\b(gs-ph|gs-wl|gs-act-fill|gs-act-blank|gs-act-draw|gs-act-drawscene|gs-dot|gs-act-num)\b/;
 
@@ -215,7 +232,108 @@ function shouldSkip(el: HTMLElement): boolean {
   if (SKIP_CLASS.test(el.className?.toString?.() ?? "")) return true;
   if (el.getAttribute("aria-hidden") === "true") return true;
   if (el.closest(".gs-ph")) return true;
+  if (el.closest(GRID_SKIP)) return true;
   return false;
+}
+
+/** FNV-1a 32-bit → base36. Used for content-addressed field ids. */
+function hashText(input: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
+
+/**
+ * Stable id for an untagged text node: derived from its tag + original text, not DOM order,
+ * so saved edits keep pointing at the same words across sessions. If the base text changes,
+ * the id changes and the old edit is simply not applied (the editor shows the rev prompt).
+ */
+function stableTextId(prefix: "t" | "s", el: Element, text: string, used: Set<string>): string {
+  const base = `${prefix}_${hashText(`${el.tagName.toLowerCase()}|${text}`)}`;
+  let id = base;
+  for (let n = 2; used.has(id); n++) id = `${base}_${n}`;
+  used.add(id);
+  return id;
+}
+
+function isTransparent(color: string): boolean {
+  const c = color.replace(/\s+/g, "").toLowerCase();
+  return c === "transparent" || c === "rgba(0,0,0,0)" || /^rgba\([^)]*,0\)$/.test(c);
+}
+
+/** First ≤80 chars of a computed font stack, cut on a comma so it stays valid CSS. */
+function trimFontStack(stack: string): string {
+  if (stack.length <= 80) return stack;
+  const parts = stack.split(",");
+  let out = "";
+  for (const p of parts) {
+    const next = out ? `${out},${p}` : p;
+    if (next.length > 80) break;
+    out = next;
+  }
+  return out || "sans-serif";
+}
+
+/** Copy the original sheet typography so Fabric overlays look like the printed sheet. */
+function readTextStyle(el: Element, fontSize: number): MeasuredTextStyle {
+  const fallback: MeasuredTextStyle = {
+    fontFamily: '"Comic Sans MS","Chalkboard SE","Trebuchet MS",sans-serif',
+    fontWeight: "normal",
+    fontStyle: "normal",
+    fill: "#111111",
+    textAlign: "left",
+    lineHeight: 1.2,
+    charSpacing: 0,
+  };
+  let cs: CSSStyleDeclaration;
+  try {
+    cs = getComputedStyle(el);
+  } catch {
+    return fallback;
+  }
+  const weightNum = Number.parseInt(cs.fontWeight, 10);
+  const fontWeight = Number.isFinite(weightNum) ? (weightNum >= 600 ? "bold" : "normal") : cs.fontWeight || "normal";
+  const svgFill = el instanceof SVGElement ? cs.fill : "";
+  const color =
+    el instanceof SVGElement
+      ? svgFill && svgFill !== "none"
+        ? svgFill
+        : fallback.fill
+      : cs.color || fallback.fill;
+  const strokeW = Number.parseFloat(cs.getPropertyValue("-webkit-text-stroke-width")) || 0;
+  const strokeC = cs.getPropertyValue("-webkit-text-stroke-color");
+  const outline = strokeW > 0 && isTransparent(color);
+  const lh = Number.parseFloat(cs.lineHeight);
+  const ls = Number.parseFloat(cs.letterSpacing);
+  const align = cs.textAlign === "end" ? "right" : cs.textAlign === "start" ? "left" : cs.textAlign;
+  return {
+    fontFamily: trimFontStack(cs.fontFamily || fallback.fontFamily),
+    fontWeight,
+    fontStyle: cs.fontStyle === "italic" || cs.fontStyle === "oblique" ? "italic" : "normal",
+    fill: outline ? "transparent" : color,
+    ...(outline ? { stroke: strokeC || "#888888", strokeWidth: strokeW } : {}),
+    textAlign: (["left", "center", "right", "justify"] as const).includes(align as "left")
+      ? (align as MeasuredTextStyle["textAlign"])
+      : "left",
+    // Fabric's lineHeight multiplies fontSize·1.13 internally; normalize so wraps match CSS.
+    lineHeight: Number.isFinite(lh) && fontSize > 0 ? Math.max(0.8, Math.min(2.5, lh / fontSize / 1.13)) : 1.16,
+    charSpacing: Number.isFinite(ls) && fontSize > 0 ? Math.round((ls / fontSize) * 1000) : 0,
+  };
+}
+
+function displayText(el: Element): string {
+  const text = plainText(el);
+  try {
+    const tt = getComputedStyle(el).textTransform;
+    if (tt === "uppercase") return text.toUpperCase();
+    if (tt === "lowercase") return text.toLowerCase();
+  } catch {
+    /* ignore */
+  }
+  return text;
 }
 
 /**
@@ -247,7 +365,7 @@ export function collectEditableTextFields(
     tagged.push({ el, id });
   });
 
-  let auto = 0;
+  const used = new Set<string>(tagged.map((t) => t.id));
   for (const sel of AUTO_TEXT_SELECTORS) {
     page.querySelectorAll(sel).forEach((el) => {
       if (seen.has(el)) return;
@@ -259,7 +377,7 @@ export function collectEditableTextFields(
       if (el.closest("[data-sheet-field]") && !el.hasAttribute("data-sheet-field")) return;
       const text = plainText(el);
       if (text.length < 1) return;
-      const id = el.getAttribute("data-sheet-field")?.trim() || `auto_${auto++}`;
+      const id = el.getAttribute("data-sheet-field")?.trim() || stableTextId("t", el, text, used);
       if (!el.hasAttribute("data-sheet-field")) el.setAttribute("data-sheet-field", id);
       seen.add(el);
       tagged.push({ el, id });
@@ -269,9 +387,10 @@ export function collectEditableTextFields(
   // SVG labels (speech bubbles, faces, etc.)
   page.querySelectorAll("svg text").forEach((el) => {
     if (seen.has(el)) return;
+    if (el.closest(GRID_SKIP)) return;
     const text = plainText(el);
     if (text.length < 1) return;
-    const id = el.getAttribute("data-sheet-field")?.trim() || `svg_${auto++}`;
+    const id = el.getAttribute("data-sheet-field")?.trim() || stableTextId("s", el, text, used);
     if (!el.hasAttribute("data-sheet-field")) el.setAttribute("data-sheet-field", id);
     seen.add(el);
     tagged.push({ el, id });
@@ -288,8 +407,11 @@ export function collectEditableTextFields(
       Math.round(Math.max(r.height, 12) * scaleY),
     );
     if (!box) continue;
-    const text = plainText(el);
+    const text = displayText(el);
     if (!text) continue;
+    const fontSize = readFontSize(el, level, id);
+    // Read typography before hiding (visibility does not change computed font, but keep order obvious).
+    const style = readTextStyle(el, fontSize);
     if (el instanceof HTMLElement) {
       el.style.visibility = "hidden";
     } else if (el instanceof SVGElement) {
@@ -299,7 +421,8 @@ export function collectEditableTextFields(
       id,
       ...box,
       text,
-      fontSize: readFontSize(el, level, id),
+      fontSize,
+      style,
     });
   }
   return out;
@@ -424,4 +547,43 @@ export async function captureSheetBase(
   const layout = measureSheetLayout(page, meta);
   const pngDataUrl = await rasterizeSheetPage(page);
   return { layout, pngDataUrl };
+}
+
+function escapeXmlText(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+}
+
+/**
+ * Snapshot the live HTML underlay (locked chrome, activity graphics, puzzle grids) as an
+ * image for export. Pass the `.gs` root so scoped sheet CSS (`.gs …`) still matches.
+ * Returns null when the browser refuses (e.g. tainted canvas) so callers can fall back.
+ */
+export async function snapshotSheetUnderlay(root: HTMLElement): Promise<HTMLImageElement | null> {
+  const W = SHEET_PAGE.width;
+  const H = SHEET_PAGE.height;
+  const xhtml = new XMLSerializer().serializeToString(root.cloneNode(true));
+  const css = [...document.querySelectorAll("style")]
+    .map((s) => s.textContent ?? "")
+    .filter((t) => t.includes(".gs-page") || t.includes(".gs,"))
+    .join("\n");
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">` +
+    `<foreignObject x="0" y="0" width="${W}" height="${H}">` +
+    `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${W}px;height:${H}px;background:#fff;overflow:hidden">` +
+    `<style>${escapeXmlText(css)}
+.gs-page{margin:0!important;box-shadow:none!important;width:8.5in!important;height:11in!important;}</style>` +
+    `${xhtml}</div></foreignObject></svg>`;
+  try {
+    const img = await loadImage(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`);
+    // Probe for canvas tainting (Safari taints foreignObject images): toDataURL throws if so.
+    const probe = document.createElement("canvas");
+    probe.width = 1;
+    probe.height = 1;
+    probe.getContext("2d")?.drawImage(img, 0, 0, 1, 1);
+    probe.toDataURL();
+    return img;
+  } catch (e) {
+    console.warn("[snapshotSheetUnderlay]", e);
+    return null;
+  }
 }
