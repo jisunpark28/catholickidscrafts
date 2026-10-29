@@ -4,21 +4,18 @@ import { useLayoutEffect, useRef, useState } from "react";
 
 /** Letter page width at 96dpi plus a little room for the page shadow. */
 const PAGE_PX = 836;
+/** Letter height (11in) + vertical page margin from `.gs-page`. */
+const PAGE_H_PX = 1056 + 32;
 
 /** Scales the 8.5in sheet down to fit narrow screens; full size when there is room. */
 export function SheetFit({ children }: { children: React.ReactNode }) {
   const outer = useRef<HTMLDivElement>(null);
-  const inner = useRef<HTMLDivElement>(null);
-  const [fit, setFit] = useState<{ scale: number; height: number | null }>({ scale: 1, height: null });
+  const [scale, setScale] = useState(1);
 
   useLayoutEffect(() => {
     const o = outer.current;
-    const i = inner.current;
-    if (!o || !i) return;
-    const update = () => {
-      const scale = Math.min(1, o.clientWidth / PAGE_PX);
-      setFit({ scale, height: i.scrollHeight * scale });
-    };
+    if (!o) return;
+    const update = () => setScale(Math.min(1, o.clientWidth / PAGE_PX));
     update();
     const ro = new ResizeObserver(update);
     ro.observe(o);
@@ -26,14 +23,17 @@ export function SheetFit({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div ref={outer} style={{ width: "100%", height: fit.height ?? undefined, overflow: "hidden" }}>
+    <div
+      ref={outer}
+      className="relative w-full overflow-hidden"
+      style={{ height: PAGE_H_PX * scale }}
+    >
       <div
-        ref={inner}
         style={{
           width: PAGE_PX,
-          transform: `scale(${fit.scale})`,
+          transform: `scale(${scale})`,
           transformOrigin: "top left",
-          marginLeft: fit.scale < 1 ? 0 : "auto",
+          marginLeft: scale < 1 ? 0 : "auto",
           marginRight: "auto",
         }}
       >
