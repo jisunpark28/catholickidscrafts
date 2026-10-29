@@ -1005,10 +1005,10 @@
       "sha256": "f0357e15785b0f84ed64ce2440846ee169dad5ea51e3ffa4810622d299a796de"
     },
     "LIT-025": {
-      "pathname": "cards/originals/LIT-025-1050e40828.png",
-      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-025-1050e40828.png",
-      "size": 896040,
-      "sha256": "1050e4082859e2fab6074e1db88fbc1ec118dc15495b547df89b99e69b5943ea"
+      "pathname": "cards/originals/LIT-025-ecc70a23ff.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-025-ecc70a23ff.png",
+      "size": 888831,
+      "sha256": "ecc70a23ff4a78882fe274979c4e1a55dc5b33b8eb92285a72c83077797df1c1"
     },
     "LIT-026": {
       "pathname": "cards/originals/LIT-026-3a4f107d19.png",
@@ -1017,10 +1017,10 @@
       "sha256": "3a4f107d190f3f3a0e01c0e903a97b666fa9e7c2511f3550631c6bae2ba51fba"
     },
     "LIT-027": {
-      "pathname": "cards/originals/LIT-027-4e657688df.png",
-      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-027-4e657688df.png",
-      "size": 810233,
-      "sha256": "4e657688df7a6b5daf28399f8d76ba537a46b8ca89fde417a521882595f7b657"
+      "pathname": "cards/originals/LIT-027-81079302f3.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-027-81079302f3.png",
+      "size": 806999,
+      "sha256": "81079302f3c0cd9ee7917654a060828d57c1959e20eac8243f682407faa9c4fa"
     },
     "LIT-028": {
       "pathname": "cards/originals/LIT-028-fe4fd67c4c.png",
@@ -1053,16 +1053,16 @@
       "sha256": "fb4d471b290235a84b86674cf9c799a4bf4ca1c4f762cf1667f04970bd5835be"
     },
     "LIT-033": {
-      "pathname": "cards/originals/LIT-033-aee9a9bae7.png",
-      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-033-aee9a9bae7.png",
-      "size": 813158,
-      "sha256": "aee9a9bae7c575bfdca7270964f67f1b123631e3f11fbd6667822f0d3f4c7352"
+      "pathname": "cards/originals/LIT-033-e300e37cef.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-033-e300e37cef.png",
+      "size": 806446,
+      "sha256": "e300e37cef9303d91ffe65a16d4d1f40f0825fb7db2c04740e0f36df30b7ac28"
     },
     "LIT-034": {
-      "pathname": "cards/originals/LIT-034-21c4414922.png",
-      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-034-21c4414922.png",
-      "size": 913399,
-      "sha256": "21c4414922b4e4c58f6e020da271e6a73ad61b2a02334effdaa335e3e4c0bf41"
+      "pathname": "cards/originals/LIT-034-3509df6dc5.png",
+      "url": "https://agic3pkg7w63ht4c.private.blob.vercel-storage.com/cards/originals/LIT-034-3509df6dc5.png",
+      "size": 910265,
+      "sha256": "3509df6dc5723636f0899bb865c9799c6f8bae6468adda0aac368145618cdd52"
     },
     "LIT-035": {
       "pathname": "cards/originals/LIT-035-62cd9f4cd3.png",
