@@ -20,7 +20,7 @@ import {
 } from "@/lib/resource/sheets";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode, worksheetNode } from "@/lib/structured-data";
-import { getSundaySheet, listSundaySheetKeys } from "@/lib/sunday-sheet-content";
+import { getSundaySheet } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
@@ -30,12 +30,8 @@ type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
+// Per-viewer print gate (session + country cookie/IP) — rendered on demand.
 export const dynamic = "force-dynamic";
-export const dynamicParams = true;
-
-export function generateStaticParams() {
-  return listSundaySheetKeys().map((key) => ({ slug: keyToSlug(key) }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -44,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!sheet) return {};
   return pageMetadata({
     title: sheetSeoTitle(sheet),
+    absoluteTitle: true,
     description: sheetDescription(sheet),
     path: resourcePath(sheet.key),
   });

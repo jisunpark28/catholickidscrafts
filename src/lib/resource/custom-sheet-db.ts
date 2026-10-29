@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import type { CustomSheetData } from "@/lib/resource/custom-sheet-data";
-import { ensureCustomSheetSchema } from "@/lib/resource/ensure-custom-sheet-schema";
 
 export type CustomSheetRow = {
   id: string;
@@ -32,8 +31,8 @@ function mapRow(r: DbRow): CustomSheetRow {
   return { ...r, data: r.data as CustomSheetData };
 }
 
+/** Table comes from migration 20261027010000_custom_sheets (no runtime DDL on request paths). */
 export async function withCustomSheetDb<T>(fn: () => Promise<T>): Promise<T> {
-  await ensureCustomSheetSchema();
   return fn();
 }
 

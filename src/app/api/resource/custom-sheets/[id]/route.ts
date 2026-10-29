@@ -61,7 +61,7 @@ export async function PATCH(request: Request, ctx: Ctx) {
     patch.name = name;
   }
   if (body.data !== undefined) {
-    const data = parseCustomSheetData(body.data);
+    const data = parseCustomSheetData(body.data, { familyAccountId: guard.session.familyAccountId });
     if (typeof data === "string") return NextResponse.json({ error: data }, { status: 400 });
     patch.data = data;
     patch.baseKey = data.base.key;

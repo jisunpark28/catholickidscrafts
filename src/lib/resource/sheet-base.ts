@@ -1,5 +1,5 @@
 import { getSundaySheet, type SundaySheetContent } from "@/lib/sunday-sheet-content";
-import { keyToSlug } from "@/lib/resource/sheets";
+import { keyToSlug, yearLabel } from "@/lib/resource/sheets";
 import { z } from "zod";
 
 /** Tiny stable hash (browser + Node) for base revision ids. */
@@ -111,7 +111,7 @@ export function defaultTextForField(sheet: SundaySheetContent, level: 1 | 2, id:
     case "subtitle":
       return `${sheet.liturgicalName} · Level ${level}`;
     case "meta":
-      return `${sheet.key}\n${sheet.gospelRef}`;
+      return `${yearLabel(sheet.key)}\n${sheet.gospelRef}`;
     case "h2_story":
       return "Today's Story";
     case "h2_key":

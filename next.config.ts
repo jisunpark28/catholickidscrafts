@@ -74,8 +74,14 @@ const nextConfig: NextConfig = {
       { source: "/lesson/:path*", destination: "/", permanent: true },
       { source: "/curriculum", destination: "/", permanent: true },
       { source: "/curriculum/:path*", destination: "/", permanent: true },
-      { source: "/resources", destination: "/", permanent: true },
-      { source: "/resources/:path*", destination: "/", permanent: true },
+      // Legacy curriculum printables (pre-Resource). `/resources` + `/resources/<season>` are live hubs now.
+      ...[
+        "advent-wreath-craft",
+        "first-communion-examination",
+        "holy-trinity-clover",
+        "lent-stations-cross-craft",
+        "noahs-ark-coloring",
+      ].map((slug) => ({ source: `/resources/${slug}`, destination: "/resources", permanent: true })),
     ];
   },
 };

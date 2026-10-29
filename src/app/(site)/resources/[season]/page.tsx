@@ -10,6 +10,7 @@ import {
   seasonLabel,
   seasonPath,
   seasonSeoDescription,
+  seasonMetaTitle,
   seasonSeoTitle,
   sheetYear,
   type ResourceSeason,
@@ -36,7 +37,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!season) return {};
   const sheets = searchSheets({ season });
   return pageMetadata({
-    title: seasonSeoTitle(season),
+    title: seasonMetaTitle(season),
+    absoluteTitle: true,
     description: seasonSeoDescription(season, sheets.length),
     path: seasonPath(season),
   });

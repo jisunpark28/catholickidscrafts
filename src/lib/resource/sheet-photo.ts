@@ -1,10 +1,14 @@
 import sharp from "sharp";
-import { put } from "@vercel/blob";
+import { del, put } from "@vercel/blob";
 import fs from "fs/promises";
 import path from "path";
 import { isVercelBlobLinked, isVercelServerless, UploadConfigurationError } from "@/lib/upload";
 
-export const SHEET_PHOTO_MAX_BYTES = 10 * 1024 * 1024;
+/**
+ * Vercel functions reject request bodies over 4.5 MB, so the editor downsizes photos in the
+ * browser first; keep the server cap just under that limit.
+ */
+export const SHEET_PHOTO_MAX_BYTES = 4 * 1024 * 1024;
 export const SHEET_PHOTO_MAX_EDGE = 2400;
 export const SHEET_PHOTO_FAMILY_QUOTA_BYTES = 200 * 1024 * 1024;
 export const SHEET_PHOTO_DAILY_LIMIT = 30;
@@ -13,7 +17,7 @@ export const SHEET_PHOTO_ALLOWED = new Set(["image/jpeg", "image/png", "image/we
 export function validateSheetPhotoFile(file: File): { ok: true } | { ok: false; error: string } {
   if (!file.size) return { ok: false, error: "Choose a photo to upload." };
   if (file.size > SHEET_PHOTO_MAX_BYTES) {
-    return { ok: false, error: "Photo must be 10 MB or smaller." };
+    return { ok: false, error: "Photo must be 4 MB or smaller after resizing." };
   }
   const type = file.type.toLowerCase();
   if (!SHEET_PHOTO_ALLOWED.has(type)) {
@@ -71,11 +75,26 @@ async function storeProcessed(
     }
   }
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "sheet-photos");
+  // Local dev: keep the family folder so URLs can be ownership-checked like Blob keys.
+  const [, familyDir, filename] = key.split("/");
+  const uploadDir = path.join(process.cwd(), "public", "uploads", "sheet-photos", familyDir!);
   await fs.mkdir(uploadDir, { recursive: true });
-  const filename = key.split("/").pop()!;
-  await fs.writeFile(path.join(uploadDir, filename), buffer);
-  return `/uploads/sheet-photos/${filename}`;
+  await fs.writeFile(path.join(uploadDir, filename!), buffer);
+  return `/uploads/sheet-photos/${familyDir}/${filename}`;
+}
+
+/** Remove a stored photo file (Blob or local dev). Best-effort: DB row is the source of truth. */
+export async function deleteStoredSheetPhoto(url: string): Promise<void> {
+  if (url.startsWith("/uploads/sheet-photos/")) {
+    const rel = url.slice("/uploads/".length);
+    if (rel.includes("..")) return;
+    const file = path.join(process.cwd(), "public", "uploads", rel);
+    await fs.unlink(file).catch(() => undefined);
+    return;
+  }
+  if (!/^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/sheet-photos\//i.test(url)) return;
+  const token = process.env.BLOB_READ_WRITE_TOKEN?.trim() || undefined;
+  await del(url, token ? { token } : undefined);
 }
 
 export async function saveProcessedSheetPhoto(

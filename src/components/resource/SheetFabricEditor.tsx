@@ -4,6 +4,8 @@ import {
   collectEditableTextFields,
   collectSheetChrome,
   measureSheetSectionBoxes,
+  snapshotSheetUnderlay,
+  type MeasuredTextField,
 } from "@/components/resource/captureSheetBase";
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
@@ -13,8 +15,9 @@ import {
   type CustomSheetData,
   type EditorFontId,
 } from "@/lib/resource/custom-sheet-data";
-import { downloadSheetPdf, downloadSheetPng } from "@/lib/resource/export-sheet-pdf";
+import { composeSheetCanvas, downloadSheetPdf, downloadSheetPng } from "@/lib/resource/export-sheet-pdf";
 import { loadEditorFonts } from "@/lib/resource/load-editor-fonts";
+import { prepareSheetPhotoUpload } from "@/lib/resource/resize-photo";
 import {
   defaultTextForField,
   type SheetLayout,
@@ -45,7 +48,73 @@ type Props = {
   initialCustomId?: string | null;
   /** Render GospelSheet(variant=base) under a transparent Fabric canvas. */
   liveHtmlBase?: boolean;
+  /** Header label on the base sheet (e.g. "Year A"); never the internal sheet key. */
+  sundayLabel?: string;
 };
+
+type SheetPhotoItem = { id: string; url: string; width: number | null; height: number | null; sizeBytes: number };
+type LayerItem = { index: number; label: string; active: boolean };
+
+const FAMILY_PHOTO_QUOTA_MB = 200;
+
+/** Original sheet typography (`.gs` in sheet-styles) for layout-seeded boxes. */
+const SHEET_FONT_STACK = '"Comic Sans MS", "Chalkboard SE", "Trebuchet MS", sans-serif';
+
+function layerLabel(o: FabricObject): string {
+  const m = metaOf(o);
+  const snippet = o instanceof Textbox ? (o.text ?? "").replace(/\s+/g, " ").trim().slice(0, 28) : "";
+  if (m.stickerId) return `Sticker · ${m.stickerId}`;
+  if (m.kind === "base-edit") return `Sheet text · ${snippet || m.fieldId || ""}`;
+  if (m.baseSectionId || o.type === "rect") return "Section box";
+  if (m.chromeKind === "writeline") return "Write line";
+  if (m.chromeKind === "checkbox") return "Checkbox";
+  if (o.type === "image") return "Photo";
+  if (o instanceof Textbox) return `Text · ${snippet || "(empty)"}`;
+  return o.type ? o.type[0]!.toUpperCase() + o.type.slice(1) : "Object";
+}
+
+/** Fabric Textbox props that reproduce the original sheet typography. */
+function textStyleProps(f: MeasuredTextField) {
+  return {
+    fontFamily: f.style.fontFamily,
+    fontWeight: f.style.fontWeight,
+    fontStyle: f.style.fontStyle,
+    fill: f.style.fill,
+    stroke: f.style.stroke ?? null,
+    strokeWidth: f.style.strokeWidth ?? 1,
+    textAlign: f.style.textAlign,
+    lineHeight: f.style.lineHeight,
+    charSpacing: f.style.charSpacing,
+  };
+}
+
+function textSig(tb: Textbox): string {
+  return JSON.stringify([
+    tb.text ?? "",
+    String(tb.fontFamily ?? ""),
+    Number(tb.fontSize ?? 0),
+    String(tb.fill ?? ""),
+    String(tb.fontWeight ?? ""),
+    String(tb.fontStyle ?? ""),
+    Boolean(tb.underline),
+  ]);
+}
+
+function isEditorFont(v: unknown): v is EditorFontId {
+  return EDITOR_FONTS.some((f) => f.id === v);
+}
+
+/** Server re-check before export (the canvas lives in the browser, so this is a deterrent, not DRM). */
+async function confirmPlusOnServer(): Promise<boolean> {
+  try {
+    const res = await fetch("/api/resource/entitlement", { cache: "no-store" });
+    if (!res.ok) return false;
+    const json = (await res.json()) as { isPlus?: boolean };
+    return json.isPlus === true;
+  } catch {
+    return false;
+  }
+}
 
 type ObjMeta = {
   kind: "base-edit" | "user";
@@ -61,6 +130,10 @@ type ObjMeta = {
   /** Promoted write-line / checkbox from base HTML (`wl_0`, `chk_0`). */
   baseChromeId?: string;
   chromeKind?: "writeline" | "checkbox";
+  /** Base textbox already carries the measured sheet typography. */
+  styled?: boolean;
+  /** Text + style signature of the untouched original; unchanged fields are not saved as edits. */
+  origSig?: string;
 };
 
 /** Content width inside letter margins (~0.5in pad each side on 8.5in). */
@@ -95,6 +168,7 @@ export function SheetFabricEditor({
   isPlus,
   initialCustomId = null,
   liveHtmlBase = false,
+  sundayLabel = "",
 }: Props) {
   const liveHostRef = useRef<HTMLDivElement>(null);
   const canvasEl = useRef<HTMLCanvasElement>(null);
@@ -130,6 +204,11 @@ export function SheetFabricEditor({
   const [uploading, setUploading] = useState(false);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+  const [layers, setLayers] = useState<LayerItem[]>([]);
+  const [photos, setPhotos] = useState<SheetPhotoItem[]>([]);
+  const [photoBytes, setPhotoBytes] = useState(0);
+  /** Saved sheet whose base rev differs from the current original (design §3 rev prompt). */
+  const [revPrompt, setRevPrompt] = useState<CustomSheetData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const syncHistoryButtons = () => {
@@ -146,7 +225,8 @@ export function SheetFabricEditor({
       const m = metaOf(active);
       setSelectedLabel(m.fieldId ?? m.stickerId ?? active.type ?? "");
       if (active instanceof Textbox) {
-        setFontFamily((active.fontFamily as EditorFontId) || "Fredoka");
+        // Base text keeps the sheet's own font stack; only sync the picker for editor fonts.
+        if (isEditorFont(active.fontFamily)) setFontFamily(active.fontFamily);
         setFontSize(Number(active.fontSize) || 18);
         setFill(String(active.fill || "#111"));
         setBold(active.fontWeight === "bold" || active.fontWeight === 700);
@@ -154,13 +234,41 @@ export function SheetFabricEditor({
         setUnderline(Boolean(active.underline));
       }
     } else setSelectedLabel("");
+    const objs = c.getObjects();
+    setLayers(
+      objs
+        .map((o, index) => ({ index, label: layerLabel(o), active: o === active }))
+        .reverse(),
+    );
   };
   refreshLayersRef.current = refreshLayers;
+
+  /** Accessible stack order: top of the list = front. */
+  const moveLayer = (index: number, dir: "forward" | "backward") => {
+    const c = fabricRef.current;
+    const obj = c?.getObjects()[index];
+    if (!c || !obj || !isPlus) return;
+    pushUndo();
+    if (dir === "forward") c.bringObjectForward(obj);
+    else c.sendObjectBackwards(obj);
+    c.requestRenderAll();
+    refreshLayers();
+  };
+
+  const selectLayer = (index: number) => {
+    const c = fabricRef.current;
+    const obj = c?.getObjects()[index];
+    if (!c || !obj || !isPlus) return;
+    c.setActiveObject(obj);
+    c.requestRenderAll();
+    refreshLayers();
+  };
 
   const pushUndo = () => {
     const c = fabricRef.current;
     if (!c || applyingRef.current) return;
-    const json = JSON.stringify(c.toJSON());
+    // Include ObjMeta (`data`) so undo/redo keeps base-edit kind/fieldId.
+    const json = JSON.stringify(c.toObject(["data"]));
     undoRef.current.push(json);
     while (undoRef.current.length > HISTORY_MAX) undoRef.current.shift();
     redoRef.current = [];
@@ -175,6 +283,7 @@ export function SheetFabricEditor({
     for (const obj of c.getObjects()) {
       const m = metaOf(obj);
       if (m.kind === "base-edit" && m.fieldId && obj instanceof Textbox) {
+        if (m.origSig && m.origSig === textSig(obj)) continue;
         edits[m.fieldId] = {
           text: obj.text ?? "",
           fontFamily: String(obj.fontFamily ?? "Fredoka"),
@@ -358,7 +467,7 @@ export function SheetFabricEditor({
             top: box.top,
             width: Math.max(40, box.width),
             fontSize: box.fontSize ?? 16,
-            fontFamily: "Fredoka",
+            fontFamily: SHEET_FONT_STACK,
             fill: "#111111",
             editable: isPlus,
             selectable: isPlus,
@@ -403,7 +512,7 @@ export function SheetFabricEditor({
                 ids.has("actTitle") ||
                 ids.has("h2_story") ||
                 ids.has("footer") ||
-                [...ids].some((id) => String(id).startsWith("auto_") || String(id).startsWith("svg_"));
+                [...ids].some((id) => /^[ts]_/.test(String(id)));
               if (!rich && attempt < 10) {
                 window.setTimeout(() => finishLive(attempt + 1), 50 + attempt * 40);
                 return;
@@ -482,16 +591,20 @@ export function SheetFabricEditor({
         if (prev) {
           const keepText =
             Boolean(prev.text) && prev.text !== f.text && prev.text !== defaultTextForField(sheet, level, f.id);
+          const pm = metaOf(prev);
           prev.set({
             left: f.left,
             top: f.top,
             width: Math.max(40, f.width),
-            fontSize: f.fontSize,
+            fontSize: pm.styled ? prev.fontSize : f.fontSize,
             text: keepText ? prev.text : f.text,
+            // Seeded layout boxes get the measured typography once; later re-measures keep user styling.
+            ...(pm.styled ? {} : textStyleProps(f)),
             selectable: true,
             evented: true,
             editable: true,
           });
+          setMeta(prev, { ...pm, styled: true, origSig: pm.styled && pm.origSig ? pm.origSig : textSig(prev) });
           existing.delete(f.id);
           continue;
         }
@@ -500,13 +613,12 @@ export function SheetFabricEditor({
           top: f.top,
           width: Math.max(40, f.width),
           fontSize: f.fontSize,
-          fontFamily: "Fredoka",
-          fill: "#111111",
+          ...textStyleProps(f),
           editable: true,
           selectable: true,
           evented: true,
         });
-        setMeta(tb, { kind: "base-edit", fieldId: f.id, id: `base_${f.id}` });
+        setMeta(tb, { kind: "base-edit", fieldId: f.id, id: `base_${f.id}`, styled: true, origSig: textSig(tb) });
         c.add(tb);
       }
 
@@ -652,9 +764,11 @@ export function SheetFabricEditor({
   promoteBaseSectionsRef.current = promoteBaseSections;
 
   /** Apply a saved CustomSheet diff onto the live canvas (base textboxes + user objects). */
-  const applyCustomData = async (data: CustomSheetData) => {
+  const applyCustomData = async (data: CustomSheetData, opts: { applyEdits?: boolean } = {}) => {
     const c = fabricRef.current;
-    if (!c) return;
+    if (!c) return { unmatched: 0 };
+    const applyEdits = opts.applyEdits ?? true;
+    const matched = new Set<string>();
     applyingRef.current = true;
     hiddenBaseSectionsRef.current = [...(data.hiddenBaseSections ?? [])];
     hiddenFieldsRef.current = [...(data.hidden ?? [])];
@@ -671,8 +785,9 @@ export function SheetFabricEditor({
             c.remove(obj);
             continue;
           }
-          const edit = data.edits[m.fieldId];
+          const edit = applyEdits ? data.edits[m.fieldId] : undefined;
           if (!edit) continue;
+          matched.add(m.fieldId);
           obj.set({
             text: edit.text,
             fontFamily: edit.fontFamily ?? obj.fontFamily,
@@ -795,7 +910,7 @@ export function SheetFabricEditor({
               angle: o.angle ?? 0,
               opacity: o.opacity ?? 1,
             });
-            setMeta(img, { kind: "user", id: o.id, photoId: o.id });
+            setMeta(img, { kind: "user", id: o.id });
             c.add(img);
           } catch (e) {
             console.warn("[SheetFabricEditor] image restore failed", e);
@@ -811,6 +926,8 @@ export function SheetFabricEditor({
     } finally {
       applyingRef.current = false;
     }
+    const unmatched = applyEdits ? Object.keys(data.edits).filter((k) => !matched.has(k)).length : 0;
+    return { unmatched };
   };
 
   useEffect(() => {
@@ -833,8 +950,23 @@ export function SheetFabricEditor({
         }
         setCustomId(initialCustomId);
         if (row.name) setName(row.name);
-        await applyCustomData(row.data);
-        if (!cancelled) setStatus(`Loaded “${row.name ?? "custom sheet"}”`);
+        const label = row.name ?? "custom sheet";
+        if (row.data.base.rev !== baseRev && Object.keys(row.data.edits).length > 0) {
+          // Original sheet changed since saving: keep user objects, ask about edited text.
+          await applyCustomData(row.data, { applyEdits: false });
+          if (cancelled) return;
+          setRevPrompt(row.data);
+          setStatus(`Loaded “${label}” — the original sheet was updated since you saved it.`);
+          return;
+        }
+        const { unmatched } = await applyCustomData(row.data);
+        if (!cancelled) {
+          setStatus(
+            unmatched
+              ? `Loaded “${label}” · ${unmatched} saved text edit${unmatched === 1 ? "" : "s"} no longer match the sheet`
+              : `Loaded “${label}”`,
+          );
+        }
       } catch {
         if (!cancelled) setStatus("Could not load saved sheet");
       }
@@ -988,10 +1120,18 @@ export function SheetFabricEditor({
     const c = fabricRef.current;
     if (!c) return;
     setUploading(true);
-    setStatus("Uploading photo…");
+    setStatus("Preparing photo…");
     try {
+      let upload: File;
+      try {
+        upload = await prepareSheetPhotoUpload(file);
+      } catch (e) {
+        setStatus(e instanceof Error ? e.message : "Could not read this photo");
+        return;
+      }
+      setStatus("Uploading photo…");
       const body = new FormData();
-      body.append("file", file);
+      body.append("file", upload);
       const res = await fetch("/api/resource/photos", { method: "POST", body });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -1003,6 +1143,25 @@ export function SheetFabricEditor({
         setStatus("Upload returned no URL");
         return;
       }
+      if (json.photo) {
+        const p = json.photo as SheetPhotoItem;
+        setPhotos((prev) => [p, ...prev.filter((x) => x.id !== p.id)]);
+        setPhotoBytes((b) => b + (Number(p.sizeBytes) || 0));
+      }
+      await insertPhoto(url, String(json.photo?.id ?? ""));
+      setStatus("Photo added");
+    } catch {
+      setStatus("Upload failed");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const insertPhoto = async (url: string, photoId: string) => {
+    const c = fabricRef.current;
+    if (!c || !isPlus) return;
+    {
       pushUndo();
       const img = await FabricImage.fromURL(url, { crossOrigin: "anonymous" });
       const maxW = 280;
@@ -1014,17 +1173,74 @@ export function SheetFabricEditor({
         scaleX: scale,
         scaleY: scale,
       });
-      setMeta(img, { kind: "user", id: uid(), photoId: String(json.photo?.id ?? "") });
+      setMeta(img, { kind: "user", id: uid(), photoId });
       c.add(img);
       c.setActiveObject(img);
       c.requestRenderAll();
-      setStatus("Photo added");
-    } catch {
-      setStatus("Upload failed");
-    } finally {
-      setUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      refreshLayers();
     }
+  };
+
+  const deletePhoto = async (p: SheetPhotoItem) => {
+    if (!isPlus) return;
+    if (!window.confirm("Delete this photo from your account? Sheets that use it will show an empty spot.")) return;
+    try {
+      const res = await fetch(`/api/resource/photos/${encodeURIComponent(p.id)}`, { method: "DELETE" });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        setStatus(json.error ?? `Delete failed (${res.status})`);
+        return;
+      }
+      setPhotos((prev) => prev.filter((x) => x.id !== p.id));
+      setPhotoBytes((b) => Math.max(0, b - (Number(p.sizeBytes) || 0)));
+      setStatus("Photo deleted");
+    } catch {
+      setStatus("Delete failed");
+    }
+  };
+
+  useEffect(() => {
+    if (!isPlus || !ready) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch("/api/resource/photos", { cache: "no-store" });
+        if (!res.ok) return;
+        const json = (await res.json()) as { photos?: SheetPhotoItem[]; usage?: { totalBytes?: number } };
+        if (cancelled) return;
+        setPhotos(json.photos ?? []);
+        setPhotoBytes(Number(json.usage?.totalBytes ?? 0));
+      } catch {
+        /* photo list is optional */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isPlus, ready]);
+
+  /** Live HTML underlay (graphics, grids, locked chrome) as an image for export/thumbnails. */
+  const underlayImage = async (): Promise<CanvasImageSource | null> => {
+    if (!liveHtmlBase) return null;
+    const root = liveHostRef.current?.querySelector<HTMLElement>(".gs");
+    if (!root) return null;
+    return snapshotSheetUnderlay(root);
+  };
+
+  const resolveRev = async (keepMine: boolean) => {
+    const data = revPrompt;
+    setRevPrompt(null);
+    if (!data || !keepMine) {
+      setStatus("Using the updated original text. Save to keep this version.");
+      return;
+    }
+    pushUndo();
+    const { unmatched } = await applyCustomData(data);
+    setStatus(
+      unmatched
+        ? `Kept your text · ${unmatched} edit${unmatched === 1 ? "" : "s"} no longer match the updated sheet`
+        : "Kept your text",
+    );
   };
 
   const exportPdf = async () => {
@@ -1033,8 +1249,13 @@ export function SheetFabricEditor({
     setExporting(true);
     setStatus("Building PDF…");
     try {
-      await downloadSheetPdf(c, `${name.trim() || sheet.key}-custom`);
-      setStatus("PDF downloaded");
+      if (!(await confirmPlusOnServer())) {
+        setStatus("PDF download is a Plus feature — please sign in again.");
+        return;
+      }
+      const under = await underlayImage();
+      await downloadSheetPdf(c, under, `${name.trim() || sheet.key}-custom`);
+      setStatus(liveHtmlBase && !under ? "PDF downloaded (sheet graphics could not be included in this browser)" : "PDF downloaded");
     } catch (e) {
       console.error(e);
       setStatus("PDF export failed — try PNG");
@@ -1043,14 +1264,26 @@ export function SheetFabricEditor({
     }
   };
 
-  const exportPng = () => {
+  const exportPng = async () => {
     const c = fabricRef.current;
     if (!c || !isPlus) return;
+    setExporting(true);
     try {
-      downloadSheetPng(c, `${name.trim() || sheet.key}-custom`);
-      setStatus("PNG downloaded (~300 dpi)");
+      if (!(await confirmPlusOnServer())) {
+        setStatus("PNG download is a Plus feature — please sign in again.");
+        return;
+      }
+      const under = await underlayImage();
+      downloadSheetPng(c, under, `${name.trim() || sheet.key}-custom`);
+      setStatus(
+        liveHtmlBase && !under
+          ? "PNG downloaded (sheet graphics could not be included in this browser)"
+          : "PNG downloaded (~300 dpi)",
+      );
     } catch {
       setStatus("PNG export failed");
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -1158,15 +1391,12 @@ export function SheetFabricEditor({
     setStatus("Saving…");
     try {
       const data = buildDiff();
-      // Live HTML base uses a transparent canvas — force white so thumbs aren't empty/beige text-only.
+      // Flatten white paper + live HTML underlay + objects so thumbs match the sheet.
       const c = fabricRef.current;
-      const prevBg = c?.backgroundColor;
-      if (c && (liveHtmlBase || !basePngUrl)) c.backgroundColor = "#ffffff";
-      c?.requestRenderAll();
-      const thumbUrl = c?.toDataURL({ format: "png", multiplier: 0.25 }) ?? null;
-      if (c && prevBg !== undefined) {
-        c.backgroundColor = prevBg;
-        c.requestRenderAll();
+      let thumbUrl: string | null = null;
+      if (c) {
+        const under = await underlayImage();
+        thumbUrl = composeSheetCanvas(c, under, 0.25).toDataURL("image/jpeg", 0.8);
       }
       const payload = { name: name.trim() || "My sheet", data, thumbUrl };
       const res = await fetch(
@@ -1214,6 +1444,38 @@ export function SheetFabricEditor({
         >
           {uploading ? "Uploading…" : "Add photo"}
         </button>
+        {isPlus && photos.length > 0 ? (
+          <details className="mt-2 rounded-lg border border-[#e7e3de] bg-white p-2 text-xs">
+            <summary className="cursor-pointer font-semibold">
+              My photos ({photos.length}) · {(photoBytes / 1024 / 1024).toFixed(1)} / {FAMILY_PHOTO_QUOTA_MB} MB
+            </summary>
+            <ul className="m-0 mt-2 grid list-none grid-cols-3 gap-1 p-0">
+              {photos.map((p) => (
+                <li key={p.id} className="relative">
+                  <button
+                    type="button"
+                    className="block w-full overflow-hidden rounded border border-[#e7e3de]"
+                    disabled={!ready}
+                    onClick={() => void insertPhoto(p.url, p.id)}
+                    title="Add to sheet"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={p.url} alt="Uploaded photo — add to sheet" className="block aspect-square w-full object-cover" loading="lazy" />
+                  </button>
+                  <button
+                    type="button"
+                    className="absolute right-0 top-0 rounded-bl bg-black/70 px-1 text-[10px] leading-4 text-white"
+                    onClick={() => void deletePhoto(p)}
+                    aria-label="Delete photo"
+                    title="Delete photo"
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ) : null}
         <button
           type="button"
           className={`${toolBtn} mt-2 w-full`}
@@ -1269,6 +1531,44 @@ export function SheetFabricEditor({
             </Link>{" "}
             unlocks editing & save.
           </p>
+        ) : null}
+        {isPlus && layers.length > 0 ? (
+          <details className="mt-3 rounded-lg border border-[#e7e3de] bg-white p-2 text-xs">
+            <summary className="cursor-pointer font-semibold">Layers ({layers.length})</summary>
+            <p className="m-0 mt-1 text-[11px] text-[#6b7280]">Top of the list is in front.</p>
+            <ol className="m-0 mt-1 max-h-64 list-none overflow-auto p-0" aria-label="Sheet layers, front to back">
+              {layers.map((l, i) => (
+                <li key={`${l.index}-${l.label}`} className="flex items-center gap-1 py-0.5">
+                  <button
+                    type="button"
+                    className={`min-w-0 flex-1 truncate rounded px-1 py-0.5 text-left ${l.active ? "bg-[#fff6ef] font-semibold text-[#d35400]" : "hover:bg-[#fdfaf7]"}`}
+                    onClick={() => selectLayer(l.index)}
+                    aria-current={l.active ? "true" : undefined}
+                  >
+                    {l.label}
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded border border-[#e7e3de] px-1 disabled:opacity-30"
+                    disabled={i === 0}
+                    onClick={() => moveLayer(l.index, "forward")}
+                    aria-label={`Bring ${l.label} forward`}
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded border border-[#e7e3de] px-1 disabled:opacity-30"
+                    disabled={i === layers.length - 1}
+                    onClick={() => moveLayer(l.index, "backward")}
+                    aria-label={`Send ${l.label} backward`}
+                  >
+                    ↓
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </details>
         ) : null}
       </aside>
 
@@ -1372,8 +1672,8 @@ export function SheetFabricEditor({
             <button
               type="button"
               className={toolBtn}
-              disabled={!isPlus || !ready}
-              onClick={exportPng}
+              disabled={!isPlus || !ready || exporting}
+              onClick={() => void exportPng()}
               title="Download ~300 dpi PNG"
             >
               PNG
@@ -1402,7 +1702,7 @@ export function SheetFabricEditor({
                   aria-hidden
                 >
                   <GospelSheet
-                    sheet={{ ...toGospelSheetView(sheet), sundayLabel: sheet.key }}
+                    sheet={{ ...toGospelSheetView(sheet), sundayLabel: sundayLabel || toGospelSheetView(sheet).sundayLabel }}
                     level={level}
                     variant="base"
                   />
@@ -1421,7 +1721,24 @@ export function SheetFabricEditor({
             </div>
           </div>
         </div>
-        {status ? <p className="mt-2 text-sm text-[#6b7280]">{status}</p> : null}
+        {revPrompt ? (
+          <div role="alert" className="mt-2 rounded-xl border border-[#f0c9a8] bg-[#fff6ef] p-3 text-sm text-[#1c1c1c]">
+            <p className="m-0">
+              This Sunday&apos;s original sheet was updated after you saved. Your stickers, photos and boxes are kept.
+              What should happen to the text you changed?
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button type="button" className={toolBtn} onClick={() => void resolveRev(false)}>
+                Use the new original
+              </button>
+              <button type="button" className={toolBtn} onClick={() => void resolveRev(true)}>
+                Keep my text
+              </button>
+            </div>
+          </div>
+        ) : null}
+        <p className="sr-only" aria-live="polite">{status}</p>
+        {status ? <p className="mt-2 text-sm text-[#6b7280]" aria-hidden>{status}</p> : null}
         {selectedLabel ? <p className="mt-1 text-xs text-[#9ca3af]">Selected: {selectedLabel}</p> : null}
       </div>
     </div>
