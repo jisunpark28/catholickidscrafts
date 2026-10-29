@@ -233,6 +233,15 @@ export function sheetSeoTitle(sheet: SundaySheetContent): string {
   ]);
 }
 
+/** JSON-LD abstract: Level 1 story, trimmed to ~300 chars at a word boundary. */
+export function sheetAbstract(sheet: SundaySheetContent): string {
+  const story = sheet.levels.level1.story.replace(/\s+/g, " ").trim();
+  if (story.length <= 300) return story;
+  const cut = story.slice(0, 299);
+  const i = cut.lastIndexOf(" ");
+  return `${i > 200 ? cut.slice(0, i) : cut}…`;
+}
+
 /** Visible H1 (spec: no gospel ref in H1). */
 export function sheetSeoH1(sheet: SundaySheetContent): string {
   return `Free Catholic Sunday Gospel Sheet: ${sheet.liturgicalName} (${yearLabel(sheet.key)})`;
