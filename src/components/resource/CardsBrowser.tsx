@@ -11,6 +11,9 @@ type Sort = "calendar" | "number" | "az";
 type Props = {
   cards: CardListItem[];
   isPlus: boolean;
+  /** Today's featured card (free for everyone, same rule as the download API). */
+  freeCardId?: string | null;
+  level?: 1 | 2;
   siteUrl: string;
   /** Cards for this Sunday (shown first in Calendar sort). */
   featuredIds: string[];
@@ -52,6 +55,8 @@ function matches(c: CardListItem, q: string): boolean {
 export function CardsBrowser({
   cards,
   isPlus,
+  freeCardId = null,
+  level = 1,
   siteUrl,
   featuredIds,
   initialQ,
@@ -146,6 +151,8 @@ export function CardsBrowser({
                   <CardTile
                     card={c}
                     isPlus={isPlus}
+                    isFree={c.id === freeCardId}
+                    level={level}
                     siteUrl={siteUrl}
                     selected={selected?.id === c.id}
                     onOpen={() => pick(c.id)}
@@ -197,7 +204,13 @@ export function CardsBrowser({
                 />
               </div>
               <div className="mt-3">
-                <CardActions card={selected} isPlus={isPlus} siteUrl={siteUrl} />
+                <CardActions
+                  card={selected}
+                  isPlus={isPlus}
+                  isFree={selected.id === freeCardId}
+                  level={level}
+                  siteUrl={siteUrl}
+                />
               </div>
             </aside>
           </div>

@@ -106,23 +106,6 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         <h2 className="mt-2 text-lg font-semibold text-[#4b5563]">{sheetSeoH2(sheet)}</h2>
       </header>
 
-      {!canPrint ? (
-        <p className="mt-4 max-w-2xl rounded-xl border border-[#efe6da] bg-[#fdfaf7] px-4 py-3 text-sm text-[#4b5563]">
-          Preview the sheet below. <strong className="text-[#1c1c1c]">Print and Edit</strong> need
-          Plus (this Sunday stays free).{" "}
-          <Link href="/subscribe" className="font-semibold text-[#d35400] hover:underline">
-            Unlock with Plus
-          </Link>
-          {viewer.thisSundayKey ? (
-            <>
-              {" · "}
-              <Link href={thisSundayHref} className="font-semibold text-[#335599] hover:underline">
-                This Sunday&apos;s sheet
-              </Link>
-            </>
-          ) : null}
-        </p>
-      ) : null}
 
       <ResourceSheetPanel
         sheet={sheet}

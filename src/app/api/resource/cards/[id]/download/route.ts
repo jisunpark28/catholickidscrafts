@@ -71,7 +71,7 @@ export async function GET(request: Request, ctx: Ctx) {
 
   let original;
   try {
-    original = await readCardOriginal(card.id);
+    original = await readCardOriginal(card.id, { oidcToken: request.headers.get("x-vercel-oidc-token") });
   } catch (e) {
     if (e instanceof CardOriginalUnavailableError) {
       return NextResponse.json({ error: e.message }, { status: 503, headers: noStore });

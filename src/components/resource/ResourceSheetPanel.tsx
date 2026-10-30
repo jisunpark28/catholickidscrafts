@@ -4,6 +4,7 @@ import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import { resourcePrintPath, yearLabel } from "@/lib/resource/sheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
+import { PlusLockButton } from "./PlusLockDialog";
 import { SheetFit } from "./SheetFit";
 
 type Props = {
@@ -47,7 +48,6 @@ function ActionButtons({
   level,
   isPlus = false,
   canPrint = true,
-  thisSundayHref = null,
 }: {
   sheetKey: string;
   level: 1 | 2;
@@ -56,7 +56,6 @@ function ActionButtons({
   thisSundayHref?: string | null;
 }) {
   const printHref = resourcePrintPath(sheetKey, level, true);
-  const lockedHref = "/subscribe";
   return (
     <>
       {canPrint ? (
@@ -69,14 +68,10 @@ function ActionButtons({
           🖨 Print
         </a>
       ) : (
-        <Link
-          href={lockedHref}
-          className={`${btn} border-[#d35400] bg-[#d35400] font-semibold text-white hover:bg-[#b8470a]`}
-          title="Print needs Plus (this Sunday is free)"
-        >
+        <PlusLockButton level={level} className={`${btn} border-[#d35400] bg-[#d35400] font-semibold text-white hover:bg-[#b8470a]`} title="Print needs Plus (this Sunday is free)">
           🖨 Print
           <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-bold">PLUS</span>
-        </Link>
+        </PlusLockButton>
       )}
       {canPrint ? (
         <a
@@ -89,23 +84,22 @@ function ActionButtons({
           ⬇ PDF
         </a>
       ) : (
-        <Link
-          href={thisSundayHref || lockedHref}
-          className={`${btn} border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]`}
-          title="PDF export needs Plus, or print this Sunday free"
-        >
+        <PlusLockButton level={level} className={`${btn} border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]`} title="PDF export needs Plus, or print this Sunday free">
           ⬇ PDF
           <span className="rounded-md bg-[#f5ebe0] px-1.5 py-0.5 text-[10px] font-bold text-[#d35400]">PLUS</span>
-        </Link>
+        </PlusLockButton>
       )}
-      <Link
-        href={isPlus ? resourceEditPath(sheetKey, level) : "/subscribe"}
-        className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`}
-        title={isPlus ? "Edit on the locked base sheet" : "Editing needs Plus"}
-      >
+      {isPlus ? (
+        <Link href={resourceEditPath(sheetKey, level)} className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`} title="Edit on the locked base sheet">
         <span aria-hidden>🔒</span> Edit
         <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
       </Link>
+      ) : (
+        <PlusLockButton level={level} className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`} title="Editing needs Plus">
+        <span aria-hidden>🔒</span> Edit
+        <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
+      </PlusLockButton>
+      )}
     </>
   );
 }
