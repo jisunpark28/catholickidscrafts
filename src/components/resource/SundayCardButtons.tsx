@@ -1,6 +1,7 @@
 "use client";
 
-import { cardDownloadPath, cardShareTargets, type PictureCard } from "@/lib/resource/card-meta";
+import { saveCardPng, shareCardPng } from "@/lib/resource/card-download-client";
+import { cardShareTargets, type PictureCard } from "@/lib/resource/card-meta";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
 export function SundayCardButtons({ card, siteUrl, primaryCls, ghostCls }: Props) {
   const [open, setOpen] = useState(false);
   const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
   const [canNative, setCanNative] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const share = cardShareTargets(card, siteUrl);
@@ -42,9 +44,20 @@ export function SundayCardButtons({ card, siteUrl, primaryCls, ghostCls }: Props
     }
     setOpen(false);
   };
+  const download = async () => {
+    setBusy(true);
+    setMsg("");
+    try {
+      await saveCardPng(card);
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : "Download failed.");
+    } finally {
+      setBusy(false);
+    }
+  };
   const nativeShare = async () => {
     try {
-      await navigator.share({ title: card.title, text: share.text, url: share.url });
+      await shareCardPng(card, share);
     } catch {
       /* cancelled */
     }
@@ -54,9 +67,9 @@ export function SundayCardButtons({ card, siteUrl, primaryCls, ghostCls }: Props
   return (
     <>
       <div className="flex flex-wrap gap-2">
-        <a href={cardDownloadPath(card.id)} download className={primaryCls}>
-          ⬇ Download
-        </a>
+        <button type="button" onClick={download} disabled={busy} className={primaryCls}>
+          {busy ? "Preparing\u2026" : <>⬇ Download</>}
+        </button>
         <div className="relative" ref={ref}>
           <button type="button" className={ghostCls} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
             Share

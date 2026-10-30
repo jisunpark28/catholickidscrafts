@@ -1,16 +1,20 @@
 "use client";
 
-import { cardDownloadPath, cardFileName, cardSharePath } from "@/lib/resource/card-meta";
-import Link from "next/link";
+import { saveCardPng, shareCardPng } from "@/lib/resource/card-download-client";
+import { cardSharePath } from "@/lib/resource/card-meta";
 import { useState } from "react";
+import { PlusLockDialog } from "./PlusLockDialog";
 
 type Props = {
   card: { id: string; title: string };
   isPlus: boolean;
+  /** Today's featured card: free for everyone (the download API agrees). */
+  isFree?: boolean;
   /** Absolute site origin for share links (server-provided, e.g. https://catholickidscrafts.com). */
   siteUrl: string;
   /** Compact = bundle column (stacked buttons, no share chips). */
   compact?: boolean;
+  level?: 1 | 2;
 };
 
 const btnBase =
@@ -19,48 +23,21 @@ const chip =
   "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium no-underline transition";
 const plusTag = "rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white";
 
-async function fetchCardBlob(id: string, inline: boolean): Promise<Blob> {
-  const res = await fetch(`${cardDownloadPath(id)}${inline ? "?inline=1" : ""}`, {
-    credentials: "same-origin",
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    let msg = "Could not get this card. Please try again.";
-    if (res.status === 401) msg = "Please sign in again to download cards.";
-    else if (res.status === 402) msg = "Card downloads are a Plus feature.";
-    try {
-      const j = (await res.json()) as { error?: string };
-      if (j?.error && res.status !== 402) msg = j.error;
-    } catch {
-      /* not JSON */
-    }
-    throw new Error(msg);
-  }
-  return res.blob();
-}
-
-/** Download PNG (4:5) + Share for one card. Plus-only; the API re-checks Plus on every request. */
-export function CardActions({ card, isPlus, siteUrl, compact = false }: Props) {
+/** Download PNG (4:5) + Share for one card. Plus, or today's free card; the API re-checks on every request. */
+export function CardActions({ card, isPlus, isFree = false, siteUrl, compact = false, level = 1 }: Props) {
   const [busy, setBusy] = useState<"" | "download" | "share">("");
   const [msg, setMsg] = useState<string>("");
+  const [lockOpen, setLockOpen] = useState(false);
 
   const shareUrl = `${siteUrl.replace(/\/$/, "")}${cardSharePath(card.id)}`;
-  const shareText = `${card.title} — a Little Light picture card from Catholic Kids Crafts`;
+  const shareText = `${card.title} \u2014 a Little Light picture card from Catholic Kids Crafts`;
   const enc = encodeURIComponent;
 
   const download = async () => {
     setBusy("download");
     setMsg("");
     try {
-      const blob = await fetchCardBlob(card.id, false);
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = cardFileName(card);
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      await saveCardPng(card);
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Download failed.");
     } finally {
@@ -85,18 +62,8 @@ export function CardActions({ card, isPlus, siteUrl, compact = false }: Props) {
     }
     setBusy("share");
     try {
-      // Phones: share the PNG itself when the browser allows files; otherwise the link.
-      let data: ShareData = { title: card.title, text: shareText, url: shareUrl };
-      try {
-        const blob = await fetchCardBlob(card.id, true);
-        const file = new File([blob], cardFileName(card), { type: "image/png" });
-        if (navigator.canShare?.({ files: [file] })) data = { ...data, files: [file] };
-      } catch (e) {
-        if (e instanceof Error && /sign in|Plus/.test(e.message)) throw e;
-      }
-      await navigator.share(data);
+      await shareCardPng(card, { url: shareUrl, text: shareText });
     } catch (e) {
-      if (e instanceof DOMException && e.name === "AbortError") return;
       setMsg(e instanceof Error ? e.message : "Share failed.");
     } finally {
       setBusy("");
@@ -104,33 +71,35 @@ export function CardActions({ card, isPlus, siteUrl, compact = false }: Props) {
   };
 
   const shareLinks = [
-    { label: "Messages", icon: "💬", href: `sms:?&body=${enc(`${shareText} ${shareUrl}`)}` },
+    { label: "Messages", icon: "\u{1F4AC}", href: `sms:?&body=${enc(`${shareText} ${shareUrl}`)}` },
     { label: "WhatsApp", icon: "", href: `https://wa.me/?text=${enc(`${shareText} ${shareUrl}`)}` },
     { label: "Facebook", icon: "", href: `https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}` },
-    { label: "Email", icon: "✉", href: `mailto:?subject=${enc(card.title)}&body=${enc(`${shareText}\n${shareUrl}`)}` },
+    { label: "Email", icon: "\u2709", href: `mailto:?subject=${enc(card.title)}&body=${enc(`${shareText}\n${shareUrl}`)}` },
   ];
 
-  if (!isPlus) {
+  if (!isPlus && !isFree) {
+    // Locked look stays; a click opens the small Plus popup (no inline Plus box).
+    const lockedBtn = `${btnBase} ${compact ? "min-w-[8.5rem] flex-1" : "w-full"} cursor-pointer border border-[#e7e3de] bg-[#f3f1ee] font-medium text-[#9ca3af]`;
     return (
       <div className="space-y-2.5">
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            disabled
-            aria-disabled="true"
+            aria-haspopup="dialog"
             title="Card downloads are a Plus feature"
-            className={`${btnBase} ${compact ? "min-w-[8.5rem] flex-1" : "w-full"} cursor-not-allowed border border-[#e7e3de] bg-[#f3f1ee] font-medium text-[#9ca3af]`}
+            onClick={() => setLockOpen(true)}
+            className={lockedBtn}
           >
-            🔒 Download PNG (4:5) <span className={plusTag}>PLUS</span>
+            {"\u{1F512}"} Download PNG (4:5) <span className={plusTag}>PLUS</span>
           </button>
           <button
             type="button"
-            disabled
-            aria-disabled="true"
+            aria-haspopup="dialog"
             title="Sharing cards is a Plus feature"
-            className={`${btnBase} ${compact ? "min-w-[8.5rem] flex-1" : "w-full"} cursor-not-allowed border border-[#e7e3de] bg-[#f3f1ee] font-medium text-[#9ca3af]`}
+            onClick={() => setLockOpen(true)}
+            className={lockedBtn}
           >
-            🔒 Share <span className={plusTag}>PLUS</span>
+            {"\u{1F512}"} Share <span className={plusTag}>PLUS</span>
           </button>
         </div>
         {compact ? null : (
@@ -142,34 +111,7 @@ export function CardActions({ card, isPlus, siteUrl, compact = false }: Props) {
             ))}
           </div>
         )}
-        {compact ? (
-          <Link
-            href="/subscribe"
-            className="inline-flex rounded-full bg-[#d35400] px-5 py-2 text-sm font-semibold text-white no-underline hover:bg-[#b8470a]"
-          >
-            Unlock with Plus
-          </Link>
-        ) : (
-          <div className="rounded-xl border border-[#f1d9c4] bg-[#fff6ef] p-3.5">
-            <div className="flex items-start gap-2.5">
-              <span aria-hidden className="text-xl leading-none">
-                🔒
-              </span>
-              <div className="min-w-0 flex-1 text-xs text-[#4b5563]">
-                <p className="m-0 text-sm font-bold text-[#1c1c1c]">Cards are a Plus feature</p>
-                <p className="m-0 mt-0.5">
-                  Join Plus to download every card as a PNG (4:5) and share it with families.
-                </p>
-              </div>
-            </div>
-            <Link
-              href="/subscribe"
-              className="mt-3 flex w-full justify-center rounded-full bg-[#d35400] px-4 py-2 text-sm font-semibold text-white no-underline hover:bg-[#b8470a]"
-            >
-              Unlock with Plus
-            </Link>
-          </div>
-        )}
+        <PlusLockDialog open={lockOpen} onClose={() => setLockOpen(false)} level={level} />
       </div>
     );
   }
@@ -183,7 +125,7 @@ export function CardActions({ card, isPlus, siteUrl, compact = false }: Props) {
           disabled={busy !== ""}
           className={`${btnBase} min-w-[8.5rem] flex-1 bg-[#d35400] text-white hover:bg-[#b8470a] disabled:opacity-70`}
         >
-          {busy === "download" ? "Preparing…" : "⬇ Download PNG (4:5)"}
+          {busy === "download" ? "Preparing\u2026" : "\u2B07 Download PNG (4:5)"}
         </button>
         <button
           type="button"
@@ -191,13 +133,13 @@ export function CardActions({ card, isPlus, siteUrl, compact = false }: Props) {
           disabled={busy !== ""}
           className={`${btnBase} min-w-[8.5rem] flex-1 border-2 border-[#d35400] bg-white text-[#d35400] hover:bg-[#fff6ef] disabled:opacity-70`}
         >
-          {busy === "share" ? "Sharing…" : "🔗 Share"}
+          {busy === "share" ? "Sharing\u2026" : "\u{1F517} Share"}
         </button>
       </div>
       {compact ? null : (
         <div className="flex flex-wrap gap-1.5">
           <button type="button" onClick={copyLink} className={`${chip} border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]`}>
-            🔗 Copy link
+            {"\u{1F517}"} Copy link
           </button>
           {shareLinks.map((l) => (
             <a

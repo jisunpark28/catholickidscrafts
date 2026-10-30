@@ -102,6 +102,8 @@ export default async function ResourcePage({ searchParams }: Props) {
   const sundayCards = sunday ? cardsForSunday(sunday.key) : { primary: null, more: [] };
   // Today's card (feast/saint by date, else this Sunday's, else the season card), picked per request.
   const featured = sunday ? featuredCardFor(country) : null;
+  // The one card free for everyone today (same rule as the download API and the card print page).
+  const freeCardId = (featured ?? featuredCardFor(country))?.card.id ?? null;
   const featuredIds = [featured?.card, sundayCards.primary, ...sundayCards.more]
     .filter((c) => c != null)
     .map((c) => c.id)
@@ -152,11 +154,14 @@ export default async function ResourcePage({ searchParams }: Props) {
           thisSundayKey={thisSundayKey}
           clearHref={clearHref}
           siteUrl={siteUrl}
+          freeCardId={freeCardId}
         />
       ) : view === "cards" ? (
         <CardsBrowser
           cards={PICTURE_CARDS.map((c) => toCardListItem(c, cardDates[c.id]))}
           isPlus={viewer.isPlus}
+          freeCardId={freeCardId}
+          level={level}
           siteUrl={siteUrl}
           featuredIds={featuredIds}
           initialQ={q}

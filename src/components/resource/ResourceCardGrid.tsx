@@ -2,6 +2,7 @@ import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { resourcePath, resourcePrintPath } from "@/lib/resource/sheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
+import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 
 type Props = {
@@ -83,22 +84,12 @@ export function ResourceCardGrid({
               ) : (
                 <div className="mt-auto px-1 pb-1 pt-3">
                   <div className="flex gap-2">
-                    <button
-                      type="button"
-                      disabled
-                      aria-disabled="true"
-                      className="cursor-not-allowed rounded-full bg-[#e7e3de] px-4 py-1.5 text-sm font-semibold text-[#6b7280]"
-                    >
+                    <PlusLockButton level={level} className="cursor-pointer rounded-full bg-[#e7e3de] px-4 py-1.5 text-sm font-semibold text-[#6b7280]">
                       Open
-                    </button>
-                    <button
-                      type="button"
-                      disabled
-                      aria-disabled="true"
-                      className="cursor-not-allowed rounded-full border border-[#e7e3de] px-4 py-1.5 text-sm font-medium text-[#9ca3af]"
-                    >
+                    </PlusLockButton>
+                    <PlusLockButton level={level} className="cursor-pointer rounded-full border border-[#e7e3de] px-4 py-1.5 text-sm font-medium text-[#9ca3af]">
                       🖨 Print
-                    </button>
+                    </PlusLockButton>
                   </div>
                   <p className="m-0 mt-2 text-xs text-[#6b7280]">
                     🔒 Plus members only ·{" "}

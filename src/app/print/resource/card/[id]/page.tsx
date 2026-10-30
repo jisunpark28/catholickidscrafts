@@ -1,9 +1,10 @@
+import { PlusLockOnLoad } from "@/components/resource/PlusLockDialog";
 import { CardAutoPrint } from "@/components/resource/CardAutoPrint";
 import { hasCardOriginal } from "@/lib/resource/card-originals";
 import { CARD_ID_RE, cardDownloadPath, cardThumbSrc, getPictureCard } from "@/lib/resource/cards";
+import { isFreeFeaturedCard } from "@/lib/resource/featured-card";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{ id: string }> };
@@ -27,30 +28,19 @@ html,body{margin:0;background:#fff}
 @media print{.card-print{padding:0}.card-print img{max-width:100%;max-height:none;break-inside:avoid}}
 `;
 
-/** Plus-only print page: just the full-res 4:5 PNG (served by the gated download API), auto-printing. */
+/** Print page (Plus, or today's free card): just the full-res 4:5 PNG (served by the gated download API), auto-printing. */
 export default async function CardPrintPage({ params }: Props) {
   const [{ id: raw }, viewer] = await Promise.all([params, resolveResourceViewer()]);
   const id = decodeURIComponent(raw).toUpperCase();
   const card = CARD_ID_RE.test(id) ? getPictureCard(id) : null;
   if (!card) notFound();
 
-  if (!viewer.isPlus) {
+  // Plus, or today's featured card (free for everyone, same rule as the download API).
+  if (!viewer.isPlus && !isFreeFeaturedCard(card.id, viewer.country)) {
     return (
-      <div className="mx-auto max-w-lg px-6 py-16 text-center">
-        <h1 className="text-xl font-bold text-[#1c1c1c]">Plus feature</h1>
-        <p className="mt-3 text-sm text-[#4b5563]">Printing picture cards is part of Plus.</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link href="/subscribe" className="rounded-full bg-[#d35400] px-5 py-2.5 text-sm font-semibold text-white no-underline">
-            Unlock with Plus
-          </Link>
-          <Link
-            href={`/resource?view=cards&card=${card.id}`}
-            className="rounded-full border border-[#e7e3de] px-5 py-2.5 text-sm font-medium text-[#1c1c1c] no-underline"
-          >
-            Back
-          </Link>
-        </div>
-      </div>
+      <main className="min-h-screen bg-[#fdfaf7]">
+        <PlusLockOnLoad backHref={`/resource?view=cards&card=${card.id}`} />
+      </main>
     );
   }
 

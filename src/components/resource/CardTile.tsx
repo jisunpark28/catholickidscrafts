@@ -1,13 +1,18 @@
 "use client";
 
 import { cardPrintPath, cardShareTargets, cardThumbSrc, type CardListItem } from "@/lib/resource/card-meta";
+import { shareCardPng } from "@/lib/resource/card-download-client";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { PlusLockDialog } from "./PlusLockDialog";
 
 type Props = {
   card: Pick<CardListItem, "id" | "title" | "cat" | "ref" | "when" | "date">;
   isPlus: boolean;
+  /** Today's featured card: free for everyone (Open / Print / Share unlocked). */
+  isFree?: boolean;
+  level?: 1 | 2;
   siteUrl: string;
   /** Selected in the Cards grid (orange border). */
   selected?: boolean;
@@ -33,7 +38,19 @@ function shortDate(ymd: string): string {
 }
 
 /** Card tile in the same shape as sheet tiles: image · ID · title · date/verse · Open / Print / Share. */
-export function CardTile({ card, isPlus, siteUrl, selected = false, onOpen, openHref, typeBadge }: Props) {
+export function CardTile({
+  card,
+  isPlus,
+  isFree = false,
+  level = 1,
+  siteUrl,
+  selected = false,
+  onOpen,
+  openHref,
+  typeBadge,
+}: Props) {
+  const unlocked = isPlus || isFree;
+  const [lockOpen, setLockOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [msg, setMsg] = useState("");
   const [canNative, setCanNative] = useState(false);
@@ -67,7 +84,7 @@ export function CardTile({ card, isPlus, siteUrl, selected = false, onOpen, open
   };
   const nativeShare = async () => {
     try {
-      await navigator.share({ title: card.title, text: share.text, url: share.url });
+      await shareCardPng(card, share);
     } catch {
       /* cancelled */
     }
@@ -89,10 +106,10 @@ export function CardTile({ card, isPlus, siteUrl, selected = false, onOpen, open
       {typeBadge ? <span className="absolute left-1.5 top-1.5">{typeBadge}</span> : null}
       <span
         className={`absolute right-1.5 top-1.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm ${
-          isPlus ? "bg-[#d35400] text-white" : "bg-white/95 text-[#d35400]"
+          isPlus ? "bg-[#d35400] text-white" : isFree ? "bg-[#e6f4ea] text-[#1e7b34]" : "bg-white/95 text-[#d35400]"
         }`}
       >
-        {isPlus ? "PLUS ✓" : "🔒 PLUS"}
+        {isPlus ? "PLUS ✓" : isFree ? "FREE" : "🔒 PLUS"}
       </span>
     </span>
   );
@@ -125,20 +142,20 @@ export function CardTile({ card, isPlus, siteUrl, selected = false, onOpen, open
       <div className="mt-auto px-1 pb-1 pt-2.5">
         {/* Narrow tiles (4-up beside the detail panel): Open on its own row, Print + Share below. */}
         <div className="grid grid-cols-2 gap-1.5">
-          {isPlus ? (
+          {unlocked ? (
             openEl(`${pillBtn} col-span-2 bg-[#d35400] text-white hover:bg-[#b8470a]`, "Open")
           ) : (
             // Same locked look as sheet tiles; the picture itself still opens the free preview.
             <button
               type="button"
-              disabled
-              aria-disabled="true"
-              className={`${pillBtn} col-span-2 cursor-not-allowed bg-[#e7e3de] text-[#6b7280]`}
+              aria-haspopup="dialog"
+              onClick={() => setLockOpen(true)}
+              className={`${pillBtn} col-span-2 cursor-pointer bg-[#e7e3de] text-[#6b7280]`}
             >
               Open
             </button>
           )}
-          {isPlus ? (
+          {unlocked ? (
             <>
               <a href={cardPrintPath(card.id)} target="_blank" rel="noopener" className={ghostBtn}>
                 🖨 Print
@@ -180,16 +197,16 @@ export function CardTile({ card, isPlus, siteUrl, selected = false, onOpen, open
             </>
           ) : (
             <>
-              <button type="button" disabled aria-disabled="true" className={`${ghostBtn} cursor-not-allowed text-[#9ca3af]`}>
+              <button type="button" aria-haspopup="dialog" onClick={() => setLockOpen(true)} className={`${ghostBtn} cursor-pointer text-[#9ca3af]`}>
                 🖨 Print
               </button>
-              <button type="button" disabled aria-disabled="true" className={`${ghostBtn} cursor-not-allowed text-[#9ca3af]`}>
+              <button type="button" aria-haspopup="dialog" onClick={() => setLockOpen(true)} className={`${ghostBtn} cursor-pointer text-[#9ca3af]`}>
                 🔗 Share
               </button>
             </>
           )}
         </div>
-        {isPlus ? (
+        {unlocked ? (
           msg ? (
             <p role="status" className="m-0 mt-1.5 break-all text-xs text-[#6b7280]">
               {msg}
@@ -204,6 +221,7 @@ export function CardTile({ card, isPlus, siteUrl, selected = false, onOpen, open
           </p>
         )}
       </div>
+      <PlusLockDialog open={lockOpen} onClose={() => setLockOpen(false)} level={level} />
     </div>
   );
 }

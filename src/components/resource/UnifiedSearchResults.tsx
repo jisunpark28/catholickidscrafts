@@ -5,6 +5,7 @@ import type { SearchHit } from "@/lib/resource/unified-search";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 import { CardTile } from "./CardTile";
+import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 
 type Props = {
@@ -16,6 +17,8 @@ type Props = {
   /** Where "Clear search" goes (the tab the search started from). */
   clearHref: string;
   siteUrl: string;
+  /** Today's featured card (free for everyone). */
+  freeCardId?: string | null;
   limit?: number;
 };
 
@@ -30,7 +33,7 @@ const typeBadge = (label: string, tone: "sheet" | "card") => (
 );
 
 /** One ranked results grid for a search from any tab: Weekly Sheets and Cards together. */
-export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, clearHref, siteUrl, limit = 48 }: Props) {
+export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, clearHref, siteUrl, freeCardId = null, limit = 48 }: Props) {
   const shown = hits.slice(0, limit);
   return (
     <section aria-label="Search results" className="mt-5">
@@ -54,6 +57,8 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                   <CardTile
                     card={c}
                     isPlus={isPlus}
+                    isFree={c.id === freeCardId}
+                    level={level}
                     siteUrl={siteUrl}
                     openHref={cardSharePath(c.id)}
                     typeBadge={typeBadge("Card", "card")}
@@ -125,12 +130,12 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                     {meta}
                     <div className="mt-auto px-1 pb-1 pt-2.5">
                       <div className="flex flex-wrap gap-1.5">
-                        <button type="button" disabled className={`${pill} cursor-not-allowed bg-[#e7e3de] text-[#6b7280]`}>
+                        <PlusLockButton level={level} className={`${pill} cursor-pointer bg-[#e7e3de] text-[#6b7280]`}>
                           Open
-                        </button>
-                        <button type="button" disabled className={`${ghost} cursor-not-allowed text-[#9ca3af]`}>
+                        </PlusLockButton>
+                        <PlusLockButton level={level} className={`${ghost} cursor-pointer text-[#9ca3af]`}>
                           🖨 Print
-                        </button>
+                        </PlusLockButton>
                       </div>
                       <p className="m-0 mt-1.5 text-xs text-[#6b7280]">
                         🔒 Plus members only ·{" "}
