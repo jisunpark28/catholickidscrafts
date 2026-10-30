@@ -1,4 +1,4 @@
-import { BillingButton } from "@/components/BillingButton";
+import { BillingButton, PlanCheckout } from "@/components/BillingButton";
 import { FamilyLogoutButton } from "@/components/FamilyLogoutButton";
 import { SubProfilesManager } from "@/components/SubProfilesManager";
 import { PageShell } from "@/components/PageShell";
@@ -10,7 +10,8 @@ import { canonicalForPath } from "@/lib/site-metadata";
 import { prisma } from "@/lib/prisma";
 import { isBillingConfigured } from "@/lib/stripe";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
-import { PLAN_FEATURES, PLUS_PRICE_LABEL, planRenewalLine } from "@/lib/subscription/plan-copy";
+import { formatPlanDate, ONE_TIME_LINE, PLAN_FEATURES, planRenewalLine } from "@/lib/subscription/plan-copy";
+import { daysLeft, EXPIRY_BANNER_DAYS } from "@/lib/subscription/pass-math";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -27,7 +28,12 @@ export default async function AccountDashboardPage() {
   const plan = await getFamilyPlan(session!.familyAccountId);
   const isPlus = plan.isPlus;
   const renewal = planRenewalLine(plan);
+  const btnPrimary =
+    "block w-full bg-[var(--color-accent)] px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60";
   const billingReady = isBillingConfigured();
+  const passEndsAt = plan.source === "pass" ? plan.passEndsAt : null;
+  const passDaysLeft = passEndsAt ? daysLeft(passEndsAt) : null;
+  const canBuy = billingReady && (plan.source === "pass" || plan.source === "free");
   const memoCount = await prisma.biblePassageMemo.count({
     where: { familyAccountId: session!.familyAccountId },
   });
@@ -76,31 +82,32 @@ export default async function AccountDashboardPage() {
                 </li>
               ))}
             </ul>
-            {!isPlus && (
-              <>
-                <p className="mt-5 text-2xl font-bold text-[var(--color-ink)]">
-                  {PLUS_PRICE_LABEL}<span className="text-sm font-normal text-[var(--color-muted)]">/month</span>
+            {passEndsAt && passDaysLeft !== null && (
+              <div
+                className={`mt-5 rounded-xl border px-4 py-3 ${
+                  passDaysLeft <= EXPIRY_BANNER_DAYS ? "border-[#f5c58a] bg-[#fff4e5]" : "border-[var(--color-border)] bg-[var(--color-surface)]"
+                }`}
+              >
+                <p className="text-sm font-bold text-[var(--color-ink)]">Plus until {formatPlanDate(passEndsAt)}</p>
+                <p className="mt-0.5 text-sm text-[var(--color-ink)]">
+                  {passDaysLeft} {passDaysLeft === 1 ? "day" : "days"} left
                 </p>
-                {billingReady ? (
-                  <div className="mt-3">
-                    <BillingButton action="checkout" className="block w-full bg-[var(--color-accent)] px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60">
-                      Upgrade to Plus
-                    </BillingButton>
-                  </div>
-                ) : (
-                  <Link href="/subscribe" className="mt-3 block bg-[var(--color-accent)] px-4 py-2.5 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)]">
-                    Upgrade to Plus
-                  </Link>
-                )}
-              </>
+              </div>
             )}
-            {renewal && <p className="mt-4 text-sm text-[var(--color-ink)]">{renewal}</p>}
-            <p className="mt-4 text-sm font-bold text-[var(--color-ink)]">
-              Cancel anytime. Your memos stay with you.
-            </p>
+            {!passEndsAt && renewal && <p className="mt-4 text-sm text-[var(--color-ink)]">{renewal}</p>}
+            {canBuy ? (
+              <div className="mt-5">
+                <PlanCheckout className={btnPrimary} extend={isPlus} />
+              </div>
+            ) : !isPlus ? (
+              <Link href="/subscribe" className={`mt-5 ${btnPrimary}`}>
+                Get Plus
+              </Link>
+            ) : null}
+            <p className="mt-4 text-sm font-bold text-[var(--color-ink)]">{ONE_TIME_LINE}</p>
             <p className="mt-1 text-xs leading-relaxed text-[var(--color-muted)]">
-              After canceling, you keep Plus until the end of your billing period. Your memos stay
-              readable; new memos need Plus.
+              Plus stops at the end of your pass - nothing to cancel. We email you 7 days and 1 day before it
+              ends. Your memos stay readable; new memos need Plus.
             </p>
             <p className="mt-3 text-xs text-[var(--color-muted)]">Secure checkout with Stripe.</p>
           </section>

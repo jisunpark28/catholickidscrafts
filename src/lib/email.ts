@@ -38,12 +38,17 @@ export function siteBase(): string {
   return getSiteUrl().replace(/\/$/, "");
 }
 
-/** CASL: sender identity, mailing address, and an unsubscribe link in every message. */
-export function complianceFooter(unsubscribeUrl: string | null): { html: string; text: string } {
+/**
+ * CASL: sender identity, mailing address, and an unsubscribe link in every message.
+ * `reason` replaces the default "why you got this" line (e.g. transactional account notices).
+ */
+export function complianceFooter(unsubscribeUrl: string | null, reason?: string): { html: string; text: string } {
   const address = process.env.MAILING_ADDRESS?.trim() ?? "";
   const from = process.env.EMAIL_FROM?.trim() ?? "";
   const lines = [`${SENDER_NAME} · ${siteBase()}`, address, from ? `Contact: ${from}` : ""].filter(Boolean);
-  const unsub = unsubscribeUrl
+  const unsub = reason
+    ? reason
+    : unsubscribeUrl
     ? `You are receiving this because you signed up for the weekly sheet. Unsubscribe: ${unsubscribeUrl}`
     : "You are receiving this because someone entered this address on our site. If it wasn't you, ignore this email and you won't hear from us.";
   return {
@@ -51,7 +56,7 @@ export function complianceFooter(unsubscribeUrl: string | null): { html: string;
     html: `<hr style="border:0;border-top:1px solid #ddd;margin:24px 0 12px"><p style="font-size:12px;color:#666;line-height:1.5">${lines
       .map(escapeHtml)
       .join("<br>")}<br>${
-      unsubscribeUrl
+      unsubscribeUrl && !reason
         ? `You are receiving this because you signed up for the weekly sheet. <a href="${escapeHtml(unsubscribeUrl)}">Unsubscribe</a>`
         : escapeHtml(unsub)
     }</p>`,

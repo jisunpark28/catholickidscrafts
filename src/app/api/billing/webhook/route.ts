@@ -7,6 +7,7 @@ import {
   linkCheckoutCustomer,
   syncSubscriptionById,
 } from "@/lib/subscription/billing-sync";
+import { grantPassFromCheckoutSession, revokePassForPaymentIntent } from "@/lib/subscription/plus-pass";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -29,12 +30,29 @@ function idOf(v: string | { id: string } | null | undefined): string | null {
 
 async function handle(stripe: Stripe, type: string, objectId: string): Promise<void> {
   switch (type) {
-    case "checkout.session.completed": {
+    case "checkout.session.completed":
+    case "checkout.session.async_payment_succeeded": {
       const session = await stripe.checkout.sessions.retrieve(objectId);
+      if (session.mode === "payment") {
+        // One-time Plus pass. Grants only when Stripe says the session is paid (idempotent).
+        const result = await grantPassFromCheckoutSession(stripe, session.id);
+        if (!result.granted) console.log("[billing] no pass granted", session.id, result.reason);
+        return;
+      }
       if (session.mode !== "subscription") return;
+      // Legacy subscription checkout (no longer sold; kept so old events still sync).
       await linkCheckoutCustomer(session);
       const subId = idOf(session.subscription);
       if (subId) await syncSubscriptionById(stripe, subId);
+      return;
+    }
+    case "charge.refunded": {
+      // Any refund turns that pass off immediately.
+      const charge = await stripe.charges.retrieve(objectId);
+      const paymentIntentId = idOf(charge.payment_intent);
+      if (paymentIntentId && (charge.refunded || charge.amount_refunded > 0)) {
+        await revokePassForPaymentIntent(paymentIntentId, charge.refunded ? "refunded" : "partially refunded");
+      }
       return;
     }
     case "customer.subscription.created":

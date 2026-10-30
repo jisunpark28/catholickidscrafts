@@ -1,7 +1,7 @@
 "use client";
 
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
-import { PLUS_PRICE_LABEL } from "@/lib/subscription/plan-copy";
+import { PLUS_FROM_LABEL, PLUS_PRICE_LABEL } from "@/lib/subscription/plan-copy";
 import {
   DEFAULT_MEMO_COLOR,
   MEMO_BODY_MAX,
@@ -427,7 +427,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       });
       const data = (await res.json().catch(() => ({}))) as { memo?: PassageMemoDto; error?: string };
       if (!res.ok || !data.memo) {
-        setError(res.status === 403 ? t("bible.memo.upsell_title", "Memos are part of the family subscription") : data.error ?? t("bible.memo.error", "Could not save memo. Please try again."));
+        setError(res.status === 403 ? t("bible.memo.upsell_title", "Memos are part of Plus") : data.error ?? t("bible.memo.error", "Could not save memo. Please try again."));
         return;
       }
       setMemos((list) => [...list, data.memo!].sort((a, b) => a.startVerse - b.startVerse));
@@ -611,19 +611,19 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
             🔒
           </span>
           <h3 id={`${dialogId}-up`} className="text-base font-bold">
-            {t("bible.memo.upsell_title", "Memos are part of the family subscription")}
+            {t("bible.memo.upsell_title", "Memos are part of Plus")}
           </h3>
         </div>
         <p className="mt-2 text-sm text-[var(--color-muted)]">
-          {t("bible.memo.upsell_body", "Typing the Bible is free. Subscribe to save memos on your favourite passages.")}
+          {t("bible.memo.upsell_body", "Typing the Bible is free. Get Plus to save memos on your favourite passages.")}
         </p>
         <p className="mt-3 text-xl font-bold">
-          {t("bible.memo.upsell_price", PLUS_PRICE_LABEL)}
-          <span className="text-sm font-normal text-[var(--color-muted)]">{t("bible.memo.upsell_period", "/mo")}</span>
+          {PLUS_PRICE_LABEL}
+          <span className="text-sm font-normal text-[var(--color-muted)]"> / 1 month · one-time, no auto-renew</span>
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Link href={SUBSCRIBE_HREF} className={btnPrimary} autoFocus>
-            {t("bible.memo.upsell_cta", "Start subscription")}
+            {t("bible.memo.upsell_cta", "Get Plus")}
           </Link>
           <button type="button" className={btnGhost} onClick={() => closeAll()}>
             {t("bible.memo.upsell_dismiss", "Not now")}
@@ -635,7 +635,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
             <>
               {" "}
               <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
-                {t("bible.memo.upsell_signin", "Already subscribed? Sign in")}
+                {t("bible.memo.upsell_signin", "Already have Plus? Sign in")}
               </Link>
             </>
           )}
@@ -875,7 +875,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
               <p className="mt-2 text-xs text-[var(--color-muted)]">
                 {t("bible.memo.plan_ended", "Your Plus plan has ended.")}{" "}
                 <Link href={SUBSCRIBE_HREF} className="font-semibold text-[var(--color-link)]">
-                  {t("bible.memo.renew", "Renew")} · {PLUS_PRICE_LABEL}/month
+                  {t("bible.memo.renew", "Renew")} · {PLUS_FROM_LABEL}
                 </Link>
               </p>
             )}
@@ -979,7 +979,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           : t("bible.memo.list_hint_readonly", "Your Plus plan has ended, so memos are read-only. You can still view and delete them.")}{" "}
         {!paid && (
           <Link href={SUBSCRIBE_HREF} className="font-semibold text-[var(--color-link)]">
-            {lock} {t("bible.memo.upsell_cta", "Start subscription")}
+            {lock} {t("bible.memo.upsell_cta", "Get Plus")}
           </Link>
         )}
       </p>

@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { getSiteUrl } from "@/lib/site-url";
+import type { PassPlan } from "@/lib/subscription/pass-math";
 
 let client: Stripe | null = null;
 
@@ -11,17 +12,25 @@ export function getStripe(): Stripe | null {
   return client;
 }
 
-export function stripePriceMonthly(): string | null {
-  return process.env.STRIPE_PRICE_MONTHLY?.trim() || null;
+/** Stripe Price ids for the one-time Plus passes (US$5.99 / 1 month, US$29.99 / 1 year). Server-only. */
+export function stripePriceForPlan(plan: PassPlan): string | null {
+  const raw = plan === "year" ? process.env.STRIPE_PRICE_YEAR : process.env.STRIPE_PRICE_MONTH;
+  const id = raw?.trim();
+  return id && /^price_[A-Za-z0-9]+$/.test(id) ? id : null;
 }
 
-/** Optional; annual plan is not offered yet. */
-export function stripePriceAnnual(): string | null {
-  return process.env.STRIPE_PRICE_ANNUAL?.trim() || null;
+/** Which plan a Stripe Price id belongs to (null for anything that isn't one of our two prices). */
+export function planForStripePrice(priceId: string | null | undefined): PassPlan | null {
+  if (!priceId) return null;
+  if (priceId === stripePriceForPlan("month")) return "month";
+  if (priceId === stripePriceForPlan("year")) return "year";
+  return null;
 }
 
 export function isBillingConfigured(): boolean {
-  return Boolean(process.env.STRIPE_SECRET_KEY?.trim() && stripePriceMonthly());
+  return Boolean(
+    process.env.STRIPE_SECRET_KEY?.trim() && stripePriceForPlan("month") && stripePriceForPlan("year"),
+  );
 }
 
 export function automaticTaxEnabled(): boolean {

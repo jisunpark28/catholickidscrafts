@@ -41,7 +41,7 @@ export default async function AccountLoginPage({ searchParams }: Props) {
             <FamilyLoginForm error={googleError} />
           </div>
           <p className="mt-4 text-center text-[13px] text-[var(--color-muted)]">
-            Plus is CA$5.99/month · cancel anytime
+            Plus from US$5.99 · one-time payment, no auto-renew
           </p>
         </div>
       </div>

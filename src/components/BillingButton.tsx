@@ -1,17 +1,17 @@
 "use client";
 
-import { PLAN_OPTIONS, type PlanInterval } from "@/lib/subscription/plan-copy";
+import { ONE_TIME_LINE, PLAN_OPTIONS, type PlanInterval } from "@/lib/subscription/plan-copy";
 import { useRef, useState } from "react";
 
 type Props = {
   action: "checkout" | "portal";
-  /** Checkout billing interval (default month). */
+  /** Which one-time pass to buy (default 1 month). */
   interval?: PlanInterval;
   className?: string;
   children: React.ReactNode;
 };
 
-/** Starts Stripe Checkout or opens the Customer Portal, then redirects the browser. */
+/** Starts a one-time Stripe Checkout for a Plus pass or opens the Customer Portal, then redirects the browser. */
 export function BillingButton({ action, interval = "month", className, children }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export function BillingButton({ action, interval = "month", className, children 
       const res = await fetch(`/api/billing/${action}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(action === "checkout" ? { interval } : {}),
+        body: JSON.stringify(action === "checkout" ? { plan: interval } : {}),
       });
       const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
       if (res.ok && data.url) {
@@ -55,8 +55,8 @@ export function BillingButton({ action, interval = "month", className, children 
   );
 }
 
-/** "Choose your plan" radiogroup (Monthly / Yearly) + checkout button. */
-export function PlanCheckout({ className }: { className?: string }) {
+/** "Choose your plan" radiogroup (1 month / 1 year one-time passes) + checkout button. */
+export function PlanCheckout({ className, extend = false }: { className?: string; extend?: boolean }) {
   const [selected, setSelected] = useState<PlanInterval>("year");
   const refs = useRef<Record<PlanInterval, HTMLDivElement | null>>({ month: null, year: null });
   const order: PlanInterval[] = ["month", "year"];
@@ -136,11 +136,13 @@ export function PlanCheckout({ className }: { className?: string }) {
       </div>
       <div className="mt-4">
         <BillingButton action="checkout" interval={selected} className={className}>
-          {opt.cta} · {opt.price}
-          {opt.unit}
+          {extend ? opt.cta.replace(/^Get/, "Add") : opt.cta} · {opt.price}
         </BillingButton>
       </div>
-      <p className="mt-2 text-center text-xs text-[var(--color-muted)]">Renews automatically. Cancel anytime.</p>
+      <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
+        {ONE_TIME_LINE}
+        {extend ? " The new time starts when your current Plus ends." : ""}
+      </p>
     </div>
   );
 }
