@@ -117,3 +117,10 @@ export const FEEDBACK_RULE: RateLimitRule = {
   windowMs: 10 * 60 * 1000,
   blockMs: 30 * 60 * 1000,
 };
+
+/** Plus checkout: 10 Checkout sessions per family / IP in 10 minutes, then 15 minutes blocked. */
+export const CHECKOUT_RULE: RateLimitRule = {
+  max: 10,
+  windowMs: 10 * 60 * 1000,
+  blockMs: 15 * 60 * 1000,
+};

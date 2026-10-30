@@ -333,6 +333,7 @@ model FamilyAccount {
   passageMemos       BiblePassageMemo[]       @relation("OwnerPassageMemos")
   gallerySubmissions CraftGallerySubmission[]
   billingCustomer    BillingCustomer?
+  plusPasses         PlusPass[]
   customSheets       CustomSheet[]
   sheetPhotos        SheetPhoto[]
 }
@@ -585,6 +586,34 @@ model Subscription {
   billingCustomer      BillingCustomer    @relation(fields: [billingCustomerId], references: [id], onDelete: Cascade)
 
   @@index([billingCustomerId])
+}
+
+/// One-time Plus purchase (Stripe Checkout, payment mode). No auto-renew: access ends at expiresAt.
+/// Buying again while a pass is running stacks: the new pass starts when the current one ends.
+model PlusPass {
+  id                      String        @id @default(cuid())
+  familyAccountId         String
+  /// "month" | "year"
+  plan                    String
+  stripeCheckoutSessionId String        @unique
+  stripePaymentIntentId   String?       @unique
+  stripePriceId           String
+  /// Amount actually paid, in the smallest currency unit (after promotion codes).
+  amountTotal             Int
+  currency                String
+  startsAt                DateTime
+  expiresAt               DateTime
+  /// Set on refund: the pass stops granting Plus immediately.
+  revokedAt               DateTime?
+  revokeReason            String?
+  reminder7SentAt         DateTime?
+  reminder1SentAt         DateTime?
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+  familyAccount           FamilyAccount @relation(fields: [familyAccountId], references: [id], onDelete: Cascade)
+
+  @@index([familyAccountId, expiresAt])
+  @@index([expiresAt])
 }
 
 /// Processed Stripe webhook events (idempotency + audit).

@@ -3,9 +3,9 @@ import { PageShell } from "@/components/PageShell";
 import { getReaderKey } from "@/lib/bible/reader";
 import { requireFamilySession, requireParentActive } from "@/lib/family-auth";
 import { pageMetadata } from "@/lib/site-metadata";
-import { isBillingConfigured, stripePriceAnnual } from "@/lib/stripe";
+import { isBillingConfigured } from "@/lib/stripe";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
-import { PLAN_FEATURES, PLUS_PRICE_LABEL, planRenewalLine } from "@/lib/subscription/plan-copy";
+import { ONE_TIME_LINE, PLAN_FEATURES, PLAN_OPTIONS, planRenewalLine } from "@/lib/subscription/plan-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Catholic Kids Crafts Plus – Family Plan",
   absoluteTitle: true,
   description:
-    "One Plus plan for the whole family, up to 5 children: Bible typing extras, memos and catechism activities. CA$5.99/month, cancel anytime.",
+    "One Plus plan for the whole family, up to 5 children: Bible typing extras, memos and catechism activities. US$5.99 for 1 month or US$29.99 for 1 year. One-time payment, no auto-renew.",
   path: "/subscribe",
 });
 
@@ -30,9 +30,10 @@ export default async function SubscribePage() {
   const plan = session ? await getFamilyPlan(session.familyAccountId) : null;
   const configured = isBillingConfigured();
   const renewal = plan ? planRenewalLine(plan) : null;
-  // Only a boolean reaches the client; the price id stays on the server.
-  const annualAvailable = Boolean(stripePriceAnnual());
-  const showPlanCards = !isChild && Boolean(session) && !plan?.isPlus && configured && annualAvailable;
+  // Price ids stay on the server; the client only sends "month" or "year".
+  const onLegacySubscription = plan?.source === "stripe";
+  const onPreview = plan?.source === "preview";
+  const canBuy = !isChild && Boolean(session) && configured && !onLegacySubscription && !onPreview;
 
   return (
     <PageShell>
@@ -47,12 +48,17 @@ export default async function SubscribePage() {
       </p>
 
       <section className="mt-8 border border-[var(--color-border)] bg-white p-5 sm:p-6">
-        {!showPlanCards && (
-          <p className="text-3xl font-bold text-[var(--color-ink)]">
-            {PLUS_PRICE_LABEL}
-            <span className="text-sm font-normal text-[var(--color-muted)]">/month</span>
-          </p>
+        {!canBuy && (
+          <div className="flex flex-wrap gap-6">
+            {(["month", "year"] as const).map((k) => (
+              <p key={k} className="text-3xl font-bold text-[var(--color-ink)]">
+                {PLAN_OPTIONS[k].price}
+                <span className="text-sm font-normal text-[var(--color-muted)]">{PLAN_OPTIONS[k].unit}</span>
+              </p>
+            ))}
+          </div>
         )}
+        <p className="mt-2 text-sm font-bold text-[var(--color-ink)]">{ONE_TIME_LINE}</p>
         <ul className="mt-4 space-y-2 text-sm">
           {PLAN_FEATURES.map((f) => (
             <li key={f.label} className="flex items-center justify-between gap-2">
@@ -68,15 +74,15 @@ export default async function SubscribePage() {
           ) : !session ? (
             <>
               <Link href="/account/login" className={btn}>
-                Sign in with Google to subscribe
+                Sign in with Google to get Plus
               </Link>
               <p className="mt-2 text-xs text-[var(--color-muted)]">Parents sign in with their Google account.</p>
             </>
-          ) : plan?.isPlus ? (
+          ) : onLegacySubscription || onPreview ? (
             <>
               <p className="text-sm font-bold text-green-800">Your family has Plus.</p>
               {renewal && <p className="mt-1 text-xs text-[var(--color-muted)]">{renewal}</p>}
-              {plan.hasCustomer && configured && (
+              {onLegacySubscription && plan?.hasCustomer && configured && (
                 <div className="mt-3">
                   <BillingButton action="portal" className={btn}>
                     Manage subscription
@@ -85,20 +91,25 @@ export default async function SubscribePage() {
               )}
             </>
           ) : !configured ? (
-            <p className="text-sm font-semibold text-[var(--color-muted)]">Subscriptions open soon.</p>
-          ) : showPlanCards ? (
-            <PlanCheckout className={btn} />
+            <p className="text-sm font-semibold text-[var(--color-muted)]">Plus opens soon.</p>
           ) : (
-            <BillingButton action="checkout" className={btn}>
-              Upgrade to Plus
-            </BillingButton>
+            <>
+              {plan?.isPlus && (
+                <div className="mb-4">
+                  <p className="text-sm font-bold text-green-800">Your family has Plus.</p>
+                  {renewal && <p className="mt-1 text-xs text-[var(--color-muted)]">{renewal}</p>}
+                </div>
+              )}
+              <PlanCheckout className={btn} extend={Boolean(plan?.isPlus)} />
+            </>
           )}
         </div>
 
-        <p className="mt-5 text-sm font-bold text-[var(--color-ink)]">Cancel anytime. Your memos stay with you.</p>
+        <p className="mt-5 text-sm font-bold text-[var(--color-ink)]">Nothing to cancel. Your memos stay with you.</p>
         <p className="mt-1 text-xs leading-relaxed text-[var(--color-muted)]">
-          After canceling, you keep Plus until the end of your billing period. Your memos stay readable; new
-          memos need Plus. Prices in Canadian dollars{process.env.STRIPE_AUTOMATIC_TAX === "1" ? "; tax calculated at checkout" : ""}.
+          Plus simply stops at the end of your pass - we never charge you again. We email you 7 days and 1 day
+          before it ends. Buying again adds time after your current pass. When Plus ends, your memos stay
+          readable; new memos need Plus. Prices in US dollars{process.env.STRIPE_AUTOMATIC_TAX === "1" ? "; tax calculated at checkout" : ""}.
         </p>
         <p className="mt-3 text-xs text-[var(--color-muted)]">Secure checkout with Stripe.</p>
       </section>

@@ -1,11 +1,13 @@
 import type { ReaderKey } from "@/lib/bible/reader";
 import { prisma } from "@/lib/prisma";
+import { getFamilyPassStatus, type FamilyPassStatus } from "@/lib/subscription/plus-pass";
 import { subscriptionGrantsPlus, type SubscriptionSnapshot } from "@/lib/subscription/status";
 
 /**
  * Paid-feature gate. Plus is decided ONLY by the family account behind the signed-in
- * reader (signed ckc_family / ckc_reader session -> familyAccountId): an active Stripe
- * Subscription row or the family's email in PAID_PREVIEW_EMAILS (comma-separated).
+ * reader (signed ckc_family / ckc_reader session -> familyAccountId): an active one-time
+ * PlusPass first, then a legacy Stripe Subscription row, then the family's email in
+ * PAID_PREVIEW_EMAILS (comma-separated).
  * Admin sessions never grant Plus. Sub profiles inherit their parent family's plan.
  * Server-only: always re-check in API routes. Never cache across requests/users.
  */
@@ -28,17 +30,21 @@ async function familyEmail(familyAccountId: string): Promise<string | null> {
 }
 
 /** Single source of truth for a family's plan (used by paywalls, /account and the header badge). */
-export async function resolveFamilyPlus(
-  familyAccountId: string,
-): Promise<{ isPlus: boolean; source: "stripe" | "preview" | "free"; sub: Awaited<ReturnType<typeof getFamilySubscription>> }> {
-  const sub = await getFamilySubscription(familyAccountId);
-  if (sub.grantsPlus) return { isPlus: true, source: "stripe", sub };
+export async function resolveFamilyPlus(familyAccountId: string): Promise<{
+  isPlus: boolean;
+  source: "pass" | "stripe" | "preview" | "free";
+  pass: FamilyPassStatus;
+  sub: Awaited<ReturnType<typeof getFamilySubscription>>;
+}> {
+  const [pass, sub] = await Promise.all([getFamilyPassStatus(familyAccountId), getFamilySubscription(familyAccountId)]);
+  if (pass.active) return { isPlus: true, source: "pass", pass, sub };
+  if (sub.grantsPlus) return { isPlus: true, source: "stripe", pass, sub };
   const allow = paidPreviewEmails();
   if (allow.size > 0) {
     const email = await familyEmail(familyAccountId);
-    if (email && allow.has(email)) return { isPlus: true, source: "preview", sub };
+    if (email && allow.has(email)) return { isPlus: true, source: "preview", pass, sub };
   }
-  return { isPlus: false, source: "free", sub };
+  return { isPlus: false, source: "free", pass, sub };
 }
 
 export async function hasPaidFeatures(key: ReaderKey | null): Promise<boolean> {
@@ -102,12 +108,16 @@ export async function hasActiveSubscription(familyAccountId: string): Promise<bo
 
 /** Plan summary for the parent's /account page and /subscribe. Email is re-read from the DB, not trusted from the caller. */
 export async function getFamilyPlan(familyAccountId: string) {
-  const { isPlus, source, sub } = await resolveFamilyPlus(familyAccountId);
+  const { isPlus, source, pass, sub } = await resolveFamilyPlus(familyAccountId);
   const { customer, subscription } = sub;
   return {
     isPlus,
     source,
     hasCustomer: Boolean(customer),
+    /** End of the family's one-time Plus (stacked passes included), or null. */
+    passEndsAt: pass.endsAt,
+    /** Legacy subscription fields (kept as a fallback; no new subscriptions are sold). */
+    hasLegacySubscription: Boolean(sub.grantsPlus),
     status: subscription?.status ?? null,
     currentPeriodEnd: subscription?.currentPeriodEnd ?? null,
     cancelAtPeriodEnd: subscription?.cancelAtPeriodEnd ?? false,

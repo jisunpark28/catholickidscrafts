@@ -101,9 +101,9 @@ export default async function ResourcesPage() {
           href="/subscribe"
           className="mt-4 inline-block rounded-full bg-[#d35400] px-6 py-2.5 font-bold text-white no-underline"
         >
-          Subscribe
+          Get Plus
         </Link>
-        <p className="mt-3 text-xs text-[#6b7280]">Cancel anytime. Secure checkout with Stripe.</p>
+        <p className="mt-3 text-xs text-[#6b7280]">One-time payment. No auto-renew. Secure checkout with Stripe.</p>
       </section>
     </HomePdfShell>
   );

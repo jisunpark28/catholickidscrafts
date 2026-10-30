@@ -1,8 +1,9 @@
 import { PageShell } from "@/components/PageShell";
 import { requireParentActive } from "@/lib/family-auth";
 import { getStripe } from "@/lib/stripe";
-import { linkCheckoutCustomer, syncSubscriptionById } from "@/lib/subscription/billing-sync";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
+import { formatPlanDate } from "@/lib/subscription/plan-copy";
+import { grantPassFromCheckoutSession } from "@/lib/subscription/plus-pass";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,16 +16,15 @@ export const metadata: Metadata = {
 
 type Props = { searchParams: Promise<{ session_id?: string }> };
 
-/** Sync right away so Plus shows even if the webhook is still on its way. */
+/** Grant right away so Plus shows even if the webhook is still on its way (idempotent with it). */
 async function syncFromCheckout(sessionId: string, familyAccountId: string) {
   const stripe = getStripe();
   if (!stripe || !/^cs_[A-Za-z0-9_]+$/.test(sessionId)) return;
   try {
     const checkout = await stripe.checkout.sessions.retrieve(sessionId);
-    if (checkout.client_reference_id !== familyAccountId) return;
-    await linkCheckoutCustomer(checkout);
-    const subId = typeof checkout.subscription === "string" ? checkout.subscription : checkout.subscription?.id;
-    if (subId) await syncSubscriptionById(stripe, subId);
+    // Only the family that started this checkout can trigger the grant from this page.
+    if (checkout.client_reference_id !== familyAccountId || checkout.mode !== "payment") return;
+    await grantPassFromCheckoutSession(stripe, checkout.id);
   } catch (err) {
     console.error("[billing] success-page sync failed", err);
   }
@@ -44,6 +44,7 @@ export default async function SubscribeSuccessPage({ searchParams }: Props) {
       {plan?.isPlus ? (
         <p className="mt-3 text-sm text-[var(--color-ink)]">
           Your family now has Plus. Every child profile on your account can use memos and catechism activities.
+          {plan.passEndsAt && <> Plus is active until {formatPlanDate(plan.passEndsAt)}.</>}
         </p>
       ) : (
         <p className="mt-3 text-sm text-[var(--color-ink)]">
@@ -51,7 +52,7 @@ export default async function SubscribeSuccessPage({ searchParams }: Props) {
           family account shortly.
         </p>
       )}
-      <p className="mt-2 text-xs text-[var(--color-muted)]">A receipt is on its way to your email from Stripe.</p>
+      <p className="mt-2 text-xs text-[var(--color-muted)]">One-time payment. No auto-renew. A receipt is on its way to your email from Stripe.</p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
           href="/account"

@@ -10,6 +10,8 @@ export type HeaderSessionResponse = {
     children?: HeaderSessionChild[];
     /** Device is in child mode: returning to the parent needs a fresh Google sign-in. */
     childMode?: boolean;
+    /** ISO end of the family's one-time Plus pass (parent only; null in child mode). */
+    plusEndsAt?: string | null;
   } | null;
   reader: { type: "owner" | "sub"; displayName: string; subProfileId?: string } | null;
 };

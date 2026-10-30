@@ -2,7 +2,7 @@ import { effectiveReaderMode, getFamilySession } from "@/lib/family-auth";
 import { getReaderKey } from "@/lib/bible/reader";
 import type { HeaderSessionResponse } from "@/lib/header-session";
 import { prisma } from "@/lib/prisma";
-import { familyHasPlus } from "@/lib/subscription/entitlements";
+import { resolveFamilyPlus } from "@/lib/subscription/entitlements";
 
 export async function getHeaderSession(): Promise<HeaderSessionResponse> {
   const [familySession, readerKey] = await Promise.all([
@@ -13,7 +13,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
   let family: HeaderSessionResponse["family"] = null;
   if (familySession) {
     const familyAccountId = familySession.familyAccountId;
-    const [account, children, isPlus, mode] = await Promise.all([
+    const [account, children, plus, mode] = await Promise.all([
       prisma.familyAccount.findUnique({
         where: { id: familyAccountId },
         select: { email: true, displayName: true },
@@ -25,10 +25,12 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
           orderBy: { createdAt: "asc" },
         })
         .catch(() => []),
-      familyHasPlus(familyAccountId).catch(() => false),
+      resolveFamilyPlus(familyAccountId).catch(() => null),
       effectiveReaderMode(familySession),
     ]);
     const childMode = mode.type === "sub" || readerKey?.type === "sub";
+    const isPlus = Boolean(plus?.isPlus);
+    const plusEndsAt = plus?.source === "pass" && plus.pass.endsAt ? plus.pass.endsAt.toISOString() : null;
     if (account) {
       family = childMode
         ? {
@@ -41,6 +43,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
                 ? children.filter((c) => c.id === readerKey.subProfileId)
                 : [],
             childMode: true,
+            plusEndsAt: null,
           }
         : {
             email: account.email,
@@ -48,6 +51,7 @@ export async function getHeaderSession(): Promise<HeaderSessionResponse> {
             isPlus,
             children,
             childMode: false,
+            plusEndsAt,
           };
     }
   }
