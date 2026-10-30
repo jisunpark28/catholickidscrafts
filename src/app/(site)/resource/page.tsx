@@ -3,9 +3,9 @@ import { CardsBrowser } from "@/components/resource/CardsBrowser";
 import { CustomSheetCardGrid } from "@/components/resource/CustomSheetCardGrid";
 import { ResourceCardGrid } from "@/components/resource/ResourceCardGrid";
 import { ResourceSearchBar } from "@/components/resource/ResourceSearchBar";
-import { ResourceSheetPanel } from "@/components/resource/ResourceSheetPanel";
 import { ResourceTabs } from "@/components/resource/ResourceTabs";
-import { ThisSundayCards } from "@/components/resource/ThisSundayCards";
+import { SundayBundle } from "@/components/resource/SundayBundle";
+import { UnifiedSearchResults } from "@/components/resource/UnifiedSearchResults";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { requireFamilySession } from "@/lib/family-auth";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
@@ -13,26 +13,17 @@ import { upcomingCardDates } from "@/lib/resource/card-calendar";
 import {
   cardsForSunday,
   getPictureCard,
-  parseCardCategory,
   PICTURE_CARDS,
   toCardListItem,
 } from "@/lib/resource/cards";
 import { getResourceNav } from "@/lib/resource/nav";
 import { listCustomSheets } from "@/lib/resource/custom-sheet-db";
+import { featuredCardFor } from "@/lib/resource/featured-card";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
-import {
-  parseSeason,
-  RESOURCE_SEASONS,
-  resourcePath,
-  searchSheets,
-  seasonLabel,
-  sheetSeason,
-  yearLabel,
-} from "@/lib/resource/sheets";
+import { parseSeason, RESOURCE_SEASONS, searchSheets } from "@/lib/resource/sheets";
 import {
   COUNTRY_COOKIE,
   COUNTRY_LABELS,
-  formatSundayDate,
   pickCountry,
   thisSunday,
   todayIn,
@@ -40,7 +31,8 @@ import {
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode } from "@/lib/structured-data";
 import { getSiteUrl } from "@/lib/site-url";
-import { getSundaySheet, listSundaySheetKeys } from "@/lib/sunday-sheet-content";
+import { unifiedSearch } from "@/lib/resource/unified-search";
+import { getSundaySheet } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import { cookies, headers } from "next/headers";
 import Link from "next/link";
@@ -92,22 +84,36 @@ export default async function ResourcePage({ searchParams }: Props) {
   const viewParam = parseView(one(sp.view));
   const country = pickCountry(undefined, cookieStore.get(COUNTRY_COOKIE)?.value, h.get("x-vercel-ip-country"));
 
-  const searching = Boolean(q.trim() || season);
+  // A text search shows one unified results view (sheets + cards); the tab stays in the URL
+  // so "Clear search" returns to it. A season filter alone still opens the Weekly Sheet list.
+  const searchMode = Boolean(q.trim());
   const view: ResourceView =
     viewParam === "custom" || viewParam === "cards"
       ? viewParam
-      : searching || viewParam === "all"
+      : viewParam === "all" || (!searchMode && season)
         ? "all"
         : "";
 
   const sunday = view === "" || view === "cards" ? thisSunday(country) : null;
   const sheet = sunday ? getSundaySheet(sunday.key) : null;
-  const results = view === "all" ? searchSheets({ q, season }) : [];
+  const results = view === "all" && !searchMode ? searchSheets({ q: "", season }) : [];
   const thisSundayKey = viewer.thisSundayKey ?? sunday?.key ?? null;
   const siteUrl = getSiteUrl();
   const sundayCards = sunday ? cardsForSunday(sunday.key) : { primary: null, more: [] };
+  // Today's card (feast/saint by date, else this Sunday's, else the season card), picked per request.
+  const featured = sunday ? featuredCardFor(country) : null;
+  const featuredIds = [featured?.card, sundayCards.primary, ...sundayCards.more]
+    .filter((c) => c != null)
+    .map((c) => c.id)
+    .filter((id, i, all) => all.indexOf(id) === i);
   const cardDates = view === "cards" && sunday ? upcomingCardDates(todayIn(country, new Date()), sunday.date, country) : {};
-  const sheetCount = listSundaySheetKeys().length * 2;
+  const cardsSundayOnly = view === "cards" && !searchMode && one(sp.sunday) === "1";
+  const searchHits = searchMode ? unifiedSearch(q, season, thisSundayKey) : [];
+  const clearParams = new URLSearchParams();
+  if (view) clearParams.set("view", view);
+  if (season && view !== "") clearParams.set("season", season);
+  if (level === 2) clearParams.set("level", "2");
+  const clearHref = `/resource${clearParams.toString() ? `?${clearParams.toString()}` : ""}`;
 
   let customSheets: Awaited<ReturnType<typeof listCustomSheets>> = [];
   let customError: string | null = null;
@@ -128,26 +134,35 @@ export default async function ResourcePage({ searchParams }: Props) {
       <JsonLd nodes={[breadcrumbNode([{ name: "Resource", path: "/resource" }])]} />
       <h1 className="sr-only">Sunday Gospel activity sheets</h1>
       <ResourceSearchBar
-        state={{ q, season: season ?? "", level, view }}
+        state={{ q, season: season ?? "", level, view, sunday: cardsSundayOnly }}
         seasons={RESOURCE_SEASONS}
         isPlus={viewer.isPlus}
       />
       <ResourceTabs
-        active={view === "" ? "sunday" : view === "all" ? "sheets" : view}
-        sheetCount={sheetCount}
-        cardCount={PICTURE_CARDS.length}
+        active={searchMode ? null : view === "" ? "sunday" : view === "all" ? "sheets" : view}
         level={level}
       />
 
-      {view === "cards" ? (
+      {searchMode ? (
+        <UnifiedSearchResults
+          q={q.trim()}
+          hits={searchHits}
+          level={level}
+          isPlus={viewer.isPlus}
+          thisSundayKey={thisSundayKey}
+          clearHref={clearHref}
+          siteUrl={siteUrl}
+        />
+      ) : view === "cards" ? (
         <CardsBrowser
           cards={PICTURE_CARDS.map((c) => toCardListItem(c, cardDates[c.id]))}
           isPlus={viewer.isPlus}
           siteUrl={siteUrl}
-          featuredIds={[sundayCards.primary, ...sundayCards.more].filter((c) => c != null).map((c) => c.id)}
-          initialCat={parseCardCategory(one(sp.cat))}
+          featuredIds={featuredIds}
           initialQ={q}
-          initialCardId={getPictureCard(one(sp.card))?.id ?? sundayCards.primary?.id ?? null}
+          initialCardId={getPictureCard(one(sp.card))?.id ?? featuredIds[0] ?? null}
+          season={season ?? ""}
+          onlySunday={cardsSundayOnly}
         />
       ) : view === "custom" ? (
         <section aria-label="Custom sheets" className="mt-5">
@@ -211,32 +226,24 @@ export default async function ResourcePage({ searchParams }: Props) {
           )}
         </section>
       ) : sunday && sheet ? (
-        <ResourceSheetPanel
-          beforeSheet={
-            sundayCards.primary ? (
-              <ThisSundayCards
-                primary={sundayCards.primary}
-                more={sundayCards.more}
-                totalCards={PICTURE_CARDS.length}
-                isPlus={viewer.isPlus}
-                siteUrl={siteUrl}
-                dateLabel={sundayCards.primary.md ? sundayCards.primary.when : shortDate(sunday.date)}
-              />
-            ) : null
-          }
+        <SundayBundle
           sheet={sheet}
           level={level}
           sundayDate={sunday.date}
-          isPlus={viewer.isPlus}
-          heading={<>This Sunday · {formatSundayDate(sunday.date)}</>}
-          subheading={
-            <>
-              {sheet.liturgicalName} · {yearLabel(sheet.key)} · {seasonLabel(sheetSeason(sheet))} ·{" "}
-              {COUNTRY_LABELS[country] ?? country} ·{" "}
-              <Link href={resourcePath(sheet.key, level)} className="text-[#335599]">
-                Sheet page
-              </Link>
-            </>
+          countryLabel={COUNTRY_LABELS[country] ?? country}
+          siteUrl={siteUrl}
+          card={featured?.card ?? null}
+          moreCards={[sundayCards.primary, ...sundayCards.more].filter(
+            (c): c is NonNullable<typeof c> => c != null && c.id !== featured?.card.id,
+          )}
+          cardDateLabel={
+            featured
+              ? featured.reason === "today"
+                ? `Today · ${featured.card.when ?? shortDate(featured.today)}`
+                : featured.reason === "sunday"
+                  ? shortDate(featured.sundayDate)
+                  : "Season card"
+              : undefined
           }
         />
       ) : (

@@ -1,7 +1,9 @@
 // Little Light picture cards: the catalog (626 cards). Import from server code only —
 // client components use ./card-meta so the JSON stays out of the browser bundle.
 import CARDS_JSON from "@/data/cards/cards.json";
-import { CARD_ID_RE, type CardListItem, type PictureCard } from "./card-meta";
+import { getSundaySheet } from "@/lib/sunday-sheet-content";
+import { CARD_ID_RE, type CardListItem, type CardSeason, type PictureCard } from "./card-meta";
+import { sheetSeason } from "./sheets";
 
 export * from "./card-meta";
 
@@ -49,7 +51,43 @@ export function cardsForSunday(sheetKey: string): { primary: PictureCard | null;
   return { primary: seasonCardForSheetKey(sheetKey), more: [] };
 }
 
+const WHEN_SEASONS: [RegExp, CardSeason][] = [
+  [/advent/i, "advent"],
+  [/christmas|epiphany|baptism of the lord|holy family/i, "christmas"],
+  [/lent|holy week|holy thursday|good friday|ash wednesday|palm sunday|before easter|chrism/i, "lent"],
+  [/easter|pentecost|ascension/i, "easter"],
+  [/ordinary time|green season/i, "ordinary-time"],
+];
+
+/**
+ * Liturgical seasons a card belongs to, from real data only: its Sunday sheets' seasons,
+ * season words in its "when" label, fixed Advent/Christmas dates, and feast days.
+ * Cards for "anytime" get none (they show under Season: All).
+ */
+export function cardSeasons(card: PictureCard): CardSeason[] {
+  const out = new Set<CardSeason>();
+  for (const k of card.sheetKeys ?? []) {
+    const sheet = getSundaySheet(k);
+    if (sheet) out.add(sheetSeason(sheet));
+  }
+  const when = card.when ?? "";
+  if (!/^anytime\b/i.test(when) || /lent|easter|advent|christmas/i.test(when)) {
+    for (const [re, s] of WHEN_SEASONS) {
+      // "Advent & Lent", "Sundays outside Advent & Lent" etc.: skip negated mentions.
+      if (re.test(when) && !/outside|not in/i.test(when)) out.add(s);
+    }
+  }
+  if (card.md) {
+    if (card.md >= "12-01" && card.md <= "12-24") out.add("advent");
+    else if (card.md >= "12-25" || card.md <= "01-13") out.add("christmas");
+    else out.add("feasts");
+  }
+  if (card.cat === "Feast" && !out.size) out.add("feasts");
+  return [...out];
+}
+
 export function toCardListItem(card: PictureCard, date?: { date: string; sunday: boolean }): CardListItem {
+  const seasons = cardSeasons(card);
   return {
     id: card.id,
     cat: card.cat,
@@ -58,5 +96,6 @@ export function toCardListItem(card: PictureCard, date?: { date: string; sunday:
     ...(card.ref ? { ref: card.ref } : {}),
     ...(card.when ? { when: card.when } : {}),
     ...(date ? { date: date.date, sunday: date.sunday } : {}),
+    ...(seasons.length ? { seasons } : {}),
   };
 }

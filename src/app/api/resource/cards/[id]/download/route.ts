@@ -1,7 +1,11 @@
+import { cookies } from "next/headers";
+import { clientIpFromHeaders } from "@/lib/client-ip";
 import { parentApiGuard } from "@/lib/family-auth";
 import { getRateLimitState, recordRateLimitFailure, type RateLimitRule } from "@/lib/rate-limit";
 import { CardOriginalUnavailableError, readCardOriginal } from "@/lib/resource/card-originals";
 import { cardFileName, getPictureCard } from "@/lib/resource/cards";
+import { isFreeFeaturedCard } from "@/lib/resource/featured-card";
+import { COUNTRY_COOKIE, pickCountry } from "@/lib/resource/this-sunday";
 import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
@@ -17,22 +21,46 @@ const CARD_DOWNLOAD_RULE: RateLimitRule = {
   blockMs: 60 * 60 * 1000,
 };
 
+/** Free featured (This Sunday / today's) card: 30 per hour per IP. */
+const FREE_CARD_DOWNLOAD_RULE: RateLimitRule = {
+  max: 30,
+  windowMs: 60 * 60 * 1000,
+  blockMs: 60 * 60 * 1000,
+};
+
 const noStore = { "Cache-Control": "private, no-store" };
 
 /**
- * Plus-only full-resolution card (1080×1350 PNG, Instagram 4:5).
- * Signed-in parent + active Plus, checked on every request; originals never get a public URL.
- * `?inline=1` is used by the Share button (Web Share API needs the file in memory).
+ * Full-resolution card (1080×1350 PNG, Instagram 4:5).
+ * Today's featured card (This Sunday tab) is free for everyone, rate-limited by IP.
+ * Every other card needs a signed-in parent + active Plus, checked on every request.
+ * Originals never get a public URL. `?inline=1` is used by the Share button.
  */
 export async function GET(request: Request, ctx: Ctx) {
-  const guard = await parentApiGuard();
-  if (guard.error) return guard.error;
   const { id } = await ctx.params;
   const card = getPictureCard(id);
   if (!card) return NextResponse.json({ error: "Not found" }, { status: 404, headers: noStore });
-  if (!(await familyHasPlus(guard.session.familyAccountId))) return plusRequiredResponse();
 
-  const limitKey = `card-dl:${guard.session.familyAccountId}`;
+  const cookieStore = await cookies();
+  const country = pickCountry(
+    undefined,
+    cookieStore.get(COUNTRY_COOKIE)?.value,
+    request.headers.get("x-vercel-ip-country"),
+  );
+
+  let limitKey: string;
+  let rule: RateLimitRule;
+  if (isFreeFeaturedCard(card.id, country)) {
+    limitKey = `card-dl-free:ip:${clientIpFromHeaders(request.headers)}`;
+    rule = FREE_CARD_DOWNLOAD_RULE;
+  } else {
+    const guard = await parentApiGuard();
+    if (guard.error) return guard.error;
+    if (!(await familyHasPlus(guard.session.familyAccountId))) return plusRequiredResponse();
+    limitKey = `card-dl:${guard.session.familyAccountId}`;
+    rule = CARD_DOWNLOAD_RULE;
+  }
+
   const limit = await getRateLimitState([limitKey]);
   if (limit.blocked) {
     return NextResponse.json(
@@ -54,7 +82,7 @@ export async function GET(request: Request, ctx: Ctx) {
     return NextResponse.json({ error: "This card is not available yet." }, { status: 404, headers: noStore });
   }
 
-  await recordRateLimitFailure(limitKey, CARD_DOWNLOAD_RULE);
+  await recordRateLimitFailure(limitKey, rule);
 
   const inline = new URL(request.url).searchParams.get("inline") === "1";
   const name = cardFileName(card);
