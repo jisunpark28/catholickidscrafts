@@ -1,6 +1,5 @@
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { GOSPEL_SHEET_CSS, GOSPEL_SHEET_PAGE_CSS } from "@/components/gospel-sheet/sheet-styles";
-import { PlusLockOnLoad } from "@/components/resource/PlusLockDialog";
 import { BundlePrintToolbar } from "@/components/resource/BundlePrintToolbar";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
 import { hasCardOriginal } from "@/lib/resource/card-originals";
@@ -10,7 +9,7 @@ import { resolveResourceViewer } from "@/lib/resource/resolve-access";
 import { slugToKey, yearLabel } from "@/lib/resource/sheets";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -42,13 +41,7 @@ export default async function ResourceBundlePrintPage({ params, searchParams }: 
 
   const isThisSunday = viewer.thisSundayKey === key && viewer.thisSundayDate;
   // This Sunday's bundle is free for everyone; other Sundays' bundles stay Plus.
-  if (!viewer.isPlus && !isThisSunday) {
-    return (
-      <main className="min-h-screen bg-[#fdfaf7]">
-        <PlusLockOnLoad level={level} backHref={level === 2 ? "/resource?level=2" : "/resource"} />
-      </main>
-    );
-  }
+  if (!viewer.isPlus && !isThisSunday) redirect("/subscribe");
 
   const view = isThisSunday
     ? toGospelSheetView(sheet, viewer.thisSundayDate!)

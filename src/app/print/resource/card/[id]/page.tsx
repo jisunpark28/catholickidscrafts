@@ -1,11 +1,10 @@
-import { PlusLockOnLoad } from "@/components/resource/PlusLockDialog";
 import { CardAutoPrint } from "@/components/resource/CardAutoPrint";
 import { hasCardOriginal } from "@/lib/resource/card-originals";
 import { CARD_ID_RE, cardDownloadPath, cardThumbSrc, getPictureCard } from "@/lib/resource/cards";
 import { isFreeFeaturedCard } from "@/lib/resource/featured-card";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -36,13 +35,7 @@ export default async function CardPrintPage({ params }: Props) {
   if (!card) notFound();
 
   // Plus, or today's featured card (free for everyone, same rule as the download API).
-  if (!viewer.isPlus && !isFreeFeaturedCard(card.id, viewer.country)) {
-    return (
-      <main className="min-h-screen bg-[#fdfaf7]">
-        <PlusLockOnLoad backHref={`/resource?view=cards&card=${card.id}`} />
-      </main>
-    );
-  }
+  if (!viewer.isPlus && !isFreeFeaturedCard(card.id, viewer.country)) redirect("/subscribe");
 
   // Full-res original through the gated API; the preview thumbnail only if the original is not uploaded yet.
   const src = (await hasCardOriginal(card.id)) ? `${cardDownloadPath(card.id)}?inline=1` : cardThumbSrc(card.id);

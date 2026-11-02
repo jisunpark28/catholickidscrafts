@@ -12,7 +12,7 @@ import { resourcePath, slugToKey, yearLabel } from "@/lib/resource/sheets";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -59,6 +59,9 @@ export default async function ResourceEditPage({ params, searchParams }: Props) 
   const key = slugToKey(slug);
   const sheet = key ? getSundaySheet(key) : null;
   if (!key || !sheet) notFound();
+  // The editor is Plus-only: signed-out and free visitors go to /subscribe (it handles Google sign-in first).
+  // Save / photo / custom-sheet APIs re-check Plus on every request.
+  if (!viewer.isPlus) redirect("/subscribe");
   const level = parseLevelParam(sp.level);
   const allowed = sheetOpenAllowed(viewer, key);
   const layout = await loadLayout(key, level);

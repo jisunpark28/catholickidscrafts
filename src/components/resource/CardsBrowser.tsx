@@ -1,10 +1,11 @@
 "use client";
 
-import { cardThumbSrc, type CardListItem } from "@/lib/resource/card-meta";
+import { cardLockedPreviewSrc, cardThumbSrc, type CardListItem } from "@/lib/resource/card-meta";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CardActions } from "./CardActions";
 import { CardTile } from "./CardTile";
+import { LockedPreview } from "./LockedPreview";
 
 type Sort = "calendar" | "number" | "az";
 
@@ -193,15 +194,30 @@ export function CardsBrowser({
                 <p className="m-0 mt-0.5 text-xs text-[#6b7280]">{subtitle(selected)}</p>
               ) : null}
               <div className="mt-3 overflow-hidden rounded-xl border border-[#eee8e1] bg-[#fbf7f1]">
-                <Image
-                  key={selected.id}
-                  src={cardThumbSrc(selected.id)}
-                  alt={`${selected.title} picture card`}
-                  width={432}
-                  height={540}
-                  unoptimized
-                  className="block h-auto w-full"
-                />
+                {isPlus || selected.id === freeCardId ? (
+                  <Image
+                    key={selected.id}
+                    src={cardThumbSrc(selected.id)}
+                    alt={`${selected.title} picture card`}
+                    width={432}
+                    height={540}
+                    unoptimized
+                    className="block h-auto w-full"
+                  />
+                ) : (
+                  <LockedPreview label={`${selected.title}: unlock with Plus`}>
+                    <Image
+                      key={selected.id}
+                      src={cardLockedPreviewSrc(selected.id)}
+                      alt=""
+                      width={216}
+                      height={270}
+                      unoptimized
+                      draggable={false}
+                      className="block h-auto w-full"
+                    />
+                  </LockedPreview>
+                )}
               </div>
               <div className="mt-3">
                 <CardActions

@@ -5,6 +5,7 @@ import type { SearchHit } from "@/lib/resource/unified-search";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 import { CardTile } from "./CardTile";
+import { LockedPreview } from "./LockedPreview";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 
@@ -80,11 +81,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                       FREE
                     </span>
                   ) : null
-                ) : (
-                  <span className="absolute right-1.5 top-1.5 rounded-md bg-white/95 px-1.5 py-0.5 text-[10px] font-bold text-[#d35400] shadow-sm">
-                    🔒 PLUS
-                  </span>
-                )}
+                ) : null /* locked: LockedPreview shows the lock */}
               </span>
             );
             const meta = (
@@ -126,7 +123,9 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                     aria-disabled="true"
                     title="Plus members only (this Sunday's sheet is free)"
                   >
-                    <span className="block opacity-60">{thumb}</span>
+                    <LockedPreview className="rounded-lg" label={`${lv.title}: unlock with Plus`}>
+                      {thumb}
+                    </LockedPreview>
                     {meta}
                     <div className="mt-auto px-1 pb-1 pt-2.5">
                       <div className="flex flex-wrap gap-1.5">

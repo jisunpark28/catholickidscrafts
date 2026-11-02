@@ -186,6 +186,7 @@ export default async function HomePage() {
             sundayLabel={sheet.sundayLabel}
             gospelRef={sheet.gospelRef}
             printBasePath={sheet.printBasePath}
+            editBasePath={sheet.key ? `/resource/edit/${sheet.slug}` : null}
             seasonHref={seasonHref}
             seasonLabel={seasonLabel}
             groupInquiryHref={groupInquiryHref}

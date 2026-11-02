@@ -1,4 +1,3 @@
-import { PlusLockOnLoad } from "@/components/resource/PlusLockDialog";
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { PrintToolbar } from "@/components/gospel-sheet/PrintToolbar";
 import { GOSPEL_SHEET_CSS, GOSPEL_SHEET_PAGE_CSS } from "@/components/gospel-sheet/sheet-styles";
@@ -7,7 +6,7 @@ import { sheetOpenAllowed, resolveResourceViewer } from "@/lib/resource/resolve-
 import { keyToSlug, resourcePath, slugToKey, yearLabel } from "@/lib/resource/sheets";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -36,13 +35,8 @@ export default async function ResourcePrintPage({ params, searchParams }: Props)
   const autoPrint = query.autoprint === "1";
   const canOpen = sheetOpenAllowed(viewer, key);
 
-  if (!canOpen) {
-    return (
-      <main className="min-h-screen bg-[#fdfaf7]">
-        <PlusLockOnLoad level={level} backHref={resourcePath(key, level)} />
-      </main>
-    );
-  }
+  // Locked (free viewer, not this Sunday): never render the sheet; send them to Plus.
+  if (!canOpen) redirect("/subscribe");
 
   const view =
     viewer.thisSundayKey === key && viewer.thisSundayDate

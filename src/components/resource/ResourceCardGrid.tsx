@@ -2,6 +2,7 @@ import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { resourcePath, resourcePrintPath } from "@/lib/resource/sheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
+import { LockedPreview } from "./LockedPreview";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 
@@ -43,14 +44,9 @@ export function ResourceCardGrid({
                   <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
                 </Link>
               ) : (
-                <div className="relative select-none opacity-60" aria-hidden>
+                <LockedPreview className="rounded-lg" label={`${title}: unlock with Plus`}>
                   <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
-                </div>
-              )}
-              {unlocked ? null : (
-                <span className="pointer-events-none absolute right-5 top-5 rounded-full bg-[#1c1c1c]/80 px-2.5 py-1 text-xs font-semibold text-white">
-                  🔒 Plus
-                </span>
+                </LockedPreview>
               )}
               <div className="mt-3 px-1 text-xs font-bold tracking-wide text-[#d35400]">{sheet.key}</div>
               <h3 className="mb-0.5 mt-0.5 px-1 text-base font-bold leading-snug text-[#1c1c1c]">
