@@ -26,8 +26,8 @@ export function ResourceLockedPanel({
       </p>
       <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#4b5563]">
         Free accounts can browse the library and open <strong>this Sunday&apos;s</strong> worksheet to
-        view and print. Unlock Plus to open every Sunday and feast sheet, and to edit with photos and
-        stickers.
+        view, print, and try Customize. Unlock Plus to open every Sunday and feast sheet, and to save
+        or print your custom sheets. One-time payment. No auto-renew.
       </p>
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
         <Link

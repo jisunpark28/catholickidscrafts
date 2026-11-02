@@ -18,7 +18,7 @@ type Props = {
   heading?: React.ReactNode;
   subheading?: React.ReactNode;
   headingLevel?: "h1" | "h2" | "h3";
-  /** When false, Edit links to /subscribe instead of the Fabric editor. */
+  /** When true, Edit omits the PLUS lock chip emphasis (editor itself is tryable for free). */
   isPlus?: boolean;
   /**
    * When false, Print/PDF go to subscribe (or thisSundayHref) instead of the print route.
@@ -89,17 +89,14 @@ function ActionButtons({
           <span className="rounded-md bg-[#f5ebe0] px-1.5 py-0.5 text-[10px] font-bold text-[#d35400]">PLUS</span>
         </PlusLockButton>
       )}
-      {isPlus ? (
-        <Link href={resourceEditPath(sheetKey, level)} className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`} title="Edit on the locked base sheet">
-        <span aria-hidden>🔒</span> Edit
+      <Link
+        href={resourceEditPath(sheetKey, level)}
+        className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`}
+        title={isPlus ? "Edit on the locked base sheet" : "Try the editor free — Save and Print need Plus"}
+      >
+        <span aria-hidden>{isPlus ? "🔒" : "✏️"}</span> Edit
         <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
       </Link>
-      ) : (
-        <PlusLockButton level={level} className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`} title="Editing needs Plus">
-        <span aria-hidden>🔒</span> Edit
-        <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
-      </PlusLockButton>
-      )}
     </>
   );
 }

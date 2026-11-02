@@ -1,7 +1,7 @@
 "use client";
 
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
-import { PLUS_FROM_LABEL, PLUS_PRICE_LABEL } from "@/lib/subscription/plan-copy";
+import { ONE_TIME_LINE, PLUS_FROM_LABEL, PLUS_PRICE_LABEL } from "@/lib/subscription/plan-copy";
 import {
   DEFAULT_MEMO_COLOR,
   MEMO_BODY_MAX,
@@ -619,8 +619,11 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         </p>
         <p className="mt-3 text-xl font-bold">
           {PLUS_PRICE_LABEL}
-          <span className="text-sm font-normal text-[var(--color-muted)]"> / 1 month · one-time, no auto-renew</span>
+          <span className="text-sm font-normal text-[var(--color-muted)]">
+            {t("bible.memo.upsell_period", " / 1 month · one-time, no auto-renew")}
+          </span>
         </p>
+        <p className="mt-1 text-xs font-semibold text-[var(--color-muted)]">{ONE_TIME_LINE}</p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Link href={SUBSCRIBE_HREF} className={btnPrimary} autoFocus>
             {t("bible.memo.upsell_cta", "Get Plus")}
@@ -873,10 +876,11 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
             )}
             {!paid && (
               <p className="mt-2 text-xs text-[var(--color-muted)]">
-                {t("bible.memo.plan_ended", "Your Plus plan has ended.")}{" "}
+                {t("bible.memo.plan_ended", "Your Plus pass has ended.")}{" "}
                 <Link href={SUBSCRIBE_HREF} className="font-semibold text-[var(--color-link)]">
-                  {t("bible.memo.renew", "Renew")} · {PLUS_FROM_LABEL}
+                  {t("bible.memo.renew", "Get Plus again")} · {PLUS_FROM_LABEL}
                 </Link>
+                <span className="mt-1 block">{ONE_TIME_LINE}</span>
               </p>
             )}
           </>
@@ -976,10 +980,13 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       )}
       <p className="mt-2 text-xs text-[var(--color-muted)]">{paid
           ? t("bible.memo.list_hint", "Tap a memo to jump to its verse. Memos are private unless you share them with your family.")
-          : t("bible.memo.list_hint_readonly", "Your Plus plan has ended, so memos are read-only. You can still view and delete them.")}{" "}
+          : t(
+              "bible.memo.list_hint_readonly",
+              "Your Plus pass has ended, so memos are read-only. You can still view and delete them.",
+            )}{" "}
         {!paid && (
           <Link href={SUBSCRIBE_HREF} className="font-semibold text-[var(--color-link)]">
-            {lock} {t("bible.memo.upsell_cta", "Get Plus")}
+            {lock} {t("bible.memo.upsell_cta", "Get Plus again")}
           </Link>
         )}
       </p>

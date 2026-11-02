@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         journal
           ? { error: "You've used your free Faith Journal entries", code: "journal_limit" }
-          : { error: "Memos are part of the family subscription", code: "subscription_required" },
+          : { error: "Memos need Catholic Kids Crafts Plus (one-time pass, no auto-renew)", code: "subscription_required" },
         { status: 403 },
       );
     }

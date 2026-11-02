@@ -1,6 +1,6 @@
 "use client";
 
-import { ONE_TIME_LINE, PLAN_OPTIONS, type PlanInterval } from "@/lib/subscription/plan-copy";
+import { BEST_VALUE_BADGE, ONE_TIME_LINE, PLAN_OPTIONS, type PlanInterval } from "@/lib/subscription/plan-copy";
 import { useRef, useState } from "react";
 
 type Props = {
@@ -121,7 +121,7 @@ export function PlanCheckout({ className, extend = false }: { className?: string
                 </span>
                 {key === "year" && (
                   <span className="rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
-                    Best value
+                    {BEST_VALUE_BADGE}
                   </span>
                 )}
               </div>

@@ -124,7 +124,8 @@ export async function getFamilyPlan(familyAccountId: string) {
   };
 }
 
-export const PLUS_REQUIRED_MESSAGE = "This feature needs Catholic Kids Crafts Plus. Upgrade at /subscribe.";
+export const PLUS_REQUIRED_MESSAGE =
+  "This feature needs Catholic Kids Crafts Plus (one-time payment, no auto-renew). Get it at /subscribe.";
 
 /** 402 response for API routes behind Plus. */
 export function plusRequiredResponse() {

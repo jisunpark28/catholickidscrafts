@@ -1,6 +1,7 @@
 "use client";
 
 import { HomeHubAccountMenu } from "@/components/HomeHubAccountMenu";
+import { HomeHubMenuLink } from "@/components/HomeHubButton";
 import { HomeLearnSearch } from "@/components/HomeLearnSearch";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { Branch, Cross, Heart, Sparkle, Star } from "@/components/home/HomeBackdrop";
@@ -110,6 +111,13 @@ export function HomeHubHeader({ initialSession }: Props) {
                 )}
               </svg>
             </button>
+            <HomeHubMenuLink
+              href="/subscribe"
+              ariaLabel="Catholic Kids Crafts Plus"
+              className="!px-3 sm:!px-3.5"
+            >
+              Plus
+            </HomeHubMenuLink>
             <HomeHubAccountMenu initialSession={initialSession} signInLabel={t("global.nav.sign_in", "Sign in")} />
           </div>
         </div>

@@ -5,6 +5,8 @@ export const PLUS_ANNUAL_PRICE_LABEL = "US$29.99";
 /** Short "from" price for upsells (the 1-month pass). */
 export const PLUS_FROM_LABEL = `from ${PLUS_PRICE_LABEL}`;
 export const ONE_TIME_LINE = "One-time payment. No auto-renew.";
+/** Annual plan badge — keep this wording everywhere (do not invent a second style). */
+export const BEST_VALUE_BADGE = "Best value";
 
 export type PlanInterval = "month" | "year";
 

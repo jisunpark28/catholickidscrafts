@@ -15,8 +15,8 @@ type Props = {
    */
   printBasePath: string;
   /**
-   * Plus sheet editor for this sheet, e.g. `/resource/edit/a-ot32` (null for the legacy DB fallback sheet).
-   * The edit route itself sends free and signed-out visitors to /subscribe.
+   * Sheet editor for this sheet, e.g. `/resource/edit/a-ot32` (null for the legacy DB fallback sheet).
+   * Free and signed-out visitors can try the editor; Save / Print need Plus.
    */
   editBasePath?: string | null;
   /** Liturgy page for the current season, e.g. "/liturgy/ordinary-time". */
@@ -213,7 +213,9 @@ export function SundaySheetHero({
               <span className="text-lg font-bold leading-tight">
                 <span aria-hidden>✏️</span> Customize this sheet
               </span>
-              <span className="text-xs font-medium leading-tight text-[#4b5563]">Make it your own · Plus</span>
+              <span className="text-xs font-medium leading-tight text-[#4b5563]">
+                Try free · save with Plus · no auto-renew
+              </span>
             </Link>
           ) : null}
         </div>

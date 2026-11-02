@@ -5,7 +5,13 @@ import { requireFamilySession, requireParentActive } from "@/lib/family-auth";
 import { pageMetadata } from "@/lib/site-metadata";
 import { isBillingConfigured } from "@/lib/stripe";
 import { getFamilyPlan } from "@/lib/subscription/entitlements";
-import { ONE_TIME_LINE, PLAN_FEATURES, PLAN_OPTIONS, planRenewalLine } from "@/lib/subscription/plan-copy";
+import {
+  BEST_VALUE_BADGE,
+  ONE_TIME_LINE,
+  PLAN_FEATURES,
+  PLAN_OPTIONS,
+  planRenewalLine,
+} from "@/lib/subscription/plan-copy";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -49,16 +55,30 @@ export default async function SubscribePage() {
 
       <section className="mt-8 border border-[var(--color-border)] bg-white p-5 sm:p-6">
         {!canBuy && (
-          <div className="flex flex-wrap gap-6">
-            {(["month", "year"] as const).map((k) => (
-              <p key={k} className="text-3xl font-bold text-[var(--color-ink)]">
-                {PLAN_OPTIONS[k].price}
-                <span className="text-sm font-normal text-[var(--color-muted)]">{PLAN_OPTIONS[k].unit}</span>
-              </p>
-            ))}
+          <div className="mt-1 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {(["month", "year"] as const).map((k) => {
+              const o = PLAN_OPTIONS[k];
+              return (
+                <div key={k} className="rounded-xl border border-[var(--color-border)] bg-white p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-bold text-[var(--color-ink)]">{o.name}</span>
+                    {k === "year" ? (
+                      <span className="rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
+                        {BEST_VALUE_BADGE}
+                      </span>
+                    ) : null}
+                  </div>
+                  <p className="mt-2 text-2xl font-bold text-[var(--color-ink)]">
+                    {o.price}
+                    <span className="text-sm font-normal text-[var(--color-muted)]">{o.unit}</span>
+                  </p>
+                  <p className="mt-0.5 text-xs text-[var(--color-muted)]">{o.billed}</p>
+                </div>
+              );
+            })}
           </div>
         )}
-        <p className="mt-2 text-sm font-bold text-[var(--color-ink)]">{ONE_TIME_LINE}</p>
+        <p className={`${canBuy ? "mt-2" : "mt-3"} text-sm font-bold text-[var(--color-ink)]`}>{ONE_TIME_LINE}</p>
         <ul className="mt-4 space-y-2 text-sm">
           {PLAN_FEATURES.map((f) => (
             <li key={f.label} className="flex items-center justify-between gap-2">

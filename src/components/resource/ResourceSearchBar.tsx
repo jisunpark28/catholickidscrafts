@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -126,34 +125,23 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         All
       </button>
 
-      {isPlus ? (
-        <button
-          type="button"
-          onClick={() => {
-            setQ("");
-            go({ q: "", season: "", view: "custom", sunday: false });
-          }}
-          aria-pressed={customActive}
-          title="Your saved, edited sheets"
-          className={`${pill} ${
-            customActive
-              ? "border-[#d35400] bg-[#fff6ef] text-[#d35400]"
-              : "border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]"
-          }`}
-        >
-          Custom
-          <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
-        </button>
-      ) : (
-        <Link
-          href="/subscribe"
-          className={`${pill} border-[#e7e3de] bg-white text-[#1c1c1c] no-underline hover:bg-[#fffdfb]`}
-          title="Save and reopen your edited sheets with Plus"
-        >
-          Custom
-          <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
-        </Link>
-      )}
+      <button
+        type="button"
+        onClick={() => {
+          setQ("");
+          go({ q: "", season: "", view: "custom", sunday: false });
+        }}
+        aria-pressed={customActive}
+        title={isPlus ? "Your saved, edited sheets" : "Saved custom sheets need Plus (one-time, no auto-renew)"}
+        className={`${pill} ${
+          customActive
+            ? "border-[#d35400] bg-[#fff6ef] text-[#d35400]"
+            : "border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]"
+        }`}
+      >
+        Custom
+        <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
+      </button>
 
       <label className="inline-flex">
         <span className="sr-only">Season</span>

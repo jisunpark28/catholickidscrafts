@@ -11,7 +11,7 @@ export const FEEDBACK_CATEGORIES = [
     hint: "Broken screens, typing errors, stickers not saving, and similar problems.",
   },
   { id: "idea", label: "💡 Feature idea", hint: "" },
-  { id: "plus", label: "💳 Plus subscription / other question", hint: "" },
+  { id: "plus", label: "💳 Plus / billing / other question", hint: "" },
 ] as const;
 
 export type FeedbackCategory = (typeof FEEDBACK_CATEGORIES)[number]["id"];
