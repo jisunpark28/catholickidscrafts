@@ -75,6 +75,14 @@ export function cardThumbSrc(id: string): string {
   return `/cards/thumbs/${id}.webp`;
 }
 
+/**
+ * Small blurred greyscale preview (216×270 WebP in /public, built by scripts/build-card-locked-previews.mjs)
+ * shown to free visitors on Plus-locked cards, so locked tiles never load the sharper preview.
+ */
+export function cardLockedPreviewSrc(id: string): string {
+  return `/cards/locked/${id}.webp`;
+}
+
 /** Plus-only full-resolution 1080×1350 PNG (server checks session + Plus). */
 export function cardDownloadPath(id: string): string {
   return `/api/resource/cards/${id}/download`;

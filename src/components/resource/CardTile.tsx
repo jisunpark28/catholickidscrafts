@@ -1,10 +1,17 @@
 "use client";
 
-import { cardPrintPath, cardShareTargets, cardThumbSrc, type CardListItem } from "@/lib/resource/card-meta";
+import {
+  cardLockedPreviewSrc,
+  cardPrintPath,
+  cardShareTargets,
+  cardThumbSrc,
+  type CardListItem,
+} from "@/lib/resource/card-meta";
 import { shareCardPng } from "@/lib/resource/card-download-client";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { LockedPreview } from "./LockedPreview";
 import { PlusLockDialog } from "./PlusLockDialog";
 
 type Props = {
@@ -92,7 +99,16 @@ export function CardTile({
   };
 
   const dateLine = [card.date ? shortDate(card.date) : card.when, card.ref].filter(Boolean).join(" · ");
-  const image = (
+  const badge = (
+    <span
+      className={`absolute right-1.5 top-1.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm ${
+        isPlus ? "bg-[#d35400] text-white" : "bg-[#e6f4ea] text-[#1e7b34]"
+      }`}
+    >
+      {isPlus ? "PLUS ✓" : "FREE"}
+    </span>
+  );
+  const image = unlocked ? (
     <span className="relative block overflow-hidden rounded-lg bg-[#fbf7f1]">
       <Image
         src={cardThumbSrc(card.id)}
@@ -104,13 +120,24 @@ export function CardTile({
         loading="lazy"
       />
       {typeBadge ? <span className="absolute left-1.5 top-1.5">{typeBadge}</span> : null}
-      <span
-        className={`absolute right-1.5 top-1.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold shadow-sm ${
-          isPlus ? "bg-[#d35400] text-white" : isFree ? "bg-[#e6f4ea] text-[#1e7b34]" : "bg-white/95 text-[#d35400]"
-        }`}
-      >
-        {isPlus ? "PLUS ✓" : isFree ? "FREE" : "🔒 PLUS"}
-      </span>
+      {badge}
+    </span>
+  ) : (
+    // Locked for free visitors: only the small blurred greyscale preview is sent; the overlay links to /subscribe.
+    <span className="relative block">
+      <LockedPreview className="rounded-lg bg-[#fbf7f1]" label={`${card.title}: unlock with Plus`}>
+        <Image
+          src={cardLockedPreviewSrc(card.id)}
+          alt=""
+          width={216}
+          height={270}
+          unoptimized
+          draggable={false}
+          className="block h-auto w-full"
+          loading="lazy"
+        />
+      </LockedPreview>
+      {typeBadge ? <span className="pointer-events-none absolute left-1.5 top-1.5">{typeBadge}</span> : null}
     </span>
   );
   const openEl = (cls: string, children: React.ReactNode, label?: string) =>
@@ -130,7 +157,9 @@ export function CardTile({
         selected ? "border-2 border-[#d35400] p-[5px]" : "border border-[#e7e3de] p-1.5"
       }`}
     >
-      {openEl("block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]", image, `Open ${card.title}`)}
+      {unlocked
+        ? openEl("block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]", image, `Open ${card.title}`)
+        : image}
       <div className="px-1 pt-2">
         <div className="text-xs font-bold tracking-wide text-[#d35400]">{card.id}</div>
         <div className="truncate text-sm font-bold text-[#1c1c1c]" title={card.title}>
@@ -145,7 +174,7 @@ export function CardTile({
           {unlocked ? (
             openEl(`${pillBtn} col-span-2 bg-[#d35400] text-white hover:bg-[#b8470a]`, "Open")
           ) : (
-            // Same locked look as sheet tiles; the picture itself still opens the free preview.
+            // Same locked look as sheet tiles; the picture links to /subscribe.
             <button
               type="button"
               aria-haspopup="dialog"

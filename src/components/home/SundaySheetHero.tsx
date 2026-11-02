@@ -14,6 +14,11 @@ type Props = {
    * or `/print/2026-10-25` (legacy DB featured fallback).
    */
   printBasePath: string;
+  /**
+   * Plus sheet editor for this sheet, e.g. `/resource/edit/a-ot32` (null for the legacy DB fallback sheet).
+   * The edit route itself sends free and signed-out visitors to /subscribe.
+   */
+  editBasePath?: string | null;
   /** Liturgy page for the current season, e.g. "/liturgy/ordinary-time". */
   seasonHref: string;
   seasonLabel: string;
@@ -58,6 +63,7 @@ export function SundaySheetHero({
   sundayLabel,
   gospelRef,
   printBasePath,
+  editBasePath = null,
   seasonHref,
   seasonLabel,
   groupInquiryHref,
@@ -191,13 +197,26 @@ export function SundaySheetHero({
           ))}
         </div>
 
-        <button
-          type="button"
-          onClick={onPrint}
-          className="w-full rounded-full bg-[#2e7d32] px-8 py-4 text-xl font-bold shadow-[0_8px_16px_-8px_rgba(46,125,50,0.6)] text-white hover:bg-[#256628] sm:w-auto sm:self-start"
-        >
-          🖨 Print this week&apos;s sheet
-        </button>
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <button
+            type="button"
+            onClick={onPrint}
+            className="w-full rounded-full bg-[#2e7d32] px-8 py-4 text-xl font-bold shadow-[0_8px_16px_-8px_rgba(46,125,50,0.6)] text-white hover:bg-[#256628] sm:w-auto"
+          >
+            🖨 Print this week&apos;s sheet
+          </button>
+          {editBasePath ? (
+            <Link
+              href={level === 2 ? `${editBasePath}?level=2` : editBasePath}
+              className="flex w-full flex-col items-center rounded-full border-2 border-[#2e7d32] bg-white px-7 py-2.5 text-[#2e7d32] no-underline hover:bg-[#f1f8f1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2e7d32] sm:w-auto"
+            >
+              <span className="text-lg font-bold leading-tight">
+                <span aria-hidden>✏️</span> Customize this sheet
+              </span>
+              <span className="text-xs font-medium leading-tight text-[#4b5563]">Make it your own · Plus</span>
+            </Link>
+          ) : null}
+        </div>
 
         <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <Link href="/bible/gospel" className="font-semibold text-[var(--color-link)] hover:underline">
