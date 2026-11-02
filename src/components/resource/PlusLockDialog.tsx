@@ -1,5 +1,6 @@
 "use client";
 
+import { ONE_TIME_LINE } from "@/lib/subscription/plan-copy";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
@@ -101,6 +102,7 @@ function OpenDialog({ onClose, level }: { onClose: () => void; level: 1 | 2 }) {
             Unlock with Plus
           </Link>
         </div>
+        <p className="mt-3 text-xs text-[#6b7280]">{ONE_TIME_LINE}</p>
       </div>
     </dialog>
   );

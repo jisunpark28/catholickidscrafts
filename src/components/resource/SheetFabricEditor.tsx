@@ -35,6 +35,8 @@ import {
   Textbox,
   type FabricObject,
 } from "fabric";
+import { PlusLockDialog } from "@/components/resource/PlusLockDialog";
+import { ONE_TIME_LINE } from "@/lib/subscription/plan-copy";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -199,6 +201,7 @@ export function SheetFabricEditor({
     `${(level === 2 ? sheet.levels.level2 : sheet.levels.level1).title} — my sheet`,
   );
   const [customId, setCustomId] = useState<string | null>(initialCustomId);
+  const [plusLockOpen, setPlusLockOpen] = useState(false);
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -248,7 +251,7 @@ export function SheetFabricEditor({
   const moveLayer = (index: number, dir: "forward" | "backward") => {
     const c = fabricRef.current;
     const obj = c?.getObjects()[index];
-    if (!c || !obj || !isPlus) return;
+    if (!c || !obj) return;
     pushUndo();
     if (dir === "forward") c.bringObjectForward(obj);
     else c.sendObjectBackwards(obj);
@@ -259,7 +262,7 @@ export function SheetFabricEditor({
   const selectLayer = (index: number) => {
     const c = fabricRef.current;
     const obj = c?.getObjects()[index];
-    if (!c || !obj || !isPlus) return;
+    if (!c || !obj) return;
     c.setActiveObject(obj);
     c.requestRenderAll();
     refreshLayers();
@@ -442,7 +445,7 @@ export function SheetFabricEditor({
           height: SHEET_PAGE.height,
           backgroundColor: liveHtmlBase || !basePngUrl ? "transparent" : "#ffffff",
           preserveObjectStacking: true,
-          selection: isPlus,
+          selection: true,
         });
         fabricRef.current = canvas;
 
@@ -470,9 +473,9 @@ export function SheetFabricEditor({
             fontSize: box.fontSize ?? 16,
             fontFamily: SHEET_FONT_STACK,
             fill: "#111111",
-            editable: isPlus,
-            selectable: isPlus,
-            evented: isPlus,
+            editable: true,
+            selectable: true,
+            evented: true,
           });
           setMeta(tb, { kind: "base-edit", fieldId: box.id, id: `base_${box.id}` });
           canvas.add(tb);
@@ -495,7 +498,7 @@ export function SheetFabricEditor({
 
         canvas.requestRenderAll();
         if (!cancelled) {
-          if (liveHtmlBase && isPlus) {
+          if (liveHtmlBase) {
             const finishLive = (attempt: number) => {
                 if (cancelled) return;
                 installLiveTextRef.current();
@@ -550,14 +553,14 @@ export function SheetFabricEditor({
     };
     // layout.boxes identity changes often; key off rev + count
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [basePngUrl, baseRev, isPlus, level, sheet.key, liveHtmlBase, layout.boxes.length]);
+  }, [basePngUrl, baseRev, level, sheet.key, liveHtmlBase, layout.boxes.length]);
 
   /**
    * Measure every visible text node on the live GospelSheet underlay and install
    * (or reposition) Fabric Textboxes so headers, activity copy, and chrome are editable.
    */
   const installLiveTextFields = () => {
-    if (!liveHtmlBase || !isPlus) return;
+    if (!liveHtmlBase) return;
     const c = fabricRef.current;
     const host = liveHostRef.current;
     const page = host?.querySelector("[data-sheet-page]") as HTMLElement | null;
@@ -636,7 +639,7 @@ export function SheetFabricEditor({
 
   /** Promote dotted write-lines and checklist boxes from the live underlay. */
   const installLiveChrome = () => {
-    if (!liveHtmlBase || !isPlus) return;
+    if (!liveHtmlBase) return;
     const c = fabricRef.current;
     const host = liveHostRef.current;
     const page = host?.querySelector("[data-sheet-page]") as HTMLElement | null;
@@ -716,7 +719,7 @@ export function SheetFabricEditor({
    * (unless the user deleted it — tracked in hiddenBaseSections).
    */
   const promoteBaseSections = () => {
-    if (!liveHtmlBase || !isPlus) return;
+    if (!liveHtmlBase) return;
     const c = fabricRef.current;
     const host = liveHostRef.current;
     const page = host?.querySelector("[data-sheet-page]") as HTMLElement | null;
@@ -816,7 +819,7 @@ export function SheetFabricEditor({
             fontSize: o.fontSize ?? (o.type === "sticker" ? 42 : 18),
             fill: o.fill ?? "#111",
             opacity: o.opacity ?? 1,
-            editable: o.type !== "sticker" && isPlus,
+            editable: o.type !== "sticker",
           });
           setMeta(tb, {
             kind: "user",
@@ -981,7 +984,7 @@ export function SheetFabricEditor({
   const applyStyleToActive = () => {
     const c = fabricRef.current;
     const obj = c?.getActiveObject();
-    if (!c || !(obj instanceof Textbox) || !isPlus) return;
+    if (!c || !(obj instanceof Textbox)) return;
     pushUndo();
     obj.set({
       fontFamily,
@@ -997,7 +1000,7 @@ export function SheetFabricEditor({
 
   const addText = () => {
     const c = fabricRef.current;
-    if (!c || !isPlus) return;
+    if (!c) return;
     pushUndo();
     const tb = new Textbox("New text", {
       left: 120,
@@ -1018,7 +1021,7 @@ export function SheetFabricEditor({
 
   const addSticker = (stickerId: string, emoji: string) => {
     const c = fabricRef.current;
-    if (!c || !isPlus) return;
+    if (!c) return;
     pushUndo();
     const tb = new Textbox(emoji, {
       left: 200 + Math.random() * 80,
@@ -1035,7 +1038,7 @@ export function SheetFabricEditor({
   /** Sheet-style rounded section frame (resize / delete like other objects). */
   const addSectionBox = (opts?: { cover?: boolean }) => {
     const c = fabricRef.current;
-    if (!c || !isPlus) return;
+    if (!c) return;
     pushUndo();
     const cover = Boolean(opts?.cover);
     const obj = new Rect({
@@ -1061,7 +1064,7 @@ export function SheetFabricEditor({
 
   const addShape = (kind: "rect" | "circle" | "ellipse" | "line") => {
     const c = fabricRef.current;
-    if (!c || !isPlus) return;
+    if (!c) return;
     pushUndo();
     let obj: FabricObject;
     if (kind === "rect") {
@@ -1117,7 +1120,11 @@ export function SheetFabricEditor({
   };
 
   const onPhotoPicked = async (file: File | null) => {
-    if (!file || !isPlus) return;
+    if (!file) return;
+    if (!isPlus) {
+      setPlusLockOpen(true);
+      return;
+    }
     const c = fabricRef.current;
     if (!c) return;
     setUploading(true);
@@ -1246,7 +1253,11 @@ export function SheetFabricEditor({
 
   const exportPdf = async () => {
     const c = fabricRef.current;
-    if (!c || !isPlus) return;
+    if (!c) return;
+    if (!isPlus) {
+      setPlusLockOpen(true);
+      return;
+    }
     setExporting(true);
     setStatus("Building PDF…");
     try {
@@ -1267,7 +1278,11 @@ export function SheetFabricEditor({
 
   const exportPng = async () => {
     const c = fabricRef.current;
-    if (!c || !isPlus) return;
+    if (!c) return;
+    if (!isPlus) {
+      setPlusLockOpen(true);
+      return;
+    }
     setExporting(true);
     try {
       if (!(await confirmPlusOnServer())) {
@@ -1291,7 +1306,7 @@ export function SheetFabricEditor({
   const removeActive = () => {
     const c = fabricRef.current;
     const obj = c?.getActiveObject();
-    if (!c || !obj || !isPlus) return;
+    if (!c || !obj) return;
     // Typing inside a textbox: Delete/Backspace should edit characters (keyboard handler skips).
     if (obj instanceof Textbox && obj.isEditing) return;
 
@@ -1355,7 +1370,7 @@ export function SheetFabricEditor({
   };
 
   useEffect(() => {
-    if (!isPlus || !ready) return;
+    if (!ready) return;
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
@@ -1384,10 +1399,13 @@ export function SheetFabricEditor({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlus, ready]);
+  }, [ready]);
 
   const save = async () => {
-    if (!isPlus) return;
+    if (!isPlus) {
+      setPlusLockOpen(true);
+      return;
+    }
     setSaving(true);
     setStatus("Saving…");
     try {
@@ -1447,7 +1465,7 @@ export function SheetFabricEditor({
       {/* Left: elements */}
       <aside className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3">
         <h2 className="m-0 text-sm font-bold text-[#1c1c1c]">Elements</h2>
-        <button type="button" className={`${toolBtn} mt-2 w-full`} disabled={!isPlus || !ready} onClick={addText}>
+        <button type="button" className={`${toolBtn} mt-2 w-full`} disabled={!ready} onClick={addText}>
           Add text
         </button>
         <input
@@ -1460,8 +1478,14 @@ export function SheetFabricEditor({
         <button
           type="button"
           className={`${toolBtn} mt-2 w-full`}
-          disabled={!isPlus || !ready || uploading}
-          onClick={() => fileInputRef.current?.click()}
+          disabled={!ready || uploading}
+          onClick={() => {
+            if (!isPlus) {
+              setPlusLockOpen(true);
+              return;
+            }
+            fileInputRef.current?.click();
+          }}
         >
           {uploading ? "Uploading…" : "Add photo"}
         </button>
@@ -1500,7 +1524,7 @@ export function SheetFabricEditor({
         <button
           type="button"
           className={`${toolBtn} mt-2 w-full`}
-          disabled={!isPlus || !ready}
+          disabled={!ready}
           onClick={() => addSectionBox()}
           title="Add a rounded section frame you can resize or delete"
         >
@@ -1509,23 +1533,23 @@ export function SheetFabricEditor({
         <button
           type="button"
           className={`${toolBtn} mt-1 w-full`}
-          disabled={!isPlus || !ready}
+          disabled={!ready}
           onClick={() => addSectionBox({ cover: true })}
           title="White rounded box to cover a locked base section, then resize or Delete"
         >
           □ Cover base box
         </button>
         <div className="mt-2 grid grid-cols-2 gap-1">
-          <button type="button" className={toolBtn} disabled={!isPlus || !ready} onClick={() => addShape("rect")}>
+          <button type="button" className={toolBtn} disabled={!ready} onClick={() => addShape("rect")}>
             □ Rect
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus || !ready} onClick={() => addShape("circle")}>
+          <button type="button" className={toolBtn} disabled={!ready} onClick={() => addShape("circle")}>
             ○ Circle
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus || !ready} onClick={() => addShape("ellipse")}>
+          <button type="button" className={toolBtn} disabled={!ready} onClick={() => addShape("ellipse")}>
             ◯ Oval
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus || !ready} onClick={() => addShape("line")}>
+          <button type="button" className={toolBtn} disabled={!ready} onClick={() => addShape("line")}>
             ― Line
           </button>
         </div>
@@ -1537,7 +1561,7 @@ export function SheetFabricEditor({
               type="button"
               title={s.label}
               className="rounded-lg border border-[#e7e3de] bg-white py-1 text-xl hover:bg-white disabled:opacity-40"
-              disabled={!isPlus || !ready}
+              disabled={!ready}
               onClick={() => addSticker(s.id, s.emoji)}
             >
               {s.emoji}
@@ -1546,14 +1570,14 @@ export function SheetFabricEditor({
         </div>
         {!isPlus ? (
           <p className="mt-3 text-xs text-[#6b7280]">
-            Preview only.{" "}
+            Try free. Save, PDF/PNG and photos need{" "}
             <Link href="/subscribe" className="text-[#d35400]">
               Plus
-            </Link>{" "}
-            unlocks editing & save.
+            </Link>
+            . {ONE_TIME_LINE}
           </p>
         ) : null}
-        {isPlus && layers.length > 0 ? (
+        {layers.length > 0 ? (
           <details className="mt-3 rounded-lg border border-[#e7e3de] bg-white p-2 text-xs">
             <summary className="cursor-pointer font-semibold">Layers ({layers.length})</summary>
             <p className="m-0 mt-1 text-[11px] text-[#6b7280]">Top of the list is in front.</p>
@@ -1599,7 +1623,6 @@ export function SheetFabricEditor({
           <select
             className="rounded-lg border border-[#e7e3de] px-2 py-1.5 text-sm"
             value={fontFamily}
-            disabled={!isPlus}
             onChange={(e) => setFontFamily(e.target.value as EditorFontId)}
             style={{ fontFamily }}
           >
@@ -1614,34 +1637,32 @@ export function SheetFabricEditor({
             min={10}
             max={72}
             value={fontSize}
-            disabled={!isPlus}
             onChange={(e) => setFontSize(Number(e.target.value) || 18)}
             className="w-16 rounded-lg border border-[#e7e3de] px-2 py-1.5 text-sm"
           />
           <input
             type="color"
             value={fill.startsWith("#") ? fill : "#d35400"}
-            disabled={!isPlus}
             onChange={(e) => setFill(e.target.value)}
             className="h-9 w-10 cursor-pointer rounded border border-[#e7e3de] bg-white"
             title="Color"
           />
-          <button type="button" className={`${toolBtn} ${bold ? toolBtnOn : ""}`} disabled={!isPlus} onClick={() => setBold((v) => !v)}>
+          <button type="button" className={`${toolBtn} ${bold ? toolBtnOn : ""}`} onClick={() => setBold((v) => !v)}>
             B
           </button>
-          <button type="button" className={`${toolBtn} italic ${italic ? toolBtnOn : ""}`} disabled={!isPlus} onClick={() => setItalic((v) => !v)}>
+          <button type="button" className={`${toolBtn} italic ${italic ? toolBtnOn : ""}`} onClick={() => setItalic((v) => !v)}>
             I
           </button>
-          <button type="button" className={`${toolBtn} underline ${underline ? toolBtnOn : ""}`} disabled={!isPlus} onClick={() => setUnderline((v) => !v)}>
+          <button type="button" className={`${toolBtn} underline ${underline ? toolBtnOn : ""}`} onClick={() => setUnderline((v) => !v)}>
             U
           </button>
-          <button type="button" className={toolBtn} disabled={!isPlus} onClick={applyStyleToActive}>
+          <button type="button" className={toolBtn} onClick={applyStyleToActive}>
             Apply
           </button>
           <button
             type="button"
             className={toolBtn}
-            disabled={!isPlus || !canUndo}
+            disabled={!canUndo}
             onClick={() => void undo()}
             title="Undo (Ctrl+Z) · last ~10 steps"
           >
@@ -1650,7 +1671,7 @@ export function SheetFabricEditor({
           <button
             type="button"
             className={toolBtn}
-            disabled={!isPlus || !canRedo}
+            disabled={!canRedo}
             onClick={() => void redo()}
             title="Redo (Ctrl+Y) · last ~10 steps"
           >
@@ -1659,7 +1680,6 @@ export function SheetFabricEditor({
           <button
             type="button"
             className={toolBtn}
-            disabled={!isPlus}
             onClick={removeActive}
             title="Delete selected (Delete / Backspace)"
           >
@@ -1669,33 +1689,33 @@ export function SheetFabricEditor({
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              disabled={!isPlus}
               className="min-w-[10rem] rounded-lg border border-[#e7e3de] px-2 py-1.5 text-sm"
               aria-label="Sheet name"
             />
             <button
               type="button"
               className="rounded-full bg-[#d35400] px-4 py-1.5 text-sm font-semibold text-white disabled:opacity-40"
-              disabled={!isPlus || !ready || saving}
+              disabled={!ready || saving}
               onClick={() => void save()}
+              title={isPlus ? undefined : "Save needs Plus"}
             >
               {saving ? "Saving…" : "Save"}
             </button>
             <button
               type="button"
               className={toolBtn}
-              disabled={!isPlus || !ready || exporting}
+              disabled={!ready || exporting}
               onClick={() => void exportPdf()}
-              title="Download Letter PDF (~300 dpi)"
+              title={isPlus ? "Download Letter PDF (~300 dpi)" : "PDF export needs Plus"}
             >
               {exporting ? "PDF…" : "PDF"}
             </button>
             <button
               type="button"
               className={toolBtn}
-              disabled={!isPlus || !ready || exporting}
+              disabled={!ready || exporting}
               onClick={() => void exportPng()}
-              title="Download ~300 dpi PNG"
+              title={isPlus ? "Download ~300 dpi PNG" : "PNG export needs Plus"}
             >
               PNG
             </button>
@@ -1762,6 +1782,7 @@ export function SheetFabricEditor({
         {status ? <p className="mt-2 text-sm text-[#6b7280]" aria-hidden>{status}</p> : null}
         {selectedLabel ? <p className="mt-1 text-xs text-[#9ca3af]">Selected: {selectedLabel}</p> : null}
       </div>
+      <PlusLockDialog open={plusLockOpen} onClose={() => setPlusLockOpen(false)} level={level} />
     </div>
   );
 }

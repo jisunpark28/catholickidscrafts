@@ -11,7 +11,7 @@ import {
   type MemoVisibility,
   type PassageMemoDto,
 } from "@/lib/bible-memos/passage-memos";
-import { PLUS_FROM_LABEL } from "@/lib/subscription/plan-copy";
+import { ONE_TIME_LINE, PLUS_FROM_LABEL } from "@/lib/subscription/plan-copy";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -328,7 +328,10 @@ export function MyMemosClient({
 
       {!paid && n > 0 && (
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#f5c58a] bg-[#fff4e5] px-4 py-3 text-sm text-[var(--color-ink)]">
-          <span>Your Plus plan has ended. You can still view and delete your memos.</span>
+          <span>
+            Your Plus pass has ended. You can still view and delete your memos.{" "}
+            <span className="font-semibold">{ONE_TIME_LINE}</span>
+          </span>
           <Link href="/subscribe" className={btnPrimary}>
             Get Plus again · {PLUS_FROM_LABEL}
           </Link>

@@ -20,7 +20,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
   if (!isSignedInReaderKey(key)) return signInError();
   if (!(await hasPaidFeatures(key))) {
     return NextResponse.json(
-      { error: "Editing memos is part of the family subscription", code: "subscription_required" },
+      { error: "Editing memos needs Catholic Kids Crafts Plus (one-time pass, no auto-renew)", code: "subscription_required" },
       { status: 403 },
     );
   }
