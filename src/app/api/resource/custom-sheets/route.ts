@@ -1,6 +1,7 @@
 import { parentApiGuard } from "@/lib/family-auth";
 import { parseCustomSheetData } from "@/lib/resource/custom-sheet-data";
 import { createCustomSheet, listCustomSheets } from "@/lib/resource/custom-sheet-db";
+import { parseCustomSheetThumb } from "@/lib/resource/custom-sheet-thumb";
 import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
@@ -52,10 +53,7 @@ export async function POST(request: Request) {
   if (!name) return NextResponse.json({ error: "Name is required" }, { status: 400 });
   const data = parseCustomSheetData(body.data, { familyAccountId: guard.session.familyAccountId });
   if (typeof data === "string") return NextResponse.json({ error: data }, { status: 400 });
-  const thumbUrl =
-    typeof body.thumbUrl === "string" && body.thumbUrl.startsWith("data:image/")
-      ? body.thumbUrl.slice(0, 120_000)
-      : null;
+  const thumbUrl = parseCustomSheetThumb(body.thumbUrl) ?? null;
 
   try {
     const row = await createCustomSheet({

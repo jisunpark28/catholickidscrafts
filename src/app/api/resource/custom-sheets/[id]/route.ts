@@ -5,6 +5,7 @@ import {
   getCustomSheet,
   updateCustomSheet,
 } from "@/lib/resource/custom-sheet-db";
+import { parseCustomSheetThumb } from "@/lib/resource/custom-sheet-thumb";
 import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
@@ -68,10 +69,9 @@ export async function PATCH(request: Request, ctx: Ctx) {
     patch.level = data.base.level;
     patch.baseRev = data.base.rev;
   }
-  if (body.thumbUrl === null) patch.thumbUrl = null;
-  else if (typeof body.thumbUrl === "string" && body.thumbUrl.startsWith("data:image/")) {
-    patch.thumbUrl = body.thumbUrl.slice(0, 120_000);
-  }
+  // A new save always replaces the thumbnail; a bad or oversized one clears it (grid then shows the base sheet).
+  const thumbUrl = parseCustomSheetThumb(body.thumbUrl);
+  if (thumbUrl !== undefined) patch.thumbUrl = thumbUrl;
 
   try {
     const row = await updateCustomSheet(id, guard.session.familyAccountId, patch);

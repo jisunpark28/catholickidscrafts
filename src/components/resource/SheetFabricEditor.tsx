@@ -15,6 +15,7 @@ import {
   type CustomSheetData,
   type EditorFontId,
 } from "@/lib/resource/custom-sheet-data";
+import { CUSTOM_SHEET_THUMB_MAX_CHARS, CUSTOM_SHEETS_DIRTY_KEY } from "@/lib/resource/custom-sheet-thumb";
 import { composeSheetCanvas, downloadSheetPdf, downloadSheetPng } from "@/lib/resource/export-sheet-pdf";
 import { loadEditorFonts } from "@/lib/resource/load-editor-fonts";
 import { prepareSheetPhotoUpload } from "@/lib/resource/resize-photo";
@@ -1396,7 +1397,22 @@ export function SheetFabricEditor({
       let thumbUrl: string | null = null;
       if (c) {
         const under = await underlayImage();
-        thumbUrl = composeSheetCanvas(c, under, 0.25).toDataURL("image/jpeg", 0.8);
+        // Sharp enough for the "My custom sheets" grid; step down until it fits the server limit.
+        for (const [scale, quality] of [
+          [0.4, 0.78],
+          [0.3, 0.72],
+          [0.22, 0.65],
+        ] as const) {
+          try {
+            const url = composeSheetCanvas(c, under, scale).toDataURL("image/jpeg", quality);
+            if (url.length <= CUSTOM_SHEET_THUMB_MAX_CHARS) {
+              thumbUrl = url;
+              break;
+            }
+          } catch {
+            break; // e.g. a tainted canvas: save the sheet without a thumbnail rather than failing
+          }
+        }
       }
       const payload = { name: name.trim() || "My sheet", data, thumbUrl };
       const res = await fetch(
@@ -1414,6 +1430,11 @@ export function SheetFabricEditor({
       }
       setCustomId(json.sheet.id);
       setStatus("Saved");
+      try {
+        window.sessionStorage.setItem(CUSTOM_SHEETS_DIRTY_KEY, "1");
+      } catch {
+        /* private mode */
+      }
     } catch {
       setStatus("Save failed");
     } finally {
