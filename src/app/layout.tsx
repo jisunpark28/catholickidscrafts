@@ -14,7 +14,14 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = siteMetadata;
+export const metadata: Metadata = {
+  ...siteMetadata,
+  other: {
+    ...(siteMetadata.other as Record<string, string | number | (string | number)[]> | undefined),
+    // Pinterest domain claim (catholickidscrafts.com) for every page.
+    "p:domain_verify": "4cb89808b8a92eab3beb3b60a346229d",
+  },
+};
 
 export default async function RootLayout({
   children,
