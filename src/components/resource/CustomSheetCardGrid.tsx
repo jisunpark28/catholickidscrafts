@@ -2,12 +2,13 @@
 
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { SheetThumb } from "@/components/resource/SheetThumb";
+import { CUSTOM_SHEETS_DIRTY_KEY } from "@/lib/resource/custom-sheet-thumb";
 import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import { keyToSlug } from "@/lib/resource/sheets";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type CustomSheetCard = {
   id: string;
@@ -73,6 +74,20 @@ function DeleteButton({ id, name }: { id: string; name: string }) {
 
 /** Plus saved sheets — same paper thumb style as the All library grid. */
 export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
+  const router = useRouter();
+  // Coming back from the editor (incl. the browser Back button, which reuses the cached page):
+  // refetch once so the thumbnails show the edits just saved.
+  useEffect(() => {
+    try {
+      if (window.sessionStorage.getItem(CUSTOM_SHEETS_DIRTY_KEY)) {
+        window.sessionStorage.removeItem(CUSTOM_SHEETS_DIRTY_KEY);
+        router.refresh();
+      }
+    } catch {
+      /* private mode */
+    }
+  }, [router]);
+
   if (sheets.length === 0) {
     return (
       <p className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-6 text-sm text-[#6b7280]">
@@ -96,13 +111,19 @@ export function CustomSheetCardGrid({ sheets }: { sheets: CustomSheetCard[] }) {
               className="flex flex-col rounded-2xl border border-[#e7e3de] bg-white p-3 shadow-[0_1px_3px_rgba(28,28,28,0.04)]"
             >
               <Link href={editHref} className="relative block no-underline" tabIndex={-1}>
-                {view ? (
-                  <SheetThumb sheet={view} level={s.level} />
-                ) : s.thumbUrl?.startsWith("data:image/") ? (
+                {s.thumbUrl?.startsWith("data:image/") ? (
+                  // The saved flattened picture of the user's own edits (made on Save).
                   <div className="overflow-hidden rounded-xl border border-[#ece7e1] bg-white shadow-[0_1px_2px_rgba(28,28,28,0.04)]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.thumbUrl} alt="" className="block w-full object-cover object-top" />
+                    {/* eslint-disable-next-line @next/next/no-img-element -- inline data URL, owner-only */}
+                    <img
+                      src={s.thumbUrl}
+                      alt={`${s.name} preview`}
+                      className="block aspect-[816/1056] w-full object-cover object-top"
+                    />
                   </div>
+                ) : view ? (
+                  // No saved picture (older save, or it could not be made): show the base sheet.
+                  <SheetThumb sheet={view} level={s.level} />
                 ) : (
                   <div className="flex aspect-[8.5/11] items-center justify-center rounded-xl border border-[#ece7e1] bg-white text-sm text-[#9ca3af]">
                     {s.name}
