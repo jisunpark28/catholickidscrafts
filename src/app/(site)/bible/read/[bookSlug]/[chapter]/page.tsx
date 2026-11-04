@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ref = displayRef(route.slug, bookName, route.chapterDisplay);
   return pageMetadata({
     ...chapterTitle(ref),
-    description: `Read ${ref} from the Catholic Bible (Douay-Rheims text, official Catholic chapter and verse numbers). Highlight verses and save memos with your family.`,
+    description: `Read ${ref} from the Catholic Bible. Highlight verses and save memos with your family.`,
     path: `/bible/read/${route.slug}/${route.label.toLowerCase()}`,
   });
 }
@@ -131,8 +131,6 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
             apiBookName={chapters[0]!.meta.book.name}
             urlChapter={route.label.toLowerCase()}
             chapterDisplay={route.chapterDisplay}
-            douayDiffers={route.douayDiffers}
-            legacy={route.legacy ?? null}
             segments={segments}
             discussionSignedIn={discussionSignedIn}
             discussionReaderLabel={readerLabel}

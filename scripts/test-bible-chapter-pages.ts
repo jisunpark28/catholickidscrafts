@@ -4,6 +4,8 @@
  */
 import {
   chapterGrid,
+  officialChapterLabel,
+  officialRangeRef,
   readHrefForDouay,
   resolveReadRoute,
   verseLabelsForDouayChapter,
@@ -82,6 +84,35 @@ for (const slug of Object.values(NABRE_BOOK_TO_SLUG)) {
   }
   for (let d = 1; d <= douayChapterCount(slug); d++) check(`unreached ${slug} ${d}`, owner.has(d));
 }
+
+// Every official psalm 1-150 opens a page (directly or by redirect), e.g. /bible/read/psalms/34
+for (let n = 1; n <= 150; n++) {
+  let r = resolveReadRoute("psalms", String(n));
+  if (r.type === "redirect") r = resolveReadRoute("psalms", r.to.split("#")[0]!.split("/").pop()!);
+  check(`psalm ${n} opens`, r.type === "page", r);
+}
+check("Psalm 34 page", page("psalms", "34")?.chapterDisplay === "34");
+
+// No Douay numbering in anything shown: verse labels and memo references
+let labelCount = 0;
+for (const slug of Object.values(NABRE_BOOK_TO_SLUG)) {
+  for (const cell of chapterGrid(slug)) {
+    const own = resolveReadRoute(slug, cell.label.toLowerCase());
+    if (own.type !== "page") continue;
+    for (const d of own.douayChapters) {
+      for (const l of verseLabelsForDouayChapter(slug, d, own.label)) {
+        labelCount++;
+        if (/douay/i.test(l.ref) || !/^[0-9A-F]+:\d/.test(l.ref)) check(`ref ${slug} ${d}:${l.verse}`, false, l);
+      }
+    }
+  }
+}
+check("memo ref Ps 34:19", officialRangeRef("psalms", 33, 19, 19) === "34:19");
+check("memo ref Ps 23", officialRangeRef("psalms", 22, 1, 6) === "23:1\u20136", officialRangeRef("psalms", 22, 1, 6));
+check("memo ref Mt", officialRangeRef("matthew", 5, 3, 3) === "5:3");
+check("memo ref unknown book", officialRangeRef("nosuchbook", 1, 1, 1) === null);
+check("chapter label Ps 33", officialChapterLabel("psalms", 33) === "34");
+console.log(`${labelCount} verse labels checked`);
 
 console.log(`${pages} reader pages checked, ${failures} failures`);
 if (failures > 0) process.exit(1);

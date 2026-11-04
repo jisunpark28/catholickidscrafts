@@ -153,6 +153,33 @@ export function nabreLabelForDouayChapter(slug: DouaySlug, douayChapter: number)
   return bookPages(slug).primary[douayChapter - 1] ?? null;
 }
 
+/** Official chapter label for a Douay-keyed chapter (Douay Psalm 33 -> "34"); other books unchanged. */
+export function officialChapterLabel(slug: string, douayChapter: number): string {
+  if (!isDouaySlug(slug)) return String(douayChapter);
+  return nabreLabelForDouayChapter(slug, douayChapter) ?? String(douayChapter);
+}
+
+/**
+ * Official reference for a Douay-keyed verse range: "34:19", "34:2–5", "9:20–10:2".
+ * Null when the slug or verses are unknown (callers fall back to the stored numbers).
+ */
+export function officialRangeRef(
+  slug: string,
+  douayChapter: number,
+  startVerse: number,
+  endVerse: number,
+): string | null {
+  if (!isDouaySlug(slug)) return null;
+  const a = douayToNabre(slug, douayChapter, startVerse);
+  const b = douayToNabre(slug, douayChapter, endVerse);
+  if (!a || !b) return null;
+  const ca = String(a.chapter);
+  const cb = String(b.chapter);
+  const vb = b.verseEnd ?? b.verse;
+  if (ca === cb) return a.verse === vb ? `${ca}:${a.verse}` : `${ca}:${a.verse}\u2013${vb}`;
+  return `${ca}:${a.verse}\u2013${cb}:${vb}`;
+}
+
 /** Reader URL for a Douay-numbered chapter (memos, progress, old links). */
 export function readHrefForDouay(slug: string, douayChapter: number, douayVerse?: number): string {
   if (!isDouaySlug(slug)) return `/bible/read/${slug}/${douayChapter}`;
@@ -200,9 +227,9 @@ export type VerseLabel = {
   verse: number;
   /** What the reader sees: "19", "7:26", "11–12"; "13" with douay=true when approximate. */
   text: string;
-  /** Full reference for memo cards: "34:19" or "Douay 33:13". */
+  /** Full official reference for memo cards: "34:19" (nearest official verse when approximate). */
   ref: string;
-  /** Approximate / no NABRE counterpart: number shown is the Douay-Rheims one. */
+  /** Approximate / no official counterpart: no number is shown; the text reads on. */
   douay?: true;
   /** Same official verse as the previous Douay verse (merged); render no number. */
   continued?: true;
@@ -218,11 +245,14 @@ export function verseLabelsForDouayChapter(
 ): VerseLabel[] {
   const out: VerseLabel[] = [];
   let prev = "";
+  let prevRef = "";
   for (let v = 1; v <= douayVerseCount(slug, douayChapter); v++) {
     const m = douayToNabre(slug, douayChapter, v);
     if (!m || m.quality === "approximate" || m.noCounterpart) {
-      out.push({ verse: v, text: String(v), ref: `Douay ${douayChapter}:${v}`, douay: true });
+      const ref = m ? `${m.chapter}:${m.verse}` : prevRef || `${pageLabel}:1`;
+      out.push({ verse: v, text: String(v), ref, douay: true });
       prev = "";
+      prevRef = ref;
       continue;
     }
     const ch = String(m.chapter);
@@ -235,6 +265,7 @@ export function verseLabelsForDouayChapter(
     }
     out.push(label);
     prev = text;
+    prevRef = label.ref;
   }
   return out;
 }
