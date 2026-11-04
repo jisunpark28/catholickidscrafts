@@ -2,7 +2,7 @@ import { getBibleBookCatalogEntry } from "@/lib/bible/chapter-notes/catalog";
 
 /** Book slug for `/bible/[book]` and `/bible/read/[book]/[chapter]`, when it is a canon book. */
 export function testamentBookSlugFromPath(pathname: string): string | null {
-  const chapter = pathname.match(/^\/bible\/read\/([^/]+)\/\d+(?:\/|$)/);
+  const chapter = pathname.match(/^\/bible\/read\/([^/]+)\/(?:\d+|[a-f])(?:\/|$)/i);
   const book = pathname.match(/^\/bible\/([^/]+)$/);
   const slug = chapter?.[1] ?? book?.[1] ?? null;
   if (!slug || !getBibleBookCatalogEntry(slug)) return null;

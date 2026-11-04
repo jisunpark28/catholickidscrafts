@@ -63,7 +63,7 @@ export function catholicGospelLabelKo(bookSlug: string): string | null {
 
 export function catholicChapterHeading(
   bookSlug: string,
-  chapter: number,
+  chapter: number | string,
   locale: PrayerLanguageCode,
   apiBookName: string,
 ): string {
@@ -75,7 +75,7 @@ export function catholicChapterHeading(
 
 export function catholicChapterNotesTitle(
   bookSlug: string,
-  chapter: number,
+  chapter: number | string,
   locale: PrayerLanguageCode,
   apiBookName: string,
 ): string {

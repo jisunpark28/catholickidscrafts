@@ -65,7 +65,8 @@ function MemoCard({
   const edited = memo.updatedAt !== memo.createdAt;
   const c = memoColor(memo.color);
   const author = memo.mine ? (viewer.isParent ? `Me (${viewer.name})` : "Me") : memo.authorName;
-  const bibleHref = `/bible/read/${memo.bookSlug}/${memo.chapter}`;
+  // Memos are stored with Douay-Rheims numbers; the reader redirects to the official chapter.
+  const bibleHref = `/bible/read/${memo.bookSlug}/${memo.chapter}?douay=1&v=${memo.startVerse}`;
 
   async function patch(data: { body?: string; color?: MemoColor; visibility?: MemoVisibility }) {
     setBusy(true);
