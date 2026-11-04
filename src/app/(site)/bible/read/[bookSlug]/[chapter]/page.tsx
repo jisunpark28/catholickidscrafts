@@ -6,12 +6,14 @@ import {
 } from "@/components/bible/BibleChapterReadClient";
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
+import { NewNoteBanner, ParentReplyBanner } from "@/components/moms-bible/MbBanners";
 import { getCatholicBookName } from "@/lib/bible/catholic-book-names";
 import { resolveReadRoute, verseLabelsForDouayChapter } from "@/lib/bible/chapter-pages";
 import { fetchBibleBooks, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { modernizeVerse } from "@/lib/bible/modernize-for-reading";
 import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
 import { buildVerseOffsetTable, chapterTextVersion } from "@/lib/bible-memos/verse-offsets";
+import { readerPageMomsBible } from "@/lib/moms-bible/page-data";
 import { hasPaidFeatures } from "@/lib/subscription/entitlements";
 import { normalizePassageText } from "@/lib/typing-accuracy";
 import { getHeaderSession } from "@/lib/get-header-session";
@@ -114,6 +116,12 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
     };
   });
 
+  const mb = await readerPageMomsBible({
+    bookSlug: route.slug,
+    chapters: route.douayChapters,
+    childParam: first(sp.child) ?? null,
+  });
+
   const headerSession = await getHeaderSession();
   const discussionSignedIn = isHeaderSignedIn(headerSession);
   const readerLabel =
@@ -125,6 +133,8 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
   return (
     <TestamentPageShell>
       <HubTypingWidth wide className="space-y-4">
+        {mb.childBanner && <NewNoteBanner note={mb.childBanner} />}
+        {mb.parentBanner && <ParentReplyBanner data={mb.parentBanner} />}
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
           <BibleChapterReadClient
             bookSlug={route.slug}
@@ -134,6 +144,8 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
             segments={segments}
             discussionSignedIn={discussionSignedIn}
             discussionReaderLabel={readerLabel}
+            momsBible={mb.view}
+            momsBibleIntro={mb.intro}
           />
         </Suspense>
       </HubTypingWidth>

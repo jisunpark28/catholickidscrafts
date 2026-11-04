@@ -1,10 +1,13 @@
 import { BillingButton, PlanCheckout } from "@/components/BillingButton";
 import { FamilyLogoutButton } from "@/components/FamilyLogoutButton";
 import { SubProfilesManager } from "@/components/SubProfilesManager";
+import { MomsBibleAccountSection } from "@/components/moms-bible/MomsBibleAccountSection";
+import { ParentReplyBanner } from "@/components/moms-bible/MbBanners";
 import { PageShell } from "@/components/PageShell";
 import { MAX_SUB_PROFILES_PER_FAMILY } from "@/lib/access-code";
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { requireParentActive } from "@/lib/family-auth";
+import { accountMomsBible } from "@/lib/moms-bible/account-data";
 import { redirect } from "next/navigation";
 import { canonicalForPath } from "@/lib/site-metadata";
 import { prisma } from "@/lib/prisma";
@@ -37,6 +40,7 @@ export default async function AccountDashboardPage() {
   const memoCount = await prisma.biblePassageMemo.count({
     where: { familyAccountId: session!.familyAccountId },
   });
+  const momsBible = await accountMomsBible(session!.familyAccountId);
 
   return (
     <PageShell wide>
@@ -52,6 +56,12 @@ export default async function AccountDashboardPage() {
         </div>
         <FamilyLogoutButton mode="signout" />
       </div>
+
+      {momsBible.replies.count > 0 && (
+        <div className="mt-6">
+          <ParentReplyBanner data={momsBible.replies} />
+        </div>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <SubProfilesManager
@@ -111,6 +121,13 @@ export default async function AccountDashboardPage() {
             </p>
             <p className="mt-3 text-xs text-[var(--color-muted)]">Secure checkout with Stripe.</p>
           </section>
+
+          <MomsBibleAccountSection
+            roleLabel={momsBible.roleLabel}
+            emailMode={momsBible.emailMode}
+            ownChildren={momsBible.ownChildren}
+            joined={momsBible.joined}
+          />
 
           <section className="flex items-center justify-between gap-3 border border-[var(--color-border)] bg-white p-5 sm:p-6">
             <div>

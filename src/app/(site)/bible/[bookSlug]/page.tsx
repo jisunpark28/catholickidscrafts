@@ -4,6 +4,7 @@ import { nabreChapterLabels } from "@/lib/bible/chapter-pages";
 import { booksByTestament, fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { NABRE_BOOK_TO_SLUG, SLUG_TO_NABRE_BOOK, isDouaySlug, isNabreBookId } from "@/lib/bible/ref-map";
 import { getCompletedChaptersForBook } from "@/lib/bible/progress";
+import { bookPageMomsBible } from "@/lib/moms-bible/page-data";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -39,7 +40,10 @@ export default async function BibleBookPage({ params }: Props) {
   }
 
   const testamentBooks = booksByTestament(books, book.testament);
-  const completedChapters = await getCompletedChaptersForBook(bookSlug);
+  const [completedChapters, momsBible] = await Promise.all([
+    getCompletedChaptersForBook(bookSlug),
+    isDouaySlug(bookSlug) ? bookPageMomsBible(bookSlug).catch(() => null) : Promise.resolve(null),
+  ]);
 
   const testament =
     book.testament === "OT"
@@ -52,6 +56,7 @@ export default async function BibleBookPage({ params }: Props) {
         book={book}
         testamentBooks={testamentBooks}
         completedChapters={completedChapters}
+        momsBible={momsBible}
       />
     </>
   );

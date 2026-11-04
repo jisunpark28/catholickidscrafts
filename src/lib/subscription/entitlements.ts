@@ -47,8 +47,29 @@ export async function resolveFamilyPlus(familyAccountId: string): Promise<{
   return { isPlus: false, source: "free", pass, sub };
 }
 
+/**
+ * Family Pass for a child: true when ANY parent linked to the child (the owning family or a
+ * co-parent via ParentChildLink) has active Plus. Used for Mom's Bible notes/highlights and for
+ * a child's own paid features. It never makes the other parent's own account Plus.
+ */
+export async function childHasFamilyPass(subProfileId: string): Promise<boolean> {
+  const [sub, links] = await Promise.all([
+    prisma.subProfile.findUnique({ where: { id: subProfileId }, select: { familyAccountId: true } }),
+    prisma.parentChildLink.findMany({ where: { subProfileId }, select: { parentAccountId: true } }),
+  ]);
+  const ids = new Set<string>();
+  if (sub) ids.add(sub.familyAccountId);
+  for (const l of links) ids.add(l.parentAccountId);
+  for (const id of ids) {
+    if ((await resolveFamilyPlus(id)).isPlus) return true;
+  }
+  return false;
+}
+
 export async function hasPaidFeatures(key: ReaderKey | null): Promise<boolean> {
   if (!key || key.type === "guest") return false;
+  // Children: Family Pass (any linked parent with Plus), Mom's Bible design section 3.
+  if (key.type === "sub") return childHasFamilyPass(key.subProfileId);
   const familyAccountId = await familyAccountIdForReader(key);
   if (!familyAccountId) return false;
   return (await resolveFamilyPlus(familyAccountId)).isPlus;
