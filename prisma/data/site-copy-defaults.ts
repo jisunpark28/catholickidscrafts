@@ -116,7 +116,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("home.features.play.description", "Faith games for kids: Come to Mass!, liturgical vestments, hangman and more.", "home"),
   sc("home.features.play.cta", "Play now", "home"),
   sc("home.features.prayers.title", "Prayers", "home"),
-  sc("home.features.prayers.description", "Flip cards for the Sign of the Cross, Our Father, Hail Mary and more, plus every prayer in 10 languages.", "home"),
+  sc("home.features.prayers.description", "Flip cards for the Sign of the Cross, Our Father, Hail Mary and more.", "home"),
   sc("home.features.prayers.cta", "Pray together", "home"),
   sc("home.features.program.title", "Lesson Kits (Custom Sheet)", "home"),
   sc("home.features.program.description", "Build your own lesson kit: games, Gospel typing and crafts in one sheet.", "home"),

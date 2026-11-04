@@ -64,7 +64,7 @@ const FEATURES: Feature[] = [
     title: "Bible Typing",
     hook: "Type your way through the whole Bible!",
     description: "Type the whole Bible chapter by chapter and collect a sticker for every chapter.",
-    benefits: ["Old & New Testament", "A sticker every chapter", "Many languages"],
+    benefits: ["Old & New Testament", "Word-by-word practice", "Track your progress"],
     badge: "⭐ Sign in to collect stickers",
     cta: "Open the Bible",
   },
