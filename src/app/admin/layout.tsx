@@ -41,6 +41,9 @@ export default async function AdminLayout({
               <Link href="/admin/photo-booth-frames" className="hover:text-[var(--color-accent)]">
                 Photo booth
               </Link>
+              <Link href="/admin/site-copy" className="hover:text-[var(--color-accent)]">
+                Site copy
+              </Link>
               {superAdmin && (
                 <Link href="/admin/operators" className="hover:text-[var(--color-accent)]">
                   Operators
