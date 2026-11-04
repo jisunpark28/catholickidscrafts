@@ -13,7 +13,7 @@ export function FamilySignupForm(props: Props) {
     <div className="w-full max-w-md border border-[var(--color-border)] bg-white p-8">
       <h2 className="text-xl font-bold text-[var(--color-ink)]">Create family account</h2>
       <p className="mt-2 text-sm text-[var(--color-muted)]">
-        Parents manage reader profiles and Access IDs for children (no email required for readers).
+        Parents manage reader profiles, Kid Codes and PINs for children (no email required for readers).
       </p>
       <div className="mt-6">
         <GoogleFamilySignIn from="signup" />

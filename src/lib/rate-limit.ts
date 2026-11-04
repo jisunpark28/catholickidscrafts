@@ -97,11 +97,18 @@ async function pruneRateLimits(): Promise<void> {
   }
 }
 
-/** Child Access ID sign-in: 10 failures per IP in 15 minutes, then 15 minutes blocked. */
+/** Legacy child Access ID sign-in (retired in Mom's Bible PR-2; kept for old imports). */
 export const READER_LOGIN_RULE: RateLimitRule = {
   max: 10,
   windowMs: 15 * 60 * 1000,
   blockMs: 15 * 60 * 1000,
+};
+
+/** Kid Code + PIN sign-in: 20 failures per IP in 15 minutes, then 1 hour blocked. */
+export const KID_PIN_IP_RULE: RateLimitRule = {
+  max: 20,
+  windowMs: 15 * 60 * 1000,
+  blockMs: 60 * 60 * 1000,
 };
 
 /** Parent Google sign-in callback: 30 attempts per IP in 15 minutes. */

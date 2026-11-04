@@ -89,7 +89,7 @@ export default async function TermsPage() {
 
       <h2 className="pt-4 text-xl font-bold">Privacy</h2>
       <p>
-        How we handle cookies, family accounts, and Access IDs is described in our{" "}
+        How we handle cookies, family accounts, and Kid Codes is described in our{" "}
         <Link href="/privacy" className="text-[var(--color-link)]">
           Privacy Policy
         </Link>

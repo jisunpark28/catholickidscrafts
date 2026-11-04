@@ -1,10 +1,13 @@
 import { parentApiGuard } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
+import { crossOriginError } from "@/lib/same-origin";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: Params) {
+  const originError = crossOriginError(request);
+  if (originError) return originError;
   const guard = await parentApiGuard();
   if (guard.error) return guard.error;
   const { session } = guard;
@@ -24,7 +27,7 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Profile not found" }, { status: 404 });
   }
 
-  const displayName = body.displayName?.trim();
+  const displayName = typeof body.displayName === "string" ? body.displayName.trim() : "";
   const data: { displayName?: string; active?: boolean } = {};
   if (displayName) data.displayName = displayName;
   if (typeof body.active === "boolean") data.active = body.active;
@@ -35,7 +38,7 @@ export async function PATCH(request: Request, { params }: Params) {
     select: {
       id: true,
       displayName: true,
-      accessCodeLast4: true,
+      kidCode: true,
       active: true,
     },
   });
@@ -43,7 +46,9 @@ export async function PATCH(request: Request, { params }: Params) {
   return NextResponse.json({ sub });
 }
 
-export async function DELETE(_request: Request, { params }: Params) {
+export async function DELETE(request: Request, { params }: Params) {
+  const originError = crossOriginError(request);
+  if (originError) return originError;
   const guard = await parentApiGuard();
   if (guard.error) return guard.error;
   const { session } = guard;

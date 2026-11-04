@@ -51,8 +51,8 @@ export default async function PrivacyPage() {
         <li>
           <strong>Family accounts (optional):</strong> Parents may create an account at{" "}
           <code>/account/signup</code> with email and a hashed password. We store reader display
-          names, Access ID hashes (not plain Access IDs), and Bible chapter completion counts for
-          sticker progress. Children sign in with an Access ID only—no child email is collected.
+          names, Kid Codes, PIN hashes (never plain PINs), and Bible chapter completion counts for
+          sticker progress. Children sign in with a Kid Code and a 4-digit PIN set by a parent—no child email is collected.
         </li>
         <li>
           <strong>Google sign-in (optional):</strong> Google sign-in is optional and only used when

@@ -23,7 +23,7 @@ export async function POST(request: Request, context: RouteContext) {
     const readerKey = await getSignedInDiscussionReader();
     if (!readerKey) {
       return NextResponse.json(
-        { error: "Sign in with a family account or Access ID to reply." },
+        { error: "Sign in with a family account or Kid Code to reply." },
         { status: 401 },
       );
     }

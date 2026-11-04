@@ -21,7 +21,7 @@ export function FamilyLogoutButton({ mode = "both" }: Props) {
   async function logoutEverywhere() {
     if (
       !window.confirm(
-        "Sign out on every device? Children's Access ID sign-ins will also be signed out.",
+        "Sign out on every device? Children's Kid Code sign-ins will also be signed out.",
       )
     ) {
       return;

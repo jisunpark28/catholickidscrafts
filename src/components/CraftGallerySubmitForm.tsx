@@ -137,8 +137,8 @@ export function CraftGallerySubmitForm({ resourceSlug, resourceTitle }: Props) {
             Sign in
           </Link>{" "}
           or{" "}
-          <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-            Access ID
+          <Link href="/kids" className="font-semibold text-[var(--color-link)]">
+            Kid Code
           </Link>{" "}
           to upload a photo. We review every submission before it appears in the gallery.
         </p>

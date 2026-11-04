@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Family sign-up",
   // Sign-in screens have no search value; keep them out of the index.
   robots: { index: false, follow: true },
-  description: "Create a parent account to manage reader Access IDs and Bible progress.",
+  description: "Create a parent account to manage Kid Codes, PINs and Bible progress.",
   ...canonicalForPath("/account/signup"),
 };
 

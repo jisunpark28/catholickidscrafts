@@ -45,13 +45,13 @@ export function FamilyLoginForm({ error }: Props) {
       <div className="my-6 h-px bg-[#efe6da]" />
 
       <p className="text-[14px] text-[var(--color-ink)]">
-        <span aria-hidden>👧 </span>Kids reading on their own? Use your Access ID
+        <span aria-hidden>👧 </span>Kids reading on their own? Use your Kid Code and PIN
       </p>
       <Link
-        href="/reader/login"
+        href="/kids"
         className="mt-3 flex min-h-[44px] w-full items-center justify-center rounded-lg border-2 border-[#e07b39] bg-white text-[15px] font-semibold text-[#c4621f] no-underline transition hover:bg-[#fdf3ea]"
       >
-        Reader sign-in
+        Kid sign-in
       </Link>
     </div>
   );

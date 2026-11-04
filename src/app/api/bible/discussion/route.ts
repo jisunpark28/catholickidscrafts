@@ -136,7 +136,7 @@ export async function POST(request: Request) {
     const readerKey = await getSignedInDiscussionReader();
     if (!readerKey) {
       return NextResponse.json(
-        { error: "Sign in with a family account or Access ID to post." },
+        { error: "Sign in with a family account or Kid Code to post." },
         { status: 401 },
       );
     }
