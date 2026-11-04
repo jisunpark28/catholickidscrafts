@@ -3,7 +3,9 @@
 import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
 import { BibleChapterPassage } from "@/components/bible/BibleChapterPassage";
 import { BibleChapterReadingNotes } from "@/components/bible/BibleChapterReadingNotes";
-import { MomsNotesPlaceholder } from "@/components/bible/MomsNotesPlaceholder";
+import { MomsBiblePanel } from "@/components/moms-bible/MomsBiblePanel";
+import { MomsBibleSignInCard } from "@/components/moms-bible/MomsBibleSignInCard";
+import { useMomsBible } from "@/components/moms-bible/useMomsBible";
 import {
   catholicChapterHeading,
   getCatholicBookName,
@@ -16,8 +18,9 @@ import {
   type PrayerLanguageCode,
 } from "@/lib/prayers/prayer-languages";
 import type { PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
+import type { MbChapterView } from "@/lib/moms-bible/types";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import "@/styles/bible-reader.css";
 
 /** One Douay-Rheims chapter shown on the page (memos stay keyed by it). */
@@ -40,6 +43,10 @@ type Props = {
   segments: readonly BibleReaderSegment[];
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
+  /** Mom's Bible data for a parent (selected child) or a signed-in child; null otherwise. */
+  momsBible?: MbChapterView | null;
+  /** Who sees the "how Mom's Bible works" card instead: guests, or a parent with no child yet. */
+  momsBibleIntro?: "guest" | "no-child" | null;
 };
 
 function heading(bookSlug: string, display: string, locale: PrayerLanguageCode, apiBookName: string) {
@@ -70,6 +77,8 @@ export function BibleChapterReadClient({
   segments,
   discussionSignedIn,
   discussionReaderLabel,
+  momsBible,
+  momsBibleIntro,
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -122,6 +131,11 @@ export function BibleChapterReadClient({
 
   if (!firstSegment) return null;
 
+  const paneLabel = (s: BibleReaderSegment) =>
+    segments.length > 1
+      ? segmentLabel(bookSlug === "psalms" ? "Psalm" : localizedBookName, s.verseLabels, title)
+      : title;
+
   return (
     <div className="space-y-4">
       <div>
@@ -141,24 +155,40 @@ export function BibleChapterReadClient({
       />
 
       <div className="bible-reader gospel-typing gospel-typing--bible overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm">
-        <div className="bible-reader__columns">
-          <div className="bible-reader__passages">
-            {segments.map((s) => (
+        {momsBible ? (
+          <ColumnsWithMomsBible
+            view={momsBible}
+            bookSlug={bookSlug}
+            refBookName={bookSlug === "psalms" ? "Psalm" : getCatholicBookName(bookSlug, "en", apiBookName)}
+            segments={segments}
+            initialSituation={searchParams.get("situation")}
+            renderPassage={(s, mbProps) => (
               <BibleChapterPassage
                 key={s.douayChapter}
                 bookSlug={bookSlug}
                 bookName={localizedBookName}
                 segment={s}
-                paneLabel={
-                  segments.length > 1
-                    ? segmentLabel(bookSlug === "psalms" ? "Psalm" : localizedBookName, s.verseLabels, title)
-                    : title
-                }
+                paneLabel={paneLabel(s)}
+                momsBible={mbProps}
               />
-            ))}
+            )}
+          />
+        ) : (
+          <div className="bible-reader__columns">
+            <div className="bible-reader__passages">
+              {segments.map((s) => (
+                <BibleChapterPassage
+                  key={s.douayChapter}
+                  bookSlug={bookSlug}
+                  bookName={localizedBookName}
+                  segment={s}
+                  paneLabel={paneLabel(s)}
+                />
+              ))}
+            </div>
+            <MomsBibleSignInCard variant={momsBibleIntro ?? "guest"} />
           </div>
-          <MomsNotesPlaceholder />
-        </div>
+        )}
       </div>
 
       <BibleChapterDiscussion
@@ -166,6 +196,64 @@ export function BibleChapterReadClient({
         chapter={firstSegment.douayChapter}
         initialSignedIn={discussionSignedIn}
         initialReaderLabel={discussionReaderLabel}
+      />
+    </div>
+  );
+}
+
+type PassageMb = NonNullable<Parameters<typeof BibleChapterPassage>[0]["momsBible"]>;
+
+/** Passage + Mom's Bible column sharing one state (marks on the text, notes on the right). */
+function ColumnsWithMomsBible({
+  view,
+  bookSlug,
+  refBookName,
+  segments,
+  initialSituation,
+  renderPassage,
+}: {
+  view: MbChapterView;
+  bookSlug: string;
+  refBookName: string;
+  segments: readonly BibleReaderSegment[];
+  initialSituation: string | null;
+  renderPassage: (s: BibleReaderSegment, mb: PassageMb) => ReactNode;
+}) {
+  const chapters = segments.map((s) => s.douayChapter);
+  const mb = useMomsBible(view, bookSlug, chapters);
+  const { setSelected, canSelectVerses } = mb;
+
+  // "Open & leave a note" from the situations page: pre-select the linked verse for the parent.
+  useEffect(() => {
+    if (!canSelectVerses || !initialSituation) return;
+    const id = window.location.hash.slice(1);
+    for (const s of segments) {
+      const l = s.verseLabels.find((x) => x.id === id && !x.continued && !x.douay);
+      if (l) {
+        setSelected({ chapter: s.douayChapter, verse: l.verse });
+        return;
+      }
+    }
+  }, [canSelectVerses, initialSituation, segments, setSelected]);
+
+  const passageMb: PassageMb = {
+    verseClass: mb.verseClass,
+    verseBadge: mb.verseBadge,
+    onVerseClick: canSelectVerses
+      ? (chapter, verse) =>
+          setSelected((cur) => (cur && cur.chapter === chapter && cur.verse === verse ? null : { chapter, verse }))
+      : undefined,
+  };
+
+  return (
+    <div className="bible-reader__columns">
+      <div className="bible-reader__passages">{segments.map((s) => renderPassage(s, passageMb))}</div>
+      <MomsBiblePanel
+        mb={mb}
+        bookSlug={bookSlug}
+        refBookName={refBookName}
+        segments={segments}
+        initialSituation={initialSituation}
       />
     </div>
   );
