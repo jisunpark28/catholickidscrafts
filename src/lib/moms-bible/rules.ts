@@ -19,6 +19,7 @@ const OK: Decision = { ok: true };
 export const MB_NOT_FOUND = "Not found";
 export const MB_PLUS_NEEDED =
   "Writing new notes and highlights needs Plus for one of this child's parents. Reading always stays open.";
+export const MB_PDF_PLUS = "Printing the Bible book needs Plus on your own account.";
 export const MB_REPLY_LOCKED =
   "You already answered this note. More replies come back when your family has Plus again.";
 
@@ -31,6 +32,15 @@ export function canParentRead(f: ParentFacts): Decision {
 export function canParentWrite(f: ParentFacts): Decision {
   if (!f.linked) return { ok: false, status: 404, error: MB_NOT_FOUND };
   if (!f.familyPass) return { ok: false, status: 402, error: MB_PLUS_NEEDED };
+  return OK;
+}
+
+/**
+ * The keepsake PDF: a linked parent with their OWN Plus (Family Pass doesn't cover it, design 3/C).
+ */
+export function canParentPrintPdf(f: { linked: boolean; ownPlus: boolean }): Decision {
+  if (!f.linked) return { ok: false, status: 404, error: MB_NOT_FOUND };
+  if (!f.ownPlus) return { ok: false, status: 402, error: MB_PDF_PLUS };
   return OK;
 }
 
@@ -133,12 +143,28 @@ export function cleanRoleLabel(raw: unknown): string | null {
 
 // ───────────────────────── Stamps + seeds ─────────────────────────
 
-/** One stamp per child x chapter: the one that needs action first. */
-export function chapterStamp(notes: readonly { childRepliedAt: Date | null }[], highlightCount: number): MbStamp {
-  if (notes.some((n) => n.childRepliedAt === null)) return "waiting";
+/**
+ * One stamp per child x chapter, the one that needs attention first.
+ * Child: an unanswered note = waiting (new note to read); all answered = shared; only marks = mine.
+ * Parent: an unseen child reply = waiting (new reply to read); a note not answered yet or only
+ * highlights = mine; all answered = shared.
+ */
+export function chapterStamp(
+  viewer: "parent" | "child",
+  notes: readonly { childRepliedAt: Date | null }[],
+  highlightCount: number,
+  unseenReplies = 0,
+): MbStamp {
+  const open = notes.some((n) => n.childRepliedAt === null);
+  if (viewer === "child") {
+    if (open) return "waiting";
+    if (notes.length > 0) return "shared";
+    return highlightCount > 0 ? "mine" : null;
+  }
+  if (unseenReplies > 0) return "waiting";
+  if (open) return "mine";
   if (notes.length > 0) return "shared";
-  if (highlightCount > 0) return "highlights";
-  return null;
+  return highlightCount > 0 ? "mine" : null;
 }
 
 /** 🌱 seeds: chapters where the child answered at least one note. */

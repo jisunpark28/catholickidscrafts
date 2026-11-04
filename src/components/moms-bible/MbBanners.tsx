@@ -21,7 +21,7 @@ export function NewNoteBanner({ note }: { note: ChildNoteBannerData }) {
       <p>
         <span aria-hidden>💌</span> {note.roleLabel} left a new note for you in {note.ref}!
       </p>
-      <Link className="mb-banner__open" href={readHrefForDouay(note.bookSlug, note.chapter, note.startVerse ?? undefined)}>
+      <Link className="mb-btn mb-btn--primary" href={readHrefForDouay(note.bookSlug, note.chapter, note.startVerse ?? undefined)}>
         Open →
       </Link>
     </div>
@@ -41,13 +41,13 @@ export function ParentReplyBanner({ data }: { data: ParentReplyBannerData }) {
   const [path, hash] = readHrefForDouay(l.bookSlug, l.chapter, l.startVerse ?? undefined).split("#");
   const href = `${path}?child=${encodeURIComponent(l.childId)}${hash ? `#${hash}` : ""}`;
   return (
-    <div className="mb-banner" role="status">
+    <div className="mb-banner mb-banner--small" role="status">
       <p>
         <span aria-hidden>💌</span>{" "}
         {data.count === 1 ? `${l.childName} sent a warm reply in ${l.ref}!` : `${data.count} warm replies are waiting for you!`}
       </p>
       <div className="flex items-center gap-2">
-        <Link className="mb-banner__open" href={href}>
+        <Link className="mb-btn mb-btn--primary" href={href}>
           Open →
         </Link>
         <button

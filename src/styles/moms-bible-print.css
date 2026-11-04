@@ -1,0 +1,132 @@
+/* Mom's Bible keepsake booklet (/print/moms-bible/[childId]). Screen: a centred page with a
+   settings bar. Print: the bar is hidden, the cover gets its own page, entries never split. */
+.mbp {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  font-family: Georgia, "Times New Roman", serif;
+  color: #1f2937;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.mbp-bar {
+  margin-bottom: 28px;
+  border-radius: 16px;
+  background: #fff3e6;
+  padding: 14px 16px;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+}
+.mbp-bar__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.mbp-bar__toggles { margin-top: 10px; justify-content: flex-start; gap: 18px; }
+.mbp-bar__toggles input { accent-color: #d35400; }
+.mbp-bar__back { font-weight: 700; color: #d35400; }
+.mbp-bar__dedication { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.mbp-bar__dedication label > span { display: block; font-size: 12px; font-weight: 800; color: #9a7ab3; text-transform: uppercase; letter-spacing: 0.5px; }
+.mbp-bar__dedication textarea,
+.mbp-bar__by input {
+  width: 100%;
+  border: 1px dashed #d8c8e8;
+  border-radius: 12px;
+  background: #fff;
+  padding: 8px 10px;
+  font: inherit;
+}
+.mbp-bar__by { display: flex; flex: 1; align-items: center; gap: 8px; }
+.mbp-bar__by > span { white-space: nowrap; }
+.mbp-bar__msg { font-size: 13px; color: #2e7d32; }
+.mbp-bar__hint { margin-top: 8px; font-size: 12px; color: #8a7d96; }
+.mbp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: #d35400;
+  padding: 9px 18px;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+}
+.mbp-btn:disabled { opacity: 0.55; }
+.mbp-btn--ghost { border: 2px solid #d35400; background: #fff; color: #d35400; }
+
+.mbp-cover {
+  display: flex;
+  min-height: 80vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 3px double #e6c98f;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #fffaf0, #fff3e6);
+  padding: 48px 32px;
+  text-align: center;
+}
+.mbp-cover__emoji { font-size: 48px; }
+.mbp-cover__title { margin-top: 16px; font-size: 2.2rem; font-weight: 700; line-height: 1.2; }
+.mbp-cover__sub { margin-top: 8px; font-size: 1.1rem; font-style: italic; color: #8a5a2b; }
+.mbp-cover__dedication { margin: 32px auto 0; max-width: 28rem; font-size: 1.05rem; line-height: 1.6; white-space: pre-wrap; }
+.mbp-cover__dedication footer { margin-top: 8px; font-style: italic; color: #6b7280; }
+.mbp-cover__date { margin-top: 40px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 12px; color: #a39aac; }
+
+.mbp-legend { margin-top: 32px; border-radius: 14px; border: 1px solid #eee3d3; padding: 14px 18px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+.mbp-legend h2 { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #9a7ab3; }
+.mbp-legend ul { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; }
+.mbp-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.mbp-swatch { display: inline-block; width: 18px; height: 12px; border-radius: 4px; }
+.mbp-star-sample { border-bottom: 2px dashed #e0a800; }
+
+.mbp-hl--yellow { background-color: #fff1a8; }
+.mbp-hl--pink { background-color: #ffd9ea; }
+.mbp-hl--green { background-color: #d8f5d0; }
+.mbp-hl--blue { background-color: #d6e9ff; }
+
+.mbp-empty { margin-top: 32px; text-align: center; color: #8a7d96; }
+.mbp-book__title { margin-top: 36px; border-bottom: 2px solid #f2c94c; padding-bottom: 4px; font-size: 1.6rem; font-weight: 700; break-after: avoid; }
+.mbp-chapter__title { margin-top: 18px; font-size: 1.15rem; font-weight: 700; color: #8a5a2b; break-after: avoid; }
+
+.mbp-entry {
+  margin-top: 12px;
+  border-left: 5px solid #f2c94c;
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px 14px;
+  box-shadow: 0 1px 0 #eee3d3;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.mbp-entry--letter { border-left-color: #c79be8; background: #fdf8ff; }
+.mbp-entry__head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+.mbp-entry__ref { font-size: 12px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #9a7ab3; }
+.mbp-tag { border-radius: 999px; background: #fff3e6; padding: 1px 8px; font-size: 11px; font-weight: 700; color: #8a5a2b; }
+.mbp-verse { margin-top: 6px; border-radius: 6px; padding: 4px 6px; font-size: 15px; line-height: 1.6; }
+.mbp-verse--star { border-bottom: 2px dashed #e0a800; }
+.mbp-note { margin-top: 8px; }
+.mbp-note__text { white-space: pre-wrap; font-size: 15px; line-height: 1.55; }
+.mbp-note__by { margin-top: 2px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 11px; color: #a39aac; }
+.mbp-reply { margin: 8px 0 0 auto; width: fit-content; max-width: 85%; border-radius: 14px 14px 4px 14px; background: #fff1a8; padding: 6px 12px; font-size: 14px; }
+.mbp-who { font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-weight: 800; }
+.mbp-date { font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 11px; color: #8a7d96; }
+
+.mbp-blessing { margin-top: 40px; border: 2px solid #e6c98f; border-radius: 18px; padding: 20px 24px; break-inside: avoid; page-break-inside: avoid; }
+.mbp-blessing h2 { text-align: center; font-size: 1.3rem; font-weight: 700; }
+.mbp-blessing__lines { margin-top: 16px; }
+.mbp-blessing__lines div { height: 34px; border-bottom: 1px solid #d8c8b0; }
+.mbp-blessing__sign { margin-top: 24px; display: flex; align-items: flex-end; gap: 10px; font-family: Inter, ui-sans-serif, system-ui, sans-serif; font-size: 13px; }
+.mbp-line { flex: 1; border-bottom: 1px solid #1f2937; }
+.mbp-line--short { flex: 0 0 8rem; }
+
+.mbp-gate { max-width: 32rem; margin: 15vh auto; padding: 0 20px; text-align: center; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+.mbp-gate h1 { margin: 12px 0 8px; font-family: Georgia, serif; font-size: 1.5rem; font-weight: 700; }
+.mbp-gate p { margin-bottom: 18px; color: #6b7280; }
+
+@page { size: auto; margin: 16mm 14mm; }
+@media print {
+  .mbp { max-width: none; padding: 0; }
+  .mbp-bar { display: none !important; }
+  .mbp-cover { min-height: 245mm; break-after: page; page-break-after: always; border-radius: 0; }
+  .mbp-entry { box-shadow: none; border-top: 1px solid #f1e7d8; border-right: 1px solid #f1e7d8; border-bottom: 1px solid #f1e7d8; }
+  .mbp-blessing { break-before: page; page-break-before: always; }
+}

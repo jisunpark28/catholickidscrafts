@@ -1,18 +1,30 @@
 "use client";
 
 import type { BibleReaderSegment } from "@/components/bible/BibleChapterReadClient";
-import { SITUATION_GROUPS, getSituation } from "@/data/moms-bible/situations";
-import { normalizePassageText } from "@/lib/typing-accuracy";
-import { MB_COLORS, MB_COLOR_INFO, MB_LIMITS, MB_STICKERS, stickerLabel, type MbColorKey, type MbStickerKey } from "@/lib/moms-bible/constants";
-import type { MbNoteDto } from "@/lib/moms-bible/types";
+import { SAMPLE_NOTE_TEXT } from "@/data/moms-bible/sample-genesis-1";
+import { getSituation } from "@/data/moms-bible/situations";
+import {
+  MB_COLORS,
+  MB_COLOR_INFO,
+  MB_LIMITS,
+  MB_STICKERS,
+  colorLabel,
+  prayerStarters,
+  stickerLabel,
+  type MbColorKey,
+  type MbStickerKey,
+} from "@/lib/moms-bible/constants";
+import type { MbItemDto, MbNoteDto } from "@/lib/moms-bible/types";
 import { clip, ownerVerseMap, ownerVerseTexts } from "@/lib/moms-bible/verse-text";
+import { normalizePassageText } from "@/lib/typing-accuracy";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { mbFetch } from "./mb-fetch";
 import type { MomsBibleState } from "./useMomsBible";
 import "@/styles/moms-bible.css";
 
-type VerseInfo = { chapter: number; verse: number; ref: string; id?: string; text: string };
+type VerseInfo = { chapter: number; verse: number; num: string; ref: string; id?: string; text: string };
+type VerseIndex = Map<string, VerseInfo>;
 
 type Props = {
   mb: MomsBibleState;
@@ -25,29 +37,35 @@ type Props = {
   initialSituation?: string | null;
 };
 
-const PLUS_HREF = "/subscribe";
+const TZ = "America/Toronto";
+const HEART: Record<MbColorKey, string> = { YELLOW: "💛", GREEN: "💚", BLUE: "💙", PINK: "🩷" };
 
-function useVerseIndex(segments: readonly BibleReaderSegment[], refBookName: string) {
+export function fmtDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: TZ });
+}
+function fmtTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: TZ });
+}
+
+function useVerseIndex(segments: readonly BibleReaderSegment[], refBookName: string): VerseIndex {
   return useMemo(() => {
-    const map = new Map<string, VerseInfo>();
-    const order: VerseInfo[] = [];
+    const map: VerseIndex = new Map();
     for (const s of segments) {
       const owners = ownerVerseMap(s.verseMarkers, s.verseLabels);
       const texts = ownerVerseTexts(normalizePassageText(s.text), s.verseMarkers, owners);
       for (const l of s.verseLabels) {
         if (l.continued || l.douay) continue;
-        const info: VerseInfo = {
+        map.set(`${s.douayChapter}:${l.verse}`, {
           chapter: s.douayChapter,
           verse: l.verse,
+          num: l.text,
           ref: `${refBookName} ${l.ref}`,
           id: l.id,
           text: texts.get(l.verse) ?? "",
-        };
-        map.set(`${s.douayChapter}:${l.verse}`, info);
-        order.push(info);
+        });
       }
     }
-    return { map, order };
+    return map;
   }, [segments, refBookName]);
 }
 
@@ -56,47 +74,130 @@ function scrollToVerse(id?: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
+function cardColorClass(color: MbColorKey | null): string {
+  return color ? `mb-card--${color.toLowerCase()}` : "mb-card--yellow";
+}
+
+// ───────────────────────── Palette (after the selected verse) ─────────────────────────
+
+/** Floating palette under the selected verse (mockup 1): four colours + Star (+ Clear). */
+export function MbPalette({ mb, situationKey }: { mb: MomsBibleState; situationKey?: string | null }) {
+  const [busy, setBusy] = useState(false);
+  const sel = mb.selected;
+  if (!sel) return null;
+  const me = mb.view.authors.find((a) => a.isMe);
+  const cur = mb.myMark(sel.chapter, sel.verse);
+  const situation = getSituation(situationKey ?? null) ? situationKey! : undefined;
+  const run = async (next: Parameters<MomsBibleState["mark"]>[0]) => {
+    setBusy(true);
+    await mb.mark(next, [], situation);
+    setBusy(false);
+  };
+  return (
+    <div className="mb-palette" role="group" aria-label="Highlight this verse" onClick={(e) => e.stopPropagation()}>
+      {MB_COLORS.map((c) => (
+        <button
+          key={c}
+          type="button"
+          className="mb-palette__chip"
+          disabled={busy}
+          aria-pressed={cur?.color === c}
+          onClick={() => void run(cur?.color === c && !cur.star ? { clear: true } : { color: cur?.color === c ? null : c })}
+        >
+          {MB_COLOR_INFO[c].emoji} {colorLabel(c, me?.roleLabel)}
+        </button>
+      ))}
+      <button
+        type="button"
+        className="mb-palette__chip"
+        disabled={busy}
+        aria-pressed={Boolean(cur?.star)}
+        onClick={() => void run(cur?.star && !cur.color ? { clear: true } : { star: !cur?.star })}
+      >
+        ⭐ Star
+      </button>
+      {cur && (
+        <button type="button" className="mb-palette__chip mb-palette__chip--muted" disabled={busy} onClick={() => void run({ clear: true })}>
+          ✕ Clear
+        </button>
+      )}
+      {/* Small screens: the notes column sits below the text, so jump to the note box. */}
+      <button
+        type="button"
+        className="mb-palette__chip lg:hidden"
+        onClick={() => document.getElementById("mb-composer")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+      >
+        ✏️ Write a note ↓
+      </button>
+    </div>
+  );
+}
+
+// ───────────────────────── Notes column ─────────────────────────
+
 export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSituation }: Props) {
   const { view } = mb;
   const verses = useVerseIndex(segments, refBookName);
+  const isParent = view.viewer === "parent";
   const roleOf = (parentId: string | null) => view.authors.find((a) => a.parentId === parentId)?.roleLabel ?? "Parent";
+  const me = view.authors.find((a) => a.isMe) ?? null;
+  const situation = getSituation(initialSituation ?? null) ? initialSituation! : null;
+  const [letterOpen, setLetterOpen] = useState(false);
+
   const visibleNotes = view.notes.filter((n) => !mb.showTabs || !mb.activeAuthor || n.authorParentId === mb.activeAuthor);
   const letters = visibleNotes.filter((n) => n.startVerse === null);
-  const verseNotes = visibleNotes.filter((n) => n.startVerse !== null);
-  const isParent = view.viewer === "parent";
+  const verseNotes = visibleNotes
+    .filter((n) => n.startVerse !== null)
+    .sort((a, b) => a.chapter - b.chapter || (a.startVerse ?? 0) - (b.startVerse ?? 0) || a.createdAt.localeCompare(b.createdAt));
+
+  const sel = isParent ? mb.selected : null;
+  const myNoteAtSel = sel
+    ? view.notes.find((n) => n.chapter === sel.chapter && n.startVerse === sel.verse && n.authorParentId === me?.parentId) ?? null
+    : null;
+  const selInfo = sel ? verses.get(`${sel.chapter}:${sel.verse}`) ?? null : null;
+  // New card for the selected verse, slotted in verse order.
+  const draftPos = sel && !myNoteAtSel ? verseNotes.findIndex((n) => n.chapter > sel.chapter || (n.chapter === sel.chapter && (n.startVerse ?? 0) > sel.verse)) : -1;
+
   const tabAuthors = isParent
     ? view.authors
     : view.authors.filter((a) => view.notes.some((n) => n.authorParentId === a.parentId) || view.highlights.some((h) => h.authorParentId === a.parentId));
+  const hasDot = (parentId: string) =>
+    view.notes.some((n) => n.authorParentId === parentId && (isParent ? n.unseenReply : !n.childRepliedAt));
+
+  const draftCard =
+    sel && selInfo && !myNoteAtSel ? (
+      <article key="draft" className={`mb-card ${cardColorClass(mb.myMark(sel.chapter, sel.verse)?.color ?? null)}`}>
+        <div className="mb-lbl">
+          <span>
+            💌 {me?.roleLabel ?? "Mom"}&apos;s Note · v.{selInfo.num}
+          </span>
+          <button type="button" className="mb-x normal-case" aria-label="Close" onClick={() => mb.setSelected(null)}>
+            ×
+          </button>
+        </div>
+        <Composer mb={mb} bookSlug={bookSlug} target={{ kind: "verse", info: selInfo }} note={null} situation={situation} />
+      </article>
+    ) : null;
+
+  const noteCards: ReactNode[] = verseNotes.map((n) => (
+    <NoteCard
+      key={n.id}
+      note={n}
+      mb={mb}
+      roleLabel={roleOf(n.authorParentId)}
+      verse={verses.get(`${n.chapter}:${n.startVerse}`) ?? null}
+      endVerse={n.endVerse !== n.startVerse ? verses.get(`${n.chapter}:${n.endVerse}`) ?? null : null}
+      composer={
+        myNoteAtSel?.id === n.id && selInfo ? (
+          <Composer mb={mb} bookSlug={bookSlug} target={{ kind: "verse", info: selInfo }} note={n} situation={situation} />
+        ) : null
+      }
+    />
+  ));
+  if (draftCard) noteCards.splice(draftPos < 0 ? noteCards.length : draftPos, 0, draftCard);
 
   return (
-    <aside className="bible-reader__notes mb-panel" aria-labelledby="mb-panel-title">
-      <div className="mb-panel__head">
-        <h2 id="mb-panel-title" className="mb-panel__title">
-          <span aria-hidden>💌</span> {isParent ? "Mom's Bible" : "Notes for you"}
-        </h2>
-        {!isParent && (
-          <span className="mb-seeds" title="Seeds: chapters where you answered a note">
-            <span aria-hidden>🌱</span> {view.seeds}
-          </span>
-        )}
-      </div>
-
-      {isParent && view.children.length > 1 && (
-        <label className="mb-switcher">
-          <span className="sr-only">Whose Bible</span>
-          <select value={view.childId} onChange={(e) => void mb.switchChild(e.target.value)} disabled={mb.loading}>
-            {view.children.map((c) => (
-              <option key={c.id} value={c.id}>
-                Viewing {c.displayName}&apos;s Bible
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
-      {isParent && view.children.length === 1 && (
-        <p className="mb-panel__sub">Viewing {view.childName}&apos;s Bible</p>
-      )}
-
+    <aside className="bible-reader__notes mb-panel" aria-label={isParent ? `${view.childName}'s Bible notes` : "Notes for you"}>
       {mb.showTabs && (
         <div className="mb-tabs" role="tablist">
           {tabAuthors.map((a) => (
@@ -109,327 +210,213 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
               onClick={() => mb.setActiveAuthor(a.parentId)}
             >
               {a.roleLabel}&apos;s Notes
+              {hasDot(a.parentId) && mb.activeAuthor !== a.parentId && <span className="mb-dot" aria-label="new" />}
             </button>
           ))}
         </div>
       )}
 
-      {isParent && !view.familyPass && (
-        <div className="mb-card mb-card--lock">
-          <p className="font-semibold">🔒 New notes and highlights need Plus</p>
-          <p className="mt-1 text-xs">
-            Everything already written stays here to read. {view.childName} can still answer notes waiting for a reply.
+      {view.preview && (
+        <div className="mb-card mb-card--notice">
+          <div className="mb-lbl">✨ Sample · a peek at Mom&apos;s Bible</div>
+          <p className="mt-2 text-sm">
+            This is how highlights, notes and replies look in your child&apos;s own Bible. Tap a verse to try it.
           </p>
-          <Link href={PLUS_HREF} className="mb-btn mb-btn--primary mt-2 inline-block">
-            See Plus
-          </Link>
         </div>
       )}
+      {isParent && !view.preview && !view.familyPass && <ExpiredReadOnlyNotice mb={mb} />}
 
-      {isParent && (
-        <ParentTools mb={mb} bookSlug={bookSlug} verses={verses} initialSituation={initialSituation ?? null} />
+      {isParent && !sel && (view.familyPass || view.preview) && (
+        <p className="mb-hint">Tap a verse to highlight it or leave a note for {view.childName}.</p>
       )}
 
       {letters.map((n) => (
         <NoteCard key={n.id} note={n} mb={mb} roleLabel={roleOf(n.authorParentId)} verse={null} />
       ))}
-      {verseNotes.map((n) => (
-        <NoteCard
-          key={n.id}
-          note={n}
-          mb={mb}
-          roleLabel={roleOf(n.authorParentId)}
-          verse={verses.map.get(`${n.chapter}:${n.startVerse}`) ?? null}
-          endVerse={n.endVerse !== n.startVerse ? verses.map.get(`${n.chapter}:${n.endVerse}`) ?? null : null}
-        />
-      ))}
+      {noteCards}
 
       {!isParent && letters.length + verseNotes.length === 0 && (
-        <div className="mb-card mb-card--empty">
+        <div className="mb-card mb-card--plain">
           <p>No notes in this chapter yet.</p>
-          {view.highlights.length > 0 && <p className="mt-1 text-xs">Look for the coloured verses: they were marked just for you.</p>}
+          {view.highlights.length > 0 && <p className="mt-1 text-xs text-[#8a7d96]">Look for the coloured verses: they were marked just for you.</p>}
         </div>
+      )}
+
+      {isParent && (view.familyPass || view.preview) && (
+        letterOpen ? (
+          <article className="mb-card mb-card--letter">
+            <div className="mb-lbl">
+              <span>📌 Chapter Letter</span>
+              <button type="button" className="mb-x" aria-label="Close" onClick={() => setLetterOpen(false)}>
+                ×
+              </button>
+            </div>
+            <Composer
+              mb={mb}
+              bookSlug={bookSlug}
+              target={{ kind: "letter", chapter: segments[0]?.douayChapter ?? 1 }}
+              note={null}
+              situation={situation}
+              onDone={() => setLetterOpen(false)}
+            />
+          </article>
+        ) : (
+          <button type="button" className="mb-link self-start text-sm" onClick={() => setLetterOpen(true)}>
+            ✉️ Write a chapter letter for {view.childName}
+          </button>
+        )
+      )}
+
+      {mb.error && (
+        <p className="mb-error" role="alert">
+          {mb.error}
+        </p>
       )}
     </aside>
   );
 }
 
-// ───────────────────────── Parent: palette, verse note, chapter letter ─────────────────────────
-
-function SituationSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+/** A parent whose Plus ended (or never started): everything stays readable, new writes need Plus. */
+export function ExpiredReadOnlyNotice({ mb }: { mb: MomsBibleState }) {
+  const hasContent = mb.view.notes.length > 0 || mb.view.highlights.length > 0;
   return (
-    <label className="mb-field">
-      <span className="mb-field__label">Moment (optional)</span>
-      <select value={value} onChange={(e) => onChange(e.target.value)}>
-        <option value="">None</option>
-        {SITUATION_GROUPS.map((g) => (
-          <optgroup key={g.title} label={`${g.emoji} ${g.title}`}>
-            {g.situations.map((s) => (
-              <option key={s.key} value={s.key}>
-                {s.emoji} {s.title}
-              </option>
-            ))}
-          </optgroup>
-        ))}
-      </select>
-    </label>
+    <div className="mb-card mb-card--notice">
+      <div className="mb-lbl">🔒 {hasContent ? "Read-only for now" : "Mom's Bible is a Plus feature"}</div>
+      <p className="mt-2 text-sm">
+        {hasContent
+          ? `Everything already written stays here. ${mb.view.childName} can still answer notes waiting for a reply. Renew Plus to add new highlights and notes.`
+          : `Highlight verses and leave notes and prayers in ${mb.view.childName}'s own Bible.`}
+      </p>
+      <button type="button" className="mb-btn mb-btn--primary mt-3" onClick={() => mb.setPlusOpen(true)}>
+        ⭐ Get Plus
+      </button>
+    </div>
   );
 }
 
-function AlsoSendTo({ mb, value, onChange }: { mb: MomsBibleState; value: string[]; onChange: (v: string[]) => void }) {
-  if (mb.view.siblings.length === 0) return null;
-  return (
-    <fieldset className="mb-also">
-      {mb.view.siblings.map((c) => (
-        <label key={c.id} className="mb-also__item">
-          <input
-            type="checkbox"
-            checked={value.includes(c.id)}
-            onChange={(e) => onChange(e.target.checked ? [...value, c.id] : value.filter((x) => x !== c.id))}
-          />{" "}
-          Also send to {c.displayName}
-        </label>
-      ))}
-    </fieldset>
-  );
-}
+// ───────────────────────── Parent composer (verse note / letter) ─────────────────────────
 
-function ParentTools({
+type ComposerTarget = { kind: "verse"; info: VerseInfo } | { kind: "letter"; chapter: number };
+
+function Composer({
   mb,
   bookSlug,
-  verses,
-  initialSituation,
+  target,
+  note,
+  situation,
+  onDone,
 }: {
   mb: MomsBibleState;
   bookSlug: string;
-  verses: { map: Map<string, VerseInfo>; order: VerseInfo[] };
-  initialSituation: string | null;
+  target: ComposerTarget;
+  /** This parent's existing note on the verse: new text is added to its thread. */
+  note: MbNoteDto | null;
+  situation: string | null;
+  onDone?: () => void;
 }) {
-  const { view, selected } = mb;
+  const { view } = mb;
   const [body, setBody] = useState("");
-  const [endVerse, setEndVerse] = useState<number | null>(null);
-  const [situation, setSituation] = useState(getSituation(initialSituation) ? initialSituation! : "");
   const [also, setAlso] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [letterOpen, setLetterOpen] = useState(false);
-  const [letter, setLetter] = useState("");
-  const locked = !view.familyPass;
-  const info = selected ? verses.map.get(`${selected.chapter}:${selected.verse}`) ?? null : null;
-  const meId = view.authors.find((a) => a.isMe)?.parentId;
-  const mine = selected
-    ? view.highlights.find((h) => h.chapter === selected.chapter && h.verse === selected.verse && h.authorParentId === meId)
-    : undefined;
-  const chapters = [...new Set(verses.order.map((v) => v.chapter))];
+  const [tag, setTag] = useState<string | null>(situation);
+  const color = target.kind === "verse" ? mb.myMark(target.info.chapter, target.info.verse)?.color ?? note?.color ?? null : "PINK";
+  const starters = prayerStarters(color, view.childName);
+  const tagInfo = tag ? getSituation(tag) : null;
 
-  const rangeChoices = info
-    ? verses.order.filter((v) => v.chapter === info.chapter && v.verse > info.verse).slice(0, 12)
-    : [];
+  const addStarter = (s: string) => {
+    const t = s.replace(/…$/, "").trim();
+    setBody((b) => (b.trim() ? `${b.trimEnd()} ${t} ` : `${t} `));
+  };
 
-  async function run(fn: () => Promise<{ ok: boolean; error?: string; status?: number }>) {
+  async function save() {
     setBusy(true);
-    setError(null);
-    const res = await fn();
+    const ok = await mb.write(() =>
+      note
+        ? mbFetch(`/api/moms-bible/notes/${note.id}/items`, "POST", { body })
+        : mbFetch("/api/moms-bible/notes", "POST", {
+            childId: view.childId,
+            book: bookSlug,
+            chapter: target.kind === "verse" ? target.info.chapter : target.chapter,
+            startVerse: target.kind === "verse" ? target.info.verse : null,
+            endVerse: target.kind === "verse" ? target.info.verse : null,
+            body,
+            color: target.kind === "verse" ? color : null,
+            situationKey: tag || undefined,
+            alsoChildIds: also.length ? also : undefined,
+          }),
+    );
     setBusy(false);
-    if (!res.ok) {
-      setError(res.error ?? "Something went wrong.");
-      return false;
-    }
-    await mb.refresh();
-    return true;
-  }
-
-  async function mark(next: { color?: MbColorKey | null; star?: boolean; underline?: boolean }) {
-    if (!selected) return;
-    await run(() =>
-      mbFetch("/api/moms-bible/highlights", "PUT", {
-        childId: view.childId,
-        book: bookSlug,
-        chapter: selected.chapter,
-        verse: selected.verse,
-        color: next.color !== undefined ? next.color : mine?.color ?? null,
-        star: next.star ?? mine?.star ?? false,
-        underline: next.underline ?? mine?.underline ?? false,
-        situationKey: situation || undefined,
-        alsoChildIds: also.length ? also : undefined,
-      }),
-    );
-  }
-
-  async function saveNote() {
-    if (!selected) return;
-    const ok = await run(() =>
-      mbFetch("/api/moms-bible/notes", "POST", {
-        childId: view.childId,
-        book: bookSlug,
-        chapter: selected.chapter,
-        startVerse: selected.verse,
-        endVerse: endVerse ?? selected.verse,
-        body,
-        color: mine?.color ?? null,
-        situationKey: situation || undefined,
-        alsoChildIds: also.length ? also : undefined,
-      }),
-    );
     if (ok) {
       setBody("");
-      setEndVerse(null);
-    }
-  }
-
-  async function saveLetter() {
-    const ok = await run(() =>
-      mbFetch("/api/moms-bible/notes", "POST", {
-        childId: view.childId,
-        book: bookSlug,
-        chapter: chapters[0],
-        startVerse: null,
-        body: letter,
-        situationKey: situation || undefined,
-        alsoChildIds: also.length ? also : undefined,
-      }),
-    );
-    if (ok) {
-      setLetter("");
-      setLetterOpen(false);
+      setAlso([]);
+      onDone?.();
     }
   }
 
   return (
-    <>
-      {!selected && (
-        <p className="mb-hint">Tap a verse number to highlight it or leave a note for {view.childName}.</p>
+    <div id={target.kind === "verse" ? "mb-composer" : undefined} onClick={(e) => e.stopPropagation()}>
+      <div className="mb-compose-title">
+        ✏️ {note ? "Add to this note" : target.kind === "letter" ? "Write a letter" : "Write a note"} — Prayer Starters
+      </div>
+      <div>
+        {starters.map((s) => (
+          <button key={s} type="button" className="mb-chip" onClick={() => addStarter(s)}>
+            {HEART[color ?? "YELLOW"]} {s}
+          </button>
+        ))}
+      </div>
+      {tagInfo && !note && (
+        <span className="mb-tag">
+          {tagInfo.emoji} {tagInfo.title}
+          <button type="button" aria-label="Remove moment" onClick={() => setTag(null)}>
+            ×
+          </button>
+        </span>
       )}
-      {selected && info && (
-        <div className="mb-card mb-card--tools">
-          <div className="flex items-center justify-between gap-2">
-            <p className="font-semibold">{info.ref}</p>
-            <button type="button" className="mb-x" aria-label="Close" onClick={() => mb.setSelected(null)}>
-              ×
-            </button>
-          </div>
-          <div className="mb-palette" role="group" aria-label="Highlight">
-            {MB_COLORS.map((c) => (
-              <button
-                key={c}
-                type="button"
-                disabled={busy || locked}
-                className={`mb-swatch ${MB_COLOR_INFO[c].className}${mine?.color === c ? " mb-swatch--on" : ""}`}
-                aria-pressed={mine?.color === c}
-                title={MB_COLOR_INFO[c].label}
-                onClick={() => void mark({ color: mine?.color === c ? null : c })}
-              >
-                <span className="sr-only">{MB_COLOR_INFO[c].label}</span>
-              </button>
-            ))}
-            <button
-              type="button"
-              disabled={busy || locked}
-              className={`mb-chip${mine?.star ? " mb-chip--on" : ""}`}
-              aria-pressed={Boolean(mine?.star)}
-              onClick={() => void mark({ star: !mine?.star })}
-            >
-              ⭐ Star
-            </button>
-            <button
-              type="button"
-              disabled={busy || locked}
-              className={`mb-chip${mine?.underline ? " mb-chip--on" : ""}`}
-              aria-pressed={Boolean(mine?.underline)}
-              onClick={() => void mark({ underline: !mine?.underline })}
-            >
-              <span className="underline decoration-dashed">U</span> Underline
-            </button>
-            {mine && (
-              <button
-                type="button"
-                disabled={busy}
-                className="mb-chip"
-                onClick={() => void mark({ color: null, star: false, underline: false })}
-              >
-                Clear
-              </button>
-            )}
-          </div>
-
-          {!locked && (
-            <div className="mt-3 space-y-2">
-              <label className="mb-field">
-                <span className="mb-field__label">Note or prayer for {view.childName}</span>
-                <textarea
-                  value={body}
-                  maxLength={MB_LIMITS.parentText}
-                  rows={4}
-                  placeholder="When you feel sad, remember…"
-                  onChange={(e) => setBody(e.target.value)}
-                />
-              </label>
-              {rangeChoices.length > 0 && (
-                <label className="mb-field">
-                  <span className="mb-field__label">Through verse</span>
-                  <select value={endVerse ?? ""} onChange={(e) => setEndVerse(e.target.value ? Number(e.target.value) : null)}>
-                    <option value="">Just this verse</option>
-                    {rangeChoices.map((v) => (
-                      <option key={v.verse} value={v.verse}>
-                        {v.ref}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              <SituationSelect value={situation} onChange={setSituation} />
-              <AlsoSendTo mb={mb} value={also} onChange={setAlso} />
-              <button type="button" className="mb-btn mb-btn--primary" disabled={busy || !body.trim()} onClick={() => void saveNote()}>
-                {busy ? "Saving…" : "Leave note"}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {!locked && (
-        <div className="mb-card mb-card--letter-compose">
-          {!letterOpen ? (
-            <button type="button" className="mb-btn mb-btn--ghost w-full" onClick={() => setLetterOpen(true)}>
-              ✉️ Write a letter for this chapter
-            </button>
-          ) : (
-            <div className="space-y-2">
-              <label className="mb-field">
-                <span className="mb-field__label">Chapter letter to {view.childName}</span>
-                <textarea
-                  value={letter}
-                  maxLength={MB_LIMITS.parentText}
-                  rows={5}
-                  placeholder={`Dear ${view.childName}, …`}
-                  onChange={(e) => setLetter(e.target.value)}
-                />
-              </label>
-              {!selected && <SituationSelect value={situation} onChange={setSituation} />}
-              {!selected && <AlsoSendTo mb={mb} value={also} onChange={setAlso} />}
-              <div className="flex gap-2">
-                <button type="button" className="mb-btn mb-btn--primary" disabled={busy || !letter.trim()} onClick={() => void saveLetter()}>
-                  {busy ? "Saving…" : "Save letter"}
-                </button>
-                <button type="button" className="mb-btn mb-btn--ghost" onClick={() => setLetterOpen(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {error && (
-        <p className="mb-error" role="alert">
-          {error}
-        </p>
-      )}
-    </>
+      <label>
+        <span className="sr-only">{target.kind === "letter" ? "Chapter letter" : "Note"}</span>
+        <textarea
+          className="mb-textarea"
+          value={body}
+          maxLength={MB_LIMITS.parentText}
+          placeholder={target.kind === "letter" ? `Dear ${view.childName}, …` : `Write a note for ${view.childName}…`}
+          onChange={(e) => setBody(e.target.value)}
+        />
+      </label>
+      <div className="mb-compose-row">
+        {!note &&
+          view.siblings.map((c) => (
+            <label key={c.id} className="mb-also">
+              <input
+                type="checkbox"
+                checked={also.includes(c.id)}
+                onChange={(e) => setAlso(e.target.checked ? [...also, c.id] : also.filter((x) => x !== c.id))}
+              />
+              Also send to {c.displayName}
+            </label>
+          ))}
+        <button type="button" className="mb-btn mb-btn--primary" disabled={busy || !body.trim()} onClick={() => void save()}>
+          {busy ? "Saving…" : target.kind === "letter" ? "Save letter 💌" : "Save note 💌"}
+        </button>
+      </div>
+    </div>
   );
 }
 
 // ───────────────────────── Note card (both views) ─────────────────────────
+
+type ItemGroup = { child: boolean; items: MbItemDto[] };
+
+function groupItems(items: MbItemDto[]): ItemGroup[] {
+  const out: ItemGroup[] = [];
+  for (const i of items) {
+    const child = i.authorKind === "CHILD";
+    const last = out[out.length - 1];
+    if (child && last?.child) last.items.push(i);
+    else out.push({ child, items: [i] });
+  }
+  return out;
+}
 
 function NoteCard({
   note,
@@ -437,204 +424,251 @@ function NoteCard({
   roleLabel,
   verse,
   endVerse,
+  composer,
 }: {
   note: MbNoteDto;
   mb: MomsBibleState;
   roleLabel: string;
   verse: VerseInfo | null;
   endVerse?: VerseInfo | null;
+  composer?: ReactNode;
 }) {
   const { view } = mb;
   const isParent = view.viewer === "parent";
   const isLetter = note.startVerse === null;
-  const mineNote = isParent && view.authors.find((a) => a.isMe)?.parentId === note.authorParentId;
+  const mineNote = isParent && mb.meId === note.authorParentId;
   const replied = Boolean(note.childRepliedAt);
-  const canChildReply = !isParent && (view.familyPass || !replied);
-  const [composerOpen, setComposerOpen] = useState(!replied);
-  const [sticker, setSticker] = useState<MbStickerKey | null>(null);
-  const [text, setText] = useState("");
-  const [more, setMore] = useState("");
+  const canReply = !isParent && !view.preview && (view.familyPass || !replied);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const colorClass = note.color ? MB_COLOR_INFO[note.color].className : "";
   const quote = verse ? clip([verse.text, endVerse?.text].filter(Boolean).join(" … ")) : "";
+  const vLabel = verse ? `v.${verse.num}${endVerse ? `–${endVerse.num}` : ""}` : "";
+  const sit = note.situationKey ? getSituation(note.situationKey) : null;
 
-  async function act(fn: () => ReturnType<typeof mbFetch>) {
+  async function del(paths: string[], ask: string) {
+    if (!window.confirm(ask)) return;
     setBusy(true);
-    setError(null);
-    const res = await fn();
-    setBusy(false);
-    if (!res.ok) {
-      setError(res.error);
-      return false;
-    }
-    await mb.refresh();
-    return true;
-  }
-
-  async function sendReply() {
-    const ok = await act(() =>
-      mbFetch(`/api/moms-bible/notes/${note.id}/items`, "POST", { stickerKey: sticker, body: text.trim() || null }),
+    await mb.write(
+      async () => {
+        let last = await mbFetch(paths[0]!, "DELETE");
+        for (const p of paths.slice(1)) if (last.ok) last = await mbFetch(p, "DELETE");
+        return last;
+      },
+      { parentWrite: false },
     );
-    if (ok) {
-      setSticker(null);
-      setText("");
-      setComposerOpen(false);
-    }
+    setBusy(false);
   }
 
-  async function addMore() {
-    const ok = await act(() => mbFetch(`/api/moms-bible/notes/${note.id}/items`, "POST", { body: more }));
-    if (ok) setMore("");
-  }
+  const openVerse = () => {
+    if (!verse) return;
+    scrollToVerse(verse.id);
+    if (isParent) mb.setSelected({ chapter: verse.chapter, verse: verse.verse });
+  };
 
   return (
-    <article className={`mb-card mb-note ${isLetter ? "mb-note--letter" : ""}`}>
-      <header className="mb-note__head">
-        <p className="mb-note__ref">
-          {isLetter ? `✉️ ${roleLabel}'s letter · ${note.ref}` : note.ref}
-        </p>
-        {verse?.id && (
-          <button type="button" className="mb-link" onClick={() => scrollToVerse(verse.id)}>
-            Open →
+    <article className={`mb-card ${isLetter ? "mb-card--letter" : cardColorClass(note.color)}`}>
+      <div className="mb-lbl">
+        {isLetter ? (
+          <span>📌 Chapter Letter</span>
+        ) : (
+          <button type="button" className="text-left uppercase tracking-[0.5px]" onClick={openVerse} title="Show this verse">
+            💌 {roleLabel}&apos;s Note{vLabel ? ` · ${vLabel}` : ""}
           </button>
         )}
-      </header>
-      {quote && <blockquote className={`mb-quote ${colorClass ? `mb-hl ${colorClass}` : ""}`}>“{quote}”</blockquote>}
-      {note.situationKey && getSituation(note.situationKey) && (
-        <p className="mb-tag">
-          {getSituation(note.situationKey)!.emoji} {getSituation(note.situationKey)!.title}
-        </p>
-      )}
-
-      <ul className="mb-thread">
-        {note.items.map((i) => {
-          const fromChild = i.authorKind === "CHILD";
-          return (
-            <li key={i.id} className={`mb-item ${fromChild ? "mb-item--child" : "mb-item--parent"}`}>
-              {i.kind === "STICKER" && i.stickerKey ? (
-                <span className="mb-sticker-chip">{stickerLabel(i.stickerKey, roleLabel)}</span>
-              ) : (
-                <p className="mb-item__body">{i.body}</p>
-              )}
-              <span className="mb-item__who">
-                {fromChild ? (isParent ? view.childName : "You") : i.authorParentId ? roleOfItem(view, i.authorParentId) : roleLabel}
-              </span>
-              {i.mine && (
-                <button
-                  type="button"
-                  className="mb-x"
-                  aria-label="Delete"
-                  disabled={busy}
-                  onClick={() => {
-                    if (window.confirm("Delete this?")) void act(() => mbFetch(`/api/moms-bible/items/${i.id}`, "DELETE"));
-                  }}
-                >
-                  ×
-                </button>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-
-      {replied ? (
-        <p className="mb-stamp mb-stamp--shared" aria-label="Shared together">
-          🌱 Shared Together
-        </p>
-      ) : isParent ? (
-        <p className="mb-pill">💛 Waiting for {view.childName}</p>
-      ) : null}
-
-      {canChildReply && !composerOpen && (
-        <button type="button" className="mb-btn mb-btn--ghost mt-2 w-full" onClick={() => setComposerOpen(true)}>
-          Add another reply…
-        </button>
-      )}
-      {canChildReply && composerOpen && (
-        <div className="mb-reply">
-          <div className="mb-stickers" role="group" aria-label="Stickers">
-            {(Object.keys(MB_STICKERS) as MbStickerKey[]).map((k) => (
-              <button
-                key={k}
-                type="button"
-                aria-pressed={sticker === k}
-                className={`mb-chip${sticker === k ? " mb-chip--on" : ""}`}
-                onClick={() => setSticker(sticker === k ? null : k)}
-              >
-                {stickerLabel(k, roleLabel)}
-              </button>
-            ))}
-          </div>
-          <label className="mb-field">
-            <span className="sr-only">Your reply</span>
-            <textarea
-              rows={3}
-              value={text}
-              maxLength={MB_LIMITS.childText}
-              placeholder={`Write back to ${roleLabel} (optional)`}
-              onChange={(e) => setText(e.target.value)}
-            />
-          </label>
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-[var(--color-muted)]">
-              {[...text].length}/{MB_LIMITS.childText}
-            </span>
-            <button type="button" className="mb-btn mb-btn--primary" disabled={busy || (!sticker && !text.trim())} onClick={() => void sendReply()}>
-              {busy ? "Sending…" : "Send reply"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {mineNote && view.familyPass && (
-        <div className="mt-2 flex gap-2">
-          <input
-            className="mb-input"
-            value={more}
-            maxLength={MB_LIMITS.parentText}
-            placeholder="Add more…"
-            onChange={(e) => setMore(e.target.value)}
-          />
+        {mineNote && !composer && !view.preview && (
           <button
             type="button"
-            className="mb-btn mb-btn--ghost"
-            disabled={busy || !more.trim()}
-            onClick={() => void addMore()}
+            className="text-[11px] font-semibold normal-case tracking-normal text-[#a39aac] hover:underline"
+            disabled={busy}
+            onClick={() => void del([`/api/moms-bible/notes/${note.id}`], "Delete this note and its replies?")}
           >
-            Add
+            Delete
           </button>
+        )}
+      </div>
+      {!isParent && quote && <p className="mb-quote">{quote}</p>}
+      {sit && (
+        <span className="mb-tag">
+          {sit.emoji} {sit.title}
+        </span>
+      )}
+
+      {groupItems(note.items).map((g, gi, all) =>
+        g.child ? (
+          <ChildBubble key={g.items[0]!.id} items={g.items} mb={mb} roleLabel={roleLabel} busy={busy} onDelete={del} />
+        ) : (
+          <div key={g.items[0]!.id}>
+            <p className="mb-note-text">{g.items[0]!.body}</p>
+            <div className="mb-date">
+              {isParent ? "" : `From ${roleLabel} · `}
+              {fmtDate(g.items[0]!.createdAt)}
+              {isParent && g.items[0]!.authorParentId && g.items[0]!.authorParentId !== note.authorParentId
+                ? ` · ${view.authors.find((a) => a.parentId === g.items[0]!.authorParentId)?.roleLabel ?? ""}`
+                : ""}
+              {isParent && !view.preview && !replied && gi === all.length - 1 && (
+                <span className="mb-waiting-inline"> · 💛 Waiting for {view.childName}</span>
+              )}
+            </div>
+          </div>
+        ),
+      )}
+
+      {replied && (
+        <div>
+          <span className="mb-stamp">🌱 Shared Together</span>
         </div>
       )}
-      {mineNote && (
-        <button
-          type="button"
-          className="mb-link mt-2 text-xs"
-          disabled={busy}
-          onClick={() => {
-            if (window.confirm("Delete this note and its replies?")) void act(() => mbFetch(`/api/moms-bible/notes/${note.id}`, "DELETE"));
-          }}
-        >
-          Delete note
-        </button>
-      )}
-      {error && (
-        <p className="mb-error" role="alert">
-          {error}
-          {/Plus/.test(error) && (
-            <>
-              {" "}
-              <Link href={PLUS_HREF}>See Plus</Link>
-            </>
-          )}
-        </p>
-      )}
+
+      {canReply && (replied ? <MoreReply note={note} mb={mb} /> : <FirstReply note={note} mb={mb} roleLabel={roleLabel} />)}
+      {composer}
     </article>
   );
 }
 
-function roleOfItem(view: MomsBibleState["view"], parentId: string): string {
-  const a = view.authors.find((x) => x.parentId === parentId);
-  if (!a) return "Parent";
-  return a.isMe ? "You" : a.roleLabel;
+function ChildBubble({
+  items,
+  mb,
+  roleLabel,
+  busy,
+  onDelete,
+}: {
+  items: MbItemDto[];
+  mb: MomsBibleState;
+  roleLabel: string;
+  busy: boolean;
+  onDelete: (paths: string[], ask: string) => Promise<void>;
+}) {
+  const sticker = items.find((i) => i.kind === "STICKER" && i.stickerKey);
+  const allTexts = items.filter((i) => i.kind === "TEXT" && i.body);
+  const firstLine = sticker?.stickerKey ? stickerLabel(sticker.stickerKey, roleLabel) : allTexts[0]?.body;
+  const texts = sticker ? allTexts : allTexts.slice(1);
+  const last = items[items.length - 1]!;
+  const mine = items.filter((i) => i.mine);
+  return (
+    <div className="mb-bubble-row">
+      <div className="mb-bubble">
+        <div className="mb-bubble__line">
+          <b>👧 {mb.view.childName}:</b> {firstLine}
+        </div>
+        {texts.map((t) => (
+          <div key={t.id} className="mb-bubble__line">
+            {t.body}
+          </div>
+        ))}
+        <div className="mb-date">
+          {fmtDate(last.createdAt)} · {fmtTime(last.createdAt)}
+          {mine.length > 0 && !mb.view.preview && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void onDelete(mine.map((i) => `/api/moms-bible/items/${i.id}`), "Delete this reply?")}
+            >
+              Delete
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FirstReply({ note, mb, roleLabel }: { note: MbNoteDto; mb: MomsBibleState; roleLabel: string }) {
+  const [sticker, setSticker] = useState<MbStickerKey | null>(null);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  async function send() {
+    setBusy(true);
+    const ok = await mb.write(
+      () => mbFetch(`/api/moms-bible/notes/${note.id}/items`, "POST", { stickerKey: sticker, body: text.trim() || null }),
+      { parentWrite: false },
+    );
+    setBusy(false);
+    if (ok) {
+      setSticker(null);
+      setText("");
+    }
+  }
+  return (
+    <div className="mt-3">
+      <div role="group" aria-label="Stickers">
+        {(Object.keys(MB_STICKERS) as MbStickerKey[]).map((k) => (
+          <button
+            key={k}
+            type="button"
+            aria-pressed={sticker === k}
+            className={`mb-chip mb-chip--${k}`}
+            onClick={() => setSticker(sticker === k ? null : k)}
+          >
+            {stickerLabel(k, roleLabel)}
+          </button>
+        ))}
+      </div>
+      <label>
+        <span className="sr-only">Your reply</span>
+        <textarea
+          className="mb-textarea"
+          value={text}
+          maxLength={MB_LIMITS.childText}
+          placeholder={`Write a little reply to ${roleLabel}…`}
+          onChange={(e) => setText(e.target.value)}
+        />
+      </label>
+      <div className="mt-2 flex items-center justify-between">
+        <span className="text-xs text-[#a39aac]">
+          {[...text].length}/{MB_LIMITS.childText}
+        </span>
+        <button type="button" className="mb-btn mb-btn--primary" disabled={busy || (!sticker && !text.trim())} onClick={() => void send()}>
+          {busy ? "Sending…" : "Send reply"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function MoreReply({ note, mb }: { note: MbNoteDto; mb: MomsBibleState }) {
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  async function send() {
+    setBusy(true);
+    const ok = await mb.write(() => mbFetch(`/api/moms-bible/notes/${note.id}/items`, "POST", { body: text.trim() }), {
+      parentWrite: false,
+    });
+    setBusy(false);
+    if (ok) setText("");
+  }
+  return (
+    <form
+      className="flex gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (text.trim()) void send();
+      }}
+    >
+      <label className="flex min-w-0 flex-1">
+        <span className="sr-only">Add another reply</span>
+        <input
+          className="mb-reply-input"
+          value={text}
+          maxLength={MB_LIMITS.childText}
+          placeholder="Add another reply…"
+          onChange={(e) => setText(e.target.value)}
+        />
+      </label>
+      <button type="submit" className="mb-btn mb-btn--primary" disabled={busy || !text.trim()}>
+        Send
+      </button>
+    </form>
+  );
+}
+
+/** Guests: what a note looks like (mockup 5), plus where to start. */
+export function SampleNoteCard() {
+  return (
+    <div className="mb-card mb-card--sample">
+      <div className="mb-lbl">Sample Mom&apos;s Note</div>
+      <p className="mb-note-text">{SAMPLE_NOTE_TEXT}</p>
+      <Link href="/bible/read/genesis/1" className="mb-link text-xs">
+        See a full sample in Genesis 1 →
+      </Link>
+    </div>
+  );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { PinSetupDialog, PinSetupForm } from "@/components/kid/PinSetupDialog";
+import { MemoImportDialog } from "@/components/moms-bible/MemoImportDialog";
 import type { DashboardReaderRow } from "@/lib/account-dashboard";
 import { clearKidProfiles } from "@/lib/kids/kid-device-profiles";
 import type { KidPinStatus } from "@/lib/kids/kid-pin";
@@ -66,6 +67,8 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
   const [pinFormId, setPinFormId] = useState<string | null>(null);
   /** Children whose "Set a PIN" popup was skipped during this visit. */
   const [skippedPinIds, setSkippedPinIds] = useState<string[]>([]);
+  /** First child added: offer to move the parent's old Bible memos (after the PIN step). */
+  const [memoImport, setMemoImport] = useState<{ child: { id: string; displayName: string }; count: number } | null>(null);
 
   const atLimit = subs.length >= maxSubs;
   const needsPin = subs.find(
@@ -95,6 +98,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     const data = (await res.json().catch(() => ({}))) as {
       error?: string;
       sub?: { id: string; displayName: string; kidCode: string };
+      memoImport?: { count: number };
     };
     if (!res.ok || !data.sub) {
       setError(data.error ?? "Could not add child");
@@ -107,6 +111,9 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     setNewChildName("");
     await refresh();
     setPinFormId(data.sub.id);
+    if (data.memoImport && data.memoImport.count > 0) {
+      setMemoImport({ child: { id: data.sub.id, displayName: data.sub.displayName }, count: data.memoImport.count });
+    }
   }
 
   async function saveRename(row: DashboardReaderRow) {
@@ -185,6 +192,17 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
           child={{ id: needsPin.id, displayName: needsPin.displayName, kidCode: needsPin.kidCode }}
           onSaved={() => pinSaved(needsPin)}
           onSkip={() => setSkippedPinIds((ids) => [...ids, needsPin.id!])}
+        />
+      )}
+      {memoImport && pinFormId === null && !(needsPin && needsPin.id && needsPin.kidCode) && (
+        <MemoImportDialog
+          child={memoImport.child}
+          count={memoImport.count}
+          onClose={(result) => {
+            if (result) setMessage(`Moved ${result.imported} ${result.imported === 1 ? "note" : "notes"} to ${memoImport.child.displayName}'s Bible 💌`);
+            setMemoImport(null);
+            router.refresh();
+          }}
         />
       )}
 

@@ -3,6 +3,7 @@
 import { MB_LIMITS, MB_ROLE_CHOICES } from "@/lib/moms-bible/constants";
 import { useCallback, useEffect, useState } from "react";
 import { InviteAcceptClient } from "./InviteAcceptClient";
+import { MemoImportOffer } from "./MemoImportDialog";
 import { mbFetch } from "./mb-fetch";
 import "@/styles/moms-bible.css";
 
@@ -16,10 +17,12 @@ type Props = {
   ownChildren: Child[];
   /** Children of other families this parent is linked to (co-parent links). */
   joined: { linkId: string; childName: string }[];
+  /** Old Bible memos that can still be moved into a child's Bible. */
+  memoImport?: { count: number } | null;
 };
 
 /** /account: Mom's Bible settings, invite a co-parent (e.g. Dad), and linked parents. */
-export function MomsBibleAccountSection({ roleLabel, emailMode, ownChildren, joined: initialJoined }: Props) {
+export function MomsBibleAccountSection({ roleLabel, emailMode, ownChildren, joined: initialJoined, memoImport }: Props) {
   const [label, setLabel] = useState(roleLabel);
   const [mode, setMode] = useState(emailMode);
   const [saved, setSaved] = useState<string | null>(null);
@@ -71,6 +74,7 @@ export function MomsBibleAccountSection({ roleLabel, emailMode, ownChildren, joi
       <h2 className="text-xl font-bold text-[var(--color-ink)]">💌 Mom&apos;s Bible</h2>
 
       <InviteAcceptClient signedIn compact />
+      {memoImport && memoImport.count > 0 && <MemoImportOffer count={memoImport.count} kids={ownChildren} />}
 
       <div className="mt-4 space-y-3 text-sm">
         <label className="mb-field">

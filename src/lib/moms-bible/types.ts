@@ -37,6 +37,8 @@ export type MbNoteDto = {
   situationKey: string | null;
   childRepliedAt: string | null;
   createdAt: string;
+  /** Parent view: this parent hasn't seen the child's latest reply yet (dot on the tab). */
+  unseenReply: boolean;
   items: MbItemDto[];
 };
 
@@ -57,6 +59,13 @@ export type MbChapterView = {
   familyPass: boolean;
   /** Child view: total 🌱 seeds. */
   seeds: number;
+  /** Static sample (free preview): nothing is saved; writes open the Plus modal. */
+  preview?: boolean;
 };
 
 export type MbBookStamps = { stamps: Record<number, Exclude<MbStamp, null>>; childName: string; viewer: "parent" | "child" };
+
+/** Top bar: "Viewing Mia's Bible ▾ | Leo" + PDF button (parent) or "Hi, Mia! (mia-4821)" (child). */
+export type MbToolbarData =
+  | { viewer: "parent"; childId: string; childName: string; children: MbChildChoice[]; canPrint: boolean }
+  | { viewer: "child"; childName: string; kidCode: string | null };

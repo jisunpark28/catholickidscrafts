@@ -1,165 +1,104 @@
 "use client";
 
-import { usePassageMemos } from "@/components/bible/usePassageMemos";
 import type { BibleReaderSegment } from "@/components/bible/BibleChapterReadClient";
 import type { VerseLabel } from "@/lib/bible/chapter-pages";
-import { charOwnerVerses, ownerVerseMap } from "@/lib/moms-bible/verse-text";
+import { ownerVerseMap } from "@/lib/moms-bible/verse-text";
 import { normalizePassageText } from "@/lib/typing-accuracy";
-import { Fragment, useMemo, type ReactNode } from "react";
+import { Fragment, useMemo, type KeyboardEvent, type ReactNode } from "react";
 
-/** Mom's Bible marks on the text (storage chapter/verse keys). */
+/** Mom's Bible hooks into the text (storage chapter/verse keys). */
 export type PassageMomsBible = {
   verseClass: (chapter: number, verse: number) => string | undefined;
-  verseBadge: (chapter: number, verse: number) => string | null;
-  /** Parents: tap a verse number to mark it or leave a note. */
+  /** Parents: tap a verse to mark it or leave a note. */
   onVerseClick?: (chapter: number, verse: number) => void;
+  /** Rendered right after a verse block (the floating palette for the selected verse). */
+  renderAfterVerse?: (chapter: number, verse: number) => ReactNode;
 };
 
 type Props = {
-  bookSlug: string;
-  bookName: string;
   segment: BibleReaderSegment;
-  paneLabel: string;
+  /** Shown only when a page joins several text sections (e.g. Psalms 9–10). */
+  paneLabel: string | null;
   momsBible?: PassageMomsBible;
 };
 
-/** The memo hook's passage props (empty object when memos are off). */
-type PassageProps = {
-  passageCharClassName?: (index: number) => string | undefined;
-  renderAfterPassageChar?: (index: number) => ReactNode;
-  passageAddon?: ReactNode;
-  onPassageElement?: (el: HTMLParagraphElement | null) => void;
-};
-
-function VerseNumber({
-  label,
-  badge,
-  onClick,
-}: {
-  label: VerseLabel;
-  badge?: string | null;
-  onClick?: () => void;
-}) {
-  // Verses without their own official number read on as part of the previous verse.
-  if (label.continued || label.douay) return null;
-  const inner = (
-    <>
-      <span aria-hidden>{label.text}</span>
-      <span className="sr-only">{`Verse ${label.text}. `}</span>
-      {badge ? (
-        <span className="mb-verse-badge" aria-hidden>
-          {badge}
-        </span>
-      ) : null}
-    </>
-  );
-  if (onClick) {
-    return (
-      <button
-        type="button"
-        id={label.id}
-        data-verse={label.verse}
-        className="bible-reader-verse bible-reader-verse--mb"
-        onClick={onClick}
-        title={`Mark verse ${label.text} or leave a note`}
-      >
-        {inner}
-      </button>
-    );
-  }
-  return (
-    <span id={label.id} data-verse={label.verse} className="bible-reader-verse">
-      {inner}
-    </span>
-  );
-}
+type VerseBlock = { verse: number; label: VerseLabel | null; text: string };
 
 /**
- * Read-only chapter text (no typing). Characters keep the data-ci spans the memo hook anchors
- * to, and memo verse numbers stay Douay-Rheims; only the visible numbers are official ones.
+ * Verse blocks for display: storage verses without their own official number ("continued")
+ * read on inside the previous numbered verse, so every block carries an official number.
  */
-export function BibleChapterPassage({ bookSlug, bookName, segment, paneLabel, momsBible }: Props) {
-  const refLabels = useMemo(() => {
-    const out: Record<number, string> = {};
-    for (const l of segment.verseLabels) out[l.verse] = l.ref;
-    return out;
-  }, [segment.verseLabels]);
-  const memos = usePassageMemos({
-    bookSlug,
-    bookName,
-    chapter: segment.douayChapter,
-    text: segment.text,
-    setup: segment.memoSetup,
-    refLabels,
-  });
-  const tp: PassageProps = memos.typingProps;
-  const target = useMemo(() => normalizePassageText(segment.text), [segment.text]);
-  const labelAt = useMemo(() => {
-    const byVerse = new Map(segment.verseLabels.map((l) => [l.verse, l]));
-    const map = new Map<number, VerseLabel>();
-    for (const m of segment.verseMarkers) {
-      map.set(m.start, byVerse.get(m.verse) ?? { verse: m.verse, text: String(m.verse), ref: String(m.verse), douay: true });
+function verseBlocks(segment: BibleReaderSegment): VerseBlock[] {
+  const text = normalizePassageText(segment.text);
+  const markers = [...segment.verseMarkers].sort((a, b) => a.start - b.start);
+  if (!text) return [];
+  if (markers.length === 0) return [{ verse: 0, label: null, text }];
+  const owners = ownerVerseMap(markers, segment.verseLabels);
+  const byVerse = new Map(segment.verseLabels.map((l) => [l.verse, l]));
+  const blocks: VerseBlock[] = [];
+  if (markers[0]!.start > 0) blocks.push({ verse: 0, label: null, text: text.slice(0, markers[0]!.start).trim() });
+  for (let i = 0; i < markers.length; i++) {
+    const m = markers[i]!;
+    const end = i + 1 < markers.length ? markers[i + 1]!.start : text.length;
+    const piece = text.slice(m.start, end).trim();
+    const owner = owners.get(m.verse) ?? m.verse;
+    const last = blocks[blocks.length - 1];
+    if (last && last.verse === owner) {
+      last.text = `${last.text} ${piece}`;
+      continue;
     }
-    return map;
-  }, [segment.verseLabels, segment.verseMarkers]);
-  const owners = useMemo(
-    () => ownerVerseMap(segment.verseMarkers, segment.verseLabels),
-    [segment.verseMarkers, segment.verseLabels],
-  );
-  const mbOn = Boolean(momsBible);
-  const charVerse = useMemo(
-    () => (mbOn ? charOwnerVerses(target.length, segment.verseMarkers, owners) : null),
-    [mbOn, target.length, segment.verseMarkers, owners],
-  );
+    const l = byVerse.get(owner);
+    blocks.push({ verse: owner, label: l && !l.continued && !l.douay ? l : null, text: piece });
+  }
+  return blocks;
+}
+
+/** Read-only chapter text (no typing): one block per official verse, Mom's Bible marks on top. */
+export function BibleChapterPassage({ segment, paneLabel, momsBible }: Props) {
+  const blocks = useMemo(() => verseBlocks(segment), [segment]);
   const ch = segment.douayChapter;
 
-  if (!target) {
+  if (blocks.length === 0) {
     return <p className="text-sm text-[var(--color-muted)]">No text available for this chapter.</p>;
   }
 
   return (
-    <section className="bible-reader__segment">
-      <p className="gospel-typing__pane-label">{paneLabel}</p>
-      <div className="relative">
-        <p
-          ref={(el) => tp.onPassageElement?.(el)}
-          className="gospel-typing-passage gospel-typing__pane-content bible-reader__passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] text-[var(--color-ink)]"
-        >
-          {target.split("").map((char, i) => {
-            const label = labelAt.get(i);
-            return (
-              <Fragment key={i}>
-                {label ? (
-                  <VerseNumber
-                    label={label}
-                    badge={momsBible?.verseBadge(ch, label.verse)}
-                    onClick={momsBible?.onVerseClick ? () => momsBible.onVerseClick!(ch, label.verse) : undefined}
-                  />
-                ) : null}
-                <span data-ci={i} className={charClass(tp.passageCharClassName?.(i), charVerse, i, ch, momsBible)}>
-                  {char}
+    <section className="bible-reader__card">
+      {paneLabel && <p className="bible-reader__pane-label">{paneLabel}</p>}
+      {blocks.map((b, idx) => {
+        const tap = b.verse > 0 && momsBible?.onVerseClick ? () => momsBible.onVerseClick!(ch, b.verse) : undefined;
+        const cls = b.verse > 0 ? momsBible?.verseClass(ch, b.verse) : undefined;
+        const onKey = tap
+          ? (e: KeyboardEvent) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                tap();
+              }
+            }
+          : undefined;
+        return (
+          <Fragment key={`${b.verse}-${idx}`}>
+            <span
+              id={b.label?.id}
+              data-verse={b.verse || undefined}
+              className={`bible-reader__verse${tap ? " bible-reader__verse--tap" : ""}${cls ? ` ${cls}` : ""}`}
+              role={tap ? "button" : undefined}
+              tabIndex={tap ? 0 : undefined}
+              onClick={tap}
+              onKeyDown={onKey}
+            >
+              {b.label && (
+                <span className="bible-reader-verse">
+                  <span aria-hidden>{b.label.text}</span>
+                  <span className="sr-only">{`Verse ${b.label.text}. `}</span>
                 </span>
-                {tp.renderAfterPassageChar?.(i)}
-              </Fragment>
-            );
-          })}
-        </p>
-        {tp.passageAddon}
-      </div>
-      {memos.panel}
+              )}
+              {b.text}
+            </span>
+            {b.verse > 0 && momsBible?.renderAfterVerse?.(ch, b.verse)}
+          </Fragment>
+        );
+      })}
     </section>
   );
-}
-
-function charClass(
-  memoClass: string | undefined,
-  charVerse: Int32Array | null,
-  i: number,
-  chapter: number,
-  mb: PassageMomsBible | undefined,
-): string | undefined {
-  const v = charVerse?.[i] ?? -1;
-  const mbClass = mb && v > 0 ? mb.verseClass(chapter, v) : undefined;
-  if (!mbClass) return memoClass;
-  return memoClass ? `${memoClass} ${mbClass}` : mbClass;
 }

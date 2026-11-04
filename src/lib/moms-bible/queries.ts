@@ -45,6 +45,8 @@ export async function loadChapterView(args: {
         situationKey: true,
         childRepliedAt: true,
         createdAt: true,
+        // Parent view: an unseen child reply on this note (empty id never matches for a child).
+        notifications: { where: { parentAccountId: meParent ?? "", seenAt: null }, select: { id: true }, take: 1 },
         items: {
           where: { deletedAt: null },
           orderBy: { createdAt: "asc" },
@@ -85,6 +87,7 @@ export async function loadChapterView(args: {
     situationKey: n.situationKey,
     childRepliedAt: n.childRepliedAt?.toISOString() ?? null,
     createdAt: n.createdAt.toISOString(),
+    unseenReply: n.notifications.length > 0,
     items: n.items.map(
       (i): MbItemDto => ({
         id: i.id,
@@ -125,11 +128,23 @@ export async function loadChapterView(args: {
   };
 }
 
-/** Stamp per storage chapter of one book for a child. */
-export async function loadBookStamps(childId: string, bookSlug: string): Promise<Record<number, "waiting" | "shared" | "highlights">> {
-  const [notes, hl] = await Promise.all([
+type StampKey = "mine" | "waiting" | "shared";
+
+/** Stamp per storage chapter of one book, as seen by the child or by one parent. */
+export async function loadBookStamps(
+  childId: string,
+  bookSlug: string,
+  viewer: { kind: "child" } | { kind: "parent"; parentId: string },
+): Promise<Record<number, StampKey>> {
+  const [notes, hl, unseen] = await Promise.all([
     prisma.mbNote.findMany({ where: { subProfileId: childId, bookSlug }, select: { chapter: true, childRepliedAt: true } }),
     prisma.mbHighlight.groupBy({ by: ["chapter"], where: { subProfileId: childId, bookSlug }, _count: { _all: true } }),
+    viewer.kind === "parent"
+      ? prisma.mbNotification.findMany({
+          where: { parentAccountId: viewer.parentId, subProfileId: childId, seenAt: null, note: { bookSlug } },
+          select: { note: { select: { chapter: true } } },
+        })
+      : Promise.resolve([] as { note: { chapter: number } }[]),
   ]);
   const byChapter = new Map<number, { childRepliedAt: Date | null }[]>();
   for (const n of notes) {
@@ -138,9 +153,11 @@ export async function loadBookStamps(childId: string, bookSlug: string): Promise
     byChapter.set(n.chapter, list);
   }
   const hlCount = new Map(hl.map((h) => [h.chapter, h._count._all]));
-  const out: Record<number, "waiting" | "shared" | "highlights"> = {};
+  const unseenCount = new Map<number, number>();
+  for (const u of unseen) unseenCount.set(u.note.chapter, (unseenCount.get(u.note.chapter) ?? 0) + 1);
+  const out: Record<number, StampKey> = {};
   for (const ch of new Set([...byChapter.keys(), ...hlCount.keys()])) {
-    const stamp = chapterStamp(byChapter.get(ch) ?? [], hlCount.get(ch) ?? 0);
+    const stamp = chapterStamp(viewer.kind, byChapter.get(ch) ?? [], hlCount.get(ch) ?? 0, unseenCount.get(ch) ?? 0);
     if (stamp) out[ch] = stamp;
   }
   return out;
