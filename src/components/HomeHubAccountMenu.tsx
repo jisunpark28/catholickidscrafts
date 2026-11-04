@@ -285,10 +285,10 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
     window.location.href = "/account/login";
   }
 
-  /** Existing switch-reader flow: children sign in with their Access ID. */
+  /** Existing switch-reader flow: children sign in with their Kid Code + PIN. */
   function switchToChild() {
     close();
-    router.push("/reader/login");
+    router.push("/kids");
   }
 
   if (!signedIn) {
@@ -443,7 +443,7 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
           )}
           {mode === "child" && (
             <>
-              <Link href="/reader/login" role="menuitem" className={rowInk} onClick={close}>
+              <Link href="/kids" role="menuitem" className={rowInk} onClick={close}>
                 <Icon name="swap" />
                 Switch reader
               </Link>

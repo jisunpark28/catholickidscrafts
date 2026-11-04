@@ -26,8 +26,8 @@ export function ReaderStatusBar({ reader }: Props) {
     return (
       <p className="mt-4 rounded border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-muted)]">
         Reading as guest on this device.{" "}
-        <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-          Sign in with Access ID
+        <Link href="/kids" className="font-semibold text-[var(--color-link)]">
+          Kid sign-in
         </Link>{" "}
         or{" "}
         <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
@@ -48,7 +48,7 @@ export function ReaderStatusBar({ reader }: Props) {
       Signed in as <strong className="text-[var(--color-ink)]">{label}</strong>
       {reader.mode === "owner" ? " (parent)" : " (reader)"}. <ReaderSignOutLink />
       {" · "}
-      <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
+      <Link href="/kids" className="font-semibold text-[var(--color-link)]">
         Switch reader
       </Link>
     </p>

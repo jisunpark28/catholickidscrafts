@@ -15,8 +15,8 @@ export function BibleReaderNotice({ reader }: Props) {
             family account
           </Link>{" "}
           or{" "}
-          <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-            Access ID
+          <Link href="/kids" className="font-semibold text-[var(--color-link)]">
+            Kid Code
           </Link>{" "}
           to save praise stickers as you type each chapter.
         </p>
@@ -34,7 +34,7 @@ export function BibleReaderNotice({ reader }: Props) {
       <p className="text-sm text-[var(--color-muted)]">
         Signed in as <strong className="text-[var(--color-ink)]">{label}</strong>
         {reader.mode === "owner" ? " (parent)" : " (reader)"}.{" "}
-        <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
+        <Link href="/kids" className="font-semibold text-[var(--color-link)]">
           Switch reader
         </Link>
       </p>

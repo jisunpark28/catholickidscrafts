@@ -26,4 +26,5 @@ export const SITE_COPY_GROUPS = [
   { id: "taxonomy", label: "Season labels & filters" },
   { id: "game_tiny_priest", label: "Come to Mass! game" },
   { id: "game_hangman", label: "Hangman game" },
+  { id: "notice", label: "Notices & banners" },
 ] as const;

@@ -2,13 +2,15 @@
  * Kid Codes for Mom's Bible child sign-in: "<name letters>-<4 random digits>", e.g. "lily-8492".
  * System-generated, unique per child (SubProfile.kidCode @unique), lower case.
  * The code is not a secret (it shows on the device picker); the 4-digit PIN is.
- * Pure helpers: no DB access, safe to import in tests.
+ * Pure helpers: no DB access, safe to import in tests. Client code should import the format
+ * helpers from ./kid-code-format (this file imports Node's crypto).
  */
 import { randomInt } from "crypto";
 
+export { KID_CODE_PATTERN, isValidKidCode, normalizeKidCode } from "./kid-code-format";
+
 export const KID_CODE_NAME_MAX = 12;
 export const KID_CODE_FALLBACK_NAME = "kid";
-export const KID_CODE_PATTERN = /^[a-z]{2,12}-\d{4}$/;
 /** Collision retries before giving up (10,000 codes per name part). */
 export const KID_CODE_MAX_ATTEMPTS = 25;
 
@@ -27,15 +29,6 @@ export function kidCodeNamePart(displayName: string): string {
 export function kidCodeCandidate(displayName: string, random: (max: number) => number = randomInt): string {
   const digits = String(random(10_000)).padStart(4, "0");
   return `${kidCodeNamePart(displayName)}-${digits}`;
-}
-
-/** Trim + lower-case what a child or parent typed ("Lily-8492 " -> "lily-8492"). */
-export function normalizeKidCode(raw: string): string {
-  return raw.trim().toLowerCase().replace(/\s+/g, "");
-}
-
-export function isValidKidCode(code: string): boolean {
-  return KID_CODE_PATTERN.test(code);
 }
 
 /**

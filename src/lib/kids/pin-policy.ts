@@ -64,3 +64,21 @@ export function checkPin(pin: string): PinCheck {
 export function isAcceptablePin(pin: string): boolean {
   return checkPin(pin).ok;
 }
+
+/**
+ * Policy for the PIN of one child: the rules above, and the PIN may not be the 4 digits of
+ * the child's own Kid Code (the code is shown on the device picker, so it isn't secret).
+ */
+export function checkPinForChild(pin: string, kidCode: string | null | undefined): PinCheck {
+  const base = checkPin(pin);
+  if (!base.ok) return base;
+  const digits = kidCode?.match(/-(\d{4})$/)?.[1];
+  if (digits && digits === pin) {
+    return {
+      ok: false,
+      reason: "pattern",
+      message: "The PIN can't be the same as the numbers in the Kid Code. Please choose another one.",
+    };
+  }
+  return base;
+}

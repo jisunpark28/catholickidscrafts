@@ -1,5 +1,6 @@
 import type { BibleBookMeta } from "@/lib/bible/latinprayer";
 import { fetchBibleBooks } from "@/lib/bible/latinprayer";
+import { kidPinStatus, type KidPinStatus } from "@/lib/kids/kid-pin";
 import { prisma } from "@/lib/prisma";
 
 export type StickerCategoryKey = "bible" | "ot" | "nt" | "gospel";
@@ -16,6 +17,10 @@ export type DashboardReaderRow = {
   kind: "owner" | "sub";
   displayName: string;
   accountLabel: string;
+  /** Child only: Kid Code for sign-in (e.g. "lily-8492"). Not a secret. */
+  kidCode: string | null;
+  /** Child only: PIN state for the parent (never the PIN or its hash). */
+  pinStatus: KidPinStatus | null;
   active: boolean;
   totalStickers: number;
   categories: StickerCategory[];
@@ -123,7 +128,10 @@ export async function loadAccountDashboardReaders(familyAccountId: string): Prom
       select: {
         id: true,
         displayName: true,
-        accessCodeLast4: true,
+        kidCode: true,
+        pinHash: true,
+        pinLockedUntil: true,
+        pinDisabledAt: true,
         active: true,
       },
     }),
@@ -143,10 +151,13 @@ export async function loadAccountDashboardReaders(familyAccountId: string): Prom
     kind: "owner",
     displayName: ownerName,
     accountLabel: account.email,
+    kidCode: null,
+    pinStatus: null,
     active: true,
     ...ownerStats,
   };
 
+  const now = new Date();
   const subRows = await Promise.all(
     subs.map(async (sub) => {
       const stats = await stickerStatsForScope(
@@ -157,9 +168,9 @@ export async function loadAccountDashboardReaders(familyAccountId: string): Prom
         id: sub.id,
         kind: "sub" as const,
         displayName: sub.displayName,
-        accountLabel: sub.accessCodeLast4
-            ? `CKC-····-${sub.accessCodeLast4}`
-            : "Access ID",
+        accountLabel: sub.kidCode,
+        kidCode: sub.kidCode,
+        pinStatus: kidPinStatus(sub, now),
         active: sub.active,
         ...stats,
       };

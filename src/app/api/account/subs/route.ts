@@ -11,9 +11,15 @@ import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { parentApiGuard } from "@/lib/family-auth";
 import { generateUniqueKidCode } from "@/lib/kids/kid-code";
 import { prisma } from "@/lib/prisma";
+import { crossOriginError } from "@/lib/same-origin";
 import { NextResponse } from "next/server";
 
-async function uniqueAccessCode(): Promise<string> {
+/**
+ * Legacy Access ID columns are still NOT NULL (dropped in a later cleanup migration), so new
+ * children get a random Access ID that is never shown and can't be used: the Access ID
+ * sign-in endpoint is retired (410) since Mom's Bible PR-2.
+ */
+async function unusedLegacyAccessCode(): Promise<string> {
   for (let attempt = 0; attempt < 12; attempt++) {
     const code = generateAccessCode();
     const normalized = normalizeAccessCode(code);
@@ -24,7 +30,7 @@ async function uniqueAccessCode(): Promise<string> {
     });
     if (!existing && isValidAccessCodeFormat(normalized)) return normalized;
   }
-  throw new Error("Could not generate unique Access ID");
+  throw new Error("Could not generate a unique legacy code");
 }
 
 export async function GET() {
@@ -42,6 +48,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const originError = crossOriginError(request);
+  if (originError) return originError;
   const guard = await parentApiGuard();
   if (guard.error) return guard.error;
   const { session } = guard;
@@ -53,7 +61,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const displayName = body.displayName?.trim();
+  const displayName = typeof body.displayName === "string" ? body.displayName.trim() : "";
   if (!displayName) {
     return NextResponse.json({ error: "Display name is required" }, { status: 400 });
   }
@@ -68,9 +76,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const normalized = await uniqueAccessCode();
-  const accessCodeHash = await hashAccessCode(normalized);
-  // Mom's Bible sign-in code (used from PR-2). The PIN is set later by the parent.
+  const legacy = await unusedLegacyAccessCode();
+  const accessCodeHash = await hashAccessCode(legacy);
+  // Kid Code for sign-in. The PIN is set by the parent next (the child can't sign in before that).
   const kidCode = await generateUniqueKidCode(displayName, async (code) =>
     Boolean(await prisma.subProfile.findUnique({ where: { kidCode: code }, select: { id: true } })),
   );
@@ -80,8 +88,8 @@ export async function POST(request: Request) {
       familyAccountId: session.familyAccountId,
       displayName,
       accessCodeHash,
-      accessCodeLookup: accessCodeLookupKey(normalized),
-      accessCodeLast4: accessCodeLast4(normalized),
+      accessCodeLookup: accessCodeLookupKey(legacy),
+      accessCodeLast4: accessCodeLast4(legacy),
       kidCode,
       sortOrder: count,
       active: true,
@@ -89,12 +97,8 @@ export async function POST(request: Request) {
         create: { parentAccountId: session.familyAccountId, roleLabel: "Parent", isOwner: true },
       },
     },
-    select: { id: true, displayName: true, accessCodeLast4: true },
+    select: { id: true, displayName: true, kidCode: true },
   });
 
-  return NextResponse.json({
-    sub,
-    /** Shown once — store securely; only a hash is saved. */
-    accessId: normalized,
-  });
+  return NextResponse.json({ sub, kidCode: sub.kidCode });
 }

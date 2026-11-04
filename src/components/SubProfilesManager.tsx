@@ -1,6 +1,9 @@
 "use client";
 
+import { PinSetupDialog, PinSetupForm } from "@/components/kid/PinSetupDialog";
 import type { DashboardReaderRow } from "@/lib/account-dashboard";
+import { clearKidProfiles } from "@/lib/kids/kid-device-profiles";
+import type { KidPinStatus } from "@/lib/kids/kid-pin";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,6 +19,13 @@ type DashboardData = {
 };
 
 const CROSS = "\u271D\uFE0E";
+
+const PIN_STATUS_LABEL: Record<KidPinStatus, { text: string; className: string }> = {
+  not_set: { text: "No PIN yet: can't sign in", className: "bg-amber-50 text-amber-800 border-amber-200" },
+  set: { text: "PIN set", className: "bg-green-50 text-green-800 border-green-200" },
+  locked: { text: "Paused: too many wrong PINs", className: "bg-amber-50 text-amber-800 border-amber-200" },
+  disabled: { text: "Locked: set a new PIN", className: "bg-red-50 text-red-700 border-red-200" },
+};
 
 function StickerCount({ count }: { count: number }) {
   return (
@@ -37,19 +47,30 @@ function initial(name: string) {
   return (name.trim()[0] ?? "?").toUpperCase();
 }
 
+function PinBadge({ status }: { status: KidPinStatus | null }) {
+  if (!status) return null;
+  const s = PIN_STATUS_LABEL[status];
+  return <span className={`ml-2 inline-block border px-1.5 py-0.5 text-[11px] font-semibold ${s.className}`}>{s.text}</span>;
+}
+
 export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props) {
   const router = useRouter();
   const [owner, setOwner] = useState(initialOwner);
   const [subs, setSubs] = useState(initialSubs);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [newAccessId, setNewAccessId] = useState<string | null>(null);
   const [addingChild, setAddingChild] = useState(false);
   const [newChildName, setNewChildName] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
+  const [pinFormId, setPinFormId] = useState<string | null>(null);
+  /** Children whose "Set a PIN" popup was skipped during this visit. */
+  const [skippedPinIds, setSkippedPinIds] = useState<string[]>([]);
 
   const atLimit = subs.length >= maxSubs;
+  const needsPin = subs.find(
+    (s) => s.active && s.id && s.kidCode && s.pinStatus === "not_set" && !skippedPinIds.includes(s.id),
+  );
 
   async function refresh() {
     const res = await fetch("/api/account/subs");
@@ -66,22 +87,26 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     if (!displayName) return;
     setError("");
     setMessage("");
-    setNewAccessId(null);
     const res = await fetch("/api/account/subs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ displayName }),
     });
-    const data = (await res.json()) as { error?: string; accessId?: string };
-    if (!res.ok) {
+    const data = (await res.json().catch(() => ({}))) as {
+      error?: string;
+      sub?: { id: string; displayName: string; kidCode: string };
+    };
+    if (!res.ok || !data.sub) {
       setError(data.error ?? "Could not add child");
       return;
     }
-    setNewAccessId(data.accessId ?? null);
-    setMessage("Child added. Copy the Access ID now. Your child signs in with it at /reader/login.");
+    setMessage(
+      `${data.sub.displayName} was added. Kid Code: ${data.sub.kidCode}. Set a 4-digit PIN below so ${data.sub.displayName} can sign in at /kids.`,
+    );
     setAddingChild(false);
     setNewChildName("");
     await refresh();
+    setPinFormId(data.sub.id);
   }
 
   async function saveRename(row: DashboardReaderRow) {
@@ -107,25 +132,24 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     await refresh();
   }
 
-  async function regenerate(row: DashboardReaderRow) {
+  async function newKidCode(row: DashboardReaderRow) {
     if (row.kind !== "sub" || !row.id) return;
     if (
       !window.confirm(
-        `Make a new Access ID for "${row.displayName}"? The old code will stop working.`,
+        `Make a new Kid Code for "${row.displayName}"? The old code (${row.kidCode}) stops working, so ${row.displayName} has to add the new code on each device. The PIN stays the same.`,
       )
     ) {
       return;
     }
     setError("");
-    setNewAccessId(null);
+    setMessage("");
     const res = await fetch(`/api/account/subs/${row.id}/regenerate`, { method: "POST" });
-    const data = (await res.json()) as { error?: string; accessId?: string };
+    const data = (await res.json().catch(() => ({}))) as { error?: string; kidCode?: string };
     if (!res.ok) {
       setError(data.error ?? "Could not make a new code");
       return;
     }
-    setNewAccessId(data.accessId ?? null);
-    setMessage("New Access ID made. Copy it now. It will not be shown again.");
+    setMessage(`New Kid Code for ${row.displayName}: ${data.kidCode ?? ""}`);
     await refresh();
   }
 
@@ -138,11 +162,32 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     await refresh();
   }
 
+  async function pinSaved(row: { id: string | null; displayName: string }) {
+    setPinFormId(null);
+    setError("");
+    setMessage(`PIN saved. ${row.displayName} can now sign in at /kids with the Kid Code and PIN.`);
+    await refresh();
+  }
+
+  function forgetDeviceProfiles() {
+    if (!window.confirm("Remove all kid profiles from the sign-in screen on this device?")) return;
+    clearKidProfiles();
+    setMessage("Kid profiles were removed from this device's sign-in screen.");
+  }
+
   const btn =
     "border border-[var(--color-border)] px-2.5 py-1 text-xs font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]";
 
   return (
     <section className="border border-[var(--color-border)] bg-white p-5 sm:p-6">
+      {needsPin && needsPin.id && needsPin.kidCode && pinFormId === null && (
+        <PinSetupDialog
+          child={{ id: needsPin.id, displayName: needsPin.displayName, kidCode: needsPin.kidCode }}
+          onSaved={() => pinSaved(needsPin)}
+          onSkip={() => setSkippedPinIds((ids) => [...ids, needsPin.id!])}
+        />
+      )}
+
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-xl font-bold text-[var(--color-ink)]">Who&apos;s reading?</h2>
         <p className="text-sm text-[var(--color-muted)]">
@@ -152,14 +197,6 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
 
       {message && <p className="mt-4 text-sm text-green-800">{message}</p>}
       {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
-      {newAccessId && (
-        <div className="mt-4 border-2 border-[var(--color-accent)] bg-[var(--color-surface)] p-4">
-          <p className="text-sm font-semibold text-[var(--color-ink)]">Access ID (copy now)</p>
-          <p className="mt-2 break-all font-mono text-2xl tracking-wide text-[var(--color-ink)]">
-            {newAccessId}
-          </p>
-        </div>
-      )}
 
       <ul className="mt-5 divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
         <li className="flex flex-wrap items-center gap-3 py-4">
@@ -178,6 +215,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
 
         {subs.map((row) => {
           const isEditing = row.id === editingId;
+          const showPinForm = row.id !== null && row.id === pinFormId;
           return (
             <li key={row.id!} className="flex flex-wrap items-center gap-3 py-4">
               <span
@@ -226,12 +264,23 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                     )}
                   </button>
                 )}
-                <p className="font-mono text-xs text-[var(--color-muted)]">{row.accountLabel}</p>
+                <p className="text-xs text-[var(--color-muted)]">
+                  Kid Code{" "}
+                  <span className="font-mono font-semibold text-[var(--color-ink)]">{row.kidCode}</span>
+                  <PinBadge status={row.pinStatus} />
+                </p>
               </div>
               <StickerCount count={row.totalStickers} />
               <div className="flex w-full flex-wrap gap-2 sm:w-auto">
-                <button type="button" className={btn} onClick={() => void regenerate(row)}>
-                  Make new code
+                <button
+                  type="button"
+                  className={`${btn} ${row.pinStatus === "not_set" || row.pinStatus === "disabled" ? "border-[var(--color-accent)]" : ""}`}
+                  onClick={() => setPinFormId(showPinForm ? null : row.id)}
+                >
+                  {row.pinStatus === "not_set" ? "Set PIN" : "Reset PIN"}
+                </button>
+                <button type="button" className={btn} onClick={() => void newKidCode(row)}>
+                  New Kid Code
                 </button>
                 <button type="button" className={btn} onClick={() => void toggleActive(row)}>
                   {row.active ? "Pause" : "Resume"}
@@ -244,6 +293,14 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                   Delete
                 </button>
               </div>
+              {showPinForm && row.id && row.kidCode && (
+                <PinSetupForm
+                  child={{ id: row.id, displayName: row.displayName, kidCode: row.kidCode }}
+                  variant="inline"
+                  onSaved={() => pinSaved(row)}
+                  onCancel={() => setPinFormId(null)}
+                />
+              )}
             </li>
           );
         })}
@@ -262,7 +319,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                 setNewChildName("");
               }
             }}
-            placeholder="Child's name"
+            placeholder="Child's first name"
             className="min-w-[12rem] flex-1 border border-[var(--color-border)] px-3 py-2"
             autoFocus
           />
@@ -305,9 +362,17 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
       )}
 
       <p className="mt-4 text-xs leading-relaxed text-[var(--color-muted)]">
-        Access IDs are shown only once, when you make them. If a code is lost, make a new one.
-        Children can&apos;t post in public discussions.
+        Children sign in at <strong>/kids</strong> with their Kid Code and a 4-digit PIN that you set
+        here. Kid Codes aren&apos;t secret; keep the PIN private. After 20 wrong PINs, sign-in turns off
+        until you set a new PIN. Children can&apos;t post in public discussions.
       </p>
+      <button
+        type="button"
+        onClick={forgetDeviceProfiles}
+        className="mt-2 text-xs font-semibold text-[var(--color-link)] hover:underline"
+      >
+        Forget kid profiles on this device
+      </button>
     </section>
   );
 }

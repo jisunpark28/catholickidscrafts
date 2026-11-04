@@ -59,7 +59,7 @@ function apiErrorMessage(
 ): string {
   if (data?.error) return data.error;
   if (res.status === 401) {
-    return "Sign in with a family account or Access ID to comment.";
+    return "Sign in with a family account or Kid Code to comment.";
   }
   if (res.status === 403) {
     return "You can only edit or delete your own comments.";
@@ -470,8 +470,8 @@ export function BibleChapterDiscussion({
             Sign in
           </Link>{" "}
           or{" "}
-          <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
-            Access ID
+          <Link href="/kids" className="font-semibold text-[var(--color-link)]">
+            Kid Code
           </Link>{" "}
           to comment.
         </p>

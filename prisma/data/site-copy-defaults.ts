@@ -582,4 +582,20 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("bible.discussion.reply", "Reply", "bible"),
 
   sc("bible.notes.title", "Chapter notes", "bible"),
+
+  // Kid sign-in change notice (Mom's Bible PR-1b). Turn on 3-5 days before the Kid Code + PIN
+  // sign-in ships, and off again once it is live.
+  sc(
+    "notice.kid_login_change.enabled",
+    "off",
+    "notice",
+    "Type on to show the kid sign-in notice (on /reader/login, /kids and /account). Anything else hides it.",
+  ),
+  sc(
+    "notice.kid_login_change.text",
+    "Parents must create the child profile and set a 4-digit PIN before your child can sign in.",
+    "notice",
+    "Kid sign-in change notice text",
+  ),
+  sc("notice.kid_login_change.link", "Go to Account → Children", "notice", "Link text (opens /account)"),
 ];
