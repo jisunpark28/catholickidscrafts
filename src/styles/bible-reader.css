@@ -1,86 +1,123 @@
-/* Old/New Testament reader: read-only passage (left) + Mom's Notes column (right).
-   Reuses the gospel-typing fonts and sizes; nothing here applies to Today's Gospel. */
-.bible-reader.gospel-typing--bible {
-  min-height: 0;
+/* Old/New Testament reader (approved Mom's Bible mockups): white text card on the left,
+   Mom's Notes column (440px) on the right, stacked on small screens.
+   Nothing here applies to Today's Gospel typing. */
+.bible-reader {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.bible-reader__title {
+  margin: 4px 0 2px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1f2937;
 }
 
 .bible-reader__columns {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 1.25rem 1rem;
-}
-
-@media (min-width: 640px) {
-  .bible-reader__columns {
-    padding: 1.5rem;
-  }
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
 }
 
 @media (min-width: 1024px) {
   .bible-reader__columns {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 24px;
+  }
+}
+
+/* Mockup width for the notes column once the page (with the site sidebar) has room. */
+@media (min-width: 1440px) {
+  .bible-reader__columns {
+    grid-template-columns: minmax(0, 1fr) 440px;
+    gap: 28px;
   }
 }
 
 .bible-reader__passages {
   display: flex;
   min-width: 0;
-  flex: 1 1 0;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 20px;
 }
 
-.bible-reader__segment {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.bible-reader .bible-reader__passage {
-  flex: none;
-  min-height: 0;
-  max-height: min(75vh, 52rem);
-  overflow-y: auto;
-  padding: 1.25rem;
-  white-space: normal;
-  font-family: var(--gospel-typing-font);
+/* White text card */
+.bible-reader__card {
+  border-radius: 18px;
+  background: #fff;
+  padding: 18px 16px;
+  box-shadow: 0 4px 16px #0001;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16.5px;
+  line-height: 1.75;
+  color: #1f2937;
 }
 
 @media (min-width: 640px) {
-  .bible-reader .bible-reader__passage {
-    padding: 1.5rem;
+  .bible-reader__card {
+    padding: 22px 26px;
   }
+}
+
+.bible-reader__pane-label {
+  margin-bottom: 6px;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #9a7ab3;
+}
+
+/* One block per verse */
+.bible-reader__verse {
+  display: block;
+  border-radius: 6px;
+  padding: 2px 6px;
+  scroll-margin-top: 30vh;
+}
+
+.bible-reader__verse--tap {
+  cursor: pointer;
+}
+
+.bible-reader__verse--tap:not([class*="mb-hl--"]):hover {
+  background-color: #faf6ff;
+}
+
+.bible-reader__verse--tap:focus-visible {
+  outline: 2px solid #d35400;
+  outline-offset: 1px;
+}
+
+/* Official verse numbers: small purple superscript, never selectable */
+.bible-reader .bible-reader-verse {
+  margin-right: 6px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  vertical-align: super;
+  color: #b07cd0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .bible-reader__notes {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 14px;
 }
 
 @media (min-width: 1024px) {
   .bible-reader__notes {
     position: sticky;
     top: 1rem;
-    width: 20rem;
-    flex: 0 0 20rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    padding: 2px 4px 8px 2px;
   }
-}
-
-/* Official verse numbers: inline superscript, never selectable */
-.bible-reader .bible-reader-verse {
-  margin: 0 0.18em 0 0.1em;
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  font-size: max(0.45em, 10px);
-  font-weight: 700;
-  line-height: 1;
-  vertical-align: super;
-  color: #b0896a;
-  user-select: none;
-  -webkit-user-select: none;
-  scroll-margin-top: 30vh;
 }

@@ -91,10 +91,17 @@ check("sticker label uses role", stickerLabel("love", "Dad").includes("Dad"));
 
 // ── Stamps + seeds ──
 const d = new Date("2026-11-01T00:00:00Z");
-check("stamp waiting first", chapterStamp([{ childRepliedAt: d }, { childRepliedAt: null }], 3) === "waiting");
-check("stamp shared", chapterStamp([{ childRepliedAt: d }], 0) === "shared");
-check("stamp highlights", chapterStamp([], 2) === "highlights");
-check("stamp none", chapterStamp([], 0) === null);
+// Child view: a note to read first, then shared, then highlights only.
+check("child stamp waiting first", chapterStamp("child", [{ childRepliedAt: d }, { childRepliedAt: null }], 3) === "waiting");
+check("child stamp shared", chapterStamp("child", [{ childRepliedAt: d }], 0) === "shared");
+check("child stamp highlights = mine", chapterStamp("child", [], 2) === "mine");
+check("child stamp none", chapterStamp("child", [], 0) === null);
+// Parent view (mockup legend): unseen reply = waiting, unanswered note = my note, answered = shared.
+check("parent stamp unseen reply waiting", chapterStamp("parent", [{ childRepliedAt: d }], 0, 1) === "waiting");
+check("parent stamp open note mine", chapterStamp("parent", [{ childRepliedAt: d }, { childRepliedAt: null }], 0) === "mine");
+check("parent stamp shared", chapterStamp("parent", [{ childRepliedAt: d }], 0) === "shared");
+check("parent stamp highlights mine", chapterStamp("parent", [], 1) === "mine");
+check("parent stamp none", chapterStamp("parent", [], 0) === null);
 check(
   "seeds count chapters",
   seedCount([
@@ -127,7 +134,7 @@ const one = replyEmailCopy("Mia", 1);
 const many = replyEmailCopy("Mia", 3);
 check("email copy single", one.subject.includes("Mia sent a warm reply") && !one.subject.includes(secret));
 check("email copy many", many.lead === "Mia sent 3 warm replies to your notes!");
-check("email copy never has reply text or stickers", ![one.subject, one.lead, many.subject, many.lead].some((t) => t.includes(secret) || /Love you|prayed/.test(t)));
+check("email copy never has reply text or stickers", ![one.subject, one.lead, many.subject, many.lead].some((t) => t.includes(secret) || /Love you|Amen|remember this/.test(t)));
 check("email copy blank name", replyEmailCopy(" ", 1).lead.startsWith("Your child"));
 
 // ── Invites ──

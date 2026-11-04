@@ -12,7 +12,7 @@ export type MbLinkedChild = { id: string; displayName: string; roleLabel: string
 
 export type MbViewer =
   | { kind: "parent"; parentId: string; children: MbLinkedChild[] }
-  | { kind: "child"; childId: string; displayName: string };
+  | { kind: "child"; childId: string; displayName: string; kidCode: string | null };
 
 /**
  * Children a parent may see: ParentChildLink rows (owner + co-parent) for active children, plus
@@ -68,9 +68,9 @@ export async function getMbViewer(): Promise<MbViewer | null> {
   if (key.type === "sub") {
     const sub = await prisma.subProfile.findUnique({
       where: { id: key.subProfileId },
-      select: { id: true, displayName: true, active: true },
+      select: { id: true, displayName: true, active: true, kidCode: true },
     });
-    return sub?.active ? { kind: "child", childId: sub.id, displayName: sub.displayName } : null;
+    return sub?.active ? { kind: "child", childId: sub.id, displayName: sub.displayName, kidCode: sub.kidCode } : null;
   }
   const parent = await requireParentActive();
   if (!parent || parent.familyAccountId !== key.familyAccountId) return null;

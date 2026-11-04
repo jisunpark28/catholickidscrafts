@@ -1,24 +1,26 @@
 import Link from "next/link";
+import { SampleNoteCard } from "./MomsBiblePanel";
 import "@/styles/moms-bible.css";
 
-/** Right column when there is no Mom's Bible to show: guests, or a parent without a child profile. */
+/** Right column when there is no Mom's Bible to show: guests (sample note), or a parent without a child profile. */
 export function MomsBibleSignInCard({ variant }: { variant: "guest" | "no-child" }) {
   return (
     <aside className="bible-reader__notes mb-panel" aria-labelledby="mb-intro-title">
-      <div className="mb-card">
-        <h2 id="mb-intro-title" className="mb-panel__title">
-          <span aria-hidden>💌</span> Mom&apos;s Bible
+      {variant === "guest" && <SampleNoteCard />}
+      <div className="mb-card mb-card--letter">
+        <h2 id="mb-intro-title" className="mb-lbl">
+          💌 Mom&apos;s Bible
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">
-          Parents highlight verses, write a letter for a chapter and leave little notes and prayers. Children
-          answer with stickers and a few words of their own.
+        <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
+          Parents highlight verses, write a letter for a chapter and leave little notes and prayers. Children answer
+          with stickers and a few words of their own.
         </p>
         {variant === "guest" ? (
-          <Link href="/account/login" className="mb-btn mb-btn--primary mt-3 inline-block">
+          <Link href="/account/login" className="mb-btn mb-btn--primary mt-3">
             Parent sign in
           </Link>
         ) : (
-          <Link href="/account" className="mb-btn mb-btn--primary mt-3 inline-block">
+          <Link href="/account" className="mb-btn mb-btn--primary mt-3">
             Add your child to start
           </Link>
         )}

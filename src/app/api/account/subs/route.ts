@@ -10,6 +10,7 @@ import {
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { parentApiGuard } from "@/lib/family-auth";
 import { generateUniqueKidCode } from "@/lib/kids/kid-code";
+import { memoImportOffer } from "@/lib/moms-bible/memo-import-server";
 import { prisma } from "@/lib/prisma";
 import { crossOriginError } from "@/lib/same-origin";
 import { NextResponse } from "next/server";
@@ -100,5 +101,8 @@ export async function POST(request: Request) {
     select: { id: true, displayName: true, kidCode: true },
   });
 
-  return NextResponse.json({ sub, kidCode: sub.kidCode });
+  // First child: offer to move the parent's existing Bible memos into this child's Bible.
+  const memoImport = count === 0 ? await memoImportOffer(session.familyAccountId).catch(() => null) : null;
+
+  return NextResponse.json({ sub, kidCode: sub.kidCode, ...(memoImport ? { memoImport } : {}) });
 }

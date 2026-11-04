@@ -7,15 +7,13 @@ import {
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { NewNoteBanner, ParentReplyBanner } from "@/components/moms-bible/MbBanners";
+import { MbToolbar } from "@/components/moms-bible/MbToolbar";
 import { getCatholicBookName } from "@/lib/bible/catholic-book-names";
 import { resolveReadRoute, verseLabelsForDouayChapter } from "@/lib/bible/chapter-pages";
 import { fetchBibleBooks, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { modernizeVerse } from "@/lib/bible/modernize-for-reading";
-import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
-import { buildVerseOffsetTable, chapterTextVersion } from "@/lib/bible-memos/verse-offsets";
+import { buildVerseOffsetTable } from "@/lib/bible-memos/verse-offsets";
 import { readerPageMomsBible } from "@/lib/moms-bible/page-data";
-import { hasPaidFeatures } from "@/lib/subscription/entitlements";
-import { normalizePassageText } from "@/lib/typing-accuracy";
 import { getHeaderSession } from "@/lib/get-header-session";
 import { isHeaderSignedIn } from "@/lib/header-session";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -57,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ref = displayRef(route.slug, bookName, route.chapterDisplay);
   return pageMetadata({
     ...chapterTitle(ref),
-    description: `Read ${ref} from the Catholic Bible. Highlight verses and save memos with your family.`,
+    description: `Read ${ref} from the Catholic Bible. Highlight verses and leave notes for your child.`,
     path: `/bible/read/${route.slug}/${route.label.toLowerCase()}`,
   });
 }
@@ -87,12 +85,8 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
   // latinprayer.org answers some out-of-range chapters with a different chapter.
   if (chapters.some((c, i) => c.meta.chapter !== route.douayChapters[i])) notFound();
 
-  const readerKey = await getReaderKey();
-  const signedIn = isSignedInReaderKey(readerKey);
-  const paid = await hasPaidFeatures(readerKey);
-
   const segments: BibleReaderSegment[] = chapters.map((data) => {
-    // Same per-verse text and join as chapterPlainTextForReading, kept per verse for memo anchoring.
+    // Same per-verse text and join as chapterPlainTextForReading, kept per verse for verse blocks.
     const verseTexts = data.verses.map((v) => ({
       verse: v.verse,
       text: modernizeVerse(data.meta.book.slug, data.meta.chapter, v.verse, v.text),
@@ -103,14 +97,6 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
       douayChapter: data.meta.chapter,
       citation: data.citation,
       text,
-      memoSetup: verseTable
-        ? {
-            verseTable,
-            textVersion: chapterTextVersion(normalizePassageText(text)),
-            signedIn,
-            paid,
-          }
-        : null,
       verseMarkers: verseTable?.verses ?? [],
       verseLabels: verseLabelsForDouayChapter(route.slug, data.meta.chapter, route.label),
     };
@@ -133,8 +119,6 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
   return (
     <TestamentPageShell>
       <HubTypingWidth wide className="space-y-4">
-        {mb.childBanner && <NewNoteBanner note={mb.childBanner} />}
-        {mb.parentBanner && <ParentReplyBanner data={mb.parentBanner} />}
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
           <BibleChapterReadClient
             bookSlug={route.slug}
@@ -146,6 +130,15 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
             discussionReaderLabel={readerLabel}
             momsBible={mb.view}
             momsBibleIntro={mb.intro}
+            header={
+              mb.toolbar || mb.intro === "guest" || mb.childBanner || mb.parentBanner ? (
+                <>
+                  {(mb.toolbar || mb.intro === "guest") && <MbToolbar data={mb.toolbar} />}
+                  {mb.childBanner && <NewNoteBanner note={mb.childBanner} />}
+                  {mb.parentBanner && <ParentReplyBanner data={mb.parentBanner} />}
+                </>
+              ) : null
+            }
           />
         </Suspense>
       </HubTypingWidth>

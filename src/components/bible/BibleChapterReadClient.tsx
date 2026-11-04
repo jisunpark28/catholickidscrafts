@@ -1,10 +1,11 @@
 "use client";
 
 import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
-import { BibleChapterPassage } from "@/components/bible/BibleChapterPassage";
+import { BibleChapterPassage, type PassageMomsBible } from "@/components/bible/BibleChapterPassage";
 import { BibleChapterReadingNotes } from "@/components/bible/BibleChapterReadingNotes";
-import { MomsBiblePanel } from "@/components/moms-bible/MomsBiblePanel";
+import { MbPalette, MomsBiblePanel } from "@/components/moms-bible/MomsBiblePanel";
 import { MomsBibleSignInCard } from "@/components/moms-bible/MomsBibleSignInCard";
+import { PlusModal } from "@/components/moms-bible/PlusModal";
 import { useMomsBible } from "@/components/moms-bible/useMomsBible";
 import {
   catholicChapterHeading,
@@ -17,18 +18,16 @@ import {
   normalizePrayerLanguage,
   type PrayerLanguageCode,
 } from "@/lib/prayers/prayer-languages";
-import type { PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
 import type { MbChapterView } from "@/lib/moms-bible/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import "@/styles/bible-reader.css";
 
-/** One Douay-Rheims chapter shown on the page (memos stay keyed by it). */
+/** One storage chapter shown on the page (Mom's Bible marks stay keyed by it). */
 export type BibleReaderSegment = {
   douayChapter: number;
   citation: string;
   text: string;
-  memoSetup: PassageMemoSetup | null;
   verseMarkers: readonly { verse: number; start: number }[];
   verseLabels: readonly VerseLabel[];
 };
@@ -47,6 +46,8 @@ type Props = {
   momsBible?: MbChapterView | null;
   /** Who sees the "how Mom's Bible works" card instead: guests, or a parent with no child yet. */
   momsBibleIntro?: "guest" | "no-child" | null;
+  /** Toolbar and banners shown above the title, inside the reader panel. */
+  header?: ReactNode;
 };
 
 function heading(bookSlug: string, display: string, locale: PrayerLanguageCode, apiBookName: string) {
@@ -79,6 +80,7 @@ export function BibleChapterReadClient({
   discussionReaderLabel,
   momsBible,
   momsBibleIntro,
+  header,
 }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -108,7 +110,7 @@ export function BibleChapterReadClient({
     }
   }, [bookSlug, urlChapter, langParam, router, searchParams]);
 
-  // #v-34-19 links: the passage pane scrolls on its own, so bring the verse into view.
+  // #v-34-19 links: bring the verse into view.
   useEffect(() => {
     const id = window.location.hash.slice(1);
     if (!id) return;
@@ -132,58 +134,46 @@ export function BibleChapterReadClient({
   if (!firstSegment) return null;
 
   const paneLabel = (s: BibleReaderSegment) =>
-    segments.length > 1
-      ? segmentLabel(bookSlug === "psalms" ? "Psalm" : localizedBookName, s.verseLabels, title)
-      : title;
+    segments.length > 1 ? segmentLabel(bookSlug === "psalms" ? "Psalm" : localizedBookName, s.verseLabels, title) : null;
+  const refBookName = bookSlug === "psalms" ? "Psalm" : getCatholicBookName(bookSlug, "en", apiBookName);
 
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="text-xl font-bold text-[var(--color-ink)] sm:text-2xl">{title}</h1>
-        {uiLanguage !== "en" && localizedBookName !== apiBookName && (
-          <p className="mt-1 text-xs text-[var(--color-muted)]">{apiBookName}</p>
-        )}
-      </div>
+      <div className="bible-reader space-y-4 rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
+        {header}
+        <div>
+          <h1 className="bible-reader__title">{title}</h1>
+          {uiLanguage !== "en" && localizedBookName !== apiBookName && (
+            <p className="mt-1 text-xs text-[var(--color-muted)]">{apiBookName}</p>
+          )}
+        </div>
 
-      <BibleChapterReadingNotes
-        bookSlug={bookSlug}
-        apiBookName={apiBookName}
-        chapter={firstSegment.douayChapter}
-        displayChapter={chapterDisplay}
-        locale={uiLanguage}
-        onLocaleChange={selectLanguage}
-      />
+        <BibleChapterReadingNotes
+          bookSlug={bookSlug}
+          apiBookName={apiBookName}
+          chapter={firstSegment.douayChapter}
+          displayChapter={chapterDisplay}
+          locale={uiLanguage}
+          onLocaleChange={selectLanguage}
+        />
 
-      <div className="bible-reader gospel-typing gospel-typing--bible overflow-hidden rounded-2xl border border-[#e8e0d6] bg-[#fffaf5] shadow-sm">
         {momsBible ? (
           <ColumnsWithMomsBible
+            key={`${momsBible.childId}:${momsBible.preview ? "sample" : "live"}`}
             view={momsBible}
             bookSlug={bookSlug}
-            refBookName={bookSlug === "psalms" ? "Psalm" : getCatholicBookName(bookSlug, "en", apiBookName)}
+            refBookName={refBookName}
             segments={segments}
             initialSituation={searchParams.get("situation")}
             renderPassage={(s, mbProps) => (
-              <BibleChapterPassage
-                key={s.douayChapter}
-                bookSlug={bookSlug}
-                bookName={localizedBookName}
-                segment={s}
-                paneLabel={paneLabel(s)}
-                momsBible={mbProps}
-              />
+              <BibleChapterPassage key={s.douayChapter} segment={s} paneLabel={paneLabel(s)} momsBible={mbProps} />
             )}
           />
         ) : (
           <div className="bible-reader__columns">
             <div className="bible-reader__passages">
               {segments.map((s) => (
-                <BibleChapterPassage
-                  key={s.douayChapter}
-                  bookSlug={bookSlug}
-                  bookName={localizedBookName}
-                  segment={s}
-                  paneLabel={paneLabel(s)}
-                />
+                <BibleChapterPassage key={s.douayChapter} segment={s} paneLabel={paneLabel(s)} />
               ))}
             </div>
             <MomsBibleSignInCard variant={momsBibleIntro ?? "guest"} />
@@ -201,8 +191,6 @@ export function BibleChapterReadClient({
   );
 }
 
-type PassageMb = NonNullable<Parameters<typeof BibleChapterPassage>[0]["momsBible"]>;
-
 /** Passage + Mom's Bible column sharing one state (marks on the text, notes on the right). */
 function ColumnsWithMomsBible({
   view,
@@ -217,7 +205,7 @@ function ColumnsWithMomsBible({
   refBookName: string;
   segments: readonly BibleReaderSegment[];
   initialSituation: string | null;
-  renderPassage: (s: BibleReaderSegment, mb: PassageMb) => ReactNode;
+  renderPassage: (s: BibleReaderSegment, mb: PassageMomsBible) => ReactNode;
 }) {
   const chapters = segments.map((s) => s.douayChapter);
   const mb = useMomsBible(view, bookSlug, chapters);
@@ -236,13 +224,16 @@ function ColumnsWithMomsBible({
     }
   }, [canSelectVerses, initialSituation, segments, setSelected]);
 
-  const passageMb: PassageMb = {
+  const passageMb: PassageMomsBible = {
     verseClass: mb.verseClass,
-    verseBadge: mb.verseBadge,
     onVerseClick: canSelectVerses
       ? (chapter, verse) =>
           setSelected((cur) => (cur && cur.chapter === chapter && cur.verse === verse ? null : { chapter, verse }))
       : undefined,
+    renderAfterVerse: (chapter, verse) =>
+      mb.selected && mb.selected.chapter === chapter && mb.selected.verse === verse ? (
+        <MbPalette mb={mb} situationKey={initialSituation} />
+      ) : null,
   };
 
   return (
@@ -255,6 +246,7 @@ function ColumnsWithMomsBible({
         segments={segments}
         initialSituation={initialSituation}
       />
+      <PlusModal open={mb.plusOpen} onClose={() => mb.setPlusOpen(false)} />
     </div>
   );
 }

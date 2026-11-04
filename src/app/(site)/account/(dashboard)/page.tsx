@@ -127,6 +127,7 @@ export default async function AccountDashboardPage() {
             emailMode={momsBible.emailMode}
             ownChildren={momsBible.ownChildren}
             joined={momsBible.joined}
+            memoImport={momsBible.memoImport}
           />
 
           <section className="flex items-center justify-between gap-3 border border-[var(--color-border)] bg-white p-5 sm:p-6">
