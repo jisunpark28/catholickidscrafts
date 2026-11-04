@@ -22,6 +22,8 @@ type NotesProps = {
   bookSlug: string;
   apiBookName: string;
   chapter: number;
+  /** Official chapter shown in the title (notes content stays keyed by the Douay chapter). */
+  displayChapter?: string;
   locale: ChapterNoteLocale;
   onLocaleChange: (locale: ChapterNoteLocale) => void;
 };
@@ -30,6 +32,7 @@ export function BibleChapterReadingNotes({
   bookSlug,
   apiBookName,
   chapter,
+  displayChapter,
   locale,
   onLocaleChange,
 }: NotesProps) {
@@ -46,7 +49,7 @@ export function BibleChapterReadingNotes({
   }
 
   const book = getCatholicBookName(bookSlug, locale, apiBookName);
-  const notesTitle = catholicChapterNotesTitle(bookSlug, chapter, locale, apiBookName);
+  const notesTitle = catholicChapterNotesTitle(bookSlug, displayChapter ?? chapter, locale, apiBookName);
   const gospelLabel = catholicGospelLabel(bookSlug, locale);
 
   return (

@@ -11,6 +11,7 @@ import {
   type MemoVisibility,
   type PassageMemoDto,
 } from "@/lib/bible-memos/passage-memos";
+import { officialRangeRef } from "@/lib/bible/chapter-pages";
 import { ONE_TIME_LINE, PLUS_FROM_LABEL } from "@/lib/subscription/plan-copy";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -33,6 +34,9 @@ const chip = (on: boolean) =>
   }`;
 
 function ref(m: MyMemo) {
+  // Stored numbers are the text's own; show the official Catholic reference.
+  const official = officialRangeRef(m.bookSlug, m.chapter, m.startVerse, m.endVerse);
+  if (official) return `${m.bookName} ${official}`;
   return m.startVerse === m.endVerse
     ? `${m.bookName} ${m.chapter}:${m.startVerse}`
     : `${m.bookName} ${m.chapter}:${m.startVerse}\u2013${m.endVerse}`;
@@ -65,7 +69,8 @@ function MemoCard({
   const edited = memo.updatedAt !== memo.createdAt;
   const c = memoColor(memo.color);
   const author = memo.mine ? (viewer.isParent ? `Me (${viewer.name})` : "Me") : memo.authorName;
-  const bibleHref = `/bible/read/${memo.bookSlug}/${memo.chapter}`;
+  // Memos are stored with Douay-Rheims numbers; the reader redirects to the official chapter.
+  const bibleHref = `/bible/read/${memo.bookSlug}/${memo.chapter}?douay=1&v=${memo.startVerse}`;
 
   async function patch(data: { body?: string; color?: MemoColor; visibility?: MemoVisibility }) {
     setBusy(true);

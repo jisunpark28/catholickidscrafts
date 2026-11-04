@@ -2,6 +2,7 @@ import { MemoPrintActions } from "@/components/account/MemoPrintActions";
 import { withBookInfo } from "@/lib/bible-memos/book-info";
 import { loadVisibleMemos, resolveMemoViewer } from "@/lib/bible-memos/memo-access";
 import { filterMemos, formatMemoDate, memoColor } from "@/lib/bible-memos/passage-memos";
+import { officialChapterLabel, officialRangeRef } from "@/lib/bible/chapter-pages";
 import { getReaderKey, isSignedInReaderKey } from "@/lib/bible/reader";
 import logo from "@/Logo.png";
 import type { Metadata } from "next";
@@ -36,12 +37,14 @@ export default async function MemoPrintPage({ searchParams }: { searchParams: SP
     (a, b) => a.bookOrder - b.bookOrder || a.chapter - b.chapter || a.startVerse - b.startVerse,
   );
 
-  const books: { name: string; chapters: { chapter: number; items: typeof memos }[] }[] = [];
+  // Grouped by the official chapter (e.g. Psalm 116 holds two stored chapters).
+  const books: { name: string; chapters: { chapter: string; items: typeof memos }[] }[] = [];
   for (const m of memos) {
     let b = books.find((x) => x.name === m.bookName);
     if (!b) books.push((b = { name: m.bookName, chapters: [] }));
-    let c = b.chapters.find((x) => x.chapter === m.chapter);
-    if (!c) b.chapters.push((c = { chapter: m.chapter, items: [] }));
+    const label = officialChapterLabel(m.bookSlug, m.chapter);
+    let c = b.chapters.find((x) => x.chapter === label);
+    if (!c) b.chapters.push((c = { chapter: label, items: [] }));
     c.items.push(m);
   }
   const today = formatMemoDate(new Date().toISOString());
@@ -71,8 +74,10 @@ export default async function MemoPrintPage({ searchParams }: { searchParams: SP
               </h3>
               {c.items.map((m) => {
                 const col = memoColor(m.color);
-                const passage =
-                  m.startVerse === m.endVerse
+                const official = officialRangeRef(m.bookSlug, m.chapter, m.startVerse, m.endVerse);
+                const passage = official
+                  ? `${isPsalms(b.name) ? "Psalm" : b.name} ${official}`
+                  : m.startVerse === m.endVerse
                     ? `${isPsalms(b.name) ? "Psalm" : b.name} ${m.chapter}:${m.startVerse}`
                     : `${isPsalms(b.name) ? "Psalm" : b.name} ${m.chapter}:${m.startVerse}\u2013${m.endVerse}`;
                 return (

@@ -30,6 +30,8 @@ type Args = {
   chapter: number;
   text: string;
   setup: PassageMemoSetup | null;
+  /** Douay verse -> displayed reference ("34:19"), when the page shows official numbering. */
+  refLabels?: Readonly<Record<number, string>>;
 };
 
 type Draft = { start: number; end: number; startVerse: number; endVerse: number; quote: string };
@@ -155,11 +157,27 @@ export function MemoVisibilityToggle({
   );
 }
 
-function verseRef(bookName: string, chapter: number, a: number, b: number) {
+function verseRef(
+  bookName: string,
+  chapter: number,
+  a: number,
+  b: number,
+  refLabels?: Readonly<Record<number, string>>,
+) {
+  const ra = refLabels?.[a];
+  const rb = refLabels?.[b];
+  if (ra && rb) {
+    if (a === b || ra === rb) return `${bookName} ${ra}`;
+    const [ca, va] = ra.split(":");
+    const [cb, vb] = rb.split(":");
+    // "Psalms 34:2–5" when both ends are in the same official chapter.
+    if (ca === cb && va && vb) return `${bookName} ${ca}:${va}–${vb}`;
+    return `${bookName} ${ra}–${rb}`;
+  }
   return a === b ? `${bookName} ${chapter}:${a}` : `${bookName} ${chapter}:${a}–${b}`;
 }
 
-export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Args) {
+export function usePassageMemos({ bookSlug, bookName, chapter, text, setup, refLabels }: Args) {
   const copy = useSiteCopy();
   const t = useCallback((key: string, fallback: string) => textFromCopy(copy, key, fallback), [copy]);
   const target = useMemo(() => normalizePassageText(text), [text]);
@@ -528,7 +546,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
     (i: number) => {
       const memo = memoEndAt.get(i);
       if (!memo) return null;
-      const ref = verseRef(bookName, chapter, memo.startVerse, memo.endVerse);
+      const ref = verseRef(bookName, chapter, memo.startVerse, memo.endVerse, refLabels);
       const shared = memo.visibility === "FAMILY";
       return (
         <button
@@ -552,7 +570,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
         </button>
       );
     },
-    [memoEndAt, bookName, chapter, t, anchorFor],
+    [memoEndAt, bookName, chapter, t, anchorFor, refLabels],
   );
 
   if (!enabled) {
@@ -674,7 +692,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       >
         <div className="flex items-center justify-between gap-2">
           <h3 id={`${dialogId}-ed`} className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
-            {t("bible.memo.eyebrow", "Memo")} · {verseRef(bookName, chapter, editor.startVerse, editor.endVerse)}
+            {t("bible.memo.eyebrow", "Memo")} · {verseRef(bookName, chapter, editor.startVerse, editor.endVerse, refLabels)}
           </h3>
           {visTag(visibility)}
         </div>
@@ -732,7 +750,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
       <>
         <div className="flex items-center justify-between gap-2">
           <h3 id={`${dialogId}-vw`} className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
-            {t("bible.memo.eyebrow", "Memo")} · {verseRef(bookName, chapter, viewing.memo.startVerse, viewing.memo.endVerse)}
+            {t("bible.memo.eyebrow", "Memo")} · {verseRef(bookName, chapter, viewing.memo.startVerse, viewing.memo.endVerse, refLabels)}
           </h3>
           {visTag(viewMode === "edit" ? editVisibility : viewing.memo.visibility)}
         </div>
@@ -903,7 +921,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
           ? t("bible.memo.tap_first", "Tap the first verse.")
           : t("bible.memo.tap_last", "Selecting from {ref}. Now tap the last verse.").replace(
               "{ref}",
-              `${chapter}:${tapMode.firstVerse}`,
+              refLabels?.[tapMode.firstVerse] ?? `${chapter}:${tapMode.firstVerse}`,
             )}
       </span>
       <button type="button" className="font-bold text-[#f9c97a]" onClick={() => setTapMode(null)}>
@@ -962,7 +980,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup }: Ar
               >
                 <span className="flex justify-between gap-2 text-xs font-semibold text-[var(--color-muted)]">
                   <span>
-                    {verseRef(bookName, chapter, m.startVerse, m.endVerse)}
+                    {verseRef(bookName, chapter, m.startVerse, m.endVerse, refLabels)}
                     {m.visibility === "FAMILY" && (
                       <span className="ml-1 text-[#3730a3]">
                         <span aria-hidden>{"\u{1F46A}"}</span> {m.mine ? t("bible.memo.shared_short", "Shared") : authorMemoLabel(m.authorName)}

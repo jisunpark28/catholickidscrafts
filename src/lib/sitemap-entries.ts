@@ -1,3 +1,4 @@
+import { readPagePaths } from "@/lib/bible/chapter-pages";
 import { fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
@@ -137,11 +138,19 @@ export async function buildPagesSitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 }
 
-/** Bible chapter reading pages: /bible/read/<book>/<chapter> for every chapter. */
+/**
+ * Bible chapter reading pages: /bible/read/<book>/<chapter> for every page, numbered the
+ * official Catholic way (chapters that redirect into another page, like Psalm 10, are skipped).
+ */
 export async function buildBibleChaptersSitemap(): Promise<MetadataRoute.Sitemap> {
   const books = await bibleBooksOrEmpty("bible");
   const out: MetadataRoute.Sitemap = [];
   for (const book of [...books].sort((a, b) => a.order - b.order)) {
+    const paths = readPagePaths(book.slug);
+    if (paths.length > 0) {
+      for (const path of paths) out.push(entry(path, "yearly", 0.4));
+      continue;
+    }
     for (let ch = 1; ch <= book.totalChapters; ch++) {
       out.push(entry(`/bible/read/${book.slug}/${ch}`, "yearly", 0.4));
     }

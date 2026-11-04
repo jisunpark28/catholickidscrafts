@@ -1,0 +1,86 @@
+/* Old/New Testament reader: read-only passage (left) + Mom's Notes column (right).
+   Reuses the gospel-typing fonts and sizes; nothing here applies to Today's Gospel. */
+.bible-reader.gospel-typing--bible {
+  min-height: 0;
+}
+
+.bible-reader__columns {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.25rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .bible-reader__columns {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .bible-reader__columns {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
+
+.bible-reader__passages {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.bible-reader__segment {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bible-reader .bible-reader__passage {
+  flex: none;
+  min-height: 0;
+  max-height: min(75vh, 52rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  white-space: normal;
+  font-family: var(--gospel-typing-font);
+}
+
+@media (min-width: 640px) {
+  .bible-reader .bible-reader__passage {
+    padding: 1.5rem;
+  }
+}
+
+.bible-reader__notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .bible-reader__notes {
+    position: sticky;
+    top: 1rem;
+    width: 20rem;
+    flex: 0 0 20rem;
+  }
+}
+
+/* Official verse numbers: inline superscript, never selectable */
+.bible-reader .bible-reader-verse {
+  margin: 0 0.18em 0 0.1em;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: max(0.45em, 10px);
+  font-weight: 700;
+  line-height: 1;
+  vertical-align: super;
+  color: #b0896a;
+  user-select: none;
+  -webkit-user-select: none;
+  scroll-margin-top: 30vh;
+}
