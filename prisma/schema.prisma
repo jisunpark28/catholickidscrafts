@@ -336,6 +336,14 @@ model FamilyAccount {
   plusPasses         PlusPass[]
   customSheets       CustomSheet[]
   sheetPhotos        SheetPhoto[]
+  /// Mom's Bible: children this parent is linked to (owner link + co-parent links).
+  childLinks         ParentChildLink[]
+  parentInvites      ParentInvite[]
+  mbHighlights       MbHighlight[]            @relation("MbHighlightAuthor")
+  mbNotes            MbNote[]                 @relation("MbNoteAuthor")
+  mbNoteItems        MbNoteItem[]             @relation("MbItemParent")
+  mbNotifications    MbNotification[]
+  mbSettings         MbParentSettings?
 }
 
 /// Plus member edited Sunday sheet (diff over a locked base PNG). See docs/SHEET_BASES.md.
@@ -394,6 +402,22 @@ model SubProfile {
   discussionThreads  BibleChapterThread[]   @relation("SubDiscussionThreads")
   discussionComments BibleChapterComment[]  @relation("SubDiscussionComments")
   passageMemos       BiblePassageMemo[]     @relation("SubPassageMemos")
+  /// Mom's Bible sign-in: "lily-8492" (name + 4 random digits), unique, lower case.
+  kidCode            String                 @unique
+  /// bcrypt of "<id>:<4-digit PIN>"; null until a parent sets the PIN (child can't sign in).
+  pinHash            String?
+  pinSetAt           DateTime?
+  pinFailCount       Int                    @default(0)
+  pinLockedUntil     DateTime?
+  /// Set after too many wrong PINs; a parent must reset the PIN.
+  pinDisabledAt      DateTime?
+  parentLinks        ParentChildLink[]
+  mbHighlights       MbHighlight[]          @relation("MbHighlightChild")
+  mbNotes            MbNote[]               @relation("MbNoteChild")
+  mbNoteItems        MbNoteItem[]           @relation("MbItemChild")
+  mbSeen             MbChapterSeen[]
+  mbNotifications    MbNotification[]
+  mbBook             MbBook?
 
   @@index([familyAccountId, sortOrder])
 }
@@ -762,4 +786,195 @@ model Feedback {
 
   @@index([createdAt])
   @@index([category, createdAt])
+}
+
+// ─── Mom's Bible (docs/moms-bible-design.md) ──────────────────────────────────
+// Bible keys are Douay-Rheims (latinprayer slug + Douay chapter/verse), like BiblePassageMemo.
+
+/// Highlight colours: YELLOW Love & Comfort, GREEN Wisdom & Growth, BLUE Courage & Peace, PINK Mom's Prayer.
+enum MbColor {
+  YELLOW
+  GREEN
+  BLUE
+  PINK
+}
+
+enum MbAuthorKind {
+  PARENT
+  CHILD
+}
+
+enum MbItemKind {
+  TEXT
+  STICKER
+}
+
+/// Reply emails: INSTANT = at most one per hour, DIGEST = daily, OFF = in-app only.
+enum MbEmailMode {
+  INSTANT
+  DIGEST
+  OFF
+}
+
+/// Parent <-> child (N:M). The owner link mirrors SubProfile.familyAccountId (isOwner = true).
+model ParentChildLink {
+  id              String        @id @default(cuid())
+  parentAccountId String
+  subProfileId    String
+  /// "Mom" | "Dad" | custom (<= 20 chars), shown on notes.
+  roleLabel       String
+  isOwner         Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  parent          FamilyAccount @relation(fields: [parentAccountId], references: [id], onDelete: Cascade)
+  child           SubProfile    @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([parentAccountId, subProfileId])
+  @@index([subProfileId])
+}
+
+/// Co-parent invite (single use, 7 days). Only a hash of the token is stored.
+model ParentInvite {
+  id             String        @id @default(cuid())
+  ownerAccountId String
+  subProfileIds  String[]
+  roleLabel      String
+  tokenHash      String        @unique
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  acceptedById   String?
+  createdAt      DateTime      @default(now())
+  owner          FamilyAccount @relation(fields: [ownerAccountId], references: [id], onDelete: Cascade)
+
+  @@index([ownerAccountId])
+}
+
+/// One verse mark by one parent in one child's Bible.
+model MbHighlight {
+  id             String        @id @default(cuid())
+  subProfileId   String
+  authorParentId String
+  bookSlug       String
+  chapter        Int
+  verse          Int
+  color          MbColor?
+  star           Boolean       @default(false)
+  underline      Boolean       @default(false)
+  /// Situation tag (e.g. "losing-a-pet"), shown in the PDF.
+  situationKey   String?
+  /// Same id on sibling copies ("Also send to Leo").
+  batchId        String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  child          SubProfile    @relation("MbHighlightChild", fields: [subProfileId], references: [id], onDelete: Cascade)
+  author         FamilyAccount @relation("MbHighlightAuthor", fields: [authorParentId], references: [id], onDelete: Cascade)
+
+  @@unique([subProfileId, authorParentId, bookSlug, chapter, verse])
+  @@index([subProfileId, bookSlug, chapter])
+  @@index([batchId])
+}
+
+/// Chapter letter (startVerse null; one per child x parent x chapter, partial unique index in SQL)
+/// or verse card (startVerse..endVerse).
+model MbNote {
+  id                 String           @id @default(cuid())
+  subProfileId       String
+  authorParentId     String
+  bookSlug           String
+  chapter            Int
+  startVerse         Int?
+  endVerse           Int?
+  color              MbColor?
+  /// Situation tag (e.g. "losing-a-pet"), shown in the PDF.
+  situationKey       String?
+  batchId            String?
+  /// Memo import: the BiblePassageMemo this note was copied from (idempotent).
+  importedFromMemoId String?          @unique
+  /// First child reply; null = waiting for the child (yellow stamp).
+  childRepliedAt     DateTime?
+  lastActivityAt     DateTime         @default(now())
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  child              SubProfile       @relation("MbNoteChild", fields: [subProfileId], references: [id], onDelete: Cascade)
+  author             FamilyAccount    @relation("MbNoteAuthor", fields: [authorParentId], references: [id], onDelete: Cascade)
+  items              MbNoteItem[]
+  notifications      MbNotification[]
+
+  @@index([subProfileId, bookSlug, chapter])
+  @@index([subProfileId, lastActivityAt])
+  @@index([authorParentId, createdAt])
+  @@index([batchId])
+}
+
+/// Thread entry under a note: parent text, child reply (<= 200 chars) or a 1-click sticker.
+model MbNoteItem {
+  id             String          @id @default(cuid())
+  noteId         String
+  authorKind     MbAuthorKind
+  authorParentId String?
+  authorChildId  String?
+  kind           MbItemKind
+  body           String?         @db.Text
+  /// Whitelisted sticker key (e.g. "love", "prayed", "thanks").
+  stickerKey     String?
+  createdAt      DateTime        @default(now())
+  editedAt       DateTime?
+  deletedAt      DateTime?
+  note           MbNote          @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  authorParent   FamilyAccount?  @relation("MbItemParent", fields: [authorParentId], references: [id], onDelete: Cascade)
+  authorChild    SubProfile?     @relation("MbItemChild", fields: [authorChildId], references: [id], onDelete: Cascade)
+  notification   MbNotification?
+
+  @@index([noteId, createdAt])
+}
+
+/// When the child last opened a chapter (seen state, new-note banner).
+model MbChapterSeen {
+  subProfileId String
+  bookSlug     String
+  chapter      Int
+  seenAt       DateTime
+  child        SubProfile @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
+
+  @@id([subProfileId, bookSlug, chapter])
+}
+
+/// Child reply -> parent: in-app banner and email queue.
+model MbNotification {
+  id              String        @id @default(cuid())
+  parentAccountId String
+  subProfileId    String
+  noteId          String
+  itemId          String        @unique
+  createdAt       DateTime      @default(now())
+  seenAt          DateTime?
+  emailedAt       DateTime?
+  parent          FamilyAccount @relation(fields: [parentAccountId], references: [id], onDelete: Cascade)
+  child           SubProfile    @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
+  note            MbNote        @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  item            MbNoteItem    @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([parentAccountId, seenAt])
+  @@index([parentAccountId, emailedAt])
+}
+
+/// Per-parent Mom's Bible settings (created lazily for new accounts).
+model MbParentSettings {
+  parentAccountId    String        @id
+  emailMode          MbEmailMode   @default(INSTANT)
+  lastReplyEmailAt   DateTime?
+  unsubscribeToken   String        @unique
+  memoImportPromptAt DateTime?
+  memoImportDoneAt   DateTime?
+  updatedAt          DateTime      @updatedAt
+  parent             FamilyAccount @relation(fields: [parentAccountId], references: [id], onDelete: Cascade)
+}
+
+/// Per-child book settings for the PDF cover.
+model MbBook {
+  subProfileId String     @id
+  /// Dedication on the PDF cover (<= 500 chars).
+  dedication   String?
+  dedicationBy String?
+  updatedAt    DateTime   @updatedAt
+  child        SubProfile @relation(fields: [subProfileId], references: [id], onDelete: Cascade)
 }
