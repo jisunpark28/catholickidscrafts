@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : book.totalChapters;
   return pageMetadata({
     title: `${book.name} – Catholic Bible for Kids`,
-    description: `Read ${book.name} chapter by chapter (${chapters} chapters) in the Catholic Bible, with official chapter and verse numbers. A gentle way for children to read the Bible at home or in class.`,
+    description: `Read ${book.name} chapter by chapter (${chapters} chapters) in the Catholic Bible. A gentle way for children to read the Bible at home or in class.`,
     path: `/bible/${bookSlug}`,
   });
 }

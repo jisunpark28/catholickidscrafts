@@ -22,21 +22,12 @@ type PassageProps = {
 };
 
 function VerseNumber({ label }: { label: VerseLabel }) {
-  if (label.continued) return null;
+  // Verses without their own official number read on as part of the previous verse.
+  if (label.continued || label.douay) return null;
   return (
-    <span
-      id={label.id}
-      data-verse={label.verse}
-      className={`bible-reader-verse${label.douay ? " bible-reader-verse--douay" : ""}`}
-      title={label.douay ? `Douay-Rheims verse ${label.verse} (official numbering divides this text differently)` : undefined}
-    >
-      <span aria-hidden>
-        {label.text}
-        {label.douay ? "*" : ""}
-      </span>
-      <span className="sr-only">
-        {label.douay ? `Douay-Rheims verse ${label.verse}. ` : `Verse ${label.text}. `}
-      </span>
+    <span id={label.id} data-verse={label.verse} className="bible-reader-verse">
+      <span aria-hidden>{label.text}</span>
+      <span className="sr-only">{`Verse ${label.text}. `}</span>
     </span>
   );
 }
@@ -69,7 +60,6 @@ export function BibleChapterPassage({ bookSlug, bookName, segment, paneLabel }: 
     }
     return map;
   }, [segment.verseLabels, segment.verseMarkers]);
-  const hasDouayNumbers = segment.verseLabels.some((l) => l.douay);
 
   if (!target) {
     return <p className="text-sm text-[var(--color-muted)]">No text available for this chapter.</p>;
@@ -98,12 +88,6 @@ export function BibleChapterPassage({ bookSlug, bookName, segment, paneLabel }: 
         </p>
         {tp.passageAddon}
       </div>
-      {hasDouayNumbers && (
-        <p className="mt-2 text-xs text-[var(--color-muted)]">
-          * Verse numbers with an asterisk are Douay-Rheims numbers: the official Catholic numbering
-          divides this text differently.
-        </p>
-      )}
       {memos.panel}
     </section>
   );

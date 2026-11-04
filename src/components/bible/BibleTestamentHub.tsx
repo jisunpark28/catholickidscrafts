@@ -36,8 +36,7 @@ export function BibleTestamentHub({ title, description, books }: Props) {
         </div>
 
         <p className="text-xs text-[var(--color-muted)]">
-          Type each chapter with 80% accuracy to unlock a praise sticker. Douay-Rheims (public
-          domain) via latinprayer.org.
+          Type each chapter with 80% accuracy to unlock a praise sticker.
         </p>
       </section>
     </BibleHubShell>

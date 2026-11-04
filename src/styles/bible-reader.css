@@ -84,8 +84,3 @@
   -webkit-user-select: none;
   scroll-margin-top: 30vh;
 }
-
-.bible-reader .bible-reader-verse--douay {
-  font-style: italic;
-  color: #c4ad99;
-}

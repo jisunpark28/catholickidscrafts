@@ -921,7 +921,7 @@ export function usePassageMemos({ bookSlug, bookName, chapter, text, setup, refL
           ? t("bible.memo.tap_first", "Tap the first verse.")
           : t("bible.memo.tap_last", "Selecting from {ref}. Now tap the last verse.").replace(
               "{ref}",
-              `${chapter}:${tapMode.firstVerse}`,
+              refLabels?.[tapMode.firstVerse] ?? `${chapter}:${tapMode.firstVerse}`,
             )}
       </span>
       <button type="button" className="font-bold text-[#f9c97a]" onClick={() => setTapMode(null)}>

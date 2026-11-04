@@ -16,7 +16,6 @@ import {
   type PrayerLanguageCode,
 } from "@/lib/prayers/prayer-languages";
 import type { PassageMemoSetup } from "@/lib/bible-memos/passage-memos";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import "@/styles/bible-reader.css";
@@ -38,8 +37,6 @@ type Props = {
   urlChapter: string;
   /** Official chapters on the page, e.g. "34" or "9–10". */
   chapterDisplay: string;
-  douayDiffers: boolean;
-  legacy: { douayChapter: number; href: string; label: string } | null;
   segments: readonly BibleReaderSegment[];
   discussionSignedIn: boolean;
   discussionReaderLabel: string;
@@ -52,13 +49,24 @@ function heading(bookSlug: string, display: string, locale: PrayerLanguageCode, 
   return catholicChapterHeading(bookSlug, display, locale, apiBookName);
 }
 
+/** "Psalm 116:1–9" for one part of a page made of several text sections (official numbers). */
+function segmentLabel(bookName: string, labels: readonly VerseLabel[], fallback: string): string {
+  const refs = labels.filter((l) => !l.douay && !l.continued).map((l) => l.ref);
+  const first = refs[0];
+  const last = refs[refs.length - 1];
+  if (!first || !last) return fallback;
+  const [c1] = first.split(":");
+  const [c2, v2] = last.split(":");
+  const end = (v2 ?? "").split("\u2013").pop();
+  if (first === last) return `${bookName} ${first}`;
+  return c1 === c2 && end ? `${bookName} ${first}\u2013${end}` : `${bookName} ${first}\u2013${last}`;
+}
+
 export function BibleChapterReadClient({
   bookSlug,
   apiBookName,
   urlChapter,
   chapterDisplay,
-  douayDiffers,
-  legacy,
   segments,
   discussionSignedIn,
   discussionReaderLabel,
@@ -70,7 +78,6 @@ export function BibleChapterReadClient({
   const [uiLanguage, setUiLanguage] = useState<PrayerLanguageCode>(language);
   const localizedBookName = getCatholicBookName(bookSlug, uiLanguage, apiBookName);
   const title = heading(bookSlug, chapterDisplay, uiLanguage, apiBookName);
-  const douayList = segments.map((s) => s.douayChapter).join("–");
   const firstSegment = segments[0];
 
   useEffect(() => {
@@ -118,29 +125,9 @@ export function BibleChapterReadClient({
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-xl font-bold text-[var(--color-ink)] sm:text-2xl">
-          {title}
-          {douayDiffers && (
-            <span className="ml-2 align-middle text-sm font-medium text-[var(--color-muted)]">
-              (Douay {douayList})
-            </span>
-          )}
-        </h1>
-        <p className="mt-1 text-sm text-[var(--color-muted)]">
-          {segments.map((s) => s.citation).join(" · ")}
-        </p>
+        <h1 className="text-xl font-bold text-[var(--color-ink)] sm:text-2xl">{title}</h1>
         {uiLanguage !== "en" && localizedBookName !== apiBookName && (
           <p className="mt-1 text-xs text-[var(--color-muted)]">{apiBookName}</p>
-        )}
-        {legacy && (
-          <p className="mt-1 text-xs text-[var(--color-muted)]">
-            Chapter and verse numbers follow the official Catholic numbering. Looking for Douay-Rheims{" "}
-            {bookSlug === "psalms" ? "Psalm" : localizedBookName} {legacy.douayChapter}? It is{" "}
-            <Link href={legacy.href} className="font-semibold text-[var(--color-link)] hover:underline">
-              {bookSlug === "psalms" ? "Psalm" : localizedBookName} {legacy.label}
-            </Link>
-            .
-          </p>
         )}
       </div>
 
@@ -164,7 +151,7 @@ export function BibleChapterReadClient({
                 segment={s}
                 paneLabel={
                   segments.length > 1
-                    ? `${title} · Douay-Rheims ${bookSlug === "psalms" ? "Psalm" : localizedBookName} ${s.douayChapter}`
+                    ? segmentLabel(bookSlug === "psalms" ? "Psalm" : localizedBookName, s.verseLabels, title)
                     : title
                 }
               />
