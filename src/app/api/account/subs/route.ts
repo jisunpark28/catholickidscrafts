@@ -9,6 +9,7 @@ import {
 } from "@/lib/access-code";
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { parentApiGuard } from "@/lib/family-auth";
+import { generateUniqueKidCode } from "@/lib/kids/kid-code";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -69,6 +70,10 @@ export async function POST(request: Request) {
 
   const normalized = await uniqueAccessCode();
   const accessCodeHash = await hashAccessCode(normalized);
+  // Mom's Bible sign-in code (used from PR-2). The PIN is set later by the parent.
+  const kidCode = await generateUniqueKidCode(displayName, async (code) =>
+    Boolean(await prisma.subProfile.findUnique({ where: { kidCode: code }, select: { id: true } })),
+  );
 
   const sub = await prisma.subProfile.create({
     data: {
@@ -77,8 +82,12 @@ export async function POST(request: Request) {
       accessCodeHash,
       accessCodeLookup: accessCodeLookupKey(normalized),
       accessCodeLast4: accessCodeLast4(normalized),
+      kidCode,
       sortOrder: count,
       active: true,
+      parentLinks: {
+        create: { parentAccountId: session.familyAccountId, roleLabel: "Parent", isOwner: true },
+      },
     },
     select: { id: true, displayName: true, accessCodeLast4: true },
   });
