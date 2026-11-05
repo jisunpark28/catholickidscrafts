@@ -1,7 +1,13 @@
 /** Serializable Mom's Bible shapes shared by server queries, API routes and client components. */
 import type { MbColorKey, MbStamp, MbStickerKey } from "./constants";
 
-export type MbAuthorDto = { parentId: string; roleLabel: string; isMe: boolean };
+export type MbAuthorDto = {
+  parentId: string;
+  roleLabel: string;
+  isMe: boolean;
+  /** Still linked to the child (a removed parent's old notes stay, labelled "Parent"). Children can message linked parents. */
+  linked?: boolean;
+};
 
 export type MbHighlightDto = {
   id: string;
@@ -36,6 +42,8 @@ export type MbNoteDto = {
   color: MbColorKey | null;
   situationKey: string | null;
   childRepliedAt: string | null;
+  /** The child started this thread: a message to authorParentId (the parent it was sent to). */
+  startedByChild?: boolean;
   createdAt: string;
   /** Parent view: this parent hasn't seen the child's latest reply yet (dot on the tab). */
   unseenReply: boolean;
