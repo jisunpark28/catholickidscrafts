@@ -10,6 +10,8 @@ const GOOGLE_ISSUERS = ["https://accounts.google.com", "accounts.google.com"];
 /** HttpOnly cookie that binds an OAuth round trip to this browser (holds the state nonce). */
 export const GOOGLE_OAUTH_NONCE_COOKIE = "ckc_oauth_nonce";
 export const GOOGLE_OAUTH_NONCE_MAX_AGE_SEC = 10 * 60;
+/** The nonce cookie is scoped to the Google sign-in routes; clearing it needs this exact path. */
+export const GOOGLE_OAUTH_NONCE_PATH = "/api/auth/family/google";
 /** A sign-in on a locked device must be this recent (ID token auth_time). */
 export const GOOGLE_FRESH_AUTH_MAX_AGE_SEC = 5 * 60;
 

@@ -1,7 +1,7 @@
 /**
  * Child-mode cookies, Google re-auth decision, the emailed unlock code and the session
  * time limits (parent 30d rolling / 90d absolute, kid 7d, device lock 30d, admin 8h + 30 min idle,
- * PIN lockout from 5 failures). No DB, fake clock where the code allows it.
+ * PIN lockout from 5 failures) and the full reset every sign-out runs. No DB, fake clock where the code allows it.
  * Run: npx tsx scripts/test-kid-mode-session.ts
  */
 process.env.AUTH_SECRET ||= "test-secret-for-kid-mode-session-checks-only";
@@ -20,11 +20,17 @@ import {
   signAdminActivity,
 } from "../src/lib/admin-session-policy";
 import { authConfig } from "../src/auth.config";
+import { readFileSync } from "fs";
+import { join } from "path";
+import { clearDeviceLockCookie } from "../src/lib/child-mode-cookies";
 import {
-  clearChildSignOutCookies,
-  clearDeviceLockCookie,
-  shouldClearFamilyOnChildSignOut,
-} from "../src/lib/child-mode-cookies";
+  applySessionReset,
+  AUTH_COOKIE_RE,
+  CLEAR_SITE_DATA_COOKIES,
+  CLEAR_SITE_DATA_HEADER,
+  resetSessionOnResponse,
+  sessionResetCookieSpecs,
+} from "../src/lib/session-reset";
 import {
   checkUnlockCode,
   createUnlockChallenge,
@@ -61,7 +67,7 @@ import {
   verifyReaderSession,
 } from "../src/lib/family-session";
 import { pinFailureOutcome } from "../src/lib/kids/kid-pin";
-import { GOOGLE_FRESH_AUTH_MAX_AGE_SEC, GOOGLE_OAUTH_NONCE_COOKIE } from "../src/lib/google-oauth";
+import { GOOGLE_FRESH_AUTH_MAX_AGE_SEC, GOOGLE_OAUTH_NONCE_COOKIE, GOOGLE_OAUTH_NONCE_PATH } from "../src/lib/google-oauth";
 
 let failures = 0;
 let checks = 0;
@@ -106,26 +112,94 @@ async function main() {
   // --- Clearing uses the same name + path the cookies were set with.
   {
     const res = NextResponse.json({});
-    clearChildSignOutCookies(res, { clearFamily: true });
-    check("child sign-out clears reader", cleared(res, READER_SESSION_COOKIE));
-    check("child sign-out clears child-mode family", cleared(res, FAMILY_SESSION_COOKIE));
-    check("child sign-out keeps the device lock", res.cookies.get(DEVICE_LOCK_COOKIE) === undefined);
-  }
-  {
-    const res = NextResponse.json({});
-    clearChildSignOutCookies(res, { clearFamily: false });
-    check("reader-only sign-out clears reader", cleared(res, READER_SESSION_COOKIE));
-    check("reader-only sign-out keeps parent", res.cookies.get(FAMILY_SESSION_COOKIE) === undefined);
-  }
-  {
-    const res = NextResponse.json({});
     clearDeviceLockCookie(res);
     check("device lock clear", cleared(res, DEVICE_LOCK_COOKIE));
   }
-  check("no family cookie: nothing to clear", !shouldClearFamilyOnChildSignOut({ familyCookiePresent: false, familyMode: null }));
-  check("child-mode family cleared", shouldClearFamilyOnChildSignOut({ familyCookiePresent: true, familyMode: "sub" }));
-  check("invalid family cleared", shouldClearFamilyOnChildSignOut({ familyCookiePresent: true, familyMode: null }));
-  check("active parent kept", !shouldClearFamilyOnChildSignOut({ familyCookiePresent: true, familyMode: "owner" }));
+
+  // --- Any sign-out is a full reset: every session cookie, the device lock included.
+  {
+    const present = [
+      FAMILY_SESSION_COOKIE,
+      READER_SESSION_COOKIE,
+      DEVICE_LOCK_COOKIE,
+      "ckc_some_future_cookie",
+      "__Secure-authjs.session-token.0",
+      "__Secure-authjs.session-token.1",
+      "__Host-authjs.csrf-token",
+      "other_site_cookie",
+    ];
+    const res = NextResponse.json({ ok: true });
+    resetSessionOnResponse(res, present);
+    const expired = (name: string, path = "/") => {
+      const c = res.cookies.get(name);
+      return Boolean(c && c.value === "" && c.maxAge === 0 && c.path === path && !("domain" in c && c.domain));
+    };
+    check("reset clears ckc_family", expired(FAMILY_SESSION_COOKIE));
+    check("reset clears ckc_reader", expired(READER_SESSION_COOKIE));
+    check("reset clears the device lock", expired(DEVICE_LOCK_COOKIE));
+    check("reset clears ckc_unlock on its own path", expired(DEVICE_UNLOCK_COOKIE, DEVICE_UNLOCK_PATH));
+    check("reset clears ckc_oauth_nonce on its own path", expired(GOOGLE_OAUTH_NONCE_COOKIE, GOOGLE_OAUTH_NONCE_PATH));
+    check("nonce path is the Google route", GOOGLE_OAUTH_NONCE_PATH === "/api/auth/family/google");
+    check("reset clears ckc_admin_activity", expired(ADMIN_ACTIVITY_COOKIE));
+    check("reset clears guest/visitor/mb cookies", expired("ckc_bible_reader") && expired("ckc_vid") && expired("ckc_mb_child"));
+    check("reset clears any other ckc_ cookie sent", expired("ckc_some_future_cookie"));
+    check("reset clears Auth.js session + chunks", expired("authjs.session-token") && expired("__Secure-authjs.session-token") && expired("__Secure-authjs.session-token.0") && expired("__Secure-authjs.session-token.1"));
+    check("reset clears legacy next-auth session", expired("next-auth.session-token") && expired("__Secure-next-auth.session-token"));
+    check("reset clears Auth.js csrf/callback", expired("__Host-authjs.csrf-token") && expired("authjs.callback-url"));
+    check("reset leaves other sites' cookies alone", res.cookies.get("other_site_cookie") === undefined);
+    check("reset never writes a value", res.cookies.getAll().every((c) => c.value === "" && c.maxAge === 0));
+    check("prefixed cookies cleared with Secure", res.cookies.getAll().filter((c) => /^__(Secure|Host)-/.test(c.name)).every((c) => c.secure === true));
+    check("__Host- cleared on path / without domain", res.cookies.get("__Host-authjs.csrf-token")?.path === "/");
+    check("reset sends Clear-Site-Data cookies", res.headers.get(CLEAR_SITE_DATA_HEADER) === CLEAR_SITE_DATA_COOKIES);
+    check("reset response not cached", res.headers.get("Cache-Control") === "private, no-store");
+    const setCookie = res.headers.getSetCookie();
+    check("Set-Cookie for device lock expires it", setCookie.some((h) => h.startsWith(`${DEVICE_LOCK_COOKIE}=;`) && /Path=\/(;|$)/.test(h) && /Max-Age=0/i.test(h)));
+    check("auth cookie regex", AUTH_COOKIE_RE.test("authjs.pkce.code_verifier") && !AUTH_COOKIE_RE.test("authjs") && !AUTH_COOKIE_RE.test("ckc_family"));
+  }
+  {
+    // Same flags as when set (secure in production, strict for the unlock cookie).
+    const env = process.env as Record<string, string | undefined>;
+    const before = env.NODE_ENV;
+    env.NODE_ENV = "production";
+    try {
+      const specs = new Map(sessionResetCookieSpecs().map((s) => [s.name, s]));
+      check("prod: family cleared Secure", specs.get(FAMILY_SESSION_COOKIE)?.secure === true);
+      check("prod: device lock cleared Secure+Lax", specs.get(DEVICE_LOCK_COOKIE)?.secure === true && specs.get(DEVICE_LOCK_COOKIE)?.sameSite === "lax");
+      check("prod: unlock cleared Strict", specs.get(DEVICE_UNLOCK_COOKIE)?.sameSite === "strict" && specs.get(DEVICE_UNLOCK_COOKIE)?.secure === true);
+      check("prod: unprefixed authjs cleared Secure", specs.get("authjs.session-token")?.secure === true);
+      check("browser-set ckc_mb_child cleared like it was set", specs.get("ckc_mb_child")?.httpOnly === false && specs.get("ckc_mb_child")?.secure === false);
+    } finally {
+      env.NODE_ENV = before;
+    }
+  }
+  {
+    // Server actions use the cookies() store; the same writer works there.
+    const written = new Map<string, { value: string; path: string; maxAge: number }>();
+    applySessionReset({ set: (name, value, o) => written.set(name, { value, path: o.path, maxAge: o.maxAge }) }, ["ckc_x"]);
+    check("action store gets the device lock cleared", written.get(DEVICE_LOCK_COOKIE)?.maxAge === 0);
+    check("action store gets extra ckc_ cookie cleared", written.get("ckc_x")?.value === "");
+  }
+  {
+    // Every sign-out entry point runs the full reset.
+    const src = (p: string) => readFileSync(join(process.cwd(), p), "utf8");
+    for (const p of [
+      "src/app/api/auth/family/logout/route.ts",
+      "src/app/api/auth/family/logout-all/route.ts",
+      "src/app/api/auth/reader/logout/route.ts",
+    ]) {
+      const s = src(p);
+      check(`${p} runs the full reset`, s.includes("resetSessionOnResponse(") && !/cookies\.set\(/.test(s));
+    }
+    const logoutAll = src("src/app/api/auth/family/logout-all/route.ts");
+    check("logout-all resets even when the guard refuses", /if \(guard\.error\) \{\s*resetSessionOnResponse\(guard\.error/.test(logoutAll));
+    const admin = src("src/app/admin/(dashboard)/page.tsx");
+    check("admin sign-out runs the full reset before signOut", /applySessionReset\([\s\S]*?\);\s*await signOut\(/.test(admin));
+    for (const p of ["src/components/HomeHubAccountMenu.tsx", "src/components/ReaderStatusBar.tsx", "src/components/FamilyLogoutButton.tsx"]) {
+      const s = src(p);
+      const posts = s.match(/fetch\("\/api\/auth\/(family|reader)\/logout(-all)?", \{ method: "POST" \}\)/g) ?? [];
+      check(`${p} signs out through the server route`, posts.length > 0);
+    }
+  }
 
   // --- Signed tokens keep child mode.
   const famSub = await signFamilySession({

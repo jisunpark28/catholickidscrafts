@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type Props = {
@@ -9,13 +8,12 @@ type Props = {
 };
 
 export function FamilyLogoutButton({ mode = "both" }: Props) {
-  const router = useRouter();
   const [busy, setBusy] = useState(false);
 
   async function logout() {
     await fetch("/api/auth/family/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
+    // Full page load so no signed-in page stays in the client router cache.
+    window.location.assign("/");
   }
 
   async function logoutEverywhere() {
@@ -32,8 +30,7 @@ export function FamilyLogoutButton({ mode = "both" }: Props) {
     } finally {
       setBusy(false);
     }
-    router.push("/");
-    router.refresh();
+    window.location.assign("/");
   }
 
   return (

@@ -3,6 +3,7 @@ import {
   buildGoogleAuthUrl,
   GOOGLE_OAUTH_NONCE_COOKIE,
   GOOGLE_OAUTH_NONCE_MAX_AGE_SEC,
+  GOOGLE_OAUTH_NONCE_PATH,
   createGoogleOAuthState,
   isGoogleSignInConfigured,
   type GoogleOAuthFrom,
@@ -26,7 +27,7 @@ export async function GET(request: Request) {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
-    path: "/api/auth/family/google",
+    path: GOOGLE_OAUTH_NONCE_PATH,
     maxAge: GOOGLE_OAUTH_NONCE_MAX_AGE_SEC,
   });
   return res;
