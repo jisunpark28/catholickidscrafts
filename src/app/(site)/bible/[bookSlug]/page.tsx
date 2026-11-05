@@ -45,13 +45,9 @@ export default async function BibleBookPage({ params }: Props) {
     isDouaySlug(bookSlug) ? bookPageMomsBible(bookSlug).catch(() => null) : Promise.resolve(null),
   ]);
 
-  const testament =
-    book.testament === "OT"
-      ? { name: "Old Testament", path: "/bible/old-testament" }
-      : { name: "New Testament", path: "/bible/new-testament" };
   return (
     <>
-      <JsonLd nodes={[breadcrumbNode([testament, { name: book.name, path: `/bible/${bookSlug}` }])]} />
+      <JsonLd nodes={[breadcrumbNode([{ name: book.name, path: `/bible/${bookSlug}` }])]} />
       <BibleBookHub
         book={book}
         testamentBooks={testamentBooks}
