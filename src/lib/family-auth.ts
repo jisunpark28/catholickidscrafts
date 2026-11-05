@@ -15,6 +15,7 @@ import {
   READER_SESSION_COOKIE,
   verifyReaderSession,
 } from "@/lib/family-session";
+import { clearDeviceLockCookie } from "@/lib/child-mode-cookies";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -250,7 +251,7 @@ export async function enterChildMode(
 
 /** A verified fresh parent sign-in unlocks the device. */
 export function clearDeviceLock(res: NextResponse) {
-  res.cookies.set(DEVICE_LOCK_COOKIE, "", { path: "/", maxAge: 0 });
+  clearDeviceLockCookie(res);
 }
 
 export function clearFamilyCookies(res: NextResponse) {
