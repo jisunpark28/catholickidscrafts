@@ -7,6 +7,7 @@ import {
   deviceUnlockCookieOptions,
   isUnlockCodeFormat,
 } from "@/lib/device-unlock";
+import { consumeUnlockChallenge, isCurrentUnlockChallenge } from "@/lib/device-unlock-store";
 import { getDeviceLock, getFamilySession, setFamilyAndOwnerReaderCookies } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import {
@@ -77,6 +78,16 @@ export async function POST(request: Request) {
     return res;
   }
 
+  // Only the newest, unused code of this family counts (a newer code or a used one voids it).
+  if (result.nonce && !(await isCurrentUnlockChallenge(familyAccountId, result.nonce))) {
+    const res = NextResponse.json(
+      { error: "This code is no longer valid. Use the newest code we emailed, or ask for a new one." },
+      { status: 400, headers: noStore },
+    );
+    clearChallenge(res);
+    return res;
+  }
+
   if (!result.ok) {
     if (result.reason !== "wrong_code") {
       const res = NextResponse.json({ error: "This code expired. Ask for a new code." }, { status: 400, headers: noStore });
@@ -93,8 +104,16 @@ export async function POST(request: Request) {
     return res;
   }
 
-  // Single use, then sign the grown-up in.
+  // Single use (atomic: two parallel requests cannot both pass), then sign the grown-up in.
   await recordRateLimitFailure(`unlock-used:${result.nonce}`, USED_RULE);
+  if (!(await consumeUnlockChallenge(result.familyAccountId, result.nonce))) {
+    const res = NextResponse.json(
+      { error: "This code is no longer valid. Ask for a new code." },
+      { status: 400, headers: noStore },
+    );
+    clearChallenge(res);
+    return res;
+  }
   const account = await prisma.familyAccount.findUnique({
     where: { id: result.familyAccountId },
     select: { id: true, email: true },

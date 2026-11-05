@@ -1,5 +1,12 @@
 import { authConfig } from "@/auth.config";
 import {
+  ADMIN_ACTIVITY_COOKIE,
+  adminActivityCookieOptions,
+  isAdminActivityPath,
+  isAdminIdleExpired,
+  signAdminActivity,
+} from "@/lib/admin-session-policy";
+import {
   getCanonicalRedirectTarget,
   isVercelDeploymentHost,
 } from "@/lib/canonical-host";
@@ -54,12 +61,48 @@ function crossSiteAdminWrite(request: NextRequest): NextResponse | null {
   return NextResponse.json({ error: "Cross-site request blocked" }, { status: 403 });
 }
 
-export default auth((request) => {
+type AuthedRequest = NextRequest & { auth?: { user?: { id?: string } | null; loginAt?: number } | null };
+
+/**
+ * Admin idle timeout (30 min): every /admin and /api/admin request by a signed-in admin
+ * renews the signed ckc_admin_activity cookie; once it lapses the session is dead for good
+ * (lib/admin-auth applies the same check), and the admin has to sign in again.
+ */
+async function adminIdle(
+  request: AuthedRequest,
+): Promise<{ expired: NextResponse } | { activity: string } | null> {
+  const pathname = request.nextUrl.pathname;
+  if (!isAdminActivityPath(pathname)) return null;
+  const adminId = request.auth?.user?.id;
+  const loginAt = request.auth?.loginAt;
+  // Not signed in: authorized() in auth.config already sent the request to the login page / 401.
+  if (!adminId || typeof loginAt !== "number") return null;
+  const ref = { adminId, loginAt };
+  const token = request.cookies.get(ADMIN_ACTIVITY_COOKIE)?.value;
+  if (await isAdminIdleExpired({ token, ref })) {
+    const res = pathname.startsWith("/api/admin")
+      ? NextResponse.json({ error: "Session expired. Sign in again." }, { status: 401 })
+      : NextResponse.redirect(new URL("/admin/login?error=SessionExpired", request.nextUrl));
+    const c = adminActivityCookieOptions("", 0);
+    res.cookies.set(c.name, "", c);
+    return { expired: res };
+  }
+  return { activity: await signAdminActivity(ref) };
+}
+
+export default auth(async (request) => {
   const redirect = canonicalRedirect(request);
   if (redirect) return withVercelNoIndex(request, redirect);
   const blocked = crossSiteAdminWrite(request);
   if (blocked) return withVercelNoIndex(request, blocked);
-  return withVercelNoIndex(request, NextResponse.next());
+  const idle = await adminIdle(request as AuthedRequest);
+  if (idle && "expired" in idle) return withVercelNoIndex(request, idle.expired);
+  const res = NextResponse.next();
+  if (idle) {
+    const c = adminActivityCookieOptions(idle.activity);
+    res.cookies.set(c.name, c.value, c);
+  }
+  return withVercelNoIndex(request, res);
 });
 
 export const config = {

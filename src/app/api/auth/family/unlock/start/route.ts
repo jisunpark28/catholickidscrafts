@@ -5,6 +5,7 @@ import {
   deviceUnlockCookieOptions,
   maskEmail,
 } from "@/lib/device-unlock";
+import { recordIssuedUnlockChallenge } from "@/lib/device-unlock-store";
 import { complianceFooter, emailConfigured, escapeHtml, sendEmail } from "@/lib/email";
 import { getDeviceLock, getFamilySession } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
@@ -67,7 +68,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const { code, token } = await createUnlockChallenge({ familyAccountId: account.id, lockedAt: lock.lockedAt });
+  const { code, token, nonce } = await createUnlockChallenge({ familyAccountId: account.id, lockedAt: lock.lockedAt });
+  // This becomes the only usable code: every earlier code of the family stops working now.
+  try {
+    await recordIssuedUnlockChallenge(account.id, nonce);
+  } catch (e) {
+    console.error("unlock challenge record", e);
+    return NextResponse.json({ error: "We could not send the email. Please try again." }, { status: 503, headers: noStore });
+  }
   const minutes = Math.round(DEVICE_UNLOCK_TTL_SEC / 60);
   const what = `Someone asked to switch a device that is in child mode back to your grown-up account (${account.email}).`;
   const footer = complianceFooter(

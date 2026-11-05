@@ -72,6 +72,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.email = token.email as string;
         session.user.role = token.role as AdminRole;
       }
+      session.loginAt = typeof token.loginAt === "number" ? token.loginAt : undefined;
       return session;
     },
   },

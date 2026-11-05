@@ -11,7 +11,9 @@ import { GOOGLE_FRESH_AUTH_MAX_AGE_SEC } from "@/lib/google-oauth";
  *    on the device never unlocks it by itself.
  * 2. Email code: a 6-digit code sent to the family account's email. The code is never stored;
  *    the browser keeps an HttpOnly, signed challenge (HMAC of the code) bound to the current
- *    device lock, valid 10 minutes, 5 tries, single use.
+ *    device lock, valid 10 minutes, 5 tries, single use. Only the newest code of a family
+ *    counts: sending a new code or using one voids every earlier code (server-side record,
+ *    see device-unlock-store.ts).
  */
 
 export type FreshReauthInput = {
@@ -137,6 +139,25 @@ export async function checkUnlockCode(
   const b = Buffer.from(ch.hash);
   if (a.length !== b.length || !timingSafeEqual(a, b)) return { ok: false, reason: "wrong_code", nonce: ch.nonce };
   return { ok: true, familyAccountId: ch.familyAccountId, nonce: ch.nonce };
+}
+
+/** Server-side record of the newest unlock code per family ("AuthRateLimit" rows, no extra table). */
+export function unlockCurrentPrefix(familyAccountId: string): string {
+  return `unlock-current:${familyAccountId}:`;
+}
+
+/** Nonce of the newest issued challenge, or null when there is none. */
+export function newestUnlockNonce(
+  rows: ReadonlyArray<{ key: string; windowStart: Date }>,
+  prefix: string,
+): string | null {
+  let best: { key: string; t: number } | null = null;
+  for (const r of rows) {
+    if (!r.key.startsWith(prefix)) continue;
+    const t = r.windowStart.getTime();
+    if (!best || t > best.t || (t === best.t && r.key > best.key)) best = { key: r.key, t };
+  }
+  return best ? best.key.slice(prefix.length) : null;
 }
 
 /** "jisun@gmail.com" -> "j•••@gmail.com" (shown to whoever holds the device). */
