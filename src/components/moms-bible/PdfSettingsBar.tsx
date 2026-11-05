@@ -47,7 +47,7 @@ export function PdfSettingsBar({ childId, childName, others, replies, hasOthers,
   return (
     <div className="mbp-bar">
       <div className="mbp-bar__row">
-        <Link href="/bible/old-testament" className="mbp-bar__back">
+        <Link href="/bible/genesis" className="mbp-bar__back">
           ← Back to the Bible
         </Link>
         <button type="button" className="mbp-btn" onClick={() => window.print()}>

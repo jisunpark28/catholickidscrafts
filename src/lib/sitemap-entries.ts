@@ -37,8 +37,6 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/resource", "weekly", 0.9],
   ["/resources", "weekly", 0.85],
   ["/bible/gospel", "daily", 0.9],
-  ["/bible/old-testament", "monthly", 0.8],
-  ["/bible/new-testament", "monthly", 0.8],
   ["/recommendations", "weekly", 0.8],
   ["/play", "weekly", 0.75],
   ["/prayers", "monthly", 0.75],

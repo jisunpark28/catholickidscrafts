@@ -59,16 +59,6 @@ const nextConfig: NextConfig = {
         destination: "/bible/gospel",
         permanent: true,
       },
-      {
-        source: "/old-testament",
-        destination: "/bible/old-testament",
-        permanent: true,
-      },
-      {
-        source: "/new-testament",
-        destination: "/bible/new-testament",
-        permanent: true,
-      },
       { source: "/program", destination: "/", permanent: true },
       { source: "/program/:path*", destination: "/", permanent: true },
       { source: "/lesson/:path*", destination: "/", permanent: true },
