@@ -37,50 +37,64 @@ type Feature = {
   benefits: string[];
   badge?: string;
   cta: string;
+  /** Browser-frame address; defaults to catholickidscrafts.com + href when omitted. */
+  frameUrl?: string;
 };
 
 const FEATURES: Feature[] = [
   {
     id: "gospel",
-    href: "/gospel",
+    href: "/bible/gospel",
     image: "/home-features/gospel.webp",
     icon: "📖",
     color: "#d35400",
     tint: "#fde7d6",
     title: "Today's Gospel Typing",
     hook: "Hear Jesus speak, one word at a time.",
-    description: "Type today's Gospel word by word and let the Word sink in.",
+    description: "Type today's short Gospel passage word by word and let the Word sink into your child's heart.",
     benefits: ["New Gospel every day", "Praise stickers on a calendar"],
     badge: "⭐ Sign in to collect stickers",
     cta: "Start typing",
   },
   {
     id: "bible",
-    href: "/bible/genesis",
+    href: "/bible/read/genesis/1",
     image: "/home-features/bible.webp",
-    icon: "⭐",
+    icon: "💝",
     color: "#a87b00",
     tint: "#fdf3c7",
-    title: "Bible Typing",
-    hook: "Type your way through the whole Bible!",
-    description: "Type the whole Bible chapter by chapter and collect a sticker for every chapter.",
-    benefits: ["Old & New Testament", "Word-by-word practice", "Track your progress"],
-    badge: "⭐ Sign in to collect stickers",
-    cta: "Open the Bible",
+    title: "Mom's Bible",
+    hook: "A color-coded Prayer Bible from Mom & Dad.",
+    description:
+      "Tap any verse to highlight in 4 pastel themes—Love, Wisdom, Courage, or Prayer—and leave a warm note in the margin for your child to discover.",
+    benefits: [
+      "4 color-coded themes (🟡 Love · 🟢 Wisdom · 🔵 Courage · 🩷 Prayer)",
+      '"When my child is..." verse finder for real-life moments',
+      "10-second Prayer Starter chips for busy parents",
+    ],
+    badge: "🩷 Mom's Prayer for You",
+    cta: "Open Mom's Bible",
+    frameUrl: "catholickidscrafts.com/bible/read/psalms/34",
   },
   {
     id: "memos",
-    href: "/bible/read/matthew/5",
+    href: "/bible/read/genesis/1",
     image: "/home-features/memos.webp",
-    icon: "📝",
+    icon: "💌",
     color: "#2e8b57",
     tint: "#e0f2e9",
-    title: "Bible Memos",
-    hook: "Keep the verses that touch your heart.",
-    description: "Leave a note on your favourite passages and come back to them anytime.",
-    benefits: ["Notes on any chapter"],
-    badge: "💚 My favourite verse",
-    cta: "Try memos",
+    title: "Shared Faith Notes",
+    hook: "From yellow treasure stamps to a printed keepsake book.",
+    description:
+      "Your child follows yellow stamps (💌 Waiting for You!) to read your notes, replies with 1-click stickers, and you can print it all as a keepsake PDF book for First Communion or birthdays.",
+    benefits: [
+      "1-Click kid sticker replies (❤️ Love you, Mom! · 🙏 Amen!)",
+      "Separate Mom & Dad tabs for family co-parenting",
+      'Print as a "Mom\'s Prayer Bible for My Child" PDF booklet',
+    ],
+    badge: "🌱 Shared Together",
+    cta: "See sample & print preview",
+    frameUrl: "catholickidscrafts.com/print/moms-bible/mia",
   },
   {
     id: "play",
@@ -91,8 +105,8 @@ const FEATURES: Feature[] = [
     tint: "#e3ecfb",
     title: "Play & Learn",
     hook: "Learn the faith by playing!",
-    description: "Faith games for kids: Come to Mass!, liturgical vestments, hangman and more.",
-    benefits: ["Play time on every game", "Photos stay on your device"],
+    description: "Interactive Catholic games for kids: Come to Mass!, liturgical vestments, Bible hangman, and more.",
+    benefits: ["Safe & ad-free for kids", "Photos stay on your device"],
     badge: "🎉 Faith games",
     cta: "Play now",
   },
@@ -105,22 +119,23 @@ const FEATURES: Feature[] = [
     tint: "#f3e5f5",
     title: "Prayers",
     hook: "Learn to pray, one prayer at a time.",
-    description: "Flip cards for the Sign of the Cross, Our Father, Hail Mary and more.",
-    benefits: ["Prayer flip cards", "Tap to pray"],
+    description: "Step-by-step flip cards for the Sign of the Cross, Our Father, Hail Mary, and more in 10 languages.",
+    benefits: ["Prayer flip cards", "Tap to pray together"],
     badge: "🙏 Pray together",
     cta: "Pray together",
   },
   {
     id: "liturgy",
-    href: "/liturgy/ordinary-time", // replaced with the current season at request time
+    href: "/liturgy/ordinary-time",
     image: "/home-features/liturgy.webp",
     icon: "⛪",
     color: "#c0392b",
     tint: "#fbe4e4",
     title: "Liturgical Year",
     hook: "Celebrate every season of the Church.",
-    description: "Kid questions and answers, crafts and activities for Advent, Christmas, Lent, Easter and Ordinary Time.",
-    benefits: ["6 seasons", "Q&A flip cards", "Follows the Church calendar"],
+    description:
+      "Kid-friendly questions and answers, crafts, and activities for Advent, Christmas, Lent, Easter, and Ordinary Time.",
+    benefits: ["6 liturgical seasons", "Kid Q&A flip cards", "Follows the Church calendar"],
     badge: "✂️ Season activities",
     cta: "Explore the seasons",
   },
@@ -149,7 +164,7 @@ export default async function HomePage() {
   const seasonLabel = isLiturgyTopic(seasonSlug) ? LITURGY_TOPIC_LABELS[seasonSlug] : "seasonal";
   const slides: HomeFeatureSlide[] = FEATURES.map((f) => {
     const title = copyText(copy, `home.features.${f.id}.title`, f.title);
-    const href = f.id === "liturgy" ? seasonHref : f.href;
+    const href = f.href;
     return {
       id: f.id,
       href,
@@ -164,7 +179,7 @@ export default async function HomePage() {
       badge: f.badge,
       cta: copyText(copy, `home.features.${f.id}.cta`, f.cta),
       imageAlt: `${title} screenshot`,
-      frameUrl: `catholickidscrafts.com${href}`,
+      frameUrl: f.frameUrl ?? `catholickidscrafts.com${href}`,
     };
   });
 
@@ -221,8 +236,8 @@ export default async function HomePage() {
         <HomeBackdrop />
       <HomeFeatureCarousel
         eyebrow={copyText(copy, "home.features.heading", "What you can do here")}
-        heading={copyText(copy, "home.features.headline", "Faith fun for every week")}
-        subtitle={copyText(copy, "home.features.subtitle", "Print, pray, type and play. Free for families and catechists.")}
+        heading={copyText(copy, "home.features.headline", "Faith fun & lasting memories for every week")}
+        subtitle={copyText(copy, "home.features.subtitle", "Print, pray, highlight, and play. Built for Catholic families.")}
         lead={lead}
         slides={slides}
         prevLabel={copyText(copy, "home.features.prev", "Previous feature")}
