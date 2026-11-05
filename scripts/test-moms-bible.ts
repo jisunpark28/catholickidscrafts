@@ -5,7 +5,7 @@
  */
 import { SITUATIONS, SITUATION_GROUPS, getSituation, isSituationKey } from "../src/data/moms-bible/situations";
 import { nabreToDouay } from "../src/lib/bible/ref-map";
-import { MB_LIMITS, MB_STICKERS, isMbColor, isMbSticker, stickerLabel } from "../src/lib/moms-bible/constants";
+import { MB_LIMITS, MB_STICKERS, isMbColor, isMbSticker, stickerLabel, formatSeedsLabel } from "../src/lib/moms-bible/constants";
 import { hashInviteToken, isInviteTokenShape, newInviteToken } from "../src/lib/moms-bible/invites";
 import {
   MB_EMAIL_COOLDOWN_MS,
@@ -129,6 +129,10 @@ check(
     { bookSlug: "john", chapter: 3, childRepliedAt: d },
   ]) === 1,
 );
+check("seeds badge label plural", formatSeedsLabel(14) === "Shared Together: 14 seeds");
+check("seeds badge label singular", formatSeedsLabel(1) === "Shared Together: 1 seed");
+check("seeds badge label zero", formatSeedsLabel(0) === "Shared Together: 0 seeds");
+check("seeds badge label floors", formatSeedsLabel(2.9) === "Shared Together: 2 seeds");
 
 // ── Email cooldown + digest ──
 const now = new Date("2026-11-04T12:00:00Z");
