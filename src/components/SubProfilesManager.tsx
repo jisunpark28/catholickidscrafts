@@ -62,6 +62,12 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
   const [error, setError] = useState("");
   const [addingChild, setAddingChild] = useState(false);
   const [newChildName, setNewChildName] = useState("");
+  /** Shown when the child's name gives no free Kid Code: the parent types one (letters only). */
+  const [askChildCode, setAskChildCode] = useState(false);
+  const [newChildCode, setNewChildCode] = useState("");
+  /** "New Kid Code" for this child needs a typed code (the name's code is taken or unusable). */
+  const [codeFormId, setCodeFormId] = useState<string | null>(null);
+  const [codeFormValue, setCodeFormValue] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
   const [pinFormId, setPinFormId] = useState<string | null>(null);
@@ -88,32 +94,42 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
   async function submitNewChild() {
     const displayName = newChildName.trim();
     if (!displayName) return;
+    const kidCode = askChildCode ? newChildCode.trim() : "";
+    if (askChildCode && !kidCode) return;
     setError("");
     setMessage("");
     const res = await fetch("/api/account/subs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ displayName }),
+      body: JSON.stringify(kidCode ? { displayName, kidCode } : { displayName }),
     });
     const data = (await res.json().catch(() => ({}))) as {
       error?: string;
+      needsKidCode?: boolean;
       sub?: { id: string; displayName: string; kidCode: string };
       memoImport?: { count: number };
     };
     if (!res.ok || !data.sub) {
+      if (data.needsKidCode) setAskChildCode(true);
       setError(data.error ?? "Could not add child");
       return;
     }
     setMessage(
       `${data.sub.displayName} was added. Kid Code: ${data.sub.kidCode}. Set a 4-digit PIN below so ${data.sub.displayName} can sign in at /kids.`,
     );
-    setAddingChild(false);
-    setNewChildName("");
+    closeAddChild();
     await refresh();
     setPinFormId(data.sub.id);
     if (data.memoImport && data.memoImport.count > 0) {
       setMemoImport({ child: { id: data.sub.id, displayName: data.sub.displayName }, count: data.memoImport.count });
     }
+  }
+
+  function closeAddChild() {
+    setAddingChild(false);
+    setNewChildName("");
+    setAskChildCode(false);
+    setNewChildCode("");
   }
 
   async function saveRename(row: DashboardReaderRow) {
@@ -148,14 +164,27 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     ) {
       return;
     }
+    await requestNewKidCode(row);
+  }
+
+  /** Without `kidCode` the server uses the child's name; with it, the parent's typed code. */
+  async function requestNewKidCode(row: DashboardReaderRow, kidCode?: string) {
+    if (row.kind !== "sub" || !row.id) return;
     setError("");
     setMessage("");
-    const res = await fetch(`/api/account/subs/${row.id}/regenerate`, { method: "POST" });
-    const data = (await res.json().catch(() => ({}))) as { error?: string; kidCode?: string };
+    const res = await fetch(`/api/account/subs/${row.id}/regenerate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(kidCode ? { kidCode } : {}),
+    });
+    const data = (await res.json().catch(() => ({}))) as { error?: string; needsKidCode?: boolean; kidCode?: string };
     if (!res.ok) {
+      if (data.needsKidCode) setCodeFormId(row.id);
       setError(data.error ?? "Could not make a new code");
       return;
     }
+    setCodeFormId(null);
+    setCodeFormValue("");
     setMessage(`New Kid Code for ${row.displayName}: ${data.kidCode ?? ""}`);
     await refresh();
   }
@@ -234,6 +263,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
         {subs.map((row) => {
           const isEditing = row.id === editingId;
           const showPinForm = row.id !== null && row.id === pinFormId;
+          const showCodeForm = row.id !== null && row.id === codeFormId;
           return (
             <li key={row.id!} className="flex flex-wrap items-center gap-3 py-4">
               <span
@@ -311,6 +341,49 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
                   Delete
                 </button>
               </div>
+              {showCodeForm && (
+                <div className="flex w-full flex-wrap items-center gap-2">
+                  <label className="text-xs font-semibold text-[var(--color-ink)]" htmlFor={`kid-code-${row.id}`}>
+                    New Kid Code
+                  </label>
+                  <input
+                    id={`kid-code-${row.id}`}
+                    type="text"
+                    value={codeFormValue}
+                    onChange={(e) => setCodeFormValue(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && codeFormValue.trim()) void requestNewKidCode(row, codeFormValue.trim());
+                      if (e.key === "Escape") setCodeFormId(null);
+                    }}
+                    autoComplete="off"
+                    autoCapitalize="none"
+                    spellCheck={false}
+                    maxLength={12}
+                    placeholder="lily"
+                    className="min-w-[8rem] border border-[var(--color-border)] px-2 py-1 font-mono"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={() => void requestNewKidCode(row, codeFormValue.trim())}
+                    disabled={!codeFormValue.trim()}
+                    className="text-xs font-semibold text-[var(--color-link)] disabled:opacity-50"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCodeFormId(null);
+                      setCodeFormValue("");
+                    }}
+                    className="text-xs text-[var(--color-muted)]"
+                  >
+                    Cancel
+                  </button>
+                  <p className="w-full text-xs text-[var(--color-muted)]">2-12 letters (a-z) only, like &quot;lily&quot;.</p>
+                </div>
+              )}
               {showPinForm && row.id && row.kidCode && (
                 <PinSetupForm
                   child={{ id: row.id, displayName: row.displayName, kidCode: row.kidCode }}
@@ -332,33 +405,51 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
             onChange={(e) => setNewChildName(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") void submitNewChild();
-              if (e.key === "Escape") {
-                setAddingChild(false);
-                setNewChildName("");
-              }
+              if (e.key === "Escape") closeAddChild();
             }}
             placeholder="Child's first name"
             className="min-w-[12rem] flex-1 border border-[var(--color-border)] px-3 py-2"
             autoFocus
           />
+          {askChildCode && (
+            <input
+              type="text"
+              value={newChildCode}
+              onChange={(e) => setNewChildCode(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") void submitNewChild();
+                if (e.key === "Escape") closeAddChild();
+              }}
+              aria-label="Kid Code"
+              autoComplete="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              maxLength={12}
+              placeholder="Kid Code, like lily"
+              className="min-w-[10rem] flex-1 border border-[var(--color-border)] px-3 py-2 font-mono"
+              autoFocus
+            />
+          )}
           <button
             type="button"
             onClick={() => void submitNewChild()}
-            disabled={!newChildName.trim()}
+            disabled={!newChildName.trim() || (askChildCode && !newChildCode.trim())}
             className="bg-[var(--color-accent)] px-3 py-2 text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
           >
             Add
           </button>
           <button
             type="button"
-            onClick={() => {
-              setAddingChild(false);
-              setNewChildName("");
-            }}
+            onClick={closeAddChild}
             className="px-3 py-2 text-sm text-[var(--color-muted)]"
           >
             Cancel
           </button>
+          {askChildCode && (
+            <p className="w-full text-xs text-[var(--color-muted)]">
+              Kid Codes are 2-12 letters (a-z) only, like &quot;lily&quot;.
+            </p>
+          )}
         </div>
       ) : (
         <button

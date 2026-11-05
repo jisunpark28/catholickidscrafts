@@ -17,7 +17,7 @@ export type DashboardReaderRow = {
   kind: "owner" | "sub";
   displayName: string;
   accountLabel: string;
-  /** Child only: Kid Code for sign-in (e.g. "lily-8492"). Not a secret. */
+  /** Child only: Kid Code for sign-in (e.g. "lily"; older codes "lily-8492"). Not a secret. */
   kidCode: string | null;
   /** Child only: PIN state for the parent (never the PIN or its hash). */
   pinStatus: KidPinStatus | null;
