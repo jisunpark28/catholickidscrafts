@@ -13,6 +13,7 @@ export async function POST() {
     type: "owner",
     familyAccountId: session.familyAccountId,
     sessionVersion: session.sessionVersion,
+    authTime: session.authTime,
   });
 
   const res = NextResponse.json({

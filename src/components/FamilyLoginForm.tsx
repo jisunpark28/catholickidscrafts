@@ -1,5 +1,6 @@
 "use client";
 
+import { DeviceUnlockPanel } from "@/components/DeviceUnlockPanel";
 import { GoogleFamilySignIn } from "@/components/GoogleFamilySignIn";
 import Link from "next/link";
 
@@ -8,9 +9,11 @@ type Props = {
   redirectTo?: string;
   /** Google sign-in error to show inside the card. */
   error?: string | null;
+  /** This device is in child mode: offer the emailed-code way back to the grown-up account. */
+  deviceLocked?: boolean;
 };
 
-export function FamilyLoginForm({ error }: Props) {
+export function FamilyLoginForm({ error, deviceLocked = false }: Props) {
   return (
     <div className="w-full rounded-2xl border border-[#efe6da] bg-white px-6 py-8 text-center shadow-[0_12px_32px_rgba(120,84,48,0.12)] sm:px-8">
       <span
@@ -41,6 +44,8 @@ export function FamilyLoginForm({ error }: Props) {
       <p className="mt-3 text-[13px] text-[var(--color-muted)]">
         New families are created automatically the first time you sign in.
       </p>
+
+      {deviceLocked ? <DeviceUnlockPanel /> : null}
 
       <div className="my-6 h-px bg-[#efe6da]" />
 

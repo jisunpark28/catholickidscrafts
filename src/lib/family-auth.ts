@@ -12,9 +12,11 @@ import {
   verifyFamilySession,
   FAMILY_SESSION_COOKIE,
   FAMILY_SESSION_REFRESH_AFTER_SEC,
+  KID_SESSION_MAX_AGE_SEC,
   READER_SESSION_COOKIE,
   verifyReaderSession,
 } from "@/lib/family-session";
+import { clearDeviceLockCookie } from "@/lib/child-mode-cookies";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -188,7 +190,7 @@ export async function setFamilyChildModeCookies(
     sessionVersion,
     readerMode: { type: "sub", subProfileId },
   });
-  setCookie(res, familyCookieOptions(familyToken));
+  setCookie(res, familyCookieOptions(familyToken, KID_SESSION_MAX_AGE_SEC));
   if (subProfileId) {
     const readerToken = await signReaderSession({
       type: "sub",
@@ -238,19 +240,21 @@ export async function enterChildMode(
       familyAccountId: family.familyAccountId,
       email: family.email,
       sessionVersion: family.sessionVersion,
+      authTime: family.authTime,
       readerMode: {
         type: "sub",
         subProfileId: family.familyAccountId === child.familyAccountId ? child.subProfileId : null,
       },
     });
-    setCookie(res, familyCookieOptions(familyToken));
+    // Child mode lasts 7 days from the kid sign-in and is not extended.
+    setCookie(res, familyCookieOptions(familyToken, KID_SESSION_MAX_AGE_SEC));
   }
   await clearAdminSessionCookies(res);
 }
 
 /** A verified fresh parent sign-in unlocks the device. */
 export function clearDeviceLock(res: NextResponse) {
-  res.cookies.set(DEVICE_LOCK_COOKIE, "", { path: "/", maxAge: 0 });
+  clearDeviceLockCookie(res);
 }
 
 export function clearFamilyCookies(res: NextResponse) {
@@ -270,17 +274,20 @@ export async function ensureOwnerReaderCookie(
   if (!family || family.familyAccountId !== familyAccountId || family.readerMode?.type !== "owner") return;
 
   const sessionVersion = await getFamilySessionVersion(familyAccountId);
-  const token = await signReaderSession({ type: "owner", familyAccountId, sessionVersion });
+  const token = await signReaderSession({ type: "owner", familyAccountId, sessionVersion, authTime: family.authTime });
   setCookie(res, readerCookieOptions(token, "owner"));
 }
 
 /**
  * Rolling 30-day parent session: re-issue ckc_family (and an owner ckc_reader)
  * once the current token is more than a day old. Call from a frequently-hit route.
+ * The sign-in time is carried over, so a session still ends 90 days after sign-in.
+ * A parent cookie in child mode is not extended (7 days from the kid sign-in).
  */
 export async function refreshFamilySessionIfStale(res: NextResponse): Promise<void> {
   const session = await getFamilySession();
   if (!session) return;
+  if (session.readerMode?.type === "sub") return;
   if (Date.now() / 1000 - session.issuedAt < FAMILY_SESSION_REFRESH_AFTER_SEC) return;
 
   const readerMode = await effectiveReaderMode(session);
@@ -288,9 +295,13 @@ export async function refreshFamilySessionIfStale(res: NextResponse): Promise<vo
     familyAccountId: session.familyAccountId,
     email: session.email,
     sessionVersion: session.sessionVersion,
+    authTime: session.authTime,
     readerMode,
   });
-  setCookie(res, familyCookieOptions(familyToken));
+  setCookie(
+    res,
+    familyCookieOptions(familyToken, readerMode.type === "sub" ? KID_SESSION_MAX_AGE_SEC : undefined),
+  );
   if (readerMode.type !== "owner") return;
 
   const jar = await cookies();
@@ -301,6 +312,7 @@ export async function refreshFamilySessionIfStale(res: NextResponse): Promise<vo
       type: "owner",
       familyAccountId: session.familyAccountId,
       sessionVersion: session.sessionVersion,
+      authTime: session.authTime,
     });
     setCookie(res, readerCookieOptions(readerToken, "owner"));
   }

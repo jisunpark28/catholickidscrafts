@@ -1,8 +1,10 @@
 import { auth } from "@/auth";
 import { isSuperAdmin } from "@/lib/admin-roles";
+import { ADMIN_ACTIVITY_COOKIE, isAdminIdleExpired, isAdminLoginExpired } from "@/lib/admin-session-policy";
 import { isFamilyChildMode } from "@/lib/family-auth";
 import { prisma } from "@/lib/prisma";
 import type { AdminRole } from "@prisma/client";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 import type { Session } from "next-auth";
@@ -21,6 +23,13 @@ export async function getAdmin(): Promise<{ session: Session; admin: AdminIdenti
     const id = session?.user?.id;
     const email = session?.user?.email?.trim().toLowerCase();
     if (!session?.user || !id || !email) return null;
+    // 8 hours after sign-in at most, and 30 minutes idle (middleware renews the activity
+    // cookie on admin requests; this sees the value from before the current request, hence
+    // the small grace).
+    const loginAt = session.loginAt;
+    if (typeof loginAt !== "number" || isAdminLoginExpired(loginAt)) return null;
+    const activity = (await cookies()).get(ADMIN_ACTIVITY_COOKIE)?.value;
+    if (await isAdminIdleExpired({ token: activity, ref: { adminId: id, loginAt }, graceSec: 60 })) return null;
     // A browser handed to a child (family cookie in child mode) never has admin access.
     if (await isFamilyChildMode()) return null;
     const admin = await prisma.adminUser.findUnique({

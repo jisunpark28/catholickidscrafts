@@ -1,6 +1,6 @@
 import { FamilyLoginForm } from "@/components/FamilyLoginForm";
 import { PageShell } from "@/components/PageShell";
-import { requireParentActive } from "@/lib/family-auth";
+import { getDeviceLock, requireParentActive } from "@/lib/family-auth";
 import { googleAuthErrorMessage } from "@/lib/google-auth-messages";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -26,6 +26,7 @@ export default async function AccountLoginPage({ searchParams }: Props) {
 
   const params = await searchParams;
   const googleError = googleAuthErrorMessage(params.error);
+  const deviceLocked = Boolean(await getDeviceLock());
 
   return (
     <PageShell>
@@ -38,7 +39,7 @@ export default async function AccountLoginPage({ searchParams }: Props) {
             ← Home
           </Link>
           <div className="mt-3">
-            <FamilyLoginForm error={googleError} />
+            <FamilyLoginForm error={googleError} deviceLocked={deviceLocked} />
           </div>
           <p className="mt-4 text-center text-[13px] text-[var(--color-muted)]">
             Plus from US$5.99 · one-time payment, no auto-renew

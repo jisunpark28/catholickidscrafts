@@ -13,6 +13,8 @@ declare module "next-auth" {
       name?: string | null;
       role: AdminRole;
     };
+    /** Seconds since epoch of the admin password sign-in. */
+    loginAt?: number;
   }
 }
 
@@ -21,5 +23,7 @@ declare module "next-auth/jwt" {
     id?: string;
     email?: string;
     role?: AdminRole;
+    /** Seconds since epoch of the admin password sign-in (8-hour absolute limit). */
+    loginAt?: number;
   }
 }

@@ -11,6 +11,9 @@ function errorMessage(code: string | undefined): string | null {
   if (code === "CredentialsSignin") {
     return "Email or password is incorrect";
   }
+  if (code === "SessionExpired") {
+    return "Your operator session ended (30 minutes idle or 8 hours since sign-in). Please sign in again.";
+  }
   if (code === "TooManyAttempts") {
     return "Too many sign-in attempts. Try again in a few minutes.";
   }

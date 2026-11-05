@@ -5,6 +5,7 @@ import {
 import { mergeGuestProgressIntoReader } from "@/lib/bible/progress";
 import { assertFamilyAuthConfigured, googleAccountFailureReason } from "@/lib/family-auth-errors";
 import { findOrCreateFamilyFromGoogle } from "@/lib/family-google";
+import { isFreshGoogleReauth } from "@/lib/device-unlock";
 import {
   clearDeviceLock,
   getDeviceLock,
@@ -14,7 +15,6 @@ import {
 import { prisma } from "@/lib/prisma";
 import {
   fetchGoogleUserProfile,
-  GOOGLE_FRESH_AUTH_MAX_AGE_SEC,
   GOOGLE_OAUTH_NONCE_COOKIE,
   verifyGoogleOAuthState,
   type GoogleOAuthFrom,
@@ -90,17 +90,15 @@ export async function GET(request: Request) {
   const jar = await cookies();
   const boundNonce = jar.get(GOOGLE_OAUTH_NONCE_COOKIE)?.value ?? null;
   if (lock) {
-    const now = Math.floor(Date.now() / 1000);
     const idt = profile.idToken;
-    const fresh =
-      Boolean(idt) &&
-      idt!.sub === profile.googleId &&
-      account.googleId === idt!.sub &&
-      idt!.nonce === statePayload.nonce &&
-      boundNonce === statePayload.nonce &&
-      typeof idt!.authTime === "number" &&
-      now - idt!.authTime! <= GOOGLE_FRESH_AUTH_MAX_AGE_SEC &&
-      idt!.authTime! <= now + 60;
+    const fresh = isFreshGoogleReauth({
+      nowSec: Math.floor(Date.now() / 1000),
+      idToken: idt,
+      profileGoogleId: profile.googleId,
+      accountGoogleId: account.googleId,
+      stateNonce: statePayload.nonce,
+      boundNonce,
+    });
     if (!fresh) {
       let subProfileId: string | null = null;
       if (lock.subProfileId && lock.familyAccountId === account.id) {
