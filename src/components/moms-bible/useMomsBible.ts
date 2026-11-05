@@ -31,6 +31,8 @@ export function useMomsBible(initial: MbChapterView, bookSlug: string, chapters:
   const meId = view.authors.find((a) => a.isMe)?.parentId ?? null;
   /** Parent writes need the Family Pass; the sample never writes. */
   const canWrite = isParent && !view.preview && view.familyPass;
+  /** Child: tap a verse to start a message to a linked parent (new threads need the Family Pass, like parents'). */
+  const canChildMessage = !isParent && !view.preview && view.familyPass && view.authors.some((a) => a.linked);
 
   const refresh = useCallback(async () => {
     if (view.preview) return null;
@@ -162,8 +164,9 @@ export function useMomsBible(initial: MbChapterView, bookSlug: string, chapters:
     mark,
     meId,
     canWrite,
+    canChildMessage,
     verseClass,
-    /** Parents (and the sample) tap verses; children only read the marks. */
-    canSelectVerses: isParent,
+    /** Parents (and the sample) tap verses to mark them; children tap one to send a message. */
+    canSelectVerses: isParent || canChildMessage,
   };
 }

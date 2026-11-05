@@ -44,6 +44,7 @@ export async function loadChapterView(args: {
         color: true,
         situationKey: true,
         childRepliedAt: true,
+        startedByChild: true,
         createdAt: true,
         // Parent view: an unseen child reply on this note (empty id never matches for a child).
         notifications: { where: { parentAccountId: meParent ?? "", seenAt: null }, select: { id: true }, take: 1 },
@@ -67,12 +68,17 @@ export async function loadChapterView(args: {
   ]);
 
   const authorIds = new Set<string>(parents.map((p) => p.parentId));
-  const authors: MbAuthorDto[] = parents.map((p) => ({ parentId: p.parentId, roleLabel: p.roleLabel, isMe: p.parentId === meParent }));
+  const authors: MbAuthorDto[] = parents.map((p) => ({
+    parentId: p.parentId,
+    roleLabel: p.roleLabel,
+    isMe: p.parentId === meParent,
+    linked: true,
+  }));
   // A parent whose link was removed keeps their old notes visible to the child, labelled generically.
   for (const id of [...highlights.map((h) => h.authorParentId), ...notes.map((n) => n.authorParentId)]) {
     if (!authorIds.has(id)) {
       authorIds.add(id);
-      authors.push({ parentId: id, roleLabel: "Parent", isMe: id === meParent });
+      authors.push({ parentId: id, roleLabel: "Parent", isMe: id === meParent, linked: false });
     }
   }
 
@@ -86,6 +92,7 @@ export async function loadChapterView(args: {
     color: isMbColor(n.color) ? n.color : null,
     situationKey: n.situationKey,
     childRepliedAt: n.childRepliedAt?.toISOString() ?? null,
+    startedByChild: n.startedByChild,
     createdAt: n.createdAt.toISOString(),
     unseenReply: n.notifications.length > 0,
     items: n.items.map(
@@ -166,7 +173,7 @@ export async function loadBookStamps(
 export async function childSeedCount(childId: string): Promise<number> {
   const rows = await prisma.mbNote.findMany({
     where: { subProfileId: childId, childRepliedAt: { not: null } },
-    select: { bookSlug: true, chapter: true, childRepliedAt: true },
+    select: { bookSlug: true, chapter: true, childRepliedAt: true, startedByChild: true },
   });
   return seedCount(rows);
 }
@@ -203,10 +210,21 @@ export async function childNewNote(childId: string): Promise<{
   };
 }
 
-/** Parent banner: unseen child replies on this parent's notes. */
+/** Parent banner: unseen child replies on this parent's notes and child messages sent to this parent. */
 export async function parentUnseenReplies(parentId: string): Promise<{
   count: number;
-  latest: { childId: string; childName: string; bookSlug: string; chapter: number; startVerse: number | null; ref: string } | null;
+  /** Some of them are messages the child started (not replies). */
+  anyMessage: boolean;
+  latest: {
+    childId: string;
+    childName: string;
+    bookSlug: string;
+    chapter: number;
+    startVerse: number | null;
+    ref: string;
+    /** The latest one is in a thread the child started. */
+    message: boolean;
+  } | null;
 }> {
   const rows = await prisma.mbNotification.findMany({
     where: { parentAccountId: parentId, seenAt: null, child: { active: true } },
@@ -215,13 +233,14 @@ export async function parentUnseenReplies(parentId: string): Promise<{
     select: {
       subProfileId: true,
       child: { select: { displayName: true } },
-      note: { select: { bookSlug: true, chapter: true, startVerse: true, endVerse: true } },
+      note: { select: { bookSlug: true, chapter: true, startVerse: true, endVerse: true, startedByChild: true } },
     },
   });
-  if (rows.length === 0) return { count: 0, latest: null };
+  if (rows.length === 0) return { count: 0, anyMessage: false, latest: null };
   const r0 = rows[0]!;
   return {
     count: rows.length,
+    anyMessage: rows.some((r) => r.note.startedByChild),
     latest: {
       childId: r0.subProfileId,
       childName: r0.child.displayName,
@@ -229,6 +248,7 @@ export async function parentUnseenReplies(parentId: string): Promise<{
       chapter: r0.note.chapter,
       startVerse: r0.note.startVerse,
       ref: noteRef(r0.note.bookSlug, r0.note.chapter, r0.note.startVerse, r0.note.endVerse),
+      message: r0.note.startedByChild,
     },
   };
 }

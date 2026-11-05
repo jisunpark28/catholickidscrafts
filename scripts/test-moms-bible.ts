@@ -1,5 +1,5 @@
 /**
- * Mom's Bible PR-3 rules: authorization, Family Pass entitlement, reply limits, notification
+ * Mom's Bible rules: authorization, Family Pass entitlement, reply + child message limits, notification
  * cooldown/digest, invites, situations mapping and verse ownership. No DB, fake clock.
  * Run: npx tsx scripts/test-moms-bible.ts
  */
@@ -12,6 +12,7 @@ import {
   MB_INVITE_TTL_MS,
   canAcceptInvite,
   canChildReply,
+  canChildStartMessage,
   canParentRead,
   canParentRemove,
   canParentWrite,
@@ -56,6 +57,16 @@ check("child: other child's note -> 404", status(canChildReply({ ...base, noteCh
 check("child: Plus, already replied -> ok", status(canChildReply({ ...base, familyPass: true, childRepliedAt: new Date() })) === 200);
 check("child: expired, unanswered -> ok", status(canChildReply({ ...base, familyPass: false, childRepliedAt: null })) === 200);
 check("child: expired, answered -> 402", status(canChildReply({ ...base, familyPass: false, childRepliedAt: new Date() })) === 402);
+
+// ── Child-started messages ──
+check("child message: linked parent + Family Pass -> ok", status(canChildStartMessage({ recipientLinked: true, familyPass: true })) === 200);
+check("child message: unlinked parent -> 404", status(canChildStartMessage({ recipientLinked: false, familyPass: true })) === 404);
+check("child message: expired Family Pass -> 402 (new threads lock)", status(canChildStartMessage({ recipientLinked: true, familyPass: false })) === 402);
+check("child message: unlinked + expired -> 404 first", status(canChildStartMessage({ recipientLinked: false, familyPass: false })) === 404);
+// A started message has childRepliedAt set, so after expiry the child can't add more to it.
+check("child message thread: expired -> 402", status(canChildReply({ ...base, familyPass: false, childRepliedAt: new Date() })) === 402);
+check("child message: same 200-char limit", parseChildReply({ body: "a".repeat(200) }).ok && !parseChildReply({ body: "a".repeat(201) }).ok);
+check("child message: sticker + text", parseChildReply({ stickerKey: "prayed", body: "Pray for my test" }).ok);
 
 // ── Also send to ──
 const linked = new Set(["kidA", "kidB", "kidC"]);
@@ -111,6 +122,13 @@ check(
     { bookSlug: "john", chapter: 3, childRepliedAt: d },
   ]) === 2,
 );
+check(
+  "seeds skip child-started messages",
+  seedCount([
+    { bookSlug: "psalms", chapter: 33, childRepliedAt: d, startedByChild: true },
+    { bookSlug: "john", chapter: 3, childRepliedAt: d },
+  ]) === 1,
+);
 
 // ── Email cooldown + digest ──
 const now = new Date("2026-11-04T12:00:00Z");
@@ -136,6 +154,14 @@ check("email copy single", one.subject.includes("Mia sent a warm reply") && !one
 check("email copy many", many.lead === "Mia sent 3 warm replies to your notes!");
 check("email copy never has reply text or stickers", ![one.subject, one.lead, many.subject, many.lead].some((t) => t.includes(secret) || /Love you|Amen|remember this/.test(t)));
 check("email copy blank name", replyEmailCopy(" ", 1).lead.startsWith("Your child"));
+const msgOne = replyEmailCopy("Mia", 1, "message");
+const msgMany = replyEmailCopy("Mia", 2, "message");
+check("message email single", msgOne.subject === "💌 Mia sent you a message" && msgOne.lead === "Mia sent you a message on a Bible verse!");
+check("message email many", msgMany.lead === "Mia sent you 2 messages on Bible verses!");
+check(
+  "message email never has the child's text or stickers",
+  ![msgOne.subject, msgOne.lead, msgMany.subject, msgMany.lead].some((t) => t.includes(secret) || /Love you|Amen|remember this/.test(t)),
+);
 
 // ── Invites ──
 const inv = { expiresAt: new Date(now.getTime() + MB_INVITE_TTL_MS), acceptedAt: null, ownerAccountId: "mom", acceptorId: "dad" };

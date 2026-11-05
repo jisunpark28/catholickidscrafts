@@ -14,7 +14,7 @@ import {
   type MbColorKey,
   type MbStickerKey,
 } from "@/lib/moms-bible/constants";
-import type { MbItemDto, MbNoteDto } from "@/lib/moms-bible/types";
+import type { MbAuthorDto, MbItemDto, MbNoteDto } from "@/lib/moms-bible/types";
 import { clip, ownerVerseMap, ownerVerseTexts } from "@/lib/moms-bible/verse-text";
 import { normalizePassageText } from "@/lib/typing-accuracy";
 import Link from "next/link";
@@ -85,6 +85,23 @@ export function MbPalette({ mb, situationKey }: { mb: MomsBibleState; situationK
   const [busy, setBusy] = useState(false);
   const sel = mb.selected;
   if (!sel) return null;
+  if (mb.view.viewer === "child") {
+    // Child: the message box sits in the notes column (below the text on small screens).
+    return (
+      <div className="mb-palette" role="group" aria-label="Send a message about this verse" onClick={(e) => e.stopPropagation()}>
+        <button
+          type="button"
+          className="mb-palette__chip"
+          onClick={() => document.getElementById("mb-composer")?.scrollIntoView({ behavior: "smooth", block: "center" })}
+        >
+          💌 Write a message ↓
+        </button>
+        <button type="button" className="mb-palette__chip mb-palette__chip--muted" onClick={() => mb.setSelected(null)}>
+          ✕ Close
+        </button>
+      </div>
+    );
+  }
   const me = mb.view.authors.find((a) => a.isMe);
   const cur = mb.myMark(sel.chapter, sel.verse);
   const situation = getSituation(situationKey ?? null) ? situationKey! : undefined;
@@ -151,12 +168,22 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
     .sort((a, b) => a.chapter - b.chapter || (a.startVerse ?? 0) - (b.startVerse ?? 0) || a.createdAt.localeCompare(b.createdAt));
 
   const sel = isParent ? mb.selected : null;
+  // Child: a tapped verse opens a new message to a linked parent.
+  const childSel = !isParent && mb.canChildMessage ? mb.selected : null;
+  const recipients = view.authors.filter((a) => a.linked);
+  // A message the child started stays its own thread (parents answer it on its card).
   const myNoteAtSel = sel
-    ? view.notes.find((n) => n.chapter === sel.chapter && n.startVerse === sel.verse && n.authorParentId === me?.parentId) ?? null
+    ? view.notes.find(
+        (n) => n.chapter === sel.chapter && n.startVerse === sel.verse && n.authorParentId === me?.parentId && !n.startedByChild,
+      ) ?? null
     : null;
   const selInfo = sel ? verses.get(`${sel.chapter}:${sel.verse}`) ?? null : null;
+  const childSelInfo = childSel ? verses.get(`${childSel.chapter}:${childSel.verse}`) ?? null : null;
   // New card for the selected verse, slotted in verse order.
-  const draftPos = sel && !myNoteAtSel ? verseNotes.findIndex((n) => n.chapter > sel.chapter || (n.chapter === sel.chapter && (n.startVerse ?? 0) > sel.verse)) : -1;
+  const draftAt = sel && !myNoteAtSel ? sel : childSel;
+  const draftPos = draftAt
+    ? verseNotes.findIndex((n) => n.chapter > draftAt.chapter || (n.chapter === draftAt.chapter && (n.startVerse ?? 0) > draftAt.verse))
+    : -1;
 
   const tabAuthors = isParent
     ? view.authors
@@ -179,6 +206,20 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
       </article>
     ) : null;
 
+  const childDraftCard =
+    childSel && childSelInfo ? (
+      <article key="child-draft" className={`mb-card ${cardColorClass(null)}`}>
+        <div className="mb-lbl">
+          <span>💌 My Message · v.{childSelInfo.num}</span>
+          <button type="button" className="mb-x normal-case" aria-label="Close" onClick={() => mb.setSelected(null)}>
+            ×
+          </button>
+        </div>
+        {childSelInfo.text && <p className="mb-quote">{clip(childSelInfo.text)}</p>}
+        <ChildMessageComposer mb={mb} bookSlug={bookSlug} info={childSelInfo} recipients={recipients} />
+      </article>
+    ) : null;
+
   const noteCards: ReactNode[] = verseNotes.map((n) => (
     <NoteCard
       key={n.id}
@@ -195,6 +236,7 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
     />
   ));
   if (draftCard) noteCards.splice(draftPos < 0 ? noteCards.length : draftPos, 0, draftCard);
+  if (childDraftCard) noteCards.splice(draftPos < 0 ? noteCards.length : draftPos, 0, childDraftCard);
 
   return (
     <aside className="bible-reader__notes mb-panel" aria-label={isParent ? `${view.childName}'s Bible notes` : "Notes for you"}>
@@ -229,13 +271,16 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
       {isParent && !sel && (view.familyPass || view.preview) && (
         <p className="mb-hint">Tap a verse to highlight it or leave a note for {view.childName}.</p>
       )}
+      {!isParent && mb.canChildMessage && !childSel && (
+        <p className="mb-hint">Tap a verse to send a message to {recipients.map((r) => r.roleLabel).join(" or ")}.</p>
+      )}
 
       {letters.map((n) => (
         <NoteCard key={n.id} note={n} mb={mb} roleLabel={roleOf(n.authorParentId)} verse={null} />
       ))}
       {noteCards}
 
-      {!isParent && letters.length + verseNotes.length === 0 && (
+      {!isParent && letters.length + verseNotes.length === 0 && !childDraftCard && (
         <div className="mb-card mb-card--plain">
           <p>No notes in this chapter yet.</p>
           {view.highlights.length > 0 && <p className="mt-1 text-xs text-[#8a7d96]">Look for the coloured verses: they were marked just for you.</p>}
@@ -438,7 +483,12 @@ function NoteCard({
   const isLetter = note.startVerse === null;
   const mineNote = isParent && mb.meId === note.authorParentId;
   const replied = Boolean(note.childRepliedAt);
+  /** The child started this thread (a message to roleLabel). */
+  const fromChild = Boolean(note.startedByChild);
+  // A child's message is "Shared Together" once a parent answers it.
+  const shared = fromChild ? note.items.some((i) => i.authorKind === "PARENT") : replied;
   const canReply = !isParent && !view.preview && (view.familyPass || !replied);
+  const canParentAnswer = isParent && fromChild && mb.canWrite;
   const [busy, setBusy] = useState(false);
   const quote = verse ? clip([verse.text, endVerse?.text].filter(Boolean).join(" … ")) : "";
   const vLabel = verse ? `v.${verse.num}${endVerse ? `–${endVerse.num}` : ""}` : "";
@@ -471,7 +521,8 @@ function NoteCard({
           <span>📌 Chapter Letter</span>
         ) : (
           <button type="button" className="text-left uppercase tracking-[0.5px]" onClick={openVerse} title="Show this verse">
-            💌 {roleLabel}&apos;s Note{vLabel ? ` · ${vLabel}` : ""}
+            {fromChild ? `👧 ${isParent ? `${view.childName}'s` : "My"} Message to ${roleLabel}` : `💌 ${roleLabel}'s Note`}
+            {vLabel ? ` · ${vLabel}` : ""}
           </button>
         )}
         {mineNote && !composer && !view.preview && (
@@ -512,13 +563,14 @@ function NoteCard({
         ),
       )}
 
-      {replied && (
+      {shared && (
         <div>
           <span className="mb-stamp">🌱 Shared Together</span>
         </div>
       )}
 
       {canReply && (replied ? <MoreReply note={note} mb={mb} /> : <FirstReply note={note} mb={mb} roleLabel={roleLabel} />)}
+      {canParentAnswer && <ParentAnswer note={note} mb={mb} />}
       {composer}
     </article>
   );
@@ -657,6 +709,132 @@ function MoreReply({ note, mb }: { note: MbNoteDto; mb: MomsBibleState }) {
         Send
       </button>
     </form>
+  );
+}
+
+/**
+ * Child: a new message on the tapped verse to one linked parent (Mom / Dad chips when there are
+ * several): one of the 3 stickers and/or up to 200 characters, the same as a reply.
+ */
+function ChildMessageComposer({
+  mb,
+  bookSlug,
+  info,
+  recipients,
+}: {
+  mb: MomsBibleState;
+  bookSlug: string;
+  info: VerseInfo;
+  recipients: MbAuthorDto[];
+}) {
+  const initial = (mb.showTabs && recipients.find((r) => r.parentId === mb.activeAuthor)) || recipients[0];
+  const [to, setTo] = useState<string | null>(initial?.parentId ?? null);
+  const [sticker, setSticker] = useState<MbStickerKey | null>(null);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const role = recipients.find((r) => r.parentId === to)?.roleLabel ?? "Mom";
+  async function send() {
+    if (!to) return;
+    setBusy(true);
+    const ok = await mb.write(
+      () =>
+        mbFetch("/api/moms-bible/messages", "POST", {
+          book: bookSlug,
+          chapter: info.chapter,
+          verse: info.verse,
+          toParentId: to,
+          stickerKey: sticker,
+          body: text.trim() || null,
+        }),
+      { parentWrite: false },
+    );
+    setBusy(false);
+    if (ok) {
+      setSticker(null);
+      setText("");
+      mb.setActiveAuthor(to);
+      mb.setSelected(null);
+    }
+  }
+  return (
+    <div id="mb-composer" className="mt-3" onClick={(e) => e.stopPropagation()}>
+      {recipients.length > 1 && (
+        <div role="group" aria-label="Send to" className="mb-2">
+          {recipients.map((r) => (
+            <button key={r.parentId} type="button" aria-pressed={to === r.parentId} className="mb-chip" onClick={() => setTo(r.parentId)}>
+              💌 To {r.roleLabel}
+            </button>
+          ))}
+        </div>
+      )}
+      <div role="group" aria-label="Stickers">
+        {(Object.keys(MB_STICKERS) as MbStickerKey[]).map((k) => (
+          <button
+            key={k}
+            type="button"
+            aria-pressed={sticker === k}
+            className={`mb-chip mb-chip--${k}`}
+            onClick={() => setSticker(sticker === k ? null : k)}
+          >
+            {stickerLabel(k, role)}
+          </button>
+        ))}
+      </div>
+      <label>
+        <span className="sr-only">Your message</span>
+        <textarea
+          className="mb-textarea"
+          value={text}
+          maxLength={MB_LIMITS.childText}
+          placeholder={`Write a little message to ${role}…`}
+          onChange={(e) => setText(e.target.value)}
+        />
+      </label>
+      <div className="mt-2 flex items-center justify-between">
+        <span className="text-xs text-[#a39aac]">
+          {[...text].length}/{MB_LIMITS.childText}
+        </span>
+        <button
+          type="button"
+          className="mb-btn mb-btn--primary"
+          disabled={busy || !to || (!sticker && !text.trim())}
+          onClick={() => void send()}
+        >
+          {busy ? "Sending…" : `Send to ${role} 💌`}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/** Parent: write back on a message the child started (needs the Family Pass, like any parent write). */
+function ParentAnswer({ note, mb }: { note: MbNoteDto; mb: MomsBibleState }) {
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  async function send() {
+    setBusy(true);
+    const ok = await mb.write(() => mbFetch(`/api/moms-bible/notes/${note.id}/items`, "POST", { body: text }));
+    setBusy(false);
+    if (ok) setText("");
+  }
+  return (
+    <div className="mt-3" onClick={(e) => e.stopPropagation()}>
+      <label>
+        <span className="sr-only">Reply to {mb.view.childName}</span>
+        <textarea
+          className="mb-textarea"
+          value={text}
+          maxLength={MB_LIMITS.parentText}
+          placeholder={`Write back to ${mb.view.childName}…`}
+          onChange={(e) => setText(e.target.value)}
+        />
+      </label>
+      <div className="mb-compose-row">
+        <button type="button" className="mb-btn mb-btn--primary" disabled={busy || !text.trim()} onClick={() => void send()}>
+          {busy ? "Saving…" : "Send reply 💌"}
+        </button>
+      </div>
+    </div>
   );
 }
 

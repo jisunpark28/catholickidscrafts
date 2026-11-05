@@ -891,6 +891,8 @@ model MbNote {
   importedFromMemoId String?          @unique
   /// First child reply; null = waiting for the child (yellow stamp).
   childRepliedAt     DateTime?
+  /// The child started this thread on a verse: a message to authorParentId (the parent it was sent to).
+  startedByChild     Boolean          @default(false)
   lastActivityAt     DateTime         @default(now())
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
@@ -938,7 +940,7 @@ model MbChapterSeen {
   @@id([subProfileId, bookSlug, chapter])
 }
 
-/// Child reply -> parent: in-app banner and email queue.
+/// Child reply or message -> parent: in-app banner and email queue.
 model MbNotification {
   id              String        @id @default(cuid())
   parentAccountId String

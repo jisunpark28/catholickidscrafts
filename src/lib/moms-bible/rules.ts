@@ -22,6 +22,8 @@ export const MB_PLUS_NEEDED =
 export const MB_PDF_PLUS = "Printing the Bible book needs Plus on your own account.";
 export const MB_REPLY_LOCKED =
   "You already answered this note. More replies come back when your family has Plus again.";
+export const MB_MESSAGE_LOCKED =
+  "New messages come back when your family has Plus again. You can still answer notes waiting for you.";
 
 /** Reading a child's Bible: any linked parent, Plus or not. */
 export function canParentRead(f: ParentFacts): Decision {
@@ -66,6 +68,23 @@ export function canChildReply(f: ChildReplyFacts): Decision {
   if (f.sessionChildId !== f.noteChildId) return { ok: false, status: 404, error: MB_NOT_FOUND };
   if (f.familyPass || f.childRepliedAt === null) return OK;
   return { ok: false, status: 402, error: MB_REPLY_LOCKED };
+}
+
+export type ChildMessageFacts = {
+  /** The parent the child picked is linked to this child right now. */
+  recipientLinked: boolean;
+  familyPass: boolean;
+};
+
+/**
+ * A child starts a new message on a verse, to one linked parent. Same rule as a parent's new note:
+ * a new thread needs the Family Pass. After it ends the child can still answer notes waiting for a
+ * reply (canChildReply), but can't open new threads.
+ */
+export function canChildStartMessage(f: ChildMessageFacts): Decision {
+  if (!f.recipientLinked) return { ok: false, status: 404, error: MB_NOT_FOUND };
+  if (!f.familyPass) return { ok: false, status: 402, error: MB_MESSAGE_LOCKED };
+  return OK;
 }
 
 /** "Also send to Leo": every extra child must be linked to the author too. */
@@ -167,10 +186,12 @@ export function chapterStamp(
   return highlightCount > 0 ? "mine" : null;
 }
 
-/** 🌱 seeds: chapters where the child answered at least one note. */
-export function seedCount(notes: readonly { bookSlug: string; chapter: number; childRepliedAt: Date | null }[]): number {
+/** 🌱 seeds: chapters where the child answered at least one parent note (their own messages don't count). */
+export function seedCount(
+  notes: readonly { bookSlug: string; chapter: number; childRepliedAt: Date | null; startedByChild?: boolean }[],
+): number {
   const set = new Set<string>();
-  for (const n of notes) if (n.childRepliedAt) set.add(`${n.bookSlug}:${n.chapter}`);
+  for (const n of notes) if (n.childRepliedAt && !n.startedByChild) set.add(`${n.bookSlug}:${n.chapter}`);
   return set.size;
 }
 
@@ -201,9 +222,20 @@ export function digestPending<T extends { createdAt: Date; seenAt: Date | null; 
   );
 }
 
-/** Email copy: only the child's first name. Never the child's words, sticker or verse. */
-export function replyEmailCopy(childFirstName: string, count: number): { subject: string; lead: string } {
+/**
+ * Email copy: only the child's first name. Never the child's words, sticker or verse.
+ * kind "message": the child started a message (or the batch includes one).
+ */
+export function replyEmailCopy(
+  childFirstName: string,
+  count: number,
+  kind: "reply" | "message" = "reply",
+): { subject: string; lead: string } {
   const name = childFirstName.trim() || "Your child";
+  if (kind === "message") {
+    if (count <= 1) return { subject: `💌 ${name} sent you a message`, lead: `${name} sent you a message on a Bible verse!` };
+    return { subject: `💌 ${name} sent you ${count} messages`, lead: `${name} sent you ${count} messages on Bible verses!` };
+  }
   if (count <= 1) {
     return { subject: `💌 ${name} sent a warm reply to your note`, lead: `${name} sent a warm reply to your note!` };
   }

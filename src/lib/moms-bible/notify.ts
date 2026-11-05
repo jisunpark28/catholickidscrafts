@@ -1,5 +1,5 @@
 /**
- * Child reply -> parent notifications: in-app (MbNotification) and email (instant with a 1-hour
+ * Child reply or child-started message -> parent notifications: in-app (MbNotification) and email (instant with a 1-hour
  * cooldown, or the daily digest). Emails carry only the child's first name, never their words.
  * Server only.
  */
@@ -33,10 +33,17 @@ function unsubscribeLinks(token: string) {
   };
 }
 
-function buildReplyEmail(to: string, childNames: string[], count: number, openPath: string, token: string) {
+function buildReplyEmail(
+  to: string,
+  childNames: string[],
+  count: number,
+  openPath: string,
+  token: string,
+  kind: "reply" | "message" = "reply",
+) {
   const names = [...new Set(childNames.map(firstName).filter(Boolean))];
   const who = names.length <= 1 ? names[0] ?? "" : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
-  const copy = replyEmailCopy(who, count);
+  const copy = replyEmailCopy(who, count, kind);
   const openUrl = `${siteBase()}${openPath}`;
   const links = unsubscribeLinks(token);
   const footer = complianceFooter(
@@ -57,7 +64,8 @@ function buildReplyEmail(to: string, childNames: string[], count: number, openPa
 }
 
 /**
- * Record a child reply for the note's author and maybe email them right away.
+ * Record a child reply (or a message the child started) for the note's parent and maybe email them
+ * right away. For a child-started message the note's parent is the one the child sent it to.
  * Never throws: a failed notification must not fail the child's reply.
  */
 export async function notifyChildReply(args: { noteId: string; itemId: string; childId: string }): Promise<void> {
@@ -69,6 +77,7 @@ export async function notifyChildReply(args: { noteId: string; itemId: string; c
         bookSlug: true,
         chapter: true,
         startVerse: true,
+        startedByChild: true,
         child: { select: { displayName: true, familyAccountId: true, parentLinks: { select: { parentAccountId: true } } } },
         author: { select: { email: true } },
       },
@@ -106,6 +115,7 @@ export async function notifyChildReply(args: { noteId: string; itemId: string; c
         1,
         readHrefForDouay(note.bookSlug, note.chapter, note.startVerse ?? undefined),
         settings.unsubscribeToken,
+        note.startedByChild ? "message" : "reply",
       ),
     );
     if (sent) await prisma.mbNotification.update({ where: { id: notification.id }, data: { emailedAt: now } });
@@ -131,7 +141,7 @@ export async function runReplyDigest(now = new Date()): Promise<{ parents: numbe
       seenAt: true,
       emailedAt: true,
       child: { select: { displayName: true } },
-      note: { select: { bookSlug: true, chapter: true, startVerse: true } },
+      note: { select: { bookSlug: true, chapter: true, startVerse: true, startedByChild: true } },
     },
   });
   const byParent = new Map<string, typeof rows>();
@@ -156,6 +166,7 @@ export async function runReplyDigest(now = new Date()): Promise<{ parents: numbe
         pending.length,
         readHrefForDouay(latest.note.bookSlug, latest.note.chapter, latest.note.startVerse ?? undefined),
         settings.unsubscribeToken,
+        pending.some((p) => p.note.startedByChild) ? "message" : "reply",
       ),
     );
     if (!ok) continue;

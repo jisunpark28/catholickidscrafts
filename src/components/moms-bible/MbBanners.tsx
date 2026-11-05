@@ -30,10 +30,23 @@ export function NewNoteBanner({ note }: { note: ChildNoteBannerData }) {
 
 export type ParentReplyBannerData = {
   count: number;
-  latest: { childId: string; childName: string; bookSlug: string; chapter: number; startVerse: number | null; ref: string } | null;
+  /** Some are messages the child started. */
+  anyMessage?: boolean;
+  latest: {
+    childId: string;
+    childName: string;
+    bookSlug: string;
+    chapter: number;
+    startVerse: number | null;
+    ref: string;
+    message?: boolean;
+  } | null;
 };
 
-/** Parent: "💌 Mia sent a warm reply in Psalm 34:19! [Open →]" (in-app only; the text stays in the Bible). */
+/**
+ * Parent: "💌 Mia sent a warm reply in Psalm 34:19! [Open →]" or "💌 Mia sent you a message in
+ * Psalm 34:19!" (in-app only; the text stays in the Bible).
+ */
 export function ParentReplyBanner({ data }: { data: ParentReplyBannerData }) {
   const [hidden, setHidden] = useState(false);
   if (hidden || !data.latest || data.count === 0) return null;
@@ -44,7 +57,13 @@ export function ParentReplyBanner({ data }: { data: ParentReplyBannerData }) {
     <div className="mb-banner mb-banner--small" role="status">
       <p>
         <span aria-hidden>💌</span>{" "}
-        {data.count === 1 ? `${l.childName} sent a warm reply in ${l.ref}!` : `${data.count} warm replies are waiting for you!`}
+        {data.count === 1
+          ? l.message
+            ? `${l.childName} sent you a message in ${l.ref}!`
+            : `${l.childName} sent a warm reply in ${l.ref}!`
+          : data.anyMessage
+            ? `${data.count} warm messages are waiting for you!`
+            : `${data.count} warm replies are waiting for you!`}
       </p>
       <div className="flex items-center gap-2">
         <Link className="mb-btn mb-btn--primary" href={href}>
