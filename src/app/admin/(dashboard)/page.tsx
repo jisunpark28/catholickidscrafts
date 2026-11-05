@@ -7,6 +7,8 @@ import { TrafficStats } from "@/components/admin/TrafficStats";
 import { signOut } from "@/auth";
 import { FamilyTalkReminderCard } from "@/components/admin/FamilyTalkNotice";
 import { familyTalkCoverage } from "@/lib/daily-mass/family-talk-coverage";
+import { applySessionReset } from "@/lib/session-reset";
+import { cookies } from "next/headers";
 
 export default async function AdminDashboardPage() {
   const session = await auth();
@@ -26,6 +28,9 @@ export default async function AdminDashboardPage() {
         <form
           action={async () => {
             "use server";
+            // Full reset like every other sign-out: admin activity, family/child cookies, device lock.
+            const jar = await cookies();
+            applySessionReset(jar, jar.getAll().map((c) => c.name));
             await signOut({ redirectTo: "/admin/login" });
           }}
         >

@@ -3,8 +3,8 @@ import { SignJWT, jwtVerify } from "jose";
 export const FAMILY_SESSION_COOKIE = "ckc_family";
 export const READER_SESSION_COOKIE = "ckc_reader";
 /**
- * Signed "this device was handed to a child" marker. Survives sign-out on purpose,
- * for at most 30 days after the last child sign-in on the device.
+ * Signed "this device was handed to a child" marker, for at most 30 days after the last
+ * child sign-in on the device. Any sign-out removes it (lib/session-reset.ts).
  */
 export const DEVICE_LOCK_COOKIE = "ckc_device_lock";
 export const DEVICE_LOCK_MAX_AGE_SEC = 60 * 60 * 24 * 30;

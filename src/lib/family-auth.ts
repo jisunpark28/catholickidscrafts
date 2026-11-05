@@ -257,10 +257,6 @@ export function clearDeviceLock(res: NextResponse) {
   clearDeviceLockCookie(res);
 }
 
-export function clearFamilyCookies(res: NextResponse) {
-  res.cookies.set(FAMILY_SESSION_COOKIE, "", { path: "/", maxAge: 0 });
-  res.cookies.set(READER_SESSION_COOKIE, "", { path: "/", maxAge: 0 });
-}
 
 /** Restore reader cookie when parent is signed in but reader cookie was missing. */
 export async function ensureOwnerReaderCookie(
