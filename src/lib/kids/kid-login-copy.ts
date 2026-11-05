@@ -17,7 +17,7 @@ export const KID_LOGIN_LABELS = {
   addKid: "Add Kid",
   addKidTitle: "Add a kid to this device",
   kidCode: "Kid Code",
-  kidCodePlaceholder: "lily-8492",
+  kidCodePlaceholder: "lily",
   pin: "PIN",
   enterPin: "Type your PIN",
   signIn: "Sign in",

@@ -9,10 +9,11 @@ import {
 } from "@/lib/access-code";
 import { loadAccountDashboardReaders } from "@/lib/account-dashboard";
 import { parentApiGuard } from "@/lib/family-auth";
-import { generateUniqueKidCode } from "@/lib/kids/kid-code";
+import { KID_CODE_TAKEN_ERROR, resolveNewKidCode } from "@/lib/kids/kid-code";
 import { memoImportOffer } from "@/lib/moms-bible/memo-import-server";
 import { prisma } from "@/lib/prisma";
 import { crossOriginError } from "@/lib/same-origin";
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 /**
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
   if (guard.error) return guard.error;
   const { session } = guard;
 
-  let body: { displayName?: string };
+  let body: { displayName?: string; kidCode?: string };
   try {
     body = await request.json();
   } catch {
@@ -77,29 +78,50 @@ export async function POST(request: Request) {
     );
   }
 
+  // Kid Code for sign-in: the child's name letters ("lily"), or a letters-only code the parent
+  // types when the name gives none or it is taken. The PIN is set by the parent next.
+  const picked = await resolveNewKidCode(
+    displayName,
+    typeof body.kidCode === "string" ? body.kidCode.slice(0, 40) : null,
+    async (code) => Boolean(await prisma.subProfile.findUnique({ where: { kidCode: code }, select: { id: true } })),
+  );
+  if (!picked.ok) {
+    return NextResponse.json({ error: picked.error, needsKidCode: true }, { status: 409 });
+  }
+  const kidCode = picked.code;
+
   const legacy = await unusedLegacyAccessCode();
   const accessCodeHash = await hashAccessCode(legacy);
-  // Kid Code for sign-in. The PIN is set by the parent next (the child can't sign in before that).
-  const kidCode = await generateUniqueKidCode(displayName, async (code) =>
-    Boolean(await prisma.subProfile.findUnique({ where: { kidCode: code }, select: { id: true } })),
-  );
 
-  const sub = await prisma.subProfile.create({
-    data: {
-      familyAccountId: session.familyAccountId,
-      displayName,
-      accessCodeHash,
-      accessCodeLookup: accessCodeLookupKey(legacy),
-      accessCodeLast4: accessCodeLast4(legacy),
-      kidCode,
-      sortOrder: count,
-      active: true,
-      parentLinks: {
-        create: { parentAccountId: session.familyAccountId, roleLabel: "Parent", isOwner: true },
+  let sub: { id: string; displayName: string; kidCode: string };
+  try {
+    sub = await prisma.subProfile.create({
+      data: {
+        familyAccountId: session.familyAccountId,
+        displayName,
+        accessCodeHash,
+        accessCodeLookup: accessCodeLookupKey(legacy),
+        accessCodeLast4: accessCodeLast4(legacy),
+        kidCode,
+        sortOrder: count,
+        active: true,
+        parentLinks: {
+          create: { parentAccountId: session.familyAccountId, roleLabel: "Parent", isOwner: true },
+        },
       },
-    },
-    select: { id: true, displayName: true, kidCode: true },
-  });
+      select: { id: true, displayName: true, kidCode: true },
+    });
+  } catch (e) {
+    // Another child took the same code a moment ago.
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === "P2002" &&
+      String(e.meta?.target ?? "").includes("kidCode")
+    ) {
+      return NextResponse.json({ error: KID_CODE_TAKEN_ERROR, needsKidCode: true }, { status: 409 });
+    }
+    throw e;
+  }
 
   // First child: offer to move the parent's existing Bible memos into this child's Bible.
   const memoImport = count === 0 ? await memoImportOffer(session.familyAccountId).catch(() => null) : null;
