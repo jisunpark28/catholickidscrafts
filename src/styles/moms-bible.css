@@ -83,6 +83,20 @@
 .mb-pill__muted { color: #aaa; font-weight: 700; }
 .mb-pill__sib { color: #aaa; font-weight: 700; }
 .mb-pill__sib:hover { color: #d35400; text-decoration: underline; }
+.mb-seeds {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: #eaf8ef;
+  border: 1px solid #b7e0c4;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #1f7a3f;
+  white-space: nowrap;
+}
+
 .mb-btn-outline {
   display: inline-flex;
   align-items: center;

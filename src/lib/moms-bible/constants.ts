@@ -83,3 +83,9 @@ export const MB_STAMP_INFO: Record<Exclude<MbStamp, null>, { emoji: string; labe
 
 /** Cookie with the child a parent last picked in "Viewing Mia's Bible" (an id only; re-checked server-side). */
 export const MB_CHILD_COOKIE = "ckc_mb_child";
+
+/** Child header badge copy: chapters turned Shared Together (design section 5). */
+export function formatSeedsLabel(seeds: number): string {
+  const n = Math.max(0, Math.floor(Number.isFinite(seeds) ? seeds : 0));
+  return `Shared Together: ${n} ${n === 1 ? "seed" : "seeds"}`;
+}

@@ -73,7 +73,7 @@ export type MbChapterView = {
 
 export type MbBookStamps = { stamps: Record<number, Exclude<MbStamp, null>>; childName: string; viewer: "parent" | "child" };
 
-/** Top bar: "Viewing Mia's Bible ▾ | Leo" + PDF button (parent) or "Hi, Mia! (mia-4821)" (child). */
+/** Top bar: "Viewing Mia's Bible ▾ | Leo" + PDF button (parent) or "Hi, Mia!" + seeds badge (child). */
 export type MbToolbarData =
   | { viewer: "parent"; childId: string; childName: string; children: MbChildChoice[]; canPrint: boolean }
-  | { viewer: "child"; childName: string; kidCode: string | null };
+  | { viewer: "child"; childName: string; kidCode: string | null; seeds: number };

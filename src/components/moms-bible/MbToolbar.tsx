@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PlusModal } from "./PlusModal";
+import { SeedsBadge } from "./SeedsBadge";
 import "@/styles/moms-bible.css";
 
 /**
@@ -35,6 +36,7 @@ export function MbToolbar({ data, variant = "full" }: { data: MbToolbarData | nu
           <span aria-hidden>🧒</span> Hi, {data.childName}!
           {data.kidCode && <span className="mb-pill__muted">({data.kidCode})</span>}
         </span>
+        <SeedsBadge seeds={data.seeds} />
       </div>
     );
   }

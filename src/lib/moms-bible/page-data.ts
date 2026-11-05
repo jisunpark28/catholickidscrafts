@@ -4,7 +4,7 @@ import { SAMPLE_BOOK, SAMPLE_CHAPTER, sampleGenesisView } from "@/data/moms-bibl
 import { childHasFamilyPass, resolveFamilyPlus } from "@/lib/subscription/entitlements";
 import { getMbViewer, linkedParents, type MbLinkedChild, type MbViewer } from "./access";
 import { MB_CHILD_COOKIE } from "./constants";
-import { childNewNote, loadBookStamps, loadChapterView, parentUnseenReplies } from "./queries";
+import { childNewNote, childSeedCount, loadBookStamps, loadChapterView, parentUnseenReplies } from "./queries";
 import type { MbChapterView, MbToolbarData } from "./types";
 
 export type ChildBanner = Awaited<ReturnType<typeof childNewNote>>;
@@ -18,8 +18,20 @@ async function pickChild(children: MbLinkedChild[], childParam?: string | null):
   return children.find((c) => c.id === childParam) ?? children.find((c) => c.id === remembered) ?? children[0]!;
 }
 
-async function toolbarFor(viewer: MbViewer, child: MbLinkedChild | null): Promise<MbToolbarData | null> {
-  if (viewer.kind === "child") return { viewer: "child", childName: viewer.displayName, kidCode: viewer.kidCode };
+async function toolbarFor(
+  viewer: MbViewer,
+  child: MbLinkedChild | null,
+  /** When the chapter view already loaded seeds, reuse it (avoids a second count query). */
+  seedsHint?: number,
+): Promise<MbToolbarData | null> {
+  if (viewer.kind === "child") {
+    return {
+      viewer: "child",
+      childName: viewer.displayName,
+      kidCode: viewer.kidCode,
+      seeds: seedsHint ?? (await childSeedCount(viewer.childId)),
+    };
+  }
   if (!child) return null;
   return {
     viewer: "parent",
@@ -49,7 +61,7 @@ export async function readerPageMomsBible(args: {
     return { view: sample ? sampleGenesisView() : null, intro: "guest", childBanner: null, parentBanner: null, toolbar: null };
   }
   if (viewer.kind === "child") {
-    const [view, banner, toolbar] = await Promise.all([
+    const [view, banner] = await Promise.all([
       loadChapterView({
         viewer: { kind: "child", childId: viewer.childId },
         childId: viewer.childId,
@@ -58,8 +70,8 @@ export async function readerPageMomsBible(args: {
         familyPass: await childHasFamilyPass(viewer.childId),
       }),
       childNewNote(viewer.childId),
-      toolbarFor(viewer, null),
     ]);
+    const toolbar = await toolbarFor(viewer, null, view.seeds);
     const elsewhere = banner && !(banner.bookSlug === args.bookSlug && args.chapters.includes(banner.chapter));
     return { view, intro: null, childBanner: elsewhere ? banner : null, parentBanner: null, toolbar };
   }
