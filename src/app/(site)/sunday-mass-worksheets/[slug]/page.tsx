@@ -13,13 +13,16 @@ import {
   sheetSeoH1,
   sheetSeoH2,
   sheetSeoTitle,
-  slugToKey,
   yearLabel,
 } from "@/lib/resource/sheets";
 import {
   sheetConversationQuestions,
   SUNDAY_MASS_WORKSHEETS_HUB,
   sundayMassWorksheetPath,
+  sundayMassWorksheetSlug,
+  sundayMassWorksheetKey,
+  sundayMassWorksheetRedirect,
+  type WorksheetSearchParams,
 } from "@/lib/seo/sunday-mass-worksheets";
 import { pinOgImage } from "@/lib/seo/pin-og";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -29,15 +32,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<WorksheetSearchParams>;
+};
 
 export function generateStaticParams() {
-  return listSundaySheetKeys().map((key) => ({ slug: keyToSlug(key) }));
+  return listSundaySheetKeys().map((key) => ({ slug: sundayMassWorksheetSlug(key) }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const key = slugToKey(slug);
+  const key = sundayMassWorksheetKey(slug);
   const sheet = key ? getSundaySheet(key) : null;
   if (!sheet || !key) return {};
   return pageMetadata({
@@ -49,12 +55,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function SundayMassWorksheetPage({ params }: Props) {
+export default async function SundayMassWorksheetPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  const key = slugToKey(slug);
+  const key = sundayMassWorksheetKey(slug);
   const sheet = key ? getSundaySheet(key) : null;
   if (!key || !sheet) notFound();
-  if (slug !== keyToSlug(key)) permanentRedirect(sundayMassWorksheetPath(key));
+  if (slug !== sundayMassWorksheetSlug(key)) {
+    const target = sundayMassWorksheetRedirect(slug, await searchParams);
+    if (target) permanentRedirect(target);
+  }
 
   const path = sundayMassWorksheetPath(key);
   const season = sheetSeason(sheet);
