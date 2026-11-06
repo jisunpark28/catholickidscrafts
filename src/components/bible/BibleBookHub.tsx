@@ -20,6 +20,14 @@ type Props = {
 /** One stamp per tile when a page joins several chapters: what needs attention first. */
 const STAMP_ORDER = ["waiting", "mine", "shared"] as const;
 
+function stampFor(
+  douayChapters: number[],
+  stamps: Record<number, "mine" | "waiting" | "shared">,
+): StampCell["stamp"] {
+  const found = douayChapters.map((d) => stamps[d]).filter(Boolean);
+  return STAMP_ORDER.find((s) => found.includes(s)) ?? null;
+}
+
 export function BibleBookHub({ book, testamentBooks, completedChapters, momsBible }: Props) {
   // Cells follow the official Catholic chapter numbering; progress stays Douay-keyed.
   const done = new Set(completedChapters);
@@ -30,23 +38,43 @@ export function BibleBookHub({ book, testamentBooks, completedChapters, momsBibl
         filled: c.douayChapters.length > 0 && c.douayChapters.every((d) => done.has(d)),
       }))
     : undefined;
+
+  const cells: StampCell[] =
+    momsBible && isDouaySlug(book.slug)
+      ? chapterGrid(book.slug).map((c) => ({
+          label: c.label,
+          href: c.href,
+          stamp: stampFor(c.douayChapters, momsBible.stamps),
+        }))
+      : [];
+
+  const highlightCells: StampCell[] =
+    momsBible && isDouaySlug(book.slug)
+      ? testamentBooks.flatMap((b) => {
+          if (!isDouaySlug(b.slug)) return [];
+          const bookStamps = momsBible.stampsByBook[b.slug] ?? {};
+          return chapterGrid(b.slug).flatMap((c): StampCell[] => {
+            const stamp = stampFor(c.douayChapters, bookStamps);
+            if (!stamp) return [];
+            return [{ label: c.label, href: c.href, stamp, bookName: b.name }];
+          });
+        })
+      : [];
+
   return (
     <TestamentPageShell>
       {momsBible && isDouaySlug(book.slug) ? (
         <div className="space-y-4 rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <BibleBookSelect books={testamentBooks} currentSlug={book.slug} showLabel={false} />
-            <MbToolbar data={momsBible.toolbar} />
-          </div>
           {momsBible.childBanner && <NewNoteBanner note={momsBible.childBanner} />}
           <MbStampGrid
             bookName={book.name}
+            testamentLabel={book.testament === "OT" ? "the Old Testament" : "the New Testament"}
             viewer={momsBible.viewer}
             roleLabel={momsBible.roleLabels.join(" & ") || "Mom"}
-            cells={chapterGrid(book.slug).map((c): StampCell => {
-              const stamps = c.douayChapters.map((d) => momsBible.stamps[d]).filter(Boolean);
-              return { label: c.label, href: c.href, stamp: STAMP_ORDER.find((s) => stamps.includes(s)) ?? null };
-            })}
+            toolbar={<MbToolbar data={momsBible.toolbar} />}
+            bookSelect={<BibleBookSelect books={testamentBooks} currentSlug={book.slug} showLabel={false} />}
+            cells={cells}
+            highlightCells={highlightCells}
           />
         </div>
       ) : (

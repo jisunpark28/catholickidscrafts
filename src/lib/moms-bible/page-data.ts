@@ -4,7 +4,7 @@ import { SAMPLE_BOOK, SAMPLE_CHAPTER, sampleGenesisView } from "@/data/moms-bibl
 import { childHasFamilyPass, resolveFamilyPlus } from "@/lib/subscription/entitlements";
 import { getMbViewer, linkedParents, type MbLinkedChild, type MbViewer } from "./access";
 import { MB_CHILD_COOKIE } from "./constants";
-import { childNewNote, childSeedCount, loadBookStamps, loadChapterView, parentUnseenReplies } from "./queries";
+import { childNewNote, childSeedCount, loadAllBookStamps, loadChapterView, parentUnseenReplies } from "./queries";
 import type { MbChapterView, MbToolbarData } from "./types";
 
 export type ChildBanner = Awaited<ReturnType<typeof childNewNote>>;
@@ -110,6 +110,7 @@ export async function readerPageMomsBible(args: {
 /** Book index: stamps for the viewer's (selected) child, or null for everyone else. */
 export async function bookPageMomsBible(bookSlug: string): Promise<{
   stamps: Record<number, "mine" | "waiting" | "shared">;
+  stampsByBook: Record<string, Record<number, "mine" | "waiting" | "shared">>;
   childName: string;
   viewer: "parent" | "child";
   roleLabels: string[];
@@ -119,14 +120,15 @@ export async function bookPageMomsBible(bookSlug: string): Promise<{
   const viewer = await getMbViewer().catch(() => null);
   if (!viewer) return null;
   if (viewer.kind === "child") {
-    const [stamps, banner, parents, toolbar] = await Promise.all([
-      loadBookStamps(viewer.childId, bookSlug, { kind: "child" }),
+    const [stampsByBook, banner, parents, toolbar] = await Promise.all([
+      loadAllBookStamps(viewer.childId, { kind: "child" }),
       childNewNote(viewer.childId),
       linkedParents(viewer.childId),
       toolbarFor(viewer, null),
     ]);
     return {
-      stamps,
+      stamps: stampsByBook[bookSlug] ?? {},
+      stampsByBook,
       childName: viewer.displayName,
       viewer: "child",
       roleLabels: [...new Set(parents.map((p) => p.roleLabel))],
@@ -136,11 +138,19 @@ export async function bookPageMomsBible(bookSlug: string): Promise<{
   }
   const child = await pickChild(viewer.children);
   if (!child) return null;
-  const [stamps, toolbar] = await Promise.all([
-    loadBookStamps(child.id, bookSlug, { kind: "parent", parentId: viewer.parentId }),
+  const [stampsByBook, toolbar] = await Promise.all([
+    loadAllBookStamps(child.id, { kind: "parent", parentId: viewer.parentId }),
     toolbarFor(viewer, child),
   ]);
-  return { stamps, childName: child.displayName, viewer: "parent", roleLabels: [child.roleLabel], childBanner: null, toolbar };
+  return {
+    stamps: stampsByBook[bookSlug] ?? {},
+    stampsByBook,
+    childName: child.displayName,
+    viewer: "parent",
+    roleLabels: [child.roleLabel],
+    childBanner: null,
+    toolbar,
+  };
 }
 
 /** Toolbar only (situations page). */

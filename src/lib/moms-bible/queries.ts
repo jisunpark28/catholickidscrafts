@@ -170,6 +170,61 @@ export async function loadBookStamps(
   return out;
 }
 
+/** Stamp per storage chapter across every book, as seen by the child or by one parent. */
+export async function loadAllBookStamps(
+  childId: string,
+  viewer: { kind: "child" } | { kind: "parent"; parentId: string },
+): Promise<Record<string, Record<number, StampKey>>> {
+  const [notes, hl, unseen] = await Promise.all([
+    prisma.mbNote.findMany({
+      where: { subProfileId: childId },
+      select: { bookSlug: true, chapter: true, childRepliedAt: true },
+    }),
+    prisma.mbHighlight.groupBy({
+      by: ["bookSlug", "chapter"],
+      where: { subProfileId: childId },
+      _count: { _all: true },
+    }),
+    viewer.kind === "parent"
+      ? prisma.mbNotification.findMany({
+          where: { parentAccountId: viewer.parentId, subProfileId: childId, seenAt: null },
+          select: { note: { select: { bookSlug: true, chapter: true } } },
+        })
+      : Promise.resolve([] as { note: { bookSlug: string; chapter: number } }[]),
+  ]);
+
+  type Bucket = { notes: { childRepliedAt: Date | null }[]; hl: number; unseen: number };
+  const books = new Map<string, Map<number, Bucket>>();
+  const bucket = (bookSlug: string, chapter: number): Bucket => {
+    let chMap = books.get(bookSlug);
+    if (!chMap) {
+      chMap = new Map();
+      books.set(bookSlug, chMap);
+    }
+    let b = chMap.get(chapter);
+    if (!b) {
+      b = { notes: [], hl: 0, unseen: 0 };
+      chMap.set(chapter, b);
+    }
+    return b;
+  };
+
+  for (const n of notes) bucket(n.bookSlug, n.chapter).notes.push(n);
+  for (const h of hl) bucket(h.bookSlug, h.chapter).hl = h._count._all;
+  for (const u of unseen) bucket(u.note.bookSlug, u.note.chapter).unseen += 1;
+
+  const out: Record<string, Record<number, StampKey>> = {};
+  for (const [bookSlug, chMap] of books) {
+    const rec: Record<number, StampKey> = {};
+    for (const [ch, b] of chMap) {
+      const stamp = chapterStamp(viewer.kind, b.notes, b.hl, b.unseen);
+      if (stamp) rec[ch] = stamp;
+    }
+    if (Object.keys(rec).length) out[bookSlug] = rec;
+  }
+  return out;
+}
+
 export async function childSeedCount(childId: string): Promise<number> {
   const rows = await prisma.mbNote.findMany({
     where: { subProfileId: childId, childRepliedAt: { not: null } },
