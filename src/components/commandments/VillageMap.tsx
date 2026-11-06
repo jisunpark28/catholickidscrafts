@@ -11,7 +11,7 @@ export function VillageMap({ selected, onSelect, grown }: { selected: Location |
   return <div className="nv-map" aria-label="Village locations">
     <Image className="nv-map-image" src="/games/neighbor-village/village.webp" alt="Watercolor village with a Catholic church at upper left, a home at upper right, a playground at lower left, and a school at lower right, joined by garden paths." width={1024} height={1024} sizes="(max-width: 760px) 90vw, 550px" priority />
     <div className="nv-watercolor-garden" aria-hidden="true">{Array.from({ length: 5 }, (_, i) => <span key={i} style={{ opacity: i < grown ? 1 : 0 }}><Flower filled /></span>)}</div>
-    {LOCATIONS.map(l => <button key={l} type="button" className={`nv-map-stop nv-stop-${l}`} onClick={() => onSelect(l)} aria-pressed={selected === l} aria-label={`Play five missions at ${LABELS[l]}`}><span>{LABELS[l]}</span><small>50 missions</small></button>)}
+    {LOCATIONS.map(l => <button key={l} type="button" className={`nv-map-stop nv-stop-${l}`} onClick={() => onSelect(l)} aria-pressed={selected === l} aria-label={`Play five missions at ${LABELS[l]}`}><span>{LABELS[l]}</span></button>)}
   </div>;
 }
 
