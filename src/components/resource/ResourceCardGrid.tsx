@@ -1,5 +1,7 @@
+import { getEvergreenPage } from "@/lib/evergreen-catalog";
+import { canOpenResourceSheet } from "@/lib/resource/access";
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
-import { resourcePath, resourcePrintPath } from "@/lib/resource/sheets";
+import { resourcePath, resourcePrintPath, yearLabel } from "@/lib/resource/sheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 import { LockedPreview } from "./LockedPreview";
@@ -9,7 +11,7 @@ import { SheetThumb } from "./SheetThumb";
 type Props = {
   sheets: SundaySheetContent[];
   level: 1 | 2;
-  /** Server-resolved: Plus members can open any card; free (and signed-out) only thisSundayKey. */
+  /** Server-resolved: Plus members can open any card; free (and signed-out) this Sunday and evergreen worksheets. */
   isPlus?: boolean;
   thisSundayKey?: string | null;
 };
@@ -28,8 +30,8 @@ export function ResourceCardGrid({
         {sheets.map((sheet) => {
           const title = level === 2 ? sheet.levels.level2.title : sheet.levels.level1.title;
           const view = toGospelSheetView(sheet);
-          // Free (incl. signed-out) visitors: only this Sunday's card (server-resolved) is usable.
-          const unlocked = isPlus || (thisSundayKey != null && sheet.key === thisSundayKey);
+          // Free (incl. signed-out) visitors: this Sunday and evergreen worksheets are always usable.
+          const unlocked = canOpenResourceSheet({ isPlus, sheetKey: sheet.key, thisSundayKey });
           const openHref = resourcePath(sheet.key, level);
           const lockedTitle = "Plus members only (this Sunday's sheet is free)";
           return (
@@ -41,14 +43,14 @@ export function ResourceCardGrid({
             >
               {unlocked ? (
                 <Link href={openHref} className="block no-underline" tabIndex={-1}>
-                  <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
+                  <SheetThumb sheet={{ ...view, sundayLabel: getEvergreenPage(sheet.key) ? yearLabel(sheet.key) : sheet.key }} level={level} />
                 </Link>
               ) : (
                 <LockedPreview className="rounded-lg" label={`${title}: unlock with Plus`}>
                   <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
                 </LockedPreview>
               )}
-              <div className="mt-3 px-1 text-xs font-bold tracking-wide text-[#d35400]">{sheet.key}</div>
+              <div className="mt-3 px-1 text-xs font-bold tracking-wide text-[#d35400]">{getEvergreenPage(sheet.key) ? yearLabel(sheet.key) : sheet.key}</div>
               <h3 className="mb-0.5 mt-0.5 px-1 text-base font-bold leading-snug text-[#1c1c1c]">
                 {unlocked ? (
                   <Link href={openHref} className="text-inherit no-underline hover:underline">

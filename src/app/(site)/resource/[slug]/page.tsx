@@ -1,3 +1,4 @@
+import { getEvergreenPage, getEvergreenPageBySlug, evergreenSeoTitle, evergreenDescription, publicPath } from "@/lib/seo/evergreen-worksheets";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { ResourceSheetPanel } from "@/components/resource/ResourceSheetPanel";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -7,6 +8,7 @@ import { sheetOpenAllowed, resolveResourceViewer } from "@/lib/resource/resolve-
 import {
   keyToSlug,
   resourcePath,
+  resolveResourceSheet,
   seasonLabel,
   seasonPath,
   sheetAbstract,
@@ -21,7 +23,6 @@ import {
 import { sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode, worksheetNode } from "@/lib/structured-data";
-import { getSundaySheet } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
@@ -36,8 +37,9 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const key = slugToKey(slug);
-  const sheet = key ? getSundaySheet(key) : null;
+  const sheet = resolveResourceSheet(slug);
+  const evergreen = sheet ? getEvergreenPage(sheet.key) : null;
+  if (sheet && evergreen) return pageMetadata({ title: evergreenSeoTitle(evergreen), description: evergreenDescription(evergreen, sheet), path: publicPath(evergreen) });
   if (!sheet) return {};
   // Canonical SEO parent is the Sunday Mass worksheet page (avoid competing duplicates).
   return pageMetadata({
@@ -56,8 +58,34 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
     resolveResourceViewer(),
   ]);
   const key = slugToKey(slug);
-  const sheet = key ? getSundaySheet(key) : null;
-  if (!key || !sheet) notFound();
+  const sheet = resolveResourceSheet(slug);
+  if (!sheet) notFound();
+  const evergreen = !key ? getEvergreenPageBySlug(slug) : null;
+  if (evergreen) {
+    const level = parseLevelParam(sp.level);
+    const path = resourcePath(sheet.key);
+    const collection = evergreen.kind === "mass" ? "Mass for Kids" : "Virtue Challenge";
+    return (
+      <HomePdfShell groups={nav.groups} dailyMassLabel={nav.dailyMassLabel}>
+        <JsonLd nodes={[breadcrumbNode([
+          { name: "Resource", path: "/resource" },
+          { name: collection, path: "/resource?view=all" },
+          { name: evergreen.name, path },
+        ])]} />
+        <nav aria-label="Breadcrumb" className="text-sm text-[#6b7280]">
+          <Link href="/resource">Resource</Link>{" > "}
+          <Link href="/resource?view=all">{collection}</Link>{" > "}{evergreen.name}
+        </nav>
+        <header className="mt-4">
+          <h1 className="text-2xl font-bold">{evergreenSeoTitle(evergreen)}</h1>
+          <p className="text-sm text-[#6b7280]">Free preview and printing for everyone. Two learning levels.</p>
+        </header>
+        <ResourceSheetPanel sheet={sheet} level={level} canPrint={true}
+          levelHref={(n) => resourcePath(sheet.key, n)} />
+      </HomePdfShell>
+    );
+  }
+  if (!key) notFound();
   if (slug !== keyToSlug(key)) permanentRedirect(resourcePath(key));
   const level = parseLevelParam(sp.level);
   const path = resourcePath(key);

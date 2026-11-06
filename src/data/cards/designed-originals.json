@@ -1,0 +1,86 @@
+{
+  "MAS-066": {
+    "sha256": "2192947b6809c838f39849a9794e731be0670eb3757c9ea73792c0f9d000c067"
+  },
+  "MAS-067": {
+    "sha256": "2457b22b05e4ff68cb6340b27c6ff71591e007c65eca10b36964077c24ba088b"
+  },
+  "MAS-068": {
+    "sha256": "5a6956cd9e6c3b800eedf9a92eef014b55831f90dedb715352faeed812bc705e"
+  },
+  "MAS-069": {
+    "sha256": "7ca4ed79983030160af1eba54eda5f4a02e04874708d0b580633200ccd6fba62"
+  },
+  "VIR-054": {
+    "sha256": "ae71b1e94f2e4798c35eb41d7743dbfc3ba4c252edd03e78638514469730d76c"
+  },
+  "VIR-055": {
+    "sha256": "9ee81bb591944bc0d6adfae7e6a5cf49310e3ee5475585a5612feadf21dcc224"
+  },
+  "VIR-056": {
+    "sha256": "94cab665f6b5664ebbc4101e96546138b4e0f9055696a0cb1615fd3ce47e7738"
+  },
+  "VIR-057": {
+    "sha256": "30c3ebd05d6a3bb172d812bbd143375353e8ae718b50e8748ba4b98ad4fb1a7f"
+  },
+  "VIR-058": {
+    "sha256": "90203e8bba342bc1262c3c107a8dfdab02de47716c5907c685a148fbcd42939b"
+  },
+  "VIR-059": {
+    "sha256": "6eef21e4473d9eec1a20eebf4cc20fd58aa377a42da198ece6b6a7d4d13df80c"
+  },
+  "VIR-060": {
+    "sha256": "38f15834aec25cbe2d0907db25e067c6cd3440c76c228f6593b8dd3ede36db92"
+  },
+  "VIR-061": {
+    "sha256": "7767914def8f31ef70f87050553c4a6f070ea8c85a8e8ca5c4cf5f8939e45a93"
+  },
+  "VIR-062": {
+    "sha256": "c8bd5b3891c71b0d741ca0724f93145d93e30583763778ad9499abadb28ad35a"
+  },
+  "VIR-063": {
+    "sha256": "a9557c1a6c47c763c027142e5cc496a7fd33784bf8154bff0f4d71d13da3deeb"
+  },
+  "VIR-064": {
+    "sha256": "e99cd091a210f00eb4e331e6b6367ebdd2edbc2658da78069c3a6fac5908ac72"
+  },
+  "VIR-065": {
+    "sha256": "7be9b49e5979584df0ebcb38d3bfe834d2550be3f35c271d2ef4e70810e319a1"
+  },
+  "VIR-066": {
+    "sha256": "36f1aa18de7368d8532209b311acee9267980f27267f421acb535bd5cf323129"
+  },
+  "VIR-067": {
+    "sha256": "3b21b6ecea8ccbb1afb13f76a8273063c7718a8a6bc15ad666a2760907971957"
+  },
+  "VIR-068": {
+    "sha256": "8a6e6ebdfcdeec4412fd4f3e177a587a46f28722457ff5542ca94871ad9495d9"
+  },
+  "VIR-069": {
+    "sha256": "0a59599be58637bb4b52ba83ed3643fb4dd7b6ab3b5fcb2fbe63f9138e125ce6"
+  },
+  "VIR-070": {
+    "sha256": "83da62ca91aa7e0ce637cd853269875c94ebe3ac28708454fc1029a2c72f5a49"
+  },
+  "VIR-071": {
+    "sha256": "106af9485cf46f1907b567af9102ed94b853ab4c1ff92e497a82615a8930e3fb"
+  },
+  "VIR-072": {
+    "sha256": "6a35c8329e6e5aaec31af867c82f6bbb52bf4a33e4d40eb78d93a9f4c7b899ad"
+  },
+  "VIR-073": {
+    "sha256": "378d6ecdb79abf2c4139d3fea7d25488e5f00ee6b645f2bede02e77b1194c8f2"
+  },
+  "VIR-074": {
+    "sha256": "3cce15c23941895de35f7fb1a940d5ce48d92105f696a48039edbe5e84368d71"
+  },
+  "VIR-075": {
+    "sha256": "fe0b0faf3853c9db2372cd3ec729ab35326b2ae4edf87e0b486996833530a5c8"
+  },
+  "VIR-076": {
+    "sha256": "df6dafa4d02166baaba01f811a97dbb4b6aff48eea160e164ac5c03a711a14bf"
+  },
+  "VIR-077": {
+    "sha256": "6d9cd75fa70f12b9e88184fbe635401c56eff0eaeba1e6202ec99ac54e7a0977"
+  }
+}

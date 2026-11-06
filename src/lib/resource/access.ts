@@ -1,6 +1,7 @@
+import { getEvergreenPage } from "@/lib/evergreen-catalog";
 /**
- * Free vs Plus access for Sunday Resource sheets (Print / Edit / print route).
- * - Free / signed-out: read full landing text on any sheet; print only this Sunday.
+ * Free vs Plus access for Resource sheets (Print / Edit / print route).
+ * - Free / signed-out: read full landing text on any sheet; print this Sunday and all evergreen sheets.
  * - Plus: print any sheet + Fabric edit.
  */
 export function canOpenResourceSheet(opts: {
@@ -8,6 +9,7 @@ export function canOpenResourceSheet(opts: {
   sheetKey: string;
   thisSundayKey: string | null;
 }): boolean {
+  if (getEvergreenPage(opts.sheetKey)) return true;
   if (opts.isPlus) return true;
   if (!opts.thisSundayKey) return false;
   return opts.sheetKey === opts.thisSundayKey;

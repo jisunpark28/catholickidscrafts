@@ -1,8 +1,9 @@
+import { getEvergreenPage } from "@/lib/evergreen-catalog";
 // One search across Weekly Sheets and picture Cards, ranked together by relevance (server-only).
 import { cardSeasons, PICTURE_CARDS } from "@/lib/resource/cards";
 import type { PictureCard } from "@/lib/resource/card-meta";
-import { type ResourceSeason, sheetSeason } from "@/lib/resource/sheets";
-import { getSundaySheet, listSundaySheetKeys, type SundaySheetContent } from "@/lib/sunday-sheet-content";
+import { type ResourceSeason, sheetSeason, listResourceSheets } from "@/lib/resource/sheets";
+import { type SundaySheetContent } from "@/lib/sunday-sheet-content";
 
 export type SearchHit =
   | { type: "sheet"; score: number; sheet: SundaySheetContent }
@@ -83,10 +84,9 @@ export function unifiedSearch(q: string, season: ResourceSeason | null, thisSund
   const phrase = ` ${terms.join(" ")} `;
   const hits: SearchHit[] = [];
 
-  for (const key of listSundaySheetKeys()) {
-    const sheet = getSundaySheet(key);
-    if (!sheet) continue;
-    if (season && sheetSeason(sheet) !== season) continue;
+  for (const sheet of listResourceSheets()) {
+    const key = sheet.key;
+    if (season && (getEvergreenPage(key) || sheetSeason(sheet) !== season)) continue;
     let score = scoreFields(cached(`s:${key}`, () => sheetFields(sheet)), terms, phrase);
     if (score > 0) {
       if (key === thisSundayKey) score += 2;

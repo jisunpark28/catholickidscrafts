@@ -28,6 +28,9 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  outputFileTracingIncludes: {
+    "/api/resource/cards/*/download": ["./assets/card-originals/*.png"],
+  },
   poweredByHeader: false,
   transpilePackages: ["fabric"],
   serverExternalPackages: ["@prisma/client", "prisma", "romcal"],
