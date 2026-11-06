@@ -127,7 +127,7 @@ async function main() {
     await hub.waitFor();
     assert.equal(await pane.evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(253, 250, 247)");
     await page.setViewportSize({ width: 375, height: 1000 });
-    await page.getByRole("button", { name: "Bible & Faith", exact: true }).click();
+    await page.getByRole("button", { name: "Explore & Learn", exact: true }).click();
     assert.ok(await nav.isVisible());
     await page.keyboard.press("Escape");
     assert.equal(await nav.isVisible(), false);

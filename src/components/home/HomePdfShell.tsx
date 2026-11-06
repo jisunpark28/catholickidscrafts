@@ -1,142 +1,30 @@
 "use client";
 
-import { testamentNavLabel } from "@/lib/bible/testament-chrome";
-import type { HomePdfGroup, HomePdfLink } from "@/lib/home-pdf-nav";
-import Link from "next/link";
+import type { HomePdfGroup } from "@/lib/home-pdf-nav";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-
-function linkIsCurrent(item: HomePdfLink, pathname: string): boolean {
-  const path = item.href.split("?")[0] || item.href;
-  if (path === "/gospel" || path === "/bible/gospel") {
-    return pathname === "/gospel" || pathname === "/bible/gospel";
-  }
-  if (path === "/play") return pathname === path || pathname.startsWith(`${path}/`);
-  const testament = testamentNavLabel(pathname);
-  if (testament && item.label === testament) return true;
-  return pathname === path;
-}
+import { SidebarNavigation } from "./SidebarNavigation";
+import { useSidebarPaidPlus } from "./SidebarAccessProvider";
+import { fredoka } from "@/components/liturgy/fredoka";
 
 type Props = {
+  /** Legacy group data stays available to existing destination hubs, not expanded in this sidebar. */
   groups: HomePdfGroup[];
   children: React.ReactNode;
-  /** Label for the Daily Mass button above the Bible group. */
   dailyMassLabel?: string;
-  /** Opt-in main-pane background/size classes; shared pages keep the white default. */
   contentClassName?: string;
 };
 
-export const DAILY_MASS_HREF = "/daily-mass";
-export const RESOURCE_HREF = "/resource";
-export const PLUS_HREF = "/subscribe";
-
-function dailyMassClass(active: boolean): string {
-  return [
-    "flex w-full items-center justify-center gap-2 rounded-full px-3 py-2.5 text-center text-[15px] font-semibold no-underline transition",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]",
-    active
-      ? "border border-[#d35400] bg-[#d35400] text-white shadow-[0_2px_6px_rgba(211,84,0,0.3)]"
-      : "border-2 border-[#d35400] bg-white text-[#d35400] hover:bg-[#fff6ef]",
-  ].join(" ");
-}
-
-function CalendarIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <rect x="3" y="5" width="18" height="16" rx="2" />
-      <path d="M3 10h18M8 3v4M16 3v4" />
-    </svg>
-  );
-}
-
-function ResourceIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
-      <path d="M14 3v5h5M9 13h6M9 17h4" />
-    </svg>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 8v8M8 12h8" />
-    </svg>
-  );
-}
-
-function pillClass(active: boolean): string {
-  return [
-    "flex w-full items-center justify-center rounded-full border px-3 py-2.5 text-center text-sm font-medium text-[#1c1c1c] no-underline transition",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]",
-    active
-      ? "border-[#f5ebe0] bg-[#f5ebe0]"
-      : "border-[#e7e3de] bg-white hover:bg-[#fffdfb]",
-  ].join(" ");
-}
-
-/** Small Bible-book icons, only on the three Bible buttons (open book: Gospel; closed brown Bible: Testaments). */
-function OpenBookIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden focusable="false" className="shrink-0">
-      <path d="M2 5.5c3.2-1.2 6.3-1 9.3.9v13.1c-3-1.8-6.1-2.1-9.3-.9z" fill="#fff" stroke="#8a5a2b" strokeWidth="1.4" strokeLinejoin="round" />
-      <path d="M22 5.5c-3.2-1.2-6.3-1-9.3.9v13.1c3-1.8 6.1-2.1 9.3-.9z" fill="#fff" stroke="#8a5a2b" strokeWidth="1.4" strokeLinejoin="round" />
-      <path d="M4.5 9c1.6-.4 3.2-.2 4.8.5M4.5 12c1.6-.4 3.2-.2 4.8.5M14.7 9.5c1.6-.7 3.2-.9 4.8-.5M14.7 12.5c1.6-.7 3.2-.9 4.8-.5" stroke="#c9a27a" strokeWidth="1" strokeLinecap="round" fill="none" />
-    </svg>
-  );
-}
-
-function ClosedBibleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden focusable="false" className="shrink-0">
-      <rect x="5" y="2.5" width="14" height="19" rx="1.6" fill="#7a4a24" />
-      <rect x="5" y="2.5" width="2.4" height="19" rx="1" fill="#5c3518" />
-      <path d="M13.2 7v8M10.4 9.6h5.6" stroke="#f2c14e" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function NavLabel({ item }: { item: HomePdfLink }) {
-  if (!item.icon) return <>{item.label}</>;
-  return (
-    <span className="inline-flex items-center gap-2">
-      {item.icon === "open-book" ? <OpenBookIcon /> : <ClosedBibleIcon />}
-      {item.label}
-    </span>
-  );
-}
-
-function NavAnchor({
-  item,
-  active,
-  onNavigate,
-}: {
-  item: HomePdfLink;
-  active: boolean;
-  onNavigate: () => void;
-}) {
-  const className = pillClass(active);
-  if (item.href.startsWith("http://") || item.href.startsWith("https://")) {
-    return (
-      <a href={item.href} className={className} onClick={onNavigate}>
-        <NavLabel item={item} />
-      </a>
-    );
-  }
-  return (
-    <Link href={item.href} className={className} onClick={onNavigate} aria-current={active ? "page" : undefined}>
-      <NavLabel item={item} />
-    </Link>
-  );
-}
-
-export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass", contentClassName = "bg-white" }: Props) {
+export function HomePdfShell({ children, contentClassName = "bg-white" }: Props) {
   const pathname = usePathname() ?? "";
   const navId = useId();
-  const resourceActive = pathname === RESOURCE_HREF || pathname.startsWith(`${RESOURCE_HREF}/`);
-  const plusActive = pathname === PLUS_HREF || pathname.startsWith(`${PLUS_HREF}/`);
+  const activePaidPlus = useSidebarPaidPlus();
+  const [hash, setHash] = useState("");
+  useEffect(() => {
+    const update = () => setHash(window.location.hash);
+    update(); window.addEventListener("hashchange", update); window.addEventListener("popstate", update);
+    return () => { window.removeEventListener("hashchange", update); window.removeEventListener("popstate", update); };
+  }, [pathname]);
   const [desktopOpen, setDesktopOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -155,7 +43,8 @@ export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass", 
     <div className="flex min-h-[calc(100dvh-6.5rem)] flex-col bg-white lg:flex-row">
       <aside
         id={navId}
-        className={`${asideVisible} w-full shrink-0 flex-col bg-[#fdfaf7] lg:w-[15.5rem]`}
+        className={`${fredoka.variable} ${asideVisible} w-full shrink-0 flex-col bg-[#fffbef] lg:w-[17rem]`}
+        style={{ fontFamily: "var(--font-fredoka), sans-serif" }}
       >
         <div className="px-4 pb-8 pt-3 lg:sticky lg:top-[6.5rem] lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto">
           <div className="mb-1 flex justify-end">
@@ -173,53 +62,10 @@ export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass", 
               <span className="sr-only">Hide navigation</span>
             </button>
           </div>
-          <nav aria-label="Home">
-            <div className="mb-5 mt-1">
-              <Link
-                href={DAILY_MASS_HREF}
-                className={dailyMassClass(pathname === DAILY_MASS_HREF)}
-                aria-current={pathname === DAILY_MASS_HREF ? "page" : undefined}
-                onClick={() => setMobileOpen(false)}
-              >
-                <CalendarIcon />
-                {dailyMassLabel}
-              </Link>
-              <Link
-                href={RESOURCE_HREF}
-                className={`mt-2.5 ${dailyMassClass(resourceActive)}`}
-                aria-current={resourceActive ? "page" : undefined}
-                onClick={() => setMobileOpen(false)}
-              >
-                <ResourceIcon />
-                Resource
-              </Link>
-              <Link
-                href={PLUS_HREF}
-                className={`mt-2.5 ${dailyMassClass(plusActive)}`}
-                aria-current={plusActive ? "page" : undefined}
-                onClick={() => setMobileOpen(false)}
-              >
-                <PlusIcon />
-                Plus
-              </Link>
-            </div>
-            {groups.map((group) => (
-              <div key={group.id} className="mt-4 first:mt-1">
-                <h2 className="mb-3 px-1 text-base font-medium text-[#1c1c1c]">{group.title}</h2>
-                <ul className="flex list-none flex-col gap-2.5 p-0">
-                  {group.items.map((item) => (
-                    <li key={item.id}>
-                      <NavAnchor
-                        item={item}
-                        active={linkIsCurrent(item, pathname)}
-                        onNavigate={() => setMobileOpen(false)}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </nav>
+          <SidebarNavigation pathname={pathname} hash={hash} activePaidPlus={activePaidPlus} onNavigate={(href) => {
+            setHash(href.includes("#") ? `#${href.split("#")[1]}` : "");
+            setMobileOpen(false);
+          }} />
         </div>
       </aside>
 
@@ -233,7 +79,7 @@ export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass", 
             onClick={() => setMobileOpen(true)}
           >
             <span aria-hidden>»</span>
-            Bible & Faith
+            Explore & Learn
           </button>
         )}
         {!desktopOpen && (
