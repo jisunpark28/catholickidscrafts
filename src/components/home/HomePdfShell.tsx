@@ -43,14 +43,14 @@ export function HomePdfShell({ children, contentClassName = "bg-white" }: Props)
     <div className="flex min-h-[calc(100dvh-6.5rem)] flex-col bg-white lg:flex-row">
       <aside
         id={navId}
-        className={`${fredoka.variable} ${asideVisible} w-full shrink-0 flex-col bg-[#fffbef] lg:w-[17rem]`}
+        className={`${fredoka.variable} ${asideVisible} w-full shrink-0 flex-col bg-[#fcf7f2] lg:w-[17rem]`}
         style={{ fontFamily: "var(--font-fredoka), sans-serif" }}
       >
         <div className="px-4 pb-8 pt-3 lg:sticky lg:top-[6.5rem] lg:max-h-[calc(100dvh-6.5rem)] lg:overflow-y-auto">
           <div className="mb-1 flex justify-end">
             <button
               type="button"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-xl leading-none text-[#6b7280] hover:bg-white hover:text-[#1c1c1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-xl leading-none text-[#806454] hover:bg-[#fffdfa] hover:text-[#9d451d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#9d451d]"
               aria-expanded={true}
               aria-controls={navId}
               onClick={() => {
@@ -73,7 +73,7 @@ export function HomePdfShell({ children, contentClassName = "bg-white" }: Props)
         {!mobileOpen && (
           <button
             type="button"
-            className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#e7e3de] bg-[#fdfaf7] px-3 py-1.5 text-sm font-medium text-[#1c1c1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400] lg:hidden"
+            className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#e8d9cd] bg-[#fffdfa] px-3 py-1.5 text-sm font-medium text-[#493a30] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#9d451d] lg:hidden"
             aria-expanded={false}
             aria-controls={navId}
             onClick={() => setMobileOpen(true)}
@@ -85,7 +85,7 @@ export function HomePdfShell({ children, contentClassName = "bg-white" }: Props)
         {!desktopOpen && (
           <button
             type="button"
-            className="mb-3 hidden h-8 w-8 items-center justify-center rounded-md text-lg leading-none text-[#9ca3af] hover:bg-[#fdfaf7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400] lg:inline-flex"
+            className="mb-3 hidden h-8 w-8 items-center justify-center rounded-md text-lg leading-none text-[#806454] hover:bg-[#fffdfa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#9d451d] lg:inline-flex"
             aria-expanded={false}
             aria-controls={navId}
             onClick={() => setDesktopOpen(true)}

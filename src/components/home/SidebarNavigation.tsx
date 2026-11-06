@@ -11,16 +11,16 @@ export function SidebarNavigation({ pathname, hash = "", activePaidPlus, onNavig
       <ul className="m-0 flex list-none flex-col gap-3 p-0">
         {sidebarItems(activePaidPlus).map((item) => {
           const active = sidebarItemIsCurrent(item.id, pathname, hash);
-          const classes = `flex min-h-20 w-full items-center gap-3 rounded-[18px] border px-3 py-2.5 text-left text-[19px] font-semibold leading-tight no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#607537] ${active
-            ? "border-[#607537] bg-[#607537] text-white shadow-sm"
-            : "border-[#ded3ad] bg-[#fffbed] text-[#405329] shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_1px_2px_rgba(89,74,34,0.04)] hover:border-[#9aaa6d] hover:bg-[#f5f2df]"}`;
+          const classes = `relative flex min-h-20 w-full items-center gap-3 rounded-[18px] border px-3 py-2.5 text-left text-[19px] font-semibold leading-tight no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#9d451d] ${active
+            ? "border-[#b46139] bg-[#fbe8dc] text-[#9d451d] shadow-sm before:absolute before:-left-0.5 before:top-1/2 before:h-7 before:w-1.5 before:-translate-y-1/2 before:rounded-full before:bg-[#2e7d32]"
+            : "border-[#e8d9cd] bg-[#fffdfa] text-[#493a30] shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_1px_2px_rgba(105,65,39,0.04)] hover:border-[#c8906c] hover:bg-[#fff2e8]"}`;
           const content = <>
-            <SidebarIllustration kind={item.id} className="h-14 w-14 shrink-0" />
+            <SidebarIllustration kind={item.id} className={`h-14 w-14 shrink-0 ${active ? "text-[#9d451d]" : "text-[#b65b2e]"}`} />
             <span className="min-w-0 flex-1">{item.label}</span>
-            {item.plus && <span className="rounded-md bg-[#607537] px-1.5 py-1 text-[10px] font-semibold leading-none text-white">PLUS</span>}
+            {item.plus && <span className="rounded-md bg-[#dce6c5] px-1.5 py-1 text-[10px] font-semibold leading-none text-[#40502d]">PLUS</span>}
           </>;
           return <Fragment key={item.id}>
-            {item.separator && <li role="separator" aria-hidden="true" data-sidebar-separator={item.id} className="my-1 h-[3px] bg-[radial-gradient(circle,#c5b37b_1.3px,transparent_1.5px)] bg-[length:9px_3px] bg-repeat-x" />}
+            {item.separator && <li role="separator" aria-hidden="true" data-sidebar-separator={item.id} className="my-1 h-[3px] bg-[radial-gradient(circle,#d7a080_1.3px,transparent_1.5px)] bg-[length:9px_3px] bg-repeat-x" />}
             <li>
               {item.href ? <Link href={item.href} className={classes} onClick={() => onNavigate(item.href!)} aria-current={active ? "page" : undefined}>
                 {content}
