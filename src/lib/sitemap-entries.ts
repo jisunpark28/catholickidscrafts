@@ -5,6 +5,8 @@ import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
 import { keyToSlug, RESOURCE_SEASONS, seasonPath } from "@/lib/resource/sheets";
+import { FAITH_HUB, FAITH_SEO_CARDS, SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
+import { SUNDAY_MASS_WORKSHEETS_HUB } from "@/lib/seo/sunday-mass-worksheets";
 import { getSiteUrl } from "@/lib/site-url";
 import { listSundaySheetKeys } from "@/lib/sunday-sheet-content";
 import type { MetadataRoute } from "next";
@@ -36,9 +38,12 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/mass", "daily", 0.95],
   ["/daily-mass", "daily", 0.95],
   ["/resource", "weekly", 0.9],
+  [SUNDAY_MASS_WORKSHEETS_HUB, "weekly", 0.9],
   ["/resources", "weekly", 0.85],
   ["/bible/gospel", "daily", 0.9],
   ["/bible-verses-for-kids", "weekly", 0.85],
+  [SAINTS_HUB, "weekly", 0.85],
+  [FAITH_HUB, "weekly", 0.85],
   ["/recommendations", "weekly", 0.8],
   ["/play", "weekly", 0.75],
   ["/prayers", "monthly", 0.75],
@@ -76,11 +81,11 @@ function playEntries(): SitemapEntry[] {
   return [...paths].map((p) => entry(p, "weekly", 0.7));
 }
 
-/** Week sheets + season hubs for the dedicated resources sitemap. Advent weeks/hub prioritized. */
+/** Season hubs + Sunday worksheet SEO pages (Advent prioritized). /resource/[slug] weeks are not listed. */
 export function buildResourcesSitemap(): MetadataRoute.Sitemap {
   const weeks = listSundaySheetKeys().map((key) => {
     const isAdvent = key.includes("_ADV");
-    return entry(`/resource/${keyToSlug(key)}`, "weekly", isAdvent ? 0.95 : 0.8);
+    return entry(`/sunday-mass-worksheets/${keyToSlug(key)}`, "weekly", isAdvent ? 0.95 : 0.8);
   });
   const seasons = RESOURCE_SEASONS.map((s) =>
     entry(seasonPath(s.id), "monthly", s.id === "advent" ? 0.95 : 0.85),
@@ -94,6 +99,14 @@ function liturgyEntries(): SitemapEntry[] {
 
 function bibleVersesForKidsEntries(): SitemapEntry[] {
   return SITUATIONS.map((s) => entry(`/bible-verses-for-kids/${s.key}`, "monthly", 0.7));
+}
+
+function saintCardEntries(): SitemapEntry[] {
+  return SAINT_SEO_CARDS.map((c) => entry(`${SAINTS_HUB}/${c.slug}`, "monthly", 0.65));
+}
+
+function faithCardEntries(): SitemapEntry[] {
+  return FAITH_SEO_CARDS.map((c) => entry(`${FAITH_HUB}/${c.slug}`, "monthly", 0.65));
 }
 
 async function recommendationEntries(): Promise<SitemapEntry[]> {
@@ -139,6 +152,8 @@ export async function buildPagesSitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...STATIC_PAGES.map(([p, f, pr]) => entry(p, f, pr)),
     ...bibleVersesForKidsEntries(),
+    ...saintCardEntries(),
+    ...faithCardEntries(),
     ...playEntries(),
     ...liturgyEntries(),
     ...bookHubs,
