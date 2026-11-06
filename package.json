@@ -29,6 +29,7 @@
     "vestments:optimize": "node scripts/optimize-vestment-pngs.mjs",
     "generate:favicons": "python3 scripts/generate-favicons.py",
     "export:mass-participation": "tsx scripts/export-mass-participation-bundle.ts",
+    "test:public-title-slugs": "tsx scripts/test-public-title-slugs.ts",
     "test:sheet-keys": "tsx scripts/test-sheet-keys.ts",
     "generate:sheet-bases": "tsx scripts/generate-sheet-bases.ts",
     "cards:thumbs": "tsx scripts/build-card-thumbs.ts",

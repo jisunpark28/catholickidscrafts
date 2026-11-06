@@ -4,9 +4,9 @@ import { SITUATIONS } from "@/data/moms-bible/situations";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
-import { keyToSlug, RESOURCE_SEASONS, seasonPath } from "@/lib/resource/sheets";
+import { RESOURCE_SEASONS, seasonPath } from "@/lib/resource/sheets";
 import { FAITH_HUB, FAITH_SEO_CARDS, SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
-import { SUNDAY_MASS_WORKSHEETS_HUB } from "@/lib/seo/sunday-mass-worksheets";
+import { SUNDAY_MASS_WORKSHEETS_HUB, sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { getSiteUrl } from "@/lib/site-url";
 import { listSundaySheetKeys } from "@/lib/sunday-sheet-content";
 import type { MetadataRoute } from "next";
@@ -85,7 +85,7 @@ function playEntries(): SitemapEntry[] {
 export function buildResourcesSitemap(): MetadataRoute.Sitemap {
   const weeks = listSundaySheetKeys().map((key) => {
     const isAdvent = key.includes("_ADV");
-    return entry(`/sunday-mass-worksheets/${keyToSlug(key)}`, "weekly", isAdvent ? 0.95 : 0.8);
+    return entry(sundayMassWorksheetPath(key), "weekly", isAdvent ? 0.95 : 0.8);
   });
   const seasons = RESOURCE_SEASONS.map((s) =>
     entry(seasonPath(s.id), "monthly", s.id === "advent" ? 0.95 : 0.85),
