@@ -5,6 +5,7 @@ import { getTinyPriestEmbedPath } from "@/lib/tiny-priest";
 
 export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
   return [
+    { slug: "ten-commandments", title: copyText(copy, "play.game.commandments.title", "Love Your Neighbor Village"), description: copyText(copy, "play.game.commandments.description", "Explore the Ten Commandments with 200 everyday-choice missions — 50 in each village location."), embedPath: "/play/ten-commandments", duration: "5-10 min" },
     {
       slug: "church",
       title: copyText(copy, "play.game.church.title", "Come to Mass!"),
