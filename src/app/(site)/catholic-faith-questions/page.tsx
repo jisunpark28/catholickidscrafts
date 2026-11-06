@@ -1,5 +1,7 @@
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
-import { PageShell } from "@/components/PageShell";
+import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
+import { FaithNavigationDirectory } from "@/components/home/FaithNavigationDirectory";
+import { getResourceNav } from "@/lib/resource/nav";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { FAITH_HUB, FAITH_SEO_CARDS, groupFaithByCatThenSet } from "@/lib/seo/card-seo";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -14,7 +16,8 @@ export const metadata: Metadata = pageMetadata({
   path: FAITH_HUB,
 });
 
-export default function CatholicFaithQuestionsHubPage() {
+export default async function CatholicFaithQuestionsHubPage() {
+  const nav = await getResourceNav();
   const groups = groupFaithByCatThenSet();
   const listItems = FAITH_SEO_CARDS.map((c) => ({
     name: c.title,
@@ -22,7 +25,7 @@ export default function CatholicFaithQuestionsHubPage() {
   }));
 
   return (
-    <PageShell>
+    <TestamentPageShell>
       <JsonLd
         nodes={[
           breadcrumbNode([{ name: "Catholic Faith Questions", path: FAITH_HUB }]),
@@ -44,7 +47,9 @@ export default function CatholicFaithQuestionsHubPage() {
           Each page adds family conversation questions so catechism ideas stick beyond flashcards.
         </p>
 
-        <div className="mt-8 space-y-10">
+        <FaithNavigationDirectory groups={nav.groups} />
+        <div id="qa-cards" className="mt-8 scroll-mt-28 space-y-10">
+          <h2 className="text-2xl font-bold text-[#405329]">Q&amp;A Cards</h2>
           {groups.map((g) => (
             <section key={g.cat} aria-labelledby={`cat-${g.cat}`}>
               <h2 id={`cat-${g.cat}`} className="font-[Georgia,serif] text-2xl font-bold text-[#1f2937]">
@@ -77,6 +82,6 @@ export default function CatholicFaithQuestionsHubPage() {
           <NewsletterSubscribeForm source="catholic-faith-questions" />
         </div>
       </div>
-    </PageShell>
+    </TestamentPageShell>
   );
 }

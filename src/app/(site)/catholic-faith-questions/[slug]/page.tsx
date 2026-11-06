@@ -1,5 +1,5 @@
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
-import { PageShell } from "@/components/PageShell";
+import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   FAITH_HUB,
@@ -63,7 +63,7 @@ export default async function CatholicFaithQuestionPage({ params }: Props) {
   const path = `${FAITH_HUB}/${card.slug}`;
 
   return (
-    <PageShell>
+    <TestamentPageShell>
       <JsonLd
         nodes={[
           breadcrumbNode([
@@ -131,6 +131,6 @@ export default async function CatholicFaithQuestionPage({ params }: Props) {
           </Link>
         </p>
       </article>
-    </PageShell>
+    </TestamentPageShell>
   );
 }

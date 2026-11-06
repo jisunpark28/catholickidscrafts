@@ -1,3 +1,5 @@
+import { SidebarAccessProvider } from "@/components/home/SidebarAccessProvider";
+import { getSidebarPaidPlus } from "@/lib/sidebar-access";
 import { SiteCopyProvider } from "@/components/SiteCopyProvider";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -5,14 +7,16 @@ import { VisitTracker } from "@/components/VisitTracker";
 import { getSiteCopyMap } from "@/lib/site-copy";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const copy = await getSiteCopyMap();
+  const [copy, activePaidPlus] = await Promise.all([getSiteCopyMap(), getSidebarPaidPlus()]);
 
   return (
+    <SidebarAccessProvider activePaidPlus={activePaidPlus}>
     <SiteCopyProvider copy={copy}>
       <VisitTracker />
       <SiteHeader />
       <main className="relative z-0">{children}</main>
       <SiteFooter />
     </SiteCopyProvider>
+    </SidebarAccessProvider>
   );
 }
