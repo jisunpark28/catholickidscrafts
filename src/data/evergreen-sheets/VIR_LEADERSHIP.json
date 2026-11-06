@@ -1,0 +1,97 @@
+{
+  "key": "VIR_LEADERSHIP",
+  "liturgicalName": "Leadership Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Mark 10:43",
+  "keyVerseDR": "\"Whosoever will be greater, shall be your minister.\" (Mk 10:43)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Leadership",
+      "story": "Leadership means helping a group reach a goal while helping everyone get along. Leaders serve!",
+      "keyLine": "A leader serves.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice leadership all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did someone in our family lead by serving?",
+        "How can we lead others toward Jesus?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice leadership every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You came to serve. Help me lead others with kindness and help everyone get along. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Help a younger child learn something",
+          "TUE: Lead your family in grace before meals",
+          "WED: Invite others to play and include all",
+          "THU: Encourage a teammate who is trying",
+          "FRI: Lead a family clean-up time",
+          "SAT: Help plan a fun family activity"
+        ]
+      },
+      "words": [
+        "lead",
+        "serve",
+        "guide",
+        "team"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Leadership",
+      "story": "Leadership means guiding a group toward a good goal while helping everyone get along. A Christian leader is a servant leader. Jesus said that whoever wants to be great must serve the others, and He washed His disciples' feet. Good leaders listen, encourage, plan, and make sure no one is left out. You can lead at home, at school, and at church.",
+      "keyLine": "A leader serves.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice leadership all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did someone in our family lead by serving?",
+        "How did God help us grow in leadership?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice leadership every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You came to serve. Help me lead others with kindness and help everyone get along. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Lead a family prayer or Bible reading",
+          "TUE: Organize a game where everyone fits in",
+          "WED: Help a group solve a problem calmly",
+          "THU: Set a good example for younger kids",
+          "FRI: Listen to everyone's ideas before deciding",
+          "SAT: Serve someone like Jesus washing feet"
+        ]
+      },
+      "words": [
+        "lead",
+        "serve",
+        "guide",
+        "team"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_LEADERSHIP_main.png",
+    "heart": "VIR_LEADERSHIP_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing leadership together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "key": "VIR_HONESTY",
+  "liturgicalName": "Honesty Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Ephesians 4:25",
+  "keyVerseDR": "\"Wherefore putting away lying, speak ye the truth every man with his neighbour.\" (Eph 4:25)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Honesty",
+      "story": "Honesty means telling the truth and acting the same way when no one is watching. Jesus is the Truth!",
+      "keyLine": "I will tell the truth.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice honesty all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When was telling the truth hard this week?",
+        "How does honesty help our family trust each other?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice honesty every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You are the Truth. Help me speak truthfully and keep my promises. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Tell the truth about something you did",
+          "TUE: Keep a promise you made",
+          "WED: Return something that isn't yours",
+          "THU: Admit a mistake and say sorry",
+          "FRI: Play a game fairly without cheating",
+          "SAT: Tell God the truth in your prayers"
+        ]
+      },
+      "words": [
+        "truth",
+        "honest",
+        "promise",
+        "trust"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Honesty",
+      "story": "Honesty means telling the truth and living with integrity: being the same person on the inside and the outside. Honest people keep promises, admit mistakes, and do not cheat or take what is not theirs. Saint Paul tells us to put away lying and speak the truth. Jesus said, \"I am the way, and the truth, and the life.\" When we are honest, we follow Him.",
+      "keyLine": "I will tell the truth.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice honesty all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When was telling the truth hard this week?",
+        "How did God help us grow in honesty?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice honesty every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You are the Truth. Help me speak truthfully and keep my promises. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Own up to a mistake before someone asks",
+          "TUE: Be honest even when it costs you",
+          "WED: Give back extra change or credit",
+          "THU: Keep your word on a chore you promised",
+          "FRI: Do your work honestly, without copying",
+          "SAT: Prepare for an honest Confession"
+        ]
+      },
+      "words": [
+        "truth",
+        "honest",
+        "promise",
+        "trust"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_HONESTY_main.png",
+    "heart": "VIR_HONESTY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing honesty together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

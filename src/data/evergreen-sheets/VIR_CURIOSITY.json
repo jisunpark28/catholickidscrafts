@@ -1,0 +1,97 @@
+{
+  "key": "VIR_CURIOSITY",
+  "liturgicalName": "Curiosity Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Matthew 7:7",
+  "keyVerseDR": "\"Seek, and you shall find: knock, and it shall be opened to you.\" (Mt 7:7)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Curiosity",
+      "story": "Curiosity means being interested in new things and wanting to explore. God's world is full of wonders waiting to be found!",
+      "keyLine": "I will seek and find.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice curiosity all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What was the most interesting thing we discovered this week?",
+        "What do we still wonder about God's world?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice curiosity every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, fill me with wonder. Help me seek You in everything I learn. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Ask a grown-up one 'why' question",
+          "TUE: Look closely at a bug, leaf, or cloud",
+          "WED: Ask Grandma or Grandpa about their childhood",
+          "THU: Learn the name of a new animal",
+          "FRI: Ask a question about Jesus at dinner",
+          "SAT: Explore a new place in your yard or park"
+        ]
+      },
+      "words": [
+        "seek",
+        "wonder",
+        "explore",
+        "ask"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Curiosity",
+      "story": "Curiosity is a holy wondering. It means asking good questions, noticing new things, and wanting to explore God's world. Jesus told us to seek and knock. A curious heart wants to learn about plants, animals, people, and most of all about God. Curiosity grows when we ask, look closely, and listen for answers.",
+      "keyLine": "I will seek and find.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice curiosity all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What was the most interesting thing we discovered this week?",
+        "How did God help us grow in curiosity?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice curiosity every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, fill me with wonder. Help me seek You in everything I learn. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Look up the answer to a question you wonder about",
+          "TUE: Learn three facts about a saint",
+          "WED: Ask a family member about their work",
+          "THU: Find out how something at home works",
+          "FRI: Read about a country you have never visited",
+          "SAT: Ask a priest or catechist a faith question"
+        ]
+      },
+      "words": [
+        "seek",
+        "wonder",
+        "explore",
+        "ask"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_CURIOSITY_main.png",
+    "heart": "VIR_CURIOSITY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing curiosity together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "key": "VIR_SOCIAL_INTELLIGENCE",
+  "liturgicalName": "Social Intelligence Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Romans 12:15",
+  "keyVerseDR": "\"Rejoice with them that rejoice; weep with them that weep.\" (Rom 12:15)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Social Intelligence",
+      "story": "Social intelligence means noticing how others feel and choosing the right words and actions.",
+      "keyLine": "I notice how others feel.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice social intelligence all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we notice someone's feelings this week?",
+        "What words help someone who is sad or upset?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice social intelligence every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You saw every person's heart. Help me notice others and care for them. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Notice when someone looks sad",
+          "TUE: Ask, 'How are you feeling today?'",
+          "WED: Celebrate a friend's good news",
+          "THU: Use a gentle voice with someone upset",
+          "FRI: Wait your turn to talk",
+          "SAT: Thank someone and look them in the eye"
+        ]
+      },
+      "words": [
+        "feelings",
+        "notice",
+        "gentle",
+        "friend"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Social Intelligence",
+      "story": "Social intelligence means noticing other people's feelings and knowing what to say and do. It helps us know when a friend needs a hug, a joke, quiet time, or help. Saint Paul says to rejoice with those who rejoice and weep with those who weep. Jesus always noticed people: the lonely, the sick, and the sad. We can learn to notice too.",
+      "keyLine": "I notice how others feel.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice social intelligence all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we notice someone's feelings this week?",
+        "How did God help us grow in social intelligence?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice social intelligence every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You saw every person's heart. Help me notice others and care for them. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Read someone's face and respond kindly",
+          "TUE: Comfort a friend who is having a hard day",
+          "WED: Choose kind words when you disagree",
+          "THU: Notice who needs a turn and give it",
+          "FRI: Help two friends make peace",
+          "SAT: Pray for someone you noticed was hurting"
+        ]
+      },
+      "words": [
+        "feelings",
+        "notice",
+        "gentle",
+        "friend"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_SOCIAL_INTELLIGENCE_main.png",
+    "heart": "VIR_SOCIAL_INTELLIGENCE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing social intelligence together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

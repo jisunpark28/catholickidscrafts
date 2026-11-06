@@ -1,0 +1,97 @@
+{
+  "key": "VIR_CREATIVITY",
+  "liturgicalName": "Creativity Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Genesis 1:31",
+  "keyVerseDR": "\"And God saw all the things that he had made, and they were very good.\" (Gn 1:31)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Creativity",
+      "story": "Creativity means thinking up new ideas and using them for good. God made the whole world, and He gave you an imagination too!",
+      "keyLine": "God made me to make good things.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice creativity all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What new idea did someone in our family have this week?",
+        "How did our ideas help other people?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice creativity every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Dear God, Creator of all, help me use my ideas to make good and beautiful things. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Draw a picture of something God made",
+          "TUE: Build something new with blocks or boxes",
+          "WED: Make up a kind song for your family",
+          "THU: Find a new way to help with a chore",
+          "FRI: Make a thank-you card for someone",
+          "SAT: Create a small prayer corner at home"
+        ]
+      },
+      "words": [
+        "create",
+        "idea",
+        "imagine",
+        "make"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Creativity",
+      "story": "Creativity is the gift of finding new and helpful ways to do things. God is the first Creator: He made the stars, the seas, and you. When we invent, draw, build, or solve a problem in a fresh way, and use that idea to help others or give glory to God, we share in His creative work. A creative idea is best when it is also a good idea.",
+      "keyLine": "God made me to make good things.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice creativity all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What new idea did someone in our family have this week?",
+        "How did God help us grow in creativity?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice creativity every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Dear God, Creator of all, help me use my ideas to make good and beautiful things. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Solve a family problem in a brand-new way",
+          "TUE: Design a card to cheer up someone sad",
+          "WED: Write a short story that teaches a virtue",
+          "THU: Reuse something old to make something useful",
+          "FRI: Plan a creative surprise for a family member",
+          "SAT: Make an art gift for Jesus or Mary"
+        ]
+      },
+      "words": [
+        "create",
+        "idea",
+        "imagine",
+        "make"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_CREATIVITY_main.png",
+    "heart": "VIR_CREATIVITY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing creativity together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

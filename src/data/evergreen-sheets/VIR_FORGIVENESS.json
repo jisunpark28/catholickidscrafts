@@ -1,0 +1,97 @@
+{
+  "key": "VIR_FORGIVENESS",
+  "liturgicalName": "Forgiveness Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Ephesians 4:32",
+  "keyVerseDR": "\"Be ye kind one to another; merciful, forgiving one another, even as God hath forgiven you in Christ.\" (Eph 4:32)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Forgiveness",
+      "story": "Forgiveness means letting go of hurt and giving people a second chance, just as God forgives us.",
+      "keyLine": "God forgives me, so I forgive.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice forgiveness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "How did we forgive each other this week?",
+        "Why does God want us to forgive?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice forgiveness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Merciful Jesus, help me forgive others as You forgive me. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Say 'I forgive you' when someone is sorry",
+          "TUE: Don't hit back when someone is unkind",
+          "WED: Say sorry when you hurt someone",
+          "THU: Give a sibling a second chance",
+          "FRI: Pray the Our Father slowly",
+          "SAT: Pray for someone who was unkind to you"
+        ]
+      },
+      "words": [
+        "forgive",
+        "sorry",
+        "mercy",
+        "peace"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Forgiveness",
+      "story": "Forgiveness and mercy mean forgiving those who hurt us, giving them a second chance, and not taking revenge. Forgiving does not mean the hurt didn't matter; it means we choose to let go of anger and wish the other person good. God forgives us every time we are sorry, and Jesus forgave even from the cross. We pray, \"Forgive us our trespasses, as we forgive those who trespass against us.\"",
+      "keyLine": "God forgives me, so I forgive.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice forgiveness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "How did we forgive each other this week?",
+        "How did God help us grow in forgiveness?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice forgiveness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Merciful Jesus, help me forgive others as You forgive me. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Let go of an old grudge",
+          "TUE: Forgive without bringing it up again",
+          "WED: Ask forgiveness from someone you hurt",
+          "THU: Choose not to get even",
+          "FRI: Make an examination of conscience",
+          "SAT: Plan to go to Confession soon"
+        ]
+      },
+      "words": [
+        "forgive",
+        "sorry",
+        "mercy",
+        "peace"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_FORGIVENESS_main.png",
+    "heart": "VIR_FORGIVENESS_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing forgiveness together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

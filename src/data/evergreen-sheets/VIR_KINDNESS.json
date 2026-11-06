@@ -1,0 +1,97 @@
+{
+  "key": "VIR_KINDNESS",
+  "liturgicalName": "Kindness Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Acts 20:35",
+  "keyVerseDR": "\"It is a more blessed thing to give, rather than to receive.\" (Acts 20:35)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Kindness",
+      "story": "Kindness means doing good and helping people. A kind heart is generous and loves to share!",
+      "keyLine": "It is better to give than to receive.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice kindness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What kind or generous thing did we see this week?",
+        "What can our family share with others?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice kindness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, make my heart kind and generous. Help me give with joy, like You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Share a toy or snack with someone",
+          "TUE: Help someone who needs a hand",
+          "WED: Say something kind to a classmate",
+          "THU: Give a smile to everyone you meet",
+          "FRI: Make a gift for someone",
+          "SAT: Put a coin in the poor box at church"
+        ]
+      },
+      "words": [
+        "kind",
+        "share",
+        "give",
+        "help"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Kindness",
+      "story": "Kindness means doing good things for others, helping them, and caring for them. A kind heart is also a generous heart: it shares toys, time, and treats without expecting anything back. Jesus said it is more blessed to give than to receive. Every kind act, big or small, is a way of loving Jesus, who said that what we do for others we do for Him.",
+      "keyLine": "It is better to give than to receive.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice kindness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What kind or generous thing did we see this week?",
+        "How did God help us grow in kindness?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice kindness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, make my heart kind and generous. Help me give with joy, like You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Do a secret kind deed for a family member",
+          "TUE: Give away a toy or book in good shape",
+          "WED: Help a neighbor with a small job",
+          "THU: Include someone who is often left out",
+          "FRI: Write a kind note to a teacher",
+          "SAT: Save money to give to people in need"
+        ]
+      },
+      "words": [
+        "kind",
+        "share",
+        "give",
+        "help"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_KINDNESS_main.png",
+    "heart": "VIR_KINDNESS_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing kindness together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

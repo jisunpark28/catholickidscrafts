@@ -1,0 +1,97 @@
+{
+  "key": "VIR_SPIRITUALITY",
+  "liturgicalName": "Spirituality Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Acts 17:28",
+  "keyVerseDR": "\"For in him we live, and move, and are.\" (Acts 17:28)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Spirituality",
+      "story": "Spirituality means living close to God every day. Our life has meaning because God made us and loves us.",
+      "keyLine": "In God I live and move and am.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice spirituality all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "Where did we feel close to God this week?",
+        "How can we make prayer part of every day?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice spirituality every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "My God, I believe in You, I hope in You, and I love You. Help me live close to You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Make the Sign of the Cross when you wake",
+          "TUE: Say grace before every meal",
+          "WED: Read a short Bible story together",
+          "THU: Visit Jesus in a church",
+          "FRI: Say a night prayer with your family",
+          "SAT: Get ready for Sunday Mass"
+        ]
+      },
+      "words": [
+        "prayer",
+        "faith",
+        "God",
+        "Mass"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Spirituality",
+      "story": "Spirituality means living by faith in God and knowing that our life has meaning and purpose in Him. As Catholics, we grow close to God through prayer, the Bible, the sacraments, and especially the Mass, where we receive Jesus. Saint Paul says that in God we live and move and have our being. God made each of us for a reason: to know Him, love Him, and serve Him.",
+      "keyLine": "In God I live and move and am.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice spirituality all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "Where did we feel close to God this week?",
+        "How did God help us grow in spirituality?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice spirituality every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "My God, I believe in You, I hope in You, and I love You. Help me live close to You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Pray a decade of the Rosary as a family",
+          "TUE: Read and talk about Sunday's Gospel",
+          "WED: Make a short visit to the Blessed Sacrament",
+          "THU: Learn about your patron saint",
+          "FRI: Offer your day to God each morning",
+          "SAT: Go to Mass and pay close attention"
+        ]
+      },
+      "words": [
+        "prayer",
+        "faith",
+        "God",
+        "Mass"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_SPIRITUALITY_main.png",
+    "heart": "VIR_SPIRITUALITY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing spirituality together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

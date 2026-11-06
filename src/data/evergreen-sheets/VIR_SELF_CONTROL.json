@@ -1,0 +1,97 @@
+{
+  "key": "VIR_SELF_CONTROL",
+  "liturgicalName": "Self-Control Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Proverbs 16:32",
+  "keyVerseDR": "\"He that ruleth his spirit, is better than he that taketh cities.\" (Prv 16:32)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Self-Control",
+      "story": "Self-control means being the boss of your feelings and actions. You can wait, breathe, and choose!",
+      "keyLine": "I can stop, breathe, and choose.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice self-control all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we use self-control this week?",
+        "What helps us calm down when we are upset?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice self-control every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Holy Spirit, help me control my words, feelings, and actions. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Take three deep breaths when upset",
+          "TUE: Wait your turn without whining",
+          "WED: Turn off the screen when asked",
+          "THU: Save a treat for later",
+          "FRI: Use calm words when angry",
+          "SAT: Go to bed on time"
+        ]
+      },
+      "words": [
+        "calm",
+        "wait",
+        "control",
+        "breathe"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Self-Control",
+      "story": "Self-control means guiding our feelings and actions and holding back impulses. When we feel angry, greedy, or impatient, we can stop, breathe, and choose what is right. Proverbs says the person who rules his own spirit is stronger than a soldier who captures a city! Self-control is a fruit of the Holy Spirit, and it grows each time we practice saying a good 'no.'",
+      "keyLine": "I can stop, breathe, and choose.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice self-control all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we use self-control this week?",
+        "How did God help us grow in self-control?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice self-control every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Holy Spirit, help me control my words, feelings, and actions. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Give up a snack or game for a day",
+          "TUE: Count to ten before reacting",
+          "WED: Do homework before playing",
+          "THU: Keep your voice calm in an argument",
+          "FRI: Limit screen time and play outside",
+          "SAT: Offer a small sacrifice to Jesus"
+        ]
+      },
+      "words": [
+        "calm",
+        "wait",
+        "control",
+        "breathe"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_SELF_CONTROL_main.png",
+    "heart": "VIR_SELF_CONTROL_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing self-control together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

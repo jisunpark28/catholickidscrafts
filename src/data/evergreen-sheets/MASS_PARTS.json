@@ -1,0 +1,105 @@
+{
+  "key": "MASS_PARTS",
+  "liturgicalName": "Four Parts of the Mass",
+  "season": "The Order of Mass",
+  "gospelRef": "Mark 16:15",
+  "keyVerseDR": "\"Go ye into the whole world, and preach the gospel to every creature.\" (Mk 16:15)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Four Parts of the Mass",
+      "story": "The Mass has four parts. We gather in God's name. We listen to God's Word. We receive Jesus. Then we are sent out to love our neighbor and share the Good News!",
+      "keyLine": "We gather, listen, receive, and go!",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What are the four parts of the Mass?",
+        "How can we share Jesus after Mass this week?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Jesus, thank You for the gift of the Mass. Send me out to love and serve You. Amen.",
+      "activity": {
+        "title": "Match the parts of the Mass",
+        "intro": "Draw a line from each part of the Mass to what we do.",
+        "type": "matchup",
+        "pairs": [
+          [
+            "Introductory Rites",
+            "In the name of the Father..."
+          ],
+          [
+            "Liturgy of the Word",
+            "We listen to God's Word"
+          ],
+          [
+            "Liturgy of the Eucharist",
+            "We receive Jesus"
+          ],
+          [
+            "Concluding Rites",
+            "Go, love your neighbor and share the Gospel"
+          ]
+        ]
+      },
+      "words": [
+        "gather",
+        "listen",
+        "receive",
+        "go"
+      ]
+    },
+    "level2": {
+      "title": "Four Parts of the Mass",
+      "story": "The Mass has four main parts. In the Introductory Rites, we gather and begin \"In the name of the Father, and of the Son, and of the Holy Spirit.\" In the Liturgy of the Word, we listen to God's Word from the Bible. In the Liturgy of the Eucharist, bread and wine become Jesus' Body and Blood, and we receive Jesus in Holy Communion. In the Concluding Rites, the priest blesses us and sends us out: \"Go in peace.\" We answer, \"Thanks be to God!\" Mass does not really end at the church door. Jesus sends us to love our neighbor and share the Gospel all week long.",
+      "keyLine": "We gather, listen, receive, and go!",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What are the four parts of the Mass?",
+        "How can we share Jesus after Mass this week?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Jesus, thank You for the gift of the Mass. Send me out to love and serve You. Amen.",
+      "activity": {
+        "title": "Put the Four Parts of the Mass in order",
+        "intro": "Number the steps 1 to 4. Then write which step you like best.",
+        "type": "wordorder",
+        "pieces": [
+          "Introductory Rites: we gather",
+          "Liturgy of the Word: we listen",
+          "Liturgy of the Eucharist: we receive",
+          "Concluding Rites: we are sent"
+        ]
+      },
+      "words": [
+        "gather",
+        "listen",
+        "receive",
+        "go"
+      ]
+    }
+  },
+  "art": {
+    "main": "MASS_PARTS_main.png",
+    "heart": "MASS_PARTS_heart.png",
+    "icons": [
+      "icon_altar.png",
+      "icon_cross.png",
+      "icon_bible.png"
+    ],
+    "mainBrief": "families leaving church with joy after the blessing",
+    "heartBrief": "Mass symbols around a heart"
+  }
+}

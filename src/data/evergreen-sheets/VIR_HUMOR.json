@@ -1,0 +1,97 @@
+{
+  "key": "VIR_HUMOR",
+  "liturgicalName": "Humor Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Philippians 4:4",
+  "keyVerseDR": "\"Rejoice in the Lord always; again, I say, rejoice.\" (Phil 4:4)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Humor",
+      "story": "Humor means bringing smiles and seeing the bright side, with jokes that never hurt anyone.",
+      "keyLine": "I rejoice in the Lord always!",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice humor all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What made our family laugh together this week?",
+        "How can we tell if a joke is kind?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice humor every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, fill me with Your joy. Help me bring smiles that never hurt anyone. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Tell a kind joke at dinner",
+          "TUE: Make someone smile today",
+          "WED: Laugh at your own small mistake",
+          "THU: Find the bright side of a bad moment",
+          "FRI: Play a silly game with your family",
+          "SAT: Thank God for laughter"
+        ]
+      },
+      "words": [
+        "joy",
+        "smile",
+        "laugh",
+        "rejoice"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Humor",
+      "story": "Humor means enjoying laughter, bringing smiles to others, and seeing the bright side of things. Good humor is playful and kind; it never makes fun of someone or hurts their feelings. Saints like Philip Neri and Thomas More loved to laugh. Saint Paul says to rejoice in the Lord always. Joy is a sign that we trust God, even on cloudy days.",
+      "keyLine": "I rejoice in the Lord always!",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice humor all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What made our family laugh together this week?",
+        "How did God help us grow in humor?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice humor every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, fill me with Your joy. Help me bring smiles that never hurt anyone. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Cheer up someone with kind humor",
+          "TUE: Never laugh at someone, only with them",
+          "WED: Turn a grumpy moment into a smile",
+          "THU: Learn about joyful Saint Philip Neri",
+          "FRI: Plan a family game or funny-story night",
+          "SAT: Say a joyful prayer of praise"
+        ]
+      },
+      "words": [
+        "joy",
+        "smile",
+        "laugh",
+        "rejoice"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_HUMOR_main.png",
+    "heart": "VIR_HUMOR_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing humor together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

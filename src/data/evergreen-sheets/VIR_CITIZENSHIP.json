@@ -1,0 +1,97 @@
+{
+  "key": "VIR_CITIZENSHIP",
+  "liturgicalName": "Citizenship Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Galatians 6:2",
+  "keyVerseDR": "\"Bear ye one another's burdens; and so you shall fulfil the law of Christ.\" (Gal 6:2)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Citizenship",
+      "story": "Citizenship means working together and doing your part for your family, class, parish, and town.",
+      "keyLine": "I will do my part.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice citizenship all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "How did each of us do our part this week?",
+        "How can our family help our parish or town?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice citizenship every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, help me be a good member of my family, parish, and town. Help me do my part. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Do your chores without being asked",
+          "TUE: Clean up a mess you didn't make",
+          "WED: Follow the rules at school",
+          "THU: Help your team in a game",
+          "FRI: Pick up litter at the park",
+          "SAT: Help get ready for Mass on Sunday"
+        ]
+      },
+      "words": [
+        "team",
+        "help",
+        "serve",
+        "community"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Citizenship",
+      "story": "Citizenship means cooperating with others, being loyal to the groups we belong to, and doing our part. We are members of a family, a class, a parish, a town, and a country. Each one needs us! Saint Paul says to carry one another's burdens. Good citizens help the team, follow fair rules, care for shared places, and serve the common good.",
+      "keyLine": "I will do my part.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice citizenship all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "How did each of us do our part this week?",
+        "How did God help us grow in citizenship?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice citizenship every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, help me be a good member of my family, parish, and town. Help me do my part. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Join a parish service project",
+          "TUE: Help a classmate on a group project",
+          "WED: Care for something shared, like a park",
+          "THU: Pray for leaders of our country",
+          "FRI: Recycle and take care of creation",
+          "SAT: Thank a firefighter, nurse, or helper"
+        ]
+      },
+      "words": [
+        "team",
+        "help",
+        "serve",
+        "community"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_CITIZENSHIP_main.png",
+    "heart": "VIR_CITIZENSHIP_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing citizenship together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

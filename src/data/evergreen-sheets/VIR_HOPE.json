@@ -1,0 +1,97 @@
+{
+  "key": "VIR_HOPE",
+  "liturgicalName": "Hope Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Romans 15:13",
+  "keyVerseDR": "\"Now the God of hope fill you with all joy and peace in believing.\" (Rom 15:13)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Hope",
+      "story": "Hope means expecting good things and working for them, trusting that God holds our future.",
+      "keyLine": "My hope is in God.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice hope all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What are we hoping for, and how can we work toward it?",
+        "When did God bring good out of a hard time?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice hope every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "God of hope, fill me with joy and peace. I trust my future to You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Say: 'God is with me' when things go wrong",
+          "TUE: Make a wish and pray about it",
+          "WED: Cheer up someone who feels sad",
+          "THU: Look forward to something good",
+          "FRI: Plant a seed and wait for it to grow",
+          "SAT: Pray for someone who needs hope"
+        ]
+      },
+      "words": [
+        "hope",
+        "trust",
+        "future",
+        "heaven"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Hope",
+      "story": "Hope means expecting the best, working toward it, and trusting that a good future can be built with God. A hopeful person does not give up when things go wrong, because God is always at work. Saint Paul calls Him the God of hope, who fills us with joy and peace. Our greatest hope is heaven, where we will be with God forever.",
+      "keyLine": "My hope is in God.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice hope all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What are we hoping for, and how can we work toward it?",
+        "How did God help us grow in hope?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice hope every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "God of hope, fill me with joy and peace. I trust my future to You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Set a goal and take a first step",
+          "TUE: Find something good in a hard day",
+          "WED: Encourage someone who is discouraged",
+          "THU: Pray for people who are suffering",
+          "FRI: Remember a time God helped our family",
+          "SAT: Talk about heaven as a family"
+        ]
+      },
+      "words": [
+        "hope",
+        "trust",
+        "future",
+        "heaven"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_HOPE_main.png",
+    "heart": "VIR_HOPE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing hope together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

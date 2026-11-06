@@ -1,0 +1,97 @@
+{
+  "key": "VIR_LOVE_OF_LEARNING",
+  "liturgicalName": "Love of Learning Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Proverbs 1:5",
+  "keyVerseDR": "\"A wise man shall hear, and shall be wiser.\" (Prv 1:5)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Love of Learning",
+      "story": "Love of learning means wanting to learn new skills and new things. Every day God gives us a chance to grow!",
+      "keyLine": "I love to learn and grow.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice love of learning all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What new thing did each of us learn this week?",
+        "What would we like to learn together next?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice love of learning every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, thank You for my mind. Help me learn with joy and grow wiser each day. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Learn a new word and use it today",
+          "TUE: Practice reading for ten minutes",
+          "WED: Learn one line of a new prayer",
+          "THU: Ask someone to teach you a skill",
+          "FRI: Learn a fact about a saint",
+          "SAT: Show your family something you learned"
+        ]
+      },
+      "words": [
+        "learn",
+        "grow",
+        "read",
+        "practice"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Love of Learning",
+      "story": "Love of learning is the joy of growing in skills and knowledge. It means practicing until we master something new, reading, asking, and trying again. God gave us minds to know Him and His world. Saints like Thomas Aquinas loved to learn so they could love God more. Learning is not just for school; it is a lifelong adventure with Jesus.",
+      "keyLine": "I love to learn and grow.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice love of learning all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What new thing did each of us learn this week?",
+        "How did God help us grow in love of learning?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice love of learning every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, thank You for my mind. Help me learn with joy and grow wiser each day. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Set one learning goal for the week",
+          "TUE: Practice a hard skill for 15 minutes",
+          "WED: Memorize a short Bible verse",
+          "THU: Teach a younger child something you know",
+          "FRI: Read a chapter of a good book",
+          "SAT: Learn more about one part of the Mass"
+        ]
+      },
+      "words": [
+        "learn",
+        "grow",
+        "read",
+        "practice"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_LOVE_OF_LEARNING_main.png",
+    "heart": "VIR_LOVE_OF_LEARNING_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing love of learning together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}
