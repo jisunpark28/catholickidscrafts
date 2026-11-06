@@ -1,9 +1,7 @@
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { CardsBrowser } from "@/components/resource/CardsBrowser";
 import { CustomSheetCardGrid } from "@/components/resource/CustomSheetCardGrid";
-import { ResourceCardGrid } from "@/components/resource/ResourceCardGrid";
 import { ResourceSearchBar } from "@/components/resource/ResourceSearchBar";
-import { ResourceTabs } from "@/components/resource/ResourceTabs";
 import { SundayBundle } from "@/components/resource/SundayBundle";
 import { UnifiedSearchResults } from "@/components/resource/UnifiedSearchResults";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -20,7 +18,7 @@ import { getResourceNav } from "@/lib/resource/nav";
 import { listCustomSheets } from "@/lib/resource/custom-sheet-db";
 import { featuredCardFor } from "@/lib/resource/featured-card";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
-import { parseSeason, RESOURCE_SEASONS, searchSheets } from "@/lib/resource/sheets";
+import { parseSeason, RESOURCE_SEASONS } from "@/lib/resource/sheets";
 import {
   COUNTRY_COOKIE,
   COUNTRY_LABELS,
@@ -57,14 +55,14 @@ function shortDate(ymd: string): string {
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const sp = await searchParams;
-  // Any filtered / tab / card view (incl. the Plus-gated Cards tab) stays out of the index.
+  // Filtered library views and shared cards stay out of the index.
   const filtered = Boolean(
-    one(sp.q) || one(sp.season) || one(sp.view) || one(sp.level) || one(sp.card) || one(sp.cat),
+    one(sp.q) || one(sp.season) || one(sp.view) || one(sp.level) || one(sp.card) || one(sp.cat) || one(sp.page),
   );
   return pageMetadata({
-    title: "Sunday Gospel Activity Sheets for Catholic Kids",
+    title: "Catholic Worksheets and Picture Cards for Kids",
     description:
-      "Free printable Sunday Gospel activity sheets for every Sunday and feast. Find this Sunday's sheet or search by Gospel, topic or season, then print Level 1 or Level 2.",
+      "Find this Sunday's Gospel sheet, Mass and virtue worksheets, and Catholic picture cards. Search one resource library by Gospel, saint, topic or season.",
     path: "/resource",
     ...(filtered ? { robots: { index: false, follow: true } } : {}),
   });
@@ -84,19 +82,21 @@ export default async function ResourcePage({ searchParams }: Props) {
   const viewParam = parseView(one(sp.view));
   const country = pickCountry(undefined, cookieStore.get(COUNTRY_COOKIE)?.value, h.get("x-vercel-ip-country"));
 
-  // A text search shows one unified results view (sheets + cards); the tab stays in the URL
-  // so "Clear search" returns to it. A season filter alone still opens the Weekly Sheet list.
+  // Old card share URLs still open their detail panel; all browsing/search is one library.
   const searchMode = Boolean(q.trim());
-  const view: ResourceView =
-    viewParam === "custom" || viewParam === "cards"
-      ? viewParam
-      : viewParam === "all" || (!searchMode && season)
-        ? "all"
-        : "";
+  const sharedCard = viewParam === "cards" ? getPictureCard(one(sp.card)) : null;
+  const view: ResourceView = searchMode
+    ? "all"
+    : sharedCard
+      ? "cards"
+      : viewParam === "custom"
+        ? "custom"
+        : viewParam === "all" || viewParam === "cards" || season
+          ? "all"
+          : "";
 
   const sunday = view === "" || view === "cards" ? thisSunday(country) : null;
   const sheet = sunday ? getSundaySheet(sunday.key) : null;
-  const results = view === "all" && !searchMode ? searchSheets({ q: "", season }) : [];
   const thisSundayKey = viewer.thisSundayKey ?? sunday?.key ?? null;
   const siteUrl = getSiteUrl();
   const sundayCards = sunday ? cardsForSunday(sunday.key) : { primary: null, more: [] };
@@ -109,13 +109,16 @@ export default async function ResourcePage({ searchParams }: Props) {
     .map((c) => c.id)
     .filter((id, i, all) => all.indexOf(id) === i);
   const cardDates = view === "cards" && sunday ? upcomingCardDates(todayIn(country, new Date()), sunday.date, country) : {};
-  const cardsSundayOnly = view === "cards" && !searchMode && one(sp.sunday) === "1";
-  const searchHits = searchMode ? unifiedSearch(q, season, thisSundayKey) : [];
-  const clearParams = new URLSearchParams();
-  if (view) clearParams.set("view", view);
-  if (season && view !== "") clearParams.set("season", season);
+  const searchHits = view === "all" ? unifiedSearch(q, season, thisSundayKey) : [];
+  const clearParams = new URLSearchParams({ view: "all" });
+  if (season) clearParams.set("season", season);
   if (level === 2) clearParams.set("level", "2");
-  const clearHref = `/resource${clearParams.toString() ? `?${clearParams.toString()}` : ""}`;
+  const clearHref = `/resource?${clearParams.toString()}`;
+  const resultsParams = new URLSearchParams(clearParams);
+  if (searchMode) resultsParams.set("q", q.trim());
+  const resultsHref = `/resource?${resultsParams.toString()}`;
+  const requestedPage = Number(one(sp.page) ?? "1");
+  const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
 
   let customSheets: Awaited<ReturnType<typeof listCustomSheets>> = [];
   let customError: string | null = null;
@@ -134,18 +137,15 @@ export default async function ResourcePage({ searchParams }: Props) {
   return (
     <HomePdfShell groups={nav.groups} dailyMassLabel={nav.dailyMassLabel}>
       <JsonLd nodes={[breadcrumbNode([{ name: "Resource", path: "/resource" }])]} />
-      <h1 className="sr-only">Sunday Gospel activity sheets</h1>
+      <h1 className="sr-only">Catholic worksheets and picture cards</h1>
       <ResourceSearchBar
-        state={{ q, season: season ?? "", level, view, sunday: cardsSundayOnly }}
+        key={`${q}:${season ?? ""}:${view}`}
+        state={{ q, season: season ?? "", level, view: view === "cards" ? "all" : view }}
         seasons={RESOURCE_SEASONS}
         isPlus={viewer.isPlus}
       />
-      <ResourceTabs
-        active={searchMode ? null : view === "" ? "sunday" : view === "all" ? "sheets" : view}
-        level={level}
-      />
 
-      {searchMode ? (
+      {view === "all" ? (
         <UnifiedSearchResults
           q={q.trim()}
           hits={searchHits}
@@ -155,6 +155,8 @@ export default async function ResourcePage({ searchParams }: Props) {
           clearHref={clearHref}
           siteUrl={siteUrl}
           freeCardId={freeCardId}
+          page={page}
+          resultsHref={resultsHref}
         />
       ) : view === "cards" ? (
         <CardsBrowser
@@ -165,9 +167,9 @@ export default async function ResourcePage({ searchParams }: Props) {
           siteUrl={siteUrl}
           featuredIds={featuredIds}
           initialQ={q}
-          initialCardId={getPictureCard(one(sp.card))?.id ?? featuredIds[0] ?? null}
+          initialCardId={sharedCard?.id ?? null}
           season={season ?? ""}
-          onlySunday={cardsSundayOnly}
+          onlySunday={false}
         />
       ) : view === "custom" ? (
         <section aria-label="Custom sheets" className="mt-5">
@@ -212,25 +214,6 @@ export default async function ResourcePage({ searchParams }: Props) {
             />
           )}
         </section>
-      ) : view === "all" ? (
-        <section aria-label="Search results" className="mt-5">
-          {results.length ? (
-            <ResourceCardGrid
-              sheets={results}
-              level={level}
-              isPlus={viewer.isPlus}
-              thisSundayKey={thisSundayKey}
-            />
-          ) : (
-            <p className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm text-[#6b7280]">
-              No sheets match. Try a Gospel name (e.g. “Luke”), a story (e.g. “lost sheep”) or{" "}
-              <Link href="/resource" className="text-[#d35400]">
-                go back to this Sunday
-              </Link>
-              .
-            </p>
-          )}
-        </section>
       ) : sunday && sheet ? (
         <SundayBundle
           sheet={sheet}
@@ -256,7 +239,7 @@ export default async function ResourcePage({ searchParams }: Props) {
         <p className="mt-5 rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm text-[#6b7280]">
           This Sunday&apos;s sheet is not available right now.{" "}
           <Link href="/resource?view=all" className="text-[#d35400]">
-            Browse all sheets
+            Browse all resources
           </Link>
           .
         </p>

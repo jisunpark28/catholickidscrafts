@@ -88,7 +88,7 @@ export function cardDownloadPath(id: string): string {
   return `/api/resource/cards/${id}/download`;
 }
 
-/** Shareable page link (the Resource Cards tab opened on this card). */
+/** Shareable page link (the Resource library opened on this card). */
 export function cardSharePath(id: string): string {
   return `/resource?view=cards&card=${encodeURIComponent(id)}`;
 }

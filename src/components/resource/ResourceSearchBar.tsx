@@ -7,10 +7,8 @@ export type ResourceSearchState = {
   q: string;
   season: string; // "" = all
   level: 1 | 2;
-  /** "" = this Sunday, "all" = library, "custom" = saved sheets, "cards" = picture cards */
-  view: "" | "all" | "custom" | "cards";
-  /** Cards tab only: show just this Sunday's card(s). */
-  sunday?: boolean;
+  /** "" = this Sunday, "all" = the combined library, "custom" = saved sheets */
+  view: "" | "all" | "custom";
 };
 
 type Props = {
@@ -31,8 +29,7 @@ const selectCls =
 
 function href(s: ResourceSearchState): string {
   const p = new URLSearchParams();
-  if (s.view === "all" || s.view === "custom" || s.view === "cards") p.set("view", s.view);
-  if (s.view === "cards" && s.sunday) p.set("sunday", "1");
+  if (s.view === "all" || s.view === "custom") p.set("view", s.view);
   if (s.q.trim()) p.set("q", s.q.trim());
   if (s.season) p.set("season", s.season);
   if (s.level === 2) p.set("level", "2");
@@ -40,23 +37,17 @@ function href(s: ResourceSearchState): string {
   return `/resource${qs ? `?${qs}` : ""}`;
 }
 
-/**
- * One search + filter bar for every Resource tab (same controls everywhere):
- * search · ★ This Sunday · All · Custom (Plus) · Season · Level 1/2.
- * On the Cards tab the controls filter cards; elsewhere they drive the Sunday sheets.
- */
+/** One library search, with Sunday, All, saved sheets, season and level controls. */
 export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
   const router = useRouter();
   const [q, setQ] = useState(state.q);
-  const cards = state.view === "cards";
 
   const go = (patch: Partial<ResourceSearchState>) => router.push(href({ ...state, q, ...patch }));
 
   const searching = Boolean(state.q.trim());
-  const thisSundayActive = !searching && (cards ? Boolean(state.sunday) : state.view === "" && !state.season);
-  const allActive =
-    !searching && (cards ? !state.sunday && !state.season : state.view === "all" || (state.view === "" && Boolean(state.season)));
-  const customActive = state.view === "custom";
+  const thisSundayActive = !searching && state.view === "" && !state.season;
+  const allActive = !searching && state.view === "all";
+  const customActive = !searching && state.view === "custom";
 
   return (
     <form
@@ -64,8 +55,8 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
       className="flex flex-wrap items-center gap-2.5 rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] p-3"
       onSubmit={(e) => {
         e.preventDefault();
-        // One unified results view (sheets + cards) from any tab; clearing returns to this tab.
-        go({ sunday: false });
+        // Every query searches worksheets and cards, including from saved sheets.
+        go({ view: "all" });
       }}
     >
       <label className="flex min-w-[15rem] flex-1 items-center gap-2 rounded-full border border-[#e7e3de] bg-white px-4 py-2">
@@ -76,11 +67,7 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
           name="q"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder={
-            cards
-              ? "Search sheets and cards — e.g. 'Rosary', 'Saint Joseph'"
-              : "Search sheets and cards — Gospel, saint, feast or keyword"
-          }
+          placeholder="Search worksheets and cards - Gospel, saint, feast or keyword"
           className="w-full bg-transparent text-sm text-[#1c1c1c] outline-none placeholder:text-[#6b7280]"
           maxLength={80}
         />
@@ -90,13 +77,7 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         type="button"
         onClick={() => {
           setQ("");
-          router.push(
-            href(
-              cards
-                ? { q: "", season: "", level: state.level, view: "cards", sunday: true }
-                : { q: "", season: "", level: state.level, view: "" },
-            ),
-          );
+          router.push(href({ q: "", season: "", level: state.level, view: "" }));
         }}
         aria-pressed={thisSundayActive}
         className={`${pill} ${
@@ -104,7 +85,7 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
             ? "border-[#d35400] bg-[#d35400] text-white shadow-[0_2px_6px_rgba(211,84,0,0.3)]"
             : "border-2 border-[#d35400] bg-white text-[#d35400] hover:bg-[#fff6ef]"
         }`}
-        title={cards ? "Show this Sunday's card(s)" : "This Sunday's bundle"}
+        title="This Sunday's bundle"
       >
         ★ This Sunday
       </button>
@@ -113,7 +94,7 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         type="button"
         onClick={() => {
           setQ("");
-          go({ q: "", season: "", view: cards ? "cards" : "all", sunday: false });
+          go({ q: "", season: "", view: "all" });
         }}
         aria-pressed={allActive}
         className={`${pill} ${
@@ -129,7 +110,7 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         type="button"
         onClick={() => {
           setQ("");
-          go({ q: "", season: "", view: "custom", sunday: false });
+          go({ q: "", season: "", view: "custom" });
         }}
         aria-pressed={customActive}
         title={isPlus ? "Your saved, edited sheets" : "Saved custom sheets need Plus (one-time, no auto-renew)"}
@@ -148,13 +129,7 @@ export function ResourceSearchBar({ state, seasons, isPlus }: Props) {
         <select
           className={selectCls}
           value={state.season}
-          onChange={(e) =>
-            go(
-              cards || state.q.trim()
-                ? { season: e.target.value, sunday: false }
-                : { season: e.target.value, view: state.view === "custom" ? "all" : state.view || "all" },
-            )
-          }
+          onChange={(e) => go({ season: e.target.value, view: "all" })}
         >
           <option value="">Season: All</option>
           {seasons.map((s) => (

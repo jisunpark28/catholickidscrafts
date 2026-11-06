@@ -35,7 +35,8 @@
     "test:sheet-keys": "tsx scripts/test-sheet-keys.ts",
     "generate:sheet-bases": "tsx scripts/generate-sheet-bases.ts",
     "cards:thumbs": "tsx scripts/build-card-thumbs.ts",
-    "cards:upload": "tsx scripts/upload-cards.ts"
+    "cards:upload": "tsx scripts/upload-cards.ts",
+    "test:resource-unified": "tsx scripts/test-resource-unified.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
