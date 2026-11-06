@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { getSituation, SITUATIONS } from "@/data/moms-bible/situations";
 import { getSituationSeo } from "@/data/moms-bible/situation-seo";
 import { resolveSituationVerse } from "@/lib/moms-bible/resolve-situation-verse";
+import { pinOgImage } from "@/lib/seo/pin-og";
 import { pageMetadata } from "@/lib/site-metadata";
 import {
   absoluteSiteUrl,
@@ -33,6 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: seo.seoTitle,
     description: seo.description,
     path: `${HUB_PATH}/${momentSlug}`,
+    image: pinOgImage("verse", momentSlug, seo.seoTitle),
   });
 }
 
