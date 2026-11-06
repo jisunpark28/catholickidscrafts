@@ -37,7 +37,7 @@ export default async function PlayHubPage() {
         </h1>
       </header>
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))] content-start gap-5">
         {games.map((game) => (
           <article
             key={game.slug}
