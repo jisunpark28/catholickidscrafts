@@ -2,6 +2,7 @@ import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SheetFabricLiveBase } from "@/components/resource/SheetFabricLiveBase";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
 import { getResourceNav } from "@/lib/resource/nav";
+import { requireFamilySession } from "@/lib/family-auth";
 import { sheetOpenAllowed, resolveResourceViewer } from "@/lib/resource/resolve-access";
 import {
   sheetBasePublicPaths,
@@ -12,7 +13,7 @@ import { resourcePath, slugToKey, yearLabel } from "@/lib/resource/sheets";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -50,16 +51,18 @@ async function hasPng(key: string, level: 1 | 2) {
 
 /** Plus Fabric editor: static base when present, otherwise live browser capture. */
 export default async function ResourceEditPage({ params, searchParams }: Props) {
-  const [{ slug }, sp, nav, viewer] = await Promise.all([
+  const [{ slug }, sp, nav, viewer, session] = await Promise.all([
     params,
     searchParams,
     getResourceNav(),
     resolveResourceViewer(),
+    requireFamilySession(),
   ]);
   const key = slugToKey(slug);
   const sheet = key ? getSundaySheet(key) : null;
   if (!key || !sheet) notFound();
-  // Free / signed-out visitors may try the editor; Save, Print/export and photo APIs re-check Plus.
+  if (!session) redirect("/account/login");
+  // Signed-in free families may try this Sunday's editor; Save, Print/export and photo APIs re-check Plus.
   const level = parseLevelParam(sp.level);
   const allowed = sheetOpenAllowed(viewer, key);
   const layout = await loadLayout(key, level);

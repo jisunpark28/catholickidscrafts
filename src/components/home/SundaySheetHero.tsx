@@ -16,9 +16,11 @@ type Props = {
   printBasePath: string;
   /**
    * Sheet editor for this sheet, e.g. `/resource/edit/a-ot32` (null for the legacy DB fallback sheet).
-   * Free and signed-out visitors can try the editor; Save / Print need Plus.
+   * Signed-in free families can try the editor; Save / Print need Plus. Signed-out visitors go to sign-in.
    */
   editBasePath?: string | null;
+  /** When false, Customize goes to parent sign-in instead of the editor. */
+  signedIn?: boolean;
   /** Liturgy page for the current season, e.g. "/liturgy/ordinary-time". */
   seasonHref: string;
   seasonLabel: string;
@@ -64,6 +66,7 @@ export function SundaySheetHero({
   gospelRef,
   printBasePath,
   editBasePath = null,
+  signedIn = false,
   seasonHref,
   seasonLabel,
   groupInquiryHref,
@@ -207,14 +210,14 @@ export function SundaySheetHero({
           </button>
           {editBasePath ? (
             <Link
-              href={level === 2 ? `${editBasePath}?level=2` : editBasePath}
+              href={signedIn ? (level === 2 ? `${editBasePath}?level=2` : editBasePath) : "/account/login"}
               className="flex w-full flex-col items-center rounded-full border-2 border-[#2e7d32] bg-white px-7 py-2.5 text-[#2e7d32] no-underline hover:bg-[#f1f8f1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2e7d32] sm:w-auto"
             >
               <span className="text-lg font-bold leading-tight">
                 <span aria-hidden>✏️</span> Customize this sheet
               </span>
               <span className="text-xs font-medium leading-tight text-[#4b5563]">
-                Try free · save with Plus · no auto-renew
+                {signedIn ? "Try free · save with Plus · no auto-renew" : "Sign in to customize this sheet"}
               </span>
             </Link>
           ) : null}

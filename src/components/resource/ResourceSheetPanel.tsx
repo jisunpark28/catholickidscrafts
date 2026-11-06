@@ -92,7 +92,7 @@ function ActionButtons({
       <Link
         href={resourceEditPath(sheetKey, level)}
         className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`}
-        title={isPlus ? "Edit on the locked base sheet" : "Try the editor free — Save and Print need Plus"}
+        title={isPlus ? "Edit on the locked base sheet" : "Sign in to customize — Save and Print need Plus"}
       >
         <span aria-hidden>{isPlus ? "🔒" : "✏️"}</span> Edit
         <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>

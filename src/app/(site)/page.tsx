@@ -3,6 +3,7 @@ import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SundaySheetHero } from "@/components/home/SundaySheetHero";
 import { emailConfigured } from "@/lib/email";
+import { getFamilySession } from "@/lib/family-auth";
 import { loadHomeSundaySheet } from "@/lib/home-sunday-sheet";
 import { getPublicContactEmail } from "@/lib/site-contact";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
@@ -142,10 +143,11 @@ const FEATURES: Feature[] = [
 ];
 
 export default async function HomePage() {
-  const [copy, sections, sheet] = await Promise.all([
+  const [copy, sections, sheet, session] = await Promise.all([
     getSiteCopyMap(),
     getPublishedHomeSections(),
     loadHomeSundaySheet(),
+    getFamilySession(),
   ]);
   const contactEmail = getPublicContactEmail();
   const groupInquiryHref = contactEmail
@@ -202,6 +204,7 @@ export default async function HomePage() {
             gospelRef={sheet.gospelRef}
             printBasePath={sheet.printBasePath}
             editBasePath={sheet.key ? `/resource/edit/${sheet.slug}` : null}
+            signedIn={Boolean(session)}
             seasonHref={seasonHref}
             seasonLabel={seasonLabel}
             groupInquiryHref={groupInquiryHref}
