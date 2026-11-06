@@ -18,13 +18,23 @@ import type { MbAuthorDto, MbItemDto, MbNoteDto } from "@/lib/moms-bible/types";
 import { clip, ownerVerseMap, ownerVerseTexts } from "@/lib/moms-bible/verse-text";
 import { normalizePassageText } from "@/lib/typing-accuracy";
 import Link from "next/link";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { mbFetch } from "./mb-fetch";
 import type { MomsBibleState } from "./useMomsBible";
 import "@/styles/moms-bible.css";
 
 type VerseInfo = { chapter: number; verse: number; num: string; ref: string; id?: string; text: string };
 type VerseIndex = Map<string, VerseInfo>;
+
+/** Latest timestamp in a thread, so newer notes sort toward the bottom like a chat. */
+function noteLastAt(note: MbNoteDto): string {
+  let t = note.createdAt;
+  if (note.childRepliedAt && note.childRepliedAt > t) t = note.childRepliedAt;
+  for (const item of note.items) {
+    if (item.createdAt > t) t = item.createdAt;
+  }
+  return t;
+}
 
 type Props = {
   mb: MomsBibleState;
@@ -162,14 +172,16 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
   const [letterOpen, setLetterOpen] = useState(false);
 
   const visibleNotes = view.notes.filter((n) => !mb.showTabs || !mb.activeAuthor || n.authorParentId === mb.activeAuthor);
-  const letters = visibleNotes.filter((n) => n.startVerse === null);
-  const verseNotes = visibleNotes
-    .filter((n) => n.startVerse !== null)
-    .sort((a, b) => a.chapter - b.chapter || (a.startVerse ?? 0) - (b.startVerse ?? 0) || a.createdAt.localeCompare(b.createdAt));
+  const threadNotes = [...visibleNotes].sort((a, b) => noteLastAt(a).localeCompare(noteLastAt(b)));
 
   const sel = isParent ? mb.selected : null;
   // Child: a tapped verse opens a new message to a linked parent.
   const childSel = !isParent && mb.canChildMessage ? mb.selected : null;
+  const panelRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = panelRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [view.notes, letterOpen, sel, childSel]);
   const recipients = view.authors.filter((a) => a.linked);
   // A message the child started stays its own thread (parents answer it on its card).
   const myNoteAtSel = sel
@@ -179,11 +191,7 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
     : null;
   const selInfo = sel ? verses.get(`${sel.chapter}:${sel.verse}`) ?? null : null;
   const childSelInfo = childSel ? verses.get(`${childSel.chapter}:${childSel.verse}`) ?? null : null;
-  // New card for the selected verse, slotted in verse order.
-  const draftAt = sel && !myNoteAtSel ? sel : childSel;
-  const draftPos = draftAt
-    ? verseNotes.findIndex((n) => n.chapter > draftAt.chapter || (n.chapter === draftAt.chapter && (n.startVerse ?? 0) > draftAt.verse))
-    : -1;
+  // New compose cards sit at the bottom with the newest messages.
 
   const tabAuthors = isParent
     ? view.authors
@@ -220,7 +228,7 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
       </article>
     ) : null;
 
-  const noteCards: ReactNode[] = verseNotes.map((n) => (
+  const noteCards: ReactNode[] = threadNotes.map((n) => (
     <NoteCard
       key={n.id}
       note={n}
@@ -235,11 +243,11 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
       }
     />
   ));
-  if (draftCard) noteCards.splice(draftPos < 0 ? noteCards.length : draftPos, 0, draftCard);
-  if (childDraftCard) noteCards.splice(draftPos < 0 ? noteCards.length : draftPos, 0, childDraftCard);
+  if (draftCard) noteCards.push(draftCard);
+  if (childDraftCard) noteCards.push(childDraftCard);
 
   return (
-    <aside className="bible-reader__notes mb-panel" aria-label={isParent ? `${view.childName}'s Bible notes` : "Notes for you"}>
+    <aside ref={panelRef} className="bible-reader__notes mb-panel" aria-label={isParent ? `${view.childName}'s Bible notes` : "Notes for you"}>
       {mb.showTabs && (
         <div className="mb-tabs" role="tablist">
           {tabAuthors.map((a) => (
@@ -275,12 +283,9 @@ export function MomsBiblePanel({ mb, bookSlug, refBookName, segments, initialSit
         <p className="mb-hint">Tap a verse to send a message to {recipients.map((r) => r.roleLabel).join(" or ")}.</p>
       )}
 
-      {letters.map((n) => (
-        <NoteCard key={n.id} note={n} mb={mb} roleLabel={roleOf(n.authorParentId)} verse={null} />
-      ))}
       {noteCards}
 
-      {!isParent && letters.length + verseNotes.length === 0 && !childDraftCard && (
+      {!isParent && threadNotes.length === 0 && !childDraftCard && (
         <div className="mb-card mb-card--plain">
           <p>No notes in this chapter yet.</p>
           {view.highlights.length > 0 && <p className="mt-1 text-xs text-[#8a7d96]">Look for the coloured verses: they were marked just for you.</p>}
