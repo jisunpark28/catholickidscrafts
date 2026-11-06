@@ -5,7 +5,7 @@ import {
   VESTMENT_DEFAULT_COLOR,
   VESTMENT_CANVAS,
 } from "@/lib/liturgical-vestments-assets";
-import type { VestmentColor } from "@/lib/liturgical-vestments-game";
+import { VESTMENT_COLORS, type VestmentColor } from "@/lib/liturgical-vestments-game";
 import Image from "next/image";
 
 type Props = {
@@ -16,10 +16,7 @@ export function PriestVestmentFigure({ chasubleColor }: Props) {
   const displayColor = chasubleColor ?? VESTMENT_DEFAULT_COLOR;
   const src = VESTMENT_CHARACTER_IMAGES.dressed(displayColor);
 
-  const alt =
-    displayColor === VESTMENT_DEFAULT_COLOR && !chasubleColor
-      ? "Priest in white alb"
-      : `Priest wearing ${displayColor} liturgical vestments`;
+  const alt = `Priest wearing ${VESTMENT_COLORS[displayColor].label.toLowerCase()} liturgical vestments`;
 
   return (
     <div className="flex justify-center overflow-visible py-1">

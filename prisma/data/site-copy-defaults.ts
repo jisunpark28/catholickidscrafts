@@ -328,10 +328,9 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.vestments.round.lent_5", "Lent — 5th Sunday", "play_vestments"),
   sc("play.vestments.color.green", "Green", "play_vestments"),
   sc("play.vestments.color.purple", "Purple", "play_vestments"),
-  sc("play.vestments.color.lavender", "Light purple", "play_vestments"),
   sc("play.vestments.color.white", "White", "play_vestments"),
   sc("play.vestments.color.red", "Red", "play_vestments"),
-  sc("play.vestments.color.rose", "Pink", "play_vestments"),
+  sc("play.vestments.color.rose", "Rose (pink)", "play_vestments"),
 
   // Taxonomy
   sc("taxonomy.liturgical.advent.title", "Advent", "taxonomy"),

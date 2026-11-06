@@ -20,7 +20,6 @@ const CELLS = [
   ["red", 2, 0],
   ["green", 0, 1],
   ["purple", 1, 1],
-  ["lavender", 2, 1],
 ];
 
 async function main() {

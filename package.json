@@ -37,6 +37,8 @@
     "cards:thumbs": "tsx scripts/build-card-thumbs.ts",
     "cards:upload": "tsx scripts/upload-cards.ts",
     "test:resource-unified": "tsx scripts/test-resource-unified.ts",
+    "test:vestments": "tsx scripts/test-vestments.ts",
+    "test:vestments:browser": "tsx scripts/test-vestments-browser.ts",
     "test:worksheet-access": "tsx scripts/test-worksheet-access.ts"
   },
   "dependencies": {
