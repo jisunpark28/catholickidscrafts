@@ -68,7 +68,7 @@ export function GameEmbed({
         ← Play & learn
       </Link>
       <header
-        className={`border border-[var(--color-border)] bg-[var(--color-surface)] ${
+        className={`rounded-2xl border border-[#e8e0d6] bg-white ${
           immersive ? "mt-3 px-4 py-2 sm:mt-6 sm:px-6 sm:py-5" : "mt-6 px-6 py-5"
         }`}
       >
@@ -92,15 +92,15 @@ export function GameEmbed({
       </header>
       <div
         ref={frameRef}
-        className={`relative ${immersive ? "mt-2 sm:mt-4" : "mt-4"} flex flex-col border border-[var(--color-border)] bg-white ${
-          isFullscreen ? "h-screen w-screen" : ""
+        className={`relative ${immersive ? "mt-2 sm:mt-4" : "mt-4"} flex flex-col overflow-hidden border border-[#e8e0d6] bg-white shadow-sm ${
+          isFullscreen ? "h-screen w-screen" : "rounded-2xl"
         }`}
       >
         {showFrameFullscreen ? (
           <button
             type="button"
             onClick={() => void toggleFullscreen()}
-            className="absolute right-2 top-2 z-10 border border-[var(--color-border)] bg-white/95 px-3 py-1.5 text-xs font-bold text-[var(--color-ink)] shadow-sm hover:border-[var(--color-accent)]"
+            className="absolute right-2 top-2 z-10 rounded-full border border-[var(--color-border)] bg-white/95 px-3 py-1.5 text-xs font-bold text-[var(--color-ink)] shadow-sm hover:border-[var(--color-accent)]"
             aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
           >
             {isFullscreen ? "Exit fullscreen" : "Fullscreen"}

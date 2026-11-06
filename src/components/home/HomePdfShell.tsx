@@ -11,6 +11,7 @@ function linkIsCurrent(item: HomePdfLink, pathname: string): boolean {
   if (path === "/gospel" || path === "/bible/gospel") {
     return pathname === "/gospel" || pathname === "/bible/gospel";
   }
+  if (path === "/play") return pathname === path || pathname.startsWith(`${path}/`);
   const testament = testamentNavLabel(pathname);
   if (testament && item.label === testament) return true;
   return pathname === path;

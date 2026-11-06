@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
-import { PageShell } from "@/components/PageShell";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -22,7 +21,7 @@ export default async function LiturgicalVestmentsPage() {
   const copy = await getSiteCopyMap();
 
   return (
-    <PageShell wide>
+    <div className="min-w-0">
       <JsonLd
         nodes={[
           breadcrumbNode([{ name: "Play & Learn", path: "/play" }, { name: SEO_TITLE, path: "/play/liturgical-vestments" }]),
@@ -45,6 +44,6 @@ export default async function LiturgicalVestmentsPage() {
       </div>
 
       <LiturgicalVestmentsGame />
-    </PageShell>
+    </div>
   );
 }

@@ -1,5 +1,4 @@
 import { GameEmbed } from "@/components/GameEmbed";
-import { PageShell } from "@/components/PageShell";
 import { getPlayGameFromCopy } from "@/lib/play-games-copy";
 import { getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -56,7 +55,7 @@ export default async function PlayGamePage({ params }: Props) {
   const seo = PLAY_SEO[slug];
   const path = `/play/${slug}`;
   return (
-    <PageShell wide>
+    <div className="min-w-0">
       <JsonLd
         nodes={[
           breadcrumbNode([{ name: "Play & Learn", path: "/play" }, { name: game.title, path }]),
@@ -80,6 +79,6 @@ export default async function PlayGamePage({ params }: Props) {
           .
         </p>
       )}
-    </PageShell>
+    </div>
   );
 }
