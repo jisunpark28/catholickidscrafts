@@ -1,4 +1,4 @@
-import { HomePdfShell } from "@/components/home/HomePdfShell";
+import { PlayShell } from "@/components/PlayShell";
 import { getResourceNav } from "@/lib/resource/nav";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 
@@ -17,10 +17,8 @@ export default async function PlayLayout({ children }: { children: React.ReactNo
       ];
 
   return (
-    <HomePdfShell groups={groups} dailyMassLabel={nav.dailyMassLabel}>
-      <div className="mx-auto w-full max-w-6xl rounded-3xl border border-[#e8e0d6] bg-[#fdfaf7] p-4 sm:p-6 lg:p-8">
-        {children}
-      </div>
-    </HomePdfShell>
+    <PlayShell groups={groups} dailyMassLabel={nav.dailyMassLabel}>
+      {children}
+    </PlayShell>
   );
 }

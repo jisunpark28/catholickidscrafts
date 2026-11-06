@@ -22,6 +22,8 @@ type Props = {
   children: React.ReactNode;
   /** Label for the Daily Mass button above the Bible group. */
   dailyMassLabel?: string;
+  /** Opt-in main-pane background/size classes; shared pages keep the white default. */
+  contentClassName?: string;
 };
 
 export const DAILY_MASS_HREF = "/daily-mass";
@@ -130,7 +132,7 @@ function NavAnchor({
   );
 }
 
-export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass" }: Props) {
+export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass", contentClassName = "bg-white" }: Props) {
   const pathname = usePathname() ?? "";
   const navId = useId();
   const resourceActive = pathname === RESOURCE_HREF || pathname.startsWith(`${RESOURCE_HREF}/`);
@@ -221,7 +223,7 @@ export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass" }
         </div>
       </aside>
 
-      <div className="min-w-0 flex-1 bg-white px-3 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6">
+      <div className={`min-w-0 flex-1 px-3 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-6 ${contentClassName}`}>
         {!mobileOpen && (
           <button
             type="button"
