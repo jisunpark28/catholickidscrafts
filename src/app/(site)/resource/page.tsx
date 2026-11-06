@@ -185,7 +185,7 @@ export default async function ResourcePage({ searchParams }: Props) {
           {!viewer.isPlus ? (
             <div className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-6 py-8 text-center">
               <p className="m-0 text-sm text-[#4b5563]">
-                Try Customize free on this Sunday&apos;s sheet. Saving and reopening custom sheets needs Plus.
+                Sign in to customize this Sunday&apos;s sheet. Saving and reopening custom sheets needs Plus.
               </p>
               <p className="mb-0 mt-2 text-xs font-semibold text-[#6b7280]">One-time payment. No auto-renew.</p>
               <Link
