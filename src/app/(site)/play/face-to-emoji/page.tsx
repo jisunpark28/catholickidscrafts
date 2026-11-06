@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { FaceToEmojiEmbed } from "@/components/FaceToEmojiEmbed";
 import { PageHeader } from "@/components/PageHeader";
-import { PageShell } from "@/components/PageShell";
 import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
@@ -22,7 +21,7 @@ export default async function FaceToEmojiPage() {
   const copy = await getSiteCopyMap();
 
   return (
-    <PageShell wide>
+    <div className="min-w-0">
       <JsonLd
         nodes={[
           breadcrumbNode([{ name: "Play & Learn", path: "/play" }, { name: SEO_TITLE, path: "/play/face-to-emoji" }]),
@@ -59,6 +58,6 @@ export default async function FaceToEmojiPage() {
         </Link>
         .
       </p>
-    </PageShell>
+    </div>
   );
 }
