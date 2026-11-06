@@ -1,0 +1,97 @@
+{
+  "key": "VIR_HUMILITY",
+  "liturgicalName": "Humility Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Philippians 2:3",
+  "keyVerseDR": "\"In humility, let each esteem others better than themselves.\" (Phil 2:3)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Humility",
+      "story": "Humility means not bragging or needing to be the center of attention. Every gift comes from God!",
+      "keyLine": "My gifts come from God.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice humility all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we let someone else shine this week?",
+        "How did Jesus show humility?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice humility every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, meek and humble of heart, make my heart like Yours. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Let someone else go first",
+          "TUE: Clap for someone else's success",
+          "WED: Don't brag about winning",
+          "THU: Say thank you when you get help",
+          "FRI: Do a hidden good deed",
+          "SAT: Thank God for your talents"
+        ]
+      },
+      "words": [
+        "humble",
+        "gift",
+        "serve",
+        "quiet"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Humility",
+      "story": "Humility means not boasting, not always seeking the spotlight, and not thinking we are more special than others. A humble person knows that every talent is a gift from God and is happy to let others shine. Saint Paul says to think of others as more important than ourselves. Jesus, the Son of God, was humble: He was born in a stable and washed feet.",
+      "keyLine": "My gifts come from God.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice humility all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we let someone else shine this week?",
+        "How did God help us grow in humility?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice humility every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, meek and humble of heart, make my heart like Yours. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Do a job no one will notice",
+          "TUE: Praise someone else's work sincerely",
+          "WED: Ask for help when you need it",
+          "THU: Accept correction without excuses",
+          "FRI: Serve without seeking thanks",
+          "SAT: Read about Mary's humble 'yes'"
+        ]
+      },
+      "words": [
+        "humble",
+        "gift",
+        "serve",
+        "quiet"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_HUMILITY_main.png",
+    "heart": "VIR_HUMILITY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing humility together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

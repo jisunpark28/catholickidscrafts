@@ -6,6 +6,7 @@ import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
 import { RESOURCE_SEASONS, seasonPath } from "@/lib/resource/sheets";
 import { FAITH_HUB, FAITH_SEO_CARDS, SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
+import { EVERGREEN_PAGES, MASS_FOR_KIDS_HUB, publicPath, VIRTUE_CHALLENGE_HUB } from "@/lib/seo/evergreen-worksheets";
 import { SUNDAY_MASS_WORKSHEETS_HUB, sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { getSiteUrl } from "@/lib/site-url";
 import { listSundaySheetKeys } from "@/lib/sunday-sheet-content";
@@ -39,6 +40,8 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/daily-mass", "daily", 0.95],
   ["/resource", "weekly", 0.9],
   [SUNDAY_MASS_WORKSHEETS_HUB, "weekly", 0.9],
+  [MASS_FOR_KIDS_HUB, "monthly", 0.85],
+  [VIRTUE_CHALLENGE_HUB, "monthly", 0.85],
   ["/resources", "weekly", 0.85],
   ["/bible/gospel", "daily", 0.9],
   ["/bible-verses-for-kids", "weekly", 0.85],
@@ -81,7 +84,7 @@ function playEntries(): SitemapEntry[] {
   return [...paths].map((p) => entry(p, "weekly", 0.7));
 }
 
-/** Season hubs + Sunday worksheet SEO pages (Advent prioritized). /resource/[slug] weeks are not listed. */
+/** Season hubs + Sunday worksheet SEO pages + evergreen Mass/virtue worksheet pages (Advent prioritized). /resource/[slug] weeks are not listed. */
 export function buildResourcesSitemap(): MetadataRoute.Sitemap {
   const weeks = listSundaySheetKeys().map((key) => {
     const isAdvent = key.includes("_ADV");
@@ -90,7 +93,8 @@ export function buildResourcesSitemap(): MetadataRoute.Sitemap {
   const seasons = RESOURCE_SEASONS.map((s) =>
     entry(seasonPath(s.id), "monthly", s.id === "advent" ? 0.95 : 0.85),
   );
-  return [...seasons, ...weeks];
+  const evergreen = EVERGREEN_PAGES.map((p) => entry(publicPath(p), "monthly", 0.75));
+  return [...seasons, ...weeks, ...evergreen];
 }
 
 function liturgyEntries(): SitemapEntry[] {

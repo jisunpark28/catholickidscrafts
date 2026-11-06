@@ -1,0 +1,97 @@
+{
+  "key": "VIR_PERSPECTIVE",
+  "liturgicalName": "Perspective Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "James 1:5",
+  "keyVerseDR": "\"If any of you want wisdom, let him ask of God, who giveth to all men abundantly.\" (Jas 1:5)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Perspective",
+      "story": "Perspective means seeing the big picture and making wise choices. We can ask God for wisdom anytime!",
+      "keyLine": "God, help me see the big picture.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice perspective all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What helped us see the big picture this week?",
+        "What good advice did someone give us?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice perspective every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, give me wisdom. Help me see what matters most and choose what is good. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Ask God for wisdom when you wake up",
+          "TUE: Think: Will this matter tomorrow?",
+          "WED: Ask a parent for advice on a choice",
+          "THU: Give a friend kind, helpful advice",
+          "FRI: Remember a hard day that turned out fine",
+          "SAT: Thank God for His big, good plan"
+        ]
+      },
+      "words": [
+        "wisdom",
+        "advice",
+        "choose",
+        "plan"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Perspective",
+      "story": "Perspective is a wise way of seeing the world and making important decisions. It means stepping back to see the big picture, thinking about what matters most, and giving good advice. People with perspective remember that God's plan is bigger than one bad day. Saint James says that if we need wisdom, we should ask God, who gives generously.",
+      "keyLine": "God, help me see the big picture.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice perspective all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What helped us see the big picture this week?",
+        "How did God help us grow in perspective?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice perspective every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, give me wisdom. Help me see what matters most and choose what is good. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Before a big choice, list the good and bad",
+          "TUE: Ask an elder what they learned in life",
+          "WED: Calm a small problem by seeing the big picture",
+          "THU: Give honest advice when someone asks",
+          "FRI: Think about what Jesus would choose",
+          "SAT: Pray for wisdom for our family"
+        ]
+      },
+      "words": [
+        "wisdom",
+        "advice",
+        "choose",
+        "plan"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_PERSPECTIVE_main.png",
+    "heart": "VIR_PERSPECTIVE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing perspective together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

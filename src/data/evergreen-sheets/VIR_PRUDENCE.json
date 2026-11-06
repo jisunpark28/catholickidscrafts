@@ -1,0 +1,97 @@
+{
+  "key": "VIR_PRUDENCE",
+  "liturgicalName": "Prudence Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Proverbs 14:15",
+  "keyVerseDR": "\"The discreet man considereth his steps.\" (Prv 14:15)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Prudence",
+      "story": "Prudence means thinking carefully before you speak or act: Is this a good choice?",
+      "keyLine": "Stop, think, then choose.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice prudence all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What good choice did we think through this week?",
+        "How can we stop and think before we act?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice prudence every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Holy Spirit, help me think before I act and choose what is good. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Stop and think before you speak",
+          "TUE: Ask a parent before doing something new",
+          "WED: Think: Is this safe?",
+          "THU: Choose a good show or game",
+          "FRI: Think about how your words will feel",
+          "SAT: Ask the Holy Spirit to help you choose"
+        ]
+      },
+      "words": [
+        "think",
+        "choose",
+        "careful",
+        "wise"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Prudence",
+      "story": "Prudence means thinking carefully about whether a word or an action is a good choice before we say or do it. It means stopping, thinking, and choosing wisely. The Book of Proverbs says the wise person considers his steps. Prudence helps us avoid danger, choose good friends, and do what is right in each situation. The Holy Spirit helps us with good judgment.",
+      "keyLine": "Stop, think, then choose.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice prudence all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What good choice did we think through this week?",
+        "How did God help us grow in prudence?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice prudence every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Holy Spirit, help me think before I act and choose what is good. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Think about consequences before acting",
+          "TUE: Wait a day before a big decision",
+          "WED: Choose friends who help you be good",
+          "THU: Ask a wise adult for advice",
+          "FRI: Plan your week so the important comes first",
+          "SAT: Pray before a hard choice"
+        ]
+      },
+      "words": [
+        "think",
+        "choose",
+        "careful",
+        "wise"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_PRUDENCE_main.png",
+    "heart": "VIR_PRUDENCE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing prudence together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

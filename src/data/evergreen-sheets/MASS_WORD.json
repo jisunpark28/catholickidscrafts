@@ -1,0 +1,100 @@
+{
+  "key": "MASS_WORD",
+  "liturgicalName": "Liturgy of the Word",
+  "season": "The Order of Mass",
+  "gospelRef": "Luke 11:28",
+  "keyVerseDR": "\"Blessed are they who hear the word of God, and keep it.\" (Lk 11:28)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "Liturgy of the Word",
+      "story": "Now God speaks to us! We sit and listen to the readings from the Bible. We stand for the Gospel about Jesus. The priest explains it, we say what we believe in the Creed, and we pray for everyone.",
+      "keyLine": "God speaks, and I listen.",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What part of the Bible do we hear when we stand?",
+        "What do we ask God for in the Prayer of the Faithful?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Jesus, open my ears to hear Your Word and my heart to keep it. Amen.",
+      "activity": {
+        "title": "Put the Liturgy of the Word in order",
+        "intro": "Write 1 to 7 in the boxes to show the order at Mass.",
+        "type": "wordorder",
+        "pieces": [
+          "First Reading",
+          "Responsorial Psalm",
+          "Gospel Acclamation",
+          "Gospel",
+          "Homily",
+          "Profession of Faith (Creed)",
+          "Prayer of the Faithful"
+        ]
+      },
+      "words": [
+        "Bible",
+        "Gospel",
+        "listen",
+        "Creed"
+      ]
+    },
+    "level2": {
+      "title": "Liturgy of the Word",
+      "story": "In the Liturgy of the Word, God speaks to His people through Holy Scripture. We sit and listen to the First Reading, usually from the Old Testament. We answer with the Responsorial Psalm. On Sundays there is also a Second Reading, often from a letter of Saint Paul. Then we stand and sing the Gospel Acclamation, \"Alleluia!\" (or another verse in Lent), because Jesus Himself is about to speak in the Gospel. We trace small crosses on our forehead, lips, and heart. The priest or deacon explains the readings in the Homily. Then we stand and profess our faith in the Creed, and we pray for the Church and the world in the Prayer of the Faithful.",
+      "keyLine": "God speaks, and I listen.",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What part of the Bible do we hear when we stand?",
+        "What do we ask God for in the Prayer of the Faithful?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Jesus, open my ears to hear Your Word and my heart to keep it. Amen.",
+      "activity": {
+        "title": "Put the Liturgy of the Word in order",
+        "intro": "Number the steps 1 to 8. Then write which step you like best.",
+        "type": "wordorder",
+        "pieces": [
+          "First Reading",
+          "Responsorial Psalm",
+          "Second Reading",
+          "Gospel Acclamation (Alleluia)",
+          "Gospel",
+          "Homily",
+          "Profession of Faith (Creed)",
+          "Prayer of the Faithful"
+        ]
+      },
+      "words": [
+        "Bible",
+        "Gospel",
+        "listen",
+        "Creed"
+      ]
+    }
+  },
+  "art": {
+    "main": "MASS_WORD_main.png",
+    "heart": "MASS_WORD_heart.png",
+    "icons": [
+      "icon_altar.png",
+      "icon_cross.png",
+      "icon_bible.png"
+    ],
+    "mainBrief": "a reader at the ambo and children listening",
+    "heartBrief": "Mass symbols around a heart"
+  }
+}

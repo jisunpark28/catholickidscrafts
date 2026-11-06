@@ -1,0 +1,97 @@
+{
+  "key": "VIR_GRATITUDE",
+  "liturgicalName": "Gratitude Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Psalm 107:1",
+  "keyVerseDR": "\"Give glory to the Lord, for he is good: for his mercy endureth for ever.\" (Ps 107:1)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Gratitude",
+      "story": "Gratitude means noticing the good gifts in our lives and saying thank you to God and others.",
+      "keyLine": "Thank You, God, for You are good!",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice gratitude all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What is one thing our family was most grateful for this week?",
+        "Whom can we thank next week?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice gratitude every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Thank You, Lord, for all Your gifts. Give me a grateful heart every day. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Thank God for your health when you wake",
+          "TUE: Thank the person who prepared your meal",
+          "WED: Thank a friend who helped you today",
+          "THU: Do your work gladly, without complaining",
+          "FRI: Thank God for something beautiful you see",
+          "SAT: Pray for your priest and catechist"
+        ]
+      },
+      "words": [
+        "thanks",
+        "gift",
+        "grateful",
+        "bless"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Gratitude",
+      "story": "Gratitude means noticing the good things we have been given and feeling thankful. Everything good comes from God: our life, our family, food, friends, and faith. A grateful heart says thank you to God and to the people who help us, and it does not grumble. The word Eucharist means thanksgiving! At every Mass we thank God for His greatest gift, Jesus.",
+      "keyLine": "Thank You, God, for You are good!",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice gratitude all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What is one thing our family was most grateful for this week?",
+        "How did God help us grow in gratitude?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice gratitude every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Thank You, Lord, for all Your gifts. Give me a grateful heart every day. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: List three blessings before bed",
+          "TUE: Write a thank-you note to a teacher",
+          "WED: Thank a parent for something they do daily",
+          "THU: Go a whole day without complaining",
+          "FRI: Thank God for a hard thing that helped you",
+          "SAT: Say grace thoughtfully at every meal"
+        ]
+      },
+      "words": [
+        "thanks",
+        "gift",
+        "grateful",
+        "bless"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_GRATITUDE_main.png",
+    "heart": "VIR_GRATITUDE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing gratitude together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

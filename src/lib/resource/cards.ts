@@ -1,4 +1,4 @@
-// Little Light picture cards: the catalog (626 cards). Import from server code only —
+// Little Light picture cards: the catalog (654 cards). Import from server code only —
 // client components use ./card-meta so the JSON stays out of the browser bundle.
 import CARDS_JSON from "@/data/cards/cards.json";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";

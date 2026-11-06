@@ -1,0 +1,97 @@
+{
+  "key": "VIR_COURAGE",
+  "liturgicalName": "Courage Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Joshua 1:9",
+  "keyVerseDR": "\"Take courage, and be strong. Fear not... because the Lord thy God is with thee.\" (Jos 1:9)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Courage",
+      "story": "Courage means doing and saying what is right, even when it is hard or scary. God is always with you!",
+      "keyLine": "God is with me. I can be brave.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice courage all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When was someone in our family brave this week?",
+        "What helps us feel brave when we are afraid?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice courage every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You are with me always. Give me courage to do what is right. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Try something new even if you feel shy",
+          "TUE: Say sorry first after an argument",
+          "WED: Stand up for someone left out",
+          "THU: Pray when you feel afraid",
+          "FRI: Raise your hand to answer at school",
+          "SAT: Tell the truth even when it is hard"
+        ]
+      },
+      "words": [
+        "brave",
+        "strong",
+        "courage",
+        "fear"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Courage",
+      "story": "Courage, or bravery, means speaking and acting for what is right even when it is hard or scary. Brave people still feel afraid, but they trust God and do the right thing anyway. God told Joshua to be strong and not to fear, because He would be with him everywhere he went. Martyrs and saints show us that real courage comes from loving God more than we fear.",
+      "keyLine": "God is with me. I can be brave.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice courage all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When was someone in our family brave this week?",
+        "How did God help us grow in courage?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice courage every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You are with me always. Give me courage to do what is right. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Speak up kindly when something is wrong",
+          "TUE: Invite someone sitting alone to join you",
+          "WED: Say no to something you know is wrong",
+          "THU: Make the Sign of the Cross before eating out",
+          "FRI: Face one fear with a parent's help",
+          "SAT: Pray for people who are persecuted"
+        ]
+      },
+      "words": [
+        "brave",
+        "strong",
+        "courage",
+        "fear"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_COURAGE_main.png",
+    "heart": "VIR_COURAGE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing courage together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

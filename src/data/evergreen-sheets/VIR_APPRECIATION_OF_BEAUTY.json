@@ -1,0 +1,97 @@
+{
+  "key": "VIR_APPRECIATION_OF_BEAUTY",
+  "liturgicalName": "Appreciation of Beauty Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Psalm 19:1",
+  "keyVerseDR": "\"The heavens shew forth the glory of God.\" (Ps 19:1)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Appreciation of Beauty",
+      "story": "Appreciation of beauty means noticing and enjoying beautiful things. They point us to God!",
+      "keyLine": "Beauty points me to God.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice appreciation of beauty all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What was the most beautiful thing we saw this week?",
+        "How does beauty help us think of God?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice appreciation of beauty every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "God of beauty, open my eyes to the wonders You made. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Look at the sky and thank God",
+          "TUE: Smell a flower or notice a tree",
+          "WED: Listen to beautiful music",
+          "THU: Look closely at a church window or statue",
+          "FRI: Notice something beautiful someone did",
+          "SAT: Draw the most beautiful thing you saw"
+        ]
+      },
+      "words": [
+        "beauty",
+        "wonder",
+        "art",
+        "nature"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Appreciation of Beauty",
+      "story": "Appreciation of beauty means noticing and enjoying beauty and excellence everywhere: in nature, art, music, and in good people. A sunset, a song, a church window, or a kind act can fill us with wonder. The psalm says the heavens tell of the glory of God. All true beauty points us to God, who is Beauty itself.",
+      "keyLine": "Beauty points me to God.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice appreciation of beauty all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What was the most beautiful thing we saw this week?",
+        "How did God help us grow in appreciation of beauty?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice appreciation of beauty every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "God of beauty, open my eyes to the wonders You made. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Take a walk and look for beauty",
+          "TUE: Look at a sacred painting together",
+          "WED: Listen to a hymn or Gregorian chant",
+          "THU: Praise someone's excellent work",
+          "FRI: Keep your room neat and beautiful",
+          "SAT: Watch a sunset or stars and pray"
+        ]
+      },
+      "words": [
+        "beauty",
+        "wonder",
+        "art",
+        "nature"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_APPRECIATION_OF_BEAUTY_main.png",
+    "heart": "VIR_APPRECIATION_OF_BEAUTY_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing appreciation of beauty together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

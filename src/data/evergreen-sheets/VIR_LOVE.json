@@ -1,0 +1,97 @@
+{
+  "key": "VIR_LOVE",
+  "liturgicalName": "Love Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "John 13:34",
+  "keyVerseDR": "\"A new commandment I give unto you: That you love one another, as I have loved you.\" (Jn 13:34)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Love",
+      "story": "Love means caring for the people close to us, like family and friends. Jesus loves us first!",
+      "keyLine": "I love because Jesus loves me.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice love all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "How did we show love to each other this week?",
+        "Who outside our home can we love better?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice love every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You loved me first. Help me love my family and friends as You love me. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Give a family member a big hug",
+          "TUE: Say 'I love you' to someone",
+          "WED: Spend time with a brother or sister",
+          "THU: Draw a picture for someone you love",
+          "FRI: Pray for each person in your family",
+          "SAT: Help a parent without being asked"
+        ]
+      },
+      "words": [
+        "love",
+        "family",
+        "care",
+        "friend"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Love",
+      "story": "Love means valuing close relationships, where we give and receive care. It is shown in hugs, kind words, time together, and sacrifices for each other. Jesus gave us a new commandment: love one another as I have loved you. Our families are the first place we learn to love, and God's love is the source of all love.",
+      "keyLine": "I love because Jesus loves me.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice love all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "How did we show love to each other this week?",
+        "How did God help us grow in love?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice love every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, You loved me first. Help me love my family and friends as You love me. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Spend screen-free time with your family",
+          "TUE: Write a note telling someone why you love them",
+          "WED: Call or visit a grandparent",
+          "THU: Do a family member's chore for them",
+          "FRI: Listen to someone's whole day",
+          "SAT: Pray together as a family tonight"
+        ]
+      },
+      "words": [
+        "love",
+        "family",
+        "care",
+        "friend"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_LOVE_main.png",
+    "heart": "VIR_LOVE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing love together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

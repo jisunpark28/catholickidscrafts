@@ -1,0 +1,97 @@
+{
+  "key": "VIR_FAIRNESS",
+  "liturgicalName": "Fairness Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Matthew 7:12",
+  "keyVerseDR": "\"All things therefore whatsoever you would that men should do to you, do you also to them.\" (Mt 7:12)",
+  "color": "green",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Fairness",
+      "story": "Fairness means treating everyone the same good way, not just the people we like.",
+      "keyLine": "I treat others the way I want to be treated.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice fairness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we treat someone fairly this week?",
+        "How can we include everyone at school or church?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice fairness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, help me treat everyone fairly, the way I want to be treated. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Take turns in a game",
+          "TUE: Share treats equally",
+          "WED: Let someone else go first",
+          "THU: Play with someone you don't usually play with",
+          "FRI: Follow the rules even when losing",
+          "SAT: Listen to both sides of a story"
+        ]
+      },
+      "words": [
+        "fair",
+        "turns",
+        "rule",
+        "equal"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Fairness",
+      "story": "Fairness means treating everyone justly and equally, not deciding things only by our private feelings. A fair person gives everyone a turn, follows the rules, and does not play favorites. Jesus gave us the Golden Rule: treat others the way you want to be treated. Every person is made in God's image, so every person deserves to be treated fairly.",
+      "keyLine": "I treat others the way I want to be treated.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice fairness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we treat someone fairly this week?",
+        "How did God help us grow in fairness?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice fairness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Jesus, help me treat everyone fairly, the way I want to be treated. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Divide a task fairly with a sibling",
+          "TUE: Include everyone in a group game",
+          "WED: Be fair to someone you don't like",
+          "THU: Admit when the other side is right",
+          "FRI: Stand up for someone treated unfairly",
+          "SAT: Pray for people who suffer injustice"
+        ]
+      },
+      "words": [
+        "fair",
+        "turns",
+        "rule",
+        "equal"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_FAIRNESS_main.png",
+    "heart": "VIR_FAIRNESS_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing fairness together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "key": "VIR_OPEN_MINDEDNESS",
+  "liturgicalName": "Open-Mindedness Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "James 1:19",
+  "keyVerseDR": "\"Let every man be swift to hear, but slow to speak.\" (Jas 1:19)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Open-Mindedness",
+      "story": "Open-mindedness means looking at things from every fair side before deciding. We listen first, then we choose.",
+      "keyLine": "I listen first, then I decide.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice open-mindedness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we listen before deciding this week?",
+        "Did anyone change their mind after learning something new?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice open-mindedness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Holy Spirit, open my ears and my mind. Help me listen and think fairly. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Listen to a friend's idea all the way through",
+          "TUE: Try a food you think you won't like",
+          "WED: Play a game your sibling chooses",
+          "THU: Ask, 'What do you think?' to someone",
+          "FRI: Say 'Maybe you're right' once today",
+          "SAT: Pray before making a choice"
+        ]
+      },
+      "words": [
+        "listen",
+        "fair",
+        "think",
+        "open"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Open-Mindedness",
+      "story": "Open-mindedness means thinking about a situation from every fair side before we make up our minds. We do not jump to conclusions. We listen to other people, look at the facts, and are willing to change our minds when we learn something true. Saint James says to be quick to hear and slow to speak. An open mind still holds tight to God's truth, while listening with love.",
+      "keyLine": "I listen first, then I decide.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice open-mindedness all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "When did we listen before deciding this week?",
+        "How did God help us grow in open-mindedness?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice open-mindedness every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Holy Spirit, open my ears and my mind. Help me listen and think fairly. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Hear both sides before settling an argument",
+          "TUE: Ask someone why they think differently",
+          "WED: Change your mind when you learn something true",
+          "THU: Read about a saint very different from you",
+          "FRI: Look for facts before judging a story",
+          "SAT: Ask the Holy Spirit to help you think fairly"
+        ]
+      },
+      "words": [
+        "listen",
+        "fair",
+        "think",
+        "open"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_OPEN_MINDEDNESS_main.png",
+    "heart": "VIR_OPEN_MINDEDNESS_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing open-mindedness together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "key": "VIR_PERSEVERANCE",
+  "liturgicalName": "Perseverance Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Galatians 6:9",
+  "keyVerseDR": "\"And in doing good, let us not fail. For in due time we shall reap, not failing.\" (Gal 6:9)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Perseverance",
+      "story": "Perseverance means finishing what you start, even when it is hard. Don't give up!",
+      "keyLine": "I will not give up.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice perseverance all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What did we finish this week that was hard?",
+        "How did we encourage each other to keep going?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice perseverance every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord Jesus, when things are hard, help me keep going and never give up on doing good. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Finish one task before starting another",
+          "TUE: Try again after a mistake",
+          "WED: Finish all of your homework",
+          "THU: Keep practicing a hard skill",
+          "FRI: Clean up your toys all the way",
+          "SAT: Finish your prayers without rushing"
+        ]
+      },
+      "words": [
+        "finish",
+        "try",
+        "persevere",
+        "patient"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Perseverance",
+      "story": "Perseverance means sticking with a good task until it is finished. It means keeping on when things are slow, boring, or difficult. Saint Paul says not to grow tired of doing good, because in time we will see the harvest. Jesus kept going all the way to the cross for love of us. With God's help, we can keep trying.",
+      "keyLine": "I will not give up.",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice perseverance all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What did we finish this week that was hard?",
+        "How did God help us grow in perseverance?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice perseverance every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord Jesus, when things are hard, help me keep going and never give up on doing good. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Work on a big project a little each day",
+          "TUE: Finish a book you started",
+          "WED: Keep a promise you made",
+          "THU: Try a hard problem three times before asking",
+          "FRI: Stick with a chore until it is done well",
+          "SAT: Pray a whole decade of the Rosary"
+        ]
+      },
+      "words": [
+        "finish",
+        "try",
+        "persevere",
+        "patient"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_PERSEVERANCE_main.png",
+    "heart": "VIR_PERSEVERANCE_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing perseverance together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}

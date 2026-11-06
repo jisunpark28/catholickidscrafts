@@ -1,0 +1,96 @@
+{
+  "key": "MASS_EUCHARIST",
+  "liturgicalName": "Liturgy of the Eucharist",
+  "season": "The Order of Mass",
+  "gospelRef": "Luke 22:19",
+  "keyVerseDR": "\"This is my body, which is given for you. Do this for a commemoration of me.\" (Lk 22:19)",
+  "color": "gold",
+  "levels": {
+    "level1": {
+      "title": "Liturgy of the Eucharist",
+      "story": "We bring bread and wine to the altar. The priest prays, and the bread and wine become Jesus' Body and Blood. We pray the Our Father, share a sign of peace, and receive Jesus in Holy Communion.",
+      "keyLine": "Jesus gives Himself to us.",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What do the bread and wine become?",
+        "How can we get our hearts ready to receive Jesus?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Jesus, thank You for giving Yourself to us in the Eucharist. Make my heart ready for You. Amen.",
+      "activity": {
+        "title": "Put the Liturgy of the Eucharist in order",
+        "intro": "Write 1 to 5 in the boxes to show the order at Mass.",
+        "type": "wordorder",
+        "pieces": [
+          "Presentation of the Gifts",
+          "Eucharistic Prayer",
+          "The Lord's Prayer",
+          "Sign of Peace",
+          "Holy Communion"
+        ]
+      },
+      "words": [
+        "bread",
+        "wine",
+        "altar",
+        "Communion"
+      ]
+    },
+    "level2": {
+      "title": "Liturgy of the Eucharist",
+      "story": "In the Liturgy of the Eucharist, we do what Jesus asked at the Last Supper. In the Presentation of the Gifts, bread and wine are brought to the altar, along with our gifts for the Church and the poor. In the Eucharistic Prayer, the priest prays the words of Jesus, and by the power of the Holy Spirit the bread and wine become the Body and Blood of Christ. We sing \"Holy, Holy, Holy\" and the Great Amen. Then we pray the Lord's Prayer together as God's children. We share the Sign of Peace with those around us. After the Lamb of God, we receive Jesus in Holy Communion (or make a spiritual communion and receive a blessing if we have not made our First Communion yet).",
+      "keyLine": "Jesus gives Himself to us.",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What do the bread and wine become?",
+        "How can we get our hearts ready to receive Jesus?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Jesus, thank You for giving Yourself to us in the Eucharist. Make my heart ready for You. Amen.",
+      "activity": {
+        "title": "Put the Liturgy of the Eucharist in order",
+        "intro": "Number the steps 1 to 6. Then write which step you like best.",
+        "type": "wordorder",
+        "pieces": [
+          "Presentation of the Gifts",
+          "Eucharistic Prayer: Holy, Holy, Holy",
+          "Lord's Prayer: Our Father",
+          "Sign of Peace: Peace be with you",
+          "Lamb of God",
+          "Holy Communion: Body of Christ. Amen"
+        ]
+      },
+      "words": [
+        "bread",
+        "wine",
+        "altar",
+        "Communion"
+      ]
+    }
+  },
+  "art": {
+    "main": "MASS_EUCHARIST_main.png",
+    "heart": "MASS_EUCHARIST_heart.png",
+    "icons": [
+      "icon_altar.png",
+      "icon_cross.png",
+      "icon_bible.png"
+    ],
+    "mainBrief": "the priest raising the Host at the altar",
+    "heartBrief": "Mass symbols around a heart"
+  }
+}

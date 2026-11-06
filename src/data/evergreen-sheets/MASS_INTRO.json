@@ -1,0 +1,97 @@
+{
+  "key": "MASS_INTRO",
+  "liturgicalName": "Introductory Rites",
+  "season": "The Order of Mass",
+  "gospelRef": "Matthew 18:20",
+  "keyVerseDR": "\"For where there are two or three gathered together in my name, there am I in the midst of them.\" (Mt 18:20)",
+  "color": "white",
+  "levels": {
+    "level1": {
+      "title": "Introductory Rites",
+      "story": "When Mass begins, we gather as God's family. We sing as the priest comes in. We make the Sign of the Cross and say sorry to God. We sing \"Lord, have mercy\" and \"Glory to God,\" and the priest prays the opening prayer.",
+      "keyLine": "We gather in Jesus' name.",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What do we say when we make the Sign of the Cross?",
+        "Why do we tell God we are sorry at the start of Mass?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Lord Jesus, thank You for gathering us as Your family. Help me pray with my whole heart. Amen.",
+      "activity": {
+        "title": "Put the Introductory Rites in order",
+        "intro": "Write 1 to 6 in the boxes to show the order at Mass.",
+        "type": "wordorder",
+        "pieces": [
+          "Entrance",
+          "Greeting",
+          "Penitential Act",
+          "Kyrie (Lord, have mercy)",
+          "Gloria",
+          "Collect (Opening Prayer)"
+        ]
+      },
+      "words": [
+        "gather",
+        "sorry",
+        "Gloria",
+        "pray"
+      ]
+    },
+    "level2": {
+      "title": "Introductory Rites",
+      "story": "The Introductory Rites open the Mass and gather us into one family before God. During the Entrance, we stand and sing as the priest and servers process to the altar. In the Greeting, we make the Sign of the Cross: \"In the name of the Father, and of the Son, and of the Holy Spirit.\" The priest says, \"The Lord be with you,\" and we answer, \"And with your spirit.\" In the Penitential Act we tell God we are sorry, and we pray the Kyrie: \"Lord, have mercy. Christ, have mercy.\" On Sundays (outside Advent and Lent) we sing the Gloria, the angels' song from Christmas night. Then the priest says, \"Let us pray,\" and gathers all our prayers in the Collect.",
+      "keyLine": "We gather in Jesus' name.",
+      "heartTitle": "My Mass Heart",
+      "heartIntro": "Draw or write how you will take part in this part of the Mass next Sunday.",
+      "heartLabelA": "At Mass I will",
+      "heartLabelB": "This week I will",
+      "questions": [
+        "What do we say when we make the Sign of the Cross?",
+        "Why do we tell God we are sorry at the start of Mass?"
+      ],
+      "actions": [
+        "Bring this sheet to Mass",
+        "Say the responses out loud",
+        "Talk about Mass at lunch"
+      ],
+      "prayer": "Lord Jesus, thank You for gathering us as Your family. Help me pray with my whole heart. Amen.",
+      "activity": {
+        "title": "Put the Introductory Rites in order",
+        "intro": "Number the steps 1 to 6. Then write which step you like best.",
+        "type": "wordorder",
+        "pieces": [
+          "Entrance: we stand and sing",
+          "Greeting: The Lord be with you",
+          "Penitential Act: I confess",
+          "Kyrie: Lord, have mercy",
+          "Gloria: Glory to God in the highest",
+          "Collect: the priest gathers our prayers"
+        ]
+      },
+      "words": [
+        "gather",
+        "sorry",
+        "Gloria",
+        "pray"
+      ]
+    }
+  },
+  "art": {
+    "main": "MASS_INTRO_main.png",
+    "heart": "MASS_INTRO_heart.png",
+    "icons": [
+      "icon_altar.png",
+      "icon_cross.png",
+      "icon_bible.png"
+    ],
+    "mainBrief": "the priest walking to the altar as families stand and sing",
+    "heartBrief": "Mass symbols around a heart"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "key": "VIR_ZEST",
+  "liturgicalName": "Zest Virtue Challenge",
+  "season": "Family Virtue Challenge",
+  "gospelRef": "Psalm 118:24",
+  "keyVerseDR": "\"This is the day which the Lord hath made: let us be glad and rejoice therein.\" (Ps 118:24)",
+  "color": "red",
+  "levels": {
+    "level1": {
+      "title": "This Week's Catholic Virtue: Zest",
+      "story": "Zest means living with energy and joy. Each day is a gift from God to enjoy!",
+      "keyLine": "This is the day the Lord has made!",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice zest all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What made us excited and full of energy this week?",
+        "How can we enjoy each day as God's gift?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice zest every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, thank You for this new day. Help me live it with joy and energy for You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Wake up and say, 'Good morning, God!'",
+          "TUE: Play outside with all your energy",
+          "WED: Help with a chore cheerfully",
+          "THU: Sing a happy song to Jesus",
+          "FRI: Do something fun as a family",
+          "SAT: Try your best at something new"
+        ]
+      },
+      "words": [
+        "joy",
+        "energy",
+        "glad",
+        "today"
+      ]
+    },
+    "level2": {
+      "title": "This Week's Catholic Virtue: Zest",
+      "story": "Zest means living with energy, excitement, and interest. People with zest wake up ready for the day and put their whole heart into what they do. They do not do things halfway. The psalm says that this is the day the Lord has made, so let us be glad! Zest comes from knowing that every day is a gift from God to use well.",
+      "keyLine": "This is the day the Lord has made!",
+      "heartTitle": "Family Talk",
+      "heartIntro": "Hang this sheet on the fridge and practice zest all week. On Saturday, talk together, write what you practiced, and a parent signs.",
+      "heartLabelA": "We practiced",
+      "heartLabelB": "Next week",
+      "questions": [
+        "What made us excited and full of energy this week?",
+        "How did God help us grow in zest?"
+      ],
+      "actions": [
+        "Hang this sheet on the fridge",
+        "Practice zest every day",
+        "A parent signs on Saturday"
+      ],
+      "prayer": "Lord, thank You for this new day. Help me live it with joy and energy for You. Amen.",
+      "activity": {
+        "title": "Daily Action Checklist",
+        "intro": "Color a star each day, Monday through Saturday. Hang this sheet on the fridge and practice with your family. A parent signs at the end of the week.",
+        "type": "checklist",
+        "items": [
+          "MON: Start the day with a morning offering",
+          "TUE: Get exercise or play a sport",
+          "WED: Do a task with your whole heart",
+          "THU: Get enough sleep to be ready for tomorrow",
+          "FRI: Share your excitement with someone",
+          "SAT: Plan a joyful family activity for Sunday"
+        ]
+      },
+      "words": [
+        "joy",
+        "energy",
+        "glad",
+        "today"
+      ]
+    }
+  },
+  "art": {
+    "main": "VIR_ZEST_main.png",
+    "heart": "VIR_ZEST_heart.png",
+    "icons": [
+      "icon_star.png",
+      "icon_fridge.png",
+      "icon_family.png"
+    ],
+    "mainBrief": "A Catholic family practicing zest together at home",
+    "heartBrief": "Stars and a family around a heart"
+  }
+}
