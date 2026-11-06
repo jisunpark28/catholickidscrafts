@@ -2,7 +2,7 @@ import { getEvergreenPage } from "@/lib/evergreen-catalog";
 // One search across Weekly Sheets and picture Cards, ranked together by relevance (server-only).
 import { cardSeasons, PICTURE_CARDS } from "@/lib/resource/cards";
 import type { PictureCard } from "@/lib/resource/card-meta";
-import { type ResourceSeason, sheetSeason, listResourceSheets } from "@/lib/resource/sheets";
+import { type ResourceSeason, sheetSeason, listResourceSheets, searchSheets } from "@/lib/resource/sheets";
 import { type SundaySheetContent } from "@/lib/sunday-sheet-content";
 
 export type SearchHit =
@@ -77,8 +77,21 @@ export function searchTerms(q: string): string[] {
     .slice(0, 8);
 }
 
-/** Sheets + cards matching every term (and the season filter), best first. */
+/** A single browse catalog, interleaved so cards are visible from the first page. */
+export function browseResources(season: ResourceSeason | null): SearchHit[] {
+  const sheets = searchSheets({ season });
+  const cards = PICTURE_CARDS.filter((card) => !season || cardSeasons(card).includes(season));
+  const hits: SearchHit[] = [];
+  for (let i = 0; i < Math.max(sheets.length, cards.length); i++) {
+    if (sheets[i]) hits.push({ type: "sheet", score: 0, sheet: sheets[i]! });
+    if (cards[i]) hits.push({ type: "card", score: 0, card: cards[i]! });
+  }
+  return hits;
+}
+
+/** Sheets + cards matching every term (and the season filter), best first. Empty query browses all. */
 export function unifiedSearch(q: string, season: ResourceSeason | null, thisSundayKey: string | null): SearchHit[] {
+  if (!q.trim()) return browseResources(season);
   const terms = searchTerms(q);
   if (!terms.length) return [];
   const phrase = ` ${terms.join(" ")} `;

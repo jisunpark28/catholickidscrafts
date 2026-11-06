@@ -52,7 +52,7 @@ function matches(c: CardListItem, q: string): boolean {
     .every((w) => hay.includes(w));
 }
 
-/** Cards tab: 4-column grid + sticky detail panel (Download PNG 4:5 / Share, Plus). */
+/** Shared card detail: grid + sticky panel (Download PNG 4:5 / Share, Plus). */
 export function CardsBrowser({
   cards,
   isPlus,

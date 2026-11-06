@@ -17,12 +17,14 @@ type Props = {
   level: 1 | 2;
   isPlus: boolean;
   thisSundayKey: string | null;
-  /** Where "Clear search" goes (the tab the search started from). */
+  /** Combined library URL, retaining season and level. */
   clearHref: string;
   siteUrl: string;
   /** Today's featured card (free for everyone). */
   freeCardId?: string | null;
-  limit?: number;
+  page?: number;
+  /** Combined results URL without the page parameter. */
+  resultsHref: string;
 };
 
 const typeBadge = (label: string, tone: "sheet" | "card") => (
@@ -35,19 +37,23 @@ const typeBadge = (label: string, tone: "sheet" | "card") => (
   </span>
 );
 
-/** One ranked results grid for a search from any tab: Weekly Sheets and Cards together. */
-export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, clearHref, siteUrl, freeCardId = null, limit = 48 }: Props) {
-  const shown = hits.slice(0, limit);
+/** One paginated grid for library browsing and ranked search across worksheets and cards. */
+export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, clearHref, siteUrl, freeCardId = null, page = 1, resultsHref }: Props) {
+  const pageSize = 48;
+  const pages = Math.max(1, Math.ceil(hits.length / pageSize));
+  const currentPage = Math.min(pages, Math.max(1, page));
+  const shown = hits.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const pageHref = (n: number) => `${resultsHref}&page=${n}`;
   return (
-    <section aria-label="Search results" className="mt-5">
+    <section aria-label={q ? "Search results" : "All resources"} className="mt-5">
       <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
       <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="m-0 text-lg font-bold text-[#1c1c1c]">
-          Results for “{q}”
+          {q ? `Results for "${q}"` : "All resources"}
         </h2>
-        <Link href={clearHref} className="text-sm font-semibold text-[#d35400] no-underline hover:underline">
+        {q ? <Link href={clearHref} className="text-sm font-semibold text-[#d35400] no-underline hover:underline">
           ✕ Clear search
-        </Link>
+        </Link> : <p className="m-0 text-sm text-[#6b7280]">Weekly sheets, Mass and virtue worksheets, and picture cards</p>}
       </div>
 
       {hits.length ? (
@@ -76,7 +82,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
             const thumb = (
               <span className="relative block aspect-[4/5] overflow-hidden rounded-lg bg-white">
                 <SheetThumb sheet={{ ...toGospelSheetView(s), sundayLabel: yearLabel(s.key) }} level={level} />
-                <span className="absolute left-1.5 top-1.5">{typeBadge("Weekly Sheet", "sheet")}</span>
+                <span className="absolute left-1.5 top-1.5">{typeBadge(getEvergreenPage(s.key) ? "Worksheet" : "Weekly Sheet", "sheet")}</span>
                 {unlocked ? (
                   s.key === thisSundayKey && !isPlus ? (
                     <span className="absolute right-1.5 top-1.5 rounded-md bg-[#e6f4ea] px-1.5 py-0.5 text-[10px] font-bold text-[#1e7b34]">
@@ -156,10 +162,12 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
           Nothing matches. Try a Gospel (e.g. “Luke 15”), a story (e.g. “lost sheep”), a saint or a feast.
         </p>
       )}
-      {hits.length > shown.length ? (
-        <p className="mt-4 text-center text-sm text-[#6b7280]">
-          Showing the best matches. Add a word to narrow your search.
-        </p>
+      {pages > 1 ? (
+        <nav aria-label="Resource results pages" className="mt-4 flex items-center justify-center gap-4 text-sm">
+          {currentPage > 1 ? <Link href={pageHref(currentPage - 1)} className="font-semibold text-[#d35400]">Previous</Link> : null}
+          <span>Page {currentPage} of {pages} ({hits.length} resources)</span>
+          {currentPage < pages ? <Link href={pageHref(currentPage + 1)} className="font-semibold text-[#d35400]">Next</Link> : null}
+        </nav>
       ) : null}
       {!isPlus && hits.length ? (
         <p className="mt-3 text-center text-xs text-[#6b7280]">
