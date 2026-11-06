@@ -60,8 +60,9 @@ async function main() {
   assert.ok(page.includes('<SundayBundle'));
   assert.ok(page.includes('<CustomSheetCardGrid'));
   const results = await fs.readFile("src/components/resource/UnifiedSearchResults.tsx", "utf8");
-  assert.ok(results.includes('aria-label="Resource results pages"'));
-  assert.ok(results.includes('pageHref(currentPage + 1)'));
+  assert.ok(results.includes('<ResourcePagination'));
+  assert.ok(results.includes('totalPages={pages}'));
+  assert.ok(!results.includes('Free: print this Sunday'));
   assert.ok(!results.includes('Showing the best matches'));
   const search = await fs.readFile("src/components/resource/ResourceSearchBar.tsx", "utf8");
   assert.ok(!search.includes('view: "cards"'), "controls never scope to cards");
