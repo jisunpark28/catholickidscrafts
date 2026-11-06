@@ -92,8 +92,23 @@ async function main() {
     assert.ok((icon.svg.match(/<path|<circle/g) ?? []).length >= 4);
   }
   const luminance = (hex: string) => hex.match(/../g)!.map((v) => parseInt(v, 16) / 255).map((v) => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
-  assert.ok((1.05) / (luminance("607537") + .05) >= 4.5, "white active ink/text contrast");
-  assert.ok((luminance("fffbed") + .05) / (luminance("405329") + .05) >= 4.5, "olive normal ink/text contrast");
+  const contrast = (foreground: string, background: string) => {
+    const a = luminance(foreground), b = luminance(background);
+    return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+  };
+  for (const [label, foreground, background, minimum] of [
+    ["normal text", "493a30", "fffdfa", 4.5], ["active text/icon", "9d451d", "fbe8dc", 4.5],
+    ["normal icon", "b65b2e", "fffdfa", 3], ["active border", "b46139", "fbe8dc", 3],
+    ["green active marker", "2e7d32", "fbe8dc", 3], ["focus on paper", "9d451d", "fcf7f2", 3],
+    ["focus on hover", "9d451d", "fff2e8", 3], ["Plus badge", "40502d", "dce6c5", 4.5],
+  ] as const) {
+    const ratio = contrast(foreground, background);
+    assert.ok(ratio >= minimum, `${label}: ${ratio.toFixed(2)}:1 needs ${minimum}:1`);
+    console.log(`PASS contrast ${label}: ${ratio.toFixed(2)}:1`);
+  }
+  const navigationSource = readFileSync("src/components/home/SidebarNavigation.tsx", "utf8");
+  assert.doesNotMatch(navigationSource, /text-white|#607537|#405329|#c5b37b/, "no old olive/white-active palette");
+  assert.match(navigationSource, /before:bg-\[#2e7d32\]/, "green active indicator");
   const directory = process.env.SIDEBAR_FIXTURE_DIR ?? tmpdir(); mkdirSync(directory, { recursive: true });
   writeFileSync(path.join(directory, "sidebar-fixtures.json"), JSON.stringify({ fixtures, icons }));
   console.log(`PASS: ${decisions} reader/plan decisions + co-parent/inactive/error guards; ${routes.length} route/hash highlights; exact order/SSR omission/real destination files/7 illustrations/contrast. Fixtures: ${directory}`);

@@ -1,4 +1,4 @@
-# Olive sidebar navigation
+# Homepage-palette sidebar navigation
 
 ## Existing destinations
 
@@ -23,7 +23,7 @@ Only the resulting boolean reaches the client context. There is no local-storage
 
 ## Artwork / accessibility
 
-Seven original scalable paper-and-ink SVG drawings use coherent rounded strokes, restrained shading and inherited ink color. No emoji, stock icon mixture, rasterized text, whole-sidebar image, or game artwork is used. Active backgrounds and inherited white ink meet 4.5:1 text contrast; normal olive on cream also meets 4.5:1. Links remain real accessible DOM with focus outlines and nested-route/hash `aria-current` behavior. Existing collapse/mobile/Escape behavior is preserved.
+Seven original scalable paper-and-ink SVG drawings use coherent rounded strokes, restrained shading and inherited ink color. No emoji, stock icon mixture, rasterized text, whole-sidebar image, or game artwork is used. Pale-peach active cards use darker burnt-orange text/ink and a small green left indicator. Normal warm-brown text on near-white and active orange text on peach meet 4.5:1; icon, active-marker, border and keyboard-focus colors meet 3:1. The tiny Plus badge retains a muted-green accent. Links remain real accessible DOM with focus outlines and nested-route/hash `aria-current` behavior. Existing collapse/mobile/Escape behavior is preserved.
 
 ## Reproduction and limitations
 

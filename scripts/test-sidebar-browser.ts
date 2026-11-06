@@ -27,7 +27,7 @@ async function main() {
     assert.equal(await nav.locator('a[href="/subscribe"]').count(), 0);
     assert.equal(await nav.getByRole("button", { name: /My Binder/ }).count(), 0);
     assert.equal(await page.getByRole("banner").getByRole("link", { name: "Catholic Kids Crafts Plus", exact: true }).count(), 1, "header Plus preserved");
-    assert.equal(await nav.locator('[aria-current="page"] svg').evaluate((element) => getComputedStyle(element).stroke), "rgb(255, 255, 255)");
+    assert.equal(await nav.locator('[aria-current="page"] svg').evaluate((element) => getComputedStyle(element).stroke), "rgb(157, 69, 29)");
     for (const link of await nav.getByRole("link").all()) {
       const box = await link.boundingBox(); assert.ok(box && box.height >= 44);
       await link.focus(); assert.ok(await link.evaluate((element) => element === document.activeElement));
@@ -44,6 +44,29 @@ async function main() {
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.screenshot({ path: path.join(directory, "sidebar-desktop-signed-out.png") });
+    const activeLink = nav.locator('[aria-current="page"]');
+    assert.equal(await activeLink.evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(251, 232, 220)");
+    assert.equal(await activeLink.evaluate((element) => getComputedStyle(element).color), "rgb(157, 69, 29)");
+    const indicator = await activeLink.evaluate((element) => {
+      const style = getComputedStyle(element, "::before");
+      return { color: style.backgroundColor, width: style.width, height: style.height, content: style.content };
+    });
+    assert.deepEqual(indicator, { color: "rgb(46, 125, 50)", width: "6px", height: "28px", content: '""' });
+    assert.equal(await page.locator('aside:has(nav[aria-label="Home"])').evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(252, 247, 242)");
+    const hoverLink = nav.getByRole("link", { name: "Play & Learn", exact: true });
+    assert.equal(await hoverLink.evaluate((element) => getComputedStyle(element).color), "rgb(73, 58, 48)");
+    assert.equal(await hoverLink.locator("svg").evaluate((element) => getComputedStyle(element).stroke), "rgb(182, 91, 46)");
+    await hoverLink.hover();
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('nav[aria-label="Home"] a[href="/play"]')!).backgroundColor === "rgb(255, 242, 232)");
+    await page.screenshot({ path: path.join(directory, "sidebar-desktop-hover.png") });
+    await page.mouse.move(1000, 50);
+    await hoverLink.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await page.waitForFunction(() => getComputedStyle(document.activeElement!).outlineColor === "rgb(157, 69, 29)");
+    assert.equal(await hoverLink.evaluate((element) => getComputedStyle(element).outlineColor), "rgb(157, 69, 29)");
+    await page.screenshot({ path: path.join(directory, "sidebar-desktop-focus.png") });
+    await hoverLink.evaluate((element) => (element as HTMLElement).blur());
     // Exact SSR component fixtures, derived from mocked server billing decisions, NOT live auth.
     for (const state of ["free", "plus"]) {
       await nav.evaluate((element, html) => { element.outerHTML = html; }, data.fixtures[state]);
@@ -90,9 +113,14 @@ async function main() {
       assert.equal(result.status(), 200, `${destination}: actual HTTP destination`);
     }
     assert.deepEqual(errors, [], "no hydration/client exceptions");
+    await page.goto(`${base}/`, { waitUntil: "networkidle", timeout: 120000 });
+    await page.screenshot({ path: path.join(directory, "sidebar-home-desktop.png") });
+    await page.setViewportSize({ width: 375, height: 1000 });
+    await page.getByRole("button", { name: "Explore & Learn", exact: true }).click();
+    await page.screenshot({ path: path.join(directory, "sidebar-home-mobile.png") });
     const stylesheets = await page.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((element) => (element as HTMLLinkElement).href));
     await page.setViewportSize({ width: 1200, height: 540 });
-    await page.setContent(`<html><head>${stylesheets.map((href) => `<link rel="stylesheet" href="${href}">`).join("")}<style>body{margin:0;padding:28px;background:#fffbef;font:15px system-ui;color:#405329}svg{width:108px;height:108px;margin:0 auto 8px}h1{font-size:22px;margin:0 0 20px}.row{display:grid;grid-template-columns:repeat(7,1fr);gap:14px;padding:18px;border-radius:20px}.cell{text-align:center}.active{color:#fff;background:#607537;margin-top:20px}</style></head><body><h1>Original paper-and-ink sidebar illustrations</h1>${["row", "row active"].map((classes) => `<div class="${classes}">${data.icons.map((icon) => `<div class="cell">${icon.svg}<span>${icon.label}</span></div>`).join("")}</div>`).join("")}</body></html>`, { waitUntil: "networkidle" });
+    await page.setContent(`<html><head>${stylesheets.map((href) => `<link rel="stylesheet" href="${href}">`).join("")}<style>body{margin:0;padding:28px;background:#fcf7f2;font:15px system-ui;color:#b65b2e}svg{width:108px;height:108px;margin:0 auto 8px}h1{font-size:22px;margin:0 0 20px}.row{display:grid;grid-template-columns:repeat(7,1fr);gap:14px;padding:18px;border-radius:20px}.cell{text-align:center}.active{color:#9d451d;background:#fbe8dc;margin-top:20px}</style></head><body><h1>Original paper-and-ink sidebar illustrations</h1>${["row", "row active"].map((classes) => `<div class="${classes}">${data.icons.map((icon) => `<div class="cell">${icon.svg}<span>${icon.label}</span></div>`).join("")}</div>`).join("")}</body></html>`, { waitUntil: "networkidle" });
     await page.screenshot({ path: path.join(directory, "sidebar-icons.png") });
     console.log(`PASS actual signed-out production SSR, 16 HTTP destinations, 11 preserved categories, route/hash/current icons, desktop/mobile/toggles/focus/no overflow; free/Plus rendered component fixtures (not live billing), 7-icon sheet.`);
   } finally { await browser.close(); }
