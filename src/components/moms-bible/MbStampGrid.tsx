@@ -2,29 +2,39 @@
 
 import { MB_STAMP_INFO } from "@/lib/moms-bible/constants";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import "@/styles/moms-bible.css";
 
 export type StampCell = {
   label: string;
   href: string;
   stamp: "mine" | "waiting" | "shared" | null;
+  /** Set on testament-wide highlight cards so the book name can show under the stamp. */
+  bookName?: string;
 };
 
 const FILTER_KEY = "ckc_mb_filter_marked";
 
-/** Book index for Mom's Bible viewers (mockups 3 / 3b): chapter tiles with stamps and a highlights-only toggle. */
+/** Book index for Mom's Bible viewers: chapter tiles with stamps and a highlights-only toggle. */
 export function MbStampGrid({
   bookName,
+  testamentLabel,
   cells,
+  highlightCells,
   viewer,
   roleLabel,
+  toolbar,
+  bookSelect,
 }: {
   bookName: string;
+  testamentLabel: string;
   cells: readonly StampCell[];
+  highlightCells: readonly StampCell[];
   viewer: "parent" | "child";
   /** "Mom" / "Mom & Dad": whose highlights the toggle shows. */
   roleLabel: string;
+  toolbar?: ReactNode;
+  bookSelect?: ReactNode;
 }) {
   const [only, setOnly] = useState(false);
   useEffect(() => {
@@ -43,7 +53,7 @@ export function MbStampGrid({
       /* ignore */
     }
   };
-  const shown = only ? cells.filter((c) => c.stamp) : cells;
+  const shown = only ? highlightCells : cells;
   const legend =
     viewer === "parent"
       ? {
@@ -60,7 +70,18 @@ export function MbStampGrid({
 
   return (
     <div className="mb-index w-full">
-      <h1 className="mb-index__title">{bookName} — Chapters</h1>
+      <div className="mb-index__toolbar">
+        <button type="button" role="switch" aria-checked={only} className="mb-toggle" onClick={toggle}>
+          ✨ Show {roleLabel}&apos;s Highlights Only <span className="mb-switch" aria-hidden />
+        </button>
+        {toolbar}
+      </div>
+      {!only && (
+        <div className="mb-index__head">
+          <h1 className="mb-index__title">{bookName} — Chapters</h1>
+          {bookSelect}
+        </div>
+      )}
       <div className="mb-index__bar">
         <p className="mb-legend">
           ⓘ <b>Stamps:</b>{" "}
@@ -70,34 +91,44 @@ export function MbStampGrid({
             </span>
           ))}
         </p>
-        <button type="button" role="switch" aria-checked={only} className="mb-toggle" onClick={toggle}>
-          ✨ Show {roleLabel}&apos;s Highlights Only <span className="mb-switch" aria-hidden />
-        </button>
       </div>
       {shown.length === 0 ? (
-        <p className="mt-6 text-center text-sm text-[#8a7d96]">Nothing marked in {bookName} yet.</p>
+        <p className="mt-6 text-center text-sm text-[#8a7d96]">
+          Nothing marked in {only ? testamentLabel : bookName} yet.
+        </p>
       ) : (
-        <div className="mb-index__grid">
+        <div className={`mb-index__grid${only ? " mb-index__grid--highlights" : ""}`}>
           {shown.map((c) => (
             <Link
-              key={c.label}
+              key={c.href}
               href={c.href}
-              className={`mb-tile${c.stamp ? " mb-tile--on" : ""}`}
-              title={`${bookName} ${c.label}`}
-              aria-label={`Chapter ${c.label}${c.stamp ? `, ${MB_STAMP_INFO[c.stamp].label}` : ""}`}
+              className={`mb-tile${c.stamp ? " mb-tile--on" : ""}${only && c.bookName ? " mb-tile--book" : ""}`}
+              title={c.bookName ? `${c.bookName} ${c.label}` : `${bookName} ${c.label}`}
+              aria-label={
+                c.bookName
+                  ? `${c.bookName} chapter ${c.label}${c.stamp ? `, ${MB_STAMP_INFO[c.stamp].label}` : ""}`
+                  : `Chapter ${c.label}${c.stamp ? `, ${MB_STAMP_INFO[c.stamp].label}` : ""}`
+              }
             >
-              <b>{c.label}</b>
-              <span className="mb-tile__stamp" aria-hidden>
-                {c.stamp ? MB_STAMP_INFO[c.stamp].emoji : ""}
-              </span>
+              {only && c.bookName ? (
+                <>
+                  <span className="mb-tile__badge" aria-hidden>
+                    <span className="mb-tile__stamp">{c.stamp ? MB_STAMP_INFO[c.stamp].emoji : ""}</span>
+                    <b>{c.label}</b>
+                  </span>
+                  <span className="mb-tile__book">{c.bookName}</span>
+                </>
+              ) : (
+                <>
+                  <b>{c.label}</b>
+                  <span className="mb-tile__stamp" aria-hidden>
+                    {c.stamp ? MB_STAMP_INFO[c.stamp].emoji : ""}
+                  </span>
+                </>
+              )}
             </Link>
           ))}
         </div>
-      )}
-      {only && (
-        <p className="mb-index__count">
-          Showing {shown.length} of {cells.length} · turn off to see all
-        </p>
       )}
     </div>
   );
