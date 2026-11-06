@@ -1,4 +1,5 @@
-// Server-only: read full-resolution card PNGs (private Vercel Blob in production, local folder in dev).
+import BUNDLED_CARD_ORIGINALS from "@/data/cards/designed-originals.json";
+// Server-only: private bundled designed PNGs, private Vercel Blob, or local dev originals.
 // Never import from a client component: the manifest holds storage paths.
 import { get } from "@vercel/blob";
 import fs from "fs/promises";
@@ -10,6 +11,8 @@ type ManifestItem = { pathname: string; url: string; size: number; sha256: strin
 type Manifest = { version: number; access: "private" | "public" | null; items: Record<string, ManifestItem> };
 
 const MANIFEST = MANIFEST_JSON as Manifest;
+
+const BUNDLED_IDS = new Set<string>(Object.keys(BUNDLED_CARD_ORIGINALS));
 
 export class CardOriginalUnavailableError extends Error {}
 
@@ -119,9 +122,10 @@ async function readLocalOriginal(id: string): Promise<CardOriginal | null> {
   return { body: buf, size: buf.length };
 }
 
-/** True when a full-size original can be served (uploaded to Blob, or found in the dev folder). */
+/** True when a full-size original is bundled, uploaded to Blob, or found in the dev folder. */
 export async function hasCardOriginal(id: string): Promise<boolean> {
   if (!getPictureCard(id)) return false;
+  if (BUNDLED_IDS.has(id)) return true;
   if (MANIFEST.access && MANIFEST.items[id]) return true;
   return (await localOriginalPath(id)) != null;
 }
@@ -135,6 +139,11 @@ export async function readCardOriginal(
   opts?: { oidcToken?: string | null },
 ): Promise<CardOriginal | null> {
   if (!getPictureCard(id)) return null;
+
+  if (BUNDLED_IDS.has(id)) {
+    const buf = await fs.readFile(path.join(process.cwd(), "assets", "card-originals", `${id}.png`));
+    return { body: buf, size: buf.length };
+  }
 
   const item = MANIFEST.items[id];
   if (item && MANIFEST.access) {

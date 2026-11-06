@@ -1,4 +1,5 @@
-// Resource library: search and URL helpers over the static Sunday sheets.
+import { EVERGREEN_PAGES, getEvergreenPage, getEvergreenPageBySlug, getEvergreenSheet, printPath } from "@/lib/evergreen-catalog";
+// Resource library: Sunday + evergreen sheets; Sunday key validation stays separate.
 // DB-free and romcal-free, so it is safe for static pages and the sitemap.
 import { SHARED_KEYS, SUNDAY_KEYS } from "@/lib/sheet-keys/keys";
 import { getSundaySheet, listSundaySheetKeys, type SundaySheetContent } from "@/lib/sunday-sheet-content";
@@ -40,11 +41,26 @@ export function slugToKey(slug: string): string | null {
   return getSundaySheet(key) ? key : null;
 }
 
+/** Sunday slugs resolve first; evergreen title slugs never enter the Sunday key catalog. */
+export function resolveResourceSheet(slug: string): SundaySheetContent | null {
+  const key = slugToKey(slug);
+  if (key) return getSundaySheet(key);
+  const page = getEvergreenPageBySlug(slug);
+  return page ? getEvergreenSheet(page.key) : null;
+}
+
+export function listResourceSheets(): SundaySheetContent[] {
+  return [...listSundaySheetKeys().flatMap((key) => { const s = getSundaySheet(key); return s ? [s] : []; }),
+    ...EVERGREEN_PAGES.flatMap((page) => { const s = getEvergreenSheet(page.key); return s ? [s] : []; })];
+}
+
 export function resourcePath(key: string, level?: 1 | 2): string {
-  return `${RESOURCE_PATH}/${keyToSlug(key)}${level === 2 ? "?level=2" : ""}`;
+  return `${RESOURCE_PATH}/${getEvergreenPage(key)?.slug ?? keyToSlug(key)}${level === 2 ? "?level=2" : ""}`;
 }
 
 export function resourcePrintPath(key: string, level: 1 | 2, autoPrint = false): string {
+  const page = getEvergreenPage(key);
+  if (page) return printPath(page, level, autoPrint);
   return `/print/resource/${keyToSlug(key)}?level=${level}${autoPrint ? "&autoprint=1" : ""}`;
 }
 
@@ -82,6 +98,8 @@ export function seasonPath(id: ResourceSeason): string {
 }
 
 export function yearLabel(key: string): string {
+  const page = getEvergreenPage(key);
+  if (page) return page.kind === "mass" ? "Mass for Kids" : "Virtue Challenge";
   const y = sheetYear(key);
   return y ? `Year ${y}` : "Every year";
 }
@@ -161,9 +179,9 @@ export function searchSheets({ q, year, season }: ResourceQuery): SundaySheetCon
     .filter((t) => t.length > 1)
     .slice(0, 8);
   const rows: { sheet: SundaySheetContent; s: number }[] = [];
-  for (const key of listSundaySheetKeys()) {
-    const sheet = getSundaySheet(key);
-    if (!sheet) continue;
+  for (const sheet of listResourceSheets()) {
+    const key = sheet.key;
+    if (getEvergreenPage(key) && (year || season)) continue;
     const y = sheetYear(key);
     if (year && y && y !== year) continue;
     if (season && sheetSeason(sheet) !== season) continue;
@@ -174,7 +192,7 @@ export function searchSheets({ q, year, season }: ResourceQuery): SundaySheetCon
     .sort(
       (a, b) =>
         b.s - a.s ||
-        SEASON_ORDER[sheetSeason(a.sheet)] - SEASON_ORDER[sheetSeason(b.sheet)] ||
+        (getEvergreenPage(a.sheet.key) ? 6 : SEASON_ORDER[sheetSeason(a.sheet)]) - (getEvergreenPage(b.sheet.key) ? 6 : SEASON_ORDER[sheetSeason(b.sheet)]) ||
         a.sheet.key.localeCompare(b.sheet.key, "en", { numeric: true }),
     )
     .map((r) => r.sheet);

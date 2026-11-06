@@ -1,3 +1,5 @@
+import { getEvergreenPage } from "@/lib/evergreen-catalog";
+import { canOpenResourceSheet } from "@/lib/resource/access";
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { cardSharePath } from "@/lib/resource/card-meta";
 import { resourcePath, resourcePrintPath, yearLabel } from "@/lib/resource/sheets";
@@ -69,8 +71,8 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
             }
             const s = h.sheet;
             const lv = level === 2 ? s.levels.level2 : s.levels.level1;
-            // Free (incl. signed-out): only this Sunday's sheet opens; others stay locked (unchanged rule).
-            const unlocked = isPlus || s.key === thisSundayKey;
+            // Free (incl. signed-out): this Sunday and evergreen worksheets open; other Sunday sheets stay locked.
+            const unlocked = canOpenResourceSheet({ isPlus, sheetKey: s.key, thisSundayKey });
             const thumb = (
               <span className="relative block aspect-[4/5] overflow-hidden rounded-lg bg-white">
                 <SheetThumb sheet={{ ...toGospelSheetView(s), sundayLabel: yearLabel(s.key) }} level={level} />
@@ -86,7 +88,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
             );
             const meta = (
               <span className="block px-1 pt-2">
-                <span className="block text-xs font-bold tracking-wide text-[#d35400]">{s.key}</span>
+                <span className="block text-xs font-bold tracking-wide text-[#d35400]">{getEvergreenPage(s.key) ? yearLabel(s.key) : s.key}</span>
                 <span className="block truncate text-sm font-bold text-[#1c1c1c]">{lv.title}</span>
                 <span className="block truncate text-xs text-[#6b7280]">{s.liturgicalName}</span>
                 <span className="block truncate text-xs text-[#6b7280]">{s.gospelRef}</span>
@@ -161,7 +163,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
       ) : null}
       {!isPlus && hits.length ? (
         <p className="mt-3 text-center text-xs text-[#6b7280]">
-          Free: print this Sunday&apos;s sheet. Plus: every sheet, plus card downloads (PNG 4:5) and sharing ·{" "}
+          Free: print this Sunday&apos;s sheet and all Mass / Virtue Challenge worksheets. Plus: every sheet, plus card downloads (PNG 4:5) and sharing ·{" "}
           <Link href="/subscribe" className="font-semibold text-[#d35400]">
             Get Plus
           </Link>

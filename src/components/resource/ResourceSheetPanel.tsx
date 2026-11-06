@@ -1,3 +1,4 @@
+import { getEvergreenPage } from "@/lib/evergreen-catalog";
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
@@ -89,14 +90,14 @@ function ActionButtons({
           <span className="rounded-md bg-[#f5ebe0] px-1.5 py-0.5 text-[10px] font-bold text-[#d35400]">PLUS</span>
         </PlusLockButton>
       )}
-      <Link
+      {!getEvergreenPage(sheetKey) ? <Link
         href={resourceEditPath(sheetKey, level)}
         className={`${btn} border-[#e7e3de] bg-[#f9f9f9] text-[#6b7280] hover:bg-white`}
         title={isPlus ? "Edit on the locked base sheet" : "Sign in to customize — Save and Print need Plus"}
       >
         <span aria-hidden>{isPlus ? "🔒" : "✏️"}</span> Edit
         <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
-      </Link>
+      </Link> : null}
     </>
   );
 }
@@ -125,7 +126,7 @@ export function ResourceSheetPanel({
     />
   );
   return (
-    <section aria-label="Sunday sheet" className="pb-24 sm:pb-0">
+    <section aria-label="Worksheet" className="pb-24 sm:pb-0">
       <div
         className={`mb-4 mt-5 flex flex-wrap items-end gap-3 ${heading ? "justify-between" : "justify-end"}`}
       >

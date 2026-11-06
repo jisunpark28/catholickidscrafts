@@ -19,7 +19,7 @@ for (const page of EVERGREEN_PAGES) {
   const s = EVERGREEN_SHEETS[page.key];
   assert.ok(s, page.key);
   assert.ok(!sunday.has(page.key), "evergreen keys stay out of the Sunday catalog");
-  assert.equal(slugToKey(page.slug), null, `${page.slug} must not resolve as a /resource key`);
+  assert.equal(slugToKey(page.slug), null, `${page.slug} must not resolve as a Sunday key`);
   for (const f of ["key", "liturgicalName", "season", "gospelRef", "keyVerseDR", "color"] as const) assert.ok(s[f], `${page.key}.${f}`);
   assert.ok(s.art.main && s.art.heart && s.art.icons.length);
   for (const lv of [s.levels.level1, s.levels.level2]) {
