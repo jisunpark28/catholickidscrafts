@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
-import { PageShell } from "@/components/PageShell";
 import { PhotoBoothGame } from "@/components/PhotoBoothGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -22,7 +21,7 @@ export default async function PhotoBoothPage() {
   const copy = await getSiteCopyMap();
 
   return (
-    <PageShell wide>
+    <div className="min-w-0">
       <JsonLd
         nodes={[
           breadcrumbNode([{ name: "Play & Learn", path: "/play" }, { name: SEO_TITLE, path: "/play/photo-booth" }]),
@@ -45,6 +44,6 @@ export default async function PhotoBoothPage() {
       <p className="mt-6 text-xs text-[var(--color-muted)]">
         Photos are edited only on your device—they are not uploaded to our servers.
       </p>
-    </PageShell>
+    </div>
   );
 }

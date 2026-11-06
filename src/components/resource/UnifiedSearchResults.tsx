@@ -7,7 +7,7 @@ import type { SearchHit } from "@/lib/resource/unified-search";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 import { CardTile } from "./CardTile";
-import { LockedPreview } from "./LockedPreview";
+import { LockedSheetPreview } from "./LockedSheetPreview";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 import { ResourcePagination } from "./ResourcePagination";
@@ -77,7 +77,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
             }
             const s = h.sheet;
             const lv = level === 2 ? s.levels.level2 : s.levels.level1;
-            // Free (incl. signed-out): this Sunday and evergreen worksheets open; other Sunday sheets stay locked.
+            // Free (incl. signed-out): only this Sunday is unlocked; all other worksheets need Plus.
             const unlocked = canOpenResourceSheet({ isPlus, sheetKey: s.key, thisSundayKey });
             const thumb = (
               <span className="relative block aspect-[4/5] overflow-hidden rounded-lg bg-white">
@@ -131,9 +131,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                     aria-disabled="true"
                     title="Plus members only (this Sunday's sheet is free)"
                   >
-                    <LockedPreview className="rounded-lg" label={`${lv.title}: unlock with Plus`}>
-                      {thumb}
-                    </LockedPreview>
+                    <LockedSheetPreview title={lv.title} />
                     {meta}
                     <div className="mt-auto px-1 pb-1 pt-2.5">
                       <div className="flex flex-wrap gap-1.5">

@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { EVERGREEN_PAGES, getEvergreenPage } from "../src/lib/evergreen-catalog";
+import { canOpenResourceSheet } from "../src/lib/resource/access";
 import { cardSharePath } from "../src/lib/resource/card-meta";
 import { cardSeasons, getPictureCard, PICTURE_CARDS } from "../src/lib/resource/cards";
 import { listResourceSheets, RESOURCE_SEASONS, sheetSeason } from "../src/lib/resource/sheets";
@@ -32,6 +33,12 @@ async function main() {
           assert.ok(cardSeasons(hit.card).includes(season.id));
         }
       }
+    }
+  }
+  for (const hit of all) {
+    if (hit.type !== "sheet") continue;
+    for (const isPlus of [false, true]) {
+      assert.equal(canOpenResourceSheet({ isPlus, sheetKey: hit.sheet.key, thisSundayKey: "A_OT32" }), isPlus || hit.sheet.key === "A_OT32");
     }
   }
   const virtueHits = unifiedSearch("virtue", null, null);

@@ -4,14 +4,14 @@ import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { resourcePath, resourcePrintPath, yearLabel } from "@/lib/resource/sheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
-import { LockedPreview } from "./LockedPreview";
+import { LockedSheetPreview } from "./LockedSheetPreview";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 
 type Props = {
   sheets: SundaySheetContent[];
   level: 1 | 2;
-  /** Server-resolved: Plus members can open any card; free (and signed-out) this Sunday and evergreen worksheets. */
+  /** Server-resolved: Plus members can open any card; free (and signed-out) this Sunday only. */
   isPlus?: boolean;
   thisSundayKey?: string | null;
 };
@@ -30,7 +30,7 @@ export function ResourceCardGrid({
         {sheets.map((sheet) => {
           const title = level === 2 ? sheet.levels.level2.title : sheet.levels.level1.title;
           const view = toGospelSheetView(sheet);
-          // Free (incl. signed-out) visitors: this Sunday and evergreen worksheets are always usable.
+          // Free (incl. signed-out) visitors: only this Sunday is unlocked.
           const unlocked = canOpenResourceSheet({ isPlus, sheetKey: sheet.key, thisSundayKey });
           const openHref = resourcePath(sheet.key, level);
           const lockedTitle = "Plus members only (this Sunday's sheet is free)";
@@ -46,9 +46,7 @@ export function ResourceCardGrid({
                   <SheetThumb sheet={{ ...view, sundayLabel: getEvergreenPage(sheet.key) ? yearLabel(sheet.key) : sheet.key }} level={level} />
                 </Link>
               ) : (
-                <LockedPreview className="rounded-lg" label={`${title}: unlock with Plus`}>
-                  <SheetThumb sheet={{ ...view, sundayLabel: sheet.key }} level={level} />
-                </LockedPreview>
+                <LockedSheetPreview title={title} />
               )}
               <div className="mt-3 px-1 text-xs font-bold tracking-wide text-[#d35400]">{getEvergreenPage(sheet.key) ? yearLabel(sheet.key) : sheet.key}</div>
               <h3 className="mb-0.5 mt-0.5 px-1 text-base font-bold leading-snug text-[#1c1c1c]">
