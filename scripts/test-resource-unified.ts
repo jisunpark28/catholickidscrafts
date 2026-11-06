@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import { EVERGREEN_PAGES, getEvergreenPage } from "../src/lib/evergreen-catalog";
+import { canOpenResourceSheet } from "../src/lib/resource/access";
 import { cardSharePath } from "../src/lib/resource/card-meta";
 import { cardSeasons, getPictureCard, PICTURE_CARDS } from "../src/lib/resource/cards";
 import { listResourceSheets, RESOURCE_SEASONS, sheetSeason } from "../src/lib/resource/sheets";
@@ -34,6 +35,12 @@ async function main() {
       }
     }
   }
+  for (const hit of all) {
+    if (hit.type !== "sheet") continue;
+    for (const isPlus of [false, true]) {
+      assert.equal(canOpenResourceSheet({ isPlus, sheetKey: hit.sheet.key, thisSundayKey: "A_OT32" }), isPlus || hit.sheet.key === "A_OT32");
+    }
+  }
   const virtueHits = unifiedSearch("virtue", null, null);
   const paged: SearchHit[] = [];
   for (let offset = 0; offset < virtueHits.length; offset += 48) paged.push(...virtueHits.slice(offset, offset + 48));
@@ -60,8 +67,9 @@ async function main() {
   assert.ok(page.includes('<SundayBundle'));
   assert.ok(page.includes('<CustomSheetCardGrid'));
   const results = await fs.readFile("src/components/resource/UnifiedSearchResults.tsx", "utf8");
-  assert.ok(results.includes('aria-label="Resource results pages"'));
-  assert.ok(results.includes('pageHref(currentPage + 1)'));
+  assert.ok(results.includes('<ResourcePagination'));
+  assert.ok(results.includes('totalPages={pages}'));
+  assert.ok(!results.includes('Free: print this Sunday'));
   assert.ok(!results.includes('Showing the best matches'));
   const search = await fs.readFile("src/components/resource/ResourceSearchBar.tsx", "utf8");
   assert.ok(!search.includes('view: "cards"'), "controls never scope to cards");

@@ -7,9 +7,10 @@ import type { SearchHit } from "@/lib/resource/unified-search";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 import { CardTile } from "./CardTile";
-import { LockedPreview } from "./LockedPreview";
+import { LockedSheetPreview } from "./LockedSheetPreview";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
+import { ResourcePagination } from "./ResourcePagination";
 
 type Props = {
   q: string;
@@ -43,7 +44,6 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
   const pages = Math.max(1, Math.ceil(hits.length / pageSize));
   const currentPage = Math.min(pages, Math.max(1, page));
   const shown = hits.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const pageHref = (n: number) => `${resultsHref}&page=${n}`;
   return (
     <section aria-label={q ? "Search results" : "All resources"} className="mt-5">
       <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
@@ -77,7 +77,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
             }
             const s = h.sheet;
             const lv = level === 2 ? s.levels.level2 : s.levels.level1;
-            // Free (incl. signed-out): this Sunday and evergreen worksheets open; other Sunday sheets stay locked.
+            // Free (incl. signed-out): only this Sunday is unlocked; all other worksheets need Plus.
             const unlocked = canOpenResourceSheet({ isPlus, sheetKey: s.key, thisSundayKey });
             const thumb = (
               <span className="relative block aspect-[4/5] overflow-hidden rounded-lg bg-white">
@@ -131,9 +131,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                     aria-disabled="true"
                     title="Plus members only (this Sunday's sheet is free)"
                   >
-                    <LockedPreview className="rounded-lg" label={`${lv.title}: unlock with Plus`}>
-                      {thumb}
-                    </LockedPreview>
+                    <LockedSheetPreview title={lv.title} />
                     {meta}
                     <div className="mt-auto px-1 pb-1 pt-2.5">
                       <div className="flex flex-wrap gap-1.5">
@@ -162,21 +160,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
           Nothing matches. Try a Gospel (e.g. “Luke 15”), a story (e.g. “lost sheep”), a saint or a feast.
         </p>
       )}
-      {pages > 1 ? (
-        <nav aria-label="Resource results pages" className="mt-4 flex items-center justify-center gap-4 text-sm">
-          {currentPage > 1 ? <Link href={pageHref(currentPage - 1)} className="font-semibold text-[#d35400]">Previous</Link> : null}
-          <span>Page {currentPage} of {pages} ({hits.length} resources)</span>
-          {currentPage < pages ? <Link href={pageHref(currentPage + 1)} className="font-semibold text-[#d35400]">Next</Link> : null}
-        </nav>
-      ) : null}
-      {!isPlus && hits.length ? (
-        <p className="mt-3 text-center text-xs text-[#6b7280]">
-          Free: print this Sunday&apos;s sheet and all Mass / Virtue Challenge worksheets. Plus: every sheet, plus card downloads (PNG 4:5) and sharing ·{" "}
-          <Link href="/subscribe" className="font-semibold text-[#d35400]">
-            Get Plus
-          </Link>
-        </p>
-      ) : null}
+      <ResourcePagination currentPage={currentPage} totalPages={pages} resultsHref={resultsHref} />
     </section>
   );
 }

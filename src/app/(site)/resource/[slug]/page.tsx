@@ -78,9 +78,9 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
         </nav>
         <header className="mt-4">
           <h1 className="text-2xl font-bold">{evergreenSeoTitle(evergreen)}</h1>
-          <p className="text-sm text-[#6b7280]">Free preview and printing for everyone. Two learning levels.</p>
+          <p className="text-sm text-[#6b7280]">Plus unlocks previews and printing. This Sunday&apos;s sheet is free. Two learning levels.</p>
         </header>
-        <ResourceSheetPanel sheet={sheet} level={level} canPrint={true}
+        <ResourceSheetPanel sheet={sheet} level={level} isPlus={viewer.isPlus} canPrint={sheetOpenAllowed(viewer, sheet.key)}
           levelHref={(n) => resourcePath(sheet.key, n)} />
       </HomePdfShell>
     );

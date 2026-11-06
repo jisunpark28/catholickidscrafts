@@ -2,6 +2,7 @@ import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { PrintToolbar } from "@/components/gospel-sheet/PrintToolbar";
 import { GOSPEL_SHEET_CSS, GOSPEL_SHEET_PAGE_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
+import { resolveResourceViewer, sheetOpenAllowed } from "@/lib/resource/resolve-access";
 import {
   evergreenDescription,
   evergreenSeoTitle,
@@ -14,7 +15,7 @@ import { pageMetadata } from "@/lib/site-metadata";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -46,12 +47,13 @@ const SEO_CHROME_CSS = `
 @media print { .seo-print-chrome { display: none !important; } }
 `;
 
-/** Free print view of an evergreen worksheet (Mass order / Family Virtue Challenge). No Plus gate. */
+/** Plus-only print view, including embed and autoprint requests. */
 export default async function EvergreenPrintPage({ params, searchParams }: Props) {
-  const [{ slug }, query] = await Promise.all([params, searchParams]);
+  const [{ slug }, query, viewer] = await Promise.all([params, searchParams, resolveResourceViewer()]);
   const page = getEvergreenPageBySlug(slug);
   const sheet = page ? getEvergreenSheet(page.key) : null;
   if (!page || !sheet) notFound();
+  if (!sheetOpenAllowed(viewer, page.key)) redirect("/subscribe");
   const level = parseLevelParam(query.level);
   const embed = query.embed === "1";
   const autoPrint = query.autoprint === "1";
