@@ -1,9 +1,9 @@
-import { Fredoka } from "next/font/google";
+import localFont from "next/font/local";
 
 /** Rounded display font for kid Q&A headings only. */
-export const fredoka = Fredoka({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+export const fredoka = localFont({
+  src: "../../assets/fonts/fredoka-variable.ttf",
+  weight: "500 700",
   variable: "--font-fredoka",
   display: "swap",
 });

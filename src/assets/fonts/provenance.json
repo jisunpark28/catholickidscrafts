@@ -1,0 +1,22 @@
+{
+  "fredoka": {
+    "url": "https://raw.githubusercontent.com/google/fonts/a60a77e14f28abd4ef243a1b5dfc48df0cec5205/ofl/fredoka/Fredoka%5Bwdth%2Cwght%5D.ttf",
+    "licenseUrl": "https://raw.githubusercontent.com/google/fonts/a60a77e14f28abd4ef243a1b5dfc48df0cec5205/ofl/fredoka/OFL.txt",
+    "sha256": "2ba02e68b152868aef9ba28e24b3648c7d457fe6f25c761f2c2c53fb61a73fc8",
+    "pinnedAxes": {
+      "wdth": 100
+    },
+    "bundledSha256": "64e6289a5662c33f9f7bcfe2fb8f2fbd0e7cba91bd9ab2df9a0508ae9c75ed19",
+    "glyphCount": 320
+  },
+  "inter": {
+    "url": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf",
+    "licenseUrl": "https://raw.githubusercontent.com/google/fonts/0b58fb370093f9a9f4ff785d94405710b79de67c/ofl/inter/OFL.txt",
+    "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+    "pinnedAxes": {
+      "opsz": 14
+    },
+    "bundledSha256": "5dc65936f548f56a3c5d11bdeed2299730e3e6c03fee021140c1768bbd35466d",
+    "glyphCount": 2849
+  }
+}
