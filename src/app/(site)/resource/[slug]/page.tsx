@@ -18,6 +18,7 @@ import {
   slugToKey,
   yearLabel,
 } from "@/lib/resource/sheets";
+import { sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode, worksheetNode } from "@/lib/structured-data";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
@@ -38,11 +39,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const key = slugToKey(slug);
   const sheet = key ? getSundaySheet(key) : null;
   if (!sheet) return {};
+  // Canonical SEO parent is the Sunday Mass worksheet page (avoid competing duplicates).
   return pageMetadata({
     title: sheetSeoTitle(sheet),
     absoluteTitle: true,
     description: sheetDescription(sheet),
-    path: resourcePath(sheet.key),
+    path: sundayMassWorksheetPath(sheet.key),
   });
 }
 
@@ -83,7 +85,7 @@ export default async function ResourceSheetPage({ params, searchParams }: Props)
             description: sheetDescription(sheet),
             abstract: sheetAbstract(sheet),
             keyVerse: sheet.keyVerseDR,
-            pagePath: path,
+            pagePath: sundayMassWorksheetPath(key),
             isAccessibleForFree: true,
           }),
         ]}
