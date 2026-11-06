@@ -7,6 +7,7 @@ import {
   faithPageSeo,
   getFaithSeoCard,
 } from "@/lib/seo/card-seo";
+import { pinOgImage } from "@/lib/seo/pin-og";
 import { pageMetadata } from "@/lib/site-metadata";
 import {
   absoluteSiteUrl,
@@ -34,6 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: seo.seoTitle,
     description: seo.description,
     path: `${FAITH_HUB}/${card.slug}`,
+    image: pinOgImage("faith", card.slug, seo.seoTitle),
   });
 }
 

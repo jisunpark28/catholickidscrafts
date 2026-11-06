@@ -21,6 +21,7 @@ import {
   SUNDAY_MASS_WORKSHEETS_HUB,
   sundayMassWorksheetPath,
 } from "@/lib/seo/sunday-mass-worksheets";
+import { pinOgImage } from "@/lib/seo/pin-og";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode, worksheetNode } from "@/lib/structured-data";
 import { getSundaySheet, listSundaySheetKeys } from "@/lib/sunday-sheet-content";
@@ -44,6 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     absoluteTitle: true,
     description: sheetDescription(sheet),
     path: sundayMassWorksheetPath(key),
+    image: pinOgImage("worksheet", keyToSlug(key), sheetSeoTitle(sheet)),
   });
 }
 

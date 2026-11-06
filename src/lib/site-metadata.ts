@@ -56,6 +56,13 @@ export function canonicalForPath(path: string): Pick<Metadata, "alternates"> {
 const SITE_NAME = "Catholic Kids Crafts";
 const DEFAULT_OG_IMAGE = { url: "/logo.png", width: 512, height: 512, alt: SITE_NAME };
 
+export type PageOgImage = {
+  url: string;
+  width: number;
+  height: number;
+  alt: string;
+};
+
 type PageMetadataInput = {
   /** Page title without the " | Catholic Kids Crafts" suffix (the root template adds it). */
   title: string;
@@ -65,6 +72,11 @@ type PageMetadataInput = {
   /** Canonical path, e.g. "/mass". Also used for og:url. */
   path: string;
   robots?: Metadata["robots"];
+  /**
+   * Optional Open Graph / Twitter image. Defaults to the site logo.
+   * SEO pin pages pass the 1000×1500 `/api/og/pin` image here.
+   */
+  image?: PageOgImage;
 };
 
 /**
@@ -72,8 +84,10 @@ type PageMetadataInput = {
  * tags (og:title without the site suffix, og:url = canonical). Next.js replaces the root
  * openGraph/twitter objects instead of merging them, so the shared fields are repeated here.
  */
-export function pageMetadata({ title, absoluteTitle, description, path, robots }: PageMetadataInput): Metadata {
+export function pageMetadata({ title, absoluteTitle, description, path, robots, image }: PageMetadataInput): Metadata {
   const canonical = path.startsWith("/") ? path : `/${path}`;
+  const ogImage = image ?? DEFAULT_OG_IMAGE;
+  // Keep Twitter on "summary" site-wide (2:3 pins are for Pinterest/OG; avoid changing non-SEO pages).
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
@@ -86,13 +100,13 @@ export function pageMetadata({ title, absoluteTitle, description, path, robots }
       url: canonical,
       title,
       description,
-      images: [DEFAULT_OG_IMAGE],
+      images: [ogImage],
     },
     twitter: {
       card: "summary",
       title,
       description,
-      images: [DEFAULT_OG_IMAGE.url],
+      images: [ogImage.url],
     },
   };
 }
