@@ -7,6 +7,7 @@ import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-c
 import Link from "next/link";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetFit } from "./SheetFit";
+import { LockedSheetPreview } from "./LockedSheetPreview";
 
 type Props = {
   sheet: SundaySheetContent;
@@ -23,7 +24,7 @@ type Props = {
   isPlus?: boolean;
   /**
    * When false, Print/PDF go to subscribe (or thisSundayHref) instead of the print route.
-   * Sheet preview + body text stay visible for SEO.
+   * Locked previews use a decorative silhouette, never the readable sheet.
    */
   canPrint?: boolean;
   /** Optional fallback when print is locked (e.g. this Sunday’s sheet). */
@@ -160,8 +161,8 @@ export function ResourceSheetPanel({
         </div>
       </div>
       <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS + (canPrint ? "" : PRINT_LOCK_CSS) }} />
-      <div className={canPrint ? undefined : "ckc-print-locked-sheet"}>
-        <SheetFit>
+      <div className={canPrint ? undefined : "ckc-print-locked-sheet mx-auto max-w-[600px]"}>
+        {canPrint ? <SheetFit>
           <GospelSheet
             sheet={
               sundayDate
@@ -170,7 +171,7 @@ export function ResourceSheetPanel({
             }
             level={level}
           />
-        </SheetFit>
+        </SheetFit> : <LockedSheetPreview title={level === 2 ? sheet.levels.level2.title : sheet.levels.level1.title} />}
       </div>
       {canPrint ? null : (
         <div className="ckc-print-lock-msg" role="note">

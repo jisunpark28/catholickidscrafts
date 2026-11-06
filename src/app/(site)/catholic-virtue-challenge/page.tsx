@@ -16,7 +16,7 @@ import Link from "next/link";
 export const metadata: Metadata = pageMetadata({
   title: "Catholic Virtue Challenge for Families: 24 Printable Worksheets",
   description:
-    "24 free printable Catholic family virtue challenge sheets for kids. Take one home from Sunday school, hang it on the fridge, and practice a virtue Monday to Saturday with a parent signature.",
+    "24 printable Catholic family virtue challenge sheets for kids. Take one home from Sunday school, hang it on the fridge, and practice a virtue Monday to Saturday with a parent signature.",
   path: VIRTUE_CHALLENGE_HUB,
 });
 
@@ -84,7 +84,7 @@ export default function VirtueChallengeHubPage() {
                       <p className="mt-1 text-sm leading-relaxed text-[#374151]">{sheet?.levels.level1.story}</p>
                       <p className="mt-2 text-sm">
                         <Link href={printPath(p, 1, true)} className="font-semibold text-[#2e7d32] hover:underline">
-                          Print free
+                          Print with Plus
                         </Link>
                       </p>
                     </li>
