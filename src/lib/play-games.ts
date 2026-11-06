@@ -12,6 +12,7 @@ export type PlayGame = {
 };
 
 export const PLAY_GAMES: PlayGame[] = [
+  { slug: "ten-commandments", title: "Love Your Neighbor Village", description: "Explore the Ten Commandments with 200 everyday-choice missions.", embedPath: "/play/ten-commandments", duration: "5-10 min" },
   {
     slug: "church",
     title: "Come to Mass!",
