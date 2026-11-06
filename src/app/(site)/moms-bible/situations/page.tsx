@@ -1,12 +1,9 @@
 import { PageShell } from "@/components/PageShell";
-import { SITUATION_GROUPS, type SituationRef } from "@/data/moms-bible/situations";
+import { SITUATION_GROUPS } from "@/data/moms-bible/situations";
 import { MbToolbar } from "@/components/moms-bible/MbToolbar";
 import { SituationsBoard, type BoardGroup } from "@/components/moms-bible/SituationsBoard";
 import { momsBibleToolbar } from "@/lib/moms-bible/page-data";
-import { readHrefForDouay } from "@/lib/bible/chapter-pages";
-import { fetchBibleChapter } from "@/lib/bible/latinprayer";
-import { modernizeVerse } from "@/lib/bible/modernize-for-reading";
-import { nabreToDouay } from "@/lib/bible/ref-map";
+import { resolveSituationVerse } from "@/lib/moms-bible/resolve-situation-verse";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import "@/styles/moms-bible.css";
@@ -21,28 +18,6 @@ export const metadata: Metadata = pageMetadata({
   path: "/moms-bible/situations",
 });
 
-type Resolved = { ref: SituationRef; href: string; text: string };
-
-async function resolve(ref: SituationRef, situationKey: string): Promise<Resolved | null> {
-  const start = nabreToDouay(ref.book, ref.chapter, ref.verse);
-  if (!start) return null;
-  const end = ref.verseEnd ? nabreToDouay(ref.book, ref.chapter, ref.verseEnd) : start;
-  const [path, hash] = readHrefForDouay(start.slug, start.chapter, start.verse).split("#");
-  const href = `${path}?situation=${encodeURIComponent(situationKey)}${hash ? `#${hash}` : ""}`;
-  let text = "";
-  try {
-    const data = await fetchBibleChapter(start.slug, start.chapter);
-    const last = end && end.chapter === start.chapter ? (end.verseEnd ?? end.verse) : start.verse;
-    text = data.verses
-      .filter((v) => v.verse >= start.verse && v.verse <= last)
-      .map((v) => modernizeVerse(start.slug, start.chapter, v.verse, v.text))
-      .join(" ");
-  } catch {
-    /* the card still links to the verse */
-  }
-  return { ref, href, text };
-}
-
 /** "When my child is…": moments with recommended verses; each opens the reader to leave a note. */
 export default async function SituationsPage() {
   const groups = await Promise.all(
@@ -51,7 +26,9 @@ export default async function SituationsPage() {
       situations: await Promise.all(
         g.situations.map(async (s) => ({
           ...s,
-          verses: (await Promise.all(s.refs.map((r) => resolve(r, s.key)))).filter((x): x is Resolved => Boolean(x)),
+          verses: (
+            await Promise.all(s.refs.map((r) => resolveSituationVerse(r, s.key)))
+          ).filter((x): x is NonNullable<typeof x> => Boolean(x)),
         })),
       ),
     })),
