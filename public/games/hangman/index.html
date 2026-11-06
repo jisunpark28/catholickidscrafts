@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hangman game | Catholic Kids Crafts</title>
-    <link rel="stylesheet" href="hangman.css?v=5">
+    <link rel="stylesheet" href="hangman.css?v=10">
 </head>
 <body>
     <main class="container">
@@ -13,36 +13,41 @@
             <p>Guess the word before the flower loses all its petals.</p>
         </header>
 
-        <div class="hangman-visual-wrap">
-        <section id="hangman-visual">
-            <img src="img/background.png" alt="Flower Background" id="flower-bg">
-            <div id="petals-container">
-                <img src="img/petal.png" alt="Petal" class="petal petal-1">
-                <img src="img/petal.png" alt="Petal" class="petal petal-2">
-                <img src="img/petal.png" alt="Petal" class="petal petal-3">
-                <img src="img/petal.png" alt="Petal" class="petal petal-4">
-                <img src="img/petal.png" alt="Petal" class="petal petal-5">
-                <img src="img/petal.png" alt="Petal" class="petal petal-6">
+        <div class="hangman-visual-stage">
+            <div class="hangman-visual-glow" aria-hidden="true"></div>
+            <div class="hangman-visual-wrap" aria-hidden="true">
+                <section id="hangman-visual">
+                    <img src="img/background.png" alt="" id="flower-bg" draggable="false">
+                    <div id="petals-container">
+                        <img src="img/petal.png" alt="" class="petal petal-1" draggable="false">
+                        <img src="img/petal.png" alt="" class="petal petal-2" draggable="false">
+                        <img src="img/petal.png" alt="" class="petal petal-3" draggable="false">
+                        <img src="img/petal.png" alt="" class="petal petal-4" draggable="false">
+                        <img src="img/petal.png" alt="" class="petal petal-5" draggable="false">
+                        <img src="img/petal.png" alt="" class="petal petal-6" draggable="false">
+                    </div>
+                </section>
             </div>
-        </section>
+            <div class="hangman-visual-wash" aria-hidden="true"></div>
         </div>
 
-        <p id="hint-display"></p>
-        <div id="word-display">_ _ _ _ _</div>
+        <p id="hint-display" role="status"></p>
+        <div id="word-display" aria-live="polite">_ _ _ _ _</div>
 
-        <section class="info">
+        <section class="info" aria-live="polite">
             <p>Attempts Left: <span id="attempts">6</span></p>
             <p>Guessed: <span id="guessed-letters">-</span></p>
         </section>
 
         <section id="input-section">
-            <input type="text" id="letter-input" maxlength="1" placeholder="A" autofocus>
-            <button id="guess-btn">Guess</button>
+            <label class="sr-only" for="letter-input">Guess a letter</label>
+            <input type="text" id="letter-input" maxlength="1" placeholder="A" autofocus autocomplete="off" inputmode="text" aria-label="Guess a letter">
+            <button type="button" id="guess-btn">Guess</button>
         </section>
         </div>
 
         <div class="reset-wrap">
-            <button id="reset-btn">New Game</button>
+            <button type="button" id="reset-btn">New Game</button>
         </div>
     </main>
 
