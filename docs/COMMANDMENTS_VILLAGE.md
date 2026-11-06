@@ -52,7 +52,7 @@ Only `version`, seen/recent mission IDs, and ten commandment offering counts in 
 
 ## Artwork/accessibility
 
-Original hand-authored SVG village: church, home, school, swing/slide playground; winding paths, hills, trees, flowers, garden. Location controls are HTML buttons with descriptive accessible names/pressed state. Scenario vignettes are separately authored SVG illustrations (book/candle, house, pencil case/desk, playground). No fake illustrated site header, external art service, or generated child photographs.
+Generated watercolor village artwork, directly style-referenced to the approved lush storybook concept: church, home, school, swing/slide playground; winding paths, hills, trees and detailed flower gardens. Four separately generated representative location scenes depict church community, family crafts, children at a school desk, and inclusive playground companionship. These are general location illustrations, NOT exact depictions of all 50 prompts at a place; alt text states that explicitly. Optimized WebP assets preserve complete subjects with native 16:9 proportions. The map has real HTML location signs with transparent hit areas over the corresponding buildings, descriptive accessible names and pressed state. Progress flowers and small garden growth markers remain SVG. No fake illustrated site header or flattened UI image.
 
 Keyboard-operable answers and navigation; live feedback, explicit correct check mark, no color-only state, focus on scenario/completion headings, reduced-motion rule, mobile map/card stack. No autoplay or audio.
 
@@ -63,3 +63,7 @@ Keyboard-operable answers and navigation; live feedback, explicit correct check 
 - `tsc --noEmit`, touched TS/TSX ESLint, and actual `npm run build`.
 
 A worktree without DB environment fails existing global Prisma import checks during build page collection. For local offline verification an explicitly non-live localhost placeholder URL can exercise the existing defaults/fallbacks. That is not live-CMS/database verification and must not be represented as such. No migration/seed is required for this game. The hub copy defaults are available immediately; normal site-copy seeding may expose them to a previously initialized admin editor as usual.
+
+### Watercolor art regression
+
+Run 	sx scripts/test-commandments-art-browser.ts against the production preview. It checks all five WebP asset URLs, representative alt text, native 16:9 subject-preserving layout, desktop/mobile overflow, and actual clicks on the painted buildings (not only their signs). All 200 mission records and gameplay state code are unchanged by the art correction.
