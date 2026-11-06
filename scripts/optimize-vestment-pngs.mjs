@@ -2,7 +2,6 @@
  * Normalize vestment PNGs: same scale for every color, full body (no crop), shared canvas.
  */
 import sharp from "sharp";
-import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 const outDir = path.join("public", "games", "liturgical-vestments");
@@ -11,7 +10,6 @@ const CANVAS_W = 960;
 const CANVAS_H = 1040;
 /** Max painted figure height on the canvas (head to feet). */
 const FIGURE_MAX_H = 860;
-const PAD_TOP = 56;
 const PAD_BOTTOM = 36;
 
 function isBackground(r, g, b) {
@@ -46,9 +44,7 @@ async function loadTrimmed(file) {
 }
 
 async function main() {
-  const files = (await readdir(outDir)).filter(
-    (f) => f.startsWith("character-") && f.endsWith(".png") && f !== "character-base.png",
-  );
+  const files = ["white", "rose", "red", "green", "purple"].map((color) => `character-${color}.png`);
 
   const trimmed = [];
   for (const f of files) trimmed.push(await loadTrimmed(f));
