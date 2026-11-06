@@ -1,5 +1,6 @@
 import { readPagePaths } from "@/lib/bible/chapter-pages";
 import { fetchBibleBooks } from "@/lib/bible/latinprayer";
+import { SITUATIONS } from "@/data/moms-bible/situations";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
@@ -14,7 +15,7 @@ type SitemapEntry = MetadataRoute.Sitemap[number];
  * Stable lastmod for code-defined pages. Bump this when page content changes
  * meaningfully, and never use request time, which makes Google ignore lastmod.
  */
-export const SITEMAP_CONTENT_DATE = new Date("2026-10-27T00:00:00.000Z");
+export const SITEMAP_CONTENT_DATE = new Date("2026-11-06T00:00:00.000Z");
 
 /** Child sitemaps listed by the /sitemap.xml index. */
 export const CHILD_SITEMAP_PATHS = [
@@ -37,6 +38,7 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/resource", "weekly", 0.9],
   ["/resources", "weekly", 0.85],
   ["/bible/gospel", "daily", 0.9],
+  ["/bible-verses-for-kids", "weekly", 0.85],
   ["/recommendations", "weekly", 0.8],
   ["/play", "weekly", 0.75],
   ["/prayers", "monthly", 0.75],
@@ -74,17 +76,24 @@ function playEntries(): SitemapEntry[] {
   return [...paths].map((p) => entry(p, "weekly", 0.7));
 }
 
-/** Week sheets + season hubs for the dedicated resources sitemap. */
+/** Week sheets + season hubs for the dedicated resources sitemap. Advent weeks/hub prioritized. */
 export function buildResourcesSitemap(): MetadataRoute.Sitemap {
-  const weeks = listSundaySheetKeys().map((key) =>
-    entry(`/resource/${keyToSlug(key)}`, "weekly", 0.8),
+  const weeks = listSundaySheetKeys().map((key) => {
+    const isAdvent = key.includes("_ADV");
+    return entry(`/resource/${keyToSlug(key)}`, "weekly", isAdvent ? 0.95 : 0.8);
+  });
+  const seasons = RESOURCE_SEASONS.map((s) =>
+    entry(seasonPath(s.id), "monthly", s.id === "advent" ? 0.95 : 0.85),
   );
-  const seasons = RESOURCE_SEASONS.map((s) => entry(seasonPath(s.id), "monthly", 0.85));
   return [...seasons, ...weeks];
 }
 
 function liturgyEntries(): SitemapEntry[] {
   return LITURGY_TOPICS.map((topic) => entry(`/liturgy/${topic}`, "weekly", 0.75));
+}
+
+function bibleVersesForKidsEntries(): SitemapEntry[] {
+  return SITUATIONS.map((s) => entry(`/bible-verses-for-kids/${s.key}`, "monthly", 0.7));
 }
 
 async function recommendationEntries(): Promise<SitemapEntry[]> {
@@ -129,6 +138,7 @@ export async function buildPagesSitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...STATIC_PAGES.map(([p, f, pr]) => entry(p, f, pr)),
+    ...bibleVersesForKidsEntries(),
     ...playEntries(),
     ...liturgyEntries(),
     ...bookHubs,
