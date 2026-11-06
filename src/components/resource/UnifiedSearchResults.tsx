@@ -10,6 +10,7 @@ import { CardTile } from "./CardTile";
 import { LockedSheetPreview } from "./LockedSheetPreview";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
+import { ResourcePagination } from "./ResourcePagination";
 
 type Props = {
   q: string;
@@ -43,7 +44,6 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
   const pages = Math.max(1, Math.ceil(hits.length / pageSize));
   const currentPage = Math.min(pages, Math.max(1, page));
   const shown = hits.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const pageHref = (n: number) => `${resultsHref}&page=${n}`;
   return (
     <section aria-label={q ? "Search results" : "All resources"} className="mt-5">
       <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
@@ -160,21 +160,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
           Nothing matches. Try a Gospel (e.g. “Luke 15”), a story (e.g. “lost sheep”), a saint or a feast.
         </p>
       )}
-      {pages > 1 ? (
-        <nav aria-label="Resource results pages" className="mt-4 flex items-center justify-center gap-4 text-sm">
-          {currentPage > 1 ? <Link href={pageHref(currentPage - 1)} className="font-semibold text-[#d35400]">Previous</Link> : null}
-          <span>Page {currentPage} of {pages} ({hits.length} resources)</span>
-          {currentPage < pages ? <Link href={pageHref(currentPage + 1)} className="font-semibold text-[#d35400]">Next</Link> : null}
-        </nav>
-      ) : null}
-      {!isPlus && hits.length ? (
-        <p className="mt-3 text-center text-xs text-[#6b7280]">
-          Free: preview and print this Sunday&apos;s sheet. Plus: every worksheet (including Mass and Virtue Challenge), plus card downloads (PNG 4:5) and sharing ·{" "}
-          <Link href="/subscribe" className="font-semibold text-[#d35400]">
-            Get Plus
-          </Link>
-        </p>
-      ) : null}
+      <ResourcePagination currentPage={currentPage} totalPages={pages} resultsHref={resultsHref} />
     </section>
   );
 }
