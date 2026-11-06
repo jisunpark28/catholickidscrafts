@@ -159,7 +159,7 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
             Open the worksheet
           </Link>
         </div>
-        <p className="mt-3 text-sm text-[#6b7280]">Free to print. Level 1 and Level 2 are both included.</p>
+        <p className="mt-3 text-sm text-[#6b7280]">Plus unlocks worksheet previews and printing. Level 1 and Level 2 are both included.</p>
 
         {cards.length ? (
           <section className="mt-8 max-w-3xl" aria-labelledby="cards">

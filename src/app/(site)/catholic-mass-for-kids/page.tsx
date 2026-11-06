@@ -16,7 +16,7 @@ import Link from "next/link";
 export const metadata: Metadata = pageMetadata({
   title: "Catholic Mass for Kids: Order of the Mass Worksheets",
   description:
-    "Free printable Catholic worksheets that teach kids the order of the Mass: Introductory Rites, Liturgy of the Word, Liturgy of the Eucharist, and the four parts of the Mass.",
+    "Printable Catholic worksheets that teach kids the order of the Mass: Introductory Rites, Liturgy of the Word, Liturgy of the Eucharist, and the four parts of the Mass.",
   path: MASS_FOR_KIDS_HUB,
 });
 
@@ -45,7 +45,7 @@ export default function MassForKidsHubPage() {
             Catholic Mass for Kids: Order of the Mass Worksheets
           </h1>
           <p className="mt-2 max-w-3xl text-base leading-relaxed text-[#374151]">
-            Help children follow along at Mass. Each free printable sheet explains one part of the Mass, puts the
+            Help children follow along at Mass. Each printable sheet explains one part of the Mass, puts the
             steps in order, and ends with family talk questions and a prayer. Level 1 is for younger children; Level 2
             adds more detail.
           </p>
@@ -63,7 +63,7 @@ export default function MassForKidsHubPage() {
                 <p className="mt-2 text-sm leading-relaxed text-[#374151]">{sheet?.levels.level1.story}</p>
                 <p className="mt-3 text-sm">
                   <Link href={printPath(p, 1, true)} className="font-semibold text-[#2e7d32] hover:underline">
-                    Print free
+                    Print with Plus
                   </Link>
                 </p>
               </li>

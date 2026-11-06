@@ -14,8 +14,8 @@ export function evergreenDescription(page: EvergreenPage, sheet: SundaySheetCont
   const lead = sheet.levels.level1.story.trim();
   const tail =
     page.kind === "mass"
-      ? "Free printable Catholic Mass worksheet for kids, with two levels."
-      : "Free printable take-home family virtue challenge: Mon-Sat checklist, Family Talk, and parent signature.";
+      ? "Printable Catholic Mass worksheet for kids, with two levels. Preview and print with Plus."
+      : "Printable take-home family virtue challenge: Mon-Sat checklist, Family Talk, and parent signature. Preview and print with Plus.";
   const text = `${lead} ${tail}`;
   return text.length > 300 ? `${text.slice(0, 297)}...` : text;
 }

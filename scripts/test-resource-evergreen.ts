@@ -21,13 +21,16 @@ async function main() {
   assert.equal(resourcePrintPath("A_OT32", 2), "/print/resource/a-ot32?level=2");
   assert.equal(canOpenResourceSheet({ isPlus: false, sheetKey: "A_OT32", thisSundayKey: null }), false);
   assert.equal(canOpenResourceSheet({ isPlus: true, sheetKey: "A_OT32", thisSundayKey: null }), true);
+  assert.equal(canOpenResourceSheet({ isPlus: false, sheetKey: "A_OT32", thisSundayKey: "A_OT32" }), true);
   for (const page of EVERGREEN_PAGES) {
     assert.equal(slugToKey(page.slug), null, "Sunday slug resolver stays Sunday-only");
     assert.equal(resolveResourceSheet(page.slug)?.key, page.key);
     assert.equal(resourcePath(page.key), `/resource/${page.slug}`);
     assert.equal(resourcePath(page.key, 2), `/resource/${page.slug}?level=2`);
     assert.equal(resourcePrintPath(page.key, 2, true), `/print/evergreen/${page.slug}?level=2&autoprint=1`);
-    assert.equal(canOpenResourceSheet({ isPlus: false, sheetKey: page.key, thisSundayKey: null }), true);
+    assert.equal(canOpenResourceSheet({ isPlus: false, sheetKey: page.key, thisSundayKey: null }), false);
+    assert.equal(canOpenResourceSheet({ isPlus: false, sheetKey: page.key, thisSundayKey: "A_OT32" }), false);
+    assert.equal(canOpenResourceSheet({ isPlus: true, sheetKey: page.key, thisSundayKey: "A_OT32" }), true);
     assert.equal(yearLabel(page.key), page.kind === "mass" ? "Mass for Kids" : "Virtue Challenge");
     for (const season of RESOURCE_SEASONS) {
       assert.ok(!searchSheets({ season: season.id }).some((s) => s.key === page.key));
@@ -53,6 +56,6 @@ async function main() {
   const panel = await fs.readFile("src/components/resource/ResourceSheetPanel.tsx", "utf8");
   assert.ok(panel.includes("!getEvergreenPage(sheetKey) ? <Link"), "evergreen never links to Sunday-only editor");
   assert.equal(await readCardOriginal("../MAS-066"), null);
-  console.log("test-resource-evergreen: 28 sheets, free paths/access/search, 84 image assets and private original reads OK");
+  console.log("test-resource-evergreen: 28 sheets, Plus-gated access/paths/search, 84 image assets and private original reads OK");
 }
 main().catch((e) => { console.error(e); process.exitCode = 1; });
