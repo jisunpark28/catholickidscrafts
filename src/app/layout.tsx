@@ -6,12 +6,15 @@ import { siteMetadata } from "@/lib/site-metadata";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({
+const inter = localFont({
   variable: "--font-inter",
-  subsets: ["latin"],
+  src: "../assets/fonts/inter-variable.ttf",
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
