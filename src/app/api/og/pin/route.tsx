@@ -9,8 +9,8 @@ import type { NextRequest } from "next/server";
 
 export const runtime = "nodejs";
 
-export const PIN_WIDTH = 1000;
-export const PIN_HEIGHT = 1500;
+const PIN_WIDTH = 1000;
+const PIN_HEIGHT = 1500;
 
 function PinCard({
   title,
