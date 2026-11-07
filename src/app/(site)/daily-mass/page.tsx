@@ -1,26 +1,24 @@
-import { DailyMassView, type DailyMassReadingRef } from "@/components/daily-mass/DailyMassView";
+import { DailyMassView } from "@/components/daily-mass/DailyMassView";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { loadFaithJournal } from "@/lib/daily-mass/faith-journal";
+import type { FaithJournalState } from "@/lib/daily-mass/faith-journal-shared";
 import { familyTalkFor } from "@/lib/daily-mass/family-talk";
 import { parseGospelCitation } from "@/lib/daily-mass/gospel-citation";
+import { readingRefs } from "@/lib/daily-mass/reading-refs";
 import { deriveVestmentColor } from "@/lib/daily-mass/vestment-color";
-import { formatDisplayDate, parseDateParam, todayUtc, toDateKey } from "@/lib/dates";
+import { daysInMonth, formatDisplayDate, parseDateParam, todayUtc, toDateKey } from "@/lib/dates";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { formatLiturgicalTitleDisplay } from "@/lib/liturgical-calendar";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
 import { fetchMassDay, fetchMonthCalendar } from "@/lib/mass-source";
-import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
-import type { MassDay, MassDaySummary, MonthCalendar } from "@/types/mass";
-import type { Metadata } from "next";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { RelatedLinks } from "@/components/seo/RelatedLinks";
-import { resolveResourceViewer } from "@/lib/resource/resolve-access";
-import { resourcePath } from "@/lib/resource/sheets";
 import { breadcrumbNode } from "@/lib/structured-data";
+import type { MassDaySummary, MonthCalendar } from "@/types/mass";
+import type { Metadata } from "next";
 import "@/styles/daily-mass.css";
 
 export const metadata: Metadata = pageMetadata({
@@ -32,24 +30,32 @@ export const metadata: Metadata = pageMetadata({
 
 export const dynamic = "force-dynamic";
 
-const ORDER = ["first_reading", "psalm", "second_reading", "gospel"] as const;
+const GUEST_JOURNAL: FaithJournalState = {
+  signedIn: false,
+  paid: false,
+  total: 0,
+  anchor: null,
+  entries: [],
+};
 
-function addDays(date: Date, days: number): Date {
-  return new Date(date.getTime() + days * 86_400_000);
+/** Dates only, when the liturgical month feed fails. No invented titles or readings. */
+function structuralCalendar(year: number, month: number): MonthCalendar {
+  const mid = new Date(Date.UTC(year, month - 1, 15));
+  return {
+    year,
+    month,
+    season: getLiturgicalSeason(mid),
+    days: daysInMonth(year, month).map((day) => ({
+      date: toDateKey(day),
+      liturgicalTitle: "",
+      rank: "ferial" as const,
+    })),
+    source: "",
+  };
 }
 
 function summaryFrom(calendar: MonthCalendar | null, key: string): MassDaySummary | undefined {
-  return calendar?.days.find((d) => d.date === key);
-}
-
-/** "Holy Gospel ... according to Saint Matthew 22,34-40." -> "Matthew 22:34-40" (Evangelizo fallback titles). */
-function tidyCitation(raw: string): string {
-  return raw
-    .trim()
-    .replace(/^.*?according to (?:Saint |St\. )?/i, "")
-    .replace(/^(?:A reading from )?(?:the )?(?:Book of (?:the Prophet )?|(?:First |Second )?Letter of (?:Saint )?Paul to the |Letter of Saint )/i, "")
-    .replace(/(\d+),(\d+)/g, "$1:$2")
-    .replace(/\.$/, "");
+  return calendar?.days.find((day) => day.date === key);
 }
 
 /** Evangelizo lists several saints with years; keep the first, without dates. */
@@ -58,14 +64,6 @@ function firstSaint(raw?: string): string | undefined {
   const first = raw.split(/\)\s+(?=(?:St\.|Saint|Bl\.|Blessed|Our Lady)\s)/)[0] ?? raw;
   const clean = first.replace(/\s*\([^)]*\d{3,4}[^)]*\)?\s*$/, "").trim();
   return clean || undefined;
-}
-
-function readingRefs(day: MassDay | null): DailyMassReadingRef[] {
-  if (!day) return [];
-  return ORDER.flatMap((kind) => {
-    const r = day.readings.find((x) => x.kind === kind && x.title.trim());
-    return r ? [{ kind, label: r.label, citation: tidyCitation(r.title) }] : [];
-  });
 }
 
 export default async function DailyMassPage({
@@ -77,22 +75,18 @@ export default async function DailyMassPage({
   const requested = params.date ? parseDateParam(params.date) : null;
   const date = requested ?? todayUtc();
   const dateKey = toDateKey(date);
-  const dow = date.getUTCDay();
-  const sunday = addDays(date, dow === 0 ? 7 : 7 - dow);
-  const sundayKey = toDateKey(sunday);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
 
-  const [calendar, sundayCalendar, day, sundayDay, copy, sections, viewer] = await Promise.all([
-    fetchMonthCalendar(date.getUTCFullYear(), date.getUTCMonth() + 1),
-    sunday.getUTCMonth() === date.getUTCMonth()
-      ? Promise.resolve(null)
-      : fetchMonthCalendar(sunday.getUTCFullYear(), sunday.getUTCMonth() + 1).catch(() => null),
+  const [calendarResult, day, copy, sections] = await Promise.all([
+    fetchMonthCalendar(year, month).then(
+      (calendar) => ({ calendar, error: false as const }),
+      () => ({ calendar: structuralCalendar(year, month), error: true as const }),
+    ),
     fetchMassDay(date).catch(() => null),
-    fetchMassDay(sunday).catch(() => null),
     getSiteCopyMap(),
     getPublishedHomeSections(),
-    resolveResourceViewer(),
   ]);
-  const thisWeekSheetHref = viewer.thisSundayKey ? resourcePath(viewer.thisSundayKey) : "/resource";
 
   const { groups } = buildHomePdfNav(sections, {
     gallery: "Gallery",
@@ -101,27 +95,31 @@ export default async function DailyMassPage({
     play: copyText(copy, "global.nav.play_learn", "Play & Learn"),
   });
 
-  const summary: MassDaySummary = day ?? summaryFrom(calendar, dateKey) ?? {
+  const summary: MassDaySummary = day ?? summaryFrom(calendarResult.calendar, dateKey) ?? {
     date: dateKey,
     liturgicalTitle: "",
     rank: "ferial",
   };
   const season = getLiturgicalSeason(date);
-  const readings = readingRefs(day);
-  const sundaySummary = sundayDay ?? summaryFrom(sundayCalendar ?? calendar, sundayKey);
-  const sundayGospel = readingRefs(sundayDay).find((r) => r.kind === "gospel")?.citation;
-
+  const readings = readingRefs(day?.readings ?? []);
   const familyTalk = familyTalkFor(dateKey);
-  const gospelCitation = readings.find((r) => r.kind === "gospel")?.citation;
+  const gospelCitation = readings.find((reading) => reading.kind === "gospel")?.citation;
   const journalCitation = familyTalk?.gospel ?? gospelCitation;
   const passage = parseGospelCitation(journalCitation);
   const gospelReadHref = passage ? `/bible/read/${passage.bookSlug}/${passage.chapter}` : "/gospel";
-  const journal = await loadFaithJournal(journalCitation);
-
-  const shortDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" }).format(sunday);
+  let journal = GUEST_JOURNAL;
+  try {
+    journal = await loadFaithJournal(journalCitation);
+  } catch {
+    journal = GUEST_JOURNAL;
+  }
 
   return (
-    <HomePdfShell groups={groups} dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}>
+    <HomePdfShell
+      groups={groups}
+      dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}
+      contentClassName="bg-[#fffbef]"
+    >
       <JsonLd nodes={[breadcrumbNode([{ name: "Daily Mass", path: "/daily-mass" }])]} />
       <DailyMassView
         dateKey={dateKey}
@@ -129,42 +127,17 @@ export default async function DailyMassPage({
         displayDate={formatDisplayDate(date)}
         dayTitle={formatLiturgicalTitleDisplay(summary.liturgicalTitle) || season.name}
         seasonName={season.name}
+        seasonColor={season.color}
         memorial={summary.rank === "ferial" ? firstSaint(summary.saint) : undefined}
         color={deriveVestmentColor({ ...summary, saint: firstSaint(summary.saint) }, season)}
         readings={readings}
-        usccbUrl={usccbReadingsPageUrl(date)}
+        usccbUrl={day?.usccbPageUrl || usccbReadingsPageUrl(date)}
         familyTalk={familyTalk}
         gospelCitation={gospelCitation}
         gospelReadHref={gospelReadHref}
         journal={journal}
-        nextSunday={{
-          dateKey: sundayKey,
-          shortDate,
-          title: formatLiturgicalTitleDisplay(sundaySummary?.liturgicalTitle ?? "") || "Sunday",
-          gospel: sundayGospel,
-          usccbUrl: usccbReadingsPageUrl(sunday),
-          lwcUrl: livingWithChristReadingUrl(sundayKey),
-        }}
-        calendar={calendar}
-      />
-      <RelatedLinks
-        links={[
-          {
-            href: thisWeekSheetHref,
-            label: "This week's Gospel sheet →",
-            hint: "Free printable Sunday worksheet in Level 1 and Level 2.",
-          },
-          {
-            href: "/bible/gospel",
-            label: "Type today's Gospel",
-            hint: "Word-by-word typing with praise stickers.",
-          },
-          {
-            href: "/resources",
-            label: "Browse sheets by season",
-            hint: "Advent, Lent, Ordinary Time and more.",
-          },
-        ]}
+        calendar={calendarResult.calendar}
+        calendarError={calendarResult.error}
       />
     </HomePdfShell>
   );

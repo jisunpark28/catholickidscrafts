@@ -27,6 +27,20 @@
   border-color: #4a443e;
   color: #f3efe9;
 }
+.daily-mass-reader.dm-dark .dm-cal {
+  background: #2a2724;
+  border-color: #3d3833;
+}
+.daily-mass-reader.dm-dark .dm-sun {
+  color: #86efac;
+}
+.daily-mass-reader.dm-dark .dm-day {
+  color: #f3efe9;
+}
+.daily-mass-reader.dm-dark .dm-badge {
+  background: #34302c;
+  color: #f3efe9;
+}
 .daily-mass-reader .dm-pill:disabled {
   opacity: 0.45;
   cursor: not-allowed;
