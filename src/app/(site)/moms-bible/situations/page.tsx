@@ -1,4 +1,4 @@
-import { PageShell } from "@/components/PageShell";
+import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { SITUATION_GROUPS } from "@/data/moms-bible/situations";
 import { MbToolbar } from "@/components/moms-bible/MbToolbar";
 import { SituationsBoard, type BoardGroup } from "@/components/moms-bible/SituationsBoard";
@@ -48,13 +48,13 @@ export default async function SituationsPage() {
   }));
 
   return (
-    <PageShell wide>
+    <TestamentPageShell>
       <div className="mb-situations rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
         {toolbar && <MbToolbar data={toolbar} variant="for" />}
         <h1 className="mt-2 font-[Georgia,serif] text-3xl font-bold text-[#1f2937]">When my child is…</h1>
         <p className="mb-sub mt-1">Tap a moment — we&apos;ll suggest verses to open and leave a note.</p>
         <SituationsBoard groups={board} />
       </div>
-    </PageShell>
+    </TestamentPageShell>
   );
 }

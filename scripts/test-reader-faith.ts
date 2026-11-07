@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
 import seed from "../prisma/data/liturgy-qa-cards.json";
-import { FAITH_CATEGORY_LINKS } from "../src/components/faith/FaithCategoryDirectory";
 import {
   parseReadingSize,
   READING_SIZE_BOOTSTRAP,
@@ -12,6 +11,7 @@ import {
 import { buildHomePdfNav } from "../src/lib/home-pdf-nav";
 import { assembleQaDeck, catalogQaDeck, type QaDeckRead } from "../src/lib/liturgy-qa-catalog";
 import { LITURGY_TOPICS, type LiturgyTopic } from "../src/lib/liturgy-topics";
+import { SIDEBAR_ITEMS, sidebarItemIsCurrent } from "../src/lib/sidebar-navigation";
 import { FAITH_SEO_CARDS, faithPageSeo, getFaithSeoCard, groupFaithByCatThenSet } from "../src/lib/seo/card-seo";
 
 for (const bad of [null, "", "NaN", "Infinity", "100", "-1", "18px", "18 ", "18.0", "<script>"]) {
@@ -91,16 +91,22 @@ assert.equal(mixed.find((section) => section.slug === "advent"), undefined);
 assert.equal(mixed.find((section) => section.slug === "lent")?.source, "catalog");
 assert.equal(mixed.length, 9);
 
-const nav = buildHomePdfNav([], { gallery: "Gallery", curriculum: "Curriculum", resources: "Resources", play: "Play" });
-const links = nav.groups.flatMap((group) => group.items);
-assert.equal(links.find((item) => item.label === "Q&A Cards")?.href, "/catholic-faith-questions#qa-cards");
-assert.equal(links.find((item) => item.label === "Old Testament")?.href, "/bible/genesis");
-assert.equal(links.find((item) => item.label === "New Testament")?.href, "/bible/matthew");
-assert.equal(FAITH_CATEGORY_LINKS.length, 11);
-assert.deepEqual(
-  FAITH_CATEGORY_LINKS.map((item) => item.href),
-  ["/prayers", ...LITURGY_TOPICS.map((slug) => `/liturgy/${slug}`)],
-);
+const qa = SIDEBAR_ITEMS.find((item) => item.id === "questions");
+const faith = SIDEBAR_ITEMS.find((item) => item.id === "prayer");
+assert.equal(qa?.href, "/catholic-faith-questions#qa-cards");
+assert.equal(faith?.href, "/catholic-faith-questions");
+assert.equal(sidebarItemIsCurrent("questions", "/catholic-faith-questions", "#qa-cards"), true);
+assert.equal(sidebarItemIsCurrent("prayer", "/catholic-faith-questions", "#qa-cards"), false);
+assert.equal(sidebarItemIsCurrent("prayer", "/catholic-faith-questions", ""), true);
+assert.equal(sidebarItemIsCurrent("questions", "/catholic-faith-questions", ""), false);
+assert.equal(SIDEBAR_ITEMS.some((item) => item.href?.includes("/bible/old-testament") || item.href?.includes("/bible/new-testament")), false);
+const directory = buildHomePdfNav([], { gallery: "Gallery", curriculum: "Curriculum", resources: "Resources", play: "Play" });
+const categoryHrefs = directory.groups
+  .filter((group) => group.id === "faith" || group.id === "liturgical-year")
+  .flatMap((group) => group.items.map((item) => item.href));
+assert.deepEqual(categoryHrefs, ["/prayers", ...LITURGY_TOPICS.map((slug) => `/liturgy/${slug}`)]);
+assert.equal(fs.readFileSync("src/components/home/HomePdfShell.tsx", "utf8").includes("SidebarNavigation"), true);
+assert.equal(fs.readFileSync("src/components/home/HomePdfShell.tsx", "utf8").includes("Old Testament"), false);
 
 const hub = fs.readFileSync("src/app/(site)/catholic-faith-questions/page.tsx", "utf8");
 const article = fs.readFileSync("src/app/(site)/catholic-faith-questions/[slug]/page.tsx", "utf8");

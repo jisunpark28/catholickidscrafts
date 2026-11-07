@@ -277,6 +277,8 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("play.game.vestments.description", "What color vestments does Father wear?", "play"),
   sc("play.game.typing.title", "Typing Game", "play"),
   sc("play.game.typing.description", "Type church words before they land.", "play"),
+  sc("play.game.commandments.title", "Love Your Neighbor Village", "play"),
+  sc("play.game.commandments.description", "Explore the Ten Commandments with 200 everyday-choice missions — 50 in each village location.", "play"),
   sc("play.game.hangman.title", "Hangman", "play"),
   sc("play.game.hangman.description", "Guess the word before the petals fall.", "play"),
   sc("play.game.face-to-emoji.title", "Face to Emoji", "play"),

@@ -1,10 +1,11 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { FaithArticleCard } from "@/components/faith/FaithArticleCard";
-import { FaithCategoryDirectory } from "@/components/faith/FaithCategoryDirectory";
+import { FaithNavigationDirectory } from "@/components/home/FaithNavigationDirectory";
 import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { loadLiturgyQaDeck } from "@/lib/liturgy-qa-deck";
+import { getResourceNav } from "@/lib/resource/nav";
 import { FAITH_HUB, FAITH_SEO_CARDS, groupFaithByCatThenSet } from "@/lib/seo/card-seo";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode, itemListNode } from "@/lib/structured-data";
@@ -22,8 +23,8 @@ export const metadata: Metadata = pageMetadata({
 export const dynamic = "force-dynamic";
 
 export default async function CatholicFaithQuestionsHubPage() {
+  const [nav, deck] = await Promise.all([getResourceNav(), loadLiturgyQaDeck()]);
   const groups = groupFaithByCatThenSet();
-  const deck = await loadLiturgyQaDeck();
   const listItems = FAITH_SEO_CARDS.map((c) => ({
     name: c.title,
     path: `${FAITH_HUB}/${c.slug}`,
@@ -76,7 +77,7 @@ export default async function CatholicFaithQuestionsHubPage() {
           ))}
         </div>
 
-        <FaithCategoryDirectory />
+        <FaithNavigationDirectory groups={nav.groups} />
 
         <div className="mt-10">
           <NewsletterSubscribeForm source="catholic-faith-questions" />

@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium, type Page } from "playwright";
-import { FAITH_CATEGORY_LINKS } from "../src/components/faith/FaithCategoryDirectory";
 import { catalogQaDeck } from "../src/lib/liturgy-qa-catalog";
 import { FAITH_SEO_CARDS } from "../src/lib/seo/card-seo";
 
@@ -61,13 +60,13 @@ async function run() {
     const text = page.locator(".bible-reader__verse").first();
     const original = await text.textContent();
     const titleSize = await page.locator(".bible-reader__title").evaluate((el) => getComputedStyle(el).fontSize);
-    const sidebarSize = await page.locator("aside h2").first().evaluate((el) => getComputedStyle(el).fontSize);
+    const sidebarSize = await page.getByRole("link", { name: "Mom's Bible", exact: true }).evaluate((el) => getComputedStyle(el).fontSize);
     for (let i = 0; i < 6; i++) await inc.click();
     assert.equal(await inc.isDisabled(), true);
     assert.equal(await text.evaluate((el) => getComputedStyle(el).fontSize), "32px");
     assert.equal(await text.textContent(), original);
     assert.equal(await page.locator(".bible-reader__title").evaluate((el) => getComputedStyle(el).fontSize), titleSize);
-    assert.equal(await page.locator("aside h2").first().evaluate((el) => getComputedStyle(el).fontSize), sidebarSize);
+    assert.equal(await page.getByRole("link", { name: "Mom's Bible", exact: true }).evaluate((el) => getComputedStyle(el).fontSize), sidebarSize);
     assert.ok(page.url().includes("lang=en&test=preserve"));
     await text.focus();
     await page.keyboard.press("Enter");
@@ -121,7 +120,9 @@ async function run() {
     await page.getByRole("link", { name: "Q&A Cards", exact: true }).click();
     await page.waitForURL("**/catholic-faith-questions#qa-cards");
     const qaLink = page.getByRole("link", { name: "Q&A Cards", exact: true });
+    const faithLink = page.getByRole("link", { name: "Faith & Prayer", exact: true });
     await waitFor(async () => (await qaLink.getAttribute("aria-current")) === "page", "Q&A Cards highlight");
+    assert.equal(await faithLink.getAttribute("aria-current"), null);
     const qa = page.locator("#qa-cards");
     await waitFor(async () => {
       const box = await qa.boundingBox();
@@ -158,9 +159,14 @@ async function run() {
     assert.equal(await articles.count(), FAITH_SEO_CARDS.length);
     const hrefs = await articles.evaluateAll((els) => els.map((el) => el.getAttribute("href")));
     assert.equal(new Set(hrefs).size, FAITH_SEO_CARDS.length);
-    await page.locator("summary").filter({ hasText: "Browse Faith" }).focus();
-    await page.keyboard.press("Enter");
-    assert.equal(await page.locator("#faith-prayer a").count(), FAITH_CATEGORY_LINKS.length);
+    assert.equal(await page.locator("#faith-prayer a").count(), 11);
+    await faithLink.click();
+    await page.waitForURL((url) => url.pathname === "/catholic-faith-questions" && url.hash === "");
+    await waitFor(async () => (await faithLink.getAttribute("aria-current")) === "page", "Faith & Prayer highlight");
+    assert.equal(await qaLink.getAttribute("aria-current"), null);
+    await qaLink.click();
+    await page.waitForURL("**/catholic-faith-questions#qa-cards");
+    await waitFor(async () => (await qaLink.getAttribute("aria-current")) === "page", "Q&A Cards highlight after return");
     await page.screenshot({ path: path.join(out, "ckc-faith-articles-desktop.png"), fullPage: false });
 
     let checked = 0;

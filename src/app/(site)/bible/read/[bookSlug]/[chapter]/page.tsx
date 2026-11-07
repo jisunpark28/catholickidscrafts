@@ -1,3 +1,4 @@
+import { BibleExploreLinks } from "@/components/bible/BibleExploreLinks";
 import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { Suspense } from "react";
 import {
@@ -120,6 +121,7 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
   return (
     <TestamentPageShell>
       <HubTypingWidth wide className="space-y-4">
+        <BibleExploreLinks />
         <ReadingSizeBootstrap />
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
           <BibleChapterReadClient
