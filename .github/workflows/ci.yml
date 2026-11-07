@@ -42,6 +42,9 @@ jobs:
       - name: Sheet key mapping (romcal, enabled countries 2025-2035)
         run: pnpm exec tsx scripts/test-sheet-keys.ts
 
+      - name: Daily Mass calendar grid
+        run: pnpm exec tsx scripts/test-daily-mass-calendar.ts
+
       - name: Preview build (skip DB migrate)
         run: VERCEL_ENV=preview bash scripts/vercel-build.sh
         env:
