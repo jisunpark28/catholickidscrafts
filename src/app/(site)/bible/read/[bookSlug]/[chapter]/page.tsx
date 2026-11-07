@@ -5,6 +5,7 @@ import {
   BibleChapterReadClient,
   type BibleReaderSegment,
 } from "@/components/bible/BibleChapterReadClient";
+import { ReadingSizeBootstrap } from "@/components/bible/ReadingSizeBootstrap";
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
 import { NewNoteBanner, ParentReplyBanner } from "@/components/moms-bible/MbBanners";
@@ -121,6 +122,7 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
     <TestamentPageShell>
       <HubTypingWidth wide className="space-y-4">
         <BibleExploreLinks />
+        <ReadingSizeBootstrap />
         <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
           <BibleChapterReadClient
             bookSlug={route.slug}

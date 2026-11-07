@@ -1,5 +1,6 @@
-import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
+import { FaithArticleCard, faithCollectionImage } from "@/components/faith/FaithArticleCard";
+import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   FAITH_HUB,
@@ -17,6 +18,7 @@ import {
   type JsonLdNode,
 } from "@/lib/structured-data";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -25,6 +27,8 @@ type Props = { params: Promise<{ slug: string }> };
 export function generateStaticParams() {
   return FAITH_SEO_CARDS.map((c) => ({ slug: c.slug }));
 }
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -61,6 +65,7 @@ export default async function CatholicFaithQuestionPage({ params }: Props) {
   if (!card) notFound();
   const seo = faithPageSeo(card);
   const path = `${FAITH_HUB}/${card.slug}`;
+  const related = FAITH_SEO_CARDS.filter((item) => item.cat === card.cat && item.id !== card.id).slice(0, 2);
 
   return (
     <TestamentPageShell>
@@ -73,7 +78,7 @@ export default async function CatholicFaithQuestionPage({ params }: Props) {
           learningNode(seo.h1, seo.description, path, card.title),
         ]}
       />
-      <article className="rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
+      <article className="mx-auto max-w-4xl rounded-[24px] border border-[#e6d9c5] bg-[#fffdf8] p-4 sm:p-8 lg:p-10">
         <nav aria-label="Breadcrumb" className="text-sm text-[#6b7280]">
           <Link href="/" className="text-[#335599] hover:underline">
             Home
@@ -85,7 +90,12 @@ export default async function CatholicFaithQuestionPage({ params }: Props) {
           › {card.title}
         </nav>
 
-        <header className="mt-3">
+        <p className="mt-5 text-sm">
+          <Link href={FAITH_HUB} className="font-semibold text-[#405329] underline">
+            Back to faith cards
+          </Link>
+        </p>
+        <header className="mt-6">
           <p className="text-sm font-semibold uppercase tracking-wide text-[#9a6b3f]">
             {card.cat} · {card.set}
           </p>
@@ -93,7 +103,17 @@ export default async function CatholicFaithQuestionPage({ params }: Props) {
           {card.when ? <p className="mt-2 text-sm text-[#4b5563]">When: {card.when}</p> : null}
         </header>
 
-        <div className="mt-4 max-w-3xl space-y-3 text-base leading-relaxed text-[#374151]">
+        <figure className="relative mt-6 aspect-[2/1] overflow-hidden rounded-2xl bg-[#f4eddf]">
+          <Image
+            src={faithCollectionImage(card.cat)}
+            alt={`${card.cat} collection illustration`}
+            fill
+            sizes="(max-width: 1024px) 90vw, 800px"
+            className="object-contain"
+            priority
+          />
+        </figure>
+        <div className="mt-6 max-w-3xl space-y-4 text-lg leading-relaxed text-[#374151]">
           <p>{seo.intro[0]}</p>
           <p>{seo.intro[1]}</p>
         </div>
@@ -120,6 +140,19 @@ export default async function CatholicFaithQuestionPage({ params }: Props) {
             Bible verses for kids
           </Link>
         </p>
+
+        {related.length > 0 ? (
+          <section className="mt-10" aria-labelledby="related-questions">
+            <h2 id="related-questions" className="font-[Georgia,serif] text-2xl font-bold text-[#405329]">
+              Keep exploring {card.cat}
+            </h2>
+            <div className="mt-4 grid gap-5 sm:grid-cols-2">
+              {related.map((item) => (
+                <FaithArticleCard key={item.id} card={item} />
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         <div className="mt-10">
           <NewsletterSubscribeForm source="catholic-faith-questions" />

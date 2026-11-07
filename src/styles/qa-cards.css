@@ -45,3 +45,31 @@
   .qa-q { font-size: 22px; }
   .qa-answer { font-size: 18px; }
 }
+
+/* Aggregate deck: the card grows with the answer instead of clipping it. */
+.qa-grid > li { min-width: 0; }
+.qa-grid--fit .qa-card { height: auto; display: grid; }
+.qa-grid--fit .qa-inner { display: grid; height: auto; }
+.qa-grid--fit .qa-face {
+  position: relative;
+  inset: auto;
+  grid-area: 1 / 1;
+  height: auto;
+  min-height: 22rem;
+  align-self: stretch;
+}
+.qa-grid--fit .qa-q,
+.qa-grid--fit .qa-answer,
+.qa-grid--fit .qa-chip { overflow-wrap: anywhere; }
+.qa-grid--fit .qa-back { pointer-events: none; }
+.qa-grid--fit .qa-card.is-flipped .qa-back { pointer-events: auto; }
+.qa-grid--fit .qa-card.is-flipped .qa-front { pointer-events: none; }
+
+@media (max-width: 600px) {
+  .qa-grid--fit .qa-card { height: auto; }
+  .qa-grid--fit .qa-face { min-height: 18rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qa-grid--fit .qa-face { transition: none; }
+}

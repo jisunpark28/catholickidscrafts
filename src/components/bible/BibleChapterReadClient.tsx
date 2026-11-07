@@ -1,5 +1,6 @@
 "use client";
 
+import { ReadingSizeControls, useReadingSize } from "@/components/bible/ReadingSizeControls";
 import { BibleChapterDiscussion } from "@/components/bible/BibleChapterDiscussion";
 import { BibleChapterPassage, type PassageMomsBible } from "@/components/bible/BibleChapterPassage";
 import { BibleChapterReadingNotes } from "@/components/bible/BibleChapterReadingNotes";
@@ -20,7 +21,7 @@ import {
 } from "@/lib/prayers/prayer-languages";
 import type { MbChapterView } from "@/lib/moms-bible/types";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import "@/styles/bible-reader.css";
 
 /** One storage chapter shown on the page (Mom's Bible marks stay keyed by it). */
@@ -82,6 +83,7 @@ export function BibleChapterReadClient({
   momsBibleIntro,
   header,
 }: Props) {
+  const { size, change, ready } = useReadingSize();
   const searchParams = useSearchParams();
   const router = useRouter();
   const langParam = searchParams.get("lang");
@@ -139,7 +141,10 @@ export function BibleChapterReadClient({
 
   return (
     <div className="space-y-4">
-      <div className="bible-reader space-y-4 rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
+      <div
+        className="bible-reader space-y-4 rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8"
+        style={ready ? ({ "--bible-reading-size": `${size}px` } as CSSProperties) : undefined}
+      >
         {header}
         <div>
           <h1 className="bible-reader__title">{title}</h1>
@@ -156,6 +161,8 @@ export function BibleChapterReadClient({
           locale={uiLanguage}
           onLocaleChange={selectLanguage}
         />
+
+        <ReadingSizeControls size={size} change={change} />
 
         {momsBible ? (
           <ColumnsWithMomsBible

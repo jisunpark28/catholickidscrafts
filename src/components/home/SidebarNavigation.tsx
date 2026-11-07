@@ -22,7 +22,22 @@ export function SidebarNavigation({ pathname, hash = "", activePaidPlus, onNavig
           return <Fragment key={item.id}>
             {item.separator && <li role="separator" aria-hidden="true" data-sidebar-separator={item.id} className="my-1 h-[3px] bg-[radial-gradient(circle,#d7a080_1.3px,transparent_1.5px)] bg-[length:9px_3px] bg-repeat-x" />}
             <li>
-              {item.href ? <Link href={item.href} className={classes} onClick={() => onNavigate(item.href!)} aria-current={active ? "page" : undefined}>
+              {item.href ? <Link href={item.href} className={classes} onClick={(event) => {
+                onNavigate(item.href!);
+                const hashAt = item.href!.indexOf("#");
+                const path = (hashAt >= 0 ? item.href!.slice(0, hashAt) : item.href!) || "/";
+                if (path !== window.location.pathname) return;
+                event.preventDefault();
+                const id = hashAt >= 0 ? item.href!.slice(hashAt + 1) : "";
+                const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                if (id) document.getElementById(id)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+                else window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+                const next = `${path}${id ? `#${id}` : ""}`;
+                if (`${window.location.pathname}${window.location.hash}` !== next) {
+                  window.history.pushState(null, "", next);
+                  window.dispatchEvent(new HashChangeEvent("hashchange"));
+                }
+              }} aria-current={active ? "page" : undefined}>
                 {content}
               </Link> : <button type="button" className={classes} disabled aria-describedby="sidebar-binder-unavailable" data-sidebar-unavailable="binder">
                 {content}

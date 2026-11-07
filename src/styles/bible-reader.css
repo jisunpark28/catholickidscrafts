@@ -121,3 +121,45 @@
     padding: 2px 4px 8px 2px;
   }
 }
+
+/* Passage text only. Title, notes, sidebar, and these controls keep their own sizes. */
+.bible-reader__verse {
+  font-size: var(--bible-reading-size, 16.5px);
+  overflow-wrap: anywhere;
+}
+
+.bible-reader__size-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: #405329;
+  font-size: 14px;
+}
+
+.bible-reader__size-controls button {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #a6b58c;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  color: #405329;
+}
+
+.bible-reader__size-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.bible-reader__size-controls button:focus-visible {
+  outline: 3px solid #c9773a;
+  outline-offset: 3px;
+}
+
+.bible-reader__size-controls output {
+  min-width: 48px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
