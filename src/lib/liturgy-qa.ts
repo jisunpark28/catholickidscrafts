@@ -1,5 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import type { QaDeckRead } from "@/lib/liturgy-qa-catalog";
 import type { QaTopic } from "@/lib/liturgy-qa-topics";
+import { prisma } from "@/lib/prisma";
+
+export type QaRead = QaDeckRead;
 
 /** Public shape only. Never add internalSourceRef, reviewNote or image prompts here. */
 export type PublicQaTopic = {
@@ -21,9 +24,7 @@ export type PublicQaCard = {
   cardColor: string;
 };
 
-export async function loadPublishedQa(
-  topic: QaTopic,
-): Promise<{ topic: PublicQaTopic; cards: PublicQaCard[] } | null> {
+export async function readPublishedQa(topic: QaTopic): Promise<QaRead> {
   try {
     const row = await prisma.liturgyQaTopic.findUnique({
       where: { slug: topic },
@@ -35,7 +36,7 @@ export async function loadPublishedQa(
         cardBackColor: true,
       },
     });
-    if (!row) return null;
+    if (!row) return { status: "empty" };
     const cards = await prisma.liturgyQaCard.findMany({
       where: { topicSlug: topic, status: "PUBLISHED" },
       orderBy: { sortOrder: "asc" },
@@ -50,10 +51,18 @@ export async function loadPublishedQa(
         cardColor: true,
       },
     });
-    if (cards.length === 0) return null;
-    return { topic: row, cards };
+    if (cards.length === 0) return { status: "empty" };
+    return { status: "ok", topic: row, cards };
   } catch {
-    // Table missing or DB down: the page falls back to the existing grid only.
-    return null;
+    // Table missing or DB down. Callers decide whether to use the authored catalog.
+    return { status: "error" };
   }
+}
+
+export async function loadPublishedQa(
+  topic: QaTopic,
+): Promise<{ topic: PublicQaTopic; cards: PublicQaCard[] } | null> {
+  const read = await readPublishedQa(topic);
+  if (read.status !== "ok") return null;
+  return { topic: read.topic, cards: read.cards };
 }

@@ -39,7 +39,8 @@
     "test:resource-unified": "tsx scripts/test-resource-unified.ts",
     "test:vestments": "tsx scripts/test-vestments.ts",
     "test:vestments:browser": "tsx scripts/test-vestments-browser.ts",
-    "test:worksheet-access": "tsx scripts/test-worksheet-access.ts"
+    "test:worksheet-access": "tsx scripts/test-worksheet-access.ts",
+    "test:reader-faith": "tsx scripts/test-reader-faith.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",

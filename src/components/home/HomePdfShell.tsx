@@ -6,15 +6,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
-function linkIsCurrent(item: HomePdfLink, pathname: string): boolean {
-  const path = item.href.split("?")[0] || item.href;
-  if (path === "/gospel" || path === "/bible/gospel") {
+function hrefPath(href: string): { path: string; hash: string } {
+  const noQuery = href.split("?")[0] || href;
+  const [path, hash] = noQuery.split("#");
+  return { path: path || "/", hash: hash ? `#${hash}` : "" };
+}
+
+function linkIsCurrent(item: HomePdfLink, pathname: string, hash: string): boolean {
+  const target = hrefPath(item.href);
+  if (target.hash) return pathname === target.path && hash === target.hash;
+  if (target.path === "/gospel" || target.path === "/bible/gospel") {
     return pathname === "/gospel" || pathname === "/bible/gospel";
   }
-  if (path === "/play") return pathname === path || pathname.startsWith(`${path}/`);
+  if (target.path === "/play") return pathname === target.path || pathname.startsWith(`${target.path}/`);
   const testament = testamentNavLabel(pathname);
   if (testament && item.label === testament) return true;
-  return pathname === path;
+  return pathname === target.path;
 }
 
 type Props = {
@@ -109,10 +116,12 @@ function NavLabel({ item }: { item: HomePdfLink }) {
 function NavAnchor({
   item,
   active,
+  pathname,
   onNavigate,
 }: {
   item: HomePdfLink;
   active: boolean;
+  pathname: string;
   onNavigate: () => void;
 }) {
   const className = pillClass(active);
@@ -124,7 +133,29 @@ function NavAnchor({
     );
   }
   return (
-    <Link href={item.href} className={className} onClick={onNavigate} aria-current={active ? "page" : undefined}>
+    <Link
+      href={item.href}
+      className={className}
+      onClick={(event) => {
+        onNavigate();
+        const hashAt = item.href.indexOf("#");
+        if (hashAt < 0) return;
+        const path = item.href.slice(0, hashAt) || "/";
+        const id = item.href.slice(hashAt + 1);
+        if (pathname !== path) return;
+        const target = document.getElementById(id);
+        if (!target) return;
+        event.preventDefault();
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+        const next = `${path}#${id}`;
+        if (`${window.location.pathname}${window.location.hash}` !== next) {
+          window.history.pushState(null, "", next);
+        }
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      }}
+      aria-current={active ? "page" : undefined}
+    >
       <NavLabel item={item} />
     </Link>
   );
@@ -132,7 +163,14 @@ function NavAnchor({
 
 export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass" }: Props) {
   const pathname = usePathname() ?? "";
+  const [hash, setHash] = useState("");
   const navId = useId();
+  useEffect(() => {
+    const read = () => setHash(window.location.hash);
+    read();
+    window.addEventListener("hashchange", read);
+    return () => window.removeEventListener("hashchange", read);
+  }, [pathname]);
   const resourceActive = pathname === RESOURCE_HREF || pathname.startsWith(`${RESOURCE_HREF}/`);
   const plusActive = pathname === PLUS_HREF || pathname.startsWith(`${PLUS_HREF}/`);
   const [desktopOpen, setDesktopOpen] = useState(true);
@@ -209,7 +247,8 @@ export function HomePdfShell({ groups, children, dailyMassLabel = "Daily Mass" }
                     <li key={item.id}>
                       <NavAnchor
                         item={item}
-                        active={linkIsCurrent(item, pathname)}
+                        active={linkIsCurrent(item, pathname, hash)}
+                        pathname={pathname}
                         onNavigate={() => setMobileOpen(false)}
                       />
                     </li>

@@ -63,6 +63,13 @@ const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
     id: "faith",
     title: "Faith & Prayer",
     items: [
+      {
+        id: "qa-cards",
+        label: "Q&A Cards",
+        match: /^q\s*&\s*a cards$/i,
+        fallback: "/catholic-faith-questions#qa-cards",
+        lockHref: true,
+      },
       { id: "prayers", label: "Prayers", match: /^prayers$/i, fallback: "/prayers" },
       { id: "mass", label: "Mass", match: /^mass$/i, fallback: "/liturgy/mass", lockHref: true },
       {

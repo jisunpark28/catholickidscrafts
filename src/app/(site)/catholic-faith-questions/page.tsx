@@ -1,11 +1,16 @@
+import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
+import { FaithArticleCard } from "@/components/faith/FaithArticleCard";
+import { FaithCategoryDirectory } from "@/components/faith/FaithCategoryDirectory";
+import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
-import { PageShell } from "@/components/PageShell";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { loadLiturgyQaDeck } from "@/lib/liturgy-qa-deck";
 import { FAITH_HUB, FAITH_SEO_CARDS, groupFaithByCatThenSet } from "@/lib/seo/card-seo";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode, itemListNode } from "@/lib/structured-data";
 import type { Metadata } from "next";
 import Link from "next/link";
+import "@/styles/qa-cards.css";
 
 export const metadata: Metadata = pageMetadata({
   title: "Catholic Faith Questions for Kids",
@@ -14,15 +19,18 @@ export const metadata: Metadata = pageMetadata({
   path: FAITH_HUB,
 });
 
-export default function CatholicFaithQuestionsHubPage() {
+export const dynamic = "force-dynamic";
+
+export default async function CatholicFaithQuestionsHubPage() {
   const groups = groupFaithByCatThenSet();
+  const deck = await loadLiturgyQaDeck();
   const listItems = FAITH_SEO_CARDS.map((c) => ({
     name: c.title,
     path: `${FAITH_HUB}/${c.slug}`,
   }));
 
   return (
-    <PageShell>
+    <TestamentPageShell>
       <JsonLd
         nodes={[
           breadcrumbNode([{ name: "Catholic Faith Questions", path: FAITH_HUB }]),
@@ -47,22 +55,17 @@ export default function CatholicFaithQuestionsHubPage() {
         <div className="mt-8 space-y-10">
           {groups.map((g) => (
             <section key={g.cat} aria-labelledby={`cat-${g.cat}`}>
-              <h2 id={`cat-${g.cat}`} className="font-[Georgia,serif] text-2xl font-bold text-[#1f2937]">
+              <h2 id={`cat-${g.cat}`} className="font-[Georgia,serif] text-2xl font-bold text-[#405329]">
                 {g.cat}
               </h2>
               <div className="mt-4 space-y-6">
                 {g.sets.map((s) => (
                   <div key={s.set}>
                     <h3 className="text-lg font-bold text-[#374151]">{s.set}</h3>
-                    <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    <ul className="mt-3 grid list-none gap-5 p-0 sm:grid-cols-2 xl:grid-cols-3">
                       {s.cards.map((c) => (
                         <li key={c.id}>
-                          <Link
-                            href={`${FAITH_HUB}/${c.slug}`}
-                            className="block rounded-2xl border border-[#f0d9b8] bg-white/90 px-3 py-3 text-sm no-underline hover:border-[#c9773a]"
-                          >
-                            <span className="font-bold text-[#1f2937]">{c.title}</span>
-                          </Link>
+                          <FaithArticleCard card={c} />
                         </li>
                       ))}
                     </ul>
@@ -73,10 +76,40 @@ export default function CatholicFaithQuestionsHubPage() {
           ))}
         </div>
 
+        <FaithCategoryDirectory />
+
         <div className="mt-10">
           <NewsletterSubscribeForm source="catholic-faith-questions" />
         </div>
       </div>
-    </PageShell>
+
+      <section id="qa-cards" className="mt-10 scroll-mt-28 rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8" aria-labelledby="qa-cards-heading">
+        <h2 id="qa-cards-heading" className="font-[Georgia,serif] text-3xl font-bold text-[#405329]">
+          Q&amp;A Cards
+        </h2>
+        <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
+          The questions and answers from Mass, the sacraments, the saints, devotions, and the Church seasons.
+          Tap a card to read the answer, then flip it back.
+        </p>
+        <div className="mt-8 space-y-12">
+          {deck.map((section) => (
+            <section key={section.slug} aria-labelledby={`qa-topic-${section.slug}`} data-qa-source={section.source} data-qa-topic={section.slug}>
+              <h3 id={`qa-topic-${section.slug}`} className="font-[Georgia,serif] text-2xl font-bold text-[#405329]">
+                {section.topic.title}
+              </h3>
+              {section.topic.bigIdea ? <p className="mt-2 max-w-3xl text-[#6b4a2f]">{section.topic.bigIdea}</p> : null}
+              <p className="mt-2 text-sm">
+                <Link href={`/liturgy/${section.slug}`} className="font-semibold text-[#335599] underline">
+                  {section.label} page
+                </Link>
+              </p>
+              <div className="mt-4">
+                <QaFlipCards cards={section.cards} cardBackColor={section.topic.cardBackColor} fit />
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+    </TestamentPageShell>
   );
 }
