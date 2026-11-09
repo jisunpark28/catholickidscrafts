@@ -2,7 +2,6 @@
 
 import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import type { PublicQaCard, PublicQaTopic } from "@/lib/liturgy-qa";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export type QaTopicTab = {
@@ -73,18 +72,7 @@ export function QaCardsByTopic({ tabs }: { tabs: QaTopicTab[] }) {
           className="mt-8"
         >
           {tab.topic && tab.cards.length > 0 ? (
-            <>
-              <h2 className="font-[Georgia,serif] text-2xl font-bold text-[#405329]">{tab.topic.title}</h2>
-              {tab.topic.bigIdea ? <p className="mt-2 max-w-3xl text-[#6b4a2f]">{tab.topic.bigIdea}</p> : null}
-              <p className="mt-2 text-sm">
-                <Link href={`/liturgy/${tab.slug}`} className="font-semibold text-[#335599] underline">
-                  {tab.label} page
-                </Link>
-              </p>
-              <div className="mt-4">
-                <QaFlipCards cards={tab.cards} cardBackColor={tab.topic.cardBackColor} fit />
-              </div>
-            </>
+            <QaFlipCards cards={tab.cards} cardBackColor={tab.topic.cardBackColor} fit />
           ) : (
             <p className="text-base text-[#6b4a2f]" data-qa-empty>
               No {tab.label} cards yet.
