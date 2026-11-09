@@ -87,7 +87,7 @@ async function main() {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const love = page.locator(".mb-sgroup").first();
     const before = await love.locator(".mb-chip").count();
-    await love.getByRole("button", { name: /^Show all / }).click();
+    await love.getByRole("button", { name: /^Show all in / }).click();
     assert.ok(await love.locator(".mb-chip").count() > before, "show all reveals more moments");
     await page.locator("#mb-find-moment").fill("cyberbullying");
     await page.waitForFunction(() => document.querySelector(".mb-find__status")?.textContent?.startsWith("1 of "));

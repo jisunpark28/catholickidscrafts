@@ -146,9 +146,10 @@ export function SituationsBoard({ groups }: { groups: BoardGroup[] }) {
                   type="button"
                   className="mb-more"
                   aria-expanded={false}
+                  aria-label={`Show all in ${group.title}`}
                   onClick={() => setExpanded((current) => ({ ...current, [group.title]: true }))}
                 >
-                  Show all {matched.length} in {group.title}
+                  Show all
                 </button>
               ) : null}
               {open && matched.length > PREVIEW ? (
