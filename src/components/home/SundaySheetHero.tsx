@@ -1,5 +1,6 @@
 "use client";
 
+import { useSiteSession } from "@/components/SiteSessionProvider";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -19,8 +20,6 @@ type Props = {
    * Signed-in free families can try the editor; Save / Print need Plus. Signed-out visitors go to sign-in.
    */
   editBasePath?: string | null;
-  /** When false, Customize goes to parent sign-in instead of the editor. */
-  signedIn?: boolean;
   /** Liturgy page for the current season, e.g. "/liturgy/ordinary-time". */
   seasonHref: string;
   seasonLabel: string;
@@ -66,13 +65,16 @@ export function SundaySheetHero({
   gospelRef,
   printBasePath,
   editBasePath = null,
-  signedIn = false,
   seasonHref,
   seasonLabel,
   groupInquiryHref,
   emailEnabled,
   position,
 }: Props) {
+  // Loaded once per page load by SiteSessionProvider (the page itself is static and signed-out).
+  // Signed out: Customize goes to parent sign-in instead of the editor (kid mode keeps the family session).
+  const { ready: sessionReady, session } = useSiteSession();
+  const signedIn = Boolean(session.family);
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
@@ -216,7 +218,9 @@ export function SundaySheetHero({
               <span className="text-lg font-bold leading-tight">
                 <span aria-hidden>✏️</span> Customize this sheet
               </span>
-              <span className="text-xs font-medium leading-tight text-[#4b5563]">
+              <span
+                className={`text-xs font-medium leading-tight text-[#4b5563]${sessionReady ? "" : " invisible"}`}
+              >
                 {signedIn ? "Try free · save with Plus · no auto-renew" : "Sign in to customize this sheet"}
               </span>
             </Link>

@@ -1,13 +1,9 @@
 import { formatSunday } from "@/lib/weekly-content";
-import {
-  COUNTRY_COOKIE,
-  pickCountry,
-  thisSunday,
-} from "@/lib/resource/this-sunday";
+import { thisSunday } from "@/lib/resource/this-sunday";
 import { keyToSlug } from "@/lib/resource/sheets";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
 import { loadFeaturedSheet } from "@/lib/gospel-sheet";
-import { cookies, headers } from "next/headers";
+import type { RomcalCountry } from "@/lib/sheet-keys/countries";
 
 export type HomeSundaySheet = {
   /** Path segment used in print URLs (resource slug or DB date slug). */
@@ -26,15 +22,12 @@ export type HomeSundaySheet = {
  * Homepage Sunday Sheet slide: always prefer **this Sunday** from the
  * liturgical calendar + static 188-key catalog. Falls back to the admin
  * featured GospelSheet row if romcal/catalog miss.
+ *
+ * `country` is already resolved (cookie > IP header) by the `/` rewrites in next.config.ts
+ * (lib/home-variants), so this reads no request data and the home page can be static.
  */
-export async function loadHomeSundaySheet(): Promise<HomeSundaySheet | null> {
+export async function loadHomeSundaySheet(country: RomcalCountry): Promise<HomeSundaySheet | null> {
   try {
-    const [cookieStore, h] = await Promise.all([cookies(), headers()]);
-    const country = pickCountry(
-      undefined,
-      cookieStore.get(COUNTRY_COOKIE)?.value,
-      h.get("x-vercel-ip-country"),
-    );
     const sunday = thisSunday(country);
     if (sunday) {
       const sheet = getSundaySheet(sunday.key);
