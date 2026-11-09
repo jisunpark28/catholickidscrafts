@@ -1,4 +1,5 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
+import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { SITUATION_GROUPS } from "@/data/moms-bible/situations";
 import { MbToolbar } from "@/components/moms-bible/MbToolbar";
 import { SituationsBoard, type BoardGroup } from "@/components/moms-bible/SituationsBoard";
@@ -40,7 +41,7 @@ export default async function SituationsPage() {
 
   return (
     <TestamentPageShell>
-      <div className="mb-situations rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
+      <SidebarPagePanel className="mb-situations">
         {toolbar && <MbToolbar data={toolbar} variant="for" />}
         <h1 className="mt-2 font-[Georgia,serif] text-3xl font-bold text-[#1f2937]">When my child is…</h1>
         <p className="mb-sub mt-1">
@@ -48,7 +49,7 @@ export default async function SituationsPage() {
           wording, not the Bible verse.
         </p>
         <SituationsBoard groups={board} />
-      </div>
+      </SidebarPagePanel>
     </TestamentPageShell>
   );
 }
