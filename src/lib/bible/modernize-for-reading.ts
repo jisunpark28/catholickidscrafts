@@ -106,17 +106,55 @@ function matchCase(src: string, out: string): string {
 function escapeRe(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-/** Whole-word phrase replace (never matches inside a longer word). */
-function replacePhrase(text: string, from: string, to: string): string {
-  const b = (s: string) => new RegExp(`(?<![A-Za-z])${escapeRe(s)}(?![A-Za-z])`, "g");
-  let out = text.replace(b(from), to);
-  const capFrom = cap(from);
-  if (capFrom !== from) out = out.replace(b(capFrom), cap(to));
+/** Whole-phrase regex (never matches inside a longer word). */
+function phraseRe(s: string): RegExp {
+  return new RegExp(`(?<![A-Za-z])${escapeRe(s)}(?![A-Za-z])`, "g");
+}
+/** [regex, replacement, capitalized regex or null, capitalized replacement] */
+type CompiledPhrase = readonly [RegExp, string, RegExp | null, string];
+function compilePhrases(list: readonly (readonly [string, string])[]): readonly CompiledPhrase[] {
+  return list.map(([from, to]) => {
+    const capFrom = cap(from);
+    return [phraseRe(from), to, capFrom !== from ? phraseRe(capFrom) : null, cap(to)] as const;
+  });
+}
+/** Whole-word phrase replace, in list order (later rules may depend on earlier output). */
+function applyPhrases(text: string, compiled: readonly CompiledPhrase[]): string {
+  let out = text;
+  for (const [re, to, capRe, capTo] of compiled) {
+    out = out.replace(re, to);
+    if (capRe) out = out.replace(capRe, capTo);
+  }
   return out;
 }
-function replaceWord(text: string, from: string, to: string): string {
-  const re = new RegExp(`\\b(${from}|${cap(from)})\\b`, "g");
+function wordRe(from: string): RegExp {
+  return new RegExp(`\\b(${from}|${cap(from)})\\b`, "g");
+}
+function replaceWordRe(text: string, re: RegExp, to: string): string {
   return text.replace(re, (m) => matchCase(m, to));
+}
+
+// Compiled once at module load (modernizeForReading runs per verse).
+const SOURCE_TEXT_FIXES_RE = compilePhrases(SOURCE_TEXT_FIXES);
+const DR_PHRASES_RE = compilePhrases(DR_PHRASES);
+const MONUMENTS_RE = wordRe("monuments");
+const NO_MAN_RE = wordRe("no man");
+
+/**
+ * All DR_WORDS swaps in one pass. Same result as applying them one by one: every key is a whole
+ * word (letters only, between \b), so each word matches at most one key, and no replacement
+ * contains another key, so no swap feeds a later one. Keep it that way when adding words.
+ */
+const DR_WORDS_LOOKUP = new Map<string, string>();
+for (const [from, to] of Object.entries(DR_WORDS)) {
+  for (const k of [from, cap(from)]) if (!DR_WORDS_LOOKUP.has(k)) DR_WORDS_LOOKUP.set(k, to);
+}
+const DR_WORDS_RE = new RegExp(
+  `\\b(?:${[...DR_WORDS_LOOKUP.keys()].sort((a, b) => b.length - a.length).join("|")})\\b`,
+  "g",
+);
+function replaceDrWords(text: string): string {
+  return text.replace(DR_WORDS_RE, (m) => matchCase(m, DR_WORDS_LOOKUP.get(m) as string));
 }
 function lc(w: string) {
   return w.toLowerCase();
@@ -204,8 +242,8 @@ export type ModernizeOptions = { bookSlug?: string };
 
 export function modernizeForReading(text: string, opts: ModernizeOptions = {}): string {
   let out = text;
-  for (const [from, to] of SOURCE_TEXT_FIXES) out = replacePhrase(out, from, to);
-  for (const [from, to] of DR_PHRASES) out = replacePhrase(out, from, to);
+  out = applyPhrases(out, SOURCE_TEXT_FIXES_RE);
+  out = applyPhrases(out, DR_PHRASES_RE);
   out = out.replace(/(?<!\b(?:from|to|One|one) )\b([Oo])ne to another\b/g, (_m, o: string) => (o === "O" ? "To" : "to") + " one another");
   out = out.replace(/\b([Tt])hou shalt\b/g, (_m, t: string) => (t === "T" ? "You" : "you") + " shall");
 
@@ -219,9 +257,9 @@ export function modernizeForReading(text: string, opts: ModernizeOptions = {}): 
   out = possessives(out);
   out = ethForms(out);
   out = wherefore(out);
-  for (const [from, to] of Object.entries(DR_WORDS)) out = replaceWord(out, from, to);
-  if (opts.bookSlug && GOSPELS.has(opts.bookSlug)) out = replaceWord(out, "monuments", "tombs");
-  out = replaceWord(out, "no man", "no one");
+  out = replaceDrWords(out);
+  if (opts.bookSlug && GOSPELS.has(opts.bookSlug)) out = replaceWordRe(out, MONUMENTS_RE, "tombs");
+  out = replaceWordRe(out, NO_MAN_RE, "no one");
 
   // Grammar cleanup after pronoun swaps.
   out = out
