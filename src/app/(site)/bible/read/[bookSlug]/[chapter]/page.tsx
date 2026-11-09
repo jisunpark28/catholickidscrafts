@@ -1,6 +1,5 @@
 import { BibleExploreLinks } from "@/components/bible/BibleExploreLinks";
 import { notFound, permanentRedirect, redirect } from "next/navigation";
-import { Suspense } from "react";
 import {
   BibleChapterReadClient,
   type BibleReaderSegment,
@@ -8,18 +7,28 @@ import {
 import { ReadingSizeBootstrap } from "@/components/bible/ReadingSizeBootstrap";
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { HubTypingWidth } from "@/components/HubTypingWidth";
-import { NewNoteBanner, ParentReplyBanner } from "@/components/moms-bible/MbBanners";
-import { MbToolbar } from "@/components/moms-bible/MbToolbar";
 import { getCatholicBookName } from "@/lib/bible/catholic-book-names";
 import { resolveReadRoute, verseLabelsForDouayChapter } from "@/lib/bible/chapter-pages";
 import { fetchBibleBooks, fetchBibleChapter } from "@/lib/bible/latinprayer";
 import { modernizeVerse } from "@/lib/bible/modernize-for-reading";
 import { buildVerseOffsetTable } from "@/lib/bible-memos/verse-offsets";
-import { readerPageMomsBible } from "@/lib/moms-bible/page-data";
-import { getHeaderSession } from "@/lib/get-header-session";
-import { isHeaderSignedIn } from "@/lib/header-session";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
+
+/**
+ * Static chapter page (ISR): the same public scripture HTML for everyone, built on the first
+ * visit and refreshed daily. No cookies or query strings are read here. Mom's Bible, the
+ * toolbar, banners and the reader's name load in the browser from authenticated APIs
+ * (BibleChapterReadClient). Old storage-numbered links (?douay=1) are redirected before
+ * this page by a rewrite in next.config.ts.
+ */
+export const revalidate = 86400;
+export const dynamicParams = true;
+
+/** Nothing at build time (no burst of requests to latinprayer.org); each chapter is cached on first visit. */
+export function generateStaticParams(): { bookSlug: string; chapter: string }[] {
+  return [];
+}
 
 const TITLE_SUFFIX = " | Catholic Kids Crafts";
 
@@ -37,15 +46,9 @@ function displayRef(slug: string, bookName: string, chapterDisplay: string): str
   return `${bookName} ${chapterDisplay}`;
 }
 
-type SearchParams = Record<string, string | string[] | undefined>;
 type Props = {
   params: Promise<{ bookSlug: string; chapter: string }>;
-  searchParams: Promise<SearchParams>;
 };
-
-function first(v: string | string[] | undefined): string | undefined {
-  return Array.isArray(v) ? v[0] : v;
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { bookSlug, chapter } = await params;
@@ -62,28 +65,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function BibleReadPage({ params, searchParams }: Props) {
-  const [{ bookSlug, chapter: chapterStr }, sp] = await Promise.all([params, searchParams]);
-  const douayVerse = Number(first(sp.v));
-  const route = resolveReadRoute(bookSlug, chapterStr, {
-    douay: first(sp.douay) === "1",
-    douayVerse: Number.isInteger(douayVerse) && douayVerse > 0 ? douayVerse : undefined,
-  });
+export default async function BibleReadPage({ params }: Props) {
+  const { bookSlug, chapter: chapterStr } = await params;
+  const route = resolveReadRoute(bookSlug, chapterStr);
   if (route.type === "notFound") notFound();
   if (route.type === "redirect") {
-    const lang = first(sp.lang);
-    const [path, hash] = route.to.split("#");
-    const to = `${path}${lang ? `?lang=${encodeURIComponent(lang)}` : ""}${hash ? `#${hash}` : ""}`;
-    if (route.permanent) permanentRedirect(to);
-    redirect(to);
+    if (route.permanent) permanentRedirect(route.to);
+    redirect(route.to);
   }
 
-  let chapters;
-  try {
-    chapters = await Promise.all(route.douayChapters.map((d) => fetchBibleChapter(route.slug, d)));
-  } catch {
-    notFound();
-  }
+  // A failed fetch throws (error page, not cached) instead of caching a 404 for a day.
+  const chapters = await Promise.all(route.douayChapters.map((d) => fetchBibleChapter(route.slug, d)));
   // latinprayer.org answers some out-of-range chapters with a different chapter.
   if (chapters.some((c, i) => c.meta.chapter !== route.douayChapters[i])) notFound();
 
@@ -104,47 +96,18 @@ export default async function BibleReadPage({ params, searchParams }: Props) {
     };
   });
 
-  const mb = await readerPageMomsBible({
-    bookSlug: route.slug,
-    chapters: route.douayChapters,
-    childParam: first(sp.child) ?? null,
-  });
-
-  const headerSession = await getHeaderSession();
-  const discussionSignedIn = isHeaderSignedIn(headerSession);
-  const readerLabel =
-    headerSession.reader?.displayName ??
-    headerSession.family?.displayName?.trim() ??
-    headerSession.family?.email?.split("@")[0] ??
-    "?";
-
   return (
     <TestamentPageShell>
       <HubTypingWidth wide className="space-y-4">
         <BibleExploreLinks />
         <ReadingSizeBootstrap />
-        <Suspense fallback={<p className="text-sm text-[var(--color-muted)]">Loading…</p>}>
-          <BibleChapterReadClient
-            bookSlug={route.slug}
-            apiBookName={chapters[0]!.meta.book.name}
-            urlChapter={route.label.toLowerCase()}
-            chapterDisplay={route.chapterDisplay}
-            segments={segments}
-            discussionSignedIn={discussionSignedIn}
-            discussionReaderLabel={readerLabel}
-            momsBible={mb.view}
-            momsBibleIntro={mb.intro}
-            header={
-              mb.toolbar || mb.intro === "guest" || mb.childBanner || mb.parentBanner ? (
-                <>
-                  {(mb.toolbar || mb.intro === "guest") && <MbToolbar data={mb.toolbar} />}
-                  {mb.childBanner && <NewNoteBanner note={mb.childBanner} />}
-                  {mb.parentBanner && <ParentReplyBanner data={mb.parentBanner} />}
-                </>
-              ) : null
-            }
-          />
-        </Suspense>
+        <BibleChapterReadClient
+          bookSlug={route.slug}
+          apiBookName={chapters[0]!.meta.book.name}
+          urlChapter={route.label.toLowerCase()}
+          chapterDisplay={route.chapterDisplay}
+          segments={segments}
+        />
       </HubTypingWidth>
     </TestamentPageShell>
   );
