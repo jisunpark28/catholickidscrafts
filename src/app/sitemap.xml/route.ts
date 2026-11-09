@@ -4,7 +4,7 @@ import { absoluteUrl, CHILD_SITEMAP_PATHS, SITEMAP_CONTENT_DATE } from "@/lib/si
  * Sitemap index at /sitemap.xml (the URL robots.txt and Search Console use).
  * It points to the pages sitemap and the Bible chapters sitemap.
  */
-export const dynamic = "force-dynamic";
+export const revalidate = 86400;
 
 export function GET(): Response {
   const lastmod = SITEMAP_CONTENT_DATE.toISOString();

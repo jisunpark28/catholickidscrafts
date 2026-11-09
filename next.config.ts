@@ -39,13 +39,27 @@ const nextConfig: NextConfig = {
       { source: "/", headers: securityHeaders },
       { source: "/:path*", headers: securityHeaders },
       // *.vercel.app (production alias + previews): usable, never indexed. Was in middleware;
-      // robots.ts still serves disallow-all on these hosts.
+      // robots.txt is rewritten to a disallow-all file on these hosts (rewrites below).
       {
         source: "/:path*",
         has: [{ type: "host", value: "(?<h>.*)\\.vercel\\.app" }],
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
     ];
+  },
+  async rewrites() {
+    return {
+      // *.vercel.app gets disallow-all robots; www/apex keep the static src/app/robots.ts.
+      beforeFiles: [
+        {
+          source: "/robots.txt",
+          has: [{ type: "host", value: "(?<h>.*)\\.vercel\\.app" }],
+          destination: "/robots-noindex.txt",
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
   async redirects() {
     return [
