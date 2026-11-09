@@ -56,6 +56,13 @@ const nextConfig: NextConfig = {
           has: [{ type: "host", value: "(?<h>.*)\\.vercel\\.app" }],
           destination: "/robots-noindex.txt",
         },
+        // Old storage-numbered reader links (?douay=1) go to a tiny redirect route, so the
+        // chapter page itself never reads the query string and can stay static.
+        {
+          source: "/bible/read/:bookSlug/:chapter",
+          has: [{ type: "query", key: "douay", value: "1" }],
+          destination: "/api/bible/read-redirect/:bookSlug/:chapter",
+        },
       ],
       afterFiles: [],
       fallback: [],

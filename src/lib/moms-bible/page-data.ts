@@ -9,6 +9,8 @@ import type { MbChapterView, MbToolbarData } from "./types";
 
 export type ChildBanner = Awaited<ReturnType<typeof childNewNote>>;
 export type ParentBanner = Awaited<ReturnType<typeof parentUnseenReplies>>;
+/** Reader page data (GET /api/moms-bible/reader); loaded in the browser so chapter pages stay static. */
+export type ReaderMomsBible = Awaited<ReturnType<typeof readerPageMomsBible>>;
 
 /** ?child= wins, then the remembered choice (cookie), then the first child. Always a linked child. */
 async function pickChild(children: MbLinkedChild[], childParam?: string | null): Promise<MbLinkedChild | null> {
