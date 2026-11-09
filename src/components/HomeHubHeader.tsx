@@ -5,15 +5,10 @@ import { HomeHubMenuLink } from "@/components/HomeHubButton";
 import { HomeLearnSearch } from "@/components/HomeLearnSearch";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { Branch, Cross, Heart, Sparkle, Star } from "@/components/home/HomeBackdrop";
-import type { HeaderSessionResponse } from "@/lib/header-session";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-
-type Props = {
-  initialSession: HeaderSessionResponse;
-};
 
 /**
  * Soft decorations that live only in the empty gaps between logo, search and account,
@@ -62,7 +57,7 @@ function Wordmark() {
   );
 }
 
-export function HomeHubHeader({ initialSession }: Props) {
+export function HomeHubHeader() {
   const copy = useSiteCopy();
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
   const pathname = usePathname() ?? "";
@@ -118,7 +113,7 @@ export function HomeHubHeader({ initialSession }: Props) {
             >
               Plus
             </HomeHubMenuLink>
-            <HomeHubAccountMenu initialSession={initialSession} signInLabel={t("global.nav.sign_in", "Sign in")} />
+            <HomeHubAccountMenu signInLabel={t("global.nav.sign_in", "Sign in")} />
           </div>
         </div>
 
