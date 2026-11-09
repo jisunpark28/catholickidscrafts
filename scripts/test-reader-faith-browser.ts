@@ -3,7 +3,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { chromium, type Page } from "playwright";
 import { catalogQaDeck } from "../src/lib/liturgy-qa-catalog";
-import { FAITH_SEO_CARDS } from "../src/lib/seo/card-seo";
 
 const base = process.env.READER_BASE_URL || "http://127.0.0.1:3039";
 const out = process.env.READER_SCREENSHOT_DIR || "/opt/cursor/artifacts";
@@ -27,17 +26,6 @@ function trackErrors(page: Page) {
     }
   });
   return errors;
-}
-
-function htmlHas(html: string, text: string) {
-  const decoded = html
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#x27;/g, "'")
-    .replace(/&#39;/g, "'");
-  return decoded.includes(text);
 }
 
 async function run() {
@@ -118,26 +106,31 @@ async function run() {
     await page.setViewportSize({ width: 1440, height: 1050 });
     await page.goto(`${base}/prayers`, { waitUntil: "networkidle" });
     await page.getByRole("link", { name: "Q&A Cards", exact: true }).click();
-    await page.waitForURL("**/catholic-faith-questions#qa-cards");
+    await page.waitForURL("**/qa-cards");
     const qaLink = page.getByRole("link", { name: "Q&A Cards", exact: true });
-    const faithLink = page.getByRole("link", { name: "Faith & Prayer", exact: true });
+    const prayerLink = page.getByRole("link", { name: "Prayer", exact: true });
     await waitFor(async () => (await qaLink.getAttribute("aria-current")) === "page", "Q&A Cards highlight");
-    assert.equal(await faithLink.getAttribute("aria-current"), null);
+    assert.equal(await prayerLink.getAttribute("aria-current"), null);
     const qa = page.locator("#qa-cards");
-    await waitFor(async () => {
-      const box = await qa.boundingBox();
-      return Boolean(box && box.y < 400);
-    }, "qa-cards scrolled into view");
-    assert.equal(await page.locator("#qa-cards [data-qa-topic]").count(), 10);
-    assert.equal(await page.locator('#qa-cards a[href^="/catholic-faith-questions/"]').count(), 0);
-    const qaText = await qa.evaluate((el) => el.textContent ?? "");
+    assert.deepEqual(await qa.getByRole("tab").allInnerTexts(), [
+      "Mass", "Sacraments", "Saints", "Devotions", "Ordinary Time", "Advent", "Christmas Time", "Lent", "Paschal Triduum", "Easter Time",
+    ]);
+    assert.equal(await qa.getByRole("tab", { name: "Mass", exact: true }).getAttribute("aria-selected"), "true", "Mass is the default");
     for (const section of deck) {
-      assert.ok(qaText.includes(section.topic.title), section.slug);
+      await qa.getByRole("tab", { name: section.label, exact: true }).click();
+      await page.waitForURL(`**/qa-cards#${section.slug}`);
+      const panel = qa.locator(`[data-qa-topic="${section.slug}"]`);
+      assert.equal(await panel.isVisible(), true, section.slug);
+      assert.equal(await qa.locator('[role="tabpanel"]:visible').count(), 1, `${section.slug}: one topic at a time`);
+      const panelText = await panel.evaluate((el) => el.textContent ?? "");
+      assert.ok(panelText.includes(section.topic.title), section.slug);
       for (const card of section.cards) {
-        assert.ok(qaText.includes(card.question), card.question);
-        assert.ok(qaText.includes(card.answer), card.answer);
+        assert.ok(panelText.includes(card.question), card.question);
+        assert.ok(panelText.includes(card.answer), card.answer);
       }
     }
+    const longestSection = deck.find((section) => section.cards.some((card) => card.id === longest.id))!;
+    await qa.getByRole("tab", { name: longestSection.label, exact: true }).click();
     const target = page.locator(`[data-qa-card="${longest.id}"]`);
     const front = target.locator(".qa-front");
     await front.focus();
@@ -155,43 +148,31 @@ async function run() {
     await page.keyboard.press("Enter");
     await waitFor(async () => (await target.getAttribute("data-flipped")) === "false", "keyboard flip back");
 
-    const articles = page.locator("[data-faith-article]");
-    assert.equal(await articles.count(), FAITH_SEO_CARDS.length);
-    const hrefs = await articles.evaluateAll((els) => els.map((el) => el.getAttribute("href")));
-    assert.equal(new Set(hrefs).size, FAITH_SEO_CARDS.length);
-    assert.equal(await page.locator("#faith-prayer a").count(), 11);
-    await faithLink.click();
-    await page.waitForURL((url) => url.pathname === "/catholic-faith-questions" && url.hash === "");
-    await waitFor(async () => (await faithLink.getAttribute("aria-current")) === "page", "Faith & Prayer highlight");
+    await page.reload({ waitUntil: "networkidle" });
+    await waitFor(
+      async () => (await qa.getByRole("tab", { name: longestSection.label, exact: true }).getAttribute("aria-selected")) === "true",
+      "hash restores the chosen topic",
+    );
+    await prayerLink.click();
+    await page.waitForURL((url) => url.pathname === "/prayers");
+    await waitFor(async () => (await prayerLink.getAttribute("aria-current")) === "page", "Prayer highlight");
     assert.equal(await qaLink.getAttribute("aria-current"), null);
     await qaLink.click();
-    await page.waitForURL("**/catholic-faith-questions#qa-cards");
+    await page.waitForURL("**/qa-cards");
     await waitFor(async () => (await qaLink.getAttribute("aria-current")) === "page", "Q&A Cards highlight after return");
-    await page.screenshot({ path: path.join(out, "ckc-faith-articles-desktop.png"), fullPage: false });
 
     let checked = 0;
-    const queue = [...FAITH_SEO_CARDS];
-    await Promise.all(
-      Array.from({ length: 6 }, async () => {
-        for (let card = queue.shift(); card; card = queue.shift()) {
-          const result = await page.request.get(`${base}/catholic-faith-questions/${card.slug}`);
-          assert.equal(result.status(), 200, card.slug);
-          const html = await result.text();
-          assert.ok(htmlHas(html, "Family conversation questions"), card.slug);
-          assert.ok(htmlHas(html, "Keep exploring"), card.slug);
-          assert.equal(html.includes("FAQPage"), false, card.slug);
-          assert.equal(html.includes("datePublished"), false, card.slug);
-          assert.ok(htmlHas(html, card.title), card.slug);
-          checked++;
-        }
-      }),
-    );
+    for (const gone of ["/catholic-faith-questions", "/catholic-faith-questions/why-do-we-pray"]) {
+      const result = await page.request.get(`${base}${gone}`, { maxRedirects: 0 });
+      assert.equal(result.status(), 404, `${gone} is deleted`);
+      checked++;
+    }
 
     const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
     const mobilePage = await mobile.newPage();
     mobilePage.setDefaultNavigationTimeout(120_000);
-    await mobilePage.goto(`${base}/catholic-faith-questions#qa-cards`, { waitUntil: "networkidle" });
-    const mobileCard = mobilePage.locator("[data-qa-card]").nth(3);
+    await mobilePage.goto(`${base}/qa-cards`, { waitUntil: "networkidle" });
+    const mobileCard = mobilePage.locator('[role="tabpanel"]:not([hidden]) [data-qa-card]').nth(3);
     await mobileCard.scrollIntoViewIfNeeded();
     await mobileCard.locator(".qa-front").tap();
     await waitFor(async () => (await mobileCard.getAttribute("data-flipped")) === "true", "touch flip");
@@ -200,8 +181,8 @@ async function run() {
     await mobile.close();
 
     const reduced = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
-    await reduced.goto(`${base}/catholic-faith-questions#qa-cards`, { waitUntil: "networkidle" });
-    const reducedCard = reduced.locator("[data-qa-card]").first();
+    await reduced.goto(`${base}/qa-cards`, { waitUntil: "networkidle" });
+    const reducedCard = reduced.locator('[role="tabpanel"]:not([hidden]) [data-qa-card]').first();
     await reducedCard.locator(".qa-front").click();
     await waitFor(async () => (await reducedCard.getAttribute("data-flipped")) === "true", "reduced-motion flip");
     const transform = await reducedCard.locator(".qa-inner").evaluate((el) => getComputedStyle(el).transform);
@@ -213,18 +194,9 @@ async function run() {
     }, "reduced-motion answer visible");
     await reduced.close();
 
-    await page.setViewportSize({ width: 1280, height: 900 });
-    await page.goto(`${base}/catholic-faith-questions/${FAITH_SEO_CARDS[0]!.slug}`, { waitUntil: "networkidle" });
-    await page.screenshot({ path: path.join(out, "ckc-faith-article-desktop.png"), fullPage: false });
-    await page.setViewportSize({ width: 390, height: 844 });
-    assert.equal(await page.locator("article h1").count(), 1);
-    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth), false);
-    await page.screenshot({ path: path.join(out, "ckc-faith-article-mobile.png"), fullPage: false });
-    await page.getByRole("link", { name: "Back to faith cards", exact: true }).click();
-    await page.waitForURL("**/catholic-faith-questions");
     assert.deepEqual(errors, []);
     console.log(
-      `PASS reader bounds/keyboard/persistence/storage; ${cards.length} flip cards in 10 topics; ${checked} article HTTP 200s; reduced motion and mobile.`,
+      `PASS reader bounds/keyboard/persistence/storage; ${cards.length} flip cards in 10 topics; ${checked} deleted-route 404s; reduced motion and mobile.`,
     );
   } finally {
     await browser.close();

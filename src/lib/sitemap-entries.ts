@@ -5,7 +5,7 @@ import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
 import { RESOURCE_SEASONS, seasonPath } from "@/lib/resource/sheets";
-import { FAITH_HUB, FAITH_SEO_CARDS, SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
+import { SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
 import { EVERGREEN_PAGES, MASS_FOR_KIDS_HUB, publicPath, VIRTUE_CHALLENGE_HUB } from "@/lib/seo/evergreen-worksheets";
 import { SUNDAY_MASS_WORKSHEETS_HUB, sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { getSiteUrl } from "@/lib/site-url";
@@ -46,10 +46,10 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/bible/gospel", "daily", 0.9],
   ["/bible-verses-for-kids", "weekly", 0.85],
   [SAINTS_HUB, "weekly", 0.85],
-  [FAITH_HUB, "weekly", 0.85],
   ["/recommendations", "weekly", 0.8],
   ["/play", "weekly", 0.75],
   ["/prayers", "monthly", 0.75],
+  ["/qa-cards", "monthly", 0.75],
   ["/mass/participation", "monthly", 0.7],
   ["/about", "yearly", 0.5],
   ["/subscribe", "monthly", 0.5],
@@ -109,10 +109,6 @@ function saintCardEntries(): SitemapEntry[] {
   return SAINT_SEO_CARDS.map((c) => entry(`${SAINTS_HUB}/${c.slug}`, "monthly", 0.65));
 }
 
-function faithCardEntries(): SitemapEntry[] {
-  return FAITH_SEO_CARDS.map((c) => entry(`${FAITH_HUB}/${c.slug}`, "monthly", 0.65));
-}
-
 async function recommendationEntries(): Promise<SitemapEntry[]> {
   try {
     const rows = await prisma.recommendation.findMany({
@@ -157,7 +153,6 @@ export async function buildPagesSitemap(): Promise<MetadataRoute.Sitemap> {
     ...STATIC_PAGES.map(([p, f, pr]) => entry(p, f, pr)),
     ...bibleVersesForKidsEntries(),
     ...saintCardEntries(),
-    ...faithCardEntries(),
     ...playEntries(),
     ...liturgyEntries(),
     ...bookHubs,

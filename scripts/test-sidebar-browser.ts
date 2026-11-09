@@ -20,7 +20,7 @@ async function main() {
     const serverHtml = await response!.text();
     assert.ok(!serverHtml.includes('data-sidebar-unavailable="binder"'), "actual signed-out SSR has no binder element");
     const nav = page.getByRole("navigation", { name: "Home", exact: true });
-    const labels = ["Printables", "Daily Mass", "Play & Learn", "Mom's Bible", "Q&A Cards", "Faith & Prayer"];
+    const labels = ["Printables", "Daily Mass", "Play & Learn", "Mom's Bible", "Q&A Cards", "Prayer"];
     assert.deepEqual((await nav.getByRole("link").allTextContents()).map((label) => label.trim()), labels);
     assert.equal(await nav.getByRole("link", { name: "Printables", exact: true }).getAttribute("href"), "/resource");
     assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Printables");
@@ -95,19 +95,17 @@ async function main() {
       await page.keyboard.press("Escape"); assert.equal(await nav.isVisible(), false);
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto(`${base}/catholic-faith-questions`, { waitUntil: "networkidle" });
-    assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Faith & Prayer");
-    const categories = page.getByRole("region", { name: "Faith & Prayer", exact: true });
-    assert.equal(await categories.getByRole("link").count(), 11, "all five faith + six seasonal categories remain reachable");
+    await page.goto(`${base}/prayers`, { waitUntil: "networkidle" });
+    assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Prayer");
     await nav.getByRole("link", { name: "Q&A Cards", exact: true }).click();
-    await page.waitForURL("**#qa-cards");
+    await page.waitForURL("**/qa-cards");
     assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Q&A Cards");
-    await page.reload({ waitUntil: "networkidle" });
+    await page.goto(`${base}/qa-cards#advent`, { waitUntil: "networkidle" });
     assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Q&A Cards", "direct hash load");
-    const detail = await page.locator('#qa-cards a[href^="/catholic-faith-questions/"]').first().getAttribute("href");
-    assert.ok(detail); await page.goto(`${base}${detail}`, { waitUntil: "networkidle" });
-    assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Q&A Cards");
-    const destinations = ["/resource", "/daily-mass", "/play", "/bible/read/genesis/1", "/catholic-faith-questions", "/prayers", "/liturgy/mass", "/liturgy/sacraments", "/liturgy/saints", "/liturgy/devotions", "/liturgy/ordinary-time", "/liturgy/advent", "/liturgy/christmas-time", "/liturgy/lent", "/liturgy/paschal-triduum", "/liturgy/easter-time"];
+    for (const gone of ["/catholic-faith-questions", "/catholic-faith-questions/why-do-we-pray"]) {
+      assert.equal((await page.request.get(`${base}${gone}`, { maxRedirects: 0 })).status(), 404, `${gone} is deleted`);
+    }
+    const destinations = ["/resource", "/daily-mass", "/play", "/bible/read/genesis/1", "/qa-cards", "/prayers", "/liturgy/mass", "/liturgy/sacraments", "/liturgy/saints", "/liturgy/devotions", "/liturgy/ordinary-time", "/liturgy/advent", "/liturgy/christmas-time", "/liturgy/lent", "/liturgy/paschal-triduum", "/liturgy/easter-time"];
     for (const destination of destinations) {
       const result = await page.request.get(`${base}${destination}`, { timeout: 120000 });
       assert.equal(result.status(), 200, `${destination}: actual HTTP destination`);

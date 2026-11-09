@@ -10,9 +10,9 @@ export function revalidateLiturgyPages(): void {
   revalidatePath("/liturgy/[topic]", "page");
 }
 
-/** Q&A flip cards render on /prayers, /liturgy/[topic] and the /catholic-faith-questions hub. */
+/** Q&A flip cards render on /prayers, /liturgy/[topic] and the /qa-cards page. */
 export function revalidateQaPages(): void {
   revalidatePath("/prayers");
   revalidatePath("/liturgy/[topic]", "page");
-  revalidatePath("/catholic-faith-questions");
+  revalidatePath("/qa-cards");
 }

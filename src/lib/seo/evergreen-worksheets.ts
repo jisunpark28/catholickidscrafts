@@ -1,5 +1,5 @@
 /** Evergreen worksheet SEO; catalog is shared with Resource, separate from Sunday keys. */
-import { FAITH_HUB, FAITH_SEO_CARDS, type SeoCard } from "@/lib/seo/card-seo";
+import { FAITH_SEO_CARDS, type SeoCard } from "@/lib/seo/card-seo";
 import type { SundaySheetContent } from "@/lib/sunday-sheet-content";
 import type { EvergreenPage } from "@/lib/evergreen-catalog";
 export * from "@/lib/evergreen-catalog";
@@ -24,8 +24,4 @@ const CARD_BY_ID = new Map(FAITH_SEO_CARDS.map((c) => [c.id, c]));
 
 export function relatedCards(page: EvergreenPage): SeoCard[] {
   return page.relatedCardIds.map((id) => CARD_BY_ID.get(id)).filter((c): c is SeoCard => Boolean(c));
-}
-
-export function faithCardPath(card: SeoCard): string {
-  return `${FAITH_HUB}/${card.slug}`;
 }

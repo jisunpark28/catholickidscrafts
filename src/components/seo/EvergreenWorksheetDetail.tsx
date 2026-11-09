@@ -4,7 +4,6 @@ import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeFor
 import {
   evergreenDescription,
   evergreenSeoTitle,
-  faithCardPath,
   getEvergreenSheet,
   hubPath,
   printPath,
@@ -169,9 +168,7 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
             <ul className="mt-3 list-disc space-y-2 pl-5 text-base text-[#374151]">
               {cards.map((c) => (
                 <li key={c.id}>
-                  <Link href={faithCardPath(c)} className={link}>
-                    {c.title}
-                  </Link>
+                  <span className="font-semibold">{c.title}</span>
                   {" — "}
                   {c.text}
                 </li>

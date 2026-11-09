@@ -6,8 +6,8 @@
 - Daily Mass: `/daily-mass`.
 - Play & Learn: `/play` (including nested games; merged #318 full-width canvas is retained).
 - Mom's Bible: `/moms-bible/situations`, the same entry used by the homepage Mom's Bible feature. Direct reader URLs such as `/bible/read/genesis/1` stay valid. Reader quick links retain Today's Gospel and the existing Genesis/Matthew book hubs, plus the situations board. No deleted OT/NT routes are restored.
-- Q&A Cards: `/catholic-faith-questions#qa-cards`; the anchor targets the existing card collection in the existing `FAITH_HUB` route.
-- Faith & Prayer: `/catholic-faith-questions`, the existing `FAITH_HUB` from `src/lib/seo/card-seo.ts`. A directory here retains all five faith/prayer and six liturgical-year destinations from the existing navigation. Card detail pages now retain the shared sidebar too.
+- Q&A Cards: `/qa-cards`, one page with a button per liturgy topic (Mass, Sacraments, Saints, Devotions, Ordinary Time, Advent, Christmas Time, Lent, Paschal Triduum, Easter Time). The chosen topic is kept in the URL hash, client side only.
+- Prayer: `/prayers`. `/catholic-faith-questions` and its card pages were removed and return 404.
 
 ## Blocking missing destination: My Binder
 
