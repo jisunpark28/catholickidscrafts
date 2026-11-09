@@ -12,9 +12,18 @@ import "@/styles/moms-bible.css";
 /**
  * Header row (mockups 1–3): "👧 Viewing Mia's Bible ▾ | Leo" + "📖 Print Mia's Bible PDF" for a
  * parent, "🧒 Hi, Mia! (kid code)" for a child, "⭐ Get Plus" for guests.
- * Switching child stores the id in a cookie (re-checked on the server) and reloads server data.
+ * Switching child stores the id in a cookie (re-checked on the server) and reloads server data
+ * (or calls `onSwitch` on pages that load Mom's Bible in the browser, like the static reader).
  */
-export function MbToolbar({ data, variant = "full" }: { data: MbToolbarData | null; variant?: "full" | "for" }) {
+export function MbToolbar({
+  data,
+  variant = "full",
+  onSwitch,
+}: {
+  data: MbToolbarData | null;
+  variant?: "full" | "for";
+  onSwitch?: () => void;
+}) {
   const router = useRouter();
   const [plusOpen, setPlusOpen] = useState(false);
 
@@ -49,7 +58,8 @@ export function MbToolbar({ data, variant = "full" }: { data: MbToolbarData | nu
       url.searchParams.delete("child");
       router.replace(`${url.pathname}${url.search}${url.hash}`, { scroll: false });
     }
-    router.refresh();
+    if (onSwitch) onSwitch();
+    else router.refresh();
   };
   const others = data.children.filter((c) => c.id !== data.childId);
 
