@@ -1,5 +1,6 @@
 import { DailyMassView } from "@/components/daily-mass/DailyMassView";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
+import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { loadFaithJournal } from "@/lib/daily-mass/faith-journal";
 import type { FaithJournalState } from "@/lib/daily-mass/faith-journal-shared";
@@ -118,27 +119,28 @@ export default async function DailyMassPage({
     <HomePdfShell
       groups={groups}
       dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}
-      contentClassName="bg-[#fffbef]"
     >
       <JsonLd nodes={[breadcrumbNode([{ name: "Daily Mass", path: "/daily-mass" }])]} />
-      <DailyMassView
-        dateKey={dateKey}
-        explicitDate={Boolean(requested)}
-        displayDate={formatDisplayDate(date)}
-        dayTitle={formatLiturgicalTitleDisplay(summary.liturgicalTitle) || season.name}
-        seasonName={season.name}
-        seasonColor={season.color}
-        memorial={summary.rank === "ferial" ? firstSaint(summary.saint) : undefined}
-        color={deriveVestmentColor({ ...summary, saint: firstSaint(summary.saint) }, season)}
-        readings={readings}
-        usccbUrl={day?.usccbPageUrl || usccbReadingsPageUrl(date)}
-        familyTalk={familyTalk}
-        gospelCitation={gospelCitation}
-        gospelReadHref={gospelReadHref}
-        journal={journal}
-        calendar={calendarResult.calendar}
-        calendarError={calendarResult.error}
-      />
+      <SidebarPagePanel>
+        <DailyMassView
+          dateKey={dateKey}
+          explicitDate={Boolean(requested)}
+          displayDate={formatDisplayDate(date)}
+          dayTitle={formatLiturgicalTitleDisplay(summary.liturgicalTitle) || season.name}
+          seasonName={season.name}
+          seasonColor={season.color}
+          memorial={summary.rank === "ferial" ? firstSaint(summary.saint) : undefined}
+          color={deriveVestmentColor({ ...summary, saint: firstSaint(summary.saint) }, season)}
+          readings={readings}
+          usccbUrl={day?.usccbPageUrl || usccbReadingsPageUrl(date)}
+          familyTalk={familyTalk}
+          gospelCitation={gospelCitation}
+          gospelReadHref={gospelReadHref}
+          journal={journal}
+          calendar={calendarResult.calendar}
+          calendarError={calendarResult.error}
+        />
+      </SidebarPagePanel>
     </HomePdfShell>
   );
 }

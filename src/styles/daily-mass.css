@@ -51,3 +51,12 @@
   background: #2a2420;
   border-color: #5a4636;
 }
+
+/* Cream panel yields when the reader is in dark mode. */
+.sidebar-page-panel:has(.daily-mass-reader.dm-dark) {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 0;
+}

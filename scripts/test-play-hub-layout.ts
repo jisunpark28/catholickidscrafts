@@ -19,6 +19,7 @@ async function main() {
     assert.equal(response?.status(), 200);
     const hub = page.locator('[data-play-content="hub"]');
     const pane = hub.locator("..");
+    const panel = hub.locator(".sidebar-page-panel");
     const cards = hub.locator("article");
     const grid = cards.first().locator("..");
     const nav = page.getByRole("navigation", { name: "Home", exact: true });
@@ -49,13 +50,25 @@ async function main() {
         return { x: rect.x, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height,
           paddingLeft: parseFloat(style.paddingLeft), paddingRight: parseFloat(style.paddingRight), background: style.backgroundColor };
       });
+      const panelBox = await panel.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return {
+          x: rect.x,
+          width: rect.width,
+          paddingLeft: parseFloat(style.paddingLeft),
+          paddingRight: parseFloat(style.paddingRight),
+          background: style.backgroundColor,
+        };
+      });
+      assert.equal(panelBox.background, "rgb(255, 243, 230)", `${width}: cream panel`);
       const documentWidth = await page.evaluate(() => document.documentElement.clientWidth);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${width}: no horizontal overflow`);
-      assert.equal(area.background, "rgb(253, 250, 247)", `${width}: warm main canvas`);
+      assert.equal(area.background, "rgb(255, 255, 255)", `${width}: white main canvas`);
       assert.ok(area.height >= 1000 && area.bottom >= 1000, `${width}: background fills below content to viewport bottom`);
       assert.ok(Math.abs(area.right - documentWidth) <= 1, `${width}: canvas reaches right edge`);
-      assert.ok(Math.abs(metrics.width - (area.width - area.paddingLeft - area.paddingRight)) <= 1, `${width}: no constrained centered wrapper`);
-      assert.ok(Math.abs(metrics.x - area.x - area.paddingLeft) <= 1, `${width}: consistent starting gutter`);
+      assert.ok(Math.abs(metrics.width - (panelBox.width - panelBox.paddingLeft - panelBox.paddingRight)) <= 1, `${width}: grid fills cream panel content box`);
+      assert.ok(Math.abs(metrics.x - panelBox.x - panelBox.paddingLeft) <= 1, `${width}: consistent starting gutter inside panel`);
       const expectedColumns = Math.max(1, Math.floor((metrics.width + metrics.gap) / (Math.min(256, metrics.width) + metrics.gap)));
       assert.equal(metrics.columns, expectedColumns, `${width}: adaptive columns independent of game count`);
       assert.ok(Math.max(...metrics.boxes.map((box) => box.height)) < 600, `${width}: cards are not stretched to viewport height`);
@@ -68,7 +81,7 @@ async function main() {
         assert.ok(await nav.isVisible());
         const aside = await page.locator('aside:has(nav[aria-label="Home"])').boundingBox();
         assert.ok(aside);
-        assert.ok(Math.abs(area.x - aside.x - aside.width) <= 1, `${width}: canvas begins at sidebar edge`);
+        assert.ok(Math.abs(area.x - aside.x - aside.width) <= 1, `${width}: white canvas begins at sidebar edge`);
       } else {
         assert.equal(await nav.isVisible(), false);
         assert.equal(area.x, 0);
@@ -107,7 +120,7 @@ async function main() {
       assert.ok(future.last > future.first, `${width}: extra games naturally append rows`);
       assert.equal(future.overflow, false);
       await grid.locator("[data-future-test-card]").evaluateAll((elements) => elements.forEach((element) => element.remove()));
-      console.log(`PASS ${width}: ${metrics.columns} columns, ${count} real cards, +${added} future cards, full warm canvas/no overflow`);
+      console.log(`PASS ${width}: ${metrics.columns} columns, ${count} real cards, +${added} future cards, full white canvas/no overflow`);
     }
 
     await page.setViewportSize({ width: 1440, height: 1000 });
@@ -125,7 +138,7 @@ async function main() {
     assert.equal(await frame.locator("..").evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(255, 255, 255)");
     await page.goBack({ waitUntil: "networkidle" });
     await hub.waitFor();
-    assert.equal(await pane.evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(253, 250, 247)");
+    assert.equal(await pane.evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(255, 255, 255)");
     await page.setViewportSize({ width: 375, height: 1000 });
     await page.getByRole("button", { name: "Explore & Learn", exact: true }).click();
     assert.ok(await nav.isVisible());

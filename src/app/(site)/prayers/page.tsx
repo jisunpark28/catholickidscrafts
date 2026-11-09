@@ -1,4 +1,5 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
+import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
 import { loadPublishedQa } from "@/lib/liturgy-qa";
@@ -24,14 +25,16 @@ export default async function PrayersPage() {
   return (
     <TestamentPageShell>
       <JsonLd nodes={[breadcrumbNode([{ name: "Prayers", path: "/prayers" }])]} />
-      {qa ? (
-        <>
-          <QaPageHeader topic={qa.topic} eyebrow="Faith & Prayer · Prayers" />
-          <QaFlipCards cards={qa.cards} variant="prayer" cardBackColor={qa.topic.cardBackColor} />
-        </>
-      ) : (
-        <h1 className="mb-4 text-2xl font-bold">Catholic Prayers</h1>
-      )}
+      <SidebarPagePanel>
+        {qa ? (
+          <>
+            <QaPageHeader topic={qa.topic} eyebrow="Faith & Prayer · Prayers" />
+            <QaFlipCards cards={qa.cards} variant="prayer" cardBackColor={qa.topic.cardBackColor} />
+          </>
+        ) : (
+          <h1 className="mb-4 text-2xl font-bold">Catholic Prayers</h1>
+        )}
+      </SidebarPagePanel>
     </TestamentPageShell>
   );
 }

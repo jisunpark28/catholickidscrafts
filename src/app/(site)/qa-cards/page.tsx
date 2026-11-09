@@ -1,4 +1,5 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
+import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { QaCardsByTopic, type QaTopicTab } from "@/components/liturgy/QaCardsByTopic";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { loadLiturgyQaDeck } from "@/lib/liturgy-qa-deck";
@@ -29,14 +30,14 @@ export default async function QaCardsPage() {
   return (
     <TestamentPageShell>
       <JsonLd nodes={[breadcrumbNode([{ name: "Q&A Cards", path: "/qa-cards" }])]} />
-      <div id="qa-cards" className="rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
+      <SidebarPagePanel id="qa-cards">
         <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#405329]">Q&amp;A Cards</h1>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
           The questions and answers from Mass, the sacraments, the saints, devotions, and the Church seasons.
           Tap a card to read the answer, then flip it back.
         </p>
         <QaCardsByTopic tabs={tabs} />
-      </div>
+      </SidebarPagePanel>
     </TestamentPageShell>
   );
 }
