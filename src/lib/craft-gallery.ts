@@ -64,32 +64,42 @@ export async function listApprovedGallerySubmissions(opts?: {
   resourceId?: string;
   limit?: number;
 }) {
-  const rows = await prisma.craftGallerySubmission.findMany({
-    where: {
-      isApproved: true,
-      rejectedAt: null,
-      ...(opts?.resourceId ? { resourceId: opts.resourceId } : {}),
-    },
-    orderBy: { createdAt: "desc" },
-    take: opts?.limit ?? 48,
-    select: {
-      id: true,
-      imageUrl: true,
-      authorName: true,
-      caption: true,
-      createdAt: true,
-    },
-  });
-  return rows;
+  try {
+    const rows = await prisma.craftGallerySubmission.findMany({
+      where: {
+        isApproved: true,
+        rejectedAt: null,
+        ...(opts?.resourceId ? { resourceId: opts.resourceId } : {}),
+      },
+      orderBy: { createdAt: "desc" },
+      take: opts?.limit ?? 48,
+      select: {
+        id: true,
+        imageUrl: true,
+        authorName: true,
+        caption: true,
+        createdAt: true,
+      },
+    });
+    return rows;
+  } catch {
+    // No table yet, or the database is down: show no gallery items (same as loadLiturgyCards).
+    return [];
+  }
 }
 
 export async function listApprovedGalleryForResourceSlug(slug: string, limit = 24) {
-  const resource = await prisma.resource.findFirst({
-    where: { slug, published: true },
-    select: { id: true },
-  });
-  if (!resource) return [];
-  return listApprovedGallerySubmissions({ resourceId: resource.id, limit });
+  try {
+    const resource = await prisma.resource.findFirst({
+      where: { slug, published: true },
+      select: { id: true },
+    });
+    if (!resource) return [];
+    return listApprovedGallerySubmissions({ resourceId: resource.id, limit });
+  } catch {
+    // No table yet, or the database is down: show no gallery items.
+    return [];
+  }
 }
 
 const MAX_PENDING_PER_FAMILY = 3;
