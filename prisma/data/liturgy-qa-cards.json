@@ -2832,6 +2832,36 @@
    "cardColor": "#FFF1B8",
    "internalSourceRef": "Source (verbatim): https://maria.catholic.or.kr/bible/bbs/bbs_view.asp?num=195&id=345942&ref=1212&menu=4772",
    "reviewNote": "Typo fixes vs source: 'pardon' → 'Pardon' (start of sentence)."
+  },
+  {
+   "topicSlug": "prayers",
+   "sortOrder": 15,
+   "question": "Holy Water Prayer",
+   "answer": "By this holy water and by Your Precious Blood,\nwash away all my sins, O Lord.\nAmen.",
+   "tryThis": "We pray it when we bless ourselves with holy water.",
+   "iconFallback": "💧",
+   "imageFilename": "prayers-15-holy-water-prayer.webp",
+   "imageScene": "A child dipping fingers into a shell-shaped holy water font at a church door, soft light on the water.",
+   "imagePrompt": "Boho watercolour children's book illustration, soft pastel palette (peach, butter yellow, sage green, blush pink, powder blue, lavender), warm cream paper texture, gentle hand-drawn line work, rounded friendly shapes, diverse children of many skin tones, calm joyful mood, generous negative space, no text or letters in the image, respectful and reverent sacred imagery, Jesus and Mary drawn gently and dignified with no caricature, 4:3 composition. Scene: A child dipping fingers into a shell-shaped holy water font at a church door, soft light on the water.",
+   "altText": "Watercolour illustration: a child dipping fingers into a shell-shaped holy water font at a church door, soft light on the water.",
+   "cardColor": "#DFF0E0",
+   "internalSourceRef": "Traditional Catholic prayer when using holy water.",
+   "reviewNote": ""
+  },
+  {
+   "topicSlug": "prayers",
+   "sortOrder": 16,
+   "question": "Prayer to St. Michael the Archangel",
+   "answer": "Saint Michael the Archangel, defend us in battle.\nBe our protection against the wickedness and snares of the devil.\nMay God rebuke him, we humbly pray,\nand do thou, O Prince of the heavenly hosts,\nby the power of God, thrust into hell Satan\nand all the evil spirits who prowl about the world\nseeking the ruin of souls.\nAmen.",
+   "tryThis": "We ask St. Michael to protect us from evil.",
+   "iconFallback": "🛡️",
+   "imageFilename": "prayers-16-st-michael.webp",
+   "imageScene": "A gentle childlike St. Michael the Archangel in soft armour with a calm shield, standing protectively beside children, warm pastel sky.",
+   "imagePrompt": "Boho watercolour children's book illustration, soft pastel palette (peach, butter yellow, sage green, blush pink, powder blue, lavender), warm cream paper texture, gentle hand-drawn line work, rounded friendly shapes, diverse children of many skin tones, calm joyful mood, generous negative space, no text or letters in the image, respectful and reverent sacred imagery, Jesus and Mary drawn gently and dignified with no caricature, 4:3 composition. Scene: A gentle childlike St. Michael the Archangel in soft armour with a calm shield, standing protectively beside children, warm pastel sky.",
+   "altText": "Watercolour illustration: a gentle childlike St. Michael the Archangel in soft armour with a calm shield, standing protectively beside children, warm pastel sky.",
+   "cardColor": "#FFE0EA",
+   "internalSourceRef": "Prayer of Pope Leo XIII (standard short form).",
+   "reviewNote": ""
   }
  ]
 }
