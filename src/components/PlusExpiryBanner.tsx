@@ -1,11 +1,19 @@
+"use client";
+
+import { useSiteSession } from "@/components/SiteSessionProvider";
 import { daysLeft, EXPIRY_BANNER_DAYS } from "@/lib/subscription/pass-math";
 import { formatPlanDate } from "@/lib/subscription/plan-copy";
 import Link from "next/link";
 
 /**
  * Site-wide notice for the parent when the family's one-time Plus pass ends within 7 days.
- * Server-rendered from the header session (never shown in child mode).
+ * Fed from the header session loaded by SiteSessionProvider (never shown in child mode).
  */
+export function SitePlusExpiryBanner() {
+  const { session } = useSiteSession();
+  return <PlusExpiryBanner endsAt={session.family?.plusEndsAt ?? null} />;
+}
+
 export function PlusExpiryBanner({ endsAt }: { endsAt: string | null }) {
   if (!endsAt) return null;
   const end = new Date(endsAt);

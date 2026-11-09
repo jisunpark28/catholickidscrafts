@@ -17,6 +17,7 @@ import {
   verifyReaderSession,
 } from "@/lib/family-session";
 import { clearDeviceLockCookie } from "@/lib/child-mode-cookies";
+import { setSessionMarker } from "@/lib/session-marker";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
@@ -156,6 +157,9 @@ function setCookie(res: NextResponse, opts: ReturnType<typeof familyCookieOption
     path: opts.path,
     maxAge: opts.maxAge,
   });
+  // Every parent, reader and child-mode sign-in goes through here: tell the cookie-free
+  // header that a session may exist (display hint only; see lib/session-marker.ts).
+  setSessionMarker(res);
 }
 
 export async function setFamilyAndOwnerReaderCookies(

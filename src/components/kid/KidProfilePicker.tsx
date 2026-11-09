@@ -1,6 +1,7 @@
 "use client";
 
 import { KidPinPad } from "@/components/kid/KidPinPad";
+import { notifySessionChanged } from "@/components/SiteSessionProvider";
 import { isValidKidCode, normalizeKidCode } from "@/lib/kids/kid-code-format";
 import {
   readKidProfiles,
@@ -68,6 +69,8 @@ export function KidProfilePicker({ canEditProfiles, next = "/bible/genesis" }: P
     setProfiles(saveKidProfile({ code: profile.code, name: profile.name }));
     router.push(next);
     router.refresh();
+    // The site header loads the session in the browser: reload it for the new child reader.
+    notifySessionChanged();
   }
 
   async function submit(code: string, pin: string) {

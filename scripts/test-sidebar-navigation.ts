@@ -85,7 +85,7 @@ async function main() {
   }
   assert.doesNotMatch(readFileSync("src/lib/sidebar-navigation.ts", "utf8"), /\/bible\/(old-testament|new-testament)/);
   assert.match(readFileSync("src/lib/sidebar-access.ts", "utf8"), /resolveFamily:\s*resolveFamilyPlus/);
-  assert.match(readFileSync("src/app/(site)/layout.tsx", "utf8"), /getSidebarPaidPlus/);
+  assert.match(readFileSync("src/app/api/auth/session/route.ts", "utf8"), /getSidebarPaidPlus\(readerKey\)/);
   const icons = SIDEBAR_ITEMS.map((item) => ({ label: item.label, svg: renderToStaticMarkup(React.createElement(SidebarIllustration, { kind: item.id })) }));
   for (const icon of icons) {
     assert.match(icon.svg, /stroke="currentColor"/);

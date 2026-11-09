@@ -1,12 +1,12 @@
 "use client";
 
 import { HomeHubMenuButton, HomeHubMenuLink } from "@/components/HomeHubButton";
+import { useSiteSession } from "@/components/SiteSessionProvider";
 import {
   avatarInitial,
   firstName,
   headerButtonLabel,
   isHeaderSignedIn,
-  type HeaderSessionResponse,
 } from "@/lib/header-session";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -121,13 +121,12 @@ function Divider() {
 /* ── Main ────────────────────────────────────────────────────────── */
 
 type Props = {
-  initialSession: HeaderSessionResponse;
   signInLabel: string;
 };
 
 type Mode = "parent" | "parent-child" | "child";
 
-export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
+export function HomeHubAccountMenu({ signInLabel }: Props) {
   const pathname = usePathname() ?? "";
   const router = useRouter();
   const menuId = useId();
@@ -140,7 +139,8 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
   const [open, setOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [session, setSession] = useState<HeaderSessionResponse>(initialSession);
+  // Loaded once per page load by SiteSessionProvider (the server renders signed-out).
+  const { ready, session } = useSiteSession();
 
   const signedIn = isHeaderSignedIn(session);
   const family = session.family;
@@ -157,27 +157,6 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
     mode === "parent" ? parentName : (reader?.displayName ?? headerButtonLabel(session));
   const isChildReader = mode !== "parent";
 
-  const loadSession = useCallback(async () => {
-    try {
-      const res = await fetch("/api/auth/session", { cache: "no-store" });
-      if (!res.ok) {
-        setSession({ family: null, reader: null });
-        return;
-      }
-      setSession((await res.json()) as HeaderSessionResponse);
-    } catch {
-      setSession({ family: null, reader: null });
-    }
-  }, []);
-
-  // The server passes a fresh session on every render (and router.refresh() after kid login),
-  // so we do not refetch on each pathname change. One call per full page load, and only for a
-  // signed-in parent, keeps the rolling 30-day session cookie renewed (/api/auth/session).
-  useEffect(() => setSession(initialSession), [initialSession]);
-  const hasFamilyRef = useRef(Boolean(initialSession.family));
-  useEffect(() => {
-    if (hasFamilyRef.current) void loadSession();
-  }, [loadSession]);
   useEffect(() => {
     setOpen(false);
     setConfirmOpen(false);
@@ -293,6 +272,17 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
   function switchToChild() {
     close();
     router.push("/kids");
+  }
+
+  if (!ready) {
+    // Same size as the sign-in pill, invisible, so the header does not jump while loading.
+    return (
+      <span aria-hidden className="invisible">
+        <HomeHubMenuLink href="/account/login" authLabel>
+          {signInLabel}
+        </HomeHubMenuLink>
+      </span>
+    );
   }
 
   if (!signedIn) {

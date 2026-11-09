@@ -2,6 +2,7 @@ import { ADMIN_ACTIVITY_COOKIE } from "@/lib/admin-session-policy";
 import { DEVICE_UNLOCK_COOKIE, DEVICE_UNLOCK_PATH } from "@/lib/device-unlock";
 import { DEVICE_LOCK_COOKIE, FAMILY_SESSION_COOKIE, READER_SESSION_COOKIE } from "@/lib/family-session";
 import { GOOGLE_OAUTH_NONCE_COOKIE, GOOGLE_OAUTH_NONCE_PATH } from "@/lib/google-oauth";
+import { SESSION_MARKER_COOKIE } from "@/lib/session-marker";
 
 /**
  * Full sign-out: every logout (parent, child/reader, "back to parent", all devices, admin)
@@ -56,6 +57,8 @@ function knownCkcCookies(): ResetCookieSpec[] {
     { name: GOOGLE_OAUTH_NONCE_COOKIE, path: GOOGLE_OAUTH_NONCE_PATH, sameSite: "lax", httpOnly: true, secure },
     // Set from the browser (MbToolbar): path=/, not HttpOnly, not Secure.
     { name: "ckc_mb_child", path: "/", sameSite: "lax", httpOnly: false, secure: false },
+    // Header "may be signed in" hint (lib/session-marker.ts): readable by the browser.
+    { name: SESSION_MARKER_COOKIE, path: "/", sameSite: "lax", httpOnly: false, secure },
   ];
 }
 

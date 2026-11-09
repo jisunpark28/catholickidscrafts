@@ -1,6 +1,7 @@
 import { SITE_COPY_DEFAULTS } from "../../prisma/data/site-copy-defaults";
 import type { SiteCopyMap } from "@/lib/site-copy-types";
 import { prisma } from "@/lib/prisma";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 const defaultMap = (): SiteCopyMap => {
   const map: SiteCopyMap = {};
@@ -10,36 +11,42 @@ const defaultMap = (): SiteCopyMap => {
   return map;
 };
 
-let cachedMap: SiteCopyMap | null = null;
-let cacheTime = 0;
-const CACHE_MS = 30_000;
+/** Cache tag for the published SiteCopy rows; admin saves call revalidateTag(SITE_COPY_TAG). */
+export const SITE_COPY_TAG = "site-copy";
 
+/**
+ * Published DB overrides, shared across requests and instances (Next data cache).
+ * Throws when the DB is unreachable so a failed read is never cached.
+ */
+const loadPublishedRows = unstable_cache(
+  async (): Promise<Array<{ key: string; value: string }>> =>
+    prisma.siteCopy.findMany({
+      where: { published: true },
+      select: { key: true, value: true },
+    }),
+  ["site-copy-published"],
+  { tags: [SITE_COPY_TAG], revalidate: 3600 },
+);
+
+/** Defaults merged with published DB overrides. `force` skips the cache (fresh DB read). */
 export async function getSiteCopyMap(force = false): Promise<SiteCopyMap> {
-  const now = Date.now();
-  if (!force && cachedMap && now - cacheTime < CACHE_MS) {
-    return cachedMap;
-  }
-
   const merged = defaultMap();
   try {
-    const rows = await prisma.siteCopy.findMany({
-      where: { published: true },
-    });
+    const rows = force
+      ? await prisma.siteCopy.findMany({ where: { published: true }, select: { key: true, value: true } })
+      : await loadPublishedRows();
     for (const row of rows) {
       merged[row.key] = row.value;
     }
   } catch {
-    // DB unavailable at build time — defaults only
+    // DB unavailable (e.g. at build time): defaults only, not cached
   }
-
-  cachedMap = merged;
-  cacheTime = now;
   return merged;
 }
 
+/** Call after any SiteCopy write (route handlers / server actions only). */
 export function invalidateSiteCopyCache() {
-  cachedMap = null;
-  cacheTime = 0;
+  revalidateTag(SITE_COPY_TAG);
 }
 
 export async function getSiteCopy(keys: string[]): Promise<SiteCopyMap> {

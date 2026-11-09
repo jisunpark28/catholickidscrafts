@@ -2,6 +2,7 @@
 
 import { PinSetupDialog, PinSetupForm } from "@/components/kid/PinSetupDialog";
 import { MemoImportDialog } from "@/components/moms-bible/MemoImportDialog";
+import { notifySessionChanged } from "@/components/SiteSessionProvider";
 import type { DashboardReaderRow } from "@/lib/account-dashboard";
 import { clearKidProfiles } from "@/lib/kids/kid-device-profiles";
 import type { KidPinStatus } from "@/lib/kids/kid-pin";
@@ -89,6 +90,8 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
       setSubs(data.subs);
     }
     router.refresh();
+    // Header "Reading as" list comes from the browser-loaded session.
+    notifySessionChanged();
   }
 
   async function submitNewChild() {

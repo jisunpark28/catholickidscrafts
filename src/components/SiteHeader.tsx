@@ -1,15 +1,17 @@
-import { getHeaderSession } from "@/lib/get-header-session";
 import { HomeHubHeader } from "@/components/HomeHubHeader";
-import { PlusExpiryBanner } from "@/components/PlusExpiryBanner";
+import { SitePlusExpiryBanner } from "@/components/PlusExpiryBanner";
 import { KidLoginNoticeBanner } from "@/components/KidLoginNoticeBanner";
 
-/** Public site header — search, logo, and menu on every page (home + sub-pages). */
-export async function SiteHeader() {
-  const initialSession = await getHeaderSession();
+/**
+ * Public site header: search, logo, and menu on every page (home + sub-pages).
+ * Reads no cookies or session on the server; the account menu and Plus notice load the
+ * session in the browser (SiteSessionProvider) so pages can be served statically.
+ */
+export function SiteHeader() {
   return (
     <>
-      <HomeHubHeader initialSession={initialSession} />
-      <PlusExpiryBanner endsAt={initialSession.family?.plusEndsAt ?? null} />
+      <HomeHubHeader />
+      <SitePlusExpiryBanner />
       <KidLoginNoticeBanner />
     </>
   );

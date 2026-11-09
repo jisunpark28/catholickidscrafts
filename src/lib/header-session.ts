@@ -16,6 +16,18 @@ export type HeaderSessionResponse = {
   reader: { type: "owner" | "sub"; displayName: string; subProfileId?: string } | null;
 };
 
+/**
+ * GET /api/auth/session: the header session plus the sidebar's paid-Plus flag, so the
+ * cookie-free site layout needs one request per page load. Display only: pages and APIs
+ * still check the session and entitlements on the server.
+ */
+export type SiteSessionResponse = HeaderSessionResponse & {
+  /** Server-computed (lib/sidebar-access); only shows Plus-only sidebar items. */
+  paidPlus?: boolean;
+};
+
+export const SIGNED_OUT_SESSION: HeaderSessionResponse = { family: null, reader: null };
+
 export function headerButtonLabel(session: HeaderSessionResponse | null): string {
   if (!session) return "Sign in";
   if (session.family) {

@@ -1,13 +1,14 @@
 import { effectiveReaderMode, getFamilySession } from "@/lib/family-auth";
-import { getReaderKey } from "@/lib/bible/reader";
+import { getReaderKey, type ReaderKey } from "@/lib/bible/reader";
 import type { HeaderSessionResponse } from "@/lib/header-session";
 import { prisma } from "@/lib/prisma";
 import { resolveFamilyPlus } from "@/lib/subscription/entitlements";
 
-export async function getHeaderSession(): Promise<HeaderSessionResponse> {
+/** Pass `knownReaderKey` when the caller already resolved it (saves repeat DB reads). */
+export async function getHeaderSession(knownReaderKey?: ReaderKey | null): Promise<HeaderSessionResponse> {
   const [familySession, readerKey] = await Promise.all([
     getFamilySession(),
-    getReaderKey(),
+    knownReaderKey === undefined ? getReaderKey() : Promise.resolve(knownReaderKey),
   ]);
 
   let family: HeaderSessionResponse["family"] = null;

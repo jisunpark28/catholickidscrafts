@@ -1,8 +1,8 @@
 "use client";
-import { createContext, useContext, type ReactNode } from "react";
-const SidebarPaidPlus = createContext(false);
-/** Only a server-computed entitlement enters this context; it grants no backend access. */
-export function SidebarAccessProvider({ activePaidPlus, children }: { activePaidPlus: boolean; children: ReactNode }) {
-  return <SidebarPaidPlus.Provider value={activePaidPlus}>{children}</SidebarPaidPlus.Provider>;
-}
-export function useSidebarPaidPlus() { return useContext(SidebarPaidPlus); }
+import { useSiteSession } from "@/components/SiteSessionProvider";
+/**
+ * Paid-Plus flag for the sidebar, computed on the server by /api/auth/session
+ * (lib/sidebar-access) and loaded once per page by SiteSessionProvider. Display only:
+ * it grants no backend access.
+ */
+export function useSidebarPaidPlus() { return useSiteSession().paidPlus; }

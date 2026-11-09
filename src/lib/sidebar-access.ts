@@ -1,13 +1,17 @@
 import "server-only";
-import { getReaderKey } from "@/lib/bible/reader";
+import { getReaderKey, type ReaderKey } from "@/lib/bible/reader";
 import { prisma } from "@/lib/prisma";
 import { resolveFamilyPlus } from "@/lib/subscription/entitlements";
 import { sidebarPaidPlusForReader } from "@/lib/sidebar-entitlement";
 
-/** Request-scoped server decision. Never trust client plan flags or cache across users. */
-export async function getSidebarPaidPlus(): Promise<boolean> {
+/**
+ * Request-scoped server decision. Never trust client plan flags or cache across users.
+ * Pass `knownReaderKey` when the caller already resolved it (saves repeat DB reads).
+ */
+export async function getSidebarPaidPlus(knownReaderKey?: ReaderKey | null): Promise<boolean> {
   try {
-    return await sidebarPaidPlusForReader(await getReaderKey(), {
+    const key = knownReaderKey === undefined ? await getReaderKey() : knownReaderKey;
+    return await sidebarPaidPlusForReader(key, {
       resolveFamily: resolveFamilyPlus,
       childFamilyIds: async (id) => {
         // The same owning/co-parent relationships as the existing childHasFamilyPass gate.
@@ -19,4 +23,4 @@ export async function getSidebarPaidPlus(): Promise<boolean> {
       },
     });
   } catch { return false; }
-}
+}

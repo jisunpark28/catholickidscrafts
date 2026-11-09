@@ -37,8 +37,9 @@ function crossOriginError(request: Request): NextResponse | null {
   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 }
 
+/** Admin saves show up at once: drop the cached SiteCopy rows and every cached page. */
 function bustSiteCopyCache() {
-  invalidateSiteCopyCache();
+  invalidateSiteCopyCache(); // revalidateTag(SITE_COPY_TAG)
   revalidatePath("/", "layout");
 }
 
