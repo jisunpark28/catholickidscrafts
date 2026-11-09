@@ -5,7 +5,7 @@
 - Printables: `/resource` (display-name change only; no Resource route renamed).
 - Daily Mass: `/daily-mass`.
 - Play & Learn: `/play` (including nested games; merged #318 full-width canvas is retained).
-- Mom's Bible: `/bible/read/genesis/1`, the same entry used by the homepage Mom's Bible feature. Reader quick links retain Today's Gospel and the existing Genesis/Matthew book hubs, plus the existing situations board. No deleted OT/NT routes are restored.
+- Mom's Bible: `/moms-bible/situations`, the same entry used by the homepage Mom's Bible feature. Direct reader URLs such as `/bible/read/genesis/1` stay valid. Reader quick links retain Today's Gospel and the existing Genesis/Matthew book hubs, plus the situations board. No deleted OT/NT routes are restored.
 - Q&A Cards: `/catholic-faith-questions#qa-cards`; the anchor targets the existing card collection in the existing `FAITH_HUB` route.
 - Faith & Prayer: `/catholic-faith-questions`, the existing `FAITH_HUB` from `src/lib/seo/card-seo.ts`. A directory here retains all five faith/prayer and six liturgical-year destinations from the existing navigation. Card detail pages now retain the shared sidebar too.
 

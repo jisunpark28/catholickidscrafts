@@ -14,15 +14,22 @@ export type ResolvedSituationVerse = {
   text: string;
 };
 
+/** Reader link for one official ref. Null when the ref is not in the supported Bible map. */
+export function situationVerseHref(ref: SituationRef, situationKey: string): string | null {
+  const start = nabreToDouay(ref.book, ref.chapter, ref.verse);
+  if (!start) return null;
+  const [path, hash] = readHrefForDouay(start.slug, start.chapter, start.verse).split("#");
+  return `${path}?situation=${encodeURIComponent(situationKey)}${hash ? `#${hash}` : ""}`;
+}
+
 export async function resolveSituationVerse(
   ref: SituationRef,
   situationKey: string,
 ): Promise<ResolvedSituationVerse | null> {
+  const href = situationVerseHref(ref, situationKey);
   const start = nabreToDouay(ref.book, ref.chapter, ref.verse);
-  if (!start) return null;
+  if (!href || !start) return null;
   const end = ref.verseEnd ? nabreToDouay(ref.book, ref.chapter, ref.verseEnd) : start;
-  const [path, hash] = readHrefForDouay(start.slug, start.chapter, start.verse).split("#");
-  const href = `${path}?situation=${encodeURIComponent(situationKey)}${hash ? `#${hash}` : ""}`;
   let text = "";
   try {
     const data = await fetchBibleChapter(start.slug, start.chapter);

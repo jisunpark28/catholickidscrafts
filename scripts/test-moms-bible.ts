@@ -3,7 +3,9 @@
  * cooldown/digest, invites, situations mapping and verse ownership. No DB, fake clock.
  * Run: npx tsx scripts/test-moms-bible.ts
  */
-import { SITUATIONS, SITUATION_GROUPS, getSituation, isSituationKey } from "../src/data/moms-bible/situations";
+import { SITUATIONS, SITUATION_GROUPS, ORIGINAL_SITUATIONS, getSituation, isSituationKey } from "../src/data/moms-bible/situations";
+import { SITUATION_SEO, bibleVerseMomentPaths, getSituationSeo } from "../src/data/moms-bible/situation-seo";
+import { DATASET_MOMENT_COUNT, OMITTED_DATASET_MOMENTS, PARTIAL_REFS, RENUMBERED_REFS } from "../src/data/moms-bible/situation-coverage";
 import { nabreToDouay } from "../src/lib/bible/ref-map";
 import { MB_LIMITS, MB_STICKERS, isMbColor, isMbSticker, stickerLabel, formatSeedsLabel } from "../src/lib/moms-bible/constants";
 import { hashInviteToken, isInviteTokenShape, newInviteToken } from "../src/lib/moms-bible/invites";
@@ -181,19 +183,69 @@ check("hash stored, not token", t1.tokenHash === hashInviteToken(t1.token) && t1
 check("invite TTL 7 days", MB_INVITE_TTL_MS === 7 * 24 * 3600_000);
 
 // ── Situations ──
-check("15 situations in 4 groups", SITUATIONS.length === 15 && SITUATION_GROUPS.length === 4);
+const ORIGINAL_REFS: Record<string, readonly string[]> = {
+  "losing-a-pet": ["Psalm 34:19", "Matthew 5:4"],
+  "feeling-sad": ["Isaiah 41:10", "Psalm 147:3"],
+  lonely: ["Deuteronomy 31:6", "John 15:15"],
+  bullying: ["Psalm 34:18–19", "Isaiah 41:13"],
+  honesty: ["Ephesians 4:25", "Proverbs 12:22"],
+  anger: ["James 1:19", "Ephesians 4:32"],
+  sharing: ["Hebrews 13:16", "Luke 6:31"],
+  "screen-time": ["Romans 12:2", "Proverbs 4:23"],
+  moving: ["Joshua 1:9", "Psalm 23:1–4"],
+  nightmares: ["Psalm 4:9", "Philippians 4:6–7"],
+  "big-day": ["Philippians 4:13", "Proverbs 3:5–6"],
+  anxiety: ["Matthew 6:34", "1 Peter 5:7"],
+  celebration: ["Numbers 6:24–26", "Jeremiah 29:11"],
+  "just-because": ["Zephaniah 3:17", "1 Corinthians 13:4–7"],
+  dreams: ["Matthew 5:16", "Ephesians 2:10"],
+};
+const GROUP_COUNTS = SITUATION_GROUPS.map((group) => group.situations.length);
+check("four groups", SITUATION_GROUPS.length === 4 && SITUATION_GROUPS.map((group) => group.title).join("|") === "Love & Comfort|Wisdom & Growth|Courage & Peace|Mom's Prayer for You");
+check("308 moments = 15 original + 293 dataset additions", SITUATIONS.length === 308 && ORIGINAL_SITUATIONS.length === 15 && GROUP_COUNTS.join(",") === "74,91,75,68");
 check("situation keys unique", new Set(SITUATIONS.map((s) => s.key)).size === SITUATIONS.length);
 check("situation lookup", getSituation("losing-a-pet")?.title === "Losing a Pet" && isSituationKey("anger") && !isSituationKey("nope"));
-for (const s of SITUATIONS) {
-  for (const r of s.refs) {
-    check(`${s.key} ${r.label}: no non-official naming`, !/douay/i.test(r.label));
-    for (const v of [r.verse, ...(r.verseEnd ? [r.verseEnd] : [])]) {
-      const m = nabreToDouay(r.book, r.chapter, v);
-      check(`${s.key} ${r.label} v${v} maps exactly`, Boolean(m) && m!.quality === "exact", m);
+check("original chips stay first and unchanged", SITUATION_GROUPS.every((group) => ORIGINAL_SITUATIONS.filter((situation) => group.situations.some((item) => item.key === situation.key)).every((situation, index) => group.situations[index]?.key === situation.key)));
+for (const situation of ORIGINAL_SITUATIONS) {
+  const live = getSituation(situation.key);
+  check(`original ${situation.key} title`, live?.title === situation.title);
+  check(`original ${situation.key} refs`, JSON.stringify(live?.refs.map((ref) => ref.label)) === JSON.stringify(ORIGINAL_REFS[situation.key]));
+}
+check("dataset coverage", DATASET_MOMENT_COUNT === 300 && OMITTED_DATASET_MOMENTS.length === 7 && SITUATIONS.length === DATASET_MOMENT_COUNT - OMITTED_DATASET_MOMENTS.length + ORIGINAL_SITUATIONS.length);
+for (const omitted of OMITTED_DATASET_MOMENTS) {
+  check(`omitted ${omitted.slug} kept`, Boolean(getSituation(omitted.keptAs)) && omitted.reason.length > 20);
+  if (omitted.slug !== "losing-a-pet") check(`omitted ${omitted.slug} is not a second chip`, !SITUATIONS.some((situation) => situation.key === omitted.slug));
+}
+check("Psalm 4:8 corn verse is not linked for sleep", !SITUATIONS.some((situation) => situation.refs.some((ref) => ref.book === "psalms" && ref.chapter === 4 && ref.verse === 8)));
+check("nightmares keeps Psalm 4:9", getSituation("nightmares")?.refs.some((ref) => ref.label === "Psalm 4:9") === true);
+for (const renumbered of RENUMBERED_REFS) {
+  const situation = getSituation(renumbered.key);
+  check(`renumber ${renumbered.key}`, situation?.refs[0]?.label === renumbered.to && !situation.refs.some((ref) => ref.label === renumbered.from));
+}
+const partialKeys = new Set(PARTIAL_REFS.map((item) => item.key));
+for (const partial of PARTIAL_REFS) {
+  const ref = getSituation(partial.key)?.refs[0];
+  const mapped = ref ? nabreToDouay(ref.book, ref.chapter, ref.verse) : null;
+  const douay = mapped ? `${mapped.slug} ${mapped.chapter}:${mapped.verse}${mapped.verseEnd ? `–${mapped.verseEnd}` : ""}` : "";
+  check(`partial ${partial.key}`, Boolean(mapped) && mapped!.quality === "partial" && douay === partial.douay, { douay, partial });
+}
+for (const situation of SITUATIONS) {
+  check(`${situation.key} has a verse`, situation.refs.length > 0);
+  check(`${situation.key} short label`, situation.title.length > 0 && situation.title.length <= 32 && !/seo|search volume/i.test(situation.title));
+  for (const ref of situation.refs) {
+    check(`${situation.key} ${ref.label}: no non-official naming`, !/douay/i.test(ref.label));
+    for (const verse of [ref.verse, ...(ref.verseEnd ? [ref.verseEnd] : [])]) {
+      const mapped = nabreToDouay(ref.book, ref.chapter, verse);
+      const partialOk = partialKeys.has(situation.key) && verse === ref.verse && !ref.verseEnd && mapped?.quality === "partial";
+      check(`${situation.key} ${ref.label} v${verse} maps`, Boolean(mapped) && (partialOk || mapped!.quality === "exact"), mapped);
     }
-    check(`${s.key} ${r.label} label matches numbers`, r.label.includes(`${r.chapter}:${r.verse}`), r);
+    check(`${situation.key} ${ref.label} label matches numbers`, ref.label.includes(`${ref.chapter}:${ref.verse}`), ref);
   }
 }
+const indexedKeys = SITUATIONS.filter((situation) => getSituationSeo(situation.key)).map((situation) => situation.key);
+check("public verse pages stay the original 15", indexedKeys.length === 15 && SITUATION_SEO.length === 15 && indexedKeys.every((key) => ORIGINAL_REFS[key]));
+check("sitemap does not add new moment urls", JSON.stringify(bibleVerseMomentPaths()) === JSON.stringify(indexedKeys.map((key) => `/bible-verses-for-kids/${key}`)));
+check("bullying care does not say to tolerate harm", (getSituation("bullying")?.care ?? "").includes("trusted adult") && !(getSituation("bullying")?.care ?? "").toLowerCase().includes("just pray"));
 
 // ── Verse ownership (continued verses belong to the previous numbered verse) ──
 const markers = [

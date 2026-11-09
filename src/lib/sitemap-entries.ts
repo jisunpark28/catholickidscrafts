@@ -1,6 +1,6 @@
 import { readPagePaths } from "@/lib/bible/chapter-pages";
 import { fetchBibleBooks } from "@/lib/bible/latinprayer";
-import { SITUATIONS } from "@/data/moms-bible/situations";
+import { bibleVerseMomentPaths } from "@/data/moms-bible/situation-seo";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
@@ -102,7 +102,7 @@ function liturgyEntries(): SitemapEntry[] {
 }
 
 function bibleVersesForKidsEntries(): SitemapEntry[] {
-  return SITUATIONS.map((s) => entry(`/bible-verses-for-kids/${s.key}`, "monthly", 0.7));
+  return bibleVerseMomentPaths().map((path) => entry(path, "monthly", 0.7));
 }
 
 function saintCardEntries(): SitemapEntry[] {

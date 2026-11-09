@@ -1,10 +1,14 @@
 /**
  * "When my child is…" moments with recommended verses (official Catholic / NABRE references).
  * Each ref is mapped to the reader page with nabreToDouay; scripts/test-moms-bible.ts checks
- * that every ref maps exactly.
+ * the mapping. The original fifteen chips stay first in each group. Extra moments from the
+ * parenting dataset are appended from situation-catalog.ts. A note is a parent's wording,
+ * not Scripture. A care line is for harm, crisis, or health: prayer does not replace help.
  */
 import type { MbColorKey } from "@/lib/moms-bible/constants";
 import type { NabreBookId } from "@/lib/bible/ref-map";
+import { EXTRA_SITUATIONS } from "@/data/moms-bible/situation-catalog";
+import { EXISTING_SITUATION_CARE } from "@/data/moms-bible/situation-coverage";
 
 export type SituationRef = {
   book: NabreBookId;
@@ -15,7 +19,16 @@ export type SituationRef = {
   verseEnd?: number;
 };
 
-export type Situation = { key: string; emoji: string; title: string; refs: readonly SituationRef[] };
+export type Situation = {
+  key: string;
+  emoji: string;
+  title: string;
+  refs: readonly SituationRef[];
+  /** A parent's suggested wording. Not scripture. */
+  note?: string;
+  /** Harm, crisis, or health: prayer does not replace a trusted adult or professional help. */
+  care?: string;
+};
 export type SituationGroup = { color: MbColorKey; emoji: string; title: string; situations: readonly Situation[] };
 
 const r = (book: NabreBookId, label: string, chapter: number, verse: number, verseEnd?: number): SituationRef => ({
@@ -26,7 +39,7 @@ const r = (book: NabreBookId, label: string, chapter: number, verse: number, ver
   ...(verseEnd ? { verseEnd } : {}),
 });
 
-export const SITUATION_GROUPS: readonly SituationGroup[] = [
+const ORIGINAL_GROUPS: readonly SituationGroup[] = [
   {
     color: "YELLOW",
     emoji: "💛",
@@ -71,6 +84,21 @@ export const SITUATION_GROUPS: readonly SituationGroup[] = [
     ],
   },
 ];
+
+function withExistingCare(situations: readonly Situation[]): Situation[] {
+  return situations.map((situation) => {
+    const care = EXISTING_SITUATION_CARE[situation.key as keyof typeof EXISTING_SITUATION_CARE];
+    return care ? { ...situation, care } : situation;
+  });
+}
+
+/** Original chips stay first. Extra moments follow in dataset order inside the same four groups. */
+export const SITUATION_GROUPS: readonly SituationGroup[] = ORIGINAL_GROUPS.map((group) => ({
+  ...group,
+  situations: [...withExistingCare(group.situations), ...EXTRA_SITUATIONS[group.color]],
+}));
+
+export const ORIGINAL_SITUATIONS: readonly Situation[] = ORIGINAL_GROUPS.flatMap((group) => group.situations);
 
 export const SITUATIONS: readonly Situation[] = SITUATION_GROUPS.flatMap((g) => g.situations);
 
