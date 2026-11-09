@@ -32,6 +32,18 @@ async function main() {
     assert.equal(await page.locator('aside:has(nav[aria-label="Home"])').evaluate((element) => getComputedStyle(element).backgroundColor), "rgb(252, 247, 242)");
     assert.ok((await page.locator(".mb-recs .mb-lbl").textContent())?.includes(dreams.title));
     assert.ok(await page.locator(".mb-recs article").count() > 0, "dreams recommendations retained");
+    const dreamHref = await page.locator('.mb-recs a[href*="situation=dreams"]').first().getAttribute("href");
+    assert.ok(dreamHref?.includes("situation=dreams") && dreamHref.startsWith("/bible/read/"), dreamHref);
+    assert.equal(await page.locator(".mb-find__status").innerText(), `${SITUATION_GROUPS.reduce((sum, group) => sum + group.situations.length, 0)} moments in 4 groups`);
+    const boxes = await page.locator(".mb-sgroup").evaluateAll((elements) => elements.map((element) => {
+      const box = element.getBoundingClientRect();
+      return { top: box.top, bottom: box.bottom, width: box.width };
+    }));
+    assert.equal(boxes.length, 4, "four groups");
+    for (let index = 1; index < boxes.length; index++) {
+      assert.ok(boxes[index].top >= boxes[index - 1].bottom - 1, `group ${index} is below the previous group`);
+      assert.ok(Math.abs(boxes[index].width - boxes[0].width) < 2, "groups share one full width");
+    }
     await page.screenshot({ path: path.join(directory, "moms-situations-sidebar-desktop.png"), fullPage: true });
     const action = page.locator('.mb-recs a[href^="/bible/read/"]').first();
     const href = await action.getAttribute("href"); assert.ok(href);
@@ -48,6 +60,17 @@ async function main() {
     for (const width of [320, 375]) {
       await page.setViewportSize({ width, height: 1000 });
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${width}: no overflow`);
+      if (width === 375) {
+        const narrow = await page.locator(".mb-sgroup").evaluateAll((elements) => elements.map((element) => {
+          const box = element.getBoundingClientRect();
+          return { top: box.top, bottom: box.bottom, width: box.width };
+        }));
+        assert.equal(narrow.length, 4);
+        for (let index = 1; index < narrow.length; index++) {
+          assert.ok(narrow[index].top >= narrow[index - 1].bottom - 1, `mobile group ${index} stacks`);
+          assert.ok(Math.abs(narrow[index].width - narrow[0].width) < 2, "mobile groups share one width");
+        }
+      }
       assert.equal(await nav.isVisible(), false);
       await page.getByRole("button", { name: "Explore & Learn", exact: true }).click();
       assert.ok(await nav.isVisible());
@@ -58,7 +81,41 @@ async function main() {
       assert.ok((await selected.textContent())?.includes(dreams.title));
     }
     const alternative = page.locator('.mb-chip[aria-pressed="false"]').first();
-    await alternative.click(); assert.notEqual(new URL(page.url()).hash, "#s-dreams");
+    await alternative.focus();
+    await page.keyboard.press("Enter");
+    assert.notEqual(new URL(page.url()).hash, "#s-dreams");
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    const love = page.locator(".mb-sgroup").first();
+    const before = await love.locator(".mb-chip").count();
+    await love.getByRole("button", { name: /^Show all / }).click();
+    assert.ok(await love.locator(".mb-chip").count() > before, "show all reveals more moments");
+    await page.locator("#mb-find-moment").fill("cyberbullying");
+    await page.waitForFunction(() => document.querySelector(".mb-find__status")?.textContent?.startsWith("1 of "));
+    const cyber = page.getByRole("button", { name: "🧩 Cyberbullying", exact: true });
+    const cyberLabel = await cyber.innerText();
+    await cyber.focus();
+    await page.keyboard.press("Enter");
+    assert.equal(new URL(page.url()).hash, "#s-cyberbullying-online-game-chat");
+    assert.equal(await page.locator('.mb-chip[aria-pressed="true"]').innerText(), cyberLabel);
+    await page.getByRole("button", { name: "Clear", exact: true }).click();
+    assert.equal(await page.locator("#mb-find-moment").inputValue(), "");
+    await page.setViewportSize({ width: 375, height: 1000 });
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, "search/show-all: no mobile overflow");
+    const late = SITUATION_GROUPS[0]?.situations[12];
+    assert.ok(late && late.key !== "dreams");
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const deep = await page.goto(`${base}/moms-bible/situations?from=hash#s-${late.key}`, { waitUntil: "networkidle", timeout: 180000 });
+    assert.equal(deep?.status(), 200);
+    await page.waitForFunction((title) => document.querySelector('.mb-chip[aria-pressed="true"]')?.textContent?.includes(title), late.title);
+    assert.equal(new URL(page.url()).hash, `#s-${late.key}`);
+    await page.goto(`${base}/play`, { waitUntil: "networkidle", timeout: 120000 });
+    await page.getByRole("link", { name: "Mom's Bible", exact: true }).click();
+    await page.waitForURL("**/moms-bible/situations", { timeout: 120000 });
+    assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Mom's Bible");
+    const reader = await page.goto(`${base}/bible/read/genesis/1`, { waitUntil: "networkidle", timeout: 120000 });
+    assert.equal(reader?.status(), 200);
+    assert.equal(new URL(page.url()).pathname, "/bible/read/genesis/1", "direct reader URL stays available");
+    assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Mom's Bible");
     for (const [route, label] of [["/play", "Play & Learn"], ["/resource", "Printables"], ["/daily-mass", "Daily Mass"]]) {
       await page.setViewportSize({ width: 1440, height: 1000 });
       const result = await page.goto(`${base}${route}`, { waitUntil: "networkidle", timeout: 120000 });

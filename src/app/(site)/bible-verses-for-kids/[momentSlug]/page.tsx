@@ -1,8 +1,8 @@
 import { BibleVersesSubscribeForm } from "@/components/bible-verses-for-kids/BibleVersesSubscribeForm";
 import { PageShell } from "@/components/PageShell";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getSituation, SITUATIONS } from "@/data/moms-bible/situations";
-import { getSituationSeo } from "@/data/moms-bible/situation-seo";
+import { getSituation } from "@/data/moms-bible/situations";
+import { getSituationSeo, SITUATION_SEO } from "@/data/moms-bible/situation-seo";
 import { resolveSituationVerse } from "@/lib/moms-bible/resolve-situation-verse";
 import { pinOgImage } from "@/lib/seo/pin-og";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -21,8 +21,10 @@ const HUB_PATH = "/bible-verses-for-kids";
 
 type Props = { params: Promise<{ momentSlug: string }> };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return SITUATIONS.map((s) => ({ momentSlug: s.key }));
+  return SITUATION_SEO.map((situation) => ({ momentSlug: situation.key }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -59,7 +59,7 @@ const FEATURES: Feature[] = [
   },
   {
     id: "bible",
-    href: "/bible/read/genesis/1",
+    href: "/moms-bible/situations",
     image: "/home-features/bible.webp",
     icon: "💝",
     color: "#a87b00",
@@ -75,7 +75,7 @@ const FEATURES: Feature[] = [
     ],
     badge: "🩷 Mom's Prayer for You",
     cta: "Create my child's Bible",
-    frameUrl: "catholickidscrafts.com/bible/read/psalms/34",
+    frameUrl: "catholickidscrafts.com/moms-bible/situations",
   },
   {
     id: "memos",

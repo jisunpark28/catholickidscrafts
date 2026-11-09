@@ -5,7 +5,7 @@ export const SIDEBAR_ITEMS: readonly SidebarItem[] = [
   { id: "printables", label: "Printables", href: "/resource" },
   { id: "mass", label: "Daily Mass", href: "/daily-mass" },
   { id: "play", label: "Play & Learn", href: "/play" },
-  { id: "bible", label: "Mom's Bible", href: "/bible/read/genesis/1", separator: true },
+  { id: "bible", label: "Mom's Bible", href: "/moms-bible/situations", separator: true },
   { id: "questions", label: "Q&A Cards", href: "/catholic-faith-questions#qa-cards" },
   { id: "prayer", label: "Faith & Prayer", href: "/catholic-faith-questions" },
   { id: "binder", label: "My Binder", href: null, separator: true, plus: true },

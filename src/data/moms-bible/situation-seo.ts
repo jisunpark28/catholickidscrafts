@@ -2,7 +2,7 @@
  * Unique SEO copy for each "When my child is…" moment.
  * Keys match src/data/moms-bible/situations.ts. Written so pages are not doorway templates.
  */
-import { SITUATIONS } from "@/data/moms-bible/situations";
+import { getSituation, SITUATIONS } from "@/data/moms-bible/situations";
 
 export type SituationSeo = {
   key: string;
@@ -264,11 +264,18 @@ export function getSituationSeo(key: string): SituationSeo | null {
   return BY_KEY.get(key) ?? null;
 }
 
-/** Dev-time guard: every situation must have SEO copy. */
+/** Public /bible-verses-for-kids pages only. New situation chips are not listed. */
+export function bibleVerseMomentPaths(): string[] {
+  return SITUATIONS.filter((situation) => BY_KEY.has(situation.key)).map(
+    (situation) => `/bible-verses-for-kids/${situation.key}`,
+  );
+}
+
+/** Dev-time guard: every published moment page still points at a real situation. */
 export function assertSituationSeoComplete(): void {
-  for (const s of SITUATIONS) {
-    if (!BY_KEY.has(s.key)) {
-      throw new Error(`Missing situation SEO copy for key: ${s.key}`);
+  for (const seo of SITUATION_SEO) {
+    if (!getSituation(seo.key)) {
+      throw new Error(`SEO moment has no situation: ${seo.key}`);
     }
   }
 }

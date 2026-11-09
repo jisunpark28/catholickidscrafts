@@ -207,6 +207,7 @@ export function buildPinterestCatalog(): PinContent[] {
     if (pin) out.push(pin);
   }
   for (const s of SITUATIONS) {
+    if (!getSituationSeo(s.key)) continue;
     const pin = resolvePin("verse", s.key);
     if (pin) out.push(pin);
   }

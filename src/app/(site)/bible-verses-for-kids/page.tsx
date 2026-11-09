@@ -19,11 +19,12 @@ export const metadata: Metadata = pageMetadata({
 
 /** Public SEO hub for Mom's Bible \"When my child is…\" moments. */
 export default function BibleVersesForKidsHubPage() {
-  const listItems = SITUATIONS.map((s) => {
-    const seo = getSituationSeo(s.key);
+  const indexed = SITUATIONS.filter((situation) => getSituationSeo(situation.key));
+  const listItems = indexed.map((situation) => {
+    const seo = getSituationSeo(situation.key);
     return {
-      name: seo?.h1 ?? s.title,
-      path: `${HUB_PATH}/${s.key}`,
+      name: seo?.h1 ?? situation.title,
+      path: `${HUB_PATH}/${situation.key}`,
     };
   });
 
@@ -64,13 +65,16 @@ export default function BibleVersesForKidsHubPage() {
         </div>
 
         <div className="mt-8 space-y-6">
-          {SITUATION_GROUPS.map((g) => (
+          {SITUATION_GROUPS.map((g) => {
+            const listed = g.situations.filter((situation) => getSituationSeo(situation.key));
+            if (listed.length === 0) return null;
+            return (
             <section key={g.title} aria-labelledby={`group-${g.color}`}>
               <h2 id={`group-${g.color}`} className="font-[Georgia,serif] text-xl font-bold text-[#1f2937]">
                 <span aria-hidden>{g.emoji}</span> {g.title}
               </h2>
               <ul className="mt-3 grid gap-3 sm:grid-cols-2">
-                {g.situations.map((s) => {
+                {listed.map((s) => {
                   const seo = getSituationSeo(s.key);
                   return (
                     <li key={s.key}>
@@ -90,7 +94,8 @@ export default function BibleVersesForKidsHubPage() {
                 })}
               </ul>
             </section>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-10">
