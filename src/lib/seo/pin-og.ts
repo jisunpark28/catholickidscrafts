@@ -6,7 +6,6 @@ import { SITUATIONS } from "@/data/moms-bible/situations";
 import { getSituationSeo } from "@/data/moms-bible/situation-seo";
 import {
   FAITH_HUB,
-  FAITH_SEO_CARDS,
   faithPageSeo,
   getFaithSeoCard,
   getSaintSeoCard,
@@ -217,10 +216,6 @@ export function buildPinterestCatalog(): PinContent[] {
   }
   for (const c of SAINT_SEO_CARDS) {
     const pin = resolvePin("saint", c.slug);
-    if (pin) out.push(pin);
-  }
-  for (const c of FAITH_SEO_CARDS) {
-    const pin = resolvePin("faith", c.slug);
     if (pin) out.push(pin);
   }
   return out;

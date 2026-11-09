@@ -47,7 +47,7 @@ async function main() {
   assert.equal(await sidebarPaidPlusForReader(child, { resolveFamily: async (id) => id === "co-parent" ? paid : free, childFamilyIds: async () => ["owner", "co-parent"] }), true);
   assert.equal(await sidebarPaidPlusForReader(child, { resolveFamily: async () => paid, childFamilyIds: async () => [] }), false);
   assert.equal(await sidebarPaidPlusForReader(owner, { resolveFamily: async () => { throw Error("DB unavailable"); }, childFamilyIds: async () => [] }), false);
-  const labels = ["Printables", "Daily Mass", "Play & Learn", "Mom's Bible", "Q&A Cards", "Faith & Prayer"];
+  const labels = ["Printables", "Daily Mass", "Play & Learn", "Mom's Bible", "Q&A Cards", "Prayer"];
   assert.deepEqual(sidebarItems(false).map((item) => item.label), labels);
   assert.deepEqual(sidebarItems(true).map((item) => item.label), [...labels, "My Binder"]);
   assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "binder")?.href, null, "missing binder must never silently become /account/memos or an invented URL");
@@ -57,7 +57,7 @@ async function main() {
     ["/daily-mass", "", "mass"], ["/mass/participation", "", "mass"],
     ["/play", "", "play"], ["/play/ten-commandments", "", "play"],
     ["/bible/genesis", "", "bible"], ["/bible/read/matthew/5", "", "bible"], ["/bible/gospel", "", "bible"], ["/moms-bible/situations", "", "bible"],
-    ["/catholic-faith-questions", "", "prayer"], ["/catholic-faith-questions", "#qa-cards", "questions"], ["/catholic-faith-questions/why-do-we-pray", "", "questions"],
+    ["/qa-cards", "", "questions"], ["/qa-cards", "#advent", "questions"],
     ["/prayers", "", "prayer"], ["/liturgy/advent", "", "prayer"], ["/liturgy/saints", "", "prayer"],
   ];
   for (const [pathname, hash, id] of routes) {
@@ -80,17 +80,23 @@ async function main() {
     if (activePaidPlus) assert.match(html, /disabled=""/);
     assert.doesNotMatch(html, /href="\/subscribe"|Old Testament|Ordinary Time|Get Plus/);
   }
-  for (const file of ["resource/page.tsx", "daily-mass/page.tsx", "play/page.tsx", "bible/read/[bookSlug]/[chapter]/page.tsx", "catholic-faith-questions/page.tsx"]) {
+  for (const file of ["resource/page.tsx", "daily-mass/page.tsx", "play/page.tsx", "bible/read/[bookSlug]/[chapter]/page.tsx", "qa-cards/page.tsx", "prayers/page.tsx"]) {
     assert.ok(existsSync(path.join("src/app/(site)", file)), file);
   }
   assert.doesNotMatch(readFileSync("src/lib/sidebar-navigation.ts", "utf8"), /\/bible\/(old-testament|new-testament)/);
   assert.match(readFileSync("src/lib/sidebar-access.ts", "utf8"), /resolveFamily:\s*resolveFamilyPlus/);
   assert.match(readFileSync("src/app/api/auth/session/route.ts", "utf8"), /getSidebarPaidPlus\(readerKey\)/);
   const icons = SIDEBAR_ITEMS.map((item) => ({ label: item.label, svg: renderToStaticMarkup(React.createElement(SidebarIllustration, { kind: item.id })) }));
-  for (const icon of icons) {
-    assert.match(icon.svg, /stroke="currentColor"/);
-    assert.doesNotMatch(icon.svg, /<image|<text|#[0-9a-f]{3,6}/i);
-    assert.ok((icon.svg.match(/<path|<circle/g) ?? []).length >= 4);
+  assert.equal(existsSync("src/app/(site)/catholic-faith-questions"), false, "deleted faith question pages must 404");
+  for (const [index, item] of SIDEBAR_ITEMS.entries()) {
+    const html = icons[index]!.svg;
+    if (item.id === "binder") {
+      assert.match(html, /stroke="currentColor"/);
+      continue;
+    }
+    const src = html.match(/src="([^"]+)"/)?.[1];
+    assert.ok(src?.startsWith("/images/sidebar/") && existsSync(path.join("public", src)), `${item.label} picture`);
+    assert.match(html, /alt=""/);
   }
   const luminance = (hex: string) => hex.match(/../g)!.map((v) => parseInt(v, 16) / 255).map((v) => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
   const contrast = (foreground: string, background: string) => {

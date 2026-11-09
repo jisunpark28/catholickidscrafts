@@ -10,7 +10,7 @@ import {
 } from "../src/lib/bible/reading-size";
 import { buildHomePdfNav } from "../src/lib/home-pdf-nav";
 import { assembleQaDeck, catalogQaDeck, type QaDeckRead } from "../src/lib/liturgy-qa-catalog";
-import { LITURGY_TOPICS, type LiturgyTopic } from "../src/lib/liturgy-topics";
+import { LITURGY_TOPIC_LABELS, LITURGY_TOPICS, type LiturgyTopic } from "../src/lib/liturgy-topics";
 import { SIDEBAR_ITEMS, sidebarItemIsCurrent } from "../src/lib/sidebar-navigation";
 import { FAITH_SEO_CARDS, faithPageSeo, getFaithSeoCard, groupFaithByCatThenSet } from "../src/lib/seo/card-seo";
 
@@ -93,12 +93,14 @@ assert.equal(mixed.length, 9);
 
 const qa = SIDEBAR_ITEMS.find((item) => item.id === "questions");
 const faith = SIDEBAR_ITEMS.find((item) => item.id === "prayer");
-assert.equal(qa?.href, "/catholic-faith-questions#qa-cards");
-assert.equal(faith?.href, "/catholic-faith-questions");
-assert.equal(sidebarItemIsCurrent("questions", "/catholic-faith-questions", "#qa-cards"), true);
-assert.equal(sidebarItemIsCurrent("prayer", "/catholic-faith-questions", "#qa-cards"), false);
-assert.equal(sidebarItemIsCurrent("prayer", "/catholic-faith-questions", ""), true);
-assert.equal(sidebarItemIsCurrent("questions", "/catholic-faith-questions", ""), false);
+assert.equal(qa?.href, "/qa-cards");
+assert.equal(faith?.href, "/prayers");
+assert.equal(faith?.label, "Prayer");
+assert.equal(sidebarItemIsCurrent("questions", "/qa-cards"), true);
+assert.equal(sidebarItemIsCurrent("questions", "/qa-cards", "#advent"), true);
+assert.equal(sidebarItemIsCurrent("prayer", "/qa-cards"), false);
+assert.equal(sidebarItemIsCurrent("prayer", "/prayers"), true);
+assert.equal(sidebarItemIsCurrent("questions", "/prayers"), false);
 assert.equal(SIDEBAR_ITEMS.some((item) => item.href?.includes("/bible/old-testament") || item.href?.includes("/bible/new-testament")), false);
 const directory = buildHomePdfNav([], { gallery: "Gallery", curriculum: "Curriculum", resources: "Resources", play: "Play" });
 const categoryHrefs = directory.groups
@@ -108,18 +110,17 @@ assert.deepEqual(categoryHrefs, ["/prayers", ...LITURGY_TOPICS.map((slug) => `/l
 assert.equal(fs.readFileSync("src/components/home/HomePdfShell.tsx", "utf8").includes("SidebarNavigation"), true);
 assert.equal(fs.readFileSync("src/components/home/HomePdfShell.tsx", "utf8").includes("Old Testament"), false);
 
-const hub = fs.readFileSync("src/app/(site)/catholic-faith-questions/page.tsx", "utf8");
-const article = fs.readFileSync("src/app/(site)/catholic-faith-questions/[slug]/page.tsx", "utf8");
-assert.ok(hub.includes('id="qa-cards"'));
-assert.ok(hub.includes("<QaFlipCards"));
-assert.ok(hub.includes("<FaithArticleCard"));
-assert.equal(hub.includes("FAQPage"), false);
-assert.equal(article.includes("FAQPage"), false);
-assert.equal(article.includes("datePublished"), false);
-assert.ok(article.includes("Back to faith cards"));
-assert.equal(article.includes("/bible/old-testament"), false);
-assert.equal(article.includes("/bible/new-testament"), false);
+assert.equal(fs.existsSync("src/app/(site)/catholic-faith-questions"), false, "faith question pages are deleted (404)");
+const qaPage = fs.readFileSync("src/app/(site)/qa-cards/page.tsx", "utf8");
+const qaTabs = fs.readFileSync("src/components/liturgy/QaCardsByTopic.tsx", "utf8");
+assert.ok(qaPage.includes("loadLiturgyQaDeck"));
+assert.ok(qaPage.includes("export const revalidate = 3600"));
+assert.equal(/cookies\(|headers\(/.test(qaPage), false, "Q&A page stays static");
+assert.ok(qaTabs.includes("<QaFlipCards"));
+assert.equal(qaPage.includes("FAQPage"), false);
+assert.deepEqual(LITURGY_TOPICS.map((slug) => LITURGY_TOPIC_LABELS[slug]), ["Mass", "Sacraments", "Saints", "Devotions", "Ordinary Time", "Advent", "Christmas Time", "Lent", "Paschal Triduum", "Easter Time"]);
+assert.ok(fs.readFileSync("src/lib/public-revalidate.ts", "utf8").includes('revalidatePath("/qa-cards")'));
 
 console.log(
-  `PASS reading size; ${FAITH_SEO_CARDS.length} faith articles; ${jsonCards.length} Q&A cards across ${deck.length} topics; sidebar #qa-cards; no FAQ schema.`,
+  `PASS reading size; ${FAITH_SEO_CARDS.length} faith articles; ${jsonCards.length} Q&A cards across ${deck.length} topics; sidebar /qa-cards; no FAQ schema.`,
 );

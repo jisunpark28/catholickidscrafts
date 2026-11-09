@@ -6,11 +6,11 @@
 
 ## Faith articles
 
-`/catholic-faith-questions` lists the existing faith picture cards (Mass & Church, Prayer, Sacrament, Virtue & Life). Each card links to `/catholic-faith-questions/[slug]`, which keeps the card caption, reference, introduction, and family questions. Collection illustrations are the public files `public/home-features/liturgy.webp`, `prayers.webp`, and `curriculum.webp`. Plus card previews are not used. No author, publication date, or FAQPage schema is added.
+The `/catholic-faith-questions` hub and its `/catholic-faith-questions/[slug]` card pages were removed (404). The faith card data in `src/lib/seo/card-seo.ts` is kept.
 
 ## Q&A flip deck
 
-The shared sidebar from current main (Printables, Daily Mass, Play & Learn, Mom's Bible, Q&A Cards, Faith & Prayer, and paid-only My Binder) is unchanged in structure. **Q&A Cards** still goes to `/catholic-faith-questions#qa-cards`. **Faith & Prayer** stays on `/catholic-faith-questions` with no hash. On that same path, only the item matching the hash is current. The `#qa-cards` section gathers the ten liturgy topics already on `/liturgy/ordinary-time`, `/liturgy/advent`, `/liturgy/christmas-time`, `/liturgy/lent`, `/liturgy/paschal-triduum`, `/liturgy/easter-time`, `/liturgy/mass`, `/liturgy/sacraments`, `/liturgy/saints`, and `/liturgy/devotions`. Cards flip between the existing question and answer. Prayers stay on `/prayers`. The faith hub directory keeps the existing eleven category links.
+Sidebar: **Q&A Cards** goes to `/qa-cards`, which shows the ten liturgy Q&A topics behind one button each (same published data as `/liturgy/[topic]`, with the authored catalog as fallback when the database cannot be read). **Prayer** goes to `/prayers`.
 
 When the database can be read, a topic shows its published rows (the same query as the topic page). A topic with no published rows stays out of the deck. When the database cannot be read, that topic uses the public fields of `prisma/data/liturgy-qa-cards.json` (question, answer, try this, color, alt text, emoji). Review notes and image prompts are not rendered. Topic pages themselves are unchanged and still hide Q&A when the database read fails.
 
