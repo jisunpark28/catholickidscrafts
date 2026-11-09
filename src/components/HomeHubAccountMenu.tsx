@@ -170,10 +170,14 @@ export function HomeHubAccountMenu({ initialSession, signInLabel }: Props) {
     }
   }, []);
 
+  // The server passes a fresh session on every render (and router.refresh() after kid login),
+  // so we do not refetch on each pathname change. One call per full page load, and only for a
+  // signed-in parent, keeps the rolling 30-day session cookie renewed (/api/auth/session).
   useEffect(() => setSession(initialSession), [initialSession]);
+  const hasFamilyRef = useRef(Boolean(initialSession.family));
   useEffect(() => {
-    void loadSession();
-  }, [loadSession, pathname]);
+    if (hasFamilyRef.current) void loadSession();
+  }, [loadSession]);
   useEffect(() => {
     setOpen(false);
     setConfirmOpen(false);
