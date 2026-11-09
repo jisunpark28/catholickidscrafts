@@ -28,7 +28,9 @@ export function generateStaticParams() {
   return FAITH_SEO_CARDS.map((c) => ({ slug: c.slug }));
 }
 
-export const dynamic = "force-dynamic";
+// Article text comes from the static card catalog; only the sidebar copy is read from the DB.
+export const revalidate = 86400;
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

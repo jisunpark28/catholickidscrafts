@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { ID_RE, qaCardUpdateSchema, readJson } from "@/lib/liturgy-qa-admin";
 import { prisma } from "@/lib/prisma";
+import { revalidateQaPages } from "@/lib/public-revalidate";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ id: string }> };
@@ -28,6 +29,7 @@ export async function PATCH(request: Request, { params }: Params) {
     },
     select: { id: true, topicSlug: true, status: true },
   });
+  revalidateQaPages();
   return NextResponse.json(item);
 }
 
@@ -40,5 +42,6 @@ export async function DELETE(_request: Request, { params }: Params) {
   const existing = await prisma.liturgyQaCard.findUnique({ where: { id }, select: { id: true } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await prisma.liturgyQaCard.delete({ where: { id } });
+  revalidateQaPages();
   return NextResponse.json({ ok: true });
 }

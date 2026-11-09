@@ -1,5 +1,6 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
+import { revalidateLiturgyPages } from "@/lib/public-revalidate";
 import { parseDateInput } from "@/lib/weekly-content";
 import { itemsCreateData, weeklyIssueSchema } from "@/lib/weekly-schema";
 import { Prisma } from "@prisma/client";
@@ -41,6 +42,7 @@ export async function PUT(request: Request, { params }: Params) {
         },
       }),
     ]);
+    revalidateLiturgyPages();
     return NextResponse.json(issue);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
@@ -58,5 +60,6 @@ export async function DELETE(_request: Request, { params }: Params) {
   const existing = await prisma.weeklyIssue.findUnique({ where: { id } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await prisma.weeklyIssue.delete({ where: { id } });
+  revalidateLiturgyPages();
   return NextResponse.json({ ok: true });
 }

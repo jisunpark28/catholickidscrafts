@@ -1,5 +1,6 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
+import { revalidateLiturgyPages } from "@/lib/public-revalidate";
 import { parseDateInput } from "@/lib/weekly-content";
 import { itemsCreateData, weeklyIssueSchema } from "@/lib/weekly-schema";
 import { Prisma } from "@prisma/client";
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
         items: { create: itemsCreateData(data.items) },
       },
     });
+    revalidateLiturgyPages();
     return NextResponse.json(issue);
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {

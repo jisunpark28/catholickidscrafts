@@ -15,7 +15,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/mass",
 });
 
-export const dynamic = "force-dynamic";
+// Today's date (UTC) is computed at render time, so refresh hourly to roll over to the new day.
+export const revalidate = 3600;
 
 export default async function DailyMassPage() {
   const today = todayUtc();

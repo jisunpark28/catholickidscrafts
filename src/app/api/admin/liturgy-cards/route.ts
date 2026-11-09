@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { isLiturgyCardLink, isLiturgyTopic } from "@/lib/liturgy-topics";
 import { prisma } from "@/lib/prisma";
+import { revalidateLiturgyPages } from "@/lib/public-revalidate";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -54,6 +55,7 @@ export async function POST(request: Request) {
       sortOrder,
     },
   });
+  revalidateLiturgyPages();
 
   return NextResponse.json(item, { status: 201 });
 }

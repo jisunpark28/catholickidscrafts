@@ -15,8 +15,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/prayers",
 });
 
-// Prayer cards are edited in admin, so read them per request.
-export const dynamic = "force-dynamic";
+// Prayer cards are edited in admin: saves call revalidatePath, and the hourly refresh is a fallback.
+export const revalidate = 3600;
 
 export default async function PrayersPage() {
   const qa = await loadPublishedQa("prayers");

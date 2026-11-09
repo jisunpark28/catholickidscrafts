@@ -7,7 +7,8 @@ import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+// Approved photos only; cached and refreshed hourly.
+export const revalidate = 3600;
 
 export const metadata: Metadata = pageMetadata({
   title: "Family Catholic Craft Gallery",

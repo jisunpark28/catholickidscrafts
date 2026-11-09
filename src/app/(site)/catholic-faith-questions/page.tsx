@@ -20,7 +20,8 @@ export const metadata: Metadata = pageMetadata({
   path: FAITH_HUB,
 });
 
-export const dynamic = "force-dynamic";
+// Q&A deck is edited in admin: saves call revalidatePath, and the hourly refresh is a fallback.
+export const revalidate = 3600;
 
 export default async function CatholicFaithQuestionsHubPage() {
   const [nav, deck] = await Promise.all([getResourceNav(), loadLiturgyQaDeck()]);
