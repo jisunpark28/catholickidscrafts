@@ -38,6 +38,13 @@ const nextConfig: NextConfig = {
     return [
       { source: "/", headers: securityHeaders },
       { source: "/:path*", headers: securityHeaders },
+      // *.vercel.app (production alias + previews): usable, never indexed. Was in middleware;
+      // robots.ts still serves disallow-all on these hosts.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "(?<h>.*)\\.vercel\\.app" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
     ];
   },
   async redirects() {
