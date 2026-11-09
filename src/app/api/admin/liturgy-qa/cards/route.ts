@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { qaCardCreateSchema, readJson } from "@/lib/liturgy-qa-admin";
 import { prisma } from "@/lib/prisma";
+import { revalidateQaPages } from "@/lib/public-revalidate";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -29,5 +30,6 @@ export async function POST(request: Request) {
       adminEditedAt: new Date(),
     },
   });
+  revalidateQaPages();
   return NextResponse.json({ id: item.id, topicSlug: item.topicSlug }, { status: 201 });
 }

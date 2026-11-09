@@ -44,7 +44,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export const dynamic = "force-dynamic";
+// Cached per topic (ISR). Admin saves to liturgy cards, weekly issues and Q&A call revalidatePath.
+export const revalidate = 3600;
+
+/** Empty list: each topic renders on its first visit, then stays cached (no DB reads at build). */
+export function generateStaticParams(): { topic: string }[] {
+  return [];
+}
 
 export default async function LiturgyTopicPage({ params }: Props) {
   const { topic } = await params;

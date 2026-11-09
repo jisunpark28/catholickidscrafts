@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { isLiturgyCardLink, isLiturgyTopic } from "@/lib/liturgy-topics";
 import { prisma } from "@/lib/prisma";
+import { revalidateLiturgyPages } from "@/lib/public-revalidate";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -53,6 +54,7 @@ export async function PATCH(request: Request, { params }: Params) {
       sortOrder: data.sortOrder,
     },
   });
+  revalidateLiturgyPages();
 
   return NextResponse.json(item);
 }
@@ -65,5 +67,6 @@ export async function DELETE(_request: Request, { params }: Params) {
   const existing = await prisma.liturgyCard.findUnique({ where: { id } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await prisma.liturgyCard.delete({ where: { id } });
+  revalidateLiturgyPages();
   return NextResponse.json({ ok: true });
 }

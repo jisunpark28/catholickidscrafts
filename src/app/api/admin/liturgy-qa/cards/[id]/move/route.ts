@@ -1,6 +1,7 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { ID_RE, qaMoveSchema, readJson } from "@/lib/liturgy-qa-admin";
 import { prisma } from "@/lib/prisma";
+import { revalidateQaPages } from "@/lib/public-revalidate";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ id: string }> };
@@ -33,5 +34,6 @@ export async function POST(request: Request, { params }: Params) {
       data: { sortOrder: neighbour.sortOrder, adminEditedAt: new Date() },
     }),
   ]);
+  revalidateQaPages();
   return NextResponse.json({ ok: true });
 }

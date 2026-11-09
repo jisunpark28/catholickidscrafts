@@ -2,6 +2,7 @@ import { requireAdminSession } from "@/lib/admin-auth";
 import { qaBulkStatusSchema, readJson } from "@/lib/liturgy-qa-admin";
 import { isQaTopic } from "@/lib/liturgy-qa-topics";
 import { prisma } from "@/lib/prisma";
+import { revalidateQaPages } from "@/lib/public-revalidate";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -20,5 +21,6 @@ export async function POST(request: Request, { params }: Params) {
     where: { topicSlug: slug },
     data: { status: parsed.data.status },
   });
+  revalidateQaPages();
   return NextResponse.json({ ok: true, count: result.count });
 }

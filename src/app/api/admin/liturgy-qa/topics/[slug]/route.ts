@@ -2,6 +2,7 @@ import { requireAdminSession } from "@/lib/admin-auth";
 import { qaTopicUpdateSchema, readJson } from "@/lib/liturgy-qa-admin";
 import { isQaTopic } from "@/lib/liturgy-qa-topics";
 import { prisma } from "@/lib/prisma";
+import { revalidateQaPages } from "@/lib/public-revalidate";
 import { NextResponse } from "next/server";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -19,5 +20,6 @@ export async function PATCH(request: Request, { params }: Params) {
   const existing = await prisma.liturgyQaTopic.findUnique({ where: { slug }, select: { id: true } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await prisma.liturgyQaTopic.update({ where: { slug }, data: parsed.data });
+  revalidateQaPages();
   return NextResponse.json({ ok: true });
 }

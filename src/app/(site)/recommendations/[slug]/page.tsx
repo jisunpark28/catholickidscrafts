@@ -11,7 +11,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
+
+/** Empty list: each item renders on its first visit, then stays cached (no DB reads at build). */
+export function generateStaticParams(): { slug: string }[] {
+  return [];
+}
 
 type Props = { params: Promise<{ slug: string }> };
 
