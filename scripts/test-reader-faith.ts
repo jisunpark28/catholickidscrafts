@@ -117,8 +117,6 @@ assert.ok(qaPage.includes("loadLiturgyQaDeck"));
 assert.ok(qaPage.includes("export const revalidate = 3600"));
 assert.equal(/cookies\(|headers\(/.test(qaPage), false, "Q&A page stays static");
 assert.ok(qaTabs.includes("<QaFlipCards"));
-assert.ok(qaPage.includes("Find answers to your questions about the Mass and the liturgy."));
-assert.ok(qaPage.includes("Send us feedback anytime."));
 assert.equal(qaPage.includes("Tap a card to read the answer"), false);
 assert.equal(qaTabs.includes("tab.topic.title"), false);
 assert.equal(qaTabs.includes("tab.topic.bigIdea"), false);

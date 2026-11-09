@@ -1,6 +1,7 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { QaCardsByTopic, type QaTopicTab } from "@/components/liturgy/QaCardsByTopic";
+import { fredoka } from "@/components/liturgy/fredoka";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { loadLiturgyQaDeck } from "@/lib/liturgy-qa-deck";
 import { LITURGY_TOPIC_LABELS, LITURGY_TOPICS } from "@/lib/liturgy-topics";
@@ -31,10 +32,7 @@ export default async function QaCardsPage() {
     <TestamentPageShell>
       <JsonLd nodes={[breadcrumbNode([{ name: "Q&A Cards", path: "/qa-cards" }])]} />
       <SidebarPagePanel id="qa-cards">
-        <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#405329]">Q&amp;A Cards</h1>
-        <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
-          Find answers to your questions about the Mass and the liturgy. Have another question? Send us feedback anytime.
-        </p>
+        <h1 className={`${fredoka.variable} qa-title`}>Q&amp;A Cards</h1>
         <QaCardsByTopic tabs={tabs} />
       </SidebarPagePanel>
     </TestamentPageShell>

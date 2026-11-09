@@ -28,7 +28,7 @@ export default async function PrayersPage() {
       <SidebarPagePanel>
         {qa ? (
           <>
-            <QaPageHeader topic={qa.topic} eyebrow="Faith & Prayer · Prayers" />
+            <QaPageHeader topic={qa.topic} showBigIdeaLabel={false} />
             <QaFlipCards cards={qa.cards} variant="prayer" cardBackColor={qa.topic.cardBackColor} />
           </>
         ) : (
