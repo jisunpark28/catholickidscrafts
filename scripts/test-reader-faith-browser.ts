@@ -123,7 +123,8 @@ async function run() {
       assert.equal(await panel.isVisible(), true, section.slug);
       assert.equal(await qa.locator('[role="tabpanel"]:visible').count(), 1, `${section.slug}: one topic at a time`);
       const panelText = await panel.evaluate((el) => el.textContent ?? "");
-      assert.ok(panelText.includes(section.topic.title), section.slug);
+      assert.equal(panelText.includes(section.topic.title), false, `${section.slug}: topic heading stays off /qa-cards`);
+      assert.equal(panelText.includes(`${section.label} page`), false, `${section.slug}: topic page link stays off /qa-cards`);
       for (const card of section.cards) {
         assert.ok(panelText.includes(card.question), card.question);
         assert.ok(panelText.includes(card.answer), card.answer);

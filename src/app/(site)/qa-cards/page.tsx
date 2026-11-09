@@ -32,8 +32,7 @@ export default async function QaCardsPage() {
       <div id="qa-cards" className="rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
         <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#405329]">Q&amp;A Cards</h1>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
-          The questions and answers from Mass, the sacraments, the saints, devotions, and the Church seasons.
-          Tap a card to read the answer, then flip it back.
+          Find answers to your questions about the Mass and the liturgy. Have another question? Send us feedback anytime.
         </p>
         <QaCardsByTopic tabs={tabs} />
       </div>
