@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { cspHeaders } from "./src/lib/csp";
+import { HOME_VARIANT_PREFIX, homeVariantRewrites } from "./src/lib/home-variants";
 
 /**
  * Phase 1 baseline (nosniff, referrer, SAMEORIGIN, Permissions-Policy) plus
@@ -45,6 +46,12 @@ const nextConfig: NextConfig = {
         has: [{ type: "host", value: "(?<h>.*)\\.vercel\\.app" }],
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
+      // Internal per-country home copies: only meant to be served at `/` via the rewrites below.
+      // Headers match the requested path, so `/` itself is not affected.
+      {
+        source: `${HOME_VARIANT_PREFIX}/:path*`,
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
     ];
   },
   async rewrites() {
@@ -56,6 +63,8 @@ const nextConfig: NextConfig = {
           has: [{ type: "host", value: "(?<h>.*)\\.vercel\\.app" }],
           destination: "/robots-noindex.txt",
         },
+        // `/` -> static per-country home (ckc_country cookie, then Vercel IP country), on the CDN.
+        ...homeVariantRewrites(),
       ],
       afterFiles: [],
       fallback: [],
