@@ -12,20 +12,34 @@ export function universalisCalendarPathClient(): string {
   return fromEnv && fromEnv.length > 0 ? fromEnv : DEFAULT_CALENDAR_PATH;
 }
 
+/** Days after the device's today that Universalis serves dated JSONP for (checked Nov 2026: today..+7). */
+export const UNIVERSALIS_DAYS_AHEAD = 7;
+
+/**
+ * JSONP URL. With a date this is the dated form Universalis' own sample page uses
+ * (`/{calendar}/{yyyymmdd}/jsonpmass.js`, see https://universalis.com/n-jsonp-technical.htm), so every
+ * day has its own URL and the browser can't replay an old day from its ~10-day cache.
+ * `fresh` adds a per-day query string to the undated URL (used only as a fallback for today).
+ */
 export function universalisJsonpUrlClient(
   calendarPath = universalisCalendarPathClient(),
   dateKey?: string,
+  mode: "dated" | "fresh" = "dated",
 ): string {
-  const base = `https://universalis.com/${calendarPath}/jsonpmass.js`;
-  // Universalis serves jsonpmass.js with a ~10-day Cache-Control/Expires, so the browser
-  // would keep replaying an old day. A per-day query string gives each day its own cache entry.
-  return dateKey ? `${base}?d=${dateKey.replace(/-/g, "")}` : base;
+  if (!dateKey) return `https://universalis.com/${calendarPath}/jsonpmass.js`;
+  const compact = dateKey.replace(/-/g, "");
+  return mode === "dated"
+    ? `https://universalis.com/${calendarPath}/${compact}/jsonpmass.js?callback=universalisCallback`
+    : `https://universalis.com/${calendarPath}/jsonpmass.js?d=${compact}`;
 }
 
 export function universalisMassPageUrlClient(
   calendarPath = universalisCalendarPathClient(),
+  dateKey?: string,
 ): string {
-  return `https://universalis.com/${calendarPath}/mass.htm`;
+  return dateKey
+    ? `https://universalis.com/${calendarPath}/${dateKey.replace(/-/g, "")}/mass.htm`
+    : `https://universalis.com/${calendarPath}/mass.htm`;
 }
 
 declare global {
@@ -36,17 +50,29 @@ declare global {
 
 const JSONP_TIMEOUT_MS = 20_000;
 
+// Universalis always calls the global `universalisCallback`, so only one request may be in flight.
+let queue: Promise<unknown> = Promise.resolve();
+
 /**
- * Load today's Mass readings via Universalis JSONP in the browser.
- * Intended fallback when the server cannot reach universalis.com (Vercel/datacenter IPs).
- * Complies with https://universalis.com/n-web.htm — same official JSONP endpoint.
+ * Load Mass readings via Universalis JSONP in the visitor's browser (https://universalis.com/n-web.htm).
+ * Pass a date to load that day (dated URL); requests are queued so callbacks never mix days.
  */
-export function loadUniversalisMassTodayClient(dateKey?: string): Promise<UniversalisMassDay> {
+export function loadUniversalisMassTodayClient(
+  dateKey?: string,
+  mode: "dated" | "fresh" = "dated",
+): Promise<UniversalisMassDay> {
+  const run = () => loadOnce(dateKey, mode);
+  const next = queue.then(run, run);
+  queue = next.catch(() => undefined);
+  return next;
+}
+
+function loadOnce(dateKey: string | undefined, mode: "dated" | "fresh"): Promise<UniversalisMassDay> {
   return new Promise((resolve, reject) => {
     const calendarPath = universalisCalendarPathClient();
     const script = document.createElement("script");
     script.async = true;
-    script.src = universalisJsonpUrlClient(calendarPath, dateKey);
+    script.src = universalisJsonpUrlClient(calendarPath, dateKey, mode);
 
     const cleanup = () => {
       clearTimeout(timeoutId);
