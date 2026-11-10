@@ -2,6 +2,7 @@ import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
+import { RosaryCard } from "@/components/prayers/RosaryCard";
 import { loadPublishedQa } from "@/lib/liturgy-qa";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -29,10 +30,19 @@ export default async function PrayersPage() {
         {qa ? (
           <>
             <QaPageHeader topic={qa.topic} showBigIdeaLabel={false} />
-            <QaFlipCards cards={qa.cards} variant="prayer" cardBackColor={qa.topic.cardBackColor} />
+            <QaFlipCards
+              cards={qa.cards}
+              variant="prayer"
+              cardBackColor={qa.topic.cardBackColor}
+              extra={<RosaryCard />}
+              extraAfter="Hail Mary"
+            />
           </>
         ) : (
-          <h1 className="mb-4 text-2xl font-bold">Catholic Prayers</h1>
+          <>
+            <h1 className="mb-4 text-2xl font-bold">Catholic Prayers</h1>
+            <QaFlipCards cards={[]} variant="prayer" extra={<RosaryCard />} />
+          </>
         )}
       </SidebarPagePanel>
     </TestamentPageShell>

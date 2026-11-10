@@ -11,12 +11,22 @@ type Props = {
   cardBackColor?: string;
   /** Grow each card to the answer instead of clipping it. */
   fit?: boolean;
+  /** Extra grid item (an <li>) placed after the card whose question matches `extraAfter`, or last. */
+  extra?: React.ReactNode;
+  extraAfter?: string;
 };
 
-export function QaFlipCards({ cards, variant = "qa", cardBackColor, fit = false }: Props) {
+export function QaFlipCards({ cards, variant = "qa", cardBackColor, fit = false, extra, extraAfter }: Props) {
+  const norm = (s: string) => s.trim().toLowerCase();
+  const at = extraAfter ? cards.findIndex((c) => norm(c.question) === norm(extraAfter)) : -1;
+  const pos = at >= 0 ? at + 1 : cards.length;
   return (
     <ul className={`${fredoka.variable} qa-grid ${variant === "prayer" ? "qa-grid--prayer" : ""} ${fit ? "qa-grid--fit" : ""}`} role="list">
-      {cards.map((card) => (
+      {cards.slice(0, pos).map((card) => (
+        <QaFlipCard key={card.id} card={card} variant={variant} cardBackColor={cardBackColor} />
+      ))}
+      {extra}
+      {cards.slice(pos).map((card) => (
         <QaFlipCard key={card.id} card={card} variant={variant} cardBackColor={cardBackColor} />
       ))}
     </ul>
