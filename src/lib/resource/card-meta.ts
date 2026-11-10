@@ -33,6 +33,12 @@ export type PictureCard = {
   md?: string;
   /** Sunday sheet keys this card belongs to (e.g. "SOL_ALLSAINTS", "A_OT04"). */
   sheetKeys?: string[];
+  /** Saint Fact Box: what the saint is patron of (empty or absent = hide the row). */
+  patron?: string[];
+  /** Saint Fact Box: traditional symbols in art (empty or absent = hide the row). */
+  symbols?: string[];
+  /** Saint Fact Box: one-line story. The card caption stays in `text`. */
+  story?: string;
 };
 
 /** Slim shape sent to the client grid. */
