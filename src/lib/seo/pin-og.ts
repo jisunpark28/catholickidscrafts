@@ -5,9 +5,6 @@
 import { SITUATIONS } from "@/data/moms-bible/situations";
 import { getSituationSeo } from "@/data/moms-bible/situation-seo";
 import {
-  FAITH_HUB,
-  faithPageSeo,
-  getFaithSeoCard,
   getSaintSeoCard,
   SAINTS_HUB,
   SAINT_SEO_CARDS,
@@ -18,7 +15,7 @@ import { keyToSlug, sheetDescription, slugToKey } from "@/lib/resource/sheets";
 import { getSiteUrl } from "@/lib/site-url";
 import { getSundaySheet, listSundaySheetKeys } from "@/lib/sunday-sheet-content";
 
-export const PIN_TYPES = ["worksheet", "saint", "faith", "verse"] as const;
+export const PIN_TYPES = ["worksheet", "saint", "verse"] as const;
 export type PinType = (typeof PIN_TYPES)[number];
 
 export const PIN_THEME_IDS = ["peach", "rose", "sage", "sky"] as const;
@@ -137,21 +134,6 @@ export function resolvePin(typeRaw: string, slugRaw: string, themeOverride?: str
     };
   }
 
-  if (type === "faith") {
-    const card = getFaithSeoCard(slug);
-    if (!card) return null;
-    const seo = faithPageSeo(card);
-    return {
-      type,
-      slug,
-      title: card.title,
-      subtitle: `${card.cat} · ${card.set}`,
-      description: seo.description,
-      pagePath: `${FAITH_HUB}/${card.slug}`,
-      theme,
-    };
-  }
-
   // verse
   const seo = getSituationSeo(slug);
   const situation = SITUATIONS.find((s) => s.key === slug);
@@ -193,7 +175,7 @@ export function absolutePageUrl(pagePath: string): string {
 
 /**
  * Stable catalog for the Pinterest RSS rotator.
- * Order: Advent worksheets → 15 verse moments → other worksheets → saints → faith.
+ * Order: Advent worksheets → 15 verse moments → other worksheets → saints.
  */
 export function buildPinterestCatalog(): PinContent[] {
   const keys = listSundaySheetKeys();
@@ -253,8 +235,6 @@ export function pinTypeLabel(type: PinType): string {
       return "Sunday Mass Worksheet";
     case "saint":
       return "Catholic Saint for Kids";
-    case "faith":
-      return "Catholic Faith for Kids";
     case "verse":
       return "Bible Verses for Kids";
   }

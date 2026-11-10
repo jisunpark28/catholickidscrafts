@@ -165,7 +165,8 @@ async function run() {
     let checked = 0;
     for (const gone of ["/catholic-faith-questions", "/catholic-faith-questions/why-do-we-pray"]) {
       const result = await page.request.get(`${base}${gone}`, { maxRedirects: 0 });
-      assert.equal(result.status(), 404, `${gone} is deleted`);
+      assert.equal(result.status(), 301, `${gone} is deleted and 301s`);
+      assert.equal(new URL(result.headers()["location"] ?? "", base).pathname, "/qa-cards", `${gone} -> /qa-cards`);
       checked++;
     }
 

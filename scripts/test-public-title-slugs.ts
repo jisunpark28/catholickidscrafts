@@ -4,7 +4,7 @@ import SundayMassWorksheetPage, { generateStaticParams, generateMetadata } from 
 import { listSundaySheetKeys } from "../src/lib/sunday-sheet-content";
 import { keyToSlug, slugToKey, resourcePath, resourcePrintPath, sheetYear } from "../src/lib/resource/sheets";
 import { sundayMassWorksheetSlug, sundayMassWorksheetKey, sundayMassWorksheetPath, sundayMassWorksheetRedirect } from "../src/lib/seo/sunday-mass-worksheets";
-import { SAINT_SEO_CARDS, FAITH_SEO_CARDS, getSaintSeoCard, getFaithSeoCard } from "../src/lib/seo/card-seo";
+import { SAINT_SEO_CARDS, FAITH_SEO_CARDS, getSaintSeoCard } from "../src/lib/seo/card-seo";
 import { cardSharePath } from "../src/lib/resource/card-meta";
 import { resolvePin, buildPinterestCatalog } from "../src/lib/seo/pin-og";
 import { buildResourcesSitemap } from "../src/lib/sitemap-entries";
@@ -57,13 +57,10 @@ async function main() {
     const metadata = await generateMetadata({ params: Promise.resolve({ slug }), searchParams: Promise.resolve({}) });
     assert.equal(metadata.alternates?.canonical, path);
   }
-  for (const cards of [SAINT_SEO_CARDS, FAITH_SEO_CARDS]) {
-    assert.equal(new Set(cards.map((card) => card.slug)).size, cards.length);
-    for (const card of cards) {
-      const type = card.cat === "Saint" ? "saint" : "faith";
-      assert.equal((type === "saint" ? getSaintSeoCard : getFaithSeoCard)(card.slug)?.id, card.id);
-      assert.ok(resolvePin(type, card.slug)?.pagePath.endsWith("/" + card.slug));
-    }
+  assert.equal(new Set(SAINT_SEO_CARDS.map((card) => card.slug)).size, SAINT_SEO_CARDS.length);
+  for (const card of SAINT_SEO_CARDS) {
+    assert.equal(getSaintSeoCard(card.slug)?.id, card.id);
+    assert.ok(resolvePin("saint", card.slug)?.pagePath.endsWith("/" + card.slug));
   }
   assert.equal(SAINT_SEO_CARDS.find((c) => c.id === "SNT-032")?.slug, "saint-rose-philippine-duchesne");
   assert.equal(SAINT_SEO_CARDS.find((c) => c.id === "SNT-065")?.slug, "saint-elizabeth-of-hungary");
