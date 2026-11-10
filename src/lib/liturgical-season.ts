@@ -37,16 +37,32 @@ function adventStart(year: number): Date {
   return addDays(christmas, -daysBefore - 21);
 }
 
+/**
+ * Feast of the Baptism of the Lord on the General Roman Calendar:
+ * the Sunday after 6 January. If 6 January is a Sunday (Epiphany),
+ * the feast falls on the following Sunday.
+ *
+ * This helper has no country argument, so it does not apply the
+ * US/Canada transfer (Baptism moves to Monday when Epiphany is
+ * celebrated on Sunday 7 or 8 January).
+ */
+function baptismOfTheLord(year: number): Date {
+  const epiphany = new Date(Date.UTC(year, 0, 6));
+  const dow = epiphany.getUTCDay();
+  const daysAfter = dow === 0 ? 7 : 7 - dow;
+  return addDays(epiphany, daysAfter);
+}
+
 export function getLiturgicalSeason(date: Date): LiturgicalSeasonInfo {
   const year = date.getUTCFullYear();
   const easter = easterSunday(year);
   const ashWednesday = addDays(easter, -46);
-  const palmSunday = addDays(easter, -7);
   const holyThursday = addDays(easter, -3);
   const pentecost = addDays(easter, 49);
   const advent = adventStart(year);
   const christmas = new Date(Date.UTC(year, 11, 25));
-  const baptism = new Date(Date.UTC(year, 0, 6));
+  const baptism = baptismOfTheLord(year);
+  const christmasPrev = new Date(Date.UTC(year - 1, 11, 25));
   const pentecostPrev = addDays(easterSunday(year - 1), 49);
 
   if (between(date, holyThursday, addDays(easter, -1))) {
@@ -76,7 +92,11 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeasonInfo {
     };
   }
 
-  if (between(date, ashWednesday, addDays(palmSunday, -1))) {
+  // Lent includes Palm Sunday through Holy Wednesday. Triduum days
+  // (Holy Thursday through Holy Saturday) stay on the Holy Week branch
+  // above, which links to /liturgy/paschal-triduum. There is no separate
+  // holy-week liturgy page, so these four days use Lent (purple, /liturgy/lent).
+  if (between(date, ashWednesday, addDays(holyThursday, -1))) {
     return {
       name: "Lent",
       color: "purple",
@@ -94,7 +114,13 @@ export function getLiturgicalSeason(date: Date): LiturgicalSeasonInfo {
     };
   }
 
-  if (between(date, christmas, baptism)) {
+  // Christmas Time runs from 25 December through the Baptism of the Lord.
+  // The previous check used 25 December and 6 January of the same civil
+  // year, so the range was empty and these days fell through to Ordinary Time.
+  if (
+    between(date, christmasPrev, baptism) ||
+    between(date, christmas, baptismOfTheLord(year + 1))
+  ) {
     return {
       name: "Christmas Season",
       color: "white",
