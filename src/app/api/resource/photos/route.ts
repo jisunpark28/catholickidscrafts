@@ -13,7 +13,7 @@ import {
   validateSheetPhotoFile,
 } from "@/lib/resource/sheet-photo";
 import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
-import { UploadConfigurationError } from "@/lib/upload";
+import { UploadConfigurationError, UPLOADS_UNAVAILABLE_MESSAGE } from "@/lib/upload";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -97,10 +97,13 @@ export async function POST(request: Request) {
     );
   } catch (e) {
     if (e instanceof SheetPhotoQuotaError) {
-      return NextResponse.json({ error: e.message }, { status: 429 });
+      return NextResponse.json(
+        { error: e.message },
+        { status: 429, headers: { "Retry-After": String(e.retryAfterSec) } },
+      );
     }
     if (e instanceof UploadConfigurationError) {
-      return NextResponse.json({ error: e.message }, { status: 503 });
+      return NextResponse.json({ error: UPLOADS_UNAVAILABLE_MESSAGE }, { status: 503 });
     }
     console.error("[sheet-photos] upload", e);
     return NextResponse.json({ error: "Could not upload photo." }, { status: 500 });

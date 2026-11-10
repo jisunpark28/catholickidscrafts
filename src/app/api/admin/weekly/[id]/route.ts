@@ -14,7 +14,7 @@ export async function PUT(request: Request, { params }: Params) {
   if (error) return error;
 
   const { id } = await params;
-  const parsed = weeklyIssueSchema.safeParse(await request.json());
+  const parsed = weeklyIssueSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
   }

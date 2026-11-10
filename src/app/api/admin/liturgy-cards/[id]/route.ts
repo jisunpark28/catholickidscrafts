@@ -34,7 +34,7 @@ export async function PATCH(request: Request, { params }: Params) {
   if (error) return error;
 
   const { id } = await params;
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
   const parsed = updateSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });

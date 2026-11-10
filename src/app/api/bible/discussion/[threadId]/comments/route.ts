@@ -60,17 +60,20 @@ export async function POST(request: Request, context: RouteContext) {
       }),
     );
 
-    const res = NextResponse.json({
-      comment: {
-        id: comment.id,
-        body: comment.body,
-        authorDisplay: publicAuthorDisplay(comment.isAnonymous, comment.authorLabel),
-        createdAt: comment.createdAt.toISOString(),
-        updatedAt: comment.updatedAt.toISOString(),
-        canEdit: true,
-        canDelete: true,
+    const res = NextResponse.json(
+      {
+        comment: {
+          id: comment.id,
+          body: comment.body,
+          authorDisplay: publicAuthorDisplay(comment.isAnonymous, comment.authorLabel),
+          createdAt: comment.createdAt.toISOString(),
+          updatedAt: comment.updatedAt.toISOString(),
+          canEdit: true,
+          canDelete: true,
+        },
       },
-    });
+      { status: 201 },
+    );
     if (readerKey.type === "owner") {
       await ensureOwnerReaderCookie(res, readerKey.familyAccountId);
     }

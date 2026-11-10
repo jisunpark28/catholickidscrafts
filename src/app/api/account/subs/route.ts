@@ -126,5 +126,5 @@ export async function POST(request: Request) {
   // First child: offer to move the parent's existing Bible memos into this child's Bible.
   const memoImport = count === 0 ? await memoImportOffer(session.familyAccountId).catch(() => null) : null;
 
-  return NextResponse.json({ sub, kidCode: sub.kidCode, ...(memoImport ? { memoImport } : {}) });
+  return NextResponse.json({ sub, kidCode: sub.kidCode, ...(memoImport ? { memoImport } : {}) }, { status: 201 });
 }

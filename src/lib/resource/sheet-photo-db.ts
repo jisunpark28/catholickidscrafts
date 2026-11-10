@@ -15,9 +15,11 @@ export type SheetPhotoRow = {
 };
 
 export class SheetPhotoQuotaError extends Error {
-  constructor(message: string) {
+  retryAfterSec: number;
+  constructor(message: string, retryAfterSec = 86_400) {
     super(message);
     this.name = "SheetPhotoQuotaError";
+    this.retryAfterSec = retryAfterSec;
   }
 }
 

@@ -142,7 +142,10 @@ export function WordFallTypingGame({ wordFilter, customWords, compact = false }:
       return;
     }
     fetch("/api/typing-words")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        return r.json();
+      })
       .then((items: TypingWordItem[]) => {
         if (Array.isArray(items) && items.length > 0) setAllWords(items);
         else setAllWords(DEFAULT_WORDS);
