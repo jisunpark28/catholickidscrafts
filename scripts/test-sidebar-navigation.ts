@@ -52,6 +52,7 @@ async function main() {
   assert.deepEqual(sidebarItems(true).map((item) => item.label), [...labels, "My Binder"]);
   assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "binder")?.href, null, "missing binder must never silently become /account/memos or an invented URL");
   assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "bible")?.href, "/moms-bible/situations", "Mom's Bible opens the situations board first");
+  assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "printables")?.href, "/resource?view=all", "Printables opens /resource?view=all");
   const routes = [
     ["/resource", "", "printables"], ["/resource/example", "", "printables"],
     ["/daily-mass", "", "mass"], ["/mass/participation", "", "mass"],

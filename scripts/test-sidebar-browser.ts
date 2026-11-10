@@ -22,7 +22,7 @@ async function main() {
     const nav = page.getByRole("navigation", { name: "Home", exact: true });
     const labels = ["Printables", "Daily Mass", "Play & Learn", "Mom's Bible", "Q&A Cards", "Prayer"];
     assert.deepEqual((await nav.getByRole("link").allTextContents()).map((label) => label.trim()), labels);
-    assert.equal(await nav.getByRole("link", { name: "Printables", exact: true }).getAttribute("href"), "/resource");
+    assert.equal(await nav.getByRole("link", { name: "Printables", exact: true }).getAttribute("href"), "/resource?view=all");
     assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Printables");
     assert.equal(await nav.locator('a[href="/subscribe"]').count(), 0);
     assert.equal(await nav.getByRole("button", { name: /My Binder/ }).count(), 0);
@@ -105,6 +105,9 @@ async function main() {
     for (const gone of ["/catholic-faith-questions", "/catholic-faith-questions/why-do-we-pray"]) {
       assert.equal((await page.request.get(`${base}${gone}`, { maxRedirects: 0 })).status(), 404, `${gone} is deleted`);
     }
+    await page.goto(`${base}/resource?view=all`, { waitUntil: "networkidle", timeout: 120000 });
+    assert.equal(await nav.getByRole("link", { name: "Printables", exact: true }).getAttribute("href"), "/resource?view=all");
+    assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Printables");
     const destinations = ["/resource", "/daily-mass", "/play", "/bible/read/genesis/1", "/qa-cards", "/prayers", "/liturgy/mass", "/liturgy/sacraments", "/liturgy/saints", "/liturgy/devotions", "/liturgy/ordinary-time", "/liturgy/advent", "/liturgy/christmas-time", "/liturgy/lent", "/liturgy/paschal-triduum", "/liturgy/easter-time"];
     for (const destination of destinations) {
       const result = await page.request.get(`${base}${destination}`, { timeout: 120000 });

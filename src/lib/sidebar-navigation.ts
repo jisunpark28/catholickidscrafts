@@ -2,7 +2,7 @@
 export type SidebarIcon = "printables" | "mass" | "play" | "bible" | "questions" | "prayer" | "binder";
 export type SidebarItem = { id: SidebarIcon; label: string; href: string | null; separator?: boolean; plus?: boolean };
 export const SIDEBAR_ITEMS: readonly SidebarItem[] = [
-  { id: "printables", label: "Printables", href: "/resource" },
+  { id: "printables", label: "Printables", href: "/resource?view=all" },
   { id: "mass", label: "Daily Mass", href: "/daily-mass" },
   { id: "play", label: "Play & Learn", href: "/play" },
   { id: "bible", label: "Mom's Bible", href: "/moms-bible/situations", separator: true },
