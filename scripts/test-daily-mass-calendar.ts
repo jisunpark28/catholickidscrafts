@@ -8,6 +8,7 @@ import {
   utcWeekday,
 } from "../src/lib/daily-mass/month-grid";
 import { readingRefs } from "../src/lib/daily-mass/reading-refs";
+import { universalisJsonpUrlClient } from "../src/lib/universalis-client";
 
 function cells(year: number, month: number) {
   return monthGrid(year, month).filter((cell): cell is NonNullable<typeof cell> => cell !== null);
@@ -87,5 +88,16 @@ assert.match(view, /GospelTypingSection/);
 assert.match(view, /aria-expanded/);
 assert.match(panel, /bible\.usccb\.org|usccbUrl/);
 assert.match(view, /FaithJournalBanner/);
+
+// Universalis caches jsonpmass.js for days; each day needs its own URL so the browser can't replay an old day.
+assert.equal(
+  universalisJsonpUrlClient("Europe.England", "2026-11-10"),
+  "https://universalis.com/Europe.England/jsonpmass.js?d=20261110",
+);
+const typing = fs.readFileSync("src/components/gospel/GospelTypingSection.tsx", "utf8");
+assert.equal(typing.includes("Select today"), false);
+assert.equal(view.includes("Typing practice uses today's readings"), false);
+assert.match(typing, /dateKey: readingsDateKey/);
+assert.match(view, /useState\(\{ calendar: false, typing: false, journal: false \}\)/);
 
 console.log("test-daily-mass-calendar: ok");

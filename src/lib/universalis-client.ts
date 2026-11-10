@@ -14,8 +14,12 @@ export function universalisCalendarPathClient(): string {
 
 export function universalisJsonpUrlClient(
   calendarPath = universalisCalendarPathClient(),
+  dateKey?: string,
 ): string {
-  return `https://universalis.com/${calendarPath}/jsonpmass.js`;
+  const base = `https://universalis.com/${calendarPath}/jsonpmass.js`;
+  // Universalis serves jsonpmass.js with a ~10-day Cache-Control/Expires, so the browser
+  // would keep replaying an old day. A per-day query string gives each day its own cache entry.
+  return dateKey ? `${base}?d=${dateKey.replace(/-/g, "")}` : base;
 }
 
 export function universalisMassPageUrlClient(
@@ -37,12 +41,12 @@ const JSONP_TIMEOUT_MS = 20_000;
  * Intended fallback when the server cannot reach universalis.com (Vercel/datacenter IPs).
  * Complies with https://universalis.com/n-web.htm — same official JSONP endpoint.
  */
-export function loadUniversalisMassTodayClient(): Promise<UniversalisMassDay> {
+export function loadUniversalisMassTodayClient(dateKey?: string): Promise<UniversalisMassDay> {
   return new Promise((resolve, reject) => {
     const calendarPath = universalisCalendarPathClient();
     const script = document.createElement("script");
     script.async = true;
-    script.src = universalisJsonpUrlClient(calendarPath);
+    script.src = universalisJsonpUrlClient(calendarPath, dateKey);
 
     const cleanup = () => {
       clearTimeout(timeoutId);

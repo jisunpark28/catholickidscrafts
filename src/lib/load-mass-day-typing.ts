@@ -32,7 +32,7 @@ export async function loadMassDayForTyping(
     if (typeof window === "undefined") {
       throw new Error(apiError);
     }
-    const clientDay = await loadUniversalisMassTodayClient();
+    const clientDay = await loadUniversalisMassTodayClient(todayDateKey);
     if (!isAcceptableUniversalisDate(clientDay.date, todayDateKey)) {
       throw new Error(
         `Readings are for ${clientDay.date}. Select today (${todayDateKey}) on your calendar.`,

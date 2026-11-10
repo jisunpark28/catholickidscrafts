@@ -8,70 +8,89 @@ import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
 import { loadMassDayForTyping } from "@/lib/load-mass-day-typing";
 import { typingDraftKey } from "@/lib/typing-draft-keys";
-import { universalisMassPageUrlClient } from "@/lib/universalis-client";
-import type { UniversalisMassDay } from "@/lib/universalis-parse";
 import type { ReadingKind } from "@/types/mass";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
-const GOSPEL_READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
+const READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
   { kind: "gospel", label: "Gospel" },
   { kind: "first_reading", label: "1st Reading" },
+  { kind: "psalm", label: "Psalm" },
   { kind: "second_reading", label: "2nd Reading" },
 ];
 
+/** Reading texts for one date, as the typing section uses them. */
+export type TypingDay = {
+  date: string;
+  readings: Array<{ kind: ReadingKind | string; label: string; text?: string }>;
+  copyrightNotice?: string;
+  /** Where the reading text comes from: Universalis (today) or the USCCB readings feed. */
+  source: "universalis" | "usccb";
+};
+
 type Props = {
+  /** Device date. Today's readings come from Universalis, as before. */
   todayDate: string;
+  /** Day picked on the calendar; its readings are typed and its sticker is saved. */
   focusDate: string;
+  /** Text for `focusDate` from the USCCB readings feed (already loaded by the page), if it has that day. */
+  fallbackDay?: TypingDay | null;
+  /** Official readings page for `focusDate`, shown when no text is available. */
+  usccbUrl: string;
   onCompleted: (dateKey: string) => void;
   /** Optional control (e.g. a collapse arrow) at the right of the section heading. */
   headerEnd?: ReactNode;
-  /** Optional content below the heading, e.g. a note when typing is not available. */
-  children?: ReactNode;
 };
 
-export function GospelTypingSection({ todayDate, focusDate, onCompleted, headerEnd, children }: Props) {
-  const [day, setDay] = useState<UniversalisMassDay | null>(null);
+function hasText(day: TypingDay | null | undefined): day is TypingDay {
+  return Boolean(day?.readings.some((reading) => reading.text?.trim()));
+}
+
+function shortDate(dateKey: string): string {
+  return new Intl.DateTimeFormat("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: "UTC" }).format(
+    new Date(`${dateKey}T12:00:00Z`),
+  );
+}
+
+export function GospelTypingSection({ todayDate, focusDate, fallbackDay, usccbUrl, onCompleted, headerEnd }: Props) {
+  const isToday = focusDate === todayDate;
+  const [day, setDay] = useState<TypingDay | null>(isToday ? null : hasText(fallbackDay) ? fallbackDay : null);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(isToday);
   const siteCopy = useSiteCopy();
   const [stickerError, setStickerError] = useState("");
   const [stickerSaved, setStickerSaved] = useState(false);
   const [needsSignIn, setNeedsSignIn] = useState(false);
 
-  const canType = focusDate === todayDate;
-  const readingsDateKey = day?.date ?? todayDate;
-
   const loadToday = useCallback(async () => {
-    if (!canType) return;
+    if (!isToday) return;
     setLoading(true);
-    setError("");
     try {
-      setDay(await loadMassDayForTyping(todayDate));
-    } catch (e) {
-      setDay(null);
-      setError(e instanceof Error ? e.message : "Could not load readings");
+      const universalis = await loadMassDayForTyping(todayDate);
+      setDay({ date: todayDate, readings: universalis.readings, copyrightNotice: universalis.copyrightNotice, source: "universalis" });
+    } catch {
+      // Universalis unreachable or still on another day: use the USCCB text for today when the feed has it.
+      setDay(hasText(fallbackDay) ? fallbackDay : null);
     } finally {
       setLoading(false);
     }
-  }, [canType, todayDate]);
+  }, [fallbackDay, isToday, todayDate]);
 
   useEffect(() => {
     void loadToday();
   }, [loadToday]);
 
+  const readingsDateKey = day?.date ?? focusDate;
+
   useEffect(() => {
     setStickerSaved(false);
     setNeedsSignIn(false);
     setStickerError("");
-  }, [todayDate, readingKind, readingsDateKey]);
+  }, [readingKind, readingsDateKey]);
 
   const availableKinds = useMemo(() => {
-    if (!day) return GOSPEL_READING_OPTIONS.map((o) => o.kind);
-    return GOSPEL_READING_OPTIONS.filter((o) =>
-      day.readings.some((r) => r.kind === o.kind && r.text?.trim()),
-    ).map((o) => o.kind);
+    if (!day) return READING_OPTIONS.map((o) => o.kind);
+    return READING_OPTIONS.filter((o) => day.readings.some((r) => r.kind === o.kind && r.text?.trim())).map((o) => o.kind);
   }, [day]);
 
   useEffect(() => {
@@ -80,8 +99,13 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted, headerE
     }
   }, [availableKinds, readingKind]);
 
-  const reading = day?.readings.find((r) => r.kind === readingKind);
+  const reading = day?.readings.find((r) => r.kind === readingKind && r.text?.trim());
   const readingText = reading?.text?.trim() ?? "";
+  // Universalis drafts keep the original key so saved drafts carry over; USCCB text gets its own key.
+  const draftKey =
+    day?.source === "usccb"
+      ? typingDraftKey.gospelReading(readingsDateKey, `${readingKind}:usccb`)
+      : typingDraftKey.gospelReading(readingsDateKey, readingKind);
 
   const unlockSticker = useCallback(
     async (accuracy: number) => {
@@ -90,7 +114,7 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted, headerE
       const res = await fetch("/api/gospel/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dateKey: todayDate, typingAccuracy: accuracy }),
+        body: JSON.stringify({ dateKey: readingsDateKey, typingAccuracy: accuracy }),
       });
       if (res.status === 401) {
         setNeedsSignIn(true);
@@ -103,15 +127,15 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted, headerE
         throw new Error(message);
       }
       setStickerSaved(true);
-      onCompleted(todayDate);
+      onCompleted(readingsDateKey);
     },
-    [todayDate, onCompleted],
+    [readingsDateKey, onCompleted],
   );
 
   const completionMessage = stickerSaved ? (
     <p>
-      Your praise sticker for today was added to My Reading Calendar (
-      {reading?.label ?? "reading"}).
+      Your praise sticker for {readingsDateKey === todayDate ? "today" : shortDate(readingsDateKey)} was added to your
+      calendar ({reading?.label ?? "reading"}).
     </p>
   ) : needsSignIn ? (
     <p>
@@ -126,47 +150,40 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted, headerE
     </p>
   ) : null;
 
+  const heading = isToday ? "Today's Readings" : `Readings for ${shortDate(focusDate)}`;
+
   return (
     <HubTypingWidth wide className="space-y-4">
       {headerEnd ? (
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-            Today&apos;s Readings
-          </h2>
+          <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">{heading}</h2>
           {headerEnd}
         </div>
       ) : (
-        <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-          Today&apos;s Readings
-        </h2>
+        <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">{heading}</h2>
       )}
-      {children}
 
-      {canType && loading && (
+      {loading && (
         <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-[var(--color-border)]">
-          <p className="text-sm text-[var(--color-muted)] animate-pulse">Loading today&apos;s readings…</p>
+          <p className="animate-pulse text-sm text-[var(--color-muted)]">Loading readings…</p>
         </div>
       )}
-      {canType && error && (
+
+      {!loading && !hasText(day) && (
         <p className={`${HOME_HUB_PANEL_CLASS} bg-white text-sm text-[var(--color-ink)]`}>
-          {error} Open{" "}
-          <a
-            href={universalisMassPageUrlClient()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold text-[var(--color-link)]"
-          >
-            Universalis
-          </a>{" "}
-          for today&apos;s readings.
+          Readings aren&apos;t available for this day yet.{" "}
+          <a href={usccbUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-[var(--color-link)]">
+            Read on USCCB
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </p>
       )}
 
-      {canType && day && !loading && !error && (
+      {!loading && hasText(day) && (
         <>
           <div className="flex w-full max-w-full items-end justify-between gap-4">
             <div className="flex min-w-0 flex-wrap gap-2">
-              {GOSPEL_READING_OPTIONS.map((opt) => {
+              {READING_OPTIONS.map((opt) => {
                 const available = availableKinds.includes(opt.kind);
                 const active = readingKind === opt.kind;
                 return (
@@ -198,35 +215,20 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted, headerE
 
           {readingText ? (
             <PassageTypingGame
-              key={`${readingsDateKey}-${readingKind}`}
+              key={`${readingsDateKey}-${readingKind}-${day.source}`}
               text={readingText}
               title={reading?.label ?? "Typing practice"}
-              draftKey={typingDraftKey.gospelReading(readingsDateKey, readingKind)}
+              draftKey={draftKey}
               accuracyThreshold={BIBLE_STICKER_ACCURACY_THRESHOLD}
               onStickerUnlock={unlockSticker}
               completionMessage={completionMessage}
               hideInstructions
               appearance="gospel"
             />
-          ) : (
-            <p className={`${HOME_HUB_PANEL_CLASS} bg-white`}>
-              No text is available for this reading today. Try another reading or open{" "}
-              <a
-                href={day.pageUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-[var(--color-link)]"
-              >
-                Universalis
-              </a>
-              .
-            </p>
-          )}
+          ) : null}
 
           {stickerError && <p className="text-sm text-red-600">{stickerError}</p>}
-          {day.copyrightNotice && (
-            <p className="text-xs text-[var(--color-muted)]">{day.copyrightNotice}</p>
-          )}
+          {day.copyrightNotice && <p className="text-xs text-[var(--color-muted)]">{day.copyrightNotice}</p>}
         </>
       )}
     </HubTypingWidth>
