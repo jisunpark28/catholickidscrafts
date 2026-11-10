@@ -61,7 +61,6 @@ export function GospelTypingSection({ todayDate, focusDate, readingRefs, usccbUr
   const offset = daysBetween(todayDate, focusDate);
   // Universalis serves today and the next week only; earlier and later days show references instead.
   const supported = offset >= 0 && offset <= UNIVERSALIS_DAYS_AHEAD;
-  const isFuture = offset > 0;
   const [day, setDay] = useState<TypingDay | null>(null);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
   const [loading, setLoading] = useState(supported);
@@ -95,7 +94,6 @@ export function GospelTypingSection({ todayDate, focusDate, readingRefs, usccbUr
 
   useEffect(() => {
     setStickerSaved(false);
-    setFutureDone(false);
     setNeedsSignIn(false);
     setStickerError("");
   }, [readingKind, readingsDateKey]);
@@ -114,17 +112,11 @@ export function GospelTypingSection({ todayDate, focusDate, readingRefs, usccbUr
   const reading = day?.readings.find((r) => r.kind === readingKind && r.text?.trim());
   const readingText = reading?.text?.trim() ?? "";
   const draftKey = typingDraftKey.gospelReading(readingsDateKey, readingKind);
-  const [futureDone, setFutureDone] = useState(false);
 
   const unlockSticker = useCallback(
     async (accuracy: number) => {
       setStickerError("");
       setNeedsSignIn(false);
-      if (isFuture) {
-        // Stickers belong to the day itself; practising ahead is fine, but nothing is saved yet.
-        setFutureDone(true);
-        return;
-      }
       const res = await fetch("/api/gospel/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -143,12 +135,10 @@ export function GospelTypingSection({ todayDate, focusDate, readingRefs, usccbUr
       setStickerSaved(true);
       onCompleted(readingsDateKey);
     },
-    [isFuture, readingsDateKey, onCompleted],
+    [readingsDateKey, onCompleted],
   );
 
-  const completionMessage = futureDone ? (
-    <p>Well done! Come back on {shortDate(readingsDateKey)} to type it again and earn that day&apos;s sticker.</p>
-  ) : stickerSaved ? (
+  const completionMessage = stickerSaved ? (
     <p>
       Your praise sticker for {readingsDateKey === todayDate ? "today" : shortDate(readingsDateKey)} was added to your
       calendar ({reading?.label ?? "reading"}).
