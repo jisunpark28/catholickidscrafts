@@ -177,7 +177,7 @@ export function GospelReadingCalendar({
                 {day}
               </span>
               <div className="mt-1 flex flex-1 items-start justify-center">
-                {signedIn && !isFuture ? (
+                {signedIn && (!isFuture || isDone) ? (
                   <GospelPraiseSticker completed={isDone} size="sm" />
                 ) : (
                   <span

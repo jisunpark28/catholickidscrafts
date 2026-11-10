@@ -1,5 +1,5 @@
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
-import { parseDateParam, todayUniversalis, toDateKey } from "@/lib/dates";
+import { parseDateParam, todayInTimeZone, toDateKey } from "@/lib/dates";
 import { attachGuestProgressIfAny, clearGuestProgressCookie } from "@/lib/bible/progress";
 import { getReaderKey } from "@/lib/bible/reader";
 import { ensureOwnerReaderCookie } from "@/lib/family-auth";
@@ -8,7 +8,10 @@ import {
   isSignedInReader,
   saveGospelDayProgress,
 } from "@/lib/gospel/progress";
+import { UNIVERSALIS_DAYS_AHEAD } from "@/lib/universalis-client";
 import { NextResponse } from "next/server";
+
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -51,14 +54,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "dateKey must be YYYY-MM-DD" }, { status: 400 });
   }
 
-  // Any day picked on the Daily Mass calendar can earn its own sticker. Only days after
-  // "today" are refused; one extra day covers devices ahead of UTC (e.g. Asia, Oceania).
-  const latest = new Date(todayUniversalis().getTime() + 24 * 60 * 60 * 1000);
+  // Stickers can be earned for days that have Universalis text to type: today (Toronto)
+  // through UNIVERSALIS_DAYS_AHEAD days ahead. One extra day on each side covers devices
+  // whose local date differs from Toronto's (e.g. Hawaii late evening, Asia, Oceania).
   const parsed = parseDateParam(dateKey);
-  if (!parsed || dateKey > toDateKey(latest)) {
+  const torontoToday = todayInTimeZone("America/Toronto").getTime();
+  const earliest = toDateKey(new Date(torontoToday - DAY_MS));
+  const latest = toDateKey(new Date(torontoToday + (UNIVERSALIS_DAYS_AHEAD + 1) * DAY_MS));
+  if (!parsed || dateKey < earliest || dateKey > latest) {
     return NextResponse.json(
-      { error: "Praise stickers can't be saved for a future day." },
-      { status: 403 },
+      {
+        error: `Praise stickers can be saved for today's readings and the next ${UNIVERSALIS_DAYS_AHEAD} days.`,
+      },
+      { status: 400 },
     );
   }
 
