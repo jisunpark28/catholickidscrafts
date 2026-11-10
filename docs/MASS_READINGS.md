@@ -8,7 +8,7 @@ Operator reference for **catholickidscrafts.com** `/mass` and related APIs.
 |------|----------------|---------------------------|
 | **Evangelizo Reader API** | 메타데이터·인용; 전문 재게시는 USCCB/CCD 허가 필요 | **`/mass` 달력**: 전례일 **제목**만 표시. API는 서버에서 호출. |
 | **USCCB / Living with Christ / GoodNews** | 본문은 각 공식 사이트 저작권 | **`/mass`**: 외부 링크만 (본문 HTML에 표시 안 함). |
-| **USCCB RSS** | 비유료 사이트 RSS 표시 허용 ([RSS 안내](https://www.usccb.org/subscribe/rss)) | 공개 HTML에는 미표시. `GET /api/mass/[date]`가 RSS 본문을 JSON으로 줄 수 있음(프론트 미사용). |
+| **USCCB RSS** | 비유료 사이트 RSS 표시 허용 ([RSS 안내](https://www.usccb.org/subscribe/rss)) | 공개 HTML·API에는 본문 미제공(USCCB 링크만). |
 | **Evangelizo 전문 재게시** | 운영자 책임 | `MASS_REPUBLISH_EVANGELIZO=true` 일 때만 (`fetchMassDay`). 기본 **off**. |
 | **Universalis JSONP** | [Webmasters terms](https://universalis.com/n-web.htm) | **Typing → Today’s Bible**만: **오늘** 본문 on-site + 저작권 문구 + Universalis 링크. USCCB와 다른 역본/역. |
 
@@ -83,28 +83,27 @@ See table above. **No Vatican daily-Gospel open API.** **USCCB RSS** is the only
 
 ## Typing game — Universalis JSONP (Today's Bible)
 
-The **Play → Typing → Today's Bible** mode loads **today only** via Universalis’s free [JSONP service for webmasters](https://universalis.com/n-web.htm) ([technical notes](https://universalis.com/n-jsonp.htm)).
+The **Play → Typing → Today's Bible** mode loads **today to 7 days ahead** in the browser (client-side JSONP, `src/lib/universalis-client.ts`) via Universalis’s free [JSONP service for webmasters](https://universalis.com/n-web.htm) ([technical notes](https://universalis.com/n-jsonp.htm)).
 
 | Requirement (Universalis) | How this site complies |
 |---------------------------|-------------------------|
-| Do not scrape/copy-paste pages | Server fetches official `jsonpmass.js` only |
+| Do not scrape/copy-paste pages | Browser loads official dated `jsonpmass.js` only; no server-side fetching |
 | Link to Universalis | UI links to `https://universalis.com/…/mass.htm` |
-| Keep copyright notice visible | API returns `copyrightNotice`; typing UI shows it under the passage |
+| Keep copyright notice visible | JSONP payload's `copyrightNotice` is shown under the passage in the typing UI |
 
-Default calendar: `Europe.England` (ICEL / ESV-CE texts on Universalis). Override with `UNIVERSALIS_CALENDAR_PATH` (same path segment as in the JSONP URL).
+Default calendar: `Europe.England` (ICEL / ESV-CE texts on Universalis). Override with `NEXT_PUBLIC_UNIVERSALIS_CALENDAR_PATH` (same path segment as in the JSONP URL).
 
 **Not the same as USCCB:** Universalis texts follow the calendar/translation configured on Universalis (e.g. England), not the U.S. Lectionary on bible.usccb.org. Mass hub (`/mass`) uses USCCB, Living with Christ & GoodNews **links only**.
 
 | File | Role |
 |------|------|
-| `src/lib/universalis.ts` | Fetch & parse JSONP → typing `MassReading[]` |
-| `src/app/api/universalis-readings/[date]/route.ts` | Today-only API for typing |
+| `src/lib/universalis-client.ts` | Client-side JSONP loader for typing (today to 7 days ahead) |
 
 ## Implementation in this repo
 
 | File | Role |
 |------|------|
-| `src/lib/usccb-rss.ts` | Parse USCCB RSS (used by `fetchMassDay` / API, not public `/mass` HTML) |
+| `src/lib/usccb-rss.ts` | Parse USCCB RSS (used by `fetchMassDay`, not public `/mass` HTML) |
 | `src/lib/mass-source.ts` | `fetchMassDay`, calendar summaries, footer attribution |
 | `src/lib/evangelizo.ts` | Calendar titles; optional republish when env flag set |
 | `src/lib/scripture-links.ts` | Living with Christ & GoodNews outbound URLs |
