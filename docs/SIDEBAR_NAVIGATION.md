@@ -2,7 +2,7 @@
 
 ## Existing destinations
 
-- Printables: `/resource` (display-name change only; no Resource route renamed).
+- Printables: `/resource?view=all` (display-name change only; no Resource route renamed).
 - Daily Mass: `/daily-mass`.
 - Play & Learn: `/play` (including nested games; merged #318 full-width canvas is retained).
 - Mom's Bible: `/moms-bible/situations`, the same entry used by the homepage Mom's Bible feature. Direct reader URLs such as `/bible/read/genesis/1` stay valid. Reader quick links retain Today's Gospel and the existing Genesis/Matthew book hubs, plus the situations board. No deleted OT/NT routes are restored.

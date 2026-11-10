@@ -116,7 +116,7 @@ async function main() {
     assert.equal(reader?.status(), 200);
     assert.equal(new URL(page.url()).pathname, "/bible/read/genesis/1", "direct reader URL stays available");
     assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Mom's Bible");
-    for (const [route, label] of [["/play", "Play & Learn"], ["/resource", "Printables"], ["/daily-mass", "Daily Mass"]]) {
+    for (const [route, label] of [["/play", "Play & Learn"], ["/resource", "Printables"], ["/resource?view=all", "Printables"], ["/daily-mass", "Daily Mass"]]) {
       await page.setViewportSize({ width: 1440, height: 1000 });
       const result = await page.goto(`${base}${route}`, { waitUntil: "networkidle", timeout: 120000 });
       assert.equal(result?.status(), 200); assert.equal(await nav.count(), 1);
