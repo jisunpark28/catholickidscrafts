@@ -81,7 +81,10 @@ assert.equal(view.includes("daily_mass.sources"), false);
 assert.equal(panel.includes("Family talk questions written by CatholicKidsCrafts"), false);
 assert.equal(panel.includes("links only"), false);
 assert.match(panel, /\/daily-mass\?date=/);
-assert.match(panel, /href="\/gospel"/);
+assert.match(panel, /GospelReadingCalendar/);
+assert.match(panel, /deriveVestmentColor/);
+assert.match(view, /GospelTypingSection/);
+assert.match(view, /aria-expanded/);
 assert.match(panel, /bible\.usccb\.org|usccbUrl/);
 assert.match(view, /FaithJournalBanner/);
 

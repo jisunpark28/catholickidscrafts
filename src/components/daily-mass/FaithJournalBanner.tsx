@@ -11,7 +11,7 @@ import {
   type JournalEntry,
 } from "@/lib/daily-mass/faith-journal-shared";
 import Link from "next/link";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 type Props = {
   dateKey: string;
@@ -21,6 +21,8 @@ type Props = {
   lookFor: string;
   lookColorHex: string;
   journal: FaithJournalState;
+  /** Optional control (e.g. a collapse arrow) at the right of the title row. */
+  headerEnd?: ReactNode;
 };
 
 type Notice = "saved" | "signin" | "plus" | "noanchor" | "error" | null;
@@ -57,7 +59,7 @@ function firstSentence(text: string): string {
 }
 
 /** Daily Mass "Our Faith Journal": one question of the week and one line to save what the child said. */
-export function FaithJournalBanner({ dateKey, gospelLabel, readHref, questions, lookFor, lookColorHex, journal }: Props) {
+export function FaithJournalBanner({ dateKey, gospelLabel, readHref, questions, lookFor, lookColorHex, journal, headerEnd }: Props) {
   const copy = useSiteCopy();
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
   const baseId = useId();
@@ -143,6 +145,7 @@ export function FaithJournalBanner({ dateKey, gospelLabel, readHref, questions, 
           <span aria-hidden>✍️ </span>
           {t("daily_mass.journal.title", "Our Faith Journal")}
         </h2>
+        {headerEnd ? <div className={`ml-auto${gospelLabel ? " sm:order-last sm:ml-0" : ""}`}>{headerEnd}</div> : null}
         {gospelLabel ? (
           <span className="whitespace-nowrap rounded-full border border-[#f5d9bf] bg-white px-2.5 py-0.5 text-[0.78em] font-bold text-[#b84a00] sm:ml-auto">
             {gospelLabel} ·{" "}

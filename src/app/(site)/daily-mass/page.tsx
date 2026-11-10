@@ -107,7 +107,7 @@ export default async function DailyMassPage({
   const gospelCitation = readings.find((reading) => reading.kind === "gospel")?.citation;
   const journalCitation = familyTalk?.gospel ?? gospelCitation;
   const passage = parseGospelCitation(journalCitation);
-  const gospelReadHref = passage ? `/bible/read/${passage.bookSlug}/${passage.chapter}` : "/gospel";
+  const gospelReadHref = passage ? `/bible/read/${passage.bookSlug}/${passage.chapter}` : "/daily-mass";
   let journal = GUEST_JOURNAL;
   try {
     journal = await loadFaithJournal(journalCitation);
@@ -126,7 +126,7 @@ export default async function DailyMassPage({
           dateKey={dateKey}
           explicitDate={Boolean(requested)}
           displayDate={formatDisplayDate(date)}
-          dayTitle={formatLiturgicalTitleDisplay(summary.liturgicalTitle) || season.name}
+          dayTitle={formatLiturgicalTitleDisplay(summary.liturgicalTitle)}
           seasonName={season.name}
           seasonColor={season.color}
           memorial={summary.rank === "ferial" ? firstSaint(summary.saint) : undefined}

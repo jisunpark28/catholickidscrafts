@@ -43,4 +43,4 @@ pnpm exec tsx scripts/test-csp.ts
 curl -sI http://localhost:3000/ | grep -i content-security-policy
 ```
 
-Expect `content-security-policy:` and no `content-security-policy-report-only`. Walk home, Daily Mass, a YouTube resource, `/play/church`, `/play/hangman`, `/play/face-to-emoji`, `/bible/gospel`, `/account/login`, `/admin/login`. Console should not show blocking CSP errors.
+Expect `content-security-policy:` and no `content-security-policy-report-only`. Walk home, Daily Mass, a YouTube resource, `/play/church`, `/play/hangman`, `/play/face-to-emoji`, `/account/login`, `/admin/login`. Console should not show blocking CSP errors.

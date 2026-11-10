@@ -352,7 +352,7 @@ export function MyMemosClient({
           <p className="mt-1 text-sm text-[var(--color-muted)]">
             Select verses on a Bible chapter page to save a memo, just for you or shared with your family.
           </p>
-          <Link href="/bible/gospel" className={`${btnPrimary} mt-4 inline-block px-5 py-2`}>
+          <Link href="/bible/matthew" className={`${btnPrimary} mt-4 inline-block px-5 py-2`}>
             Open the Bible
           </Link>
         </div>

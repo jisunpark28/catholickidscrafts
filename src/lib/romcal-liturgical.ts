@@ -13,6 +13,7 @@ type RomcalEntry = {
   moment: string;
   type: string;
   name: string;
+  data?: { meta?: { liturgicalColor?: { key?: string } } };
 };
 
 const yearIndexCache = new Map<number, Map<string, RomcalEntry>>();
@@ -67,6 +68,17 @@ export function getRomcalDaySummary(date: Date): MassDaySummary | null {
     date: key,
     liturgicalTitle,
     rank: resolvedRank,
+  };
+}
+
+/** Romcal's celebration type (e.g. MEMORIAL, OPT_MEMORIAL), name and color key for a date. */
+export function getRomcalDayHint(date: Date): { type: string; name: string; colorKey: string } | null {
+  const entry = getYearIndex(date.getUTCFullYear()).get(toDateKey(date));
+  if (!entry) return null;
+  return {
+    type: (entry.type ?? "").toUpperCase(),
+    name: entry.name?.trim() ?? "",
+    colorKey: (entry.data?.meta?.liturgicalColor?.key ?? "").toUpperCase(),
   };
 }
 

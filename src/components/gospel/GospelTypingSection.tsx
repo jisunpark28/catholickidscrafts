@@ -12,7 +12,7 @@ import { universalisMassPageUrlClient } from "@/lib/universalis-client";
 import type { UniversalisMassDay } from "@/lib/universalis-parse";
 import type { ReadingKind } from "@/types/mass";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 
 const GOSPEL_READING_OPTIONS: { kind: ReadingKind; label: string }[] = [
   { kind: "gospel", label: "Gospel" },
@@ -24,9 +24,13 @@ type Props = {
   todayDate: string;
   focusDate: string;
   onCompleted: (dateKey: string) => void;
+  /** Optional control (e.g. a collapse arrow) at the right of the section heading. */
+  headerEnd?: ReactNode;
+  /** Optional content below the heading, e.g. a note when typing is not available. */
+  children?: ReactNode;
 };
 
-export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props) {
+export function GospelTypingSection({ todayDate, focusDate, onCompleted, headerEnd, children }: Props) {
   const [day, setDay] = useState<UniversalisMassDay | null>(null);
   const [readingKind, setReadingKind] = useState<ReadingKind>("gospel");
   const [loading, setLoading] = useState(false);
@@ -124,9 +128,19 @@ export function GospelTypingSection({ todayDate, focusDate, onCompleted }: Props
 
   return (
     <HubTypingWidth wide className="space-y-4">
-      <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
-        Today&apos;s Readings
-      </h2>
+      {headerEnd ? (
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
+            Today&apos;s Readings
+          </h2>
+          {headerEnd}
+        </div>
+      ) : (
+        <h2 className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]">
+          Today&apos;s Readings
+        </h2>
+      )}
+      {children}
 
       {canType && loading && (
         <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-[var(--color-border)]">

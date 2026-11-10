@@ -54,7 +54,7 @@ Copy `.env.example` → `.env`. Production uses Neon pooled `DATABASE_URL` + dir
 - Bible progress: `npx prisma migrate deploy` includes `guestId` and `accessCodeLookup` on subs. Guest progress uses `ckc_bible_reader`; signed-in readers use `ckc_reader` JWT.
 - Family accounts: `/account/signup`, `/account/login`, `/reader/login` (Access ID). Optional Google OAuth — `docs/FAMILY_GOOGLE_SIGNIN.md`.
 - Home learn search: `GET /api/learn/search?q=` (resources, curriculum, games, Bible, home pills).
-- Today's Gospel (`/bible/gospel`): My Reading Calendar + daily stickers (`GospelDayProgress`). Sticker art: `public/images/gospel/praise-sticker.png`.
+- Today's Gospel typing (on `/daily-mass`; `/bible/gospel` was removed): reading calendar + daily stickers (`GospelDayProgress`). Sticker art: `public/images/gospel/praise-sticker.png`.
 - Bible text: Douay-Rheims via Latin Prayer public API (`src/lib/bible/latinprayer.ts`). All OT/NT typing uses `modernizeForReading()` (display + typing share one string). Routes under `/bible/*`.
 - **Catholic terminology:** UI copy uses `catholic-book-names` (73-book canon; Korean **마르코** not “마가”). Bible read UI language matches prayers: 10 locales via `?lang=` + shared `prayer-lang` localStorage.
 - Chapter discussion (OT/NT): below typing on `/bible/read/[book]/[chapter]`; migrations `20260622120000_bible_chapter_discussion` + `20260623150000_bible_discussion_tables_recovery`. API routes use `withDiscussionSchemaReady()` (query first; call `ensureDiscussionSchema()` only on missing table/column). `ensureDiscussionSchema()` skips direct DDL when schema is already complete (checked via pooled `DATABASE_URL`). Build still runs `scripts/ensure-bible-discussion-schema.ts`. Signed-in readers post; guests read only.

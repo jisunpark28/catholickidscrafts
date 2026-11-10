@@ -11,7 +11,7 @@ Jisun runs them, on a Neon branch first and then production
 
 Scope: only the Old/New Testament reader (`/bible/read/[book]/[chapter]`, `/bible/[book]`),
 the child sign-in and the parent account pages.
-**Today's Gospel typing (`/bible/gospel`, Universalis, `GospelTypingSection`,
+**Today's Gospel typing (now on `/daily-mass`, Universalis, `GospelTypingSection`,
 `PassageTypingGame`, `GospelDayProgress`, faith journal) does not change.**
 
 ---

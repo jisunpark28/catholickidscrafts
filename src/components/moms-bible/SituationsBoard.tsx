@@ -100,8 +100,8 @@ export function SituationsBoard({ groups }: { groups: BoardGroup[] }) {
           </button>
         ) : null}
       </div>
-      <p className="mb-find__status" aria-live="polite">
-        {words.length ? `${matchCount} of ${total} moments match` : `${total} moments in ${groups.length} groups`}
+      <p className={`mb-find__status${words.length ? "" : " sr-only"}`} aria-live="polite">
+        {words.length ? `${matchCount} of ${total} moments match` : ""}
       </p>
       <div className="mb-situations__groups">
         {groups.map((group, index) => {

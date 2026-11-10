@@ -13,6 +13,16 @@ type Props = {
   onSelectDate?: (dateKey: string) => void;
   /** Collapse control, shown at the top-right of the month header. */
   headerEnd?: ReactNode;
+  /** Day that gets the ring and opens the calendar month. Defaults to today. */
+  selectedDate?: string;
+  /** Let every day be picked (Daily Mass). Default: only today can be picked. */
+  selectAnyDay?: boolean;
+  /** Optional colour for the day number, e.g. the liturgical colour on Daily Mass. */
+  dayMark?: (dateKey: string) => { textHex: string; label: string } | undefined;
+  /** Called when Previous/Next shows another month. */
+  onMonthChange?: (year: number, month: number) => void;
+  /** Shown next to the month label while the parent loads month data. */
+  busy?: boolean;
 };
 
 export function GospelReadingCalendar({
@@ -21,8 +31,14 @@ export function GospelReadingCalendar({
   todayDate,
   onSelectDate,
   headerEnd,
+  selectedDate,
+  selectAnyDay = false,
+  dayMark,
+  onMonthChange,
+  busy = false,
 }: Props) {
-  const today = new Date(`${todayDate}T12:00:00Z`);
+  const ringDate = selectedDate ?? todayDate;
+  const today = new Date(`${ringDate}T12:00:00Z`);
   const [year, setYear] = useState(today.getUTCFullYear());
   const [month, setMonth] = useState(today.getUTCMonth() + 1);
   const [completed, setCompleted] = useState<Set<string>>(() => new Set(initialCompleted));
@@ -68,7 +84,15 @@ export function GospelReadingCalendar({
     }
     setYear(y);
     setMonth(m);
+    onMonthChange?.(y, m);
   }
+
+  useEffect(() => {
+    if (!selectedDate) return;
+    const picked = new Date(`${selectedDate}T12:00:00Z`);
+    setYear(picked.getUTCFullYear());
+    setMonth(picked.getUTCMonth() + 1);
+  }, [selectedDate]);
 
   const firstDow = new Date(Date.UTC(year, month - 1, 1)).getUTCDay();
   const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
@@ -93,7 +117,7 @@ export function GospelReadingCalendar({
             Next
           </button>
           {headerEnd}
-          {loading && <span className="text-xs text-[var(--color-muted)]">Loading…</span>}
+          {(loading || busy) && <span className="text-xs text-[var(--color-muted)]">Loading…</span>}
         </div>
       </div>
 
@@ -117,10 +141,12 @@ export function GospelReadingCalendar({
           const date = new Date(Date.UTC(year, month - 1, day));
           const dateKey = toDateKey(date);
           const isToday = dateKey === todayDate;
+          const isRing = dateKey === ringDate;
           const isDone = signedIn && completed.has(dateKey);
           const isFuture = dateKey > todayDate;
           const isPast = dateKey < todayDate;
-          const canSelect = isToday;
+          const canSelect = selectAnyDay || isToday;
+          const mark = dayMark?.(dateKey);
 
           return (
             <button
@@ -128,17 +154,24 @@ export function GospelReadingCalendar({
               type="button"
               disabled={!canSelect}
               onClick={() => canSelect && onSelectDate?.(dateKey)}
+              aria-pressed={selectAnyDay ? isRing : undefined}
+              aria-label={selectAnyDay ? dayAriaLabel(date, mark?.label) : undefined}
               className={`flex min-h-[3.15rem] flex-col items-center border-b border-r border-[#ece7e1] px-1 py-1 transition sm:min-h-[3.6rem] ${
                 !canSelect ? "cursor-default bg-[#fbfaf8]" : "bg-white hover:bg-[#fdfaf7]"
-              } ${isToday ? "ring-2 ring-inset ring-[#d35400]" : ""}`}
+              } ${isRing ? "ring-2 ring-inset ring-[#d35400]" : ""}`}
             >
               <span
-                className={`text-[11px] font-semibold leading-none sm:text-xs ${
-                  isToday
-                    ? "text-[#d35400]"
-                    : isFuture || isPast
-                      ? "text-[#b0b4b8]"
-                      : "text-[#1c1c1c]"
+                style={mark ? { color: mark.textHex } : undefined}
+                className={`text-[11px] leading-none sm:text-xs ${mark ? "font-bold" : "font-semibold"} ${
+                  mark
+                    ? ""
+                    : isRing || (selectAnyDay && isToday)
+                      ? "text-[#d35400]"
+                      : selectAnyDay
+                        ? "text-[#1c1c1c]"
+                        : isFuture || isPast
+                          ? "text-[#b0b4b8]"
+                          : "text-[#1c1c1c]"
                 }`}
               >
                 {day}
@@ -171,4 +204,15 @@ export function GospelReadingCalendar({
       )}
     </section>
   );
+}
+
+function dayAriaLabel(date: Date, colorLabel?: string): string {
+  const label = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+  return colorLabel ? `${label}, ${colorLabel}` : label;
 }

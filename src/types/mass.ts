@@ -18,6 +18,8 @@ export type MassDaySummary = {
   saint?: string;
   /** Optional feast label from Evangelizo (type=feast). */
   feast?: string;
+  /** Liturgical color for the day (month calendar only), from Romcal rank/color + vestment rules. */
+  color?: "green" | "violet" | "white" | "red" | "rose";
 };
 
 export type MassDay = MassDaySummary & {

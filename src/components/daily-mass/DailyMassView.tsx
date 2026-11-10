@@ -2,6 +2,7 @@
 
 import { DailyMassCalendarPanel } from "@/components/daily-mass/DailyMassCalendarPanel";
 import { FaithJournalBanner } from "@/components/daily-mass/FaithJournalBanner";
+import { GospelTypingSection } from "@/components/gospel/GospelTypingSection";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { deviceDateKey } from "@/lib/daily-mass/device-date";
 import type { FaithJournalState } from "@/lib/daily-mass/faith-journal-shared";
@@ -10,7 +11,7 @@ import type { ReadingRef } from "@/lib/daily-mass/reading-refs";
 import type { VestmentColorInfo } from "@/lib/daily-mass/vestment-color";
 import type { LiturgicalSeasonInfo, MonthCalendar } from "@/types/mass";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
 
 export type DailyMassReadingRef = ReadingRef;
 
@@ -36,6 +37,67 @@ export type DailyMassViewProps = {
   calendarError?: boolean;
 };
 
+function Chevron({ up }: { up: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      className={`h-4 w-4 ${up ? "" : "rotate-180"}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden
+    >
+      <path d="M5 12.5 10 7.5 15 12.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ArrowToggle({ open, controls, label, onToggle }: { open: boolean; controls: string; label: string; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      className="dm-pill inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#6b7280] hover:bg-white hover:text-[#1c1c1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]"
+      aria-expanded={open}
+      aria-controls={controls}
+      onClick={onToggle}
+    >
+      <Chevron up={open} />
+      <span className="sr-only">{open ? `Hide ${label}` : `Show ${label}`}</span>
+    </button>
+  );
+}
+
+/** One full-width Daily Mass block. Collapsed shows a slim bar; the content stays mounted so typing is kept. */
+function Collapsible({
+  label,
+  title,
+  open,
+  onToggle,
+  children,
+}: {
+  label: string;
+  title: ReactNode;
+  open: boolean;
+  onToggle: () => void;
+  children: (toggle: ReactNode) => ReactNode;
+}) {
+  const id = useId();
+  const toggle = <ArrowToggle open={open} controls={id} label={label} onToggle={onToggle} />;
+  return (
+    <section className="dm-section w-full min-w-0" aria-label={label}>
+      {open ? null : (
+        <div className="dm-card flex w-full items-center justify-between gap-3 rounded-2xl border border-[#e8e0d6] bg-white px-4 py-2.5 shadow-sm sm:px-5">
+          <span className="dm-ink text-[0.95em] font-semibold text-[#1c1c1c]">{title}</span>
+          {toggle}
+        </div>
+      )}
+      <div id={id} hidden={!open} className="w-full min-w-0">
+        {children(toggle)}
+      </div>
+    </section>
+  );
+}
+
 const SIZES = [0.9, 1, 1.1, 1.25, 1.4] as const;
 const STORE_KEY = "ckc.dailyMass.reader";
 
@@ -48,6 +110,11 @@ export function DailyMassView(props: DailyMassViewProps) {
   const router = useRouter();
   const [sizeIdx, setSizeIdx] = useState(1);
   const [dark, setDark] = useState(false);
+  const [today, setToday] = useState<string | null>(null);
+  const [signedIn, setSignedIn] = useState(props.journal.signedIn);
+  const [stickerVersion, setStickerVersion] = useState(0);
+  const [open, setOpen] = useState({ calendar: true, typing: true, journal: true });
+  const flip = (key: keyof typeof open) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
   useEffect(() => {
     try {
@@ -58,10 +125,20 @@ export function DailyMassView(props: DailyMassViewProps) {
       /* ignore */
     }
     const local = deviceDateKey();
+    setToday(local);
     if (!props.explicitDate && local !== props.dateKey) {
       router.replace(`/daily-mass?date=${local}`);
     }
   }, [props.explicitDate, props.dateKey, router]);
+
+  useEffect(() => {
+    setSignedIn(props.journal.signedIn);
+  }, [props.journal.signedIn]);
+
+  const onTypingCompleted = useCallback(() => {
+    setSignedIn(true);
+    setStickerVersion((value) => value + 1);
+  }, []);
 
   function save(next: { size: number; dark: boolean }) {
     try {
@@ -85,7 +162,7 @@ export function DailyMassView(props: DailyMassViewProps) {
   ];
 
   return (
-    <div className={`daily-mass-reader mx-auto w-full min-w-0 max-w-3xl ${dark ? "dm-dark" : ""}`} style={{ fontSize: `${SIZES[sizeIdx]}rem` }}>
+    <div className={`daily-mass-reader w-full min-w-0 ${dark ? "dm-dark" : ""}`} style={{ fontSize: `${SIZES[sizeIdx]}rem` }}>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
           <h1 className="dm-ink m-0 text-[1.75em] font-bold text-[#2e7d32]">{t("daily_mass.page.title", "Daily Mass")}</h1>
@@ -137,29 +214,56 @@ export function DailyMassView(props: DailyMassViewProps) {
         </div>
       </div>
 
-      <DailyMassCalendarPanel
-        initial={props.calendar}
-        calendarError={Boolean(props.calendarError)}
-        selectedDate={props.dateKey}
-        displayDate={props.displayDate}
-        dayTitle={props.dayTitle}
-        seasonName={props.seasonName}
-        seasonColor={props.seasonColor}
-        memorial={props.memorial}
-        readings={props.readings}
-        usccbUrl={props.usccbUrl}
-      />
+      <div className="flex w-full flex-col gap-6">
+        <Collapsible label="Mass calendar" title={<><span aria-hidden>📅 </span>Mass Calendar</>} open={open.calendar} onToggle={() => flip("calendar")}>
+          {(toggle) => (
+            <DailyMassCalendarPanel
+              initial={props.calendar}
+              calendarError={Boolean(props.calendarError)}
+              selectedDate={props.dateKey}
+              todayDate={today}
+              signedIn={signedIn}
+              stickerVersion={stickerVersion}
+              displayDate={props.displayDate}
+              dayTitle={props.dayTitle}
+              seasonName={props.seasonName}
+              seasonColor={props.seasonColor}
+              memorial={props.memorial}
+              readings={props.readings}
+              usccbUrl={props.usccbUrl}
+              headerEnd={toggle}
+            />
+          )}
+        </Collapsible>
 
-      <div className="mt-5">
-        <FaithJournalBanner
-          dateKey={props.dateKey}
-          gospelLabel={familyTalk?.gospel ?? props.gospelCitation}
-          readHref={props.gospelReadHref}
-          questions={questions}
-          lookFor={lookFor}
-          lookColorHex={color.hex}
-          journal={props.journal}
-        />
+        <Collapsible label="Typing" title={<><span aria-hidden>⌨️ </span>Today&apos;s Readings</>} open={open.typing} onToggle={() => flip("typing")}>
+          {(toggle) =>
+            today ? (
+              <GospelTypingSection todayDate={today} focusDate={props.dateKey} onCompleted={onTypingCompleted} headerEnd={toggle}>
+                {props.dateKey !== today ? (
+                  <p className="dm-muted m-0 text-[0.875em] text-[#4b5563]">
+                    {t("daily_mass.typing.today_only", "Typing practice uses today's readings. Tap Today on the calendar to type them.")}
+                  </p>
+                ) : null}
+              </GospelTypingSection>
+            ) : null
+          }
+        </Collapsible>
+
+        <Collapsible label="Our Faith Journal" title={<><span aria-hidden>✍️ </span>{t("daily_mass.journal.title", "Our Faith Journal")}</>} open={open.journal} onToggle={() => flip("journal")}>
+          {(toggle) => (
+            <FaithJournalBanner
+              dateKey={props.dateKey}
+              gospelLabel={familyTalk?.gospel ?? props.gospelCitation}
+              readHref={props.gospelReadHref}
+              questions={questions}
+              lookFor={lookFor}
+              lookColorHex={color.hex}
+              journal={props.journal}
+              headerEnd={toggle}
+            />
+          )}
+        </Collapsible>
       </div>
     </div>
   );

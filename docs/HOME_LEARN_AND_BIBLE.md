@@ -155,7 +155,7 @@ Access ID format: `CKC-XXXX-XXXX` (crypto random); store bcrypt hash only.
 
 **Bible Reading**
 
-- Today's Gospel → `/bible/gospel`
+- Today's Gospel → `/daily-mass` (`/bible/gospel` was removed)
 - Old Testament → `/bible/old-testament`
 - New Testament → `/bible/new-testament`
 
