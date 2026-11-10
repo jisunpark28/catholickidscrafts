@@ -95,6 +95,31 @@ function clip(s: string, max: number): string {
   return `${(i > 40 ? cut.slice(0, i) : cut).trimEnd()}…`;
 }
 
+export type SaintFactBox = {
+  feast?: string;
+  patron: string[];
+  symbols: string[];
+  story?: string;
+};
+
+/** Fact Box data for a saint page, or null when the card has no patron, symbols or story yet. */
+export function saintFactBox(card: SeoCard): SaintFactBox | null {
+  const patron = (card.patron ?? []).map((p) => p.trim()).filter(Boolean);
+  const symbols = (card.symbols ?? []).map((s) => s.trim()).filter(Boolean);
+  const story = card.story?.trim() || undefined;
+  if (patron.length === 0 && symbols.length === 0 && !story) return null;
+  return { feast: card.when, patron, symbols, story };
+}
+
+/** Meta description for a saint page: the Fact Box story and patronage when present, else the template. */
+export function saintMetaDescription(card: SeoCard): string {
+  const box = saintFactBox(card);
+  if (!box?.story) return saintPageSeo(card).description;
+  const patronBit = box.patron.length > 0 ? ` Patron of ${box.patron.join(", ")}.` : "";
+  const feastBit = box.feast ? ` Feast day: ${box.feast}.` : "";
+  return clip(`${card.title} for kids: ${box.story}${patronBit}${feastBit}`, 155);
+}
+
 export function saintPageSeo(card: SeoCard): CardPageSeo {
   const whenBit = card.when ? ` The Church remembers ${card.title} on ${card.when}.` : "";
   const refBit = card.ref ? ` Scripture on the card: ${card.ref}.` : "";
