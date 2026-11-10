@@ -23,7 +23,7 @@ function StatBlock({
         </div>
         <div>
           <p className="text-3xl font-bold text-[var(--color-ink)]">{pageViews}</p>
-          <p className="mt-1 text-sm text-[var(--color-muted)]">Page views</p>
+          <p className="mt-1 text-sm text-[var(--color-muted)]">Visits</p>
         </div>
       </div>
     </div>

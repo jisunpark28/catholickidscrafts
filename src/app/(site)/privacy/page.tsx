@@ -31,7 +31,7 @@ export default async function PrivacyPage() {
       <h2 className="pt-4 text-xl font-bold">Information we collect</h2>
       <ul className="list-disc space-y-2 pl-6">
         <li>
-          <strong>Usage analytics (aggregated):</strong> Page views and approximate unique visitors
+          <strong>Usage analytics (aggregated):</strong> Visits (browser sessions) and approximate unique visitors
           per calendar day. Operators view totals in <code>/admin</code>; we do not sell this data.
         </li>
         <li>
@@ -70,7 +70,7 @@ export default async function PrivacyPage() {
       <ul className="list-disc space-y-2 pl-6">
         <li>
           <strong>Essential / analytics:</strong> <code>ckc_vid</code> as described above, set via{" "}
-          <code>POST /api/analytics/visit</code> when you change pages on the public site.
+          <code>POST /api/analytics/visit</code> once per browser session on the public site.
         </li>
         <li>
           <strong>Admin session:</strong> Authentication cookies when you sign in at{" "}
