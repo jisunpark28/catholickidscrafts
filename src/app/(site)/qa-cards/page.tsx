@@ -32,7 +32,7 @@ export default async function QaCardsPage() {
     <TestamentPageShell>
       <JsonLd nodes={[breadcrumbNode([{ name: "Q&A Cards", path: "/qa-cards" }])]} />
       <SidebarPagePanel id="qa-cards">
-        <h1 className={`${fredoka.variable} qa-title`}>Q&amp;A Cards</h1>
+        <h1 className={`${fredoka.variable} qa-title text-center`}>Q&amp;A Cards</h1>
         <QaCardsByTopic tabs={tabs} />
       </SidebarPagePanel>
     </TestamentPageShell>

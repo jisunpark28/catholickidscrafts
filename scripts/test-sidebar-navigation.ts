@@ -56,7 +56,7 @@ async function main() {
     ["/resource", "", "printables"], ["/resource/example", "", "printables"],
     ["/daily-mass", "", "mass"], ["/mass/participation", "", "mass"],
     ["/play", "", "play"], ["/play/ten-commandments", "", "play"],
-    ["/bible/genesis", "", "bible"], ["/bible/read/matthew/5", "", "bible"], ["/bible/gospel", "", "bible"], ["/moms-bible/situations", "", "bible"],
+    ["/bible/genesis", "", "bible"], ["/bible/read/matthew/5", "", "bible"], ["/moms-bible/situations", "", "bible"],
     ["/qa-cards", "", "questions"], ["/qa-cards", "#advent", "questions"],
     ["/prayers", "", "prayer"], ["/liturgy/advent", "", "prayer"], ["/liturgy/saints", "", "prayer"],
   ];

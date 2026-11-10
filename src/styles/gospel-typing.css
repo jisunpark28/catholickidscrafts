@@ -61,7 +61,7 @@
   opacity: 0.35;
 }
 
-/* Gospel hub (/bible/gospel) — larger type for desktop and Windows displays */
+/* Gospel typing hub (/daily-mass) — larger type for desktop and Windows displays */
 .gospel-typing--hub {
   display: flex;
   flex-direction: column;

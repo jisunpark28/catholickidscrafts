@@ -34,7 +34,7 @@ async function main() {
     assert.ok(await page.locator(".mb-recs article").count() > 0, "dreams recommendations retained");
     const dreamHref = await page.locator('.mb-recs a[href*="situation=dreams"]').first().getAttribute("href");
     assert.ok(dreamHref?.includes("situation=dreams") && dreamHref.startsWith("/bible/read/"), dreamHref);
-    assert.equal(await page.locator(".mb-find__status").innerText(), `${SITUATION_GROUPS.reduce((sum, group) => sum + group.situations.length, 0)} moments in 4 groups`);
+    assert.equal((await page.locator(".mb-find__status").textContent())?.trim(), "", "no moment count line before a search");
     const boxes = await page.locator(".mb-sgroup").evaluateAll((elements) => elements.map((element) => {
       const box = element.getBoundingClientRect();
       return { top: box.top, bottom: box.bottom, width: box.width };

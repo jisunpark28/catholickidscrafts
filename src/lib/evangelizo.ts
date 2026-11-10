@@ -13,7 +13,8 @@ import type {
 } from "@/types/mass";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
 import { rankFromTitle } from "@/lib/liturgical-calendar";
-import { getRomcalDaySummary, preloadRomcalYear } from "@/lib/romcal-liturgical";
+import { deriveVestmentColor, type VestmentColorId } from "@/lib/daily-mass/vestment-color";
+import { getRomcalDayHint, getRomcalDaySummary, preloadRomcalYear } from "@/lib/romcal-liturgical";
 import { fetchUsccbReadingsForDate, loadUsccbLiturgicalTitleIndex } from "@/lib/usccb-rss";
 
 const EVANGELIZO_BASE = "http://feed.evangelizo.org/v2/reader.php";
@@ -237,6 +238,44 @@ async function resolveMassDaySummary(
   return { date: key, liturgicalTitle: "", rank: "ferial" };
 }
 
+const ROMCAL_COLOR: Record<string, VestmentColorId> = {
+  GREEN: "green",
+  PURPLE: "violet",
+  VIOLET: "violet",
+  WHITE: "white",
+  RED: "red",
+  ROSE: "rose",
+};
+
+/** Celebrations Romcal marks white although the Missal uses red (apostles, evangelists, martyrs). */
+const RED_CELEBRATION = /\b(apostles?|evangelist|martyrs?)\b/i;
+/** Apostle days that do stay white. */
+const WHITE_APOSTLE_DAYS = /conversion of saint paul|chair of saint peter|saint john the apostle/i;
+const CELEBRATION_TYPES = new Set(["SOLEMNITY", "FEAST", "MEMORIAL"]);
+
+/**
+ * Calendar color for one day. Base: Romcal's liturgical color for the date (it knows the
+ * seasons, Holy Week, octaves, Gaudete/Laetare and the day's celebration). Red is applied to
+ * apostle, evangelist and martyr feasts/memorials Romcal leaves white. Without a Romcal entry,
+ * the Daily Mass vestment rules (season + title rank) are used.
+ */
+function monthDayColor(date: Date, summary: MassDaySummary): VestmentColorId {
+  const hint = getRomcalDayHint(date);
+  const base = hint ? ROMCAL_COLOR[hint.colorKey] : undefined;
+  if (hint && base) {
+    if (
+      base === "white" &&
+      CELEBRATION_TYPES.has(hint.type) &&
+      RED_CELEBRATION.test(hint.name) &&
+      !WHITE_APOSTLE_DAYS.test(hint.name)
+    ) {
+      return "red";
+    }
+    return base;
+  }
+  return deriveVestmentColor(summary, getLiturgicalSeason(date)).id;
+}
+
 export async function fetchMonthCalendar(
   year: number,
   month: number,
@@ -255,7 +294,7 @@ export async function fetchMonthCalendar(
     year,
     month,
     season,
-    days: summaries,
+    days: summaries.map((summary, index) => ({ ...summary, color: monthDayColor(days[index]!, summary) })),
     source: MASS_DATA_SOURCE,
   };
 }

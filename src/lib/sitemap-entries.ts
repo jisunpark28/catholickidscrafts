@@ -33,7 +33,7 @@ export const CHILD_SITEMAP_PATHS = [
  */
 const PLAY_ALIAS_SLUGS = new Set(["emoji"]);
 
-/** Indexable public pages that are not generated from data. Excluded on purpose: /gospel (alias of /bible/gospel), /gallery, /newsletter, /unsubscribe and /subscribe/success (noindex), /account/*, /reader/*, /admin/*, /api/* and /print/*. */
+/** Indexable public pages that are not generated from data. Excluded on purpose: /gospel (redirects to /daily-mass), /gallery, /newsletter, /unsubscribe and /subscribe/success (noindex), /account/*, /reader/*, /admin/*, /api/* and /print/*. */
 const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFrequency"], priority: number]> = [
   ["/", "weekly", 1],
   ["/mass", "daily", 0.95],
@@ -43,7 +43,6 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   [MASS_FOR_KIDS_HUB, "monthly", 0.85],
   [VIRTUE_CHALLENGE_HUB, "monthly", 0.85],
   ["/resources", "weekly", 0.85],
-  ["/bible/gospel", "daily", 0.9],
   ["/bible-verses-for-kids", "weekly", 0.85],
   [SAINTS_HUB, "weekly", 0.85],
   ["/recommendations", "weekly", 0.8],

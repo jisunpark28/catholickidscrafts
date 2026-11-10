@@ -49,7 +49,7 @@ type Feature = {
 const FEATURES: Feature[] = [
   {
     id: "gospel",
-    href: "/bible/gospel",
+    href: "/daily-mass",
     image: "/home-features/gospel.webp",
     icon: "📖",
     color: "#d35400",

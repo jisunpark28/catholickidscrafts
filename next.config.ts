@@ -96,7 +96,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/gospel",
-        destination: "/bible/gospel",
+        destination: "/daily-mass",
         permanent: true,
       },
       { source: "/program", destination: "/", permanent: true },

@@ -39,7 +39,7 @@ Site copy (editable in admin **Site text**): *“Text stays on their site—we l
 ### 권장 운영 (미국 중심 사이트 + 한국 확장 대비)
 
 1. **`/mass`**: Evangelizo 전례일 제목 + **USCCB·Living with Christ·GoodNews 외부 링크** (현재 방식 유지).
-2. **`/bible/gospel` 타이핑**: **Universalis JSONP** (웹마스터 약관) 또는 CCD 확인 후 **USCCB RSS** (미국 공식 전례와 동일 텍스트 필요 시).
+2. **`/daily-mass` 타이핑** (구 `/bible/gospel`, 삭제됨): **Universalis JSONP** (웹마스터 약관) 또는 CCD 확인 후 **USCCB RSS** (미국 공식 전례와 동일 텍스트 필요 시).
 3. **한국어**: [missa.cbck.or.kr](https://missa.cbck.or.kr/) **링크** + 주교회의 **저작권 사용 승인** 신청 후에만 on-site 한국어 본문.
 4. **바티칸**: 일일 복음 데이터 소스로 사용하지 않음. 필요 시 Vatican News **위젯**만 별도 페이지에 embed 검토.
 5. **교구 RSS/위젯**: 대부분 뉴스·공지용. 미사 전문은 **소속 주교회의(USCCB/CBCK 등)** 공식 채널 우선.

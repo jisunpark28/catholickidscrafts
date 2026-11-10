@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   ...canonicalForPath("/gospel"),
 };
 
-/** Short URL for Today's Gospel — same page as /bible/gospel */
+/** Short URL for Today's Gospel: typing now lives on /daily-mass */
 export default function GospelShortLinkPage() {
-  redirect("/bible/gospel");
+  redirect("/daily-mass");
 }

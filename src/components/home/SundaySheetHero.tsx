@@ -228,7 +228,7 @@ export function SundaySheetHero({
         </div>
 
         <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          <Link href="/bible/gospel" className="font-semibold text-[var(--color-link)] hover:underline">
+          <Link href="/daily-mass" className="font-semibold text-[var(--color-link)] hover:underline">
             Practice typing today&apos;s Gospel →
           </Link>
           <Link href={seasonHref} className="font-semibold text-[var(--color-link)] hover:underline">
