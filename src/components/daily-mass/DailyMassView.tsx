@@ -2,7 +2,7 @@
 
 import { DailyMassCalendarPanel } from "@/components/daily-mass/DailyMassCalendarPanel";
 import { FaithJournalBanner } from "@/components/daily-mass/FaithJournalBanner";
-import { GospelTypingSection } from "@/components/gospel/GospelTypingSection";
+import { GospelTypingSection, type TypingDay } from "@/components/gospel/GospelTypingSection";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { deviceDateKey } from "@/lib/daily-mass/device-date";
 import type { FaithJournalState } from "@/lib/daily-mass/faith-journal-shared";
@@ -35,6 +35,8 @@ export type DailyMassViewProps = {
   journal: FaithJournalState;
   calendar: MonthCalendar;
   calendarError?: boolean;
+  /** Reading texts for `dateKey` from the USCCB feed, when it has that day. */
+  typingDay?: TypingDay | null;
 };
 
 function Chevron({ up }: { up: boolean }) {
@@ -113,7 +115,8 @@ export function DailyMassView(props: DailyMassViewProps) {
   const [today, setToday] = useState<string | null>(null);
   const [signedIn, setSignedIn] = useState(props.journal.signedIn);
   const [stickerVersion, setStickerVersion] = useState(0);
-  const [open, setOpen] = useState({ calendar: true, typing: true, journal: true });
+  // All three sections start collapsed; content stays mounted (hidden) so typing and stickers keep working.
+  const [open, setOpen] = useState({ calendar: false, typing: false, journal: false });
   const flip = (key: keyof typeof open) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
   useEffect(() => {
@@ -239,13 +242,15 @@ export function DailyMassView(props: DailyMassViewProps) {
         <Collapsible label="Typing" title={<><span aria-hidden>⌨️ </span>Today&apos;s Readings</>} open={open.typing} onToggle={() => flip("typing")}>
           {(toggle) =>
             today ? (
-              <GospelTypingSection todayDate={today} focusDate={props.dateKey} onCompleted={onTypingCompleted} headerEnd={toggle}>
-                {props.dateKey !== today ? (
-                  <p className="dm-muted m-0 text-[0.875em] text-[#4b5563]">
-                    {t("daily_mass.typing.today_only", "Typing practice uses today's readings. Tap Today on the calendar to type them.")}
-                  </p>
-                ) : null}
-              </GospelTypingSection>
+              <GospelTypingSection
+                key={props.dateKey}
+                todayDate={today}
+                focusDate={props.dateKey}
+                fallbackDay={props.typingDay}
+                usccbUrl={props.usccbUrl}
+                onCompleted={onTypingCompleted}
+                headerEnd={toggle}
+              />
             ) : null
           }
         </Collapsible>

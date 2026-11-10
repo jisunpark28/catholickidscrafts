@@ -1,5 +1,5 @@
 import { BIBLE_STICKER_ACCURACY_THRESHOLD } from "@/lib/bible/constants";
-import { todayUniversalis, toDateKey } from "@/lib/dates";
+import { parseDateParam, todayUniversalis, toDateKey } from "@/lib/dates";
 import { attachGuestProgressIfAny, clearGuestProgressCookie } from "@/lib/bible/progress";
 import { getReaderKey } from "@/lib/bible/reader";
 import { ensureOwnerReaderCookie } from "@/lib/family-auth";
@@ -51,10 +51,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "dateKey must be YYYY-MM-DD" }, { status: 400 });
   }
 
-  const todayKey = toDateKey(todayUniversalis());
-  if (dateKey !== todayKey) {
+  // Any day picked on the Daily Mass calendar can earn its own sticker. Only days after
+  // "today" are refused; one extra day covers devices ahead of UTC (e.g. Asia, Oceania).
+  const latest = new Date(todayUniversalis().getTime() + 24 * 60 * 60 * 1000);
+  const parsed = parseDateParam(dateKey);
+  if (!parsed || dateKey > toDateKey(latest)) {
     return NextResponse.json(
-      { error: "Praise stickers are only awarded for today's Gospel." },
+      { error: "Praise stickers can't be saved for a future day." },
       { status: 403 },
     );
   }
