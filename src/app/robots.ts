@@ -12,7 +12,8 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
+      // Longest match wins (Google/Pinterest), so /api/og/ pin images stay fetchable under /api/.
+      allow: ["/", "/api/og/"],
       // /print/ stays crawlable so Google can read its noindex tag.
       // Account, reader, and sheet editor are app surfaces (also noindex where set).
       disallow: ["/admin/", "/api/", "/account/", "/reader/", "/resource/edit/"],

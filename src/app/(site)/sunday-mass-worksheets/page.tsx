@@ -55,7 +55,7 @@ export default function SundayMassWorksheetsHubPage() {
           <p>
             Each worksheet page includes the Gospel summary, key verse, and family conversation prompts. Print this
             Sunday free in the app; Plus unlocks the full archive. Season hubs like{" "}
-            <Link href="/resources/advent" className="font-semibold text-[#335599] hover:underline">
+            <Link href="/liturgy/advent" className="font-semibold text-[#335599] hover:underline">
               Advent resources
             </Link>{" "}
             stay available for browsing by liturgical color and theme.

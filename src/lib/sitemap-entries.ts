@@ -4,7 +4,6 @@ import { bibleVerseMomentPaths } from "@/data/moms-bible/situation-seo";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
-import { RESOURCE_SEASONS, seasonPath } from "@/lib/resource/sheets";
 import { SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
 import { EVERGREEN_PAGES, MASS_FOR_KIDS_HUB, publicPath, VIRTUE_CHALLENGE_HUB } from "@/lib/seo/evergreen-worksheets";
 import { SUNDAY_MASS_WORKSHEETS_HUB, sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
@@ -18,7 +17,7 @@ type SitemapEntry = MetadataRoute.Sitemap[number];
  * Stable lastmod for code-defined pages. Bump this when page content changes
  * meaningfully, and never use request time, which makes Google ignore lastmod.
  */
-export const SITEMAP_CONTENT_DATE = new Date("2026-11-06T00:00:00.000Z");
+export const SITEMAP_CONTENT_DATE = new Date("2026-11-10T00:00:00.000Z");
 
 /** Child sitemaps listed by the /sitemap.xml index. */
 export const CHILD_SITEMAP_PATHS = [
@@ -42,7 +41,6 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   [SUNDAY_MASS_WORKSHEETS_HUB, "weekly", 0.9],
   [MASS_FOR_KIDS_HUB, "monthly", 0.85],
   [VIRTUE_CHALLENGE_HUB, "monthly", 0.85],
-  ["/resources", "weekly", 0.85],
   ["/bible-verses-for-kids", "weekly", 0.85],
   [SAINTS_HUB, "weekly", 0.85],
   ["/recommendations", "weekly", 0.8],
@@ -83,17 +81,14 @@ function playEntries(): SitemapEntry[] {
   return [...paths].map((p) => entry(p, "weekly", 0.7));
 }
 
-/** Season hubs + Sunday worksheet SEO pages + evergreen Mass/virtue worksheet pages (Advent prioritized). /resource/[slug] weeks are not listed. */
+/** Sunday worksheet SEO pages + evergreen Mass/virtue worksheet pages (Advent prioritized). /resource/[slug] weeks are not listed. */
 export function buildResourcesSitemap(): MetadataRoute.Sitemap {
   const weeks = listSundaySheetKeys().map((key) => {
     const isAdvent = key.includes("_ADV");
     return entry(sundayMassWorksheetPath(key), "weekly", isAdvent ? 0.95 : 0.8);
   });
-  const seasons = RESOURCE_SEASONS.map((s) =>
-    entry(seasonPath(s.id), "monthly", s.id === "advent" ? 0.95 : 0.85),
-  );
   const evergreen = EVERGREEN_PAGES.map((p) => entry(publicPath(p), "monthly", 0.75));
-  return [...seasons, ...weeks, ...evergreen];
+  return [...weeks, ...evergreen];
 }
 
 function liturgyEntries(): SitemapEntry[] {
