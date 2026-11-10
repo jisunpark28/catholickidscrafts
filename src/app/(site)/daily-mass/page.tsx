@@ -13,7 +13,7 @@ import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { formatLiturgicalTitleDisplay } from "@/lib/liturgical-calendar";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
-import { fetchMassDay, fetchMonthCalendar, USCCB_COPYRIGHT_NOTICE } from "@/lib/mass-source";
+import { fetchMassDay, fetchMonthCalendar } from "@/lib/mass-source";
 import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
@@ -139,18 +139,6 @@ export default async function DailyMassPage({
           journal={journal}
           calendar={calendarResult.calendar}
           calendarError={calendarResult.error}
-          typingDay={
-            day?.readings.some((reading) => reading.text?.trim())
-              ? {
-                  date: dateKey,
-                  readings: day.readings
-                    .filter((reading) => reading.text?.trim())
-                    .map((reading) => ({ kind: reading.kind, label: reading.label, text: reading.text })),
-                  copyrightNotice: USCCB_COPYRIGHT_NOTICE,
-                  source: "usccb",
-                }
-              : null
-          }
         />
       </SidebarPagePanel>
     </HomePdfShell>

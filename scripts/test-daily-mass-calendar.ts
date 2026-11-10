@@ -92,12 +92,21 @@ assert.match(view, /FaithJournalBanner/);
 // Universalis caches jsonpmass.js for days; each day needs its own URL so the browser can't replay an old day.
 assert.equal(
   universalisJsonpUrlClient("Europe.England", "2026-11-10"),
+  "https://universalis.com/Europe.England/20261110/jsonpmass.js?callback=universalisCallback",
+);
+assert.equal(
+  universalisJsonpUrlClient("Europe.England", "2026-11-10", "fresh"),
   "https://universalis.com/Europe.England/jsonpmass.js?d=20261110",
 );
+// Typing text comes from Universalis only, never the USCCB feed.
+const dailyMassPage = fs.readFileSync("src/app/(site)/daily-mass/page.tsx", "utf8");
+assert.equal(/USCCB_COPYRIGHT_NOTICE|typingDay/.test(dailyMassPage), false);
+assert.equal(/usccb|fallbackDay/i.test(fs.readFileSync("src/lib/load-mass-day-typing.ts", "utf8").replace(/no USCCB text/, "")), false);
 const typing = fs.readFileSync("src/components/gospel/GospelTypingSection.tsx", "utf8");
 assert.equal(typing.includes("Select today"), false);
 assert.equal(view.includes("Typing practice uses today's readings"), false);
 assert.match(typing, /dateKey: readingsDateKey/);
+assert.equal(/fallbackDay|source: "usccb"/.test(typing), false);
 assert.match(view, /useState\(\{ calendar: false, typing: false, journal: false \}\)/);
 
 console.log("test-daily-mass-calendar: ok");

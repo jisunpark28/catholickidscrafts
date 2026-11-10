@@ -1,43 +1,26 @@
 import { loadUniversalisMassTodayClient } from "@/lib/universalis-client";
-import { isAcceptableUniversalisDate } from "@/lib/universalis-date-match";
 import type { UniversalisMassDay } from "@/lib/universalis-parse";
 
 /**
- * Load today's Mass readings for typing UI.
- * 1. Site API (server-side Universalis JSONP)
- * 2. Browser JSONP fallback (user's device → universalis.com)
+ * Load one day's Mass readings for the typing UI, from Universalis only, in the visitor's browser
+ * (JSONP, as https://universalis.com/n-web.htm describes). The site's server never fetches Universalis,
+ * and no USCCB text is used.
  *
- * Does not use USCCB RSS — on-site text stays under Universalis webmaster terms only.
+ * Tries the dated URL first; if that fails and `dateKey` is today, retries the undated feed with a
+ * per-day query string. Only a payload for exactly `dateKey` is accepted.
  */
 export async function loadMassDayForTyping(
-  todayDateKey: string,
+  dateKey: string,
+  todayDateKey: string = dateKey,
 ): Promise<UniversalisMassDay> {
-  let apiError = "Could not load readings";
-
+  if (typeof window === "undefined") throw new Error("Readings load in the browser.");
+  let day: UniversalisMassDay | null = null;
   try {
-    const res = await fetch(`/api/universalis-readings/${todayDateKey}`);
-    const text = await res.text();
-    let data: UniversalisMassDay & { error?: string };
-    try {
-      data = text ? (JSON.parse(text) as typeof data) : ({} as typeof data);
-    } catch {
-      throw new Error("Could not load readings");
-    }
-    if (!res.ok) {
-      apiError = data.error ?? apiError;
-      throw new Error(apiError);
-    }
-    return data;
-  } catch {
-    if (typeof window === "undefined") {
-      throw new Error(apiError);
-    }
-    const clientDay = await loadUniversalisMassTodayClient(todayDateKey);
-    if (!isAcceptableUniversalisDate(clientDay.date, todayDateKey)) {
-      throw new Error(
-        `Readings are for ${clientDay.date}. Select today (${todayDateKey}) on your calendar.`,
-      );
-    }
-    return clientDay;
+    day = await loadUniversalisMassTodayClient(dateKey, "dated");
+  } catch (error) {
+    if (dateKey !== todayDateKey) throw error;
+    day = await loadUniversalisMassTodayClient(dateKey, "fresh");
   }
+  if (day.date !== dateKey) throw new Error("Readings for this day aren't available.");
+  return day;
 }

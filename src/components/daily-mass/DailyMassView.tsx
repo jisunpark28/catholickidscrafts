@@ -2,7 +2,7 @@
 
 import { DailyMassCalendarPanel } from "@/components/daily-mass/DailyMassCalendarPanel";
 import { FaithJournalBanner } from "@/components/daily-mass/FaithJournalBanner";
-import { GospelTypingSection, type TypingDay } from "@/components/gospel/GospelTypingSection";
+import { GospelTypingSection } from "@/components/gospel/GospelTypingSection";
 import { textFromCopy, useSiteCopy } from "@/components/SiteCopyProvider";
 import { deviceDateKey } from "@/lib/daily-mass/device-date";
 import type { FaithJournalState } from "@/lib/daily-mass/faith-journal-shared";
@@ -35,8 +35,6 @@ export type DailyMassViewProps = {
   journal: FaithJournalState;
   calendar: MonthCalendar;
   calendarError?: boolean;
-  /** Reading texts for `dateKey` from the USCCB feed, when it has that day. */
-  typingDay?: TypingDay | null;
 };
 
 function Chevron({ up }: { up: boolean }) {
@@ -246,7 +244,7 @@ export function DailyMassView(props: DailyMassViewProps) {
                 key={props.dateKey}
                 todayDate={today}
                 focusDate={props.dateKey}
-                fallbackDay={props.typingDay}
+                readingRefs={props.readings}
                 usccbUrl={props.usccbUrl}
                 onCompleted={onTypingCompleted}
                 headerEnd={toggle}
