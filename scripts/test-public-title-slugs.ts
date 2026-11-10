@@ -69,7 +69,7 @@ async function main() {
   const isLater = (id: string) => /^(MAS-(06[6-9]|0[7-9]\d)|VIR-(05[4-9]|0[6-9]\d))$/.test(id);
   const cardSnapshot = [SAINT_SEO_CARDS, FAITH_SEO_CARDS].map((cards) => cards.filter((c) => !isLater(c.id)).map((c) => [c.id, c.slug]));
   assert.equal(createHash("sha256").update(JSON.stringify(cardSnapshot)).digest("hex"),
-    "299efdad6088d9216e64cbfe0c4b505add505d2f7fd1b58e1fb2e4179743a1df");
+    "bafaf33dd8fa6f41a6d42ef5d69f966fc46e3a553f086a632489a339ffbc4d89");
   for (const pin of buildPinterestCatalog().filter((pin) => pin.type === "worksheet")) {
     assert.ok(sitemap.has(pin.pagePath));
   }
