@@ -34,10 +34,10 @@ export const DEFAULT_HOME_SECTIONS: HomeSectionWithItems[] = [
     title: "Liturgical Catechesis",
     sortOrder: 2,
     items: [
-      { id: "default-easter", title: "Easter Season", href: "/resources?period=easter", sortOrder: 0 },
-      { id: "default-advent", title: "Advent", href: "/resources?period=advent", sortOrder: 1 },
-      { id: "default-lent", title: "Lent", href: "/resources?period=lent", sortOrder: 2 },
-      { id: "default-ordinary", title: "Ordinary Time", href: "/resources?period=ordinary", sortOrder: 3 },
+      { id: "default-easter", title: "Easter Season", href: "/liturgy/easter-time", sortOrder: 0 },
+      { id: "default-advent", title: "Advent", href: "/liturgy/advent", sortOrder: 1 },
+      { id: "default-lent", title: "Lent", href: "/liturgy/lent", sortOrder: 2 },
+      { id: "default-ordinary", title: "Ordinary Time", href: "/liturgy/ordinary-time", sortOrder: 3 },
     ],
   },
 ];

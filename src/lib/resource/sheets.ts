@@ -92,9 +92,21 @@ export function seasonLabel(id: ResourceSeason): string {
   return RESOURCE_SEASONS.find((s) => s.id === id)?.label ?? "";
 }
 
-/** Indexable season hub: `/resources/lent`, `/resources/advent`, … */
+/**
+ * Live page for a worksheet season (breadcrumbs, season links, legacy /resources redirects):
+ * the /liturgy/<season> page where one exists, else the season section on the worksheet hub.
+ */
+const SEASON_PAGE: Record<ResourceSeason, string> = {
+  advent: "/liturgy/advent",
+  christmas: "/liturgy/christmas-time",
+  lent: "/liturgy/lent",
+  easter: "/liturgy/easter-time",
+  "ordinary-time": "/liturgy/ordinary-time",
+  feasts: "/sunday-mass-worksheets#season-feasts",
+};
+
 export function seasonPath(id: ResourceSeason): string {
-  return `/resources/${id}`;
+  return SEASON_PAGE[id];
 }
 
 export function yearLabel(key: string): string {

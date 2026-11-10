@@ -104,14 +104,23 @@ const nextConfig: NextConfig = {
       { source: "/lesson/:path*", destination: "/", permanent: true },
       { source: "/curriculum", destination: "/", permanent: true },
       { source: "/curriculum/:path*", destination: "/", permanent: true },
-      // Legacy curriculum printables (pre-Resource). `/resources` + `/resources/<season>` are live hubs now.
+      // Old `/resources` hubs (removed) -> live pages, to keep old pins and links working.
+      // Season targets match seasonPath() in src/lib/resource/sheets.ts.
+      { source: "/resources", destination: "/resource?view=all", permanent: true },
+      { source: "/resources/advent", destination: "/liturgy/advent", permanent: true },
+      { source: "/resources/christmas", destination: "/liturgy/christmas-time", permanent: true },
+      { source: "/resources/lent", destination: "/liturgy/lent", permanent: true },
+      { source: "/resources/easter", destination: "/liturgy/easter-time", permanent: true },
+      { source: "/resources/ordinary-time", destination: "/liturgy/ordinary-time", permanent: true },
+      { source: "/resources/feasts", destination: "/sunday-mass-worksheets#season-feasts", permanent: true },
+      // Legacy curriculum printables (pre-Resource).
       ...[
         "advent-wreath-craft",
         "first-communion-examination",
         "holy-trinity-clover",
         "lent-stations-cross-craft",
         "noahs-ark-coloring",
-      ].map((slug) => ({ source: `/resources/${slug}`, destination: "/resources", permanent: true })),
+      ].map((slug) => ({ source: `/resources/${slug}`, destination: "/resource?view=all", permanent: true })),
     ];
   },
 };
