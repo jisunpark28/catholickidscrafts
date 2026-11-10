@@ -103,7 +103,9 @@ async function main() {
     await page.goto(`${base}/qa-cards#advent`, { waitUntil: "networkidle" });
     assert.equal(await nav.locator('[aria-current="page"]').innerText(), "Q&A Cards", "direct hash load");
     for (const gone of ["/catholic-faith-questions", "/catholic-faith-questions/why-do-we-pray"]) {
-      assert.equal((await page.request.get(`${base}${gone}`, { maxRedirects: 0 })).status(), 404, `${gone} is deleted`);
+      const result = await page.request.get(`${base}${gone}`, { maxRedirects: 0 });
+      assert.equal(result.status(), 301, `${gone} is deleted and 301s`);
+      assert.equal(new URL(result.headers()["location"] ?? "", base).pathname, "/qa-cards", `${gone} -> /qa-cards`);
     }
     await page.goto(`${base}/resource?view=all`, { waitUntil: "networkidle", timeout: 120000 });
     assert.equal(await nav.getByRole("link", { name: "Printables", exact: true }).getAttribute("href"), "/resource?view=all");

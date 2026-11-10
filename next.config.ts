@@ -121,6 +121,22 @@ const nextConfig: NextConfig = {
         "lent-stations-cross-craft",
         "noahs-ark-coloring",
       ].map((slug) => ({ source: `/resources/${slug}`, destination: "/resource?view=all", permanent: true })),
+      // Deleted /catholic-faith-questions pages (pins sent Nov 6-9, 2026) -> live pages. 301 on request.
+      // Specific slugs first; the hub and every other slug go to /qa-cards.
+      ...[
+        "the-sign-of-the-cross",
+        "the-our-father-the-lord-s-prayer",
+        "the-hail-mary",
+        "the-glory-be",
+        "the-apostles-creed",
+      ].map((slug) => ({ source: `/catholic-faith-questions/${slug}`, destination: "/prayers", statusCode: 301 as const })),
+      ...["introductory-rites", "liturgy-of-the-word", "liturgy-of-the-eucharist", "four-parts-of-the-mass"].map((slug) => ({
+        source: `/catholic-faith-questions/${slug}`,
+        destination: `/catholic-mass-for-kids/${slug}`,
+        statusCode: 301 as const,
+      })),
+      { source: "/catholic-faith-questions", destination: "/qa-cards", statusCode: 301 },
+      { source: "/catholic-faith-questions/:slug*", destination: "/qa-cards", statusCode: 301 },
     ];
   },
 };

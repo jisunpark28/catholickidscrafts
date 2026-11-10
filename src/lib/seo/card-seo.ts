@@ -6,7 +6,6 @@ import { PICTURE_CARDS, type PictureCard } from "@/lib/resource/cards";
 import type { CardCategory } from "@/lib/resource/card-meta";
 
 export const SAINTS_HUB = "/catholic-saints-for-kids";
-export const FAITH_HUB = "/catholic-faith-questions";
 
 const FAITH_CATS = new Set<CardCategory>(["Virtue & Life", "Prayer", "Sacrament", "Mass & Church"]);
 
