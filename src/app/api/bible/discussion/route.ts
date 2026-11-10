@@ -178,18 +178,21 @@ export async function POST(request: Request) {
       }),
     );
 
-    const res = NextResponse.json({
-      thread: {
-        id: thread.id,
-        body: thread.body,
-        authorDisplay: publicAuthorDisplay(thread.isAnonymous, thread.authorLabel),
-        createdAt: thread.createdAt.toISOString(),
-        updatedAt: thread.updatedAt.toISOString(),
-        canEdit: true,
-        canDelete: true,
-        comments: [],
+    const res = NextResponse.json(
+      {
+        thread: {
+          id: thread.id,
+          body: thread.body,
+          authorDisplay: publicAuthorDisplay(thread.isAnonymous, thread.authorLabel),
+          createdAt: thread.createdAt.toISOString(),
+          updatedAt: thread.updatedAt.toISOString(),
+          canEdit: true,
+          canDelete: true,
+          comments: [],
+        },
       },
-    });
+      { status: 201 },
+    );
     if (readerKey.type === "owner") {
       await ensureOwnerReaderCookie(res, readerKey.familyAccountId);
     }

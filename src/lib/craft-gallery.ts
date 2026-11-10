@@ -112,6 +112,7 @@ export async function assertGallerySubmissionAllowed(familyAccountId: string): P
   if (pending >= MAX_PENDING_PER_FAMILY) {
     throw new GalleryRateLimitError(
       "You already have photos waiting for review. Please wait for approval before submitting more.",
+      3600,
     );
   }
 
@@ -125,9 +126,11 @@ export async function assertGallerySubmissionAllowed(familyAccountId: string): P
 }
 
 export class GalleryRateLimitError extends Error {
-  constructor(message: string) {
+  retryAfterSec: number;
+  constructor(message: string, retryAfterSec = 86_400) {
     super(message);
     this.name = "GalleryRateLimitError";
+    this.retryAfterSec = retryAfterSec;
   }
 }
 

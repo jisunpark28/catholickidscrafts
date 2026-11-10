@@ -11,6 +11,6 @@ export async function GET() {
     });
   } catch (e) {
     console.error("mass-order-steps:", e);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json({ error: "Could not load Mass order steps." }, { status: 503 });
   }
 }

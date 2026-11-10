@@ -7,6 +7,6 @@ export async function GET() {
     return NextResponse.json(items);
   } catch (e) {
     console.error("hangman-words:", e);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json({ error: "Could not load words." }, { status: 503 });
   }
 }

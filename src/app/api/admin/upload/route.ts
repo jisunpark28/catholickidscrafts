@@ -1,6 +1,6 @@
 import { requireAdminSession } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
-import { saveUploadedFile, UploadConfigurationError } from "@/lib/upload";
+import { saveUploadedFile, UploadConfigurationError, UPLOADS_UNAVAILABLE_MESSAGE } from "@/lib/upload";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -27,12 +27,12 @@ export async function POST(request: Request) {
         sizeBytes: saved.sizeBytes,
       },
     });
-    return NextResponse.json(record);
+    return NextResponse.json(record, { status: 201 });
   } catch (e) {
     if (e instanceof UploadConfigurationError) {
-      return NextResponse.json({ error: e.message }, { status: 503 });
+      return NextResponse.json({ error: UPLOADS_UNAVAILABLE_MESSAGE }, { status: 503 });
     }
-    const message = e instanceof Error ? e.message : "Upload failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("admin upload", e);
+    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }

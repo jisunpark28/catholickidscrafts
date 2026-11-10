@@ -11,6 +11,6 @@ export async function GET() {
     });
   } catch (e) {
     console.error("typing-words:", e);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json({ error: "Could not load words." }, { status: 503 });
   }
 }

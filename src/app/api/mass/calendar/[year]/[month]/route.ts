@@ -25,8 +25,7 @@ export async function GET(_request: Request, { params }: Params) {
       headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400" },
     });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unable to load calendar.";
-    return NextResponse.json({ error: message }, { status: 502 });
+    console.error("mass calendar:", error);
+    return NextResponse.json({ error: "Unable to load calendar." }, { status: 502 });
   }
 }

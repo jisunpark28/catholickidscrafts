@@ -57,9 +57,8 @@ async function storeProcessed(
 ): Promise<string> {
   if (isVercelBlobLinked() || isVercelServerless()) {
     if (isVercelServerless() && !isVercelBlobLinked()) {
-      throw new UploadConfigurationError(
-        "Photo uploads on Vercel require a linked Blob store. Open Project → Storage and connect Blob, then redeploy.",
-      );
+      console.error("Photo uploads on Vercel require a linked Blob store.");
+      throw new UploadConfigurationError();
     }
     const token = process.env.BLOB_READ_WRITE_TOKEN?.trim() || undefined;
     try {
@@ -71,7 +70,8 @@ async function storeProcessed(
       return blob.url;
     } catch (e) {
       const detail = e instanceof Error ? e.message : "Blob upload failed";
-      throw new UploadConfigurationError(`Could not save photo to Blob. (${detail})`);
+      console.error("Vercel Blob photo upload failed", detail);
+      throw new UploadConfigurationError();
     }
   }
 

@@ -9,7 +9,7 @@ import {
   validateCraftGalleryImage,
 } from "@/lib/craft-gallery-upload";
 import { prisma } from "@/lib/prisma";
-import { saveUploadedFile, UploadConfigurationError } from "@/lib/upload";
+import { saveUploadedFile, UploadConfigurationError, UPLOADS_UNAVAILABLE_MESSAGE } from "@/lib/upload";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       select: { id: true },
     });
     if (!resource) {
-      return NextResponse.json({ error: "Resource not found." }, { status: 400 });
+      return NextResponse.json({ error: "Resource not found." }, { status: 404 });
     }
     resourceId = resource.id;
   }
@@ -71,18 +71,24 @@ export async function POST(request: Request) {
       resourceId,
     });
 
-    return NextResponse.json({
-      ok: true,
-      id: submission.id,
-      message:
-        "Thank you! Your photo is pending review and will appear in the gallery after approval.",
-    });
+    return NextResponse.json(
+      {
+        ok: true,
+        id: submission.id,
+        message:
+          "Thank you! Your photo is pending review and will appear in the gallery after approval.",
+      },
+      { status: 201 },
+    );
   } catch (e) {
     if (e instanceof GalleryRateLimitError) {
-      return NextResponse.json({ error: e.message }, { status: 429 });
+      return NextResponse.json(
+        { error: e.message },
+        { status: 429, headers: { "Retry-After": String(e.retryAfterSec) } },
+      );
     }
     if (e instanceof UploadConfigurationError) {
-      return NextResponse.json({ error: e.message }, { status: 503 });
+      return NextResponse.json({ error: UPLOADS_UNAVAILABLE_MESSAGE }, { status: 503 });
     }
     console.error("gallery submit", e);
     return NextResponse.json({ error: "Could not submit photo." }, { status: 500 });

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       if (data.featured) await tx.gospelSheet.updateMany({ where: { featured: true }, data: { featured: false } });
       return tx.gospelSheet.create({ data });
     });
-    return NextResponse.json(sheet);
+    return NextResponse.json(sheet, { status: 201 });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
       return NextResponse.json({ error: "A sheet for that Sunday already exists" }, { status: 409 });

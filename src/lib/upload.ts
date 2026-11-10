@@ -2,8 +2,10 @@ import { put } from "@vercel/blob";
 import fs from "fs/promises";
 import path from "path";
 
+export const UPLOADS_UNAVAILABLE_MESSAGE = "Uploads are temporarily unavailable";
+
 export class UploadConfigurationError extends Error {
-  constructor(message: string) {
+  constructor(message: string = UPLOADS_UNAVAILABLE_MESSAGE) {
     super(message);
     this.name = "UploadConfigurationError";
   }
@@ -25,9 +27,8 @@ export function isVercelBlobLinked(): boolean {
 
 export function assertUploadConfigured(): void {
   if (isVercelServerless() && !isVercelBlobLinked()) {
-    throw new UploadConfigurationError(
-      "Admin uploads on Vercel require a linked Blob store. Open your project → Storage → connect or create a Blob store for catholickidscrafts, then deploy again.",
-    );
+    console.error("Admin uploads on Vercel require a linked Blob store.");
+    throw new UploadConfigurationError();
   }
 }
 
@@ -58,9 +59,8 @@ export async function saveUploadedFile(
 
   if (isVercelBlobLinked() || isVercelServerless()) {
     if (isVercelServerless() && !isVercelBlobLinked()) {
-      throw new UploadConfigurationError(
-        "Admin uploads on Vercel require a linked Blob store. In the catholickidscrafts project, open the Storage tab and connect your Blob store (or create one there), then deploy again.",
-      );
+      console.error("Admin uploads on Vercel require a linked Blob store.");
+      throw new UploadConfigurationError();
     }
 
     try {
@@ -68,9 +68,8 @@ export async function saveUploadedFile(
       return { url, filename: safeName, sizeBytes: buffer.length };
     } catch (e) {
       const detail = e instanceof Error ? e.message : "Blob upload failed";
-      throw new UploadConfigurationError(
-        `Could not save file to Vercel Blob. Link a Blob store under Project → Storage and redeploy. (${detail})`,
-      );
+      console.error("Vercel Blob upload failed", detail);
+      throw new UploadConfigurationError();
     }
   }
 

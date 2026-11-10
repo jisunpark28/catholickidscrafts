@@ -33,7 +33,7 @@ export async function PUT(request: Request) {
   const { error } = await requireAdminSession();
   if (error) return error;
 
-  const body = await request.json();
+  const body = await request.json().catch(() => null);
   const parsed = bulkSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });

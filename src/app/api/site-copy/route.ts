@@ -47,6 +47,6 @@ export async function GET(request: Request) {
     });
   } catch (e) {
     console.error("site-copy:", e);
-    return NextResponse.json({}, { status: 200 });
+    return NextResponse.json({ error: "Could not load site copy." }, { status: 503 });
   }
 }

@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       expiresAt: new Date(Date.now() + MB_INVITE_TTL_MS),
     },
   });
-  return NextResponse.json({ ok: true, url: `${siteBase()}/moms-bible/invite#${token}` });
+  return NextResponse.json({ ok: true, url: `${siteBase()}/moms-bible/invite#${token}` }, { status: 201 });
 }
 
 /** DELETE ?id=: revoke a pending invite. */

@@ -85,5 +85,5 @@ export async function POST(request: Request) {
     return { noteId: note.id, itemId: ids[0]! };
   });
   await notifyChildReply({ noteId: created.noteId, itemId: created.itemId, childId: child.childId });
-  return NextResponse.json({ ok: true, noteId: created.noteId });
+  return NextResponse.json({ ok: true, noteId: created.noteId }, { status: 201 });
 }

@@ -97,5 +97,5 @@ export async function POST(request: Request) {
     });
     ids.push(note.id);
   }
-  return NextResponse.json({ ok: true, noteIds: ids });
+  return NextResponse.json({ ok: true, noteIds: ids }, { status: 201 });
 }
