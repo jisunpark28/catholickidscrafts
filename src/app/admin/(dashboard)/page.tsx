@@ -1,21 +1,26 @@
-import { auth } from "@/auth";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { isSuperAdmin } from "@/lib/admin-roles";
 import Link from "next/link";
 import { getTrafficSummary } from "@/lib/analytics";
 import { prisma } from "@/lib/prisma";
 import { TrafficStats } from "@/components/admin/TrafficStats";
+import { MemberStats } from "@/components/admin/MemberStats";
+import { getMemberStats } from "@/lib/admin-member-stats";
 import { signOut } from "@/auth";
 import { FamilyTalkReminderCard } from "@/components/admin/FamilyTalkNotice";
 import { familyTalkCoverage } from "@/lib/daily-mass/family-talk-coverage";
 import { applySessionReset } from "@/lib/session-reset";
 import { cookies } from "next/headers";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboardPage() {
-  const session = await auth();
+  const { session } = await requireAdminPage();
   const superAdmin = isSuperAdmin(session);
-  const [cardCount, traffic] = await Promise.all([
+  const [cardCount, traffic, memberStats] = await Promise.all([
     prisma.liturgyCard.count(),
     getTrafficSummary(),
+    getMemberStats(),
   ]);
 
   return (
@@ -68,6 +73,8 @@ export default async function AdminDashboardPage() {
           </div>
         )}
       </div>
+
+      <MemberStats stats={memberStats} />
 
       <TrafficStats stats={traffic} />
 
