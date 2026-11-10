@@ -1,0 +1,152 @@
+/* Interactive Rosary (/prayers): full-screen prayer view. Ported from the approved mockup. */
+.rsy{--cream:#FFFDF9;--ink:#374151;--sage:#7fa98a;--sage-d:#4f7d5c;--yellow:#fff4c2;position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;background:var(--cream);display:flex;flex-direction:column;z-index:1000;overflow:hidden;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);text-align:left}
+.rsy *,.rsy *::before,.rsy *::after{box-sizing:border-box}
+.rsy button{font-family:inherit;line-height:inherit}
+.rsy img,.rsy svg{max-width:none}
+.rsy-header{flex:none;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid rgba(0,0,0,.06);background:var(--cream);min-height:52px;position:relative;z-index:30}
+.rsy-head-left{justify-self:start;position:relative;min-width:0}
+.rsy-head-center{justify-self:center;position:relative;max-width:100%}
+.rsy-pill{appearance:none;border:1.5px solid #d8c6b4;background:#fff;border-radius:999px;padding:7px 12px;font-weight:700;font-size:13.5px;color:#493a30;cursor:pointer;white-space:nowrap}
+.rsy-pill .rsy-lbl-short{display:none}
+.rsy-title-pill{width:auto;max-width:min(70vw,520px);text-align:center;font-family:Georgia,serif!important;font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.rsy-close{justify-self:end;width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.06);font-size:20px;cursor:pointer;color:#3b2a1f;outline:none;display:grid;place-items:center;padding:0}
+.rsy-close:focus-visible,.rsy-pill:focus-visible,.rsy-tap:focus-visible,.rsy-prev:focus-visible,.rsy-act:focus-visible,.rsy-flipbtn:focus-visible,.rsy-pop-item:focus-visible,.rsy-pop-row:focus-visible{outline:3px solid var(--sage-d);outline-offset:2px}
+
+/* Popovers (mystery picker + mode menu) */
+.rsy-popover{position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);width:min(420px,calc(100vw - 24px));background:#fff;border:1px solid #ead9c6;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.14);padding:8px;z-index:40;max-height:min(420px,70vh);overflow:auto}
+.rsy-head-left .rsy-popover{left:0;transform:none;width:260px}
+.rsy-popover[hidden]{display:none!important}
+.rsy-pop-head{font-size:13px;font-weight:800;color:#3b2a1f;padding:8px 10px 4px}
+.rsy-pop-item{display:flex;align-items:center;gap:8px;width:100%;border:0;background:transparent;text-align:left;padding:7px 10px;border-radius:10px;font-size:14px;font-weight:600;color:#3b2a1f;cursor:pointer}
+.rsy-pop-item:hover{background:#f7f1e8}
+.rsy-pop-item .rsy-ck{width:18px;color:var(--sage-d);font-weight:800;flex:none}
+.rsy-pop-row{width:100%;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:10px;font-size:13.5px;font-weight:800;color:#493a30;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.rsy-pop-row:hover{background:#f7f1e8}
+.rsy-pop-div{height:1px;background:#ead9c6;margin:6px 8px}
+
+.rsy-body{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px 16px 24px;gap:16px}
+.rsy-side{display:contents}
+
+/* Rosary map: 1-decade ring (Mini/Standard) or 5-decade ring + pendant (Full) */
+.rsy-map{position:relative;flex:none;overflow:visible;--glow:7px}
+.rsy-map--full{--glow:5px}
+.rsy-cord{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0;display:block}
+.rsy-pt{position:absolute;display:grid;place-items:center;z-index:2;pointer-events:none;transition:opacity .3s}
+.rsy-pt.is-cur{z-index:4}
+.rsy-pt.is-cur::before{content:"";position:absolute;border-radius:50%;inset:calc(var(--glow) * -1);background:rgba(127,169,138,.22);box-shadow:0 0 0 calc(var(--glow) * .7) rgba(127,169,138,.34),0 0 calc(var(--glow) * 2.2) rgba(79,125,92,.55);z-index:-1}
+.rsy-pt.is-dim{opacity:.28}
+.rsy-bead{background:radial-gradient(circle at 35% 30%,#fffaf3,#f0e0cc 55%,#e4d0b8);border:2px solid #d3b89a;border-radius:50%;box-shadow:0 1px 2px rgba(80,50,30,.16)}
+.rsy-map--full .rsy-bead{border-width:1.5px}
+.rsy-bead.is-rose{background:none;border:none;box-shadow:none;overflow:visible}
+.rsy-bead.is-prayed{background:radial-gradient(circle at 35% 30%,#fde4ea,#f4b6c6 55%,#e996ad);border-color:#d97b96}
+.rsy-bead.is-rose img{width:100%;height:100%;display:block;pointer-events:none}
+.rsy-big{border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6e0,#f0d49a 55%,#e2c07a);border:2.5px solid #b8893a;box-shadow:0 1px 3px rgba(80,50,30,.2),inset 0 1px 2px rgba(255,255,255,.55)}
+.rsy-map--full .rsy-big{border-width:2px}
+.rsy-medal svg,.rsy-xbead svg{display:block;width:100%;height:100%;overflow:visible}
+.rsy-center{position:absolute;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:1}
+.rsy-dec-line{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--sage-d);margin:0 0 6px}
+.rsy-cap{font-family:Georgia,serif;font-size:19px;font-weight:700;color:#3b2a1f;margin:0 0 6px;line-height:1.25}
+.rsy-count{font-size:14px;font-weight:700;color:#6b4a2f}
+
+/* Prayer card: height fits content */
+.rsy-pcard{perspective:1200px;width:100%;max-width:520px;flex:none;position:relative}
+.rsy-pinner{position:relative;display:block;transition:transform .6s;transform-style:preserve-3d}
+.rsy-pcard.is-flipped .rsy-pinner{transform:rotateY(180deg)}
+.rsy-pface{backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#fff;border-radius:22px;border:2px solid #f0e2d3;padding:14px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 18px rgba(0,0,0,.04);max-height:min(240px,30vh);overflow:hidden}
+.rsy-scroll{overflow:auto;min-height:0;flex:1 1 auto;display:flex;flex-direction:column;gap:10px}
+.rsy-pface.rsy-pback{position:absolute;inset:0;transform:rotateY(180deg);background:#f7fbf8;border-color:#cfe3d5}
+.rsy-leader{font-size:15.5px;color:#6b7280;line-height:1.45;margin:0}
+.rsy-resp{background:var(--yellow);border-radius:14px;padding:12px 14px;font-size:16.5px;font-weight:800;color:#3b2a1f;line-height:1.4;margin:0}
+.rsy-solo{background:transparent;padding:0;font-weight:600;font-size:15.5px;color:#3b2a1f}
+.rsy-solo.is-long{font-size:14.5px;line-height:1.45;font-weight:600}
+.rsy-flipbtn{margin-top:2px;align-self:flex-end;background:#fff8e8;border:1.5px solid #e8d4a8;border-radius:999px;color:#6b4a2f;font-weight:700;font-size:13px;cursor:pointer;padding:6px 12px;flex:none}
+.rsy-meaning{font-size:16px;color:#3b2a1f;margin:0;font-weight:600;line-height:1.4}
+.rsy-talk-lbl{font-size:12px;font-weight:800;color:#6b4a2f;text-transform:uppercase;letter-spacing:.04em;margin:8px 0 2px}
+.rsy-talk-q{font-size:15px;color:#3b2a1f;margin:0}
+
+.rsy-controls{flex:none;display:flex;align-items:center;gap:12px;width:100%;max-width:520px}
+.rsy-prev{flex:none;width:48px;height:48px;border-radius:50%;border:1.5px solid #d8c6b4;background:#fff;font-size:22px;cursor:pointer;color:#493a30;font-weight:700;padding:0}
+.rsy-tap{position:relative;overflow:hidden;flex:1;min-height:56px;border:0;border-radius:999px;background:var(--sage-d);color:#fff;font-size:19px;font-weight:800;cursor:pointer}
+.rsy-tap .rsy-fill{position:absolute;inset:0;background:rgba(255,255,255,.35);transform-origin:left;transform:scaleX(0)}
+.rsy-tap.is-cool .rsy-fill{animation:rsy-fill .7s linear forwards}
+.rsy-tap.is-cool{cursor:wait}
+@keyframes rsy-fill{to{transform:scaleX(1)}}
+.rsy-tap .rsy-tap-lbl{position:relative}
+
+.rsy-acts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;width:100%;max-width:480px}
+.rsy-act{flex:1;min-width:140px;border:2px solid #e1cdb9;background:#fff;border-radius:18px;padding:16px 12px;font-weight:800;cursor:pointer;font-size:16px;color:#3b2a1f}
+
+.rsy-done{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:16px 16px 24px;gap:10px;overflow:auto}
+.rsy-done-art{position:relative;flex:none;width:min(440px,calc(100% - 24px));margin:10px auto 6px}
+.rsy-art-frame{background:#FEF8EE;border-radius:32px;padding:10px;box-shadow:0 0 0 6px #fbe3ea,0 0 0 8px #f1c9d6,0 10px 30px rgba(196,120,150,.18)}
+.rsy-art-frame img{display:block;width:100%;height:auto;max-height:calc(100dvh - 330px);object-fit:contain;margin:0 auto;border-radius:24px}
+.rsy-garland{display:flex;justify-content:center;gap:2px;margin-top:-20px;position:relative;z-index:2}
+.rsy-garland img{width:34px;height:34px;filter:drop-shadow(0 1px 1px rgba(120,60,70,.18))}
+.rsy-done h2{font-family:Georgia,serif;color:#405329;margin:6px 0 10px;font-size:36px;outline:none;font-weight:700;line-height:1.2}
+
+.rsy-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 14px;border-radius:10px;font-size:13px;z-index:99}
+.rsy-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+@media(max-width:639px){
+  .rsy-header{padding:6px 8px;gap:6px;min-height:48px}
+  .rsy-pill{font-size:12px;padding:6px 10px}
+  .rsy-pill:not(.rsy-title-pill){max-width:34vw}
+  .rsy-pill .rsy-lbl-full{display:none}
+  .rsy-pill .rsy-lbl-short{display:inline}
+  .rsy-title-pill{font-size:13px;max-width:min(56vw,280px);width:auto}
+  .rsy-close{width:36px;height:36px;font-size:18px}
+  .rsy-body{padding:24px 12px 18px;gap:18px;justify-content:flex-start}
+  .rsy-dec-line{font-size:11px;margin-bottom:4px}
+  .rsy-cap{font-size:16px;margin:0 0 4px}
+  .rsy-count{font-size:13px}
+  .rsy-pcard{max-width:100%}
+  .rsy-pface{padding:12px 14px;max-height:min(230px,30vh)}
+  .rsy-leader{font-size:14.5px}
+  .rsy-resp{font-size:15px;padding:10px 12px}
+  .rsy-solo.is-long{font-size:13.5px}
+  .rsy-controls{gap:8px}
+  .rsy-prev{width:44px;height:44px}
+  .rsy-tap{min-height:52px;font-size:17px}
+  .rsy-done{padding:14px 12px 20px}
+  .rsy-garland img{width:28px;height:28px}
+  .rsy-art-frame{border-radius:26px;padding:8px}
+  .rsy-done h2{font-size:26px}
+  .rsy-act{padding:14px 10px;font-size:15px}
+  .rsy-head-center .rsy-popover{width:min(420px,calc(100vw - 24px));max-width:calc(100vw - 16px)}
+}
+@media(min-width:1024px){
+  .rsy-header{min-height:68px;padding:10px 20px}
+  .rsy-pill{font-size:17px;padding:10px 20px}
+  .rsy-title-pill{font-size:19px;max-width:min(60vw,720px)}
+  .rsy-close{width:50px;height:50px;font-size:24px}
+  .rsy-popover{width:min(500px,calc(100vw - 24px))}
+  .rsy-head-left .rsy-popover{width:320px}
+  .rsy-pop-head{font-size:15px}.rsy-pop-item{font-size:16.5px;padding:9px 12px}.rsy-pop-row{font-size:15.5px;padding:10px 12px}
+  .rsy-body{flex-direction:row;align-items:center;justify-content:center;padding:28px 40px;gap:64px}
+  .rsy-side{display:flex;flex-direction:column;gap:22px;width:min(600px,40vw);flex:none}
+  .rsy-pcard,.rsy-controls{max-width:none;width:100%}
+  .rsy-pface{max-height:calc(100dvh - 68px - 56px - 96px);padding:22px 26px;gap:12px;border-radius:28px}
+  .rsy-leader{font-size:20px}
+  .rsy-resp{font-size:22px;padding:16px 20px;border-radius:18px}
+  .rsy-solo{font-size:20px}.rsy-solo.is-long{font-size:18px}
+  .rsy-flipbtn{font-size:16px;padding:8px 16px}
+  .rsy-meaning{font-size:21px}.rsy-talk-lbl{font-size:14px}.rsy-talk-q{font-size:19px}
+  .rsy-prev{width:64px;height:64px;font-size:28px}
+  .rsy-tap{min-height:70px;font-size:23px}
+  .rsy-dec-line{font-size:16px;margin-bottom:10px}
+  .rsy-cap{font-size:30px;margin-bottom:10px}
+  .rsy-count{font-size:20px}
+  .rsy-map--full .rsy-cap{font-size:28px}
+  .rsy-done-art{width:min(560px,calc(100% - 24px))}
+  .rsy-art-frame img{max-height:calc(100dvh - 380px)}
+  .rsy-art-frame{border-radius:38px;padding:12px}
+  .rsy-garland img{width:44px;height:44px}
+  .rsy-garland{margin-top:-26px;gap:4px}
+  .rsy-done h2{font-size:52px;margin:10px 0 14px}
+  .rsy-acts{max-width:620px;gap:16px}
+  .rsy-act{font-size:20px;padding:20px 16px;border-radius:22px}
+}
+@media (prefers-reduced-motion: reduce){
+  .rsy *,.rsy *::before,.rsy *::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  .rsy-tap.is-cool .rsy-fill{animation:none;transform:scaleX(1);opacity:.5}
+}
