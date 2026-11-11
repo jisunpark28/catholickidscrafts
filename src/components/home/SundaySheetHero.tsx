@@ -15,24 +15,18 @@ type Props = {
    * or `/print/2026-10-25` (legacy DB featured fallback).
    */
   printBasePath: string;
-  /**
-   * Sheet editor for this sheet, e.g. `/resource/edit/a-ot32` (null for the legacy DB fallback sheet).
-   * Signed-in free families can try the editor; Save / Print need Plus. Signed-out visitors go to sign-in.
-   */
-  editBasePath?: string | null;
-  /** Liturgy page for the current season, e.g. "/liturgy/ordinary-time". */
-  seasonHref: string;
-  seasonLabel: string;
+  /** Page whose absolute URL "Copy Link" copies, e.g. the sheet's worksheet page or "/". */
+  shareHref: string;
   groupInquiryHref: string | null;
   /** False until RESEND_API_KEY, EMAIL_FROM and MAILING_ADDRESS are set: skip straight to the Plus line. */
   emailEnabled: boolean;
-  /** "1 / 6" label shown when rendered as a carousel slide. */
-  position?: string;
 };
 
 const PAGE_W = 816; // 8.5in at 96dpi
 const PAGE_H = 1056; // 11in
 const EMAIL_STATE_KEY = "ckc.sheetEmail"; // "subscribed" | "dismissed"
+/** Same sign-in page as the header's "Sign in" (Google family sign-in). */
+const SIGN_IN_HREF = "/account/login";
 
 function isMobileDevice(): boolean {
   if (typeof navigator === "undefined") return false;
@@ -57,30 +51,34 @@ function writeEmailState(value: "subscribed" | "dismissed") {
   }
 }
 
-/** Homepage hero: this Sunday's sheet, one big Print button, then an inline email opt-in. */
+/** Preview width in CSS px: small on phones so Print stays near the top, roomier on wide screens. */
+function previewWidth(): number {
+  if (window.innerWidth < 640) return 220;
+  if (window.innerWidth >= 1536) return 300;
+  return 262;
+}
+
+/** Homepage "This Sunday" hero: sheet preview, Level toggle, big Print, Save to My Binder and Copy Link. */
 export function SundaySheetHero({
   title,
   liturgicalName,
   sundayLabel,
   gospelRef,
   printBasePath,
-  editBasePath = null,
-  seasonHref,
-  seasonLabel,
+  shareHref,
   groupInquiryHref,
   emailEnabled,
-  position,
 }: Props) {
   // Loaded once per page load by SiteSessionProvider (the page itself is static and signed-out).
-  // Signed out: Customize goes to parent sign-in instead of the editor (kid mode keeps the family session).
   const { ready: sessionReady, session } = useSiteSession();
   const signedIn = Boolean(session.family);
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
-  const [scale, setScale] = useState(0.4);
+  const [scale, setScale] = useState(262 / PAGE_W);
+  const [binderOpen, setBinderOpen] = useState(false);
+  const [copyMsg, setCopyMsg] = useState("");
   const frameRef = useRef<HTMLIFrameElement>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
   const awaitingReturn = useRef(false);
 
   const src = `${printBasePath}?level=${level}&embed=1`;
@@ -90,27 +88,10 @@ export function SundaySheetHero({
   }, []);
 
   useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    // From sm up, match the page preview's height to the feature slides' screenshot frame (rendered invisibly in the
-    // same carousel grid) so every slide is equally tall. Phones keep a small preview so Print stays above the fold.
-    const frame = el.closest("[role=tabpanel]")?.querySelector<HTMLElement>("[data-feature-frame]") ?? null;
-    const update = () => {
-      const w = el.clientWidth;
-      if (w <= 0) return; // hidden slide: keep last scale
-      if (window.innerWidth < 640) {
-        setScale(Math.min(w, 170) / PAGE_W);
-        return;
-      }
-      const target = frame && frame.offsetHeight > 0 ? frame.offsetHeight : 0;
-      const byHeight = target ? (target + 24) / PAGE_H : 330 / PAGE_W; // +24: the frame's 12px padding on each side
-      setScale(Math.min(byHeight, w / PAGE_W, 520 / PAGE_W));
-    };
+    const update = () => setScale(previewWidth() / PAGE_W);
     update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    if (frame) ro.observe(frame);
-    return () => ro.disconnect();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   // Mobile: the print page opens in a new tab; show the follow-up when the user comes back.
@@ -129,6 +110,21 @@ export function SundaySheetHero({
     };
   }, []);
 
+  useEffect(() => {
+    if (!binderOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setBinderOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [binderOpen]);
+
+  useEffect(() => {
+    if (!copyMsg) return;
+    const t = window.setTimeout(() => setCopyMsg(""), 2500);
+    return () => window.clearTimeout(t);
+  }, [copyMsg]);
+
   const onPrint = useCallback(() => {
     const frameWin = frameRef.current?.contentWindow;
     if (isMobileDevice() || !frameWin) {
@@ -144,16 +140,26 @@ export function SundaySheetHero({
     window.setTimeout(done, 500);
   }, [printBasePath, level]);
 
+  const onCopy = async () => {
+    const url = new URL(shareHref, window.location.origin).href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopyMsg("Link copied");
+    } catch {
+      setCopyMsg(url);
+    }
+  };
+
   const choose = (value: "subscribed" | "dismissed") => {
     writeEmailState(value);
     setEmailState(value);
   };
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-10">
-      <div ref={wrapRef} className="w-full lg:w-[46%] lg:shrink-0">
+    <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-6">
+      <div className="shrink-0">
         <div
-          className="mx-auto -rotate-2 overflow-hidden rounded-xl border border-[#e7e3de] bg-white shadow-[0_14px_26px_-10px_rgba(0,0,0,0.3)]"
+          className="-rotate-2 overflow-hidden rounded-xl border border-[#e7e3de] bg-white shadow-[0_16px_28px_-12px_rgba(0,0,0,0.32)]"
           style={{ width: PAGE_W * scale, height: PAGE_H * scale }}
         >
           <iframe
@@ -174,18 +180,20 @@ export function SundaySheetHero({
         </div>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-3 lg:gap-4 lg:pr-6">
-        <p className="text-sm font-semibold text-[#d35400]">
-          {position ? `${position} · ` : null}This Sunday · {sundayLabel}
-        </p>
-        <h3 className="text-2xl font-bold leading-tight text-[#1c1c1c] sm:text-3xl">
+      <div className="flex w-full min-w-0 flex-1 flex-col gap-3">
+        <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#d35400]">This Sunday · {sundayLabel}</p>
+        <h2 id="home-sunday-title" className="text-2xl font-bold leading-tight text-[#1c1c1c] sm:text-3xl">
           {title}
-        </h3>
-        <p className="text-base text-[#4b5563]">
+        </h2>
+        <p className="text-sm text-[#4b5563]">
           {liturgicalName} · {gospelRef}
         </p>
 
-        <div role="radiogroup" aria-label="Level" className="flex gap-2">
+        <div
+          role="radiogroup"
+          aria-label="Level"
+          className="inline-flex w-max gap-1 rounded-full border border-[#e7e3de] bg-white p-1"
+        >
           {([1, 2] as const).map((n) => (
             <button
               key={n}
@@ -193,8 +201,8 @@ export function SundaySheetHero({
               role="radio"
               aria-checked={level === n}
               onClick={() => setLevel(n)}
-              className={`rounded-full border px-4 py-2 text-base font-semibold ${
-                level === n ? "border-[#1c1c1c] bg-[#1c1c1c] text-white" : "border-[#e7e3de] bg-white text-[#1c1c1c]"
+              className={`rounded-full px-4 py-1.5 text-[15px] font-bold ${
+                level === n ? "bg-[#1c1c1c] text-white" : "bg-transparent text-[#1c1c1c]"
               }`}
             >
               Level {n}
@@ -202,38 +210,69 @@ export function SundaySheetHero({
           ))}
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <button
+          type="button"
+          onClick={onPrint}
+          className="w-full rounded-full bg-[#2e7d32] px-6 py-3.5 text-center text-xl font-extrabold text-white shadow-[0_10px_18px_-8px_rgba(46,125,50,0.65)] hover:bg-[#256628]"
+        >
+          🖨 Print Free Sheet
+          <span className="mt-0.5 block text-xs font-semibold opacity-90">No sign-in needed</span>
+        </button>
+
+        <div className="relative flex gap-2">
           <button
             type="button"
-            onClick={onPrint}
-            className="w-full rounded-full bg-[#2e7d32] px-8 py-4 text-xl font-bold shadow-[0_8px_16px_-8px_rgba(46,125,50,0.6)] text-white hover:bg-[#256628] sm:w-auto"
+            onClick={() => setBinderOpen((v) => !v)}
+            aria-expanded={binderOpen}
+            aria-controls="home-binder-pop"
+            className="flex-1 whitespace-nowrap rounded-full border-2 border-[#2e7d32] bg-white px-3 py-2.5 text-sm font-extrabold text-[#2e7d32] hover:bg-[#f1f8f1]"
           >
-            🖨 Print this week&apos;s sheet
+            📒 Save to My Binder
           </button>
-          {editBasePath ? (
-            <Link
-              href={signedIn ? (level === 2 ? `${editBasePath}?level=2` : editBasePath) : "/account/login"}
-              className="flex w-full flex-col items-center rounded-full border-2 border-[#2e7d32] bg-white px-7 py-2.5 text-[#2e7d32] no-underline hover:bg-[#f1f8f1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2e7d32] sm:w-auto"
+          <button
+            type="button"
+            onClick={onCopy}
+            className="flex-1 whitespace-nowrap rounded-full border-2 border-[#d8cfc4] bg-white px-3 py-2.5 text-sm font-extrabold text-[#374151] hover:bg-[#faf7f3]"
+          >
+            🔗 Copy Link
+          </button>
+
+          {binderOpen ? (
+            <div
+              id="home-binder-pop"
+              role="dialog"
+              aria-label="My Binder"
+              className="absolute left-0 right-0 top-full z-20 mt-2 rounded-2xl border border-[#e7dccf] bg-white p-4 text-sm shadow-[0_14px_30px_-12px_rgba(0,0,0,0.35)]"
             >
-              <span className="text-lg font-bold leading-tight">
-                <span aria-hidden>✏️</span> Customize this sheet
-              </span>
-              <span
-                className={`text-xs font-medium leading-tight text-[#4b5563]${sessionReady ? "" : " invisible"}`}
-              >
-                {signedIn ? "Try free · save with Plus · no auto-renew" : "Sign in to customize this sheet"}
-              </span>
-            </Link>
+              <div className="flex items-start justify-between gap-3">
+                <p className="font-bold text-[#1c1c1c]">📒 My Binder is coming soon</p>
+                <button
+                  type="button"
+                  onClick={() => setBinderOpen(false)}
+                  className="-mr-1 -mt-1 rounded-full px-2 text-lg leading-none text-[#6b7280] hover:bg-[#f3f4f6]"
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
+              {sessionReady && signedIn ? (
+                <p className="mt-1 text-[#4b5563]">You&apos;re signed in. Saving sheets will open here soon.</p>
+              ) : (
+                <>
+                  <p className="mt-1 text-[#4b5563]">Sign in with Google to save sheets here when it opens.</p>
+                  <Link
+                    href={SIGN_IN_HREF}
+                    className="mt-3 inline-block rounded-full bg-[#2e7d32] px-5 py-2 font-bold text-white no-underline hover:bg-[#256628]"
+                  >
+                    Sign in
+                  </Link>
+                </>
+              )}
+            </div>
           ) : null}
         </div>
-
-        <p className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          <Link href="/daily-mass" className="font-semibold text-[var(--color-link)] hover:underline">
-            Practice typing today&apos;s Gospel →
-          </Link>
-          <Link href={seasonHref} className="font-semibold text-[var(--color-link)] hover:underline">
-            More {seasonLabel} activities →
-          </Link>
+        <p className="min-h-[1.25rem] break-all text-xs font-semibold text-[#2e7d32]" aria-live="polite">
+          {copyMsg}
         </p>
 
         {printed && emailEnabled && !emailState ? <EmailOptIn onDone={choose} /> : null}
