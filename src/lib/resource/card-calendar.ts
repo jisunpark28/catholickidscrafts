@@ -1,13 +1,16 @@
 // Server-only (romcal via sheet-keys): next date each picture card is used.
 import { toSheetKey, type RomcalCountry } from "@/lib/sheet-keys";
-import { PICTURE_CARDS } from "@/lib/resource/cards";
+import { cardMonthDay, PICTURE_CARDS } from "@/lib/resource/cards";
+import { romcalDatesForKeys } from "@/lib/romcal-liturgical";
 
 const DAY = 86_400_000;
 
 /**
  * Card id -> next date (YYYY-MM-DD) within the coming year, from `today` (YYYY-MM-DD) on.
  * Sunday-sheet cards use the Sunday whose sheet key matches; fixed-day cards (e.g. "Nov 1")
- * use their next calendar occurrence. Cards with neither are left out.
+ * use their next calendar occurrence (the country's own day from `mdByCountry`, else `md`);
+ * movable cards with `romcalKeys` use the next day romcal gives that celebration in the
+ * country's calendar. Cards with none of these are left out.
  */
 export function upcomingCardDates(
   today: string,
@@ -39,15 +42,21 @@ export function upcomingCardDates(
       const d = keyDate.get(k);
       if (d && (!best || d < best.date)) best = { date: d, sunday: true };
     }
-    if (card.md) {
+    const md = cardMonthDay(card, country);
+    if (md) {
       for (const year of [y, y + 1]) {
-        const t = Date.parse(`${year}-${card.md}T00:00:00Z`);
+        const t = Date.parse(`${year}-${md}T00:00:00Z`);
         if (Number.isFinite(t) && t >= weekStart) {
           const d = new Date(t).toISOString().slice(0, 10);
           if (!best || d < best.date) best = { date: d, sunday: new Date(t).getUTCDay() === 0 };
           break;
         }
       }
+    }
+    if (card.romcalKeys?.length) {
+      const from = new Date(weekStart).toISOString().slice(0, 10);
+      const d = [y, y + 1].flatMap((year) => romcalDatesForKeys(card.romcalKeys!, country, year)).find((day) => day >= from);
+      if (d && (!best || d < best.date)) best = { date: d, sunday: new Date(`${d}T00:00:00Z`).getUTCDay() === 0 };
     }
     if (best) out[card.id] = best;
   }

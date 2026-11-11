@@ -3,7 +3,7 @@
 // free bundle print shows, so the page and the gate always agree.
 import type { RomcalCountry } from "@/lib/sheet-keys";
 import { cardsForSheetKey, cardsForSunday, PICTURE_CARDS } from "@/lib/resource/cards";
-import type { PictureCard } from "@/lib/resource/card-meta";
+import { cardMonthDay, type PictureCard } from "@/lib/resource/card-meta";
 import { thisSunday, todayIn } from "@/lib/resource/this-sunday";
 
 export type FeaturedCardReason = "today" | "sunday" | "season";
@@ -20,9 +20,12 @@ export type FeaturedCard = {
 
 const PREFIX_ORDER = ["FEA", "MAR", "SNT", "LIT", "BIB", "SAC", "MAS", "PRY", "VIR", "FUN", "MST"];
 
-/** Fixed-date cards (feast, saint, memorial) for an MM-DD, best first (Feast > Mary > Saint > …). */
-export function cardsForMonthDay(md: string): PictureCard[] {
-  return PICTURE_CARDS.filter((c) => c.md === md).sort(
+/**
+ * Fixed-date cards (feast, saint, memorial) for an MM-DD, best first (Feast > Mary > Saint > …).
+ * With a country, a card's national day (`mdByCountry`) replaces its `md`.
+ */
+export function cardsForMonthDay(md: string, country?: RomcalCountry): PictureCard[] {
+  return PICTURE_CARDS.filter((c) => cardMonthDay(c, country) === md).sort(
     (a, b) =>
       PREFIX_ORDER.indexOf(a.id.slice(0, 3)) - PREFIX_ORDER.indexOf(b.id.slice(0, 3)) ||
       a.prio - b.prio ||
@@ -43,7 +46,7 @@ export function featuredCardFor(country: RomcalCountry, now = new Date()): Featu
   const today = todayIn(country, now);
   const md = today.slice(5);
   const isSunday = today === sunday.date;
-  const dated = cardsForMonthDay(md)[0] ?? null;
+  const dated = cardsForMonthDay(md, country)[0] ?? null;
   const sundayDirect = cardsForSheetKey(sunday.key)[0] ?? null;
   const base = { today, sundayDate: sunday.date, sundayKey: sunday.key };
 
