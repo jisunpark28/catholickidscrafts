@@ -1,0 +1,26 @@
+{
+  "advent": [
+    { "title": "What is Advent?", "href": "/liturgy/advent" },
+    { "title": "Parts of the Mass", "href": "/catholic-mass-for-kids/four-parts-of-the-mass" }
+  ],
+  "christmas-time": [
+    { "title": "What is Epiphany?", "href": "/liturgy/christmas-time" },
+    { "title": "Parts of the Mass", "href": "/catholic-mass-for-kids/four-parts-of-the-mass" }
+  ],
+  "lent": [
+    { "title": "What is Lent?", "href": "/liturgy/lent" },
+    { "title": "Parts of the Mass", "href": "/catholic-mass-for-kids/four-parts-of-the-mass" }
+  ],
+  "paschal-triduum": [
+    { "title": "What happened on Holy Thursday?", "href": "/liturgy/paschal-triduum" },
+    { "title": "Parts of the Mass", "href": "/catholic-mass-for-kids/four-parts-of-the-mass" }
+  ],
+  "easter-time": [
+    { "title": "What happened at Pentecost?", "href": "/liturgy/easter-time" },
+    { "title": "Parts of the Mass", "href": "/catholic-mass-for-kids/four-parts-of-the-mass" }
+  ],
+  "ordinary-time": [
+    { "title": "What is Ordinary Time and why is it green?", "href": "/liturgy/ordinary-time" },
+    { "title": "Parts of the Mass", "href": "/catholic-mass-for-kids/four-parts-of-the-mass" }
+  ]
+}

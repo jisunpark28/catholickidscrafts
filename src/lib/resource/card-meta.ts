@@ -31,6 +31,13 @@ export type PictureCard = {
   when?: string;
   /** Fixed calendar day "MM-DD" when the card belongs to one. */
   md?: string;
+  /**
+   * National calendar day "MM-DD" where it differs from `md` (romcal 1.3.0 canada / unitedStates).
+   * Read through cardMonthDay(); countries not listed use `md`.
+   */
+  mdByCountry?: Partial<Record<CardCalendarCountry, string>>;
+  /** romcal celebration keys for movable days with no Sunday sheet (e.g. "ashWednesday"). */
+  romcalKeys?: string[];
   /** Sunday sheet keys this card belongs to (e.g. "SOL_ALLSAINTS", "A_OT04"). */
   sheetKeys?: string[];
   /** Saint Fact Box: what the saint is patron of (empty or absent = hide the row). */
@@ -40,6 +47,17 @@ export type PictureCard = {
   /** Saint Fact Box: one-line story. The card caption stays in `text`. */
   story?: string;
 };
+
+/** ISO codes used by `mdByCountry` (same codes as the x-vercel-ip-country header). */
+export type CardCalendarCountry = "CA" | "US";
+
+const CARD_COUNTRY: Record<string, CardCalendarCountry> = { canada: "CA", unitedStates: "US" };
+
+/** The card's "MM-DD" in a romcal country's calendar (e.g. "canada"), falling back to `md`. */
+export function cardMonthDay(card: Pick<PictureCard, "md" | "mdByCountry">, country?: string | null): string | undefined {
+  const iso = country ? CARD_COUNTRY[country] : undefined;
+  return (iso && card.mdByCountry?.[iso]) || card.md;
+}
 
 /** Slim shape sent to the client grid. */
 export type CardListItem = Pick<PictureCard, "id" | "cat" | "set" | "title" | "ref" | "when"> & {
