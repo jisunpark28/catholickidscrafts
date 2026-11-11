@@ -199,10 +199,11 @@ const ORIGINAL_REFS: Record<string, readonly string[]> = {
   celebration: ["Numbers 6:24–26", "Jeremiah 29:11"],
   "just-because": ["Zephaniah 3:17", "1 Corinthians 13:4–7"],
   dreams: ["Matthew 5:16", "Ephesians 2:10"],
+  "great-job": ["Matthew 25:21", "1 Corinthians 15:58"],
 };
 const GROUP_COUNTS = SITUATION_GROUPS.map((group) => group.situations.length);
 check("four groups", SITUATION_GROUPS.length === 4 && SITUATION_GROUPS.map((group) => group.title).join("|") === "Love & Comfort|Wisdom & Growth|Courage & Peace|Mom's Prayer for You");
-check("308 moments = 15 original + 293 dataset additions", SITUATIONS.length === 308 && ORIGINAL_SITUATIONS.length === 15 && GROUP_COUNTS.join(",") === "74,91,75,68");
+check("309 moments = 16 original + 293 dataset additions", SITUATIONS.length === 309 && ORIGINAL_SITUATIONS.length === 16 && GROUP_COUNTS.join(",") === "74,91,75,69");
 check("situation keys unique", new Set(SITUATIONS.map((s) => s.key)).size === SITUATIONS.length);
 check("situation lookup", getSituation("losing-a-pet")?.title === "Losing a Pet" && isSituationKey("anger") && !isSituationKey("nope"));
 check("original chips stay first and unchanged", SITUATION_GROUPS.every((group) => ORIGINAL_SITUATIONS.filter((situation) => group.situations.some((item) => item.key === situation.key)).every((situation, index) => group.situations[index]?.key === situation.key)));

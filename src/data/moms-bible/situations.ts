@@ -1,7 +1,7 @@
 /**
  * "When my child is…" moments with recommended verses (official Catholic / NABRE references).
  * Each ref is mapped to the reader page with nabreToDouay; scripts/test-moms-bible.ts checks
- * the mapping. The original fifteen chips stay first in each group. Extra moments from the
+ * the mapping. The original sixteen chips stay first in each group. Extra moments from the
  * parenting dataset are appended from situation-catalog.ts. A note is a parent's wording,
  * not Scripture. A care line is for harm, crisis, or health: prayer does not replace help.
  */
@@ -81,6 +81,7 @@ const ORIGINAL_GROUPS: readonly SituationGroup[] = [
       { key: "celebration", emoji: "🎂", title: "Birthday / First Communion", refs: [r("numbers", "Numbers 6:24–26", 6, 24, 26), r("jeremiah", "Jeremiah 29:11", 29, 11)] },
       { key: "just-because", emoji: "🙏", title: "Just Because", refs: [r("zephaniah", "Zephaniah 3:17", 3, 17), r("1corinthians", "1 Corinthians 13:4–7", 13, 4, 7)] },
       { key: "dreams", emoji: "✨", title: "Dreams", refs: [r("matthew", "Matthew 5:16", 5, 16), r("ephesians", "Ephesians 2:10", 2, 10)] },
+      { key: "great-job", emoji: "⭐", title: "Great Job", refs: [r("matthew", "Matthew 25:21", 25, 21), r("1corinthians", "1 Corinthians 15:58", 15, 58)] },
     ],
   },
 ];
