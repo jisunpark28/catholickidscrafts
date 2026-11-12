@@ -110,37 +110,70 @@ export function saintFactBox(card: SeoCard): SaintFactBox | null {
   return { feast: card.when, patron, symbols, story };
 }
 
-/** Meta description for a saint page: the Fact Box story and patronage when present, else the template. */
-export function saintMetaDescription(card: SeoCard): string {
-  const box = saintFactBox(card);
-  if (!box?.story) return saintPageSeo(card).description;
-  const patronBit = box.patron.length > 0 ? ` Patron of ${box.patron.join(", ")}.` : "";
-  const feastBit = box.feast ? ` Feast day: ${box.feast}.` : "";
-  return clip(`${card.title} for kids: ${box.story}${patronBit}${feastBit}`, 155);
+/**
+ * Only saint pages with a Fact Box are indexed and listed in the sitemap. Pages that only have the
+ * one-line card caption stay reachable (noindex, follow) until their Fact Box is filled in.
+ */
+export function saintIsIndexable(card: SeoCard): boolean {
+  return saintFactBox(card) !== null;
 }
 
-export function saintPageSeo(card: SeoCard): CardPageSeo {
+export const INDEXABLE_SAINT_SEO_CARDS: readonly SeoCard[] = SAINT_SEO_CARDS.filter(saintIsIndexable);
+
+const SAINT_TITLE_MAX = 60;
+const SAINT_DESCRIPTION_MAX = 155;
+
+/**
+ * Title for an indexable saint page, used as the absolute <title> (no site suffix) so it stays
+ * within ~60 characters: "<Saint> for Kids – Feast Day & Story", shortened for long names.
+ */
+export function saintIndexableTitle(card: SeoCard): string {
+  const candidates = [
+    `${card.title} for Kids – Feast Day & Story`,
+    card.when ? `${card.title} for Kids – Feast Day` : `${card.title} for Kids – Story`,
+    `${card.title} for Kids`,
+  ];
+  return candidates.find((t) => t.length <= SAINT_TITLE_MAX) ?? candidates[candidates.length - 1]!;
+}
+
+function joinList(items: string[]): string {
+  if (items.length <= 1) return items.join("");
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+}
+
+/** "Nov 13 (US)" -> "Nov 13, US" so it reads cleanly inside parentheses. */
+function feastLabel(when: string): string {
+  return when.replace(/\s*\(([^)]+)\)\s*$/, ", $1").trim();
+}
+
+/**
+ * Meta description for a saint page. Indexable pages get one complete sentence (<= 155 chars,
+ * never cut mid-sentence) that only mentions the story / symbols / patronage the page really has.
+ */
+export function saintMetaDescription(card: SeoCard): string {
+  const box = saintFactBox(card);
+  if (!box) return saintPageSeo(card).description;
+  const parts: string[] = [];
+  if (box.story) parts.push("a short story");
+  if (box.symbols.length > 0) parts.push("symbols");
+  if (box.patron.length > 0) parts.push("patronage");
+  parts.push("a printable saint card");
+  const what = joinList(parts);
+  const feast = box.feast ? ` (Feast: ${feastLabel(box.feast)})` : "";
+  const candidates = [
+    `Learn about ${card.title}${feast} for Catholic kids: ${what}.`,
+    `Learn about ${card.title} for Catholic kids: ${what}.`,
+    `Learn about ${card.title} for Catholic kids with a printable saint card.`,
+    `${card.title} for Catholic kids.`,
+  ];
+  return candidates.find((d) => d.length <= SAINT_DESCRIPTION_MAX) ?? candidates[candidates.length - 1]!;
+}
+
+export type SaintPageSeo = Omit<CardPageSeo, "intro">;
+
+export function saintPageSeo(card: SeoCard): SaintPageSeo {
   const whenBit = card.when ? ` The Church remembers ${card.title} on ${card.when}.` : "";
   const refBit = card.ref ? ` Scripture on the card: ${card.ref}.` : "";
-  const variants: Array<[string, string]> = [
-    [
-      `${card.title} belongs in the "${card.set}" series of Catholic saint cards for kids. The card reminds little ones: "${card.text}"`,
-      `Parents and catechists can use this short story as a doorway into prayer, courage, and friendship with the saints.${whenBit}${refBit}`,
-    ],
-    [
-      `Looking for a simple Catholic intro to ${card.title} for children? This Little Light card from "${card.set}" says: "${card.text}"`,
-      `Read it aloud, then linger on the questions below so the saint's witness sticks beyond a craft table.${whenBit}${refBit}`,
-    ],
-    [
-      `Kids meet ${card.title} through a single vivid line: "${card.text}" That spark is why this "${card.set}" card works so well at home and in CCD.`,
-      `Pair the card with a candle, a picture book, or a quiet moment after Mass.${whenBit}${refBit}`,
-    ],
-    [
-      `Catholic kids often ask who the saints really were. ${card.title} answers with a child-sized truth: "${card.text}"`,
-      `Use this "${card.set}" card when you want holiness to feel close, not distant.${whenBit}${refBit}`,
-    ],
-  ];
-  const intro = variants[hash(card.id) % variants.length]!;
   const qVariants: Array<[string, string, string]> = [
     [
       `What do you notice first when you hear about ${card.title}: "${card.text}"?`,
@@ -170,7 +203,6 @@ export function saintPageSeo(card: SeoCard): CardPageSeo {
       158,
     ),
     h1: `${card.title}: a Catholic saint story for kids`,
-    intro,
     questions,
   };
 }

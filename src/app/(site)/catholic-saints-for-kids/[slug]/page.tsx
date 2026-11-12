@@ -1,11 +1,13 @@
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { PageShell } from "@/components/PageShell";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { cardSharePath, cardThumbSrc } from "@/lib/resource/card-meta";
 import {
   getSaintSeoCard,
   SAINTS_HUB,
   SAINT_SEO_CARDS,
   saintFactBox,
+  saintIndexableTitle,
   saintMetaDescription,
   saintPageSeo,
   type SaintFactBox,
@@ -20,6 +22,7 @@ import {
   type JsonLdNode,
 } from "@/lib/structured-data";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -35,10 +38,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const card = getSaintSeoCard(slug);
   if (!card) return {};
   const seo = saintPageSeo(card);
+  const path = `${SAINTS_HUB}/${card.slug}`;
+  const description = saintMetaDescription(card);
+  if (saintFactBox(card)) {
+    // Indexable: keyword title used as-is (no site suffix) so it stays within ~60 characters.
+    const title = saintIndexableTitle(card);
+    return pageMetadata({
+      title,
+      absoluteTitle: true,
+      description,
+      path,
+      image: pinOgImage("saint", card.slug, title),
+    });
+  }
+  // No Fact Box yet: keep the page reachable for visitors but out of the index and sitemap.
   return pageMetadata({
     title: seo.seoTitle,
-    description: saintMetaDescription(card),
-    path: `${SAINTS_HUB}/${card.slug}`,
+    description,
+    path,
+    robots: { index: false, follow: true },
     image: pinOgImage("saint", card.slug, seo.seoTitle),
   });
 }
@@ -74,22 +92,30 @@ function FactPills({ items }: { items: string[] }) {
   );
 }
 
-function SaintFactBoxCard({ box }: { box: SaintFactBox }) {
+/** Compare a Fact Box story with the card caption, ignoring quotes, punctuation and case. */
+function sameText(a: string, b: string): boolean {
+  const norm = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  return norm(a) === norm(b);
+}
+
+/** Feast day is shown once in the page header, so the Fact Box only lists patronage, symbols and the story. */
+function SaintFactBoxCard({ box, showStory }: { box: SaintFactBox; showStory: boolean }) {
   const rows: { label: string; content: ReactNode }[] = [];
-  if (box.feast) rows.push({ label: "Feast Day", content: <FactPills items={[box.feast]} /> });
   if (box.patron.length > 0) rows.push({ label: "Patron of", content: <FactPills items={box.patron} /> });
   if (box.symbols.length > 0) rows.push({ label: "Symbols", content: <FactPills items={box.symbols} /> });
-  if (box.story) {
+  if (showStory && box.story) {
     rows.push({
       label: "1-Line Story",
       content: <p className="text-base leading-relaxed text-[#374151]">{box.story}</p>,
     });
   }
+  if (rows.length === 0) return null;
   return (
-    <section
-      aria-labelledby="fact-box"
-      className="mt-4 max-w-3xl rounded-2xl border border-[#f0d9b8] bg-white/90 p-4"
-    >
+    <section aria-labelledby="fact-box" className="rounded-2xl border border-[#f0d9b8] bg-white/90 p-4">
       <h2 id="fact-box" className="font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
         Fact Box
       </h2>
@@ -113,8 +139,9 @@ export default async function CatholicSaintPage({ params }: Props) {
   if (!card) notFound();
   const seo = saintPageSeo(card);
   const factBox = saintFactBox(card);
-  const description = factBox ? saintMetaDescription(card) : seo.description;
+  const description = saintMetaDescription(card);
   const path = `${SAINTS_HUB}/${card.slug}`;
+  const showStory = Boolean(factBox?.story && !sameText(factBox.story, card.text));
 
   return (
     <PageShell>
@@ -139,25 +166,50 @@ export default async function CatholicSaintPage({ params }: Props) {
           › {card.title}
         </nav>
 
-        <header className="mt-3">
-          <p className="text-sm font-semibold uppercase tracking-wide text-[#9a6b3f]">{card.set}</p>
-          <h1 className="mt-1 font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{seo.h1}</h1>
-          {card.when ? <p className="mt-2 text-sm text-[#4b5563]">Feast / memorial: {card.when}</p> : null}
-        </header>
+        {/* Desktop (lg+): one grid row (items-stretch) so the card column ends level with the Fact Box (or the quote). */}
+        <div className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-8 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-stretch">
+          <figure className="mx-auto w-44 shrink-0 sm:mx-0 sm:w-52 lg:flex lg:w-auto lg:flex-col">
+            <div className="rounded-2xl border border-[#f0d9b8] bg-white p-2 shadow-sm lg:flex lg:min-h-[12rem] lg:flex-1 lg:flex-col lg:bg-[#fef9f6]">
+              {/* On desktop the picture fills the stretched frame without changing its 4:5 shape; the frame uses the card paper colour so the extra space blends in. */}
+              <div className="relative lg:flex-1">
+                <Image
+                  src={cardThumbSrc(card.id)}
+                  alt={`${card.title} saint card for kids`}
+                  width={432}
+                  height={540}
+                  unoptimized
+                  priority
+                  className="block h-auto w-full rounded-lg bg-[#fbf7f1] lg:absolute lg:inset-0 lg:h-full lg:bg-transparent lg:object-contain"
+                />
+              </div>
+            </div>
+            <Link
+              href={cardSharePath(card.id)}
+              className="mt-2 flex shrink-0 items-center justify-center gap-1.5 rounded-full border border-[#c9773a] bg-white px-3 py-1.5 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-[#fff8f0]"
+            >
+              <span aria-hidden="true">🖨️</span> Print / Save Saint Card
+            </Link>
+          </figure>
 
-        {factBox ? (
-          <SaintFactBoxCard box={factBox} />
-        ) : (
-          <div className="mt-4 max-w-3xl space-y-3 text-base leading-relaxed text-[#374151]">
-            <p>{seo.intro[0]}</p>
-            <p>{seo.intro[1]}</p>
+          <div className="min-w-0 flex-1 space-y-4">
+            <header>
+              <p className="text-sm font-semibold uppercase tracking-wide text-[#9a6b3f]">{card.set}</p>
+              <h1 className="mt-1 font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{seo.h1}</h1>
+              {card.when ? (
+                <p className="mt-2 text-base text-[#4b5563]">
+                  <span className="font-semibold text-[#1f2937]">Feast day:</span> {card.when}
+                </p>
+              ) : null}
+            </header>
+
+            <blockquote className="rounded-2xl border-l-4 border-[#c9773a] bg-white/90 p-4 text-lg font-medium leading-relaxed text-[#1f2937]">
+              “{card.text}”
+              {card.ref ? <footer className="mt-2 text-sm font-normal text-[#6b7280]">{card.ref}</footer> : null}
+            </blockquote>
+
+            {factBox ? <SaintFactBoxCard box={factBox} showStory={showStory} /> : null}
           </div>
-        )}
-
-        <blockquote className="mt-6 max-w-3xl rounded-2xl border border-[#f0d9b8] bg-white/90 p-4 text-base font-medium text-[#1f2937]">
-          “{card.text}”
-          {card.ref ? <footer className="mt-2 text-sm font-normal text-[#6b7280]">{card.ref}</footer> : null}
-        </blockquote>
+        </div>
 
         <section className="mt-8 max-w-3xl" aria-labelledby="talk">
           <h2 id="talk" className="font-[Georgia,serif] text-xl font-bold text-[#1f2937]">
