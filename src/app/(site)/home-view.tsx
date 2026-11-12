@@ -6,6 +6,7 @@ import { emailConfigured } from "@/lib/email";
 import { cardShortTitle, getHomeToday, type HomeHighlight, type HomeToday } from "@/lib/home/home-today";
 import { loadHomeSundaySheet } from "@/lib/home-sunday-sheet";
 import { getPublicContactEmail } from "@/lib/site-contact";
+import { activityPath, homeActivityPicks } from "@/lib/resource/activities";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
@@ -114,6 +115,9 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
     return s ? [{ key: s.key, emoji: s.emoji, title: s.title, href: `${SITUATIONS_PATH}#s-${s.key}` }] : [];
   });
   const upcoming = nextSeasonStart(today.date, today.season.name);
+  // The activity sheets are Advent ones: show the row in Advent and in the weeks before it.
+  const activityPicks =
+    today.season.name === "Advent" || upcoming?.name === "Advent" ? homeActivityPicks(today.date) : [];
 
   return (
     <HomePdfShell groups={groups} dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}>
@@ -305,6 +309,52 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
             ))}
           </ul>
         </section>
+
+        {/* Activities & crafts: today's scheduled sheet, the next ones, and the Plus craft (homeActivityPicks). */}
+        {activityPicks.length > 0 ? (
+          <section aria-labelledby="home-activities-title" className="mt-5">
+            <h2
+              id="home-activities-title"
+              className="mb-3 flex flex-wrap items-baseline gap-x-2.5 text-xl font-bold text-[#1f2937]"
+            >
+              <span className="text-xs font-extrabold uppercase tracking-[0.12em] text-[#d35400]">Activities &amp; crafts</span>
+              Print, colour and make for Advent
+              <Link
+                href="/resource?view=all&season=advent"
+                className="ml-auto text-sm font-bold text-[#d35400] no-underline hover:underline"
+              >
+                See all →
+              </Link>
+            </h2>
+            <ul className="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:grid-cols-4">
+              {activityPicks.map(({ activity, label, access }) => (
+                <li key={activity.slug}>
+                  <Link
+                    href={activityPath(activity.slug)}
+                    className="relative block h-full overflow-hidden rounded-[20px] border border-[#f1e4d6] bg-white text-[#1f2937] no-underline shadow-[0_8px_18px_-14px_rgba(0,0,0,0.35)] hover:shadow-[0_10px_22px_-12px_rgba(0,0,0,0.35)]"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={activity.previews.color}
+                      alt=""
+                      loading="lazy"
+                      className="block aspect-[4/3] w-full bg-[#fbf6f0] object-cover object-top"
+                    />
+                    {access === "plus" ? (
+                      <span aria-hidden className="absolute right-2 top-2 rounded-full bg-[#d35400] px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white">
+                        PLUS
+                      </span>
+                    ) : null}
+                    <span className="block px-3 pb-3 pt-2.5">
+                      <span className="block text-xs font-extrabold text-[#d35400]">{label}</span>
+                      <span className="block text-[15px] font-bold leading-snug">{activity.title}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
       </div>
     </HomePdfShell>
   );
