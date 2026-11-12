@@ -24,10 +24,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const activity = getActivity(slug);
   if (!activity) return {};
   return pageMetadata({
-    title: `${activity.title} Coloring Sheet`,
+    title: activity.seoTitle,
     description: activity.description,
     path: activityPath(activity.slug),
-    image: { url: activity.previews.color, width: 600, height: 776, alt: `${activity.title} coloring sheet` },
+    image: { url: activity.previews.color, width: 600, height: 776, alt: `${activity.title} ${activity.kind.toLowerCase()}` },
   });
 }
 
@@ -51,8 +51,8 @@ export default async function ActivityPage({ params }: Props) {
             "@type": "LearningResource",
             name: activity.title,
             description: activity.description,
-            learningResourceType: ["Coloring sheet", "Activity"],
-            isAccessibleForFree: true,
+            learningResourceType: [activity.kind, "Activity"],
+            isAccessibleForFree: activity.access === "signin",
             inLanguage: "en",
             url: absoluteSiteUrl(path),
             image: absoluteSiteUrl(activity.previews.color),

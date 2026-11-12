@@ -2,6 +2,7 @@ import { parentApiGuard } from "@/lib/family-auth";
 import { getRateLimitState, recordRateLimitFailure, type RateLimitRule } from "@/lib/rate-limit";
 import { activityFileName, getActivity, parseActivityVariant } from "@/lib/resource/activities";
 import { readActivityPdf } from "@/lib/resource/activity-files";
+import { familyHasPlus, plusRequiredResponse } from "@/lib/subscription/entitlements";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,8 @@ const ACTIVITY_DOWNLOAD_RULE: RateLimitRule = {
 const noStore = { "Cache-Control": "private, no-store" };
 
 /**
- * Activity PDF (B&W or colour). Free for any signed-in parent; checked on every request.
+ * Activity PDF (B&W or colour), checked on every request. Free sheets: any signed-in parent.
+ * Plus sheets (the craft): an active Plus pass too, else 402.
  * Signed out: 401. Child mode: 403 (parentApiGuard). The PDFs are bundled under assets/, never public.
  */
 export async function GET(request: Request, ctx: Ctx) {
@@ -32,6 +34,11 @@ export async function GET(request: Request, ctx: Ctx) {
   if (guard.error) {
     guard.error.headers.set("Cache-Control", noStore["Cache-Control"]);
     return guard.error;
+  }
+  if (activity.access === "plus" && !(await familyHasPlus(guard.session.familyAccountId))) {
+    const res = plusRequiredResponse();
+    res.headers.set("Cache-Control", noStore["Cache-Control"]);
+    return res;
   }
 
   const limitKey = `activity-dl:${guard.session.familyAccountId}`;

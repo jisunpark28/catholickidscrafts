@@ -1,5 +1,6 @@
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { cardKindLabel, cardSharePath, cardThumbSrc, type PictureCard } from "@/lib/resource/card-meta";
+import type { ResourceActivity } from "@/lib/resource/activities";
 import { resourcePath, resourcePrintPath } from "@/lib/resource/sheets";
 import { bundlePrintPath, fullSundayDate, seasonIcon } from "@/lib/resource/sunday-bundle";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
@@ -7,6 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { SundayCardButtons } from "./SundayCardButtons";
 import { SheetThumb } from "./SheetThumb";
+import { SundayActivitySlot } from "./activity/SundayActivitySlot";
+
+type SlotActivity = Pick<ResourceActivity, "slug" | "title" | "kind" | "previews" | "access" | "tryThis" | "summary">;
 
 type Props = {
   sheet: SundaySheetContent;
@@ -18,6 +22,10 @@ type Props = {
   moreCards: PictureCard[];
   /** e.g. "Nov 1" for the card meta line. */
   cardDateLabel?: string;
+  /** Today's activity sheet (the daily Instagram "Try this", Toronto date). */
+  activity?: { activity: SlotActivity; dateLabel: string } | null;
+  /** The Advent craft (Plus download). */
+  craft?: SlotActivity | null;
 };
 
 const colBox = "flex min-w-0 flex-col rounded-2xl border border-[#e8e0d6] bg-white p-4";
@@ -42,7 +50,7 @@ const COLOR_DOT: Record<string, string> = {
   gold: "#d4a63a",
 };
 
-/** "This Sunday" bundle (mockup a-bundle): header · Weekly Sheet · Cards · Activities · Crafts. */
+/** "This Sunday" bundle (mockup a-bundle): header · Weekly Sheet · Cards · Activities (today's sheet) · Crafts. */
 export function SundayBundle({
   sheet,
   level,
@@ -52,6 +60,8 @@ export function SundayBundle({
   card,
   moreCards,
   cardDateLabel,
+  activity,
+  craft,
 }: Props) {
   const lv = level === 2 ? sheet.levels.level2 : sheet.levels.level1;
   const sheetSections = ["Story", "Trace the words", lv.activity?.title ?? lv.heartTitle].filter(Boolean);
@@ -185,23 +195,52 @@ export function SundayBundle({
           )}
         </article>
 
-        {(["Activities", "Crafts"] as const).map((kind) => (
-          <article key={kind} className={`${colBox} bg-[#fcfbfa]`} aria-label={kind}>
-            <p className={colLabel}>{kind}</p>
-            <h3 className="m-0 mt-0.5 text-base font-bold text-[#9ca3af]">Coming soon</h3>
-            <div className="mt-3 flex min-h-[160px] flex-1 flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#ebe5de] px-4 text-center">
-              <span aria-hidden className="text-3xl">
-                {kind === "Activities" ? "🎲" : "✂️"}
-              </span>
-              <p className="m-0 mt-2 text-xs text-[#6b7280]">
-                {kind === "Activities"
-                  ? "Games and group activities for each Sunday are on the way."
-                  : "Craft templates for each Sunday are on the way."}
-              </p>
-            </div>
-          </article>
-        ))}
+        {activity ? (
+          <SundayActivitySlot
+            label="Activities"
+            activity={activity.activity}
+            meta={`${activity.activity.kind} · ${activity.dateLabel}`}
+            note={activity.activity.tryThis[0] ? `Try this: ${activity.activity.tryThis[0]}` : activity.activity.summary}
+            moreHref="/resource?view=all&season=advent"
+            moreLabel="+ more Advent activities"
+            primaryCls={`${btn} bg-[#d35400] text-white hover:bg-[#b8470a] disabled:opacity-60`}
+            ghostCls={`${btn} border border-[#e7e3de] bg-white font-medium text-[#1c1c1c] hover:bg-[#fffdfb]`}
+          />
+        ) : (
+          <ComingSoon kind="Activities" />
+        )}
+        {craft ? (
+          <SundayActivitySlot
+            label="Crafts"
+            activity={craft}
+            meta={`${craft.kind} · B&W or colour · US Letter`}
+            note={craft.summary}
+            primaryCls={`${btn} bg-[#d35400] text-white hover:bg-[#b8470a] disabled:opacity-60`}
+            ghostCls={`${btn} border border-[#e7e3de] bg-white font-medium text-[#1c1c1c] hover:bg-[#fffdfb]`}
+          />
+        ) : (
+          <ComingSoon kind="Crafts" />
+        )}
       </div>
     </section>
+  );
+}
+
+function ComingSoon({ kind }: { kind: "Activities" | "Crafts" }) {
+  return (
+    <article className={`${colBox} bg-[#fcfbfa]`} aria-label={kind}>
+      <p className={colLabel}>{kind}</p>
+      <h3 className="m-0 mt-0.5 text-base font-bold text-[#9ca3af]">Coming soon</h3>
+      <div className="mt-3 flex min-h-[160px] flex-1 flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#ebe5de] px-4 text-center">
+        <span aria-hidden className="text-3xl">
+          {kind === "Activities" ? "🎲" : "✂️"}
+        </span>
+        <p className="m-0 mt-2 text-xs text-[#6b7280]">
+          {kind === "Activities"
+            ? "Games and group activities for each Sunday are on the way."
+            : "Craft templates for each Sunday are on the way."}
+        </p>
+      </div>
+    </article>
   );
 }

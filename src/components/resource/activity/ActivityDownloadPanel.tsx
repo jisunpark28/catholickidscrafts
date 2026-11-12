@@ -17,7 +17,7 @@ import { PlusLockButton } from "../PlusLockDialog";
 import { ActivitySignInPrompt } from "./ActivitySignInPrompt";
 
 type Props = {
-  activity: Pick<ResourceActivity, "slug" | "title" | "previews" | "pageSize">;
+  activity: Pick<ResourceActivity, "slug" | "title" | "kind" | "previews" | "pageSize" | "access">;
 };
 
 const primary =
@@ -26,9 +26,10 @@ const ghost =
   "inline-flex items-center justify-center gap-1.5 rounded-full border border-[#e7e3de] bg-white px-5 py-2.5 text-sm font-semibold text-[#1c1c1c] no-underline transition hover:bg-[#fffdfb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
 /**
- * Preview + B&W / colour choice + download. Signed-in parents download (the API checks the
- * session on every request); signed-out visitors get the sign-in prompt. Plus members also
- * get the editor. Display only: the session flags here never unlock anything by themselves.
+ * Preview + B&W / colour choice + download. Free sheets: signed-in parents download (the API checks
+ * the session on every request). Plus sheets (the craft): Plus members download, others see the
+ * Plus lock. Signed-out visitors get the sign-in prompt. Plus members also get the editor.
+ * Display only: the session flags here never unlock anything by themselves.
  */
 export function ActivityDownloadPanel({ activity }: Props) {
   const { ready, session } = useSiteSession();
@@ -38,6 +39,8 @@ export function ActivityDownloadPanel({ activity }: Props) {
   const family = session.family;
   const signedIn = Boolean(family && !family.childMode);
   const isPlus = Boolean(family?.isPlus && !family.childMode);
+  const plusOnly = activity.access === "plus";
+  const kindLabel = activity.kind.toLowerCase();
 
   const download = async () => {
     setBusy(true);
@@ -58,7 +61,7 @@ export function ActivityDownloadPanel({ activity }: Props) {
           <Image
             key={variant}
             src={activity.previews[variant]}
-            alt={`${activity.title} coloring sheet preview (${ACTIVITY_VARIANT_LABELS[variant].toLowerCase()})`}
+            alt={`${activity.title} ${kindLabel} preview (${ACTIVITY_VARIANT_LABELS[variant].toLowerCase()})`}
             width={600}
             height={776}
             className="block h-auto w-full rounded-lg"
@@ -96,6 +99,21 @@ export function ActivityDownloadPanel({ activity }: Props) {
 
         {!ready ? (
           <div className="h-[46px] w-56 animate-pulse rounded-full bg-[#f3f1ee]" aria-hidden />
+        ) : signedIn && plusOnly && !isPlus ? (
+          <div>
+            <PlusLockButton
+              className={`${primary} cursor-pointer`}
+              message={`This ${kindLabel} is for Plus members. The weekly sheet, card and daily activity sheets stay free.`}
+            >
+              🔒 Download PDF ({ACTIVITY_VARIANT_LABELS[variant]})
+            </PlusLockButton>
+            <p className="m-0 mt-2 text-xs text-[#6b7280]">
+              🔒 Plus members only ·{" "}
+              <Link href="/subscribe" className="font-semibold text-[#d35400] hover:underline">
+                Get Plus
+              </Link>
+            </p>
+          </div>
         ) : signedIn ? (
           <div>
             <div className="flex flex-wrap gap-2">
@@ -108,7 +126,9 @@ export function ActivityDownloadPanel({ activity }: Props) {
                 {msg}
               </p>
             ) : (
-              <p className="m-0 mt-2 text-xs text-[#6b7280]">Free for signed-in families.</p>
+              <p className="m-0 mt-2 text-xs text-[#6b7280]">
+                {plusOnly ? "Included with Plus." : "Free for signed-in families."}
+              </p>
             )}
           </div>
         ) : family?.childMode ? (
@@ -116,7 +136,15 @@ export function ActivityDownloadPanel({ activity }: Props) {
             Grown-ups only: sign in with Google again to return to the parent account and download this sheet.
           </p>
         ) : (
-          <ActivitySignInPrompt title="Sign in to download" body="This coloring sheet is free. Sign in with your family account to download the PDF." />
+          <ActivitySignInPrompt
+            title="Sign in to download"
+            kicker={plusOnly ? "Plus members" : undefined}
+            body={
+              plusOnly
+                ? `This ${kindLabel} is for Plus members. Sign in with your family account first.`
+                : `This ${kindLabel} is free. Sign in with your family account to download the PDF.`
+            }
+          />
         )}
 
         <div className="rounded-2xl border border-[#e8e0d6] bg-white px-4 py-4">
@@ -125,7 +153,7 @@ export function ActivityDownloadPanel({ activity }: Props) {
             <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
           </h2>
           <p className="m-0 mt-1 text-sm leading-relaxed text-[#4b5563]">
-            Change any word, line or dot on the page, move or resize the doodles, recolour the seasons, then print or
+            Change any word, line or dot on the page, move or resize the pictures, recolour anything, then print or
             download your own PDF.
           </p>
           <div className="mt-3">
@@ -139,9 +167,17 @@ export function ActivityDownloadPanel({ activity }: Props) {
               <>
                 <PlusLockButton
                   className={`${ghost} cursor-pointer text-[#6b7280]`}
-                  message="Editing this sheet is a Plus feature. Downloading it is free when you sign in."
-                  freeHref={signedIn ? activityPath(activity.slug) : "/account/login"}
-                  freeLabel={signedIn ? "Download the free sheet" : "Sign in to download free"}
+                  message={
+                    plusOnly
+                      ? "Editing and downloading this craft are Plus features."
+                      : "Editing this sheet is a Plus feature. Downloading it is free when you sign in."
+                  }
+                  {...(plusOnly
+                    ? {}
+                    : {
+                        freeHref: signedIn ? activityPath(activity.slug) : "/account/login",
+                        freeLabel: signedIn ? "Download the free sheet" : "Sign in to download free",
+                      })}
                 >
                   🔒 Open the editor
                 </PlusLockButton>

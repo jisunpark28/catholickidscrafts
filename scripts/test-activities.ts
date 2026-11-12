@@ -3,8 +3,14 @@ import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
 import MODEL from "../src/data/activities/happy-new-church-year.model.json";
+import seedJson from "../prisma/data/liturgy-qa-cards.json";
 import {
   activityDownloadPath,
+  activityForTryThis,
+  DAILY_ACTIVITY_SCHEDULE,
+  dailyActivityFor,
+  SUNDAY_CRAFT_SLUG,
+  torontoDate,
   activityEditPath,
   activityFileName,
   activityPath,
@@ -21,6 +27,7 @@ import {
   withVariant,
   type ActivityEl,
 } from "../src/lib/resource/activity-doc";
+import { getActivityModel } from "../src/lib/resource/activity-models";
 import { buildResourcesSitemap } from "../src/lib/sitemap-entries";
 
 async function main() {
@@ -86,11 +93,61 @@ async function main() {
   const page = await fs.readFile("src/app/(site)/resource/activity/[slug]/page.tsx", "utf8");
   assert.ok(!page.includes("activity-models") && !page.includes("cookies("), "detail page stays static and never ships the model");
 
-  const sitemap = new Set(buildResourcesSitemap().map((e) => new URL(e.url).pathname));
-  assert.ok(sitemap.has("/resource/activity/happy-new-church-year"));
-  assert.ok(!sitemap.has("/resource/activity/happy-new-church-year/edit"));
+  // Plus-only downloads (the craft) are checked on the server too.
+  assert.ok(dl.includes('activity.access === "plus"') && dl.includes("familyHasPlus(") && dl.includes("plusRequiredResponse()"));
+  assert.ok(dl.indexOf("parentApiGuard()") < dl.indexOf("familyHasPlus("), "401 before 402");
 
-  console.log(`test-activities: ${RESOURCE_ACTIVITIES.length} activity, ${doc.elements.length} editable elements (${[...kinds].map(([k, n]) => `${k} ${n}`).join(", ")}) OK`);
+  const sitemap = new Set(buildResourcesSitemap().map((e) => new URL(e.url).pathname));
+  for (const act of RESOURCE_ACTIVITIES) {
+    assert.ok(sitemap.has(activityPath(act.slug)), `sitemap ${act.slug}`);
+    assert.ok(!sitemap.has(activityEditPath(act.slug)));
+  }
+
+  // Every activity has a valid editor model, no age fields, and a unique slug.
+  assert.equal(new Set(RESOURCE_ACTIVITIES.map((x) => x.slug)).size, RESOURCE_ACTIVITIES.length);
+  for (const act of RESOURCE_ACTIVITIES) {
+    const m = getActivityModel(act.slug);
+    assert.ok(m && parseActivityDoc(m), `${act.slug} model parses`);
+    assert.equal(m.slug, act.slug);
+    assert.ok(m.elements.length < 5000);
+    assert.ok(m.elements.some((e) => e.kind === "text" && e.text === "catholickidscrafts.com"), `${act.slug} footer`);
+    assert.ok(m.elements.some((e) => e.palette), `${act.slug} has a colour palette`);
+    for (const k of Object.keys(act)) assert.ok(!/^(age|ages|ageRange|minAge|maxAge|grade|grades)$/i.test(k), `${act.slug}: no ${k}`);
+    const words = JSON.stringify([act.title, act.summary, act.description, m.elements.filter((e) => e.kind === "text").map((e) => (e as { text: string }).text)]);
+    assert.ok(!/\bages?\b|\bgrade\b|years old/i.test(words), `${act.slug} mentions no ages`);
+  }
+
+  // Free with sign-in, except the one Plus craft.
+  const craft = getActivity(SUNDAY_CRAFT_SLUG);
+  assert.ok(craft && craft.access === "plus" && craft.kind === "Craft");
+  assert.deepEqual(RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug), [SUNDAY_CRAFT_SLUG]);
+
+  // Each daily sheet matches an Advent Q&A "Try this" tip verbatim (official site content).
+  const advent = (seedJson as { cards: { topicSlug: string; tryThis?: string }[] }).cards.filter((c) => c.topicSlug === "advent");
+  for (const act of RESOURCE_ACTIVITIES.filter((x) => x.access === "signin")) {
+    for (const t of act.tryThis) {
+      assert.ok(advent.some((c) => c.tryThis === t), `${act.slug} tip is on the Advent Q&A: ${t}`);
+      assert.equal(activityForTryThis(t)?.slug, act.slug);
+    }
+  }
+
+  // Daily schedule (Toronto dates), with fallbacks.
+  for (const row of DAILY_ACTIVITY_SCHEDULE) assert.ok(getActivity(row.slug), row.slug);
+  assert.equal(DAILY_ACTIVITY_SCHEDULE.length, 18, "Nov 12 to Nov 29");
+  assert.equal(dailyActivityFor("2026-11-12").activity.slug, "happy-new-church-year");
+  assert.equal(dailyActivityFor("2026-11-13").activity.slug, "jesse-tree-ornaments");
+  assert.ok(dailyActivityFor("2026-11-13").exact);
+  assert.equal(dailyActivityFor("2026-11-29").activity.slug, "light-the-advent-candle");
+  assert.equal(dailyActivityFor("2026-12-03").activity.slug, "light-the-advent-candle", "after the plan: latest sheet");
+  assert.equal(dailyActivityFor("2026-12-03").exact, false);
+  assert.equal(dailyActivityFor("2026-11-01").activity.slug, "happy-new-church-year", "before the plan");
+  assert.equal(dailyActivityFor("nope").activity.slug, "happy-new-church-year");
+  assert.equal(torontoDate(new Date("2026-11-13T04:30:00Z")), "2026-11-12", "11:30 PM in Toronto is still Nov 12");
+  assert.equal(torontoDate(new Date("2026-11-13T05:30:00Z")), "2026-11-13");
+  const bundle = await fs.readFile("src/components/resource/SundayBundle.tsx", "utf8");
+  assert.ok(bundle.includes("SundayActivitySlot") && bundle.includes("craft ?"), "This Sunday fills Activities and Crafts");
+
+  console.log(`test-activities: ${RESOURCE_ACTIVITIES.length} activities, ${DAILY_ACTIVITY_SCHEDULE.length} scheduled days; Happy New Church Year ${doc.elements.length} editable elements (${[...kinds].map(([k, n]) => `${k} ${n}`).join(", ")}) OK`);
 }
 main().catch((error) => {
   console.error(error);

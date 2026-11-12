@@ -4,10 +4,18 @@ import { GoogleFamilySignIn } from "@/components/GoogleFamilySignIn";
 import Link from "next/link";
 
 /** Free-with-sign-in prompt (same Google family sign-in as /account/login). */
-export function ActivitySignInPrompt({ title, body }: { title: string; body: string }) {
+export function ActivitySignInPrompt({
+  title,
+  body,
+  kicker = "Free with a family account",
+}: {
+  title: string;
+  body: string;
+  kicker?: string;
+}) {
   return (
     <div className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-5 text-center">
-      <p className="m-0 text-xs font-bold uppercase tracking-wide text-[#1e7b34]">Free with a family account</p>
+      <p className="m-0 text-xs font-bold uppercase tracking-wide text-[#1e7b34]">{kicker}</p>
       <h2 className="mb-1 mt-1.5 text-lg font-bold text-[#1c1c1c]">{title}</h2>
       <p className="mx-auto mb-4 mt-0 max-w-sm text-sm leading-relaxed text-[#4b5563]">{body}</p>
       <div className="mx-auto max-w-xs">
