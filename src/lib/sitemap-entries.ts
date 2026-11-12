@@ -4,7 +4,7 @@ import { bibleVerseMomentPaths } from "@/data/moms-bible/situation-seo";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
-import { SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
+import { INDEXABLE_SAINT_SEO_CARDS, SAINTS_HUB } from "@/lib/seo/card-seo";
 import { EVERGREEN_PAGES, MASS_FOR_KIDS_HUB, publicPath, VIRTUE_CHALLENGE_HUB } from "@/lib/seo/evergreen-worksheets";
 import { SUNDAY_MASS_WORKSHEETS_HUB, sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { getSiteUrl } from "@/lib/site-url";
@@ -99,8 +99,9 @@ function bibleVersesForKidsEntries(): SitemapEntry[] {
   return bibleVerseMomentPaths().map((path) => entry(path, "monthly", 0.7));
 }
 
+/** Only saint pages with a Fact Box (the rest are noindex until their Fact Box is filled in). */
 function saintCardEntries(): SitemapEntry[] {
-  return SAINT_SEO_CARDS.map((c) => entry(`${SAINTS_HUB}/${c.slug}`, "monthly", 0.65));
+  return INDEXABLE_SAINT_SEO_CARDS.map((c) => entry(`${SAINTS_HUB}/${c.slug}`, "monthly", 0.65));
 }
 
 async function recommendationEntries(): Promise<SitemapEntry[]> {
