@@ -7,6 +7,7 @@ import { UnifiedSearchResults } from "@/components/resource/UnifiedSearchResults
 import { JsonLd } from "@/components/seo/JsonLd";
 import { requireFamilySession } from "@/lib/family-auth";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
+import { dailyActivityFor, getActivity, SUNDAY_CRAFT_SLUG, torontoDate } from "@/lib/resource/activities";
 import { upcomingCardDates } from "@/lib/resource/card-calendar";
 import {
   cardsForSunday,
@@ -108,6 +109,10 @@ export default async function ResourcePage({ searchParams }: Props) {
     .filter((c) => c != null)
     .map((c) => c.id)
     .filter((id, i, all) => all.indexOf(id) === i);
+  // Today's activity sheet follows the daily Instagram tip (Toronto date); the Advent craft is Plus.
+  const todayToronto = torontoDate();
+  const daily = sunday ? dailyActivityFor(todayToronto) : null;
+  const craft = sunday ? getActivity(SUNDAY_CRAFT_SLUG) : null;
   const cardDates = view === "cards" && sunday ? upcomingCardDates(todayIn(country, new Date()), sunday.date, country) : {};
   const searchHits = view === "all" ? unifiedSearch(q, season, thisSundayKey) : [];
   const clearParams = new URLSearchParams({ view: "all" });
@@ -234,6 +239,15 @@ export default async function ResourcePage({ searchParams }: Props) {
                   : "Season card"
               : undefined
           }
+          activity={
+            daily
+              ? {
+                  activity: daily.activity,
+                  dateLabel: daily.exact ? `Today · ${shortDate(todayToronto)}` : daily.date ? `From ${shortDate(daily.date)}` : "Advent",
+                }
+              : null
+          }
+          craft={craft}
         />
       ) : (
         <p className="mt-5 rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-4 text-sm text-[#6b7280]">

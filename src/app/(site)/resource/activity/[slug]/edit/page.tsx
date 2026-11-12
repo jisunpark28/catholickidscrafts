@@ -48,7 +48,7 @@ export default async function ActivityEditPage({ params }: Props) {
           Every line, dot, shape and word is editable. Your changes stay on this device until you reset.
         </p>
       </header>
-      <ActivityEditorGate slug={activity.slug} title={activity.title} />
+      <ActivityEditorGate slug={activity.slug} title={activity.title} plusOnly={activity.access === "plus"} />
     </HomePdfShell>
   );
 }

@@ -16,13 +16,15 @@ export async function saveActivityPdf(slug: string, variant: ActivityVariant): P
     const msg =
       res.status === 401
         ? "Please sign in to download this sheet."
-        : res.status === 403
-          ? "Grown-ups only: sign in with Google again to return to the parent account."
-          : res.status === 429
-            ? "Too many downloads. Please try again later."
-            : res.status === 404
-              ? "This sheet is not available to download yet."
-              : "Could not get this sheet right now. Please try again.";
+        : res.status === 402
+          ? "This download is for Plus members."
+          : res.status === 403
+            ? "Grown-ups only: sign in with Google again to return to the parent account."
+            : res.status === 429
+              ? "Too many downloads. Please try again later."
+              : res.status === 404
+                ? "This sheet is not available to download yet."
+                : "Could not get this sheet right now. Please try again.";
     throw new ActivityDownloadError(msg, res.status);
   }
   const blob = await res.blob();

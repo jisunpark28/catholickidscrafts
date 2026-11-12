@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
-  activity: Pick<ResourceActivity, "slug" | "title" | "kind" | "summary" | "seasons" | "previews">;
+  activity: Pick<ResourceActivity, "slug" | "title" | "kind" | "summary" | "seasons" | "previews" | "access">;
   typeBadge?: React.ReactNode;
 };
 
 const pill = "inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm font-semibold no-underline";
 
-/** Library tile for an activity, same shape as the sheet and card tiles. Free with sign-in. */
+/** Library tile for an activity, same shape as the sheet and card tiles. Free with sign-in, or Plus. */
 export function ActivityTile({ activity, typeBadge }: Props) {
   const href = activityPath(activity.slug);
   const season = activity.seasons[0];
@@ -27,9 +27,15 @@ export function ActivityTile({ activity, typeBadge }: Props) {
             className="block h-full w-full object-cover object-top"
           />
           {typeBadge ? <span className="absolute left-1.5 top-1.5">{typeBadge}</span> : null}
-          <span className="absolute right-1.5 top-1.5 rounded-md bg-[#e6f4ea] px-1.5 py-0.5 text-[10px] font-bold text-[#1e7b34]">
-            FREE
-          </span>
+          {activity.access === "plus" ? (
+            <span className="absolute right-1.5 top-1.5 rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">
+              PLUS
+            </span>
+          ) : (
+            <span className="absolute right-1.5 top-1.5 rounded-md bg-[#e6f4ea] px-1.5 py-0.5 text-[10px] font-bold text-[#1e7b34]">
+              FREE
+            </span>
+          )}
         </span>
       </Link>
       <span className="block px-1 pt-2">
@@ -46,7 +52,9 @@ export function ActivityTile({ activity, typeBadge }: Props) {
         <Link href={href} className={`${pill} bg-[#d35400] text-white hover:bg-[#b8470a]`}>
           Open
         </Link>
-        <p className="m-0 mt-1.5 text-xs text-[#6b7280]">Free with sign-in · Plus can edit</p>
+        <p className="m-0 mt-1.5 text-xs text-[#6b7280]">
+          {activity.access === "plus" ? "Plus members download and edit" : "Free with sign-in · Plus can edit"}
+        </p>
       </div>
     </div>
   );
