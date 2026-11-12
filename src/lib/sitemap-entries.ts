@@ -2,6 +2,7 @@ import { readPagePaths } from "@/lib/bible/chapter-pages";
 import { fetchBibleBooks } from "@/lib/bible/latinprayer";
 import { bibleVerseMomentPaths } from "@/data/moms-bible/situation-seo";
 import { LITURGY_TOPICS } from "@/lib/liturgy-topics";
+import { activityPath, RESOURCE_ACTIVITIES } from "@/lib/resource/activities";
 import { PLAY_GAMES } from "@/lib/play-games";
 import { prisma } from "@/lib/prisma";
 import { INDEXABLE_SAINT_SEO_CARDS, SAINTS_HUB } from "@/lib/seo/card-seo";
@@ -18,6 +19,9 @@ type SitemapEntry = MetadataRoute.Sitemap[number];
  * meaningfully, and never use request time, which makes Google ignore lastmod.
  */
 export const SITEMAP_CONTENT_DATE = new Date("2026-11-10T00:00:00.000Z");
+
+/** lastmod for the activity pages (added Nov 12, 2026). */
+const ACTIVITIES_CONTENT_DATE = new Date("2026-11-12T00:00:00.000Z");
 
 /** Child sitemaps listed by the /sitemap.xml index. */
 export const CHILD_SITEMAP_PATHS = [
@@ -81,14 +85,17 @@ function playEntries(): SitemapEntry[] {
   return [...paths].map((p) => entry(p, "weekly", 0.7));
 }
 
-/** Sunday worksheet SEO pages + evergreen Mass/virtue worksheet pages (Advent prioritized). /resource/[slug] weeks are not listed. */
+/** Sunday worksheet SEO pages + evergreen Mass/virtue worksheet pages (Advent prioritized) + activity pages. /resource/[slug] weeks are not listed. */
 export function buildResourcesSitemap(): MetadataRoute.Sitemap {
   const weeks = listSundaySheetKeys().map((key) => {
     const isAdvent = key.includes("_ADV");
     return entry(sundayMassWorksheetPath(key), "weekly", isAdvent ? 0.95 : 0.8);
   });
   const evergreen = EVERGREEN_PAGES.map((p) => entry(publicPath(p), "monthly", 0.75));
-  return [...weeks, ...evergreen];
+  const activities = RESOURCE_ACTIVITIES.map((a) =>
+    entry(activityPath(a.slug), "monthly", a.seasons.includes("advent") ? 0.85 : 0.75, ACTIVITIES_CONTENT_DATE),
+  );
+  return [...weeks, ...evergreen, ...activities];
 }
 
 function liturgyEntries(): SitemapEntry[] {

@@ -6,6 +6,7 @@ import { resourcePath, resourcePrintPath, yearLabel } from "@/lib/resource/sheet
 import type { SearchHit } from "@/lib/resource/unified-search";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
+import { ActivityTile } from "./activity/ActivityTile";
 import { CardTile } from "./CardTile";
 import { LockedSheetPreview } from "./LockedSheetPreview";
 import { PlusLockButton } from "./PlusLockDialog";
@@ -28,10 +29,14 @@ type Props = {
   resultsHref: string;
 };
 
-const typeBadge = (label: string, tone: "sheet" | "card") => (
+const typeBadge = (label: string, tone: "sheet" | "card" | "activity") => (
   <span
     className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-      tone === "sheet" ? "bg-[#e8f0fb] text-[#335599]" : "bg-[#fdeee2] text-[#b8470a]"
+      tone === "sheet"
+        ? "bg-[#e8f0fb] text-[#335599]"
+        : tone === "activity"
+          ? "bg-[#f1ebfa] text-[#6b3fa0]"
+          : "bg-[#fdeee2] text-[#b8470a]"
     }`}
   >
     {label}
@@ -53,12 +58,19 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
         </h2>
         {q ? <Link href={clearHref} className="text-sm font-semibold text-[#d35400] no-underline hover:underline">
           ✕ Clear search
-        </Link> : <p className="m-0 text-sm text-[#6b7280]">Weekly sheets, Mass and virtue worksheets, and picture cards</p>}
+        </Link> : <p className="m-0 text-sm text-[#6b7280]">Weekly sheets, Mass and virtue worksheets, activities and picture cards</p>}
       </div>
 
       {hits.length ? (
         <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 xl:grid-cols-4">
           {shown.map((h) => {
+            if (h.type === "activity") {
+              return (
+                <li key={`a-${h.activity.slug}`}>
+                  <ActivityTile activity={h.activity} typeBadge={typeBadge("Activity", "activity")} />
+                </li>
+              );
+            }
             if (h.type === "card") {
               const c = h.card;
               return (

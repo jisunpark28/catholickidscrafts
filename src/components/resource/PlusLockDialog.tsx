@@ -17,7 +17,16 @@ const primaryBtn =
 const secondaryBtn =
   "inline-flex w-full items-center justify-center rounded-full border-2 border-[#d35400] bg-white px-5 py-2 text-sm font-semibold text-[#d35400] no-underline transition hover:bg-[#fff6ef] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
-type DialogProps = {
+/** Optional copy for Plus locks outside the weekly sheets (e.g. the activity editor). */
+type LockCopy = {
+  /** Heading line (default PLUS_LOCK_LINE). */
+  message?: string;
+  /** Main free action (default: this week's free resources). */
+  freeHref?: string;
+  freeLabel?: string;
+};
+
+type DialogProps = LockCopy & {
   open: boolean;
   /** Called after Esc, the X button or a backdrop click. */
   onClose: () => void;
@@ -29,12 +38,12 @@ type DialogProps = {
  * Native <dialog> + showModal(): the page behind is inert (focus stays inside), Esc closes,
  * and focus returns to the button that opened it. Display only; access is enforced on the server.
  */
-export function PlusLockDialog({ open, onClose, level = 1 }: DialogProps) {
+export function PlusLockDialog({ open, onClose, level = 1, ...copy }: DialogProps) {
   if (!open) return null;
-  return <OpenDialog onClose={onClose} level={level} />;
+  return <OpenDialog onClose={onClose} level={level} {...copy} />;
 }
 
-function OpenDialog({ onClose, level }: { onClose: () => void; level: 1 | 2 }) {
+function OpenDialog({ onClose, level, message, freeHref, freeLabel }: { onClose: () => void; level: 1 | 2 } & LockCopy) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const closeRef = useRef(onClose);
@@ -92,11 +101,11 @@ function OpenDialog({ onClose, level }: { onClose: () => void; level: 1 | 2 }) {
           <span aria-hidden>{"\u00d7"}</span>
         </button>
         <h2 id={titleId} className="m-0 px-3 text-[15px] font-semibold leading-snug">
-          {PLUS_LOCK_LINE}
+          {message ?? PLUS_LOCK_LINE}
         </h2>
         <div className="mt-5 flex flex-col gap-2">
-          <Link href={freeResourcesHref(level)} data-autofocus className={primaryBtn}>
-            Get this week&apos;s free resources
+          <Link href={freeHref ?? freeResourcesHref(level)} data-autofocus className={primaryBtn}>
+            {freeLabel ?? "Get this week\u2019s free resources"}
           </Link>
           <Link href="/subscribe" className={secondaryBtn}>
             Unlock with Plus
@@ -108,7 +117,7 @@ function OpenDialog({ onClose, level }: { onClose: () => void; level: 1 | 2 }) {
   );
 }
 
-type ButtonProps = {
+type ButtonProps = LockCopy & {
   className: string;
   level?: 1 | 2;
   title?: string;
@@ -116,14 +125,14 @@ type ButtonProps = {
 };
 
 /** A locked button (keeps its locked look) that opens the Plus popup instead of doing nothing. */
-export function PlusLockButton({ className, level = 1, title, children }: ButtonProps) {
+export function PlusLockButton({ className, level = 1, title, children, ...copy }: ButtonProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <button type="button" aria-haspopup="dialog" title={title} className={className} onClick={() => setOpen(true)}>
         {children}
       </button>
-      <PlusLockDialog open={open} onClose={() => setOpen(false)} level={level} />
+      <PlusLockDialog open={open} onClose={() => setOpen(false)} level={level} {...copy} />
     </>
   );
 }

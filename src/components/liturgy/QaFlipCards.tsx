@@ -2,6 +2,8 @@
 
 import type { PublicQaCard } from "@/lib/liturgy-qa";
 import { fredoka } from "@/components/liturgy/fredoka";
+import { activityForTryThis, activityPath } from "@/lib/resource/activities";
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 type Props = {
@@ -15,6 +17,24 @@ type Props = {
   extra?: React.ReactNode;
   extraAfter?: string;
 };
+
+/** "Try this" chip; links to the printable activity when one matches the tip. */
+function TryThisChip({ text }: { text: string }) {
+  const activity = activityForTryThis(text);
+  return (
+    <p className="qa-chip">
+      ✋ Try this: {text}
+      {activity ? (
+        <>
+          {" "}
+          <Link href={activityPath(activity.slug)} className="whitespace-nowrap underline underline-offset-2">
+            Get the free sheet →
+          </Link>
+        </>
+      ) : null}
+    </p>
+  );
+}
 
 export function QaFlipCards({ cards, variant = "qa", cardBackColor, fit = false, extra, extraAfter }: Props) {
   const norm = (s: string) => s.trim().toLowerCase();
@@ -100,7 +120,7 @@ function QaFlipCard({
           >
             <p className="qa-back-q">{card.question}</p>
             <div className={variant === "prayer" ? "qa-prayer-text" : "qa-answer"}>{card.answer}</div>
-            {variant === "qa" && card.tryThis && <p className="qa-chip">✋ Try this: {card.tryThis}</p>}
+            {variant === "qa" && card.tryThis && <TryThisChip text={card.tryThis} />}
             <button
               type="button"
               className="qa-hint qa-flip-back"

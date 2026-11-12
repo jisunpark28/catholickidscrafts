@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingIncludes: {
     "/api/resource/cards/*/download": ["./assets/card-originals/*.png"],
+    "/api/resource/activities/*/download": ["./assets/activities/**/*.pdf"],
   },
   poweredByHeader: false,
   transpilePackages: ["fabric"],
