@@ -274,3 +274,39 @@ export function dailyActivityFor(ymd: string): { activity: ResourceActivity; dat
   }
   return best ? { ...best, exact: best.date === ymd } : { activity: fallback, date: null, exact: false };
 }
+
+export type HomeActivityPick = {
+  activity: ResourceActivity;
+  /** Small orange label line on the home card: truthful kind and access ("Activity · Free"). */
+  label: string;
+  /** "plus" shows the PLUS badge. */
+  access: ActivityAccess;
+};
+
+/** How many activity / craft cards the home "Activities & crafts" row shows. */
+export const HOME_ACTIVITY_PICKS = 4;
+
+/**
+ * Home "Activities & crafts" row for a Toronto date: today's scheduled sheet, the next two
+ * scheduled sheets (other free Advent sheets fill in after the schedule ends), then the Plus
+ * craft. Pure and deterministic for a date, so the ISR home page renders it like its other
+ * date-rule slots (no request data).
+ */
+export function homeActivityPicks(ymd: string): HomeActivityPick[] {
+  const today = dailyActivityFor(ymd).activity;
+  const craft = getActivity(SUNDAY_CRAFT_SLUG);
+  const freeSlots = HOME_ACTIVITY_PICKS - (craft ? 1 : 0);
+  const free: ResourceActivity[] = [today];
+  const add = (a: ResourceActivity | null) => {
+    if (a && a.access === "signin" && free.length < freeSlots && !free.some((f) => f.slug === a.slug)) free.push(a);
+  };
+  for (const row of DAILY_ACTIVITY_SCHEDULE) if (YMD.test(ymd) && row.date > ymd) add(getActivity(row.slug));
+  for (const a of listActivities("advent")) add(a);
+  const picks: HomeActivityPick[] = free.map((activity, i) => ({
+    activity,
+    label: i === 0 ? "Today · Free" : "Activity · Free",
+    access: activity.access,
+  }));
+  if (craft) picks.push({ activity: craft, label: `${craft.kind} · Plus`, access: craft.access });
+  return picks;
+}

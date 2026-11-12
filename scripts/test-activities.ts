@@ -9,6 +9,8 @@ import {
   activityForTryThis,
   DAILY_ACTIVITY_SCHEDULE,
   dailyActivityFor,
+  HOME_ACTIVITY_PICKS,
+  homeActivityPicks,
   SUNDAY_CRAFT_SLUG,
   torontoDate,
   activityEditPath,
@@ -146,6 +148,28 @@ async function main() {
   assert.equal(torontoDate(new Date("2026-11-13T05:30:00Z")), "2026-11-13");
   const bundle = await fs.readFile("src/components/resource/SundayBundle.tsx", "utf8");
   assert.ok(bundle.includes("SundayActivitySlot") && bundle.includes("craft ?"), "This Sunday fills Activities and Crafts");
+
+  // Home "Activities & crafts" row: 4 real items, truthful labels, the Plus craft last.
+  const slugsOn = (ymd: string) => homeActivityPicks(ymd).map((p) => p.activity.slug);
+  for (const ymd of ["2026-11-01", "2026-11-12", "2026-11-21", "2026-11-28", "2026-11-29", "2026-12-20", "nope"]) {
+    const picks = homeActivityPicks(ymd);
+    assert.equal(picks.length, HOME_ACTIVITY_PICKS, `${ymd}: four cards`);
+    assert.equal(new Set(picks.map((p) => p.activity.slug)).size, picks.length, `${ymd}: no repeats`);
+    assert.equal(picks[0].activity.slug, dailyActivityFor(ymd).activity.slug, `${ymd}: today's sheet first`);
+    assert.equal(picks[3].activity.slug, SUNDAY_CRAFT_SLUG);
+    for (const p of picks) {
+      assert.equal(p.access, p.activity.access);
+      assert.match(p.label, p.access === "plus" ? / · Plus$/ : / · Free$/, `${ymd}: label matches access`);
+      assert.ok(p.activity.previews.color.startsWith("/images/activities/"));
+      await fs.access(path.join("public", p.activity.previews.color));
+    }
+  }
+  assert.deepEqual(slugsOn("2026-11-12"), ["happy-new-church-year", "jesse-tree-ornaments", "prepare-the-way", SUNDAY_CRAFT_SLUG]);
+  assert.deepEqual(slugsOn("2026-11-21").slice(0, 3), ["secret-kindness-notes", "happy-new-church-year", "roses-for-mary"]);
+  assert.equal(homeActivityPicks("2026-11-12")[3].label, "Craft · Plus");
+  const home = await fs.readFile("src/app/(site)/home-view.tsx", "utf8");
+  assert.ok(home.includes("homeActivityPicks(today.date)"), "home row uses the ISR date rule (no request data)");
+  assert.ok(!/cookies\(|headers\(|getServerSession|auth\(\)/.test(home), "home stays static");
 
   console.log(`test-activities: ${RESOURCE_ACTIVITIES.length} activities, ${DAILY_ACTIVITY_SCHEDULE.length} scheduled days; Happy New Church Year ${doc.elements.length} editable elements (${[...kinds].map(([k, n]) => `${k} ${n}`).join(", ")}) OK`);
 }
