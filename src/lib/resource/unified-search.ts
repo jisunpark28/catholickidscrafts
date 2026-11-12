@@ -1,5 +1,6 @@
 import { getEvergreenPage } from "@/lib/evergreen-catalog";
-// One search across Weekly Sheets and picture Cards, ranked together by relevance (server-only).
+// One search across Weekly Sheets, Activities and picture Cards, ranked together by relevance (server-only).
+import { listActivities, type ResourceActivity } from "@/lib/resource/activities";
 import { cardSeasons, PICTURE_CARDS } from "@/lib/resource/cards";
 import type { PictureCard } from "@/lib/resource/card-meta";
 import { type ResourceSeason, sheetSeason, listResourceSheets, searchSheets } from "@/lib/resource/sheets";
@@ -7,7 +8,13 @@ import { type SundaySheetContent } from "@/lib/sunday-sheet-content";
 
 export type SearchHit =
   | { type: "sheet"; score: number; sheet: SundaySheetContent }
-  | { type: "card"; score: number; card: PictureCard };
+  | { type: "card"; score: number; card: PictureCard }
+  | { type: "activity"; score: number; activity: ResourceActivity };
+
+/** Stable id of any hit (sheet key, card id or activity slug). */
+export function searchHitId(hit: SearchHit): string {
+  return hit.type === "sheet" ? hit.sheet.key : hit.type === "card" ? hit.card.id : `activity:${hit.activity.slug}`;
+}
 
 function norm(s: string): string {
   return ` ${s
@@ -59,6 +66,14 @@ function cardFields(card: PictureCard): Fields {
   };
 }
 
+function activityFields(activity: ResourceActivity): Fields {
+  return {
+    strong: norm([activity.title, activity.kind].join(" | ")),
+    medium: norm([activity.summary, ...activity.seasons, ...activity.keywords].join(" | ")),
+    weak: norm([activity.description, ...activity.tryThis].join(" | ")),
+  };
+}
+
 const fieldCache = new Map<string, Fields>();
 const cached = (k: string, f: () => Fields) => {
   let v = fieldCache.get(k);
@@ -77,11 +92,11 @@ export function searchTerms(q: string): string[] {
     .slice(0, 8);
 }
 
-/** A single browse catalog, interleaved so cards are visible from the first page. */
+/** A single browse catalog: activities first, then sheets and cards interleaved so cards are visible from the first page. */
 export function browseResources(season: ResourceSeason | null): SearchHit[] {
   const sheets = searchSheets({ season });
   const cards = PICTURE_CARDS.filter((card) => !season || cardSeasons(card).includes(season));
-  const hits: SearchHit[] = [];
+  const hits: SearchHit[] = listActivities(season).map((activity) => ({ type: "activity", score: 0, activity }));
   for (let i = 0; i < Math.max(sheets.length, cards.length); i++) {
     if (sheets[i]) hits.push({ type: "sheet", score: 0, sheet: sheets[i]! });
     if (cards[i]) hits.push({ type: "card", score: 0, card: cards[i]! });
@@ -106,6 +121,10 @@ export function unifiedSearch(q: string, season: ResourceSeason | null, thisSund
       hits.push({ type: "sheet", score, sheet });
     }
   }
+  for (const activity of listActivities(season)) {
+    const score = scoreFields(cached(`a:${activity.slug}`, () => activityFields(activity)), terms, phrase);
+    if (score > 0) hits.push({ type: "activity", score, activity });
+  }
   for (const card of PICTURE_CARDS) {
     if (season && !cardSeasons(card).includes(season)) continue;
     let score = scoreFields(cached(`c:${card.id}`, () => cardFields(card)), terms, phrase);
@@ -114,10 +133,11 @@ export function unifiedSearch(q: string, season: ResourceSeason | null, thisSund
       hits.push({ type: "card", score, card });
     }
   }
+  const typeOrder = { sheet: 0, activity: 1, card: 2 } as const;
   return hits.sort(
     (a, b) =>
       b.score - a.score ||
-      (a.type === b.type ? 0 : a.type === "sheet" ? -1 : 1) ||
+      typeOrder[a.type] - typeOrder[b.type] ||
       (a.type === "sheet" && b.type === "sheet"
         ? a.sheet.key.localeCompare(b.sheet.key, "en", { numeric: true })
         : a.type === "card" && b.type === "card"

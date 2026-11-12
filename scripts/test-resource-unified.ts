@@ -6,14 +6,24 @@ import { canOpenResourceSheet } from "../src/lib/resource/access";
 import { cardSharePath } from "../src/lib/resource/card-meta";
 import { cardSeasons, getPictureCard, PICTURE_CARDS } from "../src/lib/resource/cards";
 import { listResourceSheets, RESOURCE_SEASONS, sheetSeason } from "../src/lib/resource/sheets";
-import { browseResources, unifiedSearch, type SearchHit } from "../src/lib/resource/unified-search";
+import { activityForTryThis, getActivity, RESOURCE_ACTIVITIES } from "../src/lib/resource/activities";
+import { browseResources, searchHitId, unifiedSearch, type SearchHit } from "../src/lib/resource/unified-search";
 
-const id = (hit: SearchHit) => hit.type === "sheet" ? hit.sheet.key : hit.card.id;
+const id = searchHitId;
 
 async function main() {
   const all = unifiedSearch("", null, null);
   assert.deepEqual(all, browseResources(null));
-  assert.equal(all.length, listResourceSheets().length + PICTURE_CARDS.length);
+  assert.equal(all.length, listResourceSheets().length + PICTURE_CARDS.length + RESOURCE_ACTIVITIES.length);
+  assert.ok(all.slice(0, 48).some((hit) => hit.type === "activity"), "activities visible on first All page");
+  assert.ok(browseResources("advent").some((hit) => hit.type === "activity" && hit.activity.slug === "happy-new-church-year"));
+  assert.ok(!browseResources("lent").some((hit) => hit.type === "activity" && hit.activity.slug === "happy-new-church-year"));
+  for (const q of ["church year", "liturgical year", "coloring", "Happy New Church Year"]) {
+    assert.ok(unifiedSearch(q, null, null).some((hit) => hit.type === "activity" && hit.activity.slug === "happy-new-church-year"), q);
+  }
+  assert.equal(activityForTryThis("Make a 'Happy New Church Year' card.")?.slug, "happy-new-church-year");
+  assert.equal(activityForTryThis("Make a \u2018Happy New Church Year\u2019 card."), getActivity("happy-new-church-year"));
+  assert.equal(activityForTryThis("Light the first candle."), null);
   assert.equal(new Set(all.map(id)).size, all.length, "no duplicates");
   assert.ok(all.slice(0, 48).some((hit) => hit.type === "sheet"));
   assert.ok(all.slice(0, 48).some((hit) => hit.type === "card"), "cards visible on first All page");
@@ -29,6 +39,8 @@ async function main() {
         if (hit.type === "sheet") {
           assert.equal(getEvergreenPage(hit.sheet.key), null, "evergreen is not a liturgical season");
           assert.equal(sheetSeason(hit.sheet), season.id);
+        } else if (hit.type === "activity") {
+          assert.ok(hit.activity.seasons.includes(season.id));
         } else {
           assert.ok(cardSeasons(hit.card).includes(season.id));
         }
