@@ -6,7 +6,8 @@ import { emailConfigured } from "@/lib/email";
 import { cardShortTitle, getHomeToday, type HomeHighlight, type HomeToday } from "@/lib/home/home-today";
 import { loadHomeSundaySheet } from "@/lib/home-sunday-sheet";
 import { getPublicContactEmail } from "@/lib/site-contact";
-import { activityPath, homeActivityPicks } from "@/lib/resource/activities";
+import { activityPath, CRAFTS_LIST_PATH, homeActivityPicks, homeCraftPicks } from "@/lib/resource/activities";
+import type { ResourceSeason } from "@/lib/resource/sheets";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
 import { getLiturgicalSeason } from "@/lib/liturgical-season";
@@ -78,6 +79,15 @@ function addDay(ymd: string): string {
   return new Date(Date.parse(`${ymd}T00:00:00Z`) + DAY).toISOString().slice(0, 10);
 }
 
+/** Season whose crafts lead the home "Crafts" row (Advent from the weeks before it). */
+function homeCraftSeason(current: string, upcoming: string | null): ResourceSeason | null {
+  if (current === "Advent" || upcoming === "Advent") return "advent";
+  if (current === "Christmas Season") return "christmas";
+  if (current === "Lent" || current === "Holy Week") return "lent";
+  if (current === "Easter" || current === "Easter Season") return "easter";
+  return null;
+}
+
 function highlightIcon(h: HomeHighlight): string {
   if (h.href.startsWith("/catholic-mass-for-kids")) return "⛪";
   if (h.href.startsWith("/liturgy/")) return "📅";
@@ -118,6 +128,8 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
   // The activity sheets are Advent ones: show the row in Advent and in the weeks before it.
   const activityPicks =
     today.season.name === "Advent" || upcoming?.name === "Advent" ? homeActivityPicks(today.date) : [];
+  const craftSeason = homeCraftSeason(today.season.name, upcoming?.name ?? null);
+  const craftPicks = homeCraftPicks(craftSeason);
 
   return (
     <HomePdfShell groups={groups} dailyMassLabel={copyText(copy, "home.hub.cta_mass", "Daily Mass")}>
@@ -348,6 +360,44 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
                     <span className="block px-3 pb-3 pt-2.5">
                       <span className="block text-xs font-extrabold text-[#d35400]">{label}</span>
                       <span className="block text-[15px] font-bold leading-snug">{activity.title}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {/* Crafts: the Plus craft templates, this season's first (homeCraftPicks). Centre crop shows the finished craft. */}
+        {craftPicks.length > 0 ? (
+          <section aria-labelledby="home-crafts-title" className="mt-5">
+            <h2 id="home-crafts-title" className="mb-3 flex flex-wrap items-baseline gap-x-2.5 text-xl font-bold text-[#1f2937]">
+              <span className="text-xs font-extrabold uppercase tracking-[0.12em] text-[#d35400]">Crafts</span>
+              Cut, fold and glue
+              <Link href={CRAFTS_LIST_PATH} className="ml-auto text-sm font-bold text-[#d35400] no-underline hover:underline">
+                See all →
+              </Link>
+            </h2>
+            <ul className="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:grid-cols-4">
+              {craftPicks.map((craft) => (
+                <li key={craft.slug}>
+                  <Link
+                    href={activityPath(craft.slug)}
+                    className="relative block h-full overflow-hidden rounded-[20px] border border-[#f1e4d6] bg-white text-[#1f2937] no-underline shadow-[0_8px_18px_-14px_rgba(0,0,0,0.35)] hover:shadow-[0_10px_22px_-12px_rgba(0,0,0,0.35)]"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={craft.previews.color}
+                      alt=""
+                      loading="lazy"
+                      className="block aspect-[4/3] w-full bg-[#fbf6f0] object-cover object-center"
+                    />
+                    <span aria-hidden className="absolute right-2 top-2 rounded-full bg-[#d35400] px-2 py-0.5 text-[11px] font-extrabold tracking-wide text-white">
+                      PLUS
+                    </span>
+                    <span className="block px-3 pb-3 pt-2.5">
+                      <span className="block text-xs font-extrabold text-[#d35400]">{craft.kind} · Plus</span>
+                      <span className="block text-[15px] font-bold leading-snug">{craft.title}</span>
                     </span>
                   </Link>
                 </li>
