@@ -8,7 +8,10 @@ import {
   activityDownloadPath,
   activityForTryThis,
   DAILY_ACTIVITY_SCHEDULE,
+  CRAFTS_LIST_PATH,
   dailyActivityFor,
+  HOME_CRAFT_PICKS,
+  homeCraftPicks,
   HOME_ACTIVITY_PICKS,
   homeActivityPicks,
   SUNDAY_CRAFT_SLUG,
@@ -17,6 +20,7 @@ import {
   activityFileName,
   activityPath,
   getActivity,
+  listActivities,
   RESOURCE_ACTIVITIES,
 } from "../src/lib/resource/activities";
 import {
@@ -105,9 +109,17 @@ async function main() {
     assert.ok(!sitemap.has(activityEditPath(act.slug)));
   }
 
-  // Every activity has a valid editor model, no age fields, and a unique slug.
+  // Every editable activity has a valid editor model; none has age fields; slugs are unique.
   assert.equal(new Set(RESOURCE_ACTIVITIES.map((x) => x.slug)).size, RESOURCE_ACTIVITIES.length);
-  for (const act of RESOURCE_ACTIVITIES) {
+  const editPage = await fs.readFile("src/app/(site)/resource/activity/[slug]/edit/page.tsx", "utf8");
+  assert.ok(editPage.includes("filter((a) => a.editable)") && editPage.includes("!activity?.editable"), "no editor page without a model");
+  for (const act of RESOURCE_ACTIVITIES.filter((x) => !x.editable)) {
+    assert.equal(getActivityModel(act.slug), null, `${act.slug} has no editor model`);
+    assert.ok(act.access === "plus" && act.kind === "Craft", `${act.slug} is a Plus craft`);
+    for (const k of Object.keys(act)) assert.ok(!/^(age|ages|ageRange|minAge|maxAge|grade|grades)$/i.test(k), `${act.slug}: no ${k}`);
+    assert.ok(!/\bages?\b|\bgrade\b|years old/i.test(JSON.stringify([act.title, act.summary, act.description])), `${act.slug} mentions no ages`);
+  }
+  for (const act of RESOURCE_ACTIVITIES.filter((x) => x.editable)) {
     const m = getActivityModel(act.slug);
     assert.ok(m && parseActivityDoc(m), `${act.slug} model parses`);
     assert.equal(m.slug, act.slug);
@@ -122,7 +134,27 @@ async function main() {
   // Free with sign-in, except the one Plus craft.
   const craft = getActivity(SUNDAY_CRAFT_SLUG);
   assert.ok(craft && craft.access === "plus" && craft.kind === "Craft");
-  assert.deepEqual(RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug), [SUNDAY_CRAFT_SLUG]);
+  const UPLOADED = ["advent-bank", "advent-lantern", "fiat-flag", "gabriel-wings", "joseph-lily", "birthday-card", "swaddle-baby", "gloria-trumpet", "shepherd-crook", "bethlehem-star", "magi-gifts"];
+  assert.deepEqual(RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug), [SUNDAY_CRAFT_SLUG, ...UPLOADED]);
+  for (const slug of UPLOADED) {
+    const c = getActivity(slug)!;
+    assert.ok(c.kind === "Craft" && !c.editable && c.tryThis.length === 0 && c.seasons.length > 0, slug);
+    assert.ok(listActivities().some((x) => x.slug === slug), `${slug} is in the Printables library`);
+    assert.ok(c.previews.color.endsWith(`/${slug}/preview-color.webp`));
+  }
+
+  // Home "Crafts" row: four Plus crafts, this season's first, never the Advent Candle Craft (shown above).
+  for (const season of ["advent", "christmas", "lent", null] as const) {
+    const picks = homeCraftPicks(season);
+    assert.equal(picks.length, HOME_CRAFT_PICKS, `${season}: four crafts`);
+    assert.ok(picks.every((p) => p.access === "plus" && p.kind === "Craft" && p.slug !== SUNDAY_CRAFT_SLUG), `${season}: Plus crafts`);
+    if (season === "advent" || season === "christmas") assert.ok(picks.every((p) => p.seasons.includes(season)), `${season} crafts first`);
+  }
+  assert.deepEqual(homeCraftPicks("advent").map((p) => p.slug), ["advent-bank", "advent-lantern", "fiat-flag", "gabriel-wings"]);
+  const homeView = await fs.readFile("src/app/(site)/home-view.tsx", "utf8");
+  assert.ok(homeView.includes("homeCraftPicks(craftSeason)") && homeView.includes("CRAFTS_LIST_PATH"), "home Crafts row");
+  assert.ok(homeView.indexOf("home-crafts-title") > homeView.indexOf("home-activities-title"), "Crafts row is the last row");
+  assert.equal(CRAFTS_LIST_PATH, "/resource?view=all&q=craft");
 
   // Each daily sheet matches an Advent Q&A "Try this" tip verbatim (official site content).
   const advent = (seedJson as { cards: { topicSlug: string; tryThis?: string }[] }).cards.filter((c) => c.topicSlug === "advent");

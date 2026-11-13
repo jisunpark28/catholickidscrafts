@@ -17,7 +17,7 @@ import { PlusLockButton } from "../PlusLockDialog";
 import { ActivitySignInPrompt } from "./ActivitySignInPrompt";
 
 type Props = {
-  activity: Pick<ResourceActivity, "slug" | "title" | "kind" | "previews" | "pageSize" | "access">;
+  activity: Pick<ResourceActivity, "slug" | "title" | "kind" | "previews" | "pageSize" | "access" | "editable">;
 };
 
 const primary =
@@ -147,50 +147,52 @@ export function ActivityDownloadPanel({ activity }: Props) {
           />
         )}
 
-        <div className="rounded-2xl border border-[#e8e0d6] bg-white px-4 py-4">
-          <h2 className="m-0 flex items-center gap-2 text-base font-bold text-[#1c1c1c]">
-            Make it your own
-            <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
-          </h2>
-          <p className="m-0 mt-1 text-sm leading-relaxed text-[#4b5563]">
-            Change any word, line or dot on the page, move or resize the pictures, recolour anything, then print or
-            download your own PDF.
-          </p>
-          <div className="mt-3">
-            {!ready ? (
-              <div className="h-[42px] w-44 animate-pulse rounded-full bg-[#f3f1ee]" aria-hidden />
-            ) : isPlus ? (
-              <Link href={activityEditPath(activity.slug)} className={primary}>
-                ✏️ Open the editor
-              </Link>
-            ) : (
-              <>
-                <PlusLockButton
-                  className={`${ghost} cursor-pointer text-[#6b7280]`}
-                  message={
-                    plusOnly
-                      ? "Editing and downloading this craft are Plus features."
-                      : "Editing this sheet is a Plus feature. Downloading it is free when you sign in."
-                  }
-                  {...(plusOnly
-                    ? {}
-                    : {
-                        freeHref: signedIn ? activityPath(activity.slug) : "/account/login",
-                        freeLabel: signedIn ? "Download the free sheet" : "Sign in to download free",
-                      })}
-                >
-                  🔒 Open the editor
-                </PlusLockButton>
-                <p className="m-0 mt-1.5 text-xs text-[#6b7280]">
-                  🔒 Plus members only ·{" "}
-                  <Link href="/subscribe" className="font-semibold text-[#d35400] hover:underline">
-                    Get Plus
-                  </Link>
-                </p>
-              </>
-            )}
+        {activity.editable ? (
+          <div className="rounded-2xl border border-[#e8e0d6] bg-white px-4 py-4">
+            <h2 className="m-0 flex items-center gap-2 text-base font-bold text-[#1c1c1c]">
+              Make it your own
+              <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
+            </h2>
+            <p className="m-0 mt-1 text-sm leading-relaxed text-[#4b5563]">
+              Change any word, line or dot on the page, move or resize the pictures, recolour anything, then print or
+              download your own PDF.
+            </p>
+            <div className="mt-3">
+              {!ready ? (
+                <div className="h-[42px] w-44 animate-pulse rounded-full bg-[#f3f1ee]" aria-hidden />
+              ) : isPlus ? (
+                <Link href={activityEditPath(activity.slug)} className={primary}>
+                  ✏️ Open the editor
+                </Link>
+              ) : (
+                <>
+                  <PlusLockButton
+                    className={`${ghost} cursor-pointer text-[#6b7280]`}
+                    message={
+                      plusOnly
+                        ? "Editing and downloading this craft are Plus features."
+                        : "Editing this sheet is a Plus feature. Downloading it is free when you sign in."
+                    }
+                    {...(plusOnly
+                      ? {}
+                      : {
+                          freeHref: signedIn ? activityPath(activity.slug) : "/account/login",
+                          freeLabel: signedIn ? "Download the free sheet" : "Sign in to download free",
+                        })}
+                  >
+                    🔒 Open the editor
+                  </PlusLockButton>
+                  <p className="m-0 mt-1.5 text-xs text-[#6b7280]">
+                    🔒 Plus members only ·{" "}
+                    <Link href="/subscribe" className="font-semibold text-[#d35400] hover:underline">
+                      Get Plus
+                    </Link>
+                  </p>
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </section>
   );

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 type Props = {
-  activity: Pick<ResourceActivity, "slug" | "title" | "kind" | "summary" | "seasons" | "previews" | "access">;
+  activity: Pick<ResourceActivity, "slug" | "title" | "kind" | "summary" | "seasons" | "previews" | "access" | "editable">;
   typeBadge?: React.ReactNode;
 };
 
@@ -53,7 +53,11 @@ export function ActivityTile({ activity, typeBadge }: Props) {
           Open
         </Link>
         <p className="m-0 mt-1.5 text-xs text-[#6b7280]">
-          {activity.access === "plus" ? "Plus members download and edit" : "Free with sign-in · Plus can edit"}
+          {activity.access === "plus"
+            ? activity.editable
+              ? "Plus members download and edit"
+              : "Plus members download"
+            : "Free with sign-in · Plus can edit"}
         </p>
       </div>
     </div>

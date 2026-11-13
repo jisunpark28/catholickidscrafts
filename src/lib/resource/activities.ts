@@ -33,6 +33,8 @@ export type ResourceActivity = {
   access: ActivityAccess;
   /** Page <title> (without the site name). */
   seoTitle: string;
+  /** Has an editable element model (the Plus editor). Ready-made craft PDFs (artwork) do not. */
+  editable: boolean;
 };
 
 export const ACTIVITY_PATH = "/resource/activity";
@@ -59,6 +61,38 @@ function DAILY(rows: DailyRow[]): ResourceActivity[] {
     prio: 10 + i,
     access: "signin",
     seoTitle: `${title} (Advent ${kind})`,
+    editable: true,
+  }));
+}
+
+type CraftRow = [slug: string, title: string, summary: string, seasons: ResourceSeason[], pages: number, keywords: string[]];
+
+const SEASON_WORD: Partial<Record<ResourceSeason, string>> = { advent: "Advent", christmas: "Christmas", easter: "Easter" };
+
+/**
+ * Ready-made Plus crafts (artwork PDFs, imported by scripts/activities/crafts/import_crafts.py).
+ * Titles and summaries come from each PDF's own first page. No editor model.
+ */
+function CRAFTS(rows: CraftRow[]): ResourceActivity[] {
+  return rows.map(([slug, title, summary, seasons, pages, keywords], i) => ({
+    slug,
+    title,
+    kind: "Craft",
+    summary,
+    description: `Catholic ${SEASON_WORD[seasons[0]!] ?? ""} craft for kids: ${summary.charAt(0).toLowerCase()}${summary.slice(1)} ${pages}-page US Letter template, black and white or colour.`.replace("Catholic  ", "Catholic "),
+    seasons,
+    keywords: [...keywords, "craft", "cut and glue", "template", "printable"],
+    pageSize: "US Letter",
+    previews: {
+      bw: `/images/activities/${slug}/preview-bw.webp`,
+      color: `/images/activities/${slug}/preview-color.webp`,
+    },
+    files: { bw: `${slug}.pdf`, color: `${slug}-color.pdf` },
+    tryThis: [],
+    prio: 51 + i,
+    access: "plus",
+    seoTitle: `${title} Craft Template`,
+    editable: false,
   }));
 }
 
@@ -97,6 +131,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     prio: 0,
     access: "signin",
     seoTitle: "Happy New Church Year Coloring Sheet",
+    editable: true,
   },
   ...DAILY([
     ["jesse-tree-ornaments", "Jesse Tree Ornaments", "Cut-out sheet", "Make a Jesse tree ornament.",
@@ -164,7 +199,43 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     prio: 50,
     access: "plus",
     seoTitle: "Advent Candle Craft Template",
+    editable: true,
   },
+  ...CRAFTS([
+    ["advent-bank", "Advent Charity Bank",
+      "A little stable bank for Advent alms. Each coin is a gift for Jesus; at Christmas, give it to the poor through your parish or a Catholic charity.",
+      ["advent"], 2, ["almsgiving", "charity", "coin bank", "stable", "cheerful giver", "2 corinthians 9:7"]],
+    ["advent-lantern", "Advent Candle Lantern",
+      "A glowing six-sided paper lantern for a battery LED tea light (never a real flame).",
+      ["advent"], 2, ["lantern", "candle", "tea light", "light in the darkness", "john 1:5"]],
+    ["fiat-flag", "The Fiat Flag",
+      "Mary's yes, on a flag to carry: \"May it be done to me according to your word.\"",
+      ["advent"], 2, ["fiat", "mary", "annunciation", "flag", "luke 1:38"]],
+    ["gabriel-wings", "Angel Gabriel Wings",
+      "Wear Gabriel's wings and lily headband. You need 2 ribbons or elastic, 60 cm each.",
+      ["advent"], 3, ["angel gabriel", "wings", "headband", "lily", "annunciation", "luke 1:31", "costume"]],
+    ["joseph-lily", "St. Joseph's Lily",
+      "Fold St. Joseph's flowering lily, a traditional sign of his purity.",
+      ["advent", "feasts"], 2, ["st joseph", "saint joseph", "lily", "flower", "paper flower"]],
+    ["birthday-card", "Happy Birthday, Jesus!",
+      "A pop-up birthday card for the Baby in the manger, with a space to write your gift for Jesus.",
+      ["christmas"], 2, ["birthday card", "pop-up card", "manger", "baby jesus", "luke 2:11"]],
+    ["swaddle-baby", "Baby Jesus in Swaddling Clothes",
+      "\"She wrapped him in swaddling clothes and laid him in a manger\" (Luke 2:7). Glue and fold Baby Jesus.",
+      ["christmas"], 2, ["baby jesus", "swaddling clothes", "manger", "nativity", "luke 2:7"]],
+    ["gloria-trumpet", "The Gloria Trumpet",
+      "Sing with the angels: Gloria in excelsis Deo! A roll-up trumpet with a banner.",
+      ["christmas"], 2, ["gloria", "trumpet", "angels", "glory to god", "luke 2:14"]],
+    ["shepherd-crook", "The Good Shepherd's Crook",
+      "A shepherd's crook with a little lamb to carry home.",
+      ["christmas", "easter"], 2, ["good shepherd", "shepherd", "crook", "lamb", "sheep", "john 10:11"]],
+    ["bethlehem-star", "Star of Bethlehem",
+      "A hanging mobile of the star that led the Magi.",
+      ["christmas"], 2, ["star", "bethlehem", "magi", "mobile", "epiphany", "matthew 2:2"]],
+    ["magi-gifts", "The Magi's Gifts",
+      "Three little boxes for gold, frankincense and myrrh. The lids really open.",
+      ["christmas"], 3, ["magi", "wise men", "gold", "frankincense", "myrrh", "gift boxes", "epiphany", "matthew 2:11"]],
+  ]),
 ];
 
 export const ACTIVITY_VARIANT_LABELS: Record<ActivityVariant, string> = {
@@ -309,4 +380,20 @@ export function homeActivityPicks(ymd: string): HomeActivityPick[] {
   }));
   if (craft) picks.push({ activity: craft, label: `${craft.kind} · Plus`, access: craft.access });
   return picks;
+}
+
+/** How many cards the home "Crafts" row shows. */
+export const HOME_CRAFT_PICKS = 4;
+/** Library search that lists the crafts ("See all"). */
+export const CRAFTS_LIST_PATH = "/resource?view=all&q=craft";
+
+/**
+ * Home "Crafts" row: the Plus crafts for a season first (prio order), then the others. The Advent
+ * Candle Craft is left out because the "Activities & crafts" row above already shows it. Pure for a
+ * season, so the ISR home page renders it like its other date-rule slots.
+ */
+export function homeCraftPicks(season: ResourceSeason | null): ResourceActivity[] {
+  const crafts = listActivities().filter((a) => a.kind === "Craft" && a.slug !== SUNDAY_CRAFT_SLUG);
+  const inSeason = season ? crafts.filter((a) => a.seasons.includes(season)) : [];
+  return [...inSeason, ...crafts.filter((a) => !inSeason.includes(a))].slice(0, HOME_CRAFT_PICKS);
 }

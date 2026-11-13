@@ -12,13 +12,14 @@ type Props = { params: Promise<{ slug: string }> };
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return RESOURCE_ACTIVITIES.map((a) => ({ slug: a.slug }));
+  // Only sheets with an editor model; ready-made craft PDFs have no editor (404).
+  return RESOURCE_ACTIVITIES.filter((a) => a.editable).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const activity = getActivity(slug);
-  if (!activity) return {};
+  if (!activity?.editable) return {};
   return pageMetadata({
     title: `Edit ${activity.title}`,
     description: `Plus editor for the ${activity.title} coloring sheet.`,
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ActivityEditPage({ params }: Props) {
   const { slug } = await params;
   const activity = getActivity(slug);
-  if (!activity) notFound();
+  if (!activity?.editable) notFound();
   return (
     <HomePdfShell groups={[]}>
       <nav aria-label="Breadcrumb" className="text-sm text-[#6b7280] print:hidden">
