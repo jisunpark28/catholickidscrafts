@@ -27,7 +27,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 const btn =
-  "block w-full bg-[var(--color-accent)] px-4 py-3 text-center text-sm font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60";
+  "block w-full bg-[var(--color-accent)] px-6 py-4 text-center text-base font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60 sm:py-5 sm:text-lg";
 
 export default async function SubscribePage() {
   const familySession = await requireFamilySession();
@@ -60,26 +60,29 @@ export default async function SubscribePage() {
             {(["month", "year"] as const).map((k) => {
               const o = PLAN_OPTIONS[k];
               return (
-                <div key={k} className="rounded-xl border border-[var(--color-border)] bg-white p-5">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-base font-bold text-[var(--color-ink)]">{o.name}</span>
-                    {k === "year" ? (
-                      <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
-                        {BEST_VALUE_BADGE}
-                      </span>
-                    ) : null}
-                  </div>
-                  <p className="mt-2 text-3xl font-bold text-[var(--color-ink)]">
+                <div
+                  key={k}
+                  className="rounded-xl border border-[var(--color-border)] bg-white px-5 py-6 text-center sm:px-6 sm:py-7"
+                >
+                  {k === "year" ? (
+                    <span className="mb-3 inline-block rounded-full bg-[var(--color-accent)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                      {BEST_VALUE_BADGE}
+                    </span>
+                  ) : null}
+                  <span className="block text-base font-bold text-[var(--color-ink)] sm:text-lg">{o.name}</span>
+                  <p className="mt-3 text-3xl font-bold text-[var(--color-ink)] sm:text-4xl">
                     {o.price}
-                    <span className="text-base font-normal text-[var(--color-muted)]">{o.unit}</span>
+                    <span className="text-base font-normal text-[var(--color-muted)] sm:text-lg">{o.unit}</span>
                   </p>
-                  <p className="mt-0.5 text-sm text-[var(--color-muted)]">{o.billed}</p>
+                  <p className="mt-1.5 text-sm text-[var(--color-muted)] sm:text-base">{o.billed}</p>
                 </div>
               );
             })}
           </div>
         )}
-        <p className={`${canBuy ? "mt-2" : "mt-4"} text-base font-bold text-[var(--color-ink)]`}>{ONE_TIME_LINE}</p>
+        <p className={`${canBuy ? "mt-2" : "mt-4"} text-center text-base font-bold text-[var(--color-ink)]`}>
+          {ONE_TIME_LINE}
+        </p>
         <ul className="mt-5 grid gap-3 text-base sm:grid-cols-3">
           {PLAN_FEATURES.map((f) => (
             <li
@@ -92,7 +95,7 @@ export default async function SubscribePage() {
           ))}
         </ul>
 
-        <div className="mt-8 max-w-xl">
+        <div className="mt-8">
           {isChild ? (
             <p className="text-base font-semibold text-[var(--color-ink)]">Ask a parent to set up Plus.</p>
           ) : !session ? (
@@ -100,7 +103,9 @@ export default async function SubscribePage() {
               <Link href="/account/login" className={btn}>
                 Sign in with Google to get Plus
               </Link>
-              <p className="mt-2 text-sm text-[var(--color-muted)]">Parents sign in with their Google account.</p>
+              <p className="mt-2 text-center text-sm text-[var(--color-muted)]">
+                Parents sign in with their Google account.
+              </p>
             </>
           ) : onLegacySubscription || onPreview ? (
             <>
