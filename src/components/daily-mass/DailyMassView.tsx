@@ -28,6 +28,8 @@ export type DailyMassViewProps = {
   color: VestmentColorInfo;
   readings: ReadingRef[];
   usccbUrl: string;
+  /** Living with Christ daily readings page for the selected date. */
+  lwcUrl: string;
   familyTalk: FamilyTalkEntry | null;
   gospelCitation?: string;
   /** Where the Faith Journal "Read" link goes: the passage in the Bible reader, else /gospel. */
@@ -283,6 +285,7 @@ export function DailyMassView(props: DailyMassViewProps) {
               memorial={props.memorial}
               readings={props.readings}
               usccbUrl={props.usccbUrl}
+              lwcUrl={props.lwcUrl}
               headerEnd={toggle}
             />
           )}

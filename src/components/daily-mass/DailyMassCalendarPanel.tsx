@@ -49,6 +49,8 @@ type Props = {
   memorial?: string;
   readings: ReadingRef[];
   usccbUrl: string;
+  /** Living with Christ daily readings page for the selected date. */
+  lwcUrl: string;
   /** Collapse arrow, shown at the top-right of the month header. */
   headerEnd?: ReactNode;
   /** Bumped after a praise sticker is saved so the calendar reloads its stickers. */
@@ -80,6 +82,7 @@ export function DailyMassCalendarPanel({
   memorial,
   readings,
   usccbUrl,
+  lwcUrl,
   headerEnd,
   stickerVersion = 0,
 }: Props) {
@@ -234,17 +237,30 @@ export function DailyMassCalendarPanel({
           </p>
         ) : null}
 
-        {usccbUrl ? (
+        {usccbUrl || lwcUrl ? (
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <a
-              href={usccbUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`dm-pill inline-flex items-center rounded-full border border-[#e7e3de] bg-white px-4 py-2 text-[0.875em] font-semibold text-[#1c1c1c] no-underline hover:bg-[#fffdfb] ${FOCUS}`}
-            >
-              {t("daily_mass.links.usccb", "Read on USCCB")}
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
+            {usccbUrl ? (
+              <a
+                href={usccbUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`dm-pill inline-flex items-center rounded-full border border-[#e7e3de] bg-white px-4 py-2 text-[0.875em] font-semibold text-[#1c1c1c] no-underline hover:bg-[#fffdfb] ${FOCUS}`}
+              >
+                {t("daily_mass.links.usccb", "Read on USCCB")}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ) : null}
+            {lwcUrl ? (
+              <a
+                href={lwcUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`dm-pill inline-flex items-center rounded-full border border-[#e7e3de] bg-white px-4 py-2 text-[0.875em] font-semibold text-[#1c1c1c] no-underline hover:bg-[#fffdfb] ${FOCUS}`}
+              >
+                {t("daily_mass.links.lwc", "Read on Living with Christ")}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            ) : null}
           </div>
         ) : null}
       </div>

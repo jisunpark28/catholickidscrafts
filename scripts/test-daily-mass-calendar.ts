@@ -87,6 +87,9 @@ assert.match(panel, /deriveVestmentColor/);
 assert.match(view, /GospelTypingSection/);
 assert.match(view, /aria-expanded/);
 assert.match(panel, /bible\.usccb\.org|usccbUrl/);
+assert.match(panel, /lwcUrl|livingwithchrist|Read on Living with Christ/);
+assert.match(page, /livingWithChristReadingUrl/);
+assert.match(view, /lwcUrl=\{props\.lwcUrl\}/);
 assert.match(view, /FaithJournalBanner/);
 
 // Universalis caches jsonpmass.js for days; each day needs its own URL so the browser can't replay an old day.
