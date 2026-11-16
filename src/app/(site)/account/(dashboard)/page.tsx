@@ -180,31 +180,29 @@ export default async function AccountDashboardPage() {
   );
 
   return (
-    <PageShell>
-      <div className="mx-auto w-full max-w-[960px]">
-        <Link href="/" className="text-sm font-semibold text-[var(--color-link)]">
-          &larr; Home
-        </Link>
-        <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
-          <div className="min-w-0 flex-1">
-            <h1 className="text-4xl font-bold tracking-tight text-[var(--color-ink)] sm:text-5xl">
-              Family account
-            </h1>
-            <p className="mt-2 text-base text-[var(--color-muted)]">
-              {owner.displayName} &middot; parent
-            </p>
-          </div>
-          <FamilyLogoutButton mode="signout" />
+    <PageShell wide>
+      <Link href="/" className="text-sm font-semibold text-[var(--color-link)]">
+        &larr; Home
+      </Link>
+      <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-4xl font-bold tracking-tight text-[var(--color-ink)] sm:text-5xl">
+            Family account
+          </h1>
+          <p className="mt-2 text-base text-[var(--color-muted)]">
+            {owner.displayName} &middot; parent
+          </p>
         </div>
-
-        {momsBible.replies.count > 0 && (
-          <div className="mt-6">
-            <ParentReplyBanner data={momsBible.replies} />
-          </div>
-        )}
-
-        <AccountDashboardTabs account={accountPanel} plus={plusPanel} notes={notesPanel} />
+        <FamilyLogoutButton mode="signout" />
       </div>
+
+      {momsBible.replies.count > 0 && (
+        <div className="mt-6">
+          <ParentReplyBanner data={momsBible.replies} />
+        </div>
+      )}
+
+      <AccountDashboardTabs account={accountPanel} plus={plusPanel} notes={notesPanel} />
     </PageShell>
   );
 }

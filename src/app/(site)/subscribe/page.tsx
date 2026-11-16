@@ -1,5 +1,6 @@
 import { BillingButton, PlanCheckout } from "@/components/BillingButton";
 import { PageShell } from "@/components/PageShell";
+import { SubscribeBenefits } from "@/components/subscribe/SubscribeBenefits";
 import { getReaderKey } from "@/lib/bible/reader";
 import { requireFamilySession, requireParentActive } from "@/lib/family-auth";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -42,66 +43,69 @@ export default async function SubscribePage() {
   const canBuy = !isChild && Boolean(session) && configured && !onLegacySubscription && !onPreview;
 
   return (
-    <PageShell>
+    <PageShell wide>
       <Link href="/account" className="text-sm font-semibold text-[var(--color-link)]">
         &larr; Family account
       </Link>
-      <h1 className="mt-6 text-3xl text-[var(--color-ink)]">
+      <h1 className="mt-6 text-3xl font-bold tracking-tight text-[var(--color-ink)] sm:text-4xl">
         <span className="text-[var(--color-accent)]">✝</span> Catholic Kids Crafts Plus
       </h1>
-      <p className="mt-2 text-sm text-[var(--color-muted)]">
+      <p className="mt-2 max-w-2xl text-base text-[var(--color-muted)]">
         One plan for your whole family - up to 5 children share it.
       </p>
 
-      <section className="mt-8 border border-[var(--color-border)] bg-white p-5 sm:p-6">
+      <section className="mt-8 border border-[var(--color-border)] bg-white p-6 sm:p-8 lg:p-10">
         {!canBuy && (
-          <div className="mt-1 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {(["month", "year"] as const).map((k) => {
               const o = PLAN_OPTIONS[k];
               return (
-                <div key={k} className="rounded-xl border border-[var(--color-border)] bg-white p-4">
+                <div key={k} className="rounded-xl border border-[var(--color-border)] bg-white p-5">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-bold text-[var(--color-ink)]">{o.name}</span>
+                    <span className="text-base font-bold text-[var(--color-ink)]">{o.name}</span>
                     {k === "year" ? (
-                      <span className="rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
+                      <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
                         {BEST_VALUE_BADGE}
                       </span>
                     ) : null}
                   </div>
-                  <p className="mt-2 text-2xl font-bold text-[var(--color-ink)]">
+                  <p className="mt-2 text-3xl font-bold text-[var(--color-ink)]">
                     {o.price}
-                    <span className="text-sm font-normal text-[var(--color-muted)]">{o.unit}</span>
+                    <span className="text-base font-normal text-[var(--color-muted)]">{o.unit}</span>
                   </p>
-                  <p className="mt-0.5 text-xs text-[var(--color-muted)]">{o.billed}</p>
+                  <p className="mt-0.5 text-sm text-[var(--color-muted)]">{o.billed}</p>
                 </div>
               );
             })}
           </div>
         )}
-        <p className={`${canBuy ? "mt-2" : "mt-3"} text-sm font-bold text-[var(--color-ink)]`}>{ONE_TIME_LINE}</p>
-        <ul className="mt-4 space-y-2 text-sm">
+        <p className={`${canBuy ? "mt-2" : "mt-4"} text-base font-bold text-[var(--color-ink)]`}>{ONE_TIME_LINE}</p>
+        <ul className="mt-5 grid gap-3 text-base sm:grid-cols-3">
           {PLAN_FEATURES.map((f) => (
-            <li key={f.label} className="flex items-center justify-between gap-2">
+            <li
+              key={f.label}
+              className="flex items-center justify-between gap-2 border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3"
+            >
               <span className="text-[var(--color-ink)]">{f.label}</span>
-              <span className="text-xs font-semibold text-green-800">{f.plus ? "Plus" : "Free + Plus"}</span>
+              <span className="text-sm font-semibold text-green-800">{f.plus ? "Plus" : "Free + Plus"}</span>
             </li>
           ))}
         </ul>
 
-        <div className="mt-6">
+        <div className="mt-8 max-w-xl">
           {isChild ? (
-            <p className="text-sm font-semibold text-[var(--color-ink)]">Ask a parent to set up Plus.</p>
+            <p className="text-base font-semibold text-[var(--color-ink)]">Ask a parent to set up Plus.</p>
           ) : !session ? (
             <>
               <Link href="/account/login" className={btn}>
                 Sign in with Google to get Plus
               </Link>
-              <p className="mt-2 text-xs text-[var(--color-muted)]">Parents sign in with their Google account.</p>
+              <p className="mt-2 text-sm text-[var(--color-muted)]">Parents sign in with their Google account.</p>
             </>
           ) : onLegacySubscription || onPreview ? (
             <>
-              <p className="text-sm font-bold text-green-800">Your family has Plus.</p>
-              {renewal && <p className="mt-1 text-xs text-[var(--color-muted)]">{renewal}</p>}
+              <p className="text-base font-bold text-green-800">Your family has Plus.</p>
+              {renewal && <p className="mt-1 text-sm text-[var(--color-muted)]">{renewal}</p>}
               {onLegacySubscription && plan?.hasCustomer && configured && (
                 <div className="mt-3">
                   <BillingButton action="portal" className={btn}>
@@ -111,13 +115,13 @@ export default async function SubscribePage() {
               )}
             </>
           ) : !configured ? (
-            <p className="text-sm font-semibold text-[var(--color-muted)]">Plus opens soon.</p>
+            <p className="text-base font-semibold text-[var(--color-muted)]">Plus opens soon.</p>
           ) : (
             <>
               {plan?.isPlus && (
                 <div className="mb-4">
-                  <p className="text-sm font-bold text-green-800">Your family has Plus.</p>
-                  {renewal && <p className="mt-1 text-xs text-[var(--color-muted)]">{renewal}</p>}
+                  <p className="text-base font-bold text-green-800">Your family has Plus.</p>
+                  {renewal && <p className="mt-1 text-sm text-[var(--color-muted)]">{renewal}</p>}
                 </div>
               )}
               <PlanCheckout className={btn} extend={Boolean(plan?.isPlus)} />
@@ -125,14 +129,16 @@ export default async function SubscribePage() {
           )}
         </div>
 
-        <p className="mt-5 text-sm font-bold text-[var(--color-ink)]">Nothing to cancel. Your memos stay with you.</p>
-        <p className="mt-1 text-xs leading-relaxed text-[var(--color-muted)]">
+        <p className="mt-6 text-base font-bold text-[var(--color-ink)]">Nothing to cancel. Your memos stay with you.</p>
+        <p className="mt-1 max-w-3xl text-sm leading-relaxed text-[var(--color-muted)]">
           Plus simply stops at the end of your pass - we never charge you again. We email you 7 days and 1 day
           before it ends. Buying again adds time after your current pass. When Plus ends, your memos stay
           readable; new memos need Plus. Prices in US dollars{process.env.STRIPE_AUTOMATIC_TAX === "1" ? "; tax calculated at checkout" : ""}.
         </p>
-        <p className="mt-3 text-xs text-[var(--color-muted)]">Secure checkout with Stripe.</p>
+        <p className="mt-3 text-sm text-[var(--color-muted)]">Secure checkout with Stripe.</p>
       </section>
+
+      <SubscribeBenefits />
     </PageShell>
   );
 }
