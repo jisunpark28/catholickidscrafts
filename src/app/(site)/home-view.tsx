@@ -24,7 +24,7 @@ import Link from "next/link";
  * `/home-variant/[country]` that next.config.ts rewrites `/` to (lib/home-variants). Reads no
  * cookies, headers or session, so every variant is a static (ISR) page: today's banner, Sunday
  * sheet and season picks come from getHomeToday for the variant's country at render time. The
- * signed-in bits (Save to My Binder) load in the browser (SiteSessionProvider).
+ * signed-in bits (Edit it for your class) load in the browser (SiteSessionProvider).
  */
 export const homeMetadata: Metadata = pageMetadata({
   title: "Catholic Kids Crafts | Free Mass, Bible & Prayer Activities",
@@ -192,6 +192,7 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
             >
               <SundaySheetHero
                 slug={sheet.slug}
+                sheetKey={sheet.key}
                 title={sheet.title}
                 liturgicalName={sheet.liturgicalName}
                 sundayLabel={sheet.sundayLabel}

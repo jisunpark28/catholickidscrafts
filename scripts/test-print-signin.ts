@@ -115,6 +115,8 @@ for (const file of [
   assert.ok(!/<a\s[^>]*href=\{resourcePrintPath/.test(src(file)), `${file}: no ungated print <a>`);
 }
 assert.ok(!src("src/components/home/SundaySheetHero.tsx").includes("No sign-in needed"), "home copy updated");
+assert.ok(src("src/components/home/SundaySheetHero.tsx").includes("Edit it for your class"), "home edit-for-class label");
+assert.ok(!src("src/components/home/SundaySheetHero.tsx").includes("Save to My Binder"), "home binder label retired");
 
 // Pages stay static / ISR: the home page and the gate helpers never read cookies on render.
 assert.ok(!src("src/components/useSignInGate.ts").includes("next/headers"));
