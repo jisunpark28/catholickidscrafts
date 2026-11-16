@@ -10,17 +10,31 @@ export type VerseClawDollId =
   | "night-star"
   | "tiny-ark";
 
+/** Irregular pile pose inside the cabinet (percentages + depth). */
+export type VerseClawPilePose = {
+  left: number;
+  bottom: number;
+  rotate: number;
+  scale: number;
+  z: number;
+  width: number;
+};
+
 export type VerseClawDoll = {
   id: VerseClawDollId;
   name: string;
   note: string;
-  /** Grid slot 0–7 (row-major 4×2). */
+  /** Stable index 0–7 used by grab targeting. */
   slot: number;
   src: string;
-  /** Soft fill under the sprite for depth. */
   glow: string;
+  pile: VerseClawPilePose;
 };
 
+/**
+ * Overlapping nestle layout: foreground fish/apple/star, mid bread/ark/sheep,
+ * background halo lamb + dove — not a flat grid.
+ */
 export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
   {
     id: "little-sheep",
@@ -29,6 +43,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 0,
     src: "/games/verse-claw/doll-little-sheep.png",
     glow: "#ffb48a",
+    pile: { left: 18, bottom: 20, rotate: -10, scale: 1, z: 4, width: 26 },
   },
   {
     id: "peace-dove",
@@ -37,6 +52,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 1,
     src: "/games/verse-claw/doll-peace-dove.png",
     glow: "#c9e7d8",
+    pile: { left: 64, bottom: 36, rotate: 14, scale: 0.92, z: 5, width: 24 },
   },
   {
     id: "ichthys-fish",
@@ -45,6 +61,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 2,
     src: "/games/verse-claw/doll-ichthys-fish.png",
     glow: "#9ec9e8",
+    pile: { left: 4, bottom: 2, rotate: -22, scale: 1.14, z: 9, width: 28 },
   },
   {
     id: "halo-lamb",
@@ -53,6 +70,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 3,
     src: "/games/verse-claw/doll-halo-lamb.png",
     glow: "#ffe6a8",
+    pile: { left: 48, bottom: 24, rotate: 8, scale: 0.9, z: 3, width: 24 },
   },
   {
     id: "bread-friend",
@@ -61,6 +79,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 4,
     src: "/games/verse-claw/doll-bread-friend.png",
     glow: "#e8c9a0",
+    pile: { left: 34, bottom: 8, rotate: 5, scale: 1.06, z: 7, width: 26 },
   },
   {
     id: "joy-apple",
@@ -69,6 +88,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 5,
     src: "/games/verse-claw/doll-joy-apple.png",
     glow: "#f5a3a3",
+    pile: { left: 52, bottom: 1, rotate: -12, scale: 1.1, z: 10, width: 24 },
   },
   {
     id: "night-star",
@@ -77,6 +97,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 6,
     src: "/games/verse-claw/doll-night-star.png",
     glow: "#b8c4f0",
+    pile: { left: 72, bottom: 5, rotate: 16, scale: 1.02, z: 8, width: 24 },
   },
   {
     id: "tiny-ark",
@@ -85,17 +106,36 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 7,
     src: "/games/verse-claw/doll-tiny-ark.png",
     glow: "#d4b896",
+    pile: { left: 22, bottom: 5, rotate: -3, scale: 1.04, z: 6, width: 27 },
   },
 ];
 
-/** Claw X/Z (0–100) center for each 4×2 slot. */
+/** Soft filler felt balls (decorative only). */
+export const VERSE_CLAW_FELT_BALLS: Array<{
+  src: string;
+  left: number;
+  bottom: number;
+  size: number;
+  rotate: number;
+  z: number;
+}> = [
+  { src: "/games/verse-claw/felt-cream.png", left: 42, bottom: 2, size: 9, rotate: 0, z: 2 },
+  { src: "/games/verse-claw/felt-blue.png", left: 8, bottom: 18, size: 8, rotate: 20, z: 2 },
+  { src: "/games/verse-claw/felt-pink.png", left: 78, bottom: 22, size: 7, rotate: -12, z: 2 },
+  { src: "/games/verse-claw/felt-peach.png", left: 60, bottom: 14, size: 8, rotate: 8, z: 1 },
+  { src: "/games/verse-claw/felt-cream.png", left: 30, bottom: 32, size: 7, rotate: -18, z: 1 },
+  { src: "/games/verse-claw/felt-blue.png", left: 70, bottom: 1, size: 9, rotate: 5, z: 3 },
+];
+
+/** Claw aim point for a doll’s pile pose. */
 export function slotClawTarget(slot: number): { x: number; z: number } {
-  const col = slot % 4;
-  const row = Math.floor(slot / 4);
-  return {
-    x: 18 + col * 21.5,
-    z: row === 0 ? 72 : 32,
-  };
+  const doll = dollBySlot(slot);
+  const { left, bottom, width, z } = doll.pile;
+  const x = Math.min(88, Math.max(12, left + width * 0.45));
+  // Higher bottom + higher z → closer to player (larger claw depth).
+  const depth = 18 + bottom * 0.85 + Math.min(z, 10) * 2.2;
+  const zz = Math.min(92, Math.max(12, depth));
+  return { x, z: zz };
 }
 
 export function nearestDollSlot(clawX: number, clawZ: number): number {
@@ -105,7 +145,7 @@ export function nearestDollSlot(clawX: number, clawZ: number): number {
     const t = slotClawTarget(doll.slot);
     const dx = clawX - t.x;
     const dz = clawZ - t.z;
-    const d = dx * dx + dz * dz * 1.15;
+    const d = dx * dx + dz * dz * 1.1;
     if (d < bestDist) {
       bestDist = d;
       best = doll.slot;
