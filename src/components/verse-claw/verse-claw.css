@@ -596,8 +596,8 @@
 .vc-popup {
   position: relative;
   width: min(100%, 400px);
-  margin-top: 48px;
-  padding: 64px 22px 22px;
+  margin-top: 12px;
+  padding: 18px 22px 22px;
   border-radius: 42px;
   background:
     linear-gradient(165deg, #fffaf3 0%, #fff4e8 45%, #ffeeda 100%);
@@ -611,50 +611,42 @@
 }
 
 .vc-popup-hero {
-  position: absolute;
-  left: 50%;
-  top: -72px;
-  width: 150px;
-  height: 150px;
-  margin-left: -75px;
-  z-index: 2;
-  filter: drop-shadow(0 12px 16px rgba(80, 40, 10, 0.22));
+  position: relative;
+  width: 132px;
+  height: 132px;
+  margin: 4px auto 14px;
+  z-index: 1;
   animation: vc-pop 560ms cubic-bezier(0.34, 1.45, 0.64, 1);
 }
 
+.vc-hero-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  height: 150%;
+  margin-left: -75%;
+  margin-top: -75%;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 236, 190, 0.95) 0%,
+      rgba(255, 210, 140, 0.55) 38%,
+      rgba(255, 190, 120, 0.18) 62%,
+      transparent 72%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
 .vc-popup-hero img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-.vc-spark {
-  position: absolute;
-  font-size: 1.1rem;
-  line-height: 1;
-  filter: drop-shadow(0 2px 2px rgba(80, 40, 10, 0.15));
-  animation: vc-twinkle 2.4s ease-in-out infinite;
-}
-
-.vc-spark--a {
-  left: 4px;
-  top: 28px;
-  color: var(--vc-gold);
-}
-
-.vc-spark--b {
-  right: 2px;
-  top: 18px;
-  color: var(--vc-pink-deep);
-  animation-delay: 0.4s;
-}
-
-.vc-spark--c {
-  left: 18px;
-  bottom: 8px;
-  color: #fff;
-  text-shadow: 0 0 6px var(--vc-gold);
-  animation-delay: 0.8s;
+  filter: drop-shadow(0 10px 14px rgba(80, 40, 10, 0.2));
 }
 
 @keyframes vc-pop {
@@ -669,8 +661,11 @@
 }
 
 .vc-win-title {
+  position: relative;
+  z-index: 2;
   margin: 0;
-  line-height: 1.05;
+  padding-top: 2px;
+  line-height: 1.1;
 }
 
 .vc-you-caught {
@@ -813,13 +808,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   min-height: 48px;
-  padding: 0 14px;
+  padding: 12px 18px;
   border-radius: 999px;
   font: inherit;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
   border: 2px solid transparent;
@@ -830,12 +827,6 @@
 .vc-actions button:active {
   transform: translateY(2px);
   box-shadow: 0 3px 0 rgba(90, 50, 20, 0.18);
-}
-
-.vc-btn-icon {
-  width: 22px;
-  height: 22px;
-  flex: 0 0 auto;
 }
 
 .vc-btn-again {
@@ -868,17 +859,14 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: stretch;
+    gap: 8px;
   }
 
   .vc-actions a,
   .vc-actions button {
     flex: 1 1 0;
     min-width: 0;
-    font-size: 0.84rem;
-    padding: 0 10px;
-  }
-
-  .vc-btn-share {
-    flex: 1.25 1 0;
+    font-size: 0.82rem;
+    padding: 12px 10px;
   }
 }

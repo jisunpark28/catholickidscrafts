@@ -35,42 +35,6 @@ function pileStyle(doll: VerseClawDoll): CSSProperties {
   };
 }
 
-function IconClaw() {
-  return (
-    <svg className="vc-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="6" y="3" width="12" height="14" rx="2" fill="#5c3d2e" opacity="0.9" />
-      <path d="M12 7v5M9 14c0-2 1.5-3 3-3s3 1 3 3" stroke="#fff" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-      <rect x="4" y="17" width="16" height="4" rx="1.5" fill="#5c3d2e" />
-    </svg>
-  );
-}
-
-function IconBible() {
-  return (
-    <svg className="vc-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M5 4.5h11.5A2.5 2.5 0 0 1 19 7v12.5H7.5A2.5 2.5 0 0 0 5 22V4.5Z" fill="#8b5a2b" />
-      <path d="M7 6h9v12H7.8A2.8 2.8 0 0 0 5 20.8V8a2 2 0 0 1 2-2Z" fill="#f5e6b8" />
-      <path d="M11.2 9.2v6M8.8 11.5h4.8" stroke="#8b5a2b" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function IconShare() {
-  return (
-    <svg className="vc-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M12 21s-7-4.2-7-9.2A4.2 4.2 0 0 1 12 8.2a4.2 4.2 0 0 1 7 3.6C19 16.8 12 21 12 21Z"
-        fill="#fff"
-        stroke="#5c3d2e"
-        strokeWidth="1.2"
-      />
-      <circle cx="10" cy="12.2" r="1.3" fill="#5c3d2e" />
-      <circle cx="14" cy="12.2" r="1.3" fill="#5c3d2e" />
-      <path d="M10 14.2c.7.6 2.3.6 3 0" stroke="#5c3d2e" strokeWidth="1.1" fill="none" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function Bokeh() {
   const bits = [
     { left: "8%", top: "12%", size: 18, color: "#ffd27a", delay: "0s" },
@@ -401,11 +365,9 @@ export function VerseClawGame() {
           <Bokeh />
           <div className="vc-popup">
             <div className="vc-popup-hero">
+              <span className="vc-hero-glow" aria-hidden="true" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={WIN_LAMB} alt="" />
-              <span className="vc-spark vc-spark--a">★</span>
-              <span className="vc-spark vc-spark--b">♥</span>
-              <span className="vc-spark vc-spark--c">✦</span>
             </div>
             <h2 id="vc-win-title" className="vc-win-title">
               <span className="vc-you-caught">You caught</span>
@@ -423,15 +385,12 @@ export function VerseClawGame() {
             </div>
             <div className="vc-actions">
               <button type="button" className="vc-btn-again" onClick={playAgain}>
-                <IconClaw />
                 Play again
               </button>
               <Link href={bibleHref} className="vc-btn-bible">
-                <IconBible />
                 Open Bible
               </Link>
               <button type="button" className="vc-btn-share" onClick={shareWithFamily}>
-                <IconShare />
                 Share with family
               </button>
             </div>
