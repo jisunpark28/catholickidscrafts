@@ -1,6 +1,7 @@
 // Printable activities (coloring sheets, make-at-home pages) in the Resource library.
-// DB-free and client-safe: the catalog holds only public data. The PDFs live in
-// assets/activities (never public) and are served by the signed-in download route.
+// DB-free and client-safe: the catalog holds only public data. Editor-backed sheet PDFs live in
+// assets/activities and ready-made craft PDFs in the private Vercel Blob store (never public);
+// both are served only by the signed-in download route.
 import type { ResourceSeason } from "@/lib/resource/sheets";
 
 export type ActivityVariant = "bw" | "color";
@@ -35,6 +36,8 @@ export type ResourceActivity = {
   seoTitle: string;
   /** Has an editable element model (the Plus editor). Ready-made craft PDFs (artwork) do not. */
   editable: boolean;
+  /** Where the PDFs are: bundled under assets/activities, or the private Blob store (server-only paths in craft-blobs.ts). */
+  storage: "bundle" | "blob";
 };
 
 export const ACTIVITY_PATH = "/resource/activity";
@@ -62,6 +65,7 @@ function DAILY(rows: DailyRow[]): ResourceActivity[] {
     access: "signin",
     seoTitle: `${title} (Advent ${kind})`,
     editable: true,
+    storage: "bundle",
   }));
 }
 
@@ -93,6 +97,7 @@ function CRAFTS(rows: CraftRow[]): ResourceActivity[] {
     access: "plus",
     seoTitle: `${title} Craft Template`,
     editable: false,
+    storage: "blob",
   }));
 }
 
@@ -132,6 +137,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     access: "signin",
     seoTitle: "Happy New Church Year Coloring Sheet",
     editable: true,
+    storage: "bundle",
   },
   ...DAILY([
     ["jesse-tree-ornaments", "Jesse Tree Ornaments", "Cut-out sheet", "Make a Jesse tree ornament.",
@@ -200,6 +206,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     access: "plus",
     seoTitle: "Advent Candle Craft Template",
     editable: true,
+    storage: "bundle",
   },
   ...CRAFTS([
     ["advent-bank", "Advent Charity Bank",

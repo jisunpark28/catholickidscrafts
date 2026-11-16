@@ -1,13 +1,14 @@
-"""Import ready-made craft PDFs (<name>-color.pdf + <name>-coloring.pdf) as Plus crafts.
+"""Make the public previews of ready-made craft PDFs (<name>-color.pdf + <name>-coloring.pdf).
 
   python scripts/activities/crafts/import_crafts.py <folder with the PDFs>  (crafts not in the folder are skipped)
 
-  -> assets/activities/<slug>/<slug>.pdf (B&W) and <slug>-color.pdf (private, Plus download route)
   -> public/images/activities/<slug>/preview-bw.webp, preview-color.webp
      (page 1 only, 600 x 776, the same preview size as the other activities; the cut-out
      template pages are never public)
 
-The catalog entries live in src/lib/resource/activities.ts (CRAFT_UPLOADS).
+The PDFs themselves are NOT copied into the repo: upload them to the private Blob store with
+  pnpm exec tsx scripts/activities/crafts/upload_crafts_to_blob.ts --src <folder> [--src <folder2>]
+The catalog entries live in src/lib/resource/activities.ts (CRAFTS).
 """
 import shutil
 import subprocess
@@ -35,13 +36,10 @@ def main() -> None:
     for slug in SLUGS:
         if not (src / f"{slug}-color.pdf").exists():
             continue  # each batch folder holds only its own crafts
-        out = ROOT / "assets" / "activities" / slug
         img = ROOT / "public" / "images" / "activities" / slug
-        out.mkdir(parents=True, exist_ok=True)
         img.mkdir(parents=True, exist_ok=True)
-        for variant, name, dest in (("bw", f"{slug}-coloring.pdf", f"{slug}.pdf"), ("color", f"{slug}-color.pdf", f"{slug}-color.pdf")):
+        for variant, name in (("bw", f"{slug}-coloring.pdf"), ("color", f"{slug}-color.pdf")):
             pdf = src / name
-            shutil.copyfile(pdf, out / dest)
             with tempfile.TemporaryDirectory() as tmp:
                 base = Path(tmp) / "p1"
                 subprocess.run(["pdftoppm", "-png", "-r", "110", "-f", "1", "-l", "1", "-singlefile", str(pdf), str(base)], check=True)
