@@ -1,5 +1,5 @@
 /**
- * Frontier typing helpers for side-by-side ghost suffix mode.
+ * Frontier typing helpers for single-surface ghost suffix mode.
  * When the textarea shows typed text + ghost suffix, confirming a ghost character
  * may not change the composed value — these helpers still advance typed state.
  */

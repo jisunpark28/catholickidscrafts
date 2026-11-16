@@ -532,25 +532,22 @@ export function PassageTypingGame({
         ? "gospel-typing__body px-5 py-6 sm:px-8 sm:py-8"
         : "space-y-5 px-6 py-6";
 
-  const alignedColumns = isGospel && !embedded;
+  /** Gospel/Bible: one Monkeytype-like surface (ghost text + caret). Embedded keeps dual practice panes. */
+  const singleSurface = isGospel && !embedded;
   const sidePaneSurface =
     "gospel-typing__pane-content rounded-xl border border-[#e8e0d6] text-[var(--color-ink)]";
 
-  const passageClass = alignedColumns
-    ? `gospel-typing-passage mb-0 overflow-y-auto ${sidePaneSurface} bg-[#fdf8f3]`
-    : isBible
-      ? "gospel-typing-passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-4 text-[var(--color-ink)] sm:p-6"
-      : isGospel
-        ? "gospel-typing-passage mb-0 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:p-6"
-        : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
+  const passageClass = isBible
+    ? "gospel-typing-passage mb-0 rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-4 text-[var(--color-ink)] sm:p-6"
+    : isGospel
+      ? "gospel-typing-passage mb-0 overflow-y-auto rounded-xl border border-[#e8e0d6] bg-[#fdf8f3] p-5 text-[var(--color-ink)] sm:p-6"
+      : "mb-4 max-h-48 overflow-y-auto font-mono text-sm leading-relaxed text-[var(--color-muted)]";
 
-  const textareaClass = alignedColumns
-    ? `gospel-typing-input w-full resize-none ${sidePaneSurface} bg-white shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50`
-    : isBible
-      ? "gospel-typing-input w-full rounded-xl border border-[#e8e0d6] bg-white px-4 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:px-6 sm:py-5"
-      : isGospel
-        ? "gospel-typing-input w-full min-h-[13rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[14rem] sm:px-6 sm:py-5"
-        : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
+  const textareaClass = isBible
+    ? "gospel-typing-input w-full rounded-xl border border-[#e8e0d6] bg-white px-4 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:px-6 sm:py-5"
+    : isGospel
+      ? "gospel-typing-input w-full min-h-[13rem] resize-y rounded-xl border border-[#e8e0d6] bg-white px-5 py-4 text-[var(--color-ink)] shadow-inner focus:border-[#dfc9b0] focus:outline-none focus:ring-2 focus:ring-[#dfc9b0]/50 sm:min-h-[14rem] sm:px-6 sm:py-5"
+      : "w-full border border-[var(--color-border)] px-3 py-2 font-mono text-sm";
 
   const statsClass = isGospel
     ? "flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-[var(--color-muted)]"
@@ -568,23 +565,11 @@ export function PassageTypingGame({
     ? "mt-4 rounded-xl border border-[#dfc9b0] bg-[#fdf8f3] px-5 py-4 text-base text-[var(--color-ink)]"
     : "mt-4 border border-[var(--color-accent)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-ink)]";
 
-  const sideBySide = alignedColumns;
-
   const passagePanel = (
     <p
       ref={(el) => {
-        if (alignedColumns) passageScrollRef.current = el;
         onPassageElement?.(el);
       }}
-      onScroll={
-        alignedColumns
-          ? () => {
-              if (passageScrollRef.current) {
-                userPassageScrollRef.current = passageScrollRef.current.scrollTop;
-              }
-            }
-          : undefined
-      }
       className={passageClass}
     >
       {target.split("").map((char, i) => (
@@ -606,10 +591,23 @@ export function PassageTypingGame({
     </p>
   );
 
-  const typingInput = alignedColumns ? (
-    <div ref={mirrorContainerRef} className="gospel-typing__input-mirror">
+  const ghostTypingSurface = (
+    <div ref={mirrorContainerRef} className="gospel-typing__input-mirror gospel-typing__single-surface relative">
       <p
-        ref={inputMirrorRef}
+        ref={(el) => {
+          inputMirrorRef.current = el;
+          passageScrollRef.current = el;
+          onPassageElement?.(el);
+        }}
+        onScroll={() => {
+          const mirror = inputMirrorRef.current;
+          const inputEl = textareaRef.current;
+          if (mirror) userPassageScrollRef.current = mirror.scrollTop;
+          if (mirror && inputEl && inputEl.scrollTop !== mirror.scrollTop) {
+            inputEl.scrollTop = mirror.scrollTop;
+          }
+          syncCaretOverlay();
+        }}
         className="gospel-typing__input-mirror-display gospel-typing-input gospel-typing__mirror-text gospel-typing__pane-content mb-0"
         aria-hidden
       >
@@ -617,21 +615,19 @@ export function PassageTypingGame({
           const hasTyped = i < typed.length;
           const displayChar = hasTyped ? typed[i]! : char;
           const verse = verseAt.get(i);
+          const baseClass = hasTyped
+            ? mirrorCharClassName(i, typedNorm, target)
+            : i === nextIndex
+              ? "gospel-typing-char--next"
+              : "gospel-typing-char--pending";
+          const memoClass = passageCharClassName?.(i);
           return (
             <Fragment key={i}>
-            {verse != null && i <= typed.length ? (
-              <VerseMarker verse={verse} speak={false} />
-            ) : null}
-            <span
-              data-char-index={i}
-              className={
-                hasTyped
-                  ? mirrorCharClassName(i, typedNorm, target)
-                  : "gospel-typing-char--mirror"
-              }
-            >
-              {displayChar}
-            </span>
+              {verse != null ? <VerseMarker verse={verse} speak={false} /> : null}
+              <span data-ci={i} data-char-index={i} className={memoClass ? `${baseClass} ${memoClass}` : baseClass}>
+                {displayChar}
+              </span>
+              {renderAfterPassageChar?.(i)}
             </Fragment>
           );
         })}
@@ -669,19 +665,33 @@ export function PassageTypingGame({
         }}
         onMouseDown={(e) => {
           if (e.button !== 0) return;
+          const textarea = e.currentTarget;
+          // Let memo pencils / tap-mode targets under the capture layer receive the click.
+          textarea.style.pointerEvents = "none";
+          const under = document.elementFromPoint(e.clientX, e.clientY);
+          textarea.style.pointerEvents = "";
+          const interactive = under?.closest?.(
+            ".passage-memo-pencil, .passage-memo-ui, .passage-memo-tapmode",
+          );
+          if (interactive instanceof HTMLElement && interactive.classList.contains("passage-memo-pencil")) {
+            e.preventDefault();
+            interactive.click();
+            return;
+          }
+          if (inputMirrorRef.current?.classList.contains("passage-memo-tapmode")) {
+            // Tap-mode: do not steal focus from verse selection on the ghost surface.
+            return;
+          }
           const mirror = inputMirrorRef.current;
           if (!mirror) return;
-          const scroll = readInputScroll(e.currentTarget);
+          const scroll = readInputScroll(textarea);
           const index = caretIndexFromMirrorPoint(mirror, e.clientX, e.clientY);
           const pos = clampCaretIndex(index, typedRef.current.length);
           e.preventDefault();
-          const textarea = e.currentTarget;
           textarea.focus();
           textarea.setSelectionRange(pos, pos);
           applyInputScroll(scroll);
-          preservePassageScroll();
           requestAnimationFrame(() => {
-            preservePassageScroll();
             syncCaretOverlay();
           });
         }}
@@ -825,8 +835,11 @@ export function PassageTypingGame({
         autoCapitalize="off"
         aria-label="Type the passage"
       />
+      {passageAddon}
     </div>
-  ) : (
+  );
+
+  const plainTypingInput = (
     <textarea
       value={typed}
       onChange={(e) => {
@@ -899,7 +912,7 @@ export function PassageTypingGame({
       <section className={sectionClass}>
         <div className={bodyClass}>
           {passagePanel}
-          {typingInput}
+          {plainTypingInput}
         </div>
       </section>
     );
@@ -919,26 +932,17 @@ export function PassageTypingGame({
         </h2>
         {!hideInstructions && (
           <p className="mt-1 text-sm text-[var(--color-muted)]">
-            {sideBySide
-              ? "Type the passage on the right. Correct letters turn green. Use Save to pause and continue later."
-              : "Type the passage below. Correct letters turn green. Use Save to pause and continue later."}
+            Type the passage below. Correct letters turn green. Use Save to pause and continue later.
           </p>
         )}
       </div>
 
       <div className={bodyClass}>
-        {sideBySide ? (
+        {singleSurface ? (
           <>
-            <div className="gospel-typing__columns">
-              <div className="gospel-typing__passage-pane relative">
-                <p className="gospel-typing__pane-label">{chapterLabel ?? "Passage"}</p>
-                {passagePanel}
-                {passageAddon}
-              </div>
-              <div className="gospel-typing__input-pane">
-                <p className="gospel-typing__pane-label">Your typing</p>
-                {typingInput}
-              </div>
+            <div className="gospel-typing__single">
+              {chapterLabel ? <p className="gospel-typing__pane-label">{chapterLabel}</p> : null}
+              {ghostTypingSurface}
             </div>
             <div className="gospel-typing__footer">{controlsPanel}</div>
           </>
@@ -948,7 +952,7 @@ export function PassageTypingGame({
               {passagePanel}
               {passageAddon}
             </div>
-            {typingInput}
+            {plainTypingInput}
             {controlsPanel}
           </>
         )}

@@ -10,8 +10,9 @@ import type { FamilyTalkEntry } from "@/lib/daily-mass/family-talk";
 import type { ReadingRef } from "@/lib/daily-mass/reading-refs";
 import type { VestmentColorInfo } from "@/lib/daily-mass/vestment-color";
 import type { LiturgicalSeasonInfo, MonthCalendar } from "@/types/mass";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useId, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 
 export type DailyMassReadingRef = ReadingRef;
 
@@ -104,6 +105,9 @@ const STORE_KEY = "ckc.dailyMass.reader";
 const pill =
   "dm-pill inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-[#e7e3de] bg-white px-3.5 py-1.5 text-[0.8125em] font-semibold text-[#1c1c1c] no-underline transition hover:bg-[#fffdfb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
+const stickerCta =
+  "dm-get-sticker inline-flex items-center justify-center rounded-full border border-[#e8a06a] bg-gradient-to-b from-[#ffb074] to-[#e86a1a] px-4 py-2 text-[0.875em] font-bold tracking-wide text-white shadow-[0_2px_0_#c45512] transition hover:brightness-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] active:translate-y-px active:shadow-none";
+
 export function DailyMassView(props: DailyMassViewProps) {
   const copy = useSiteCopy();
   const t = (key: string, fallback: string) => textFromCopy(copy, key, fallback);
@@ -113,8 +117,11 @@ export function DailyMassView(props: DailyMassViewProps) {
   const [today, setToday] = useState<string | null>(null);
   const [signedIn, setSignedIn] = useState(props.journal.signedIn);
   const [stickerVersion, setStickerVersion] = useState(0);
-  // All three sections start collapsed; content stays mounted (hidden) so typing and stickers keep working.
-  const [open, setOpen] = useState({ calendar: false, typing: false, journal: false });
+  const [stickerSignInPrompt, setStickerSignInPrompt] = useState(false);
+  const [focusTypingAfterOpen, setFocusTypingAfterOpen] = useState(false);
+  // Calendar open by default; typing/journal stay collapsed until opened.
+  const [open, setOpen] = useState({ calendar: true, typing: false, journal: false });
+  const typingSectionRef = useRef<HTMLElement | null>(null);
   const flip = (key: keyof typeof open) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
   useEffect(() => {
@@ -141,6 +148,29 @@ export function DailyMassView(props: DailyMassViewProps) {
     setStickerVersion((value) => value + 1);
   }, []);
 
+  useEffect(() => {
+    if (!focusTypingAfterOpen || !open.typing) return;
+    const root = typingSectionRef.current;
+    if (!root) return;
+    setFocusTypingAfterOpen(false);
+    root.scrollIntoView({ behavior: "smooth", block: "start" });
+    const id = window.setTimeout(() => {
+      const input = root.querySelector<HTMLTextAreaElement>("textarea[aria-label='Type the passage']");
+      input?.focus({ preventScroll: true });
+    }, 320);
+    return () => window.clearTimeout(id);
+  }, [focusTypingAfterOpen, open.typing]);
+
+  const onGetSticker = useCallback(() => {
+    if (!signedIn) {
+      setStickerSignInPrompt(true);
+      return;
+    }
+    setStickerSignInPrompt(false);
+    setOpen((prev) => ({ ...prev, typing: true }));
+    setFocusTypingAfterOpen(true);
+  }, [signedIn]);
+
   function save(next: { size: number; dark: boolean }) {
     try {
       localStorage.setItem(STORE_KEY, JSON.stringify(next));
@@ -166,7 +196,12 @@ export function DailyMassView(props: DailyMassViewProps) {
     <div className={`daily-mass-reader w-full min-w-0 ${dark ? "dm-dark" : ""}`} style={{ fontSize: `${SIZES[sizeIdx]}rem` }}>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="dm-ink m-0 text-[1.75em] font-bold text-[#2e7d32]">{t("daily_mass.page.title", "Daily Mass")}</h1>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="dm-ink m-0 text-[1.75em] font-bold text-[#2e7d32]">{t("daily_mass.page.title", "Daily Mass")}</h1>
+            <button type="button" className={stickerCta} onClick={onGetSticker}>
+              {t("daily_mass.page.get_sticker", "Get Sticker!")}
+            </button>
+          </div>
           <p className="dm-muted m-0 mt-1 text-[0.9em] text-[#4b5563]">
             {t("daily_mass.page.choose", "Choose a day to see the readings")}
           </p>
@@ -215,6 +250,22 @@ export function DailyMassView(props: DailyMassViewProps) {
         </div>
       </div>
 
+      {stickerSignInPrompt && !signedIn ? (
+        <p
+          role="status"
+          className="dm-card mb-4 rounded-2xl border border-[#e8e0d6] bg-[#fff8f1] px-4 py-3 text-[0.95em] text-[#1c1c1c] shadow-sm"
+        >
+          <Link href="/account/login" className="font-semibold text-[var(--color-link)]">
+            Sign in
+          </Link>{" "}
+          or{" "}
+          <Link href="/reader/login" className="font-semibold text-[var(--color-link)]">
+            Access ID
+          </Link>{" "}
+          to save praise stickers.
+        </p>
+      ) : null}
+
       <div className="flex w-full flex-col gap-6">
         <Collapsible label="Mass calendar" title={<><span aria-hidden>📅 </span>Mass Calendar</>} open={open.calendar} onToggle={() => flip("calendar")}>
           {(toggle) => (
@@ -240,15 +291,17 @@ export function DailyMassView(props: DailyMassViewProps) {
         <Collapsible label="Typing" title={<><span aria-hidden>⌨️ </span>Today&apos;s Readings</>} open={open.typing} onToggle={() => flip("typing")}>
           {(toggle) =>
             today ? (
-              <GospelTypingSection
-                key={props.dateKey}
-                todayDate={today}
-                focusDate={props.dateKey}
-                readingRefs={props.readings}
-                usccbUrl={props.usccbUrl}
-                onCompleted={onTypingCompleted}
-                headerEnd={toggle}
-              />
+              <section ref={typingSectionRef} className="w-full min-w-0" aria-label="Gospel typing">
+                <GospelTypingSection
+                  key={props.dateKey}
+                  todayDate={today}
+                  focusDate={props.dateKey}
+                  readingRefs={props.readings}
+                  usccbUrl={props.usccbUrl}
+                  onCompleted={onTypingCompleted}
+                  headerEnd={toggle}
+                />
+              </section>
             ) : null
           }
         </Collapsible>
