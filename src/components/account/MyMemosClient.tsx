@@ -314,7 +314,7 @@ export function MyMemosClient({
         </span>
       </nav>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="flex flex-wrap items-baseline gap-2 text-3xl text-[var(--color-ink)]">
+        <h1 className="flex flex-wrap items-baseline gap-2 text-4xl font-bold tracking-tight text-[var(--color-ink)] sm:text-5xl">
           My memos
           <span className="rounded-md border border-[var(--color-border)] px-2 py-0.5 font-sans text-xs font-normal text-[var(--color-muted)]">
             <span aria-hidden>{"\u{1F464}"}</span> <span className="sr-only">Viewing as </span>
