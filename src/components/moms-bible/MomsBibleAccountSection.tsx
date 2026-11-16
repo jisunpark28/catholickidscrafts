@@ -70,8 +70,8 @@ export function MomsBibleAccountSection({ roleLabel, emailMode, ownChildren, joi
   const nameOf = (id: string) => ownChildren.find((c) => c.id === id)?.displayName ?? "";
 
   return (
-    <section className="border border-[var(--color-border)] bg-white p-5 sm:p-6">
-      <h2 className="text-xl font-bold text-[var(--color-ink)]">💌 Mom&apos;s Bible</h2>
+    <section className="border border-[var(--color-border)] bg-white p-6 sm:p-8">
+      <h2 className="text-2xl font-bold text-[var(--color-ink)]">Mom&apos;s Bible</h2>
 
       <InviteAcceptClient signedIn compact />
       {memoImport && memoImport.count > 0 && <MemoImportOffer count={memoImport.count} kids={ownChildren} />}
