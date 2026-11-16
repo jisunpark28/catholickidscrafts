@@ -103,7 +103,9 @@ export default async function SubscribePage() {
               <Link href="/account/login" className={btn}>
                 Sign in with Google to get Plus
               </Link>
-              <p className="mt-2 text-sm text-[var(--color-muted)]">Parents sign in with their Google account.</p>
+              <p className="mt-2 text-center text-sm text-[var(--color-muted)]">
+                Parents sign in with their Google account.
+              </p>
             </>
           ) : onLegacySubscription || onPreview ? (
             <>
