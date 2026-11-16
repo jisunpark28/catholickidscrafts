@@ -2,6 +2,7 @@ import { FamilyLoginForm } from "@/components/FamilyLoginForm";
 import { PageShell } from "@/components/PageShell";
 import { getDeviceLock, requireParentActive } from "@/lib/family-auth";
 import { googleAuthErrorMessage } from "@/lib/google-auth-messages";
+import { safeCallbackPath } from "@/lib/sign-in-callback";
 import { canonicalForPath } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -17,14 +18,15 @@ export const metadata: Metadata = {
   ...canonicalForPath("/account/login"),
 };
 
-type Props = { searchParams: Promise<{ error?: string }> };
+type Props = { searchParams: Promise<{ error?: string; callbackUrl?: string | string[] }> };
 
 export default async function AccountLoginPage({ searchParams }: Props) {
   // In child mode the parent must sign in again here, so only an active parent is redirected.
-  const session = await requireParentActive();
-  if (session) redirect("/account");
+  const [session, params] = await Promise.all([requireParentActive(), searchParams]);
+  // Same-site return path only (e.g. the sheet page whose Print button sent them here).
+  const callbackUrl = safeCallbackPath(Array.isArray(params.callbackUrl) ? params.callbackUrl[0] : params.callbackUrl);
+  if (session) redirect(callbackUrl ?? "/account");
 
-  const params = await searchParams;
   const googleError = googleAuthErrorMessage(params.error);
   const deviceLocked = Boolean(await getDeviceLock());
 
@@ -39,7 +41,7 @@ export default async function AccountLoginPage({ searchParams }: Props) {
             ← Home
           </Link>
           <div className="mt-3">
-            <FamilyLoginForm error={googleError} deviceLocked={deviceLocked} />
+            <FamilyLoginForm error={googleError} deviceLocked={deviceLocked} callbackUrl={callbackUrl} />
           </div>
           <p className="mt-4 text-center text-[13px] text-[var(--color-muted)]">
             Plus from US$5.99 · one-time payment, no auto-renew

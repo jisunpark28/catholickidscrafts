@@ -121,3 +121,12 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Pictures: no dragging them out and no iOS long-press "Save image" (with ImageGuard). */
+img,
+svg image,
+canvas,
+[data-image-preview] {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}

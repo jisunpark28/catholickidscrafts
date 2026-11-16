@@ -5,6 +5,7 @@ import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import { resourcePrintPath, yearLabel } from "@/lib/resource/sheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
+import { SignInGatedLink } from "@/components/SignInGatedLink";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetFit } from "./SheetFit";
 import { LockedSheetPreview } from "./LockedSheetPreview";
@@ -24,6 +25,7 @@ type Props = {
   isPlus?: boolean;
   /**
    * When false, Print/PDF go to subscribe (or thisSundayHref) instead of the print route.
+   * Either way a signed-out visitor is sent to sign-in first (and back to this page).
    * Locked previews use a decorative silhouette, never the readable sheet.
    */
   canPrint?: boolean;
@@ -61,22 +63,22 @@ function ActionButtons({
   return (
     <>
       {canPrint ? (
-        <a
+        <SignInGatedLink
           href={printHref}
           target="_blank"
           rel="noopener"
           className={`${btn} border-[#d35400] bg-[#d35400] font-semibold text-white hover:bg-[#b8470a]`}
         >
           🖨 Print
-        </a>
+        </SignInGatedLink>
       ) : (
-        <PlusLockButton level={level} className={`${btn} border-[#d35400] bg-[#d35400] font-semibold text-white hover:bg-[#b8470a]`} title="Print needs Plus (this Sunday is free)">
+        <PlusLockButton requireSignIn level={level} className={`${btn} border-[#d35400] bg-[#d35400] font-semibold text-white hover:bg-[#b8470a]`} title="Print needs Plus (this Sunday is free)">
           🖨 Print
           <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] font-bold">PLUS</span>
         </PlusLockButton>
       )}
       {canPrint ? (
-        <a
+        <SignInGatedLink
           href={printHref}
           target="_blank"
           rel="noopener"
@@ -84,9 +86,9 @@ function ActionButtons({
           title="Opens the print dialog: choose “Save as PDF”"
         >
           ⬇ PDF
-        </a>
+        </SignInGatedLink>
       ) : (
-        <PlusLockButton level={level} className={`${btn} border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]`} title="PDF export needs Plus, or print this Sunday free">
+        <PlusLockButton requireSignIn level={level} className={`${btn} border-[#e7e3de] bg-white text-[#1c1c1c] hover:bg-[#fffdfb]`} title="PDF export needs Plus, or print this Sunday free">
           ⬇ PDF
           <span className="rounded-md bg-[#f5ebe0] px-1.5 py-0.5 text-[10px] font-bold text-[#d35400]">PLUS</span>
         </PlusLockButton>

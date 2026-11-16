@@ -7,6 +7,8 @@ import { cardDownloadPath, cardsForSunday, cardThumbSrc } from "@/lib/resource/c
 import { featuredCardFor } from "@/lib/resource/featured-card";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
 import { slugToKey, yearLabel } from "@/lib/resource/sheets";
+import { pathWithQuery } from "@/lib/sign-in-callback";
+import { requireSignInForPage } from "@/lib/sign-in-gate";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -38,6 +40,8 @@ export default async function ResourceBundlePrintPage({ params, searchParams }: 
   if (!key || !sheet) notFound();
   const level = parseLevelParam(query.level);
   const autoPrint = query.autoprint === "1";
+  // Sign-in first (free), then the existing Plus / this-Sunday rule.
+  await requireSignInForPage(pathWithQuery(`/print/resource/bundle/${slug}`, query));
 
   const isThisSunday = viewer.thisSundayKey === key && viewer.thisSundayDate;
   // This Sunday's bundle is free for everyone; other Sundays' bundles stay Plus.

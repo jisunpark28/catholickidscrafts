@@ -6,6 +6,7 @@ import { bundlePrintPath, fullSundayDate, seasonIcon } from "@/lib/resource/sund
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Image from "next/image";
 import Link from "next/link";
+import { SignInGatedLink } from "@/components/SignInGatedLink";
 import { SundayCardButtons } from "./SundayCardButtons";
 import { SheetThumb } from "./SheetThumb";
 import { SundayActivitySlot } from "./activity/SundayActivitySlot";
@@ -100,7 +101,7 @@ export function SundayBundle({
             {sheet.gospelRef} · Key line: <strong className="text-[#1c1c1c]">“{lv.keyLine}”</strong>
           </p>
         </div>
-        <a
+        <SignInGatedLink
           href={bundlePrintPath(sheet.key, level)}
           target="_blank"
           rel="noopener"
@@ -108,7 +109,7 @@ export function SundayBundle({
           className={`${btn} bg-[#d35400] text-white hover:bg-[#b8470a]`}
         >
           ⬇ Download full bundle (PDF)
-        </a>
+        </SignInGatedLink>
       </div>
 
       {/* Four columns */}
@@ -125,14 +126,14 @@ export function SundayBundle({
             <SheetThumb sheet={toGospelSheetView(sheet, sundayDate)} level={level} />
           </Link>
           <div className="mt-auto flex flex-wrap gap-2 pt-3">
-            <a
+            <SignInGatedLink
               href={resourcePrintPath(sheet.key, level, true)}
               target="_blank"
               rel="noopener"
               className={`${btn} bg-[#d35400] text-white hover:bg-[#b8470a]`}
             >
               🖨 Print
-            </a>
+            </SignInGatedLink>
             <Link
               href={resourcePath(sheet.key, level)}
               className={`${btn} border border-[#e7e3de] bg-white font-medium text-[#1c1c1c] hover:bg-[#fffdfb]`}

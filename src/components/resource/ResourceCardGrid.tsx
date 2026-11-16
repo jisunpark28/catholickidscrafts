@@ -5,6 +5,7 @@ import { resourcePath, resourcePrintPath, yearLabel } from "@/lib/resource/sheet
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 import { LockedSheetPreview } from "./LockedSheetPreview";
+import { SignInGatedLink } from "@/components/SignInGatedLink";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 
@@ -68,14 +69,14 @@ export function ResourceCardGrid({
                   >
                     Open
                   </Link>
-                  <a
+                  <SignInGatedLink
                     href={resourcePrintPath(sheet.key, level, true)}
                     target="_blank"
                     rel="noopener"
                     className="rounded-full border border-[#e7e3de] px-4 py-1.5 text-sm font-medium text-[#1c1c1c] no-underline hover:bg-[#fffdfb]"
                   >
                     🖨 Print
-                  </a>
+                  </SignInGatedLink>
                 </div>
               ) : (
                 <div className="mt-auto px-1 pb-1 pt-3">
@@ -83,7 +84,7 @@ export function ResourceCardGrid({
                     <PlusLockButton level={level} className="cursor-pointer rounded-full bg-[#e7e3de] px-4 py-1.5 text-sm font-semibold text-[#6b7280]">
                       Open
                     </PlusLockButton>
-                    <PlusLockButton level={level} className="cursor-pointer rounded-full border border-[#e7e3de] px-4 py-1.5 text-sm font-medium text-[#9ca3af]">
+                    <PlusLockButton requireSignIn level={level} className="cursor-pointer rounded-full border border-[#e7e3de] px-4 py-1.5 text-sm font-medium text-[#9ca3af]">
                       🖨 Print
                     </PlusLockButton>
                   </div>

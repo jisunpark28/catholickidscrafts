@@ -13,6 +13,8 @@ import {
 } from "@/lib/resource/sheets";
 import { sheetConversationQuestions, sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { pageMetadata } from "@/lib/site-metadata";
+import { pathWithQuery } from "@/lib/sign-in-callback";
+import { isSignedInForEmbed, requireSignInForPage, SIGNED_OUT_PRINT_CSS } from "@/lib/sign-in-gate";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -86,6 +88,11 @@ export default async function ResourcePrintPage({ params, searchParams }: Props)
   const level = parseLevelParam(query.level);
   const embed = query.embed === "1";
   const autoPrint = query.autoprint === "1";
+  // Printing needs a family sign-in (free). The home page preview (embed) still renders signed out,
+  // but prints a sign-in notice instead of the sheet.
+  const signedIn = embed
+    ? await isSignedInForEmbed()
+    : Boolean(await requireSignInForPage(pathWithQuery(`/print/resource/${slug}`, query)));
   const canOpen = sheetOpenAllowed(viewer, key);
 
   // Locked (free viewer, not this Sunday): never render the sheet; send them to Plus.
@@ -101,7 +108,7 @@ export default async function ResourcePrintPage({ params, searchParams }: Props)
 
   return (
     <div style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
-      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + SEO_CHROME_CSS }} />
+      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + SEO_CHROME_CSS + (signedIn ? "" : SIGNED_OUT_PRINT_CSS) }} />
       {embed ? null : (
         <>
           <PrintToolbar

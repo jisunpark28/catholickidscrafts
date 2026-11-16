@@ -3,6 +3,7 @@ import { hasCardOriginal } from "@/lib/resource/card-originals";
 import { CARD_ID_RE, cardDownloadPath, cardThumbSrc, getPictureCard } from "@/lib/resource/cards";
 import { isFreeFeaturedCard } from "@/lib/resource/featured-card";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
+import { requireSignInForPage } from "@/lib/sign-in-gate";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
@@ -34,6 +35,8 @@ export default async function CardPrintPage({ params }: Props) {
   const card = CARD_ID_RE.test(id) ? getPictureCard(id) : null;
   if (!card) notFound();
 
+  // Sign-in first (free), then the existing Plus / free-card rule.
+  await requireSignInForPage(`/print/resource/card/${card.id}`);
   // Plus, or today's featured card (free for everyone, same rule as the download API).
   if (!viewer.isPlus && !isFreeFeaturedCard(card.id, viewer.country)) redirect("/subscribe");
 

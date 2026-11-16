@@ -4,6 +4,7 @@ import { saveCardPng, shareCardPng } from "@/lib/resource/card-download-client";
 import { cardSharePath } from "@/lib/resource/card-meta";
 import { useState } from "react";
 import { PlusLockDialog } from "./PlusLockDialog";
+import { useSignInGate } from "@/components/useSignInGate";
 
 type Props = {
   card: { id: string; title: string };
@@ -28,12 +29,15 @@ export function CardActions({ card, isPlus, isFree = false, siteUrl, compact = f
   const [busy, setBusy] = useState<"" | "download" | "share">("");
   const [msg, setMsg] = useState<string>("");
   const [lockOpen, setLockOpen] = useState(false);
+  // Download needs a family sign-in (the API checks it too); signed out goes to sign-in and back.
+  const gate = useSignInGate();
 
   const shareUrl = `${siteUrl.replace(/\/$/, "")}${cardSharePath(card.id)}`;
   const shareText = `${card.title} \u2014 a Little Light picture card from Catholic Kids Crafts`;
   const enc = encodeURIComponent;
 
   const download = async () => {
+    if (!gate()) return;
     setBusy("download");
     setMsg("");
     try {
@@ -87,7 +91,9 @@ export function CardActions({ card, isPlus, isFree = false, siteUrl, compact = f
             type="button"
             aria-haspopup="dialog"
             title="Card downloads are a Plus feature"
-            onClick={() => setLockOpen(true)}
+            onClick={() => {
+              if (gate()) setLockOpen(true);
+            }}
             className={lockedBtn}
           >
             {"\u{1F512}"} Download PNG (4:5) <span className={plusTag}>PLUS</span>

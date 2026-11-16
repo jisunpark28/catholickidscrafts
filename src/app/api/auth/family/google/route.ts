@@ -8,6 +8,7 @@ import {
   isGoogleSignInConfigured,
   type GoogleOAuthFrom,
 } from "@/lib/google-oauth";
+import { CALLBACK_PARAM, safeCallbackPath } from "@/lib/sign-in-callback";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -19,7 +20,9 @@ export async function GET(request: Request) {
   const from: GoogleOAuthFrom = searchParams.get("from") === "signup" ? "signup" : "login";
 
   const locked = Boolean(await getDeviceLock());
-  const { state, nonce } = await createGoogleOAuthState(from, locked);
+  // Same-site return path only (e.g. the sheet page whose Print button sent them here).
+  const next = safeCallbackPath(searchParams.get(CALLBACK_PARAM));
+  const { state, nonce } = await createGoogleOAuthState(from, locked, next);
   const url = buildGoogleAuthUrl(state, { nonce, locked });
   const res = NextResponse.redirect(url);
   // Binds this round trip to this browser; checked in the callback.

@@ -11,9 +11,11 @@ type Props = {
   error?: string | null;
   /** This device is in child mode: offer the emailed-code way back to the grown-up account. */
   deviceLocked?: boolean;
+  /** Same-site page to return to after Google sign-in (e.g. the sheet whose Print sent them here). */
+  callbackUrl?: string | null;
 };
 
-export function FamilyLoginForm({ error, deviceLocked = false }: Props) {
+export function FamilyLoginForm({ error, deviceLocked = false, callbackUrl = null }: Props) {
   return (
     <div className="w-full rounded-2xl border border-[#efe6da] bg-white px-6 py-8 text-center shadow-[0_12px_32px_rgba(120,84,48,0.12)] sm:px-8">
       <span
@@ -39,7 +41,7 @@ export function FamilyLoginForm({ error, deviceLocked = false }: Props) {
       )}
 
       <div className="mt-6">
-        <GoogleFamilySignIn from="login" showDivider={false} buttonClassName="min-h-[48px] text-[15px]" />
+        <GoogleFamilySignIn from="login" showDivider={false} buttonClassName="min-h-[48px] text-[15px]" callbackUrl={callbackUrl} />
       </div>
       <p className="mt-3 text-[13px] text-[var(--color-muted)]">
         New families are created automatically the first time you sign in.
