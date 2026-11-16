@@ -10,13 +10,13 @@ export type VerseClawDollId =
   | "night-star"
   | "tiny-ark";
 
-/** Irregular pile pose inside the cabinet (percentages + depth). */
+/** Irregular pile pose inside the cabinet (percentages + depth). Size stays stable — depth via overlap/shadow only. */
 export type VerseClawPilePose = {
   left: number;
   bottom: number;
   rotate: number;
-  scale: number;
   z: number;
+  /** Stable footprint % — keep near-uniform so dolls do not pulse in size. */
   width: number;
 };
 
@@ -43,7 +43,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 0,
     src: "/games/verse-claw/doll-little-sheep.png",
     glow: "#ffb48a",
-    pile: { left: 18, bottom: 20, rotate: -10, scale: 1, z: 4, width: 26 },
+    pile: { left: 18, bottom: 20, rotate: -10, z: 4, width: 25 },
   },
   {
     id: "peace-dove",
@@ -52,7 +52,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 1,
     src: "/games/verse-claw/doll-peace-dove.png",
     glow: "#c9e7d8",
-    pile: { left: 64, bottom: 36, rotate: 14, scale: 0.92, z: 5, width: 24 },
+    pile: { left: 64, bottom: 36, rotate: 14, z: 5, width: 25 },
   },
   {
     id: "ichthys-fish",
@@ -61,7 +61,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 2,
     src: "/games/verse-claw/doll-ichthys-fish.png",
     glow: "#9ec9e8",
-    pile: { left: 4, bottom: 2, rotate: -22, scale: 1.14, z: 9, width: 28 },
+    pile: { left: 4, bottom: 2, rotate: -22, z: 9, width: 25 },
   },
   {
     id: "halo-lamb",
@@ -70,7 +70,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 3,
     src: "/games/verse-claw/doll-halo-lamb.png",
     glow: "#ffe6a8",
-    pile: { left: 48, bottom: 24, rotate: 8, scale: 0.9, z: 3, width: 24 },
+    pile: { left: 48, bottom: 24, rotate: 8, z: 3, width: 25 },
   },
   {
     id: "bread-friend",
@@ -79,7 +79,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 4,
     src: "/games/verse-claw/doll-bread-friend.png",
     glow: "#e8c9a0",
-    pile: { left: 34, bottom: 8, rotate: 5, scale: 1.06, z: 7, width: 26 },
+    pile: { left: 34, bottom: 8, rotate: 5, z: 7, width: 25 },
   },
   {
     id: "joy-apple",
@@ -88,7 +88,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 5,
     src: "/games/verse-claw/doll-joy-apple.png",
     glow: "#f5a3a3",
-    pile: { left: 52, bottom: 1, rotate: -12, scale: 1.1, z: 10, width: 24 },
+    pile: { left: 52, bottom: 1, rotate: -12, z: 10, width: 25 },
   },
   {
     id: "night-star",
@@ -97,7 +97,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 6,
     src: "/games/verse-claw/doll-night-star.png",
     glow: "#b8c4f0",
-    pile: { left: 72, bottom: 5, rotate: 16, scale: 1.02, z: 8, width: 24 },
+    pile: { left: 72, bottom: 5, rotate: 16, z: 8, width: 25 },
   },
   {
     id: "tiny-ark",
@@ -106,7 +106,7 @@ export const VERSE_CLAW_DOLLS: VerseClawDoll[] = [
     slot: 7,
     src: "/games/verse-claw/doll-tiny-ark.png",
     glow: "#d4b896",
-    pile: { left: 22, bottom: 5, rotate: -3, scale: 1.04, z: 6, width: 27 },
+    pile: { left: 22, bottom: 5, rotate: -3, z: 6, width: 25 },
   },
 ];
 

@@ -254,77 +254,87 @@
 .vc-prongs {
   position: absolute;
   left: 50%;
-  top: 48px;
-  width: 90px;
-  height: 70px;
-  margin-left: -45px;
+  top: 44px;
+  width: 108px;
+  height: 78px;
+  margin-left: -54px;
   z-index: 2;
 }
 
-.vc-prong {
+.vc-toe {
   position: absolute;
   top: 0;
-  width: 16px;
-  height: 58px;
-  border-radius: 10px 10px 14px 14px;
-  background:
-    linear-gradient(180deg, #fff8ee 0%, #f0e2cc 40%, #dcc8a8 100%);
-  box-shadow:
-    0 6px 8px rgba(70, 45, 20, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  transform-origin: 50% 8px;
-  transition: transform 280ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  width: 44px;
+  height: 76px;
+  overflow: visible;
+  transform-origin: 50% 10px;
+  filter: drop-shadow(0 5px 4px rgba(70, 45, 20, 0.22));
+  transition: transform 300ms cubic-bezier(0.34, 1.15, 0.64, 1);
 }
 
-.vc-prong::after {
-  content: "";
-  position: absolute;
-  left: 2px;
-  right: 2px;
-  bottom: 4px;
-  height: 14px;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #cfc3b0, #a89a86);
-  opacity: 0.85;
+.vc-toe-arc {
+  fill: none;
+  stroke: #f5ead6;
+  stroke-width: 16;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.vc-prong--l {
-  left: 8px;
+.vc-toe-tip {
+  fill: #c4b49c;
+  stroke: rgba(160, 130, 90, 0.25);
+  stroke-width: 1;
 }
 
-.vc-prong--c {
-  left: 37px;
+.vc-toe--l {
+  left: -2px;
 }
 
-.vc-prong--r {
-  right: 8px;
+.vc-toe--c {
+  left: 32px;
+}
+
+.vc-toe--r {
+  right: -2px;
   left: auto;
 }
 
-/* Open: fingers spread wide */
-.vc-claw--open .vc-prong--l {
-  transform: rotate(-32deg) translate(-4px, 2px);
+.vc-toe--l .vc-toe-arc {
+  stroke: #f8f0e0;
 }
 
-.vc-claw--open .vc-prong--c {
-  transform: rotate(0deg) translateY(6px);
+.vc-toe--c .vc-toe-arc {
+  stroke: #f0e2c8;
 }
 
-.vc-claw--open .vc-prong--r {
-  transform: rotate(32deg) translate(4px, 2px);
+.vc-toe--r .vc-toe-arc {
+  stroke: #ebe0c4;
 }
 
-/* Closed: fingers curl inward around doll */
-.vc-claw--closed .vc-prong--l {
-  transform: rotate(18deg) translate(10px, 4px);
+/* Open: arcs already curve; fan them a bit wider */
+.vc-claw--open .vc-toe--l {
+  transform: rotate(-8deg) translate(-2px, 0);
 }
 
-.vc-claw--closed .vc-prong--c {
-  transform: rotate(0deg) translateY(2px) scaleY(0.92);
+.vc-claw--open .vc-toe--c {
+  transform: rotate(0deg) translateY(3px);
 }
 
-.vc-claw--closed .vc-prong--r {
-  transform: rotate(-18deg) translate(-10px, 4px);
+.vc-claw--open .vc-toe--r {
+  transform: rotate(8deg) translate(2px, 0);
+}
+
+/* Closed: swing arcs inward to grip the plush */
+.vc-claw--closed .vc-toe--l {
+  transform: rotate(26deg) translate(14px, 2px);
+}
+
+.vc-claw--closed .vc-toe--c {
+  transform: rotate(0deg) translateY(0);
+}
+
+.vc-claw--closed .vc-toe--r {
+  transform: rotate(-26deg) translate(-14px, 2px);
 }
 
 .vc-held-doll {
@@ -393,10 +403,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    opacity 220ms ease,
-    filter 220ms ease,
-    transform 420ms cubic-bezier(0.34, 1.3, 0.64, 1);
+  /* Size stays fixed; only opacity/visibility change when grabbed */
+  transition: opacity 220ms ease, filter 220ms ease;
   filter: drop-shadow(0 8px 6px rgba(90, 55, 25, 0.28));
 }
 
@@ -430,17 +438,17 @@
 
 @keyframes vc-roll-out {
   0% {
-    transform: translateY(0) rotate(0deg) scale(1);
+    transform: translateY(0) rotate(0deg);
     opacity: 1;
   }
   35% {
-    transform: translateY(-24%) rotate(-14deg) scale(1.06);
+    transform: translateY(-24%) rotate(-14deg);
   }
   70% {
-    transform: translateY(48%) rotate(20deg) scale(1.02);
+    transform: translateY(48%) rotate(20deg);
   }
   100% {
-    transform: translateY(86%) rotate(10deg) scale(0.9);
+    transform: translateY(86%) rotate(10deg);
     opacity: 0.12;
   }
 }

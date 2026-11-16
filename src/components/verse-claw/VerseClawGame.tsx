@@ -25,13 +25,13 @@ function clamp(n: number, min: number, max: number) {
 }
 
 function pileStyle(doll: VerseClawDoll): CSSProperties {
-  const { left, bottom, rotate, scale, z, width } = doll.pile;
+  const { left, bottom, rotate, z, width } = doll.pile;
   return {
     left: `${left}%`,
     bottom: `${bottom}%`,
     width: `${width}%`,
     zIndex: z,
-    transform: `rotate(${rotate}deg) scale(${scale})`,
+    transform: `rotate(${rotate}deg)`,
   };
 }
 
@@ -124,10 +124,20 @@ function ToyClaw({
           <span className="vc-claw-smile" />
         </div>
       </div>
-      <div className="vc-prongs">
-        <span className="vc-prong vc-prong--l" />
-        <span className="vc-prong vc-prong--c" />
-        <span className="vc-prong vc-prong--r" />
+      <div className="vc-prongs" aria-hidden="true">
+        {/* Thick stroked arcs = soft toy claw toes that clearly curve. */}
+        <svg className="vc-toe vc-toe--l" viewBox="0 0 64 84" preserveAspectRatio="xMidYMin meet">
+          <path className="vc-toe-arc" d="M38 8 C 6 22, -2 48, 24 74" />
+          <circle className="vc-toe-tip" cx="24" cy="74" r="8" />
+        </svg>
+        <svg className="vc-toe vc-toe--c" viewBox="0 0 64 84" preserveAspectRatio="xMidYMin meet">
+          <path className="vc-toe-arc" d="M32 6 C 26 28, 26 50, 32 74" />
+          <circle className="vc-toe-tip" cx="32" cy="74" r="8" />
+        </svg>
+        <svg className="vc-toe vc-toe--r" viewBox="0 0 64 84" preserveAspectRatio="xMidYMin meet">
+          <path className="vc-toe-arc" d="M26 8 C 58 22, 66 48, 40 74" />
+          <circle className="vc-toe-tip" cx="40" cy="74" r="8" />
+        </svg>
       </div>
       {held ? (
         <div className="vc-held-doll">
@@ -247,7 +257,8 @@ export function VerseClawGame() {
     }
   }
 
-  const depthScale = 0.78 + (clawZ / 100) * 0.42;
+  // Mild depth cue only — avoid dramatic shrink/grow while moving.
+  const depthScale = 0.94 + (clawZ / 100) * 0.1;
   // Idle/move hang height; drop reaches into the pile so prongs overlap the doll.
   const hangTop = 10 + (100 - clawZ) * 0.38;
   const dropReach = 58 + (100 - clawZ) * 0.55;
