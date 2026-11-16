@@ -1,5 +1,6 @@
 import { SignJWT, createRemoteJWKSet, jwtVerify } from "jose";
 import { randomUUID } from "crypto";
+import { safeCallbackPath } from "@/lib/sign-in-callback";
 
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
@@ -45,14 +46,17 @@ export function getGoogleRedirectUri(): string {
 
 export type GoogleOAuthFrom = "signup" | "login";
 
-export type GoogleOAuthState = { from: GoogleOAuthFrom; nonce: string; locked: boolean };
+/** `next`: safe same-site return path after sign-in (null: the account page). */
+export type GoogleOAuthState = { from: GoogleOAuthFrom; nonce: string; locked: boolean; next: string | null };
 
 export async function createGoogleOAuthState(
   from: GoogleOAuthFrom = "login",
   locked = false,
+  next: string | null = null,
 ): Promise<{ state: string; nonce: string }> {
   const nonce = randomUUID();
-  const state = await new SignJWT({ nonce, from, locked })
+  const safeNext = safeCallbackPath(next);
+  const state = await new SignJWT({ nonce, from, locked, ...(safeNext ? { next: safeNext } : {}) })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("10m")
@@ -68,6 +72,7 @@ export async function verifyGoogleOAuthState(state: string): Promise<GoogleOAuth
       from: payload.from === "signup" ? "signup" : "login",
       nonce: payload.nonce,
       locked: payload.locked === true,
+      next: safeCallbackPath(payload.next),
     };
   } catch {
     return null;

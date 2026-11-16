@@ -9,6 +9,7 @@ import Link from "next/link";
 import { ActivityTile } from "./activity/ActivityTile";
 import { CardTile } from "./CardTile";
 import { LockedSheetPreview } from "./LockedSheetPreview";
+import { SignInGatedLink } from "@/components/SignInGatedLink";
 import { PlusLockButton } from "./PlusLockDialog";
 import { SheetThumb } from "./SheetThumb";
 import { ResourcePagination } from "./ResourcePagination";
@@ -127,14 +128,14 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                       <Link href={resourcePath(s.key, level)} className={`${pill} bg-[#d35400] text-white hover:bg-[#b8470a]`}>
                         Open
                       </Link>
-                      <a
+                      <SignInGatedLink
                         href={resourcePrintPath(s.key, level, true)}
                         target="_blank"
                         rel="noopener"
                         className={`${ghost} text-[#1c1c1c] hover:bg-[#fffdfb]`}
                       >
                         🖨 Print
-                      </a>
+                      </SignInGatedLink>
                     </div>
                   </div>
                 ) : (
@@ -150,7 +151,7 @@ export function UnifiedSearchResults({ q, hits, level, isPlus, thisSundayKey, cl
                         <PlusLockButton level={level} className={`${pill} cursor-pointer bg-[#e7e3de] text-[#6b7280]`}>
                           Open
                         </PlusLockButton>
-                        <PlusLockButton level={level} className={`${ghost} cursor-pointer text-[#9ca3af]`}>
+                        <PlusLockButton requireSignIn level={level} className={`${ghost} cursor-pointer text-[#9ca3af]`}>
                           🖨 Print
                         </PlusLockButton>
                       </div>

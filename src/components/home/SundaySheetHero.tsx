@@ -1,6 +1,7 @@
 "use client";
 
 import { useSiteSession } from "@/components/SiteSessionProvider";
+import { useSignInGate } from "@/components/useSignInGate";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -72,6 +73,8 @@ export function SundaySheetHero({
   // Loaded once per page load by SiteSessionProvider (the page itself is static and signed-out).
   const { ready: sessionReady, session } = useSiteSession();
   const signedIn = Boolean(session.family);
+  // Print needs a family sign-in; signed out goes to sign-in and back to this page.
+  const gate = useSignInGate();
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
@@ -126,6 +129,7 @@ export function SundaySheetHero({
   }, [copyMsg]);
 
   const onPrint = useCallback(() => {
+    if (!gate()) return;
     const frameWin = frameRef.current?.contentWindow;
     if (isMobileDevice() || !frameWin) {
       awaitingReturn.current = true;
@@ -138,7 +142,7 @@ export function SundaySheetHero({
     frameWin.print();
     // Some browsers block in print() and never fire afterprint on the frame.
     window.setTimeout(done, 500);
-  }, [printBasePath, level]);
+  }, [printBasePath, level, gate]);
 
   const onCopy = async () => {
     const url = new URL(shareHref, window.location.origin).href;
@@ -159,6 +163,7 @@ export function SundaySheetHero({
     <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-6">
       <div className="shrink-0">
         <div
+          data-image-preview
           className="-rotate-2 overflow-hidden rounded-xl border border-[#e7e3de] bg-white shadow-[0_16px_28px_-12px_rgba(0,0,0,0.32)]"
           style={{ width: PAGE_W * scale, height: PAGE_H * scale }}
         >
@@ -216,7 +221,7 @@ export function SundaySheetHero({
           className="w-full rounded-full bg-[#2e7d32] px-6 py-3.5 text-center text-xl font-extrabold text-white shadow-[0_10px_18px_-8px_rgba(46,125,50,0.65)] hover:bg-[#256628]"
         >
           🖨 Print Free Sheet
-          <span className="mt-0.5 block text-xs font-semibold opacity-90">No sign-in needed</span>
+          <span className="mt-0.5 block text-xs font-semibold opacity-90">Free with a family account</span>
         </button>
 
         <div className="relative flex gap-2">

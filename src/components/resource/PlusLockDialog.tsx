@@ -4,6 +4,7 @@ import { ONE_TIME_LINE } from "@/lib/subscription/plan-copy";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { useSignInGate } from "../useSignInGate";
 
 export const PLUS_LOCK_LINE = "This is a Plus resource. This Sunday's sheet, card and bundle are free.";
 
@@ -122,14 +123,26 @@ type ButtonProps = LockCopy & {
   level?: 1 | 2;
   title?: string;
   children: React.ReactNode;
+  /** Print / Download: signed-out visitors go to sign-in (and back here) before the Plus popup. */
+  requireSignIn?: boolean;
 };
 
 /** A locked button (keeps its locked look) that opens the Plus popup instead of doing nothing. */
-export function PlusLockButton({ className, level = 1, title, children, ...copy }: ButtonProps) {
+export function PlusLockButton({ className, level = 1, title, children, requireSignIn = false, ...copy }: ButtonProps) {
   const [open, setOpen] = useState(false);
+  const gate = useSignInGate();
   return (
     <>
-      <button type="button" aria-haspopup="dialog" title={title} className={className} onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        title={title}
+        className={className}
+        onClick={() => {
+          if (requireSignIn && !gate()) return;
+          setOpen(true);
+        }}
+      >
         {children}
       </button>
       <PlusLockDialog open={open} onClose={() => setOpen(false)} level={level} {...copy} />

@@ -3,6 +3,8 @@ import { PrintToolbar } from "@/components/gospel-sheet/PrintToolbar";
 import { GOSPEL_SHEET_CSS, GOSPEL_SHEET_PAGE_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { isAdmin } from "@/lib/admin-auth";
 import { loadSheetBySlug, parseLevelParam } from "@/lib/gospel-sheet";
+import { pathWithQuery } from "@/lib/sign-in-callback";
+import { isSignedInForEmbed, requireSignInForPage, SIGNED_OUT_PRINT_CSS } from "@/lib/sign-in-gate";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -30,10 +32,15 @@ export default async function PrintSheetPage({ params, searchParams }: Props) {
 
   const embed = query.embed === "1";
   const autoPrint = query.autoprint === "1";
+  // Printing needs a family sign-in (admins keep their preview). The home page preview (embed)
+  // still renders signed out, but prints a sign-in notice instead of the sheet.
+  const signedIn = embed
+    ? await isSignedInForEmbed()
+    : (await isAdmin()) || Boolean(await requireSignInForPage(pathWithQuery(`/print/${slug}`, query)));
 
   return (
     <div style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
-      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS }} />
+      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + (signedIn ? "" : SIGNED_OUT_PRINT_CSS) }} />
       {embed ? null : (
         <PrintToolbar
           slug={sheet.slug}

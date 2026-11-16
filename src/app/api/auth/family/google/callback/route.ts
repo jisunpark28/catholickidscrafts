@@ -129,7 +129,8 @@ export async function GET(request: Request) {
   }
 
   try {
-    const res = NextResponse.redirect(new URL("/account", request.url));
+    // `next` comes from the signed state and is re-checked as a same-site path.
+    const res = NextResponse.redirect(new URL(statePayload.next ?? "/account", request.url));
     await setFamilyAndOwnerReaderCookies(res, account.id, account.email);
     res.cookies.set(GOOGLE_OAUTH_NONCE_COOKIE, "", { path: "/api/auth/family/google", maxAge: 0 });
     // A verified fresh parent sign-in (or an unlocked device) clears the child-mode marker.

@@ -1,4 +1,5 @@
 import { FeedbackWidget } from "@/components/FeedbackWidget";
+import { ImageGuard } from "@/components/ImageGuard";
 import { SiteJsonLd } from "@/components/SiteJsonLd";
 import { getGoogleSiteVerification } from "@/lib/google-site-verification";
 import { siteMetadata } from "@/lib/site-metadata";
@@ -41,6 +42,7 @@ export default function RootLayout({
         <SiteJsonLd />
         {children}
         <FeedbackWidget />
+        <ImageGuard />
         <Analytics />
       </body>
     </html>

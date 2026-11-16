@@ -12,6 +12,8 @@ import {
   publicPath,
 } from "@/lib/seo/evergreen-worksheets";
 import { pageMetadata } from "@/lib/site-metadata";
+import { pathWithQuery } from "@/lib/sign-in-callback";
+import { requireSignInForPage } from "@/lib/sign-in-gate";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -53,6 +55,8 @@ export default async function EvergreenPrintPage({ params, searchParams }: Props
   const page = getEvergreenPageBySlug(slug);
   const sheet = page ? getEvergreenSheet(page.key) : null;
   if (!page || !sheet) notFound();
+  // Sign-in first (free), then the existing Plus rule.
+  await requireSignInForPage(pathWithQuery(`/print/evergreen/${slug}`, query));
   if (!sheetOpenAllowed(viewer, page.key)) redirect("/subscribe");
   const level = parseLevelParam(query.level);
   const embed = query.embed === "1";

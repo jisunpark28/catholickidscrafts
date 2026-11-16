@@ -9,6 +9,7 @@ import {
   type ResourceActivity,
 } from "@/lib/resource/activities";
 import { saveActivityPdf } from "@/lib/resource/activity-download-client";
+import { useSignInGate } from "@/components/useSignInGate";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -45,6 +46,7 @@ export function SundayActivitySlot({ label, activity, meta, note, moreHref, more
   const isPlus = Boolean(family?.isPlus && !family.childMode);
   const plusOnly = activity.access === "plus";
   const href = activityPath(activity.slug);
+  const gate = useSignInGate();
 
   const download = async () => {
     setBusy(true);
@@ -124,7 +126,8 @@ export function SundayActivitySlot({ label, activity, meta, note, moreHref, more
             🔒 Download
           </PlusLockButton>
         ) : (
-          <Link href={href} className={primaryCls}>
+          // Signed out: straight to sign-in, then back to this page.
+          <Link href={href} className={primaryCls} onClick={(e) => void gate(e)}>
             {plusOnly ? "🔒 Sign in · Plus" : "Sign in"}
           </Link>
         )}

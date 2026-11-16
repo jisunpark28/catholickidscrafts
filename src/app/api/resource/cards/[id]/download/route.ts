@@ -32,8 +32,8 @@ const noStore = { "Cache-Control": "private, no-store" };
 
 /**
  * Full-resolution card (1080×1350 PNG, Instagram 4:5).
- * Today's featured card (This Sunday tab) is free for everyone, rate-limited by IP.
- * Every other card needs a signed-in parent + active Plus, checked on every request.
+ * Every card needs a signed-in parent (401 / 403 first). Today's featured card (This Sunday tab)
+ * is then free, rate-limited by IP; every other card also needs active Plus (402), checked on every request.
  * Originals never get a public URL. `?inline=1` is used by the Share button.
  */
 export async function GET(request: Request, ctx: Ctx) {
@@ -48,14 +48,15 @@ export async function GET(request: Request, ctx: Ctx) {
     request.headers.get("x-vercel-ip-country"),
   );
 
+  const guard = await parentApiGuard();
+  if (guard.error) return guard.error;
+
   let limitKey: string;
   let rule: RateLimitRule;
   if (isFreeFeaturedCard(card.id, country)) {
     limitKey = `card-dl-free:ip:${clientIpFromHeaders(request.headers)}`;
     rule = FREE_CARD_DOWNLOAD_RULE;
   } else {
-    const guard = await parentApiGuard();
-    if (guard.error) return guard.error;
     if (!(await familyHasPlus(guard.session.familyAccountId))) return plusRequiredResponse();
     limitKey = `card-dl:${guard.session.familyAccountId}`;
     rule = CARD_DOWNLOAD_RULE;

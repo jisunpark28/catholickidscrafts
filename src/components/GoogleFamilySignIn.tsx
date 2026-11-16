@@ -1,5 +1,6 @@
 "use client";
 
+import { CALLBACK_PARAM, safeCallbackPath } from "@/lib/sign-in-callback";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -8,6 +9,8 @@ type Props = {
   showDivider?: boolean;
   /** Extra classes for the Google button (e.g. taller variant). */
   buttonClassName?: string;
+  /** Same-site path to return to after sign-in (checked again on the server). */
+  callbackUrl?: string | null;
 };
 
 function GoogleMark() {
@@ -33,7 +36,7 @@ function GoogleMark() {
   );
 }
 
-export function GoogleFamilySignIn({ from = "login", showDivider = true, buttonClassName = "" }: Props) {
+export function GoogleFamilySignIn({ from = "login", showDivider = true, buttonClassName = "", callbackUrl = null }: Props) {
   const [enabled, setEnabled] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -75,7 +78,12 @@ export function GoogleFamilySignIn({ from = "login", showDivider = true, buttonC
     return null;
   }
 
-  const href = from === "signup" ? "/api/auth/family/google?from=signup" : "/api/auth/family/google";
+  const params = new URLSearchParams();
+  if (from === "signup") params.set("from", "signup");
+  const next = safeCallbackPath(callbackUrl);
+  if (next) params.set(CALLBACK_PARAM, next);
+  const qs = params.toString();
+  const href = `/api/auth/family/google${qs ? `?${qs}` : ""}`;
 
   return (
     <>

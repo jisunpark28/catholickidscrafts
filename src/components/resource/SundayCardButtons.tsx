@@ -3,6 +3,7 @@
 import { saveCardPng, shareCardPng } from "@/lib/resource/card-download-client";
 import { cardShareTargets, type PictureCard } from "@/lib/resource/card-meta";
 import { useEffect, useRef, useState } from "react";
+import { useSignInGate } from "@/components/useSignInGate";
 
 type Props = {
   card: Pick<PictureCard, "id" | "title">;
@@ -20,6 +21,8 @@ export function SundayCardButtons({ card, siteUrl, primaryCls, ghostCls }: Props
   const [canNative, setCanNative] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const share = cardShareTargets(card, siteUrl);
+  // Download needs a family sign-in (the API checks it too); signed out goes to sign-in and back.
+  const gate = useSignInGate();
 
   useEffect(() => setCanNative(typeof navigator.share === "function"), []);
   useEffect(() => {
@@ -45,6 +48,7 @@ export function SundayCardButtons({ card, siteUrl, primaryCls, ghostCls }: Props
     setOpen(false);
   };
   const download = async () => {
+    if (!gate()) return;
     setBusy(true);
     setMsg("");
     try {

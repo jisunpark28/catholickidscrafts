@@ -10,6 +10,8 @@ import {
 import { shareCardPng } from "@/lib/resource/card-download-client";
 import Image from "next/image";
 import Link from "next/link";
+import { SignInGatedLink } from "@/components/SignInGatedLink";
+import { useSignInGate } from "@/components/useSignInGate";
 import { useEffect, useRef, useState } from "react";
 import { LockedPreview } from "./LockedPreview";
 import { PlusLockDialog } from "./PlusLockDialog";
@@ -58,6 +60,7 @@ export function CardTile({
 }: Props) {
   const unlocked = isPlus || isFree;
   const [lockOpen, setLockOpen] = useState(false);
+  const gate = useSignInGate();
   const [shareOpen, setShareOpen] = useState(false);
   const [msg, setMsg] = useState("");
   const [canNative, setCanNative] = useState(false);
@@ -186,9 +189,9 @@ export function CardTile({
           )}
           {unlocked ? (
             <>
-              <a href={cardPrintPath(card.id)} target="_blank" rel="noopener" className={ghostBtn}>
+              <SignInGatedLink href={cardPrintPath(card.id)} target="_blank" rel="noopener" className={ghostBtn}>
                 🖨 Print
-              </a>
+              </SignInGatedLink>
               <div className="relative min-w-0" ref={shareRef}>
                 <button
                   type="button"
@@ -226,7 +229,14 @@ export function CardTile({
             </>
           ) : (
             <>
-              <button type="button" aria-haspopup="dialog" onClick={() => setLockOpen(true)} className={`${ghostBtn} cursor-pointer text-[#9ca3af]`}>
+              <button
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => {
+                  if (gate()) setLockOpen(true);
+                }}
+                className={`${ghostBtn} cursor-pointer text-[#9ca3af]`}
+              >
                 🖨 Print
               </button>
               <button type="button" aria-haspopup="dialog" onClick={() => setLockOpen(true)} className={`${ghostBtn} cursor-pointer text-[#9ca3af]`}>
