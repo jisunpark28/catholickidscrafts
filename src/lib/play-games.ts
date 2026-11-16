@@ -20,6 +20,13 @@ export const PLAY_GAMES: PlayGame[] = [
     embedPath: getTinyPriestEmbedPath(),
   },
   {
+    slug: "verse-claw",
+    title: "Verse Claw",
+    description: "Catch a blessing doll and share a Catholic verse with your family.",
+    embedPath: "/play/verse-claw",
+    duration: "2-5 min",
+  },
+  {
     slug: "liturgical-vestments",
     title: "Liturgical vestments",
     description: "What color vestments does Father wear?",

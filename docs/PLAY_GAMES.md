@@ -5,6 +5,7 @@ Public hub: `/play`
 | Game | Path | Source |
 |------|------|--------|
 | Tiny Priest (church 3D) | `/play/church` → `/games/tiny-priest/` | [tiny-priest](https://github.com/jisunpark28/tiny-priest) |
+| Verse Claw | `/play/verse-claw` | Built in Next.js (`src/components/verse-claw/`) |
 | Gospel typing | `/mass/YYYY-MM-DD` (below readings) | Built in Next.js |
 | Hangman | `/play/hangman` → `/games/hangman/` | [portfolio Hangman](https://github.com/jisunpark28/my-course-portfolio/tree/main/Project/HANGMAN-GAME/JavaScript-Ver) + words from `GET /api/hangman-words` |
 | Face to Emoji | `/play/face-to-emoji` → `/games/face-to-emoji/` (iframe) | [FaceToEmoji](https://github.com/jisunpark28/FaceToEmoji) |
@@ -70,3 +71,7 @@ Large static assets in `public/games/tiny-priest/` increase repo and Vercel bund
 ## Liturgical vestments (`/play/liturgical-vestments`)
 
 Dress Tiny Priest’s priest in the correct liturgical color per season.
+
+## Verse Claw (`/play/verse-claw`)
+
+Soft toy claw machine: move left / right / forward / back, Grab a plush blessing doll (always wins), then a share-first popup with a short Douay-Rheims verse. Sprites: `public/games/verse-claw/`. Site copy: `play.game.verse_claw.*`, `play.verse_claw.page.*`.
