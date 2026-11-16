@@ -107,6 +107,10 @@ assert.equal(typing.includes("Select today"), false);
 assert.equal(view.includes("Typing practice uses today's readings"), false);
 assert.match(typing, /dateKey: readingsDateKey/);
 assert.equal(/fallbackDay|source: "usccb"/.test(typing), false);
-assert.match(view, /useState\(\{ calendar: false, typing: false, journal: false \}\)/);
+assert.match(view, /useState\(\{ calendar: true, typing: false, journal: false \}\)/);
+assert.match(view, /Get Sticker!/);
+assert.match(view, /to save praise stickers/);
+assert.match(view, /\/account\/login/);
+assert.match(view, /\/reader\/login/);
 
 console.log("test-daily-mass-calendar: ok");
