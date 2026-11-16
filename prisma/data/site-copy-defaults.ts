@@ -191,7 +191,7 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
   sc("daily_mass.today.memorial", "Optional memorial", "mass"),
   sc("daily_mass.today.back", "Back to today", "mass"),
   sc("daily_mass.links.usccb", "Read on USCCB", "mass"),
-  sc("daily_mass.links.lwc", "Living with Christ", "mass"),
+  sc("daily_mass.links.lwc", "Read on Living with Christ", "mass"),
   sc("daily_mass.readings.title", "Today's readings", "mass"),
   sc("daily_mass.readings.unavailable", "Reading citations aren't available for this date yet. Open USCCB or Living with Christ above.", "mass"),
   sc("daily_mass.readings.missing", "Reading citations aren't available for this date yet.", "mass"),

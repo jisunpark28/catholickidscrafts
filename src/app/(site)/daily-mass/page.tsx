@@ -16,6 +16,7 @@ import { getLiturgicalSeason } from "@/lib/liturgical-season";
 import { fetchMassDay, fetchMonthCalendar } from "@/lib/mass-source";
 import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
+import { livingWithChristReadingUrl } from "@/lib/scripture-links";
 import { usccbReadingsPageUrl } from "@/lib/usccb-rss";
 import { breadcrumbNode } from "@/lib/structured-data";
 import type { MassDaySummary, MonthCalendar } from "@/types/mass";
@@ -133,6 +134,7 @@ export default async function DailyMassPage({
           color={deriveVestmentColor({ ...summary, saint: firstSaint(summary.saint) }, season)}
           readings={readings}
           usccbUrl={day?.usccbPageUrl || usccbReadingsPageUrl(date)}
+          lwcUrl={livingWithChristReadingUrl(dateKey)}
           familyTalk={familyTalk}
           gospelCitation={gospelCitation}
           gospelReadHref={gospelReadHref}
