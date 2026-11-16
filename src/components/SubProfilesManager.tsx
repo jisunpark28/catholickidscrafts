@@ -218,7 +218,7 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
     "border border-[var(--color-border)] px-2.5 py-1 text-xs font-semibold text-[var(--color-ink)] hover:bg-[var(--color-surface)]";
 
   return (
-    <section className="border border-[var(--color-border)] bg-white p-5 sm:p-6">
+    <section className="border border-[var(--color-border)] bg-white p-6 sm:p-8">
       {needsPin && needsPin.id && needsPin.kidCode && pinFormId === null && (
         <PinSetupDialog
           child={{ id: needsPin.id, displayName: needsPin.displayName, kidCode: needsPin.kidCode }}
@@ -238,19 +238,24 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
         />
       )}
 
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-xl font-bold text-[var(--color-ink)]">Who&apos;s reading?</h2>
-        <p className="text-sm text-[var(--color-muted)]">
-          {subs.length} of {maxSubs} children
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h2 className="text-2xl font-bold text-[var(--color-ink)]">Who is reading</h2>
+          <p className="mt-1 text-base text-[var(--color-muted)]">
+            Switch readers, Kid Codes, and PINs in one clear list.
+          </p>
+        </div>
+        <span className="rounded-full bg-[var(--color-surface)] px-3 py-1 text-xs font-bold text-[var(--color-ink)]">
+          {subs.length} of {maxSubs}
+        </span>
       </div>
 
-      {message && <p className="mt-4 text-sm text-green-800">{message}</p>}
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {message && <p className="mt-5 text-sm text-green-800">{message}</p>}
+      {error && <p className="mt-5 text-sm text-red-600">{error}</p>}
 
-      <ul className="mt-5 divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
-        <li className="flex flex-wrap items-center gap-3 py-4">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface)] font-bold text-[var(--color-ink)]">
+      <ul className="mt-6 divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
+        <li className="flex flex-wrap items-center gap-3 py-5">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface)] text-base font-bold text-[var(--color-ink)]">
             {initial(owner.displayName)}
           </span>
           <div className="min-w-0 flex-1">
@@ -268,9 +273,9 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
           const showPinForm = row.id !== null && row.id === pinFormId;
           const showCodeForm = row.id !== null && row.id === codeFormId;
           return (
-            <li key={row.id!} className="flex flex-wrap items-center gap-3 py-4">
+            <li key={row.id!} className="flex flex-wrap items-center gap-3 py-5">
               <span
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-bold ${
+                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base font-bold ${
                   row.active
                     ? "bg-[var(--color-accent)] text-white"
                     : "bg-[var(--color-surface)] text-[var(--color-muted)]"
@@ -462,9 +467,9 @@ export function SubProfilesManager({ initialOwner, initialSubs, maxSubs }: Props
             setError("");
           }}
           disabled={atLimit}
-          className="mt-4 w-full border-2 border-dashed border-[var(--color-border)] px-4 py-3 text-sm font-bold text-[var(--color-ink)] hover:border-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-5 w-full bg-[var(--color-accent)] px-4 py-3 text-base font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          + Add child
+          Add child
         </button>
       )}
       {atLimit && (
