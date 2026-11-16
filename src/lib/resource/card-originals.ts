@@ -61,17 +61,18 @@ function vercelOidcToken(fromRequest?: string | null): string | undefined {
   return process.env.VERCEL_OIDC_TOKEN?.trim() || undefined;
 }
 
-type BlobAuth = { token: string } | { oidcToken: string; storeId: string };
+export type BlobAuth = { token: string } | { oidcToken: string; storeId: string };
 
 let warnedNoAuth = false;
 
 /**
- * Credentials for the private cards store, always passed explicitly so @vercel/blob never falls back
- * to the project's BLOB_READ_WRITE_TOKEN (that one belongs to the other, public store).
+ * Credentials for the private cards store (card originals and, under crafts/, the craft PDFs), always
+ * passed explicitly so @vercel/blob never falls back to the project's BLOB_READ_WRITE_TOKEN (that one
+ * belongs to the other, public store).
  *  1. CARDS_BLOB_READ_WRITE_TOKEN (or CARDS_READ_WRITE_TOKEN), only if it is for the cards store.
  *  2. Vercel OIDC (the store's project connection) with CARDS_STORE_ID, else the manifest's store id.
  */
-function cardsBlobAuth(oidcFromRequest?: string | null): BlobAuth | null {
+export function cardsBlobAuth(oidcFromRequest?: string | null): BlobAuth | null {
   const cardsStore = manifestStoreId();
   for (const name of ["CARDS_BLOB_READ_WRITE_TOKEN", "CARDS_READ_WRITE_TOKEN"] as const) {
     const t = process.env[name]?.trim();

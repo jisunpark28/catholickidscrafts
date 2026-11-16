@@ -1,6 +1,7 @@
 // Printable activities (coloring sheets, make-at-home pages) in the Resource library.
-// DB-free and client-safe: the catalog holds only public data. The PDFs live in
-// assets/activities (never public) and are served by the signed-in download route.
+// DB-free and client-safe: the catalog holds only public data. Editor-backed sheet PDFs live in
+// assets/activities and ready-made craft PDFs in the private Vercel Blob store (never public);
+// both are served only by the signed-in download route.
 import type { ResourceSeason } from "@/lib/resource/sheets";
 
 export type ActivityVariant = "bw" | "color";
@@ -35,6 +36,8 @@ export type ResourceActivity = {
   seoTitle: string;
   /** Has an editable element model (the Plus editor). Ready-made craft PDFs (artwork) do not. */
   editable: boolean;
+  /** Where the PDFs are: bundled under assets/activities, or the private Blob store (server-only paths in craft-blobs.ts). */
+  storage: "bundle" | "blob";
 };
 
 export const ACTIVITY_PATH = "/resource/activity";
@@ -62,6 +65,7 @@ function DAILY(rows: DailyRow[]): ResourceActivity[] {
     access: "signin",
     seoTitle: `${title} (Advent ${kind})`,
     editable: true,
+    storage: "bundle",
   }));
 }
 
@@ -93,6 +97,7 @@ function CRAFTS(rows: CraftRow[]): ResourceActivity[] {
     access: "plus",
     seoTitle: `${title} Craft Template`,
     editable: false,
+    storage: "blob",
   }));
 }
 
@@ -132,6 +137,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     access: "signin",
     seoTitle: "Happy New Church Year Coloring Sheet",
     editable: true,
+    storage: "bundle",
   },
   ...DAILY([
     ["jesse-tree-ornaments", "Jesse Tree Ornaments", "Cut-out sheet", "Make a Jesse tree ornament.",
@@ -200,6 +206,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     access: "plus",
     seoTitle: "Advent Candle Craft Template",
     editable: true,
+    storage: "bundle",
   },
   ...CRAFTS([
     ["advent-bank", "Advent Charity Bank",
@@ -235,6 +242,49 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     ["magi-gifts", "The Magi's Gifts",
       "Three little boxes for gold, frankincense and myrrh. The lids really open.",
       ["christmas"], 3, ["magi", "wise men", "gold", "frankincense", "myrrh", "gift boxes", "epiphany", "matthew 2:11"]],
+    // Crafts2
+    ["angel-choir", "Heavenly Choir Angels",
+      "A standing hand-in-hand accordion of six singing angels: \"Glory to God in the highest\" (Luke 2:13-14).",
+      ["christmas"], 2, ["angels", "choir", "accordion", "glory to god", "gloria", "luke 2:14"]],
+    ["baptism-dove-mobile", "The Baptism of the Lord Mobile",
+      "A hanging mobile of the Spirit descending like a dove, with drops and a shell.",
+      ["christmas"], 2, ["baptism of the lord", "dove", "holy spirit", "mobile", "shell", "matthew 3:17"]],
+    ["christmas-eve-lantern", "Christmas Eve Lantern",
+      "A glowing Nativity lantern for Christmas night, for a battery LED tea light (never a real flame).",
+      ["christmas"], 2, ["lantern", "nativity", "christmas eve", "tea light", "luke 2:11"]],
+    ["emmanuel-door-hanger", "The Emmanuel Door Hanger",
+      "A door hanger that says God is with us: \"they shall name him Emmanuel\" (Matthew 1:23).",
+      ["advent", "christmas"], 2, ["emmanuel", "god is with us", "door hanger", "matthew 1:23"]],
+    ["epiphany-chalk-blessing", "The Epiphany Chalk Blessing",
+      "A blessing strip to hang above the door on Epiphany. C+M+B stands for Caspar, Melchior, Balthasar and Christus mansionem benedicat (May Christ bless this house).",
+      ["christmas"], 2, ["epiphany", "chalk blessing", "house blessing", "c+m+b", "magi", "matthew 2:11"]],
+    ["flight-into-egypt", "The Flight into Egypt",
+      "A stand-up donkey for the Holy Family, with Mary on the saddle and Joseph beside it.",
+      ["christmas"], 2, ["flight into egypt", "holy family", "donkey", "joseph", "mary", "matthew 2:14"]],
+    ["heart-ornaments", "Sacred Heart & Immaculate Heart",
+      "A matching pair of 3D heart ornaments to hang.",
+      ["feasts"], 2, ["sacred heart", "immaculate heart", "heart", "ornament", "matthew 11:29", "luke 2:35"]],
+    ["holy-family-mobile", "The Holy Family Mobile",
+      "A hanging mobile of Jesus, Mary, and Joseph.",
+      ["christmas"], 2, ["holy family", "mobile", "jesus", "mary", "joseph", "nazareth", "luke 2:51"]],
+    ["john-the-baptist-card", "Prepare the Way: John the Baptist Card",
+      "A John the Baptist standing card: \"Prepare the way of the Lord, make straight his paths.\" (Matthew 3:3)",
+      ["advent"], 2, ["john the baptist", "prepare the way", "standing card", "card", "matthew 3:3"]],
+    ["magi-finger-puppets", "The Magi Finger Puppets",
+      "Three wise men, and the star that led them, to slip on a finger. Caspar brings gold, Melchior frankincense, and Balthasar myrrh.",
+      ["christmas"], 2, ["magi", "wise men", "finger puppets", "puppets", "star", "epiphany", "matthew 2:11"]],
+    ["manger-banner", "A Sign for You",
+      "A manger banner: \"you will find an infant wrapped in swaddling clothes and lying in a manger\" (Luke 2:12).",
+      ["christmas"], 2, ["manger", "banner", "baby jesus", "swaddling clothes", "luke 2:12"]],
+    ["newborn-king-crown", "The Newborn King's Crown",
+      "A white and gold crown for Christ the newborn King. Fits 48-56 cm.",
+      ["christmas"], 2, ["crown", "newborn king", "christ the king", "epiphany", "matthew 2:2"]],
+    ["pondering-heart", "Mary's Pondering Heart",
+      "A standing 3D heart for the things Mary kept in her heart (Luke 2:19).",
+      ["christmas"], 2, ["mary", "heart", "pondering", "mother of god", "luke 2:19"]],
+    ["visitation-popup", "The Visitation",
+      "A pop-up card of Mary and Elizabeth: \"Most blessed are you among women\" (Luke 1:42).",
+      ["advent", "feasts"], 2, ["visitation", "mary", "elizabeth", "pop-up card", "luke 1:42"]],
   ]),
 ];
 

@@ -35,6 +35,10 @@ import {
 } from "../src/lib/resource/activity-doc";
 import { getActivityModel } from "../src/lib/resource/activity-models";
 import { buildResourcesSitemap } from "../src/lib/sitemap-entries";
+import { createActivityDownloadHandler, type ActivityDownloadDeps } from "../src/lib/resource/activity-download";
+import { ActivityFileUnavailableError } from "../src/lib/resource/activity-files";
+import { craftBlobPathname } from "../src/lib/resource/craft-blobs";
+import { NextResponse } from "next/server";
 
 async function main() {
   const a = getActivity("happy-new-church-year");
@@ -48,9 +52,10 @@ async function main() {
 
   for (const act of RESOURCE_ACTIVITIES) {
     for (const v of ["bw", "color"] as const) {
+      await fs.access(path.join("public", act.previews[v]));
+      if (act.storage === "blob") continue;
       const pdf = await fs.readFile(path.join("assets", "activities", act.slug, act.files[v]));
       assert.equal(pdf.subarray(0, 5).toString(), "%PDF-", `${act.slug} ${v} is a PDF`);
-      await fs.access(path.join("public", act.previews[v]));
     }
     // PDFs must not be public.
     await assert.rejects(fs.access(path.join("public", act.files.bw)));
@@ -91,8 +96,13 @@ async function main() {
   assert.equal(parseActivityDoc({ ...doc, elements: [doc.elements[0], doc.elements[0]] }), null, "duplicate ids");
 
   // Access checks stay on the server.
-  const dl = await fs.readFile("src/app/api/resource/activities/[slug]/download/route.ts", "utf8");
-  assert.ok(dl.includes("parentApiGuard()"), "download needs a signed-in parent");
+  const route = await fs.readFile("src/app/api/resource/activities/[slug]/download/route.ts", "utf8");
+  assert.ok(
+    route.includes("guard: parentApiGuard") && route.includes("hasPlus: familyHasPlus") && route.includes("plusRequired: plusRequiredResponse"),
+    "route wires the real session and Plus checks",
+  );
+  const dl = await fs.readFile("src/lib/resource/activity-download.ts", "utf8");
+  assert.ok(dl.includes("deps.guard()"), "download needs a signed-in parent");
   assert.ok(dl.includes("private, no-store"));
   const ed = await fs.readFile("src/app/api/resource/activities/[slug]/editor/route.ts", "utf8");
   assert.ok(ed.includes("parentApiGuard()") && ed.includes("familyHasPlus("), "editor model needs Plus");
@@ -100,8 +110,84 @@ async function main() {
   assert.ok(!page.includes("activity-models") && !page.includes("cookies("), "detail page stays static and never ships the model");
 
   // Plus-only downloads (the craft) are checked on the server too.
-  assert.ok(dl.includes('activity.access === "plus"') && dl.includes("familyHasPlus(") && dl.includes("plusRequiredResponse()"));
-  assert.ok(dl.indexOf("parentApiGuard()") < dl.indexOf("familyHasPlus("), "401 before 402");
+  assert.ok(dl.includes('activity.access === "plus"') && dl.includes("deps.hasPlus(") && dl.includes("deps.plusRequired()"));
+  assert.ok(dl.indexOf("deps.guard()") < dl.indexOf("deps.hasPlus(") && dl.indexOf("deps.hasPlus(") < dl.indexOf("deps.readPdf("), "401 before 402 before any file");
+
+  // Same order at runtime, with the session, Plus and Blob reads mocked.
+  {
+    const calls: string[] = [];
+    const json = (status: number) => NextResponse.json({ status }, { status });
+    const deps = (o: { signedIn: boolean; plus: boolean; file?: "ok" | "missing" | "down" }): ActivityDownloadDeps => ({
+      guard: async () => (calls.push("guard"), o.signedIn ? { session: { familyAccountId: "fam1" } } : { error: json(401) }),
+      hasPlus: async () => (calls.push("plus"), o.plus),
+      plusRequired: () => json(402),
+      rateLimitState: async () => (calls.push("limit"), { blocked: false }),
+      recordRateLimit: async () => calls.push("record"),
+      readPdf: async (act, variant) => {
+        calls.push(`read:${act.storage}:${variant}`);
+        if (o.file === "down") throw new ActivityFileUnavailableError("down");
+        if (o.file === "missing") return null;
+        return { body: new Blob(["%PDF-1.4 test"]).stream(), size: 13 };
+      },
+      isUnavailable: (e) => e instanceof ActivityFileUnavailableError,
+    });
+    const run = async (slug: string, o: Parameters<typeof deps>[0], variant = "color") => {
+      calls.length = 0;
+      const res = await createActivityDownloadHandler(deps(o))(
+        new Request(`http://x/api/resource/activities/${slug}/download?variant=${variant}`),
+        { params: Promise.resolve({ slug }) },
+      );
+      return { status: res.status, calls: [...calls], res };
+    };
+    let r = await run("magi-gifts", { signedIn: false, plus: false, file: "ok" });
+    assert.deepEqual([r.status, r.calls], [401, ["guard"]], "signed out: 401, no Plus check, no Blob read");
+    r = await run("magi-gifts", { signedIn: true, plus: false, file: "ok" });
+    assert.deepEqual([r.status, r.calls], [402, ["guard", "plus"]], "not Plus: 402, no Blob read");
+    r = await run("magi-gifts", { signedIn: true, plus: true, file: "ok" });
+    assert.deepEqual([r.status, r.calls], [200, ["guard", "plus", "limit", "read:blob:color", "record"]], "Plus: Blob read after the checks");
+    assert.equal(r.res.headers.get("content-type"), "application/pdf");
+    assert.equal(r.res.headers.get("cache-control"), "private, no-store");
+    assert.match(r.res.headers.get("content-disposition") ?? "", /catholickidscrafts-magi-gifts-color\.pdf/);
+    assert.equal(await r.res.text(), "%PDF-1.4 test", "the blob is streamed through the route");
+    assert.ok(![...r.res.headers.values()].some((v) => /blob\.vercel-storage|crafts\//.test(v)), "no Blob URL or pathname in the response");
+    r = await run("visitation-popup", { signedIn: true, plus: true, file: "missing" }, "bw");
+    assert.deepEqual([r.status, r.calls.at(-1)], [404, "read:blob:bw"]);
+    r = await run("visitation-popup", { signedIn: true, plus: true, file: "down" });
+    assert.equal(r.status, 503, "Blob not reachable");
+    r = await run("prepare-the-way", { signedIn: true, plus: false, file: "ok" }, "bw");
+    assert.deepEqual([r.status, r.calls], [200, ["guard", "limit", "read:bundle:bw", "record"]], "free sheet: no Plus check");
+    r = await run("nope", { signedIn: true, plus: true, file: "ok" });
+    assert.deepEqual([r.status, r.calls], [404, []]);
+  }
+
+  // Craft PDFs live only in the private Blob store, under server-only pathnames.
+  for (const act of RESOURCE_ACTIVITIES) {
+    if (act.storage === "blob") {
+      assert.ok(act.kind === "Craft" && !act.editable, `${act.slug}: only ready-made crafts use Blob`);
+      assert.equal(craftBlobPathname(act, "bw"), `crafts/${act.slug}/${act.slug}.pdf`);
+      assert.equal(craftBlobPathname(act, "color"), `crafts/${act.slug}/${act.slug}-color.pdf`);
+      await assert.rejects(fs.access(path.join("assets", "activities", act.slug)), `${act.slug}: no PDF folder under assets/`);
+    } else {
+      assert.equal(craftBlobPathname(act, "bw"), null);
+    }
+  }
+  const assetDirs = await fs.readdir(path.join("assets", "activities"));
+  assert.deepEqual(
+    assetDirs.sort(),
+    RESOURCE_ACTIVITIES.filter((a) => a.storage === "bundle").map((a) => a.slug).sort(),
+    "assets/activities holds only the editor-backed sheets",
+  );
+  // Server-only modules never reach a client component or page.
+  const srcFiles = (await fs.readdir("src", { recursive: true })).map(String).filter((f) => /\.(tsx?|jsx?)$/.test(f));
+  for (const f of srcFiles) {
+    const text = await fs.readFile(path.join("src", f), "utf8");
+    if (/^\s*["']use client["']/.test(text)) {
+      assert.ok(!/craft-blobs|activity-files|card-originals|@vercel\/blob/.test(text), `${f} must not import server-only Blob code`);
+    }
+    if (/(^|[\\/])page\.tsx$/.test(f)) assert.ok(!/craft-blobs|activity-files/.test(text), `${f} must not import craft storage`);
+  }
+  const nextConfig = await fs.readFile("next.config.ts", "utf8");
+  assert.ok(!nextConfig.includes("crafts"), "craft PDFs are not traced into the bundle");
 
   const sitemap = new Set(buildResourcesSitemap().map((e) => new URL(e.url).pathname));
   for (const act of RESOURCE_ACTIVITIES) {
@@ -134,7 +220,10 @@ async function main() {
   // Free with sign-in, except the one Plus craft.
   const craft = getActivity(SUNDAY_CRAFT_SLUG);
   assert.ok(craft && craft.access === "plus" && craft.kind === "Craft");
-  const UPLOADED = ["advent-bank", "advent-lantern", "fiat-flag", "gabriel-wings", "joseph-lily", "birthday-card", "swaddle-baby", "gloria-trumpet", "shepherd-crook", "bethlehem-star", "magi-gifts"];
+  const UPLOADED = ["advent-bank", "advent-lantern", "fiat-flag", "gabriel-wings", "joseph-lily", "birthday-card", "swaddle-baby", "gloria-trumpet", "shepherd-crook", "bethlehem-star", "magi-gifts",
+    "angel-choir", "baptism-dove-mobile", "christmas-eve-lantern", "emmanuel-door-hanger", "epiphany-chalk-blessing", "flight-into-egypt", "heart-ornaments",
+    "holy-family-mobile", "john-the-baptist-card", "magi-finger-puppets", "manger-banner", "newborn-king-crown", "pondering-heart", "visitation-popup"];
+  assert.equal(new Set(RESOURCE_ACTIVITIES.map((x) => x.title)).size, RESOURCE_ACTIVITIES.length, "titles are unique");
   assert.deepEqual(RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug), [SUNDAY_CRAFT_SLUG, ...UPLOADED]);
   for (const slug of UPLOADED) {
     const c = getActivity(slug)!;
