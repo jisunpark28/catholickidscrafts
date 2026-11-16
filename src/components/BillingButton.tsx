@@ -81,14 +81,14 @@ export function PlanCheckout({ className, extend = false }: { className?: string
 
   return (
     <div>
-      <p id="plan-choose-label" className="text-sm font-bold text-[var(--color-ink)]">
+      <p id="plan-choose-label" className="text-center text-base font-bold text-[var(--color-ink)] sm:text-lg">
         Choose your plan
       </p>
       <div
         role="radiogroup"
         aria-labelledby="plan-choose-label"
         onKeyDown={onKeyDown}
-        className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2"
+        className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2"
       >
         {order.map((key) => {
           const o = PLAN_OPTIONS[key];
@@ -103,43 +103,41 @@ export function PlanCheckout({ className, extend = false }: { className?: string
               aria-checked={checked}
               tabIndex={checked ? 0 : -1}
               onClick={() => setSelected(key)}
-              className={`relative cursor-pointer rounded-xl border-2 bg-white p-4 outline-none transition focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 ${
+              className={`relative cursor-pointer rounded-xl border-2 bg-white px-5 py-6 text-center outline-none transition focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:px-6 sm:py-7 ${
                 checked ? "border-[var(--color-accent)] bg-[#fdf6ef]" : "border-[var(--color-border)] hover:border-[#d9cfc3]"
               }`}
             >
-              <div className="flex items-center justify-between gap-2">
-                <span className="flex items-center gap-2 text-sm font-bold text-[var(--color-ink)]">
-                  <span
-                    aria-hidden
-                    className={`inline-flex h-4 w-4 items-center justify-center rounded-full border-2 ${
-                      checked ? "border-[var(--color-accent)]" : "border-[#cfc4b8]"
-                    }`}
-                  >
-                    {checked && <span className="h-2 w-2 rounded-full bg-[var(--color-accent)]" />}
-                  </span>
-                  {o.name}
+              {key === "year" && (
+                <span className="mb-3 inline-block rounded-full bg-[var(--color-accent)] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                  {BEST_VALUE_BADGE}
                 </span>
-                {key === "year" && (
-                  <span className="rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
-                    {BEST_VALUE_BADGE}
-                  </span>
-                )}
-              </div>
-              <p className="mt-2 text-2xl font-bold text-[var(--color-ink)]">
+              )}
+              <span className="flex items-center justify-center gap-2.5 text-base font-bold text-[var(--color-ink)] sm:text-lg">
+                <span
+                  aria-hidden
+                  className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${
+                    checked ? "border-[var(--color-accent)]" : "border-[#cfc4b8]"
+                  }`}
+                >
+                  {checked && <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-accent)]" />}
+                </span>
+                {o.name}
+              </span>
+              <p className="mt-3 text-3xl font-bold text-[var(--color-ink)] sm:text-4xl">
                 {o.price}
-                <span className="text-sm font-normal text-[var(--color-muted)]">{o.unit}</span>
+                <span className="text-base font-normal text-[var(--color-muted)] sm:text-lg">{o.unit}</span>
               </p>
-              <p className="mt-0.5 text-xs text-[var(--color-muted)]">{o.billed}</p>
+              <p className="mt-1.5 text-sm text-[var(--color-muted)] sm:text-base">{o.billed}</p>
             </div>
           );
         })}
       </div>
-      <div className="mt-4">
+      <div className="mt-5">
         <BillingButton action="checkout" interval={selected} className={className}>
           {extend ? opt.cta.replace(/^Get/, "Add") : opt.cta} · {opt.price}
         </BillingButton>
       </div>
-      <p className="mt-2 text-center text-xs text-[var(--color-muted)]">
+      <p className="mt-3 text-center text-sm text-[var(--color-muted)]">
         {ONE_TIME_LINE}
         {extend ? " The new time starts when your current Plus ends." : ""}
       </p>

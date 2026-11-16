@@ -41,11 +41,11 @@ const BENEFITS: Benefit[] = [
 export function SubscribeBenefits() {
   return (
     <div className="mt-14 space-y-12 sm:mt-16 sm:space-y-16">
-      <div className="max-w-2xl">
+      <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-2xl font-bold tracking-tight text-[var(--color-ink)] sm:text-3xl">
           Why families choose Plus
         </h2>
-        <p className="mt-2 text-base text-[var(--color-muted)]">
+        <p className="mt-2 text-base text-[var(--color-muted)] sm:text-lg">
           A simple one-time pass for memos, activities, and shared family reading—no subscription to cancel.
         </p>
       </div>

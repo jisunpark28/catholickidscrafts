@@ -33,7 +33,7 @@ export default async function AccountDashboardPage() {
   const isPlus = plan.isPlus;
   const renewal = planRenewalLine(plan);
   const btnPrimary =
-    "block w-full bg-[var(--color-accent)] px-4 py-3 text-center text-base font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60";
+    "block w-full bg-[var(--color-accent)] px-6 py-4 text-center text-base font-bold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60 sm:py-5 sm:text-lg";
   const billingReady = isBillingConfigured();
   const passEndsAt = plan.source === "pass" ? plan.passEndsAt : null;
   const passDaysLeft = passEndsAt ? daysLeft(passEndsAt) : null;
