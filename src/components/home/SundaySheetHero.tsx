@@ -2,11 +2,17 @@
 
 import { useSiteSession } from "@/components/SiteSessionProvider";
 import { useSignInGate } from "@/components/useSignInGate";
+import { decideEditForClass } from "@/lib/home/edit-for-class-action";
+import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
+import { signInPath } from "@/lib/sign-in-callback";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
   slug: string;
+  /** Catalog sheet key for Customize / Edit (same destination as resource Edit). */
+  sheetKey?: string;
   title: string;
   liturgicalName: string;
   sundayLabel: string;
@@ -26,8 +32,6 @@ type Props = {
 const PAGE_W = 816; // 8.5in at 96dpi
 const PAGE_H = 1056; // 11in
 const EMAIL_STATE_KEY = "ckc.sheetEmail"; // "subscribed" | "dismissed"
-/** Same sign-in page as the header's "Sign in" (Google family sign-in). */
-const SIGN_IN_HREF = "/account/login";
 
 function isMobileDevice(): boolean {
   if (typeof navigator === "undefined") return false;
@@ -59,8 +63,9 @@ function previewWidth(): number {
   return 262;
 }
 
-/** Homepage "This Sunday" hero: sheet preview, Level toggle, big Print, Save to My Binder and Copy Link. */
+/** Homepage "This Sunday" hero: sheet preview, Level toggle, big Print, Edit for class and Copy Link. */
 export function SundaySheetHero({
+  sheetKey,
   title,
   liturgicalName,
   sundayLabel,
@@ -71,18 +76,22 @@ export function SundaySheetHero({
   emailEnabled,
 }: Props) {
   // Loaded once per page load by SiteSessionProvider (the page itself is static and signed-out).
-  const { ready: sessionReady, session } = useSiteSession();
+  const { ready: sessionReady, session, paidPlus } = useSiteSession();
   const signedIn = Boolean(session.family);
+  const isPlus = paidPlus || Boolean(session.family?.isPlus);
   // Print needs a family sign-in; signed out goes to sign-in and back to this page.
   const gate = useSignInGate();
+  const router = useRouter();
   const [level, setLevel] = useState<1 | 2>(1);
   const [printed, setPrinted] = useState(false);
   const [emailState, setEmailState] = useState<string | null>(null);
   const [scale, setScale] = useState(262 / PAGE_W);
-  const [binderOpen, setBinderOpen] = useState(false);
+  /** Guide popover for signed-out (sign in) or signed-in free (subscribe). Plus navigates to Edit. */
+  const [editGuide, setEditGuide] = useState<"signin" | "subscribe" | null>(null);
   const [copyMsg, setCopyMsg] = useState("");
   const frameRef = useRef<HTMLIFrameElement>(null);
   const awaitingReturn = useRef(false);
+  const editHref = sheetKey ? resourceEditPath(sheetKey, level) : null;
 
   const src = `${printBasePath}?level=${level}&embed=1`;
 
@@ -114,13 +123,13 @@ export function SundaySheetHero({
   }, []);
 
   useEffect(() => {
-    if (!binderOpen) return;
+    if (!editGuide) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setBinderOpen(false);
+      if (e.key === "Escape") setEditGuide(null);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [binderOpen]);
+  }, [editGuide]);
 
   useEffect(() => {
     if (!copyMsg) return;
@@ -143,6 +152,17 @@ export function SundaySheetHero({
     // Some browsers block in print() and never fire afterprint on the frame.
     window.setTimeout(done, 500);
   }, [printBasePath, level, gate]);
+
+  /** Signed out → sign-in guide; signed-in free → subscribe; Plus → sheet Edit (Customize). */
+  const onEditForClass = useCallback(() => {
+    const decision = decideEditForClass({ sessionReady, signedIn, isPlus, editHref });
+    if (decision.kind === "signin" || decision.kind === "subscribe") {
+      setEditGuide(decision.kind);
+      return;
+    }
+    setEditGuide(null);
+    router.push(decision.href);
+  }, [sessionReady, signedIn, isPlus, editHref, router]);
 
   const onCopy = async () => {
     const url = new URL(shareHref, window.location.origin).href;
@@ -227,12 +247,12 @@ export function SundaySheetHero({
         <div className="relative flex gap-2">
           <button
             type="button"
-            onClick={() => setBinderOpen((v) => !v)}
-            aria-expanded={binderOpen}
-            aria-controls="home-binder-pop"
+            onClick={onEditForClass}
+            aria-expanded={editGuide !== null}
+            aria-controls={editGuide ? "home-edit-guide" : undefined}
             className="flex-1 whitespace-nowrap rounded-full border-2 border-[#2e7d32] bg-white px-3 py-2.5 text-sm font-extrabold text-[#2e7d32] hover:bg-[#f1f8f1]"
           >
-            📒 Save to My Binder
+            ✏️ Edit it for your class
           </button>
           <button
             type="button"
@@ -242,34 +262,48 @@ export function SundaySheetHero({
             🔗 Copy Link
           </button>
 
-          {binderOpen ? (
+          {editGuide ? (
             <div
-              id="home-binder-pop"
+              id="home-edit-guide"
               role="dialog"
-              aria-label="My Binder"
+              aria-label={editGuide === "signin" ? "Sign in to edit" : "Plus to edit"}
               className="absolute left-0 right-0 top-full z-20 mt-2 rounded-2xl border border-[#e7dccf] bg-white p-4 text-sm shadow-[0_14px_30px_-12px_rgba(0,0,0,0.35)]"
             >
               <div className="flex items-start justify-between gap-3">
-                <p className="font-bold text-[#1c1c1c]">📒 My Binder is coming soon</p>
+                <p className="font-bold text-[#1c1c1c]">
+                  {editGuide === "signin" ? "Sign in to edit for your class" : "Plus unlocks class editing"}
+                </p>
                 <button
                   type="button"
-                  onClick={() => setBinderOpen(false)}
+                  onClick={() => setEditGuide(null)}
                   className="-mr-1 -mt-1 rounded-full px-2 text-lg leading-none text-[#6b7280] hover:bg-[#f3f4f6]"
                   aria-label="Close"
                 >
                   ×
                 </button>
               </div>
-              {sessionReady && signedIn ? (
-                <p className="mt-1 text-[#4b5563]">You&apos;re signed in. Saving sheets will open here soon.</p>
-              ) : (
+              {editGuide === "signin" ? (
                 <>
-                  <p className="mt-1 text-[#4b5563]">Sign in with Google to save sheets here when it opens.</p>
+                  <p className="mt-1 text-[#4b5563]">
+                    Use your family account (same Google sign-in as the header) to customize this Sunday&apos;s sheet.
+                  </p>
                   <Link
-                    href={SIGN_IN_HREF}
+                    href={signInPath("/")}
                     className="mt-3 inline-block rounded-full bg-[#2e7d32] px-5 py-2 font-bold text-white no-underline hover:bg-[#256628]"
                   >
                     Sign in
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <p className="mt-1 text-[#4b5563]">
+                    You&apos;re signed in. Subscribe to Plus to open the sheet editor and adapt it for your class.
+                  </p>
+                  <Link
+                    href="/subscribe"
+                    className="mt-3 inline-block rounded-full bg-[#d35400] px-5 py-2 font-bold text-white no-underline hover:bg-[#b8470a]"
+                  >
+                    See Plus
                   </Link>
                 </>
               )}
