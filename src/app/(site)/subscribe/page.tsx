@@ -95,7 +95,7 @@ export default async function SubscribePage() {
           ))}
         </ul>
 
-        <div className="mt-8 mx-auto max-w-2xl">
+        <div className="mt-8">
           {isChild ? (
             <p className="text-base font-semibold text-[var(--color-ink)]">Ask a parent to set up Plus.</p>
           ) : !session ? (
