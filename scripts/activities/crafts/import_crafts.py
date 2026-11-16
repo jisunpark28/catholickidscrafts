@@ -1,6 +1,6 @@
 """Import ready-made craft PDFs (<name>-color.pdf + <name>-coloring.pdf) as Plus crafts.
 
-  python scripts/activities/crafts/import_crafts.py <folder with the PDFs>
+  python scripts/activities/crafts/import_crafts.py <folder with the PDFs>  (crafts not in the folder are skipped)
 
   -> assets/activities/<slug>/<slug>.pdf (B&W) and <slug>-color.pdf (private, Plus download route)
   -> public/images/activities/<slug>/preview-bw.webp, preview-color.webp
@@ -21,6 +21,10 @@ ROOT = Path(__file__).resolve().parents[3]
 SLUGS = [
     "advent-bank", "advent-lantern", "fiat-flag", "gabriel-wings", "joseph-lily", "birthday-card",
     "swaddle-baby", "gloria-trumpet", "shepherd-crook", "bethlehem-star", "magi-gifts",
+    # Crafts2
+    "angel-choir", "baptism-dove-mobile", "christmas-eve-lantern", "emmanuel-door-hanger", "epiphany-chalk-blessing",
+    "flight-into-egypt", "heart-ornaments", "holy-family-mobile", "john-the-baptist-card", "magi-finger-puppets",
+    "manger-banner", "newborn-king-crown", "pondering-heart", "visitation-popup",
 ]
 
 
@@ -29,6 +33,8 @@ def main() -> None:
     if not shutil.which("pdftoppm"):
         sys.exit("needs pdftoppm (poppler)")
     for slug in SLUGS:
+        if not (src / f"{slug}-color.pdf").exists():
+            continue  # each batch folder holds only its own crafts
         out = ROOT / "assets" / "activities" / slug
         img = ROOT / "public" / "images" / "activities" / slug
         out.mkdir(parents=True, exist_ok=True)
