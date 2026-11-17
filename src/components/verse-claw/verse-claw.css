@@ -332,10 +332,10 @@
 .vc-held-doll {
   position: absolute;
   left: 50%;
-  top: 52px;
-  width: 58px;
-  height: 58px;
-  margin-left: -29px;
+  top: 58px;
+  width: 36px;
+  height: 36px;
+  margin-left: -18px;
   z-index: 1;
   filter: drop-shadow(0 4px 6px rgba(60, 40, 20, 0.28));
   animation: vc-held-settle 240ms ease;

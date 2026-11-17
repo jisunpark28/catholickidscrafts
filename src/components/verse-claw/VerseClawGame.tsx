@@ -358,7 +358,7 @@ export function VerseClawGame() {
               const prize = phase === "dispense" && caught?.slot === doll.slot;
               return (
                 <div
-                  key={doll.id}
+                  key={doll.slot}
                   className={`vc-doll${gone && !prize ? " vc-doll--gone" : ""}${prize ? " vc-doll--prize" : ""}`}
                   style={pileStyle(doll)}
                 >
