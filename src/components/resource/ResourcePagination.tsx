@@ -12,10 +12,12 @@ export function resourcePageHref(resultsHref: string, page: number): string {
   return url.pathname + url.search + url.hash;
 }
 
-export function ResourcePagination({ currentPage, totalPages, resultsHref }: {
+export function ResourcePagination({ currentPage, totalPages, resultsHref, className }: {
   currentPage: number;
   totalPages: number;
   resultsHref: string;
+  /** Extra classes (e.g. background). Default includes bg-white for the library search panel. */
+  className?: string;
 }) {
   if (totalPages <= 1) return null;
   const arrowClass = "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#e5e7eb] text-[#7b8188] no-underline transition hover:border-[#aeb5bb] hover:text-[#374151] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#00a86b]";
@@ -25,7 +27,10 @@ export function ResourcePagination({ currentPage, totalPages, resultsHref }: {
     </svg>
   );
   return (
-    <nav aria-label="Resource results pages" className="mx-auto mt-6 grid w-full max-w-[720px] grid-cols-[36px_minmax(0,1fr)_36px] items-center gap-2 bg-white px-2 py-6 sm:gap-6 sm:px-5">
+    <nav
+      aria-label="Resource results pages"
+      className={`mx-auto mt-6 grid w-full max-w-[720px] grid-cols-[36px_minmax(0,1fr)_36px] items-center gap-2 px-2 py-6 sm:gap-6 sm:px-5 ${className ?? "bg-white"}`}
+    >
       {currentPage > 1 ? (
         <Link href={resourcePageHref(resultsHref, currentPage - 1)} aria-label="Previous page" rel="prev" className={arrowClass}>
           {chevron("previous")}

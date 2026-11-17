@@ -18,7 +18,7 @@ type Props = {
    * When set, `children` render in the right article column.
    */
   middle?: React.ReactNode;
-  /** Mode chrome above middle + article (e.g. Sundays | Cards toggle). */
+  /** Mode chrome above middle + article (e.g. Worksheets | Cards toggle). */
   chrome?: React.ReactNode;
   /** Mobile label for opening the middle finder drawer. */
   middleDrawerLabel?: string;

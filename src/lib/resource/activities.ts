@@ -343,6 +343,17 @@ export function listActivities(season: ResourceSeason | null = null): ResourceAc
     .sort((a, b) => a.prio - b.prio || a.slug.localeCompare(b.slug));
 }
 
+/** Page size for Printables Worksheets season craft/activity recommendations. */
+export const SEASON_REC_PAGE_SIZE = 6;
+
+/**
+ * Crafts + activities tagged for a liturgical season (Printables Worksheets article).
+ * Sorted by library prio; empty when the catalog has nothing for that season yet.
+ */
+export function seasonActivityRecommendations(season: ResourceSeason): ResourceActivity[] {
+  return listActivities(season);
+}
+
 /**
  * Which activity sheet matches the daily Instagram post (America/Toronto date). One Advent Q&A
  * "Try this" tip per day through Nov 29, 2026. Days without their own sheet show the latest

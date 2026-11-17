@@ -6,10 +6,43 @@ import type { SundayCalendarEntry } from "@/lib/resource/sunday-season-jumps";
 
 const DAY = 86_400_000;
 
+/** Weeks before/after "this Sunday" for the Printables month calendar (past + future). */
+export const SUNDAY_CALENDAR_WEEKS_BEFORE = 260; // ~5 years
+export const SUNDAY_CALENDAR_WEEKS_AFTER = 156; // ~3 years
+
 export type { SundayCalendarEntry };
 export { SUNDAY_SEASON_JUMPS } from "@/lib/resource/sunday-season-jumps";
 
-/** Upcoming Sundays from `fromSunday` (inclusive), with sheet metadata when the catalog has it. */
+function entryFromDate(date: string, country: RomcalCountry): SundayCalendarEntry | null {
+  try {
+    if (new Date(`${date}T00:00:00Z`).getUTCDay() !== 0) return null;
+    const key = toSheetKey(date, country);
+    const sheet = getSundaySheet(key);
+    if (!sheet) return null;
+    const season = sheetSeason(sheet);
+    return {
+      date,
+      key,
+      liturgicalName: sheet.liturgicalName,
+      season,
+      seasonLabel: RESOURCE_SEASONS.find((s) => s.id === season)?.label ?? sheet.season,
+      color: sheet.color,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Resolve a calendar Sunday (past or future) to its library worksheet via romcal Year A/B/C.
+ * Returns null for non-Sundays or dates with no catalog sheet.
+ */
+export function resolveSundayEntry(date: string, country: RomcalCountry): SundayCalendarEntry | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
+  return entryFromDate(date, country);
+}
+
+/** Sundays from `fromSunday` (inclusive) for `count` weeks, with sheet metadata when the catalog has it. */
 export function listUpcomingSundays(
   country: RomcalCountry,
   fromSunday: string,
@@ -20,22 +53,31 @@ export function listUpcomingSundays(
   const out: SundayCalendarEntry[] = [];
   for (let i = 0; i < count; i++) {
     const date = new Date(start + i * 7 * DAY).toISOString().slice(0, 10);
-    try {
-      const key = toSheetKey(date, country);
-      const sheet = getSundaySheet(key);
-      if (!sheet) continue;
-      const season = sheetSeason(sheet);
-      out.push({
-        date,
-        key,
-        liturgicalName: sheet.liturgicalName,
-        season,
-        seasonLabel: RESOURCE_SEASONS.find((s) => s.id === season)?.label ?? sheet.season,
-        color: sheet.color,
-      });
-    } catch {
-      /* romcal gap */
-    }
+    const entry = entryFromDate(date, country);
+    if (entry) out.push(entry);
+  }
+  return out;
+}
+
+/**
+ * Past + future Sundays around `centerSunday` for the Printables calendar.
+ * Every catalog Sunday in range is selectable (not only this week / upcoming).
+ */
+export function listSundayCalendar(
+  country: RomcalCountry,
+  centerSunday: string,
+  weeksBefore = SUNDAY_CALENDAR_WEEKS_BEFORE,
+  weeksAfter = SUNDAY_CALENDAR_WEEKS_AFTER,
+): SundayCalendarEntry[] {
+  const center = Date.parse(`${centerSunday}T00:00:00Z`);
+  if (!Number.isFinite(center)) return [];
+  const start = center - weeksBefore * 7 * DAY;
+  const count = weeksBefore + weeksAfter + 1;
+  const out: SundayCalendarEntry[] = [];
+  for (let i = 0; i < count; i++) {
+    const date = new Date(start + i * 7 * DAY).toISOString().slice(0, 10);
+    const entry = entryFromDate(date, country);
+    if (entry) out.push(entry);
   }
   return out;
 }

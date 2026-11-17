@@ -12,7 +12,8 @@ type Props = {
 };
 
 /**
- * Equal-weight Sundays | Cards sibling toggles for Printables Option E.
+ * Equal-weight Worksheets | Cards sibling toggles for Printables Option E.
+ * Mode key stays `sundays` (routes/query stable); display label is Worksheets.
  * Not a dropdown and not buried in the footer.
  */
 export function PrintablesModeToggle({
@@ -37,7 +38,7 @@ export function PrintablesModeToggle({
             : "text-[#493a30] hover:bg-[#fff2e8]"
         }`}
       >
-        Sundays
+        Worksheets
       </Link>
       <Link
         href={cardsHref}
