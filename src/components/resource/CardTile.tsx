@@ -126,9 +126,14 @@ export function CardTile({
       {badge}
     </span>
   ) : (
-    // Locked for free visitors: only the small blurred greyscale preview is sent; the overlay links to /subscribe.
+    // Locked for free visitors: only the small blurred greyscale preview is sent.
+    // When onOpen selects a detail pane, skip the subscribe link overlay so Open/image can select.
     <span className="relative block">
-      <LockedPreview className="rounded-lg bg-[#fbf7f1]" label={`${card.title}: unlock with Plus`}>
+      <LockedPreview
+        className="rounded-lg bg-[#fbf7f1]"
+        href={onOpen ? null : "/subscribe"}
+        label={`${card.title}: unlock with Plus`}
+      >
         <Image
           src={cardLockedPreviewSrc(card.id)}
           alt=""
@@ -143,6 +148,8 @@ export function CardTile({
       {typeBadge ? <span className="pointer-events-none absolute left-1.5 top-1.5">{typeBadge}</span> : null}
     </span>
   );
+  // When onOpen is set (gallery → detail pane), Open always selects the card — including
+  // Plus-locked tiles, so the right pane can show the blurred detail. Print/Share stay gated.
   const openEl = (cls: string, children: React.ReactNode, label?: string) =>
     onOpen ? (
       <button type="button" onClick={onOpen} className={cls} aria-label={label} aria-pressed={selected}>
@@ -160,7 +167,7 @@ export function CardTile({
         selected ? "border-2 border-[#d35400] p-[5px]" : "border border-[#e7e3de] p-1.5"
       }`}
     >
-      {unlocked
+      {onOpen || unlocked
         ? openEl("block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]", image, `Open ${card.title}`)
         : image}
       <div className="px-1 pt-2">
@@ -174,10 +181,17 @@ export function CardTile({
       <div className="mt-auto px-1 pb-1 pt-2.5">
         {/* Narrow tiles (4-up beside the detail panel): Open on its own row, Print + Share below. */}
         <div className="grid grid-cols-2 gap-1.5">
-          {unlocked ? (
-            openEl(`${pillBtn} col-span-2 bg-[#d35400] text-white hover:bg-[#b8470a]`, "Open")
+          {onOpen || unlocked ? (
+            openEl(
+              `${pillBtn} col-span-2 ${
+                unlocked
+                  ? "bg-[#d35400] text-white hover:bg-[#b8470a]"
+                  : "cursor-pointer bg-[#e7e3de] text-[#6b7280]"
+              }`,
+              "Open",
+            )
           ) : (
-            // Same locked look as sheet tiles; the picture links to /subscribe.
+            // No onOpen (e.g. search result without panel): locked Open opens Plus dialog.
             <button
               type="button"
               aria-haspopup="dialog"

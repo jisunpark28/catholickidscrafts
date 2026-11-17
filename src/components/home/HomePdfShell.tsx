@@ -13,29 +13,55 @@ type Props = {
   children: React.ReactNode;
   dailyMassLabel?: string;
   contentClassName?: string;
+  /**
+   * Optional middle finder for Printables Option E (3-column: nav · middle · article).
+   * When set, `children` render in the right article column.
+   */
+  middle?: React.ReactNode;
+  /** Mode chrome above middle + article (e.g. Sundays | Cards toggle). */
+  chrome?: React.ReactNode;
+  /** Mobile label for opening the middle finder drawer. */
+  middleDrawerLabel?: string;
 };
 
-export function HomePdfShell({ children, contentClassName = "bg-white" }: Props) {
+export function HomePdfShell({
+  children,
+  contentClassName = "bg-white",
+  middle,
+  chrome,
+  middleDrawerLabel = "Browse",
+}: Props) {
   const pathname = usePathname() ?? "";
   const navId = useId();
+  const middleId = useId();
   const activePaidPlus = useSidebarPaidPlus();
   const [hash, setHash] = useState("");
   useEffect(() => {
     const update = () => setHash(window.location.hash);
-    update(); window.addEventListener("hashchange", update); window.addEventListener("popstate", update);
-    return () => { window.removeEventListener("hashchange", update); window.removeEventListener("popstate", update); };
+    update();
+    window.addEventListener("hashchange", update);
+    window.addEventListener("popstate", update);
+    return () => {
+      window.removeEventListener("hashchange", update);
+      window.removeEventListener("popstate", update);
+    };
   }, [pathname]);
   const [desktopOpen, setDesktopOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [middleOpen, setMiddleOpen] = useState(false);
+  const triptych = Boolean(middle);
 
   useEffect(() => {
-    if (!mobileOpen) return;
+    if (!mobileOpen && !middleOpen) return;
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") setMobileOpen(false);
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        setMiddleOpen(false);
+      }
     }
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [mobileOpen]);
+  }, [mobileOpen, middleOpen]);
 
   const asideVisible = `${mobileOpen ? "flex" : "hidden"} ${desktopOpen ? "lg:flex" : "lg:hidden"}`;
 
@@ -62,10 +88,15 @@ export function HomePdfShell({ children, contentClassName = "bg-white" }: Props)
               <span className="sr-only">Hide navigation</span>
             </button>
           </div>
-          <SidebarNavigation pathname={pathname} hash={hash} activePaidPlus={activePaidPlus} onNavigate={(href) => {
-            setHash(href.includes("#") ? `#${href.split("#")[1]}` : "");
-            setMobileOpen(false);
-          }} />
+          <SidebarNavigation
+            pathname={pathname}
+            hash={hash}
+            activePaidPlus={activePaidPlus}
+            onNavigate={(href) => {
+              setHash(href.includes("#") ? `#${href.split("#")[1]}` : "");
+              setMobileOpen(false);
+            }}
+          />
         </div>
       </aside>
 
@@ -95,7 +126,57 @@ export function HomePdfShell({ children, contentClassName = "bg-white" }: Props)
           </button>
         )}
 
-        {children}
+        {chrome ? <div className="mb-4">{chrome}</div> : null}
+
+        {triptych ? (
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
+            {middleOpen ? (
+              <div
+                className="fixed inset-0 z-40 bg-[#1c1c1c]/35 lg:hidden"
+                aria-hidden
+                onClick={() => setMiddleOpen(false)}
+              />
+            ) : null}
+
+            {!middleOpen && (
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 self-start rounded-full border border-[#e8d9cd] bg-[#fff3e6] px-3 py-1.5 text-sm font-medium text-[#493a30] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c9773a] lg:hidden"
+                aria-expanded={false}
+                aria-controls={middleId}
+                onClick={() => setMiddleOpen(true)}
+              >
+                {middleDrawerLabel}
+              </button>
+            )}
+
+            <aside
+              id={middleId}
+              className={`${
+                middleOpen ? "fixed inset-y-0 left-0 z-50 flex w-[min(20rem,88vw)] flex-col" : "hidden"
+              } shrink-0 rounded-[20px] border border-[#e8d9cd] bg-[#fff3e6] lg:sticky lg:top-[6.5rem] lg:flex lg:max-h-[calc(100dvh-7.5rem)] lg:w-[15.5rem] lg:overflow-y-auto`}
+            >
+              <div className="flex items-center justify-between border-b border-[#eadccd] px-3 py-2 lg:hidden">
+                <p className="m-0 text-sm font-semibold text-[#493a30]">{middleDrawerLabel}</p>
+                <button
+                  type="button"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[#806454] hover:bg-[#fffdfa]"
+                  onClick={() => setMiddleOpen(false)}
+                  aria-label="Close browse panel"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="px-3 py-3" onClick={() => setMiddleOpen(false)}>
+                {middle}
+              </div>
+            </aside>
+
+            <div className="min-w-0 flex-1">{children}</div>
+          </div>
+        ) : (
+          children
+        )}
       </div>
     </div>
   );
