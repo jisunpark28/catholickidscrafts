@@ -18,6 +18,17 @@ export function getPlayGamesFromCopy(copy: SiteCopyMap): PlayGame[] {
       duration: "5-10 min",
     },
     {
+      slug: "verse-claw",
+      title: copyText(copy, "play.game.verse_claw.title", "Verse Claw"),
+      description: copyText(
+        copy,
+        "play.game.verse_claw.description",
+        "Catch a blessing doll and share a Catholic verse with your family.",
+      ),
+      embedPath: "/play/verse-claw",
+      duration: "2-5 min",
+    },
+    {
       slug: "liturgical-vestments",
       title: copyText(copy, "play.game.vestments.title", "Liturgical vestments"),
       description: copyText(

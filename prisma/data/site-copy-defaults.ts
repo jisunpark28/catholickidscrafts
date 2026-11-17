@@ -272,6 +272,19 @@ export const SITE_COPY_DEFAULTS: SiteCopySeed[] = [
 
   sc("play.game.church.title", "Come to Mass!", "play"),
   sc("play.game.church.description", "Welcome to our church!", "play"),
+  sc("play.game.verse_claw.title", "Verse Claw", "play"),
+  sc(
+    "play.game.verse_claw.description",
+    "Catch a blessing doll and share a Catholic verse with your family.",
+    "play",
+  ),
+  sc("play.verse_claw.page.title", "Verse Claw", "play"),
+  sc(
+    "play.verse_claw.page.subtitle",
+    "Guide the claw, catch a blessing doll, and share a Catholic verse with your family.",
+    "play",
+  ),
+  sc("play.verse_claw.page.program_note", "", "play"),
   sc("play.game.vestments.title", "Liturgical vestments", "play"),
   sc("play.game.vestments.description", "What color vestments does Father wear?", "play"),
   sc("play.game.typing.title", "Typing Game", "play"),
