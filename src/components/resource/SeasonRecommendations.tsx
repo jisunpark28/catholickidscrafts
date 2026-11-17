@@ -53,7 +53,12 @@ export function SeasonRecommendations({ season, activities, page, resultsHref }:
           </li>
         ))}
       </ul>
-      <ResourcePagination currentPage={currentPage} totalPages={pages} resultsHref={resultsHref} />
+      <ResourcePagination
+        currentPage={currentPage}
+        totalPages={pages}
+        resultsHref={resultsHref}
+        className="bg-transparent"
+      />
     </section>
   );
 }

@@ -40,6 +40,16 @@ const html = renderToStaticMarkup(
 assert.ok(html.includes("Advent activities"));
 assert.ok(html.includes('id="season-recs"'));
 assert.ok(html.includes('aria-label="Resource results pages"'));
+assert.match(
+  html,
+  /aria-label="Resource results pages"[^>]*bg-transparent/,
+  "season pagination should match cream panel (not white strip)",
+);
+assert.doesNotMatch(
+  html,
+  /aria-label="Resource results pages"[^>]*bg-white/,
+  "season pagination must not use library white chrome",
+);
 assert.ok(html.includes("page=2") || html.includes("Page 2"));
 assert.ok(html.includes('aria-current="page"'));
 assert.equal(
