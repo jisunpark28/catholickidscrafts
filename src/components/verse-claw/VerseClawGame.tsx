@@ -172,17 +172,17 @@ export function VerseClawGame() {
     setPhase("drop");
 
     // Descend onto pile, then close fingers around the doll, lift it out.
-    later(420, () => {
+    later(700, () => {
       setHeld(doll);
       setGoneSlot(slot);
       setPhase("close");
     });
-    later(780, () => setPhase("lift"));
-    later(1280, () => {
+    later(1100, () => setPhase("lift"));
+    later(1650, () => {
       setHeld(null);
       setPhase("dispense");
     });
-    later(2100, () => {
+    later(2400, () => {
       setVerse(pickVerseForDoll(doll.id));
       setPhase("won");
     });
@@ -265,15 +265,15 @@ export function VerseClawGame() {
 
   // Mild depth cue only — avoid dramatic shrink/grow while moving.
   const depthScale = 0.94 + (clawZ / 100) * 0.1;
-  // Idle hang sits high so prongs clear the plush pile; drop still reaches dolls.
-  const hangTop = Math.max(0, (100 - clawZ) * 0.16);
-  const dropReach = 72 + (100 - clawZ) * 0.62;
+  // Positions are % of cabinet height (must use `%` in styles — bare numbers become px).
+  // Idle hang stays high; drop/close sinks prongs into the plush pile near the floor.
+  const hangTop = Math.max(1.5, (100 - clawZ) * 0.12);
+  // Deep enough that prongs dig into the lower doll band (~floor).
+  const dropTop = 74 + (100 - clawZ) * 0.08;
   let clawTop = hangTop;
-  if (phase === "drop" || phase === "close") clawTop = hangTop + dropReach;
-  else if (phase === "lift") clawTop = hangTop + 18;
-  else if (phase === "dispense") clawTop = hangTop + 8;
-
-  const cableHeight = Math.max(12, clawTop - 8);
+  if (phase === "drop" || phase === "close") clawTop = Math.min(82, dropTop);
+  else if (phase === "lift") clawTop = hangTop + 16;
+  else if (phase === "dispense") clawTop = hangTop + 6;
 
   function onPointerDown(e: ReactPointerEvent<HTMLDivElement>) {
     if (busy || phase === "won") return;
@@ -319,13 +319,13 @@ export function VerseClawGame() {
           <div
             className="vc-cable"
             aria-hidden="true"
-            style={{ left: `${clawX}%`, height: cableHeight }}
+            style={{ left: `${clawX}%`, height: `calc(${clawTop}% - 12px)` }}
           />
           <div
             className="vc-claw-anchor"
             style={{
               left: `${clawX}%`,
-              top: clawTop,
+              top: `${clawTop}%`,
               transform: `scale(${depthScale})`,
             }}
           >
