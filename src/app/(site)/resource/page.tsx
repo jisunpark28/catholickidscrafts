@@ -11,7 +11,13 @@ import { UnifiedSearchResults } from "@/components/resource/UnifiedSearchResults
 import { JsonLd } from "@/components/seo/JsonLd";
 import { requireFamilySession } from "@/lib/family-auth";
 import { parseLevelParam } from "@/lib/gospel-sheet-level";
-import { dailyActivityFor, getActivity, SUNDAY_CRAFT_SLUG, torontoDate } from "@/lib/resource/activities";
+import {
+  dailyActivityFor,
+  getActivity,
+  seasonActivityRecommendations,
+  SUNDAY_CRAFT_SLUG,
+  torontoDate,
+} from "@/lib/resource/activities";
 import { upcomingCardDates } from "@/lib/resource/card-calendar";
 import {
   cardsForSunday,
@@ -23,7 +29,7 @@ import { getResourceNav } from "@/lib/resource/nav";
 import { listCustomSheets } from "@/lib/resource/custom-sheet-db";
 import { featuredCardFor } from "@/lib/resource/featured-card";
 import { resolveResourceViewer, sheetOpenAllowed } from "@/lib/resource/resolve-access";
-import { parseSeason, RESOURCE_SEASONS } from "@/lib/resource/sheets";
+import { parseSeason, RESOURCE_SEASONS, sheetSeason } from "@/lib/resource/sheets";
 import { listSundayCalendar, resolveSundayEntry } from "@/lib/resource/sunday-calendar";
 import { saintStoryViewsById } from "@/lib/seo/saint-story-view";
 import {
@@ -170,6 +176,12 @@ export default async function ResourcePage({ searchParams }: Props) {
   const canPreviewSelected = viewer.isPlus || canOpenSelected;
   const canPrintSelected = canOpenSelected;
   const isThisWeekFree = Boolean(selectedKey && thisSundayKey && selectedKey === thisSundayKey);
+  const selectedSeason = selectedSheet ? sheetSeason(selectedSheet) : null;
+  const seasonActivities = selectedSeason ? seasonActivityRecommendations(selectedSeason) : [];
+  const seasonRecParams = new URLSearchParams();
+  if (selectedSundayDate) seasonRecParams.set("sunday", selectedSundayDate);
+  if (level === 2) seasonRecParams.set("level", "2");
+  const seasonRecHref = `/resource?${seasonRecParams.toString()}#season-recs`;
 
   const sundaysHref = level === 2 ? "/resource?level=2" : "/resource";
   const cardsHref =
@@ -334,6 +346,10 @@ export default async function ResourcePage({ searchParams }: Props) {
               : null
           }
           craft={isThisWeekFree ? craft : null}
+          seasonActivities={seasonActivities}
+          seasonRecPage={page}
+          seasonRecHref={seasonRecHref}
+          seasonOverride={selectedSeason ?? undefined}
         />
       ) : (
         <p className="mt-5 rounded-2xl border border-[#e8d9cd] bg-[#fff3e6] px-5 py-4 text-sm text-[#6b5c50]">

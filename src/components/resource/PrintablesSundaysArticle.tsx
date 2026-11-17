@@ -1,17 +1,27 @@
 import { SignInGatedLink } from "@/components/SignInGatedLink";
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
 import { LockedSheetPreview } from "@/components/resource/LockedSheetPreview";
+import { SeasonRecommendations } from "@/components/resource/SeasonRecommendations";
 import { SheetThumb } from "@/components/resource/SheetThumb";
 import { SundayActivitySlot } from "@/components/resource/activity/SundayActivitySlot";
 import type { ResourceActivity } from "@/lib/resource/activities";
 import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
-import { resourcePath, resourcePrintPath } from "@/lib/resource/sheets";
+import {
+  resourcePath,
+  resourcePrintPath,
+  sheetSeason,
+  type ResourceSeason,
+} from "@/lib/resource/sheets";
 import { fullSundayDate } from "@/lib/resource/sunday-bundle";
 import { sheetConversationQuestions } from "@/lib/seo/sunday-mass-worksheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
 
 type SlotActivity = Pick<ResourceActivity, "slug" | "title" | "kind" | "previews" | "access" | "tryThis" | "summary">;
+type RecActivity = Pick<
+  ResourceActivity,
+  "slug" | "title" | "kind" | "summary" | "seasons" | "previews" | "access" | "editable"
+>;
 
 type Props = {
   sheet: SundaySheetContent;
@@ -23,13 +33,19 @@ type Props = {
   isThisWeekFree: boolean;
   activity?: { activity: SlotActivity; dateLabel: string } | null;
   craft?: SlotActivity | null;
+  /** Season-matched crafts/activities (paginated when many). */
+  seasonActivities?: RecActivity[];
+  seasonRecPage?: number;
+  seasonRecHref?: string;
+  seasonOverride?: ResourceSeason;
 };
 
 const btn =
   "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c9773a]";
 
 /**
- * Right article for Worksheets mode (mode key: sundays): SEO summary + worksheet + activity/craft tiles.
+ * Right article for Worksheets mode (mode key: sundays): SEO summary + worksheet +
+ * this-week slots + season-matched craft/activity recommendations (no separate shells).
  */
 export function PrintablesSundaysArticle({
   sheet,
@@ -41,6 +57,10 @@ export function PrintablesSundaysArticle({
   isThisWeekFree,
   activity,
   craft,
+  seasonActivities = [],
+  seasonRecPage = 1,
+  seasonRecHref = "/resource#season-recs",
+  seasonOverride,
 }: Props) {
   const lv = level === 2 ? sheet.levels.level2 : sheet.levels.level1;
   const view = toGospelSheetView(sheet, sundayDate);
@@ -48,6 +68,7 @@ export function PrintablesSundaysArticle({
   const questions = sheetConversationQuestions(sheet);
   const keyVerse = sheet.keyVerseDR || lv.keyLine;
   const yearCycle = /^([ABC])_/.exec(sheet.key)?.[1] ?? null;
+  const season = seasonOverride ?? sheetSeason(sheet);
 
   return (
     <article aria-label="Sunday worksheet" className="space-y-5">
@@ -188,7 +209,7 @@ export function PrintablesSundaysArticle({
 
       {(activity || craft) && (
         <section aria-label="Recommended for this Sunday" className="space-y-3">
-          <h3 className="m-0 font-serif text-lg font-bold text-[#1c1c1c]">Recommended for families</h3>
+          <h3 className="m-0 font-serif text-lg font-bold text-[#1c1c1c]">This week for families</h3>
           <div className="grid gap-3 sm:grid-cols-2">
             {activity ? (
               <SundayActivitySlot
@@ -213,6 +234,13 @@ export function PrintablesSundaysArticle({
           </div>
         </section>
       )}
+
+      <SeasonRecommendations
+        season={season}
+        activities={seasonActivities}
+        page={seasonRecPage}
+        resultsHref={seasonRecHref}
+      />
     </article>
   );
 }
