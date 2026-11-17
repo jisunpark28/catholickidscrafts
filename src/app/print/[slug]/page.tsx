@@ -1,3 +1,4 @@
+import { GospelPrintIntro, GOSPEL_PRINT_INTRO_CSS } from "@/components/gospel-sheet/GospelPrintIntro";
 import { GospelSheet } from "@/components/gospel-sheet/GospelSheet";
 import { PrintToolbar } from "@/components/gospel-sheet/PrintToolbar";
 import { GOSPEL_SHEET_CSS, GOSPEL_SHEET_PAGE_CSS } from "@/components/gospel-sheet/sheet-styles";
@@ -40,15 +41,27 @@ export default async function PrintSheetPage({ params, searchParams }: Props) {
 
   return (
     <div style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
-      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + (signedIn ? "" : SIGNED_OUT_PRINT_CSS) }} />
+      <style
+        dangerouslySetInnerHTML={{
+          __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + GOSPEL_PRINT_INTRO_CSS + (signedIn ? "" : SIGNED_OUT_PRINT_CSS),
+        }}
+      />
       {embed ? null : (
-        <PrintToolbar
-          slug={sheet.slug}
-          level={level}
-          gospelRef={sheet.gospelRef}
-          usccbUrl={sheet.usccbUrl}
-          autoPrint={autoPrint}
-        />
+        <>
+          <PrintToolbar
+            slug={sheet.slug}
+            level={level}
+            gospelRef={sheet.gospelRef}
+            usccbUrl={sheet.usccbUrl}
+            autoPrint={autoPrint}
+          />
+          <GospelPrintIntro
+            liturgicalName={sheet.liturgicalName}
+            gospelRef={sheet.gospelRef}
+            summary={sheet.levels.level1.story}
+            guideHref="/sunday-mass-worksheets"
+          />
+        </>
       )}
       <GospelSheet sheet={sheet} level={level} />
     </div>
