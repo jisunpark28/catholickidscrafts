@@ -24,7 +24,7 @@ import { listCustomSheets } from "@/lib/resource/custom-sheet-db";
 import { featuredCardFor } from "@/lib/resource/featured-card";
 import { resolveResourceViewer, sheetOpenAllowed } from "@/lib/resource/resolve-access";
 import { parseSeason, RESOURCE_SEASONS } from "@/lib/resource/sheets";
-import { listUpcomingSundays } from "@/lib/resource/sunday-calendar";
+import { listSundayCalendar, resolveSundayEntry } from "@/lib/resource/sunday-calendar";
 import { saintStoryViewsById } from "@/lib/seo/saint-story-view";
 import {
   COUNTRY_COOKIE,
@@ -95,7 +95,7 @@ export default async function ResourcePage({ searchParams }: Props) {
   const sundayParam = one(sp.sunday);
   const country = pickCountry(undefined, cookieStore.get(COUNTRY_COOKIE)?.value, h.get("x-vercel-ip-country"));
 
-  // Old card share URLs still open their detail panel; Option E defaults Printables to Sundays.
+  // Old card share URLs still open their detail panel; Option E defaults Printables to Worksheets (mode key: sundays).
   const searchMode = Boolean(q.trim()) && viewParam !== "cards";
   const sharedCard = viewParam === "cards" ? getPictureCard(one(sp.card)) : null;
   const view: ResourceView = searchMode
@@ -151,14 +151,19 @@ export default async function ResourcePage({ searchParams }: Props) {
     }
   }
 
-  // Sundays Option E selection: ?sunday=YYYY-MM-DD, else this week.
-  const upcoming = sunday ? listUpcomingSundays(country, sunday.date, 53) : [];
-  const selectedSundayDate =
-    isYmd(sundayParam) && upcoming.some((s) => s.date === sundayParam)
-      ? sundayParam
-      : sunday?.date ?? "";
-  const selectedEntry = upcoming.find((s) => s.date === selectedSundayDate) ?? null;
-  const selectedSheet = selectedEntry ? getSundaySheet(selectedEntry.key) : sunday ? getSundaySheet(sunday.key) : null;
+  // Worksheets Option E: ?sunday=YYYY-MM-DD (any past/future Sunday) → romcal Year A/B/C sheet.
+  const sundayCalendar = sunday ? listSundayCalendar(country, sunday.date) : [];
+  const paramEntry = isYmd(sundayParam) ? resolveSundayEntry(sundayParam, country) : null;
+  const selectedSundayDate = paramEntry?.date ?? sunday?.date ?? "";
+  const selectedEntry =
+    paramEntry ??
+    sundayCalendar.find((s) => s.date === selectedSundayDate) ??
+    (sunday ? resolveSundayEntry(sunday.date, country) : null);
+  const selectedSheet = selectedEntry
+    ? getSundaySheet(selectedEntry.key)
+    : sunday
+      ? getSundaySheet(sunday.key)
+      : null;
   const selectedKey = selectedEntry?.key ?? sunday?.key ?? null;
   const canOpenSelected = selectedKey ? sheetOpenAllowed(viewer, selectedKey) : false;
   // Auth hard rules: clear preview only for this-week free (or Plus). Download follows sheetOpenAllowed + SignInGatedLink.
@@ -184,10 +189,15 @@ export default async function ResourcePage({ searchParams }: Props) {
       </div>
     ) : null;
 
+  const finderSundays =
+    selectedEntry && !sundayCalendar.some((s) => s.date === selectedEntry.date)
+      ? [...sundayCalendar, selectedEntry].sort((a, b) => a.date.localeCompare(b.date))
+      : sundayCalendar;
+
   const middle =
     printablesMode === "sundays" && sunday ? (
       <PrintablesSundaysFinder
-        sundays={upcoming}
+        sundays={finderSundays}
         thisSundayDate={sunday.date}
         selectedDate={selectedSundayDate || sunday.date}
         level={level}
@@ -206,7 +216,7 @@ export default async function ResourcePage({ searchParams }: Props) {
       dailyMassLabel={nav.dailyMassLabel}
       chrome={chrome ?? undefined}
       middle={middle}
-      middleDrawerLabel={printablesMode === "cards" ? "Search cards" : "Pick a Sunday"}
+      middleDrawerLabel={printablesMode === "cards" ? "Search cards" : "Pick a worksheet"}
       contentClassName={printablesMode ? "bg-[#fff8f0]" : "bg-white"}
     >
       <JsonLd nodes={[breadcrumbNode([{ name: "Resource", path: "/resource" }])]} />

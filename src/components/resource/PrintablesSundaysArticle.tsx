@@ -29,7 +29,7 @@ const btn =
   "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c9773a]";
 
 /**
- * Right article for Sundays mode: SEO summary (always) + worksheet + activity/craft tiles.
+ * Right article for Worksheets mode (mode key: sundays): SEO summary + worksheet + activity/craft tiles.
  */
 export function PrintablesSundaysArticle({
   sheet,
@@ -47,6 +47,7 @@ export function PrintablesSundaysArticle({
   const story = sheet.levels.level1.story.trim();
   const questions = sheetConversationQuestions(sheet);
   const keyVerse = sheet.keyVerseDR || lv.keyLine;
+  const yearCycle = /^([ABC])_/.exec(sheet.key)?.[1] ?? null;
 
   return (
     <article aria-label="Sunday worksheet" className="space-y-5">
@@ -57,6 +58,12 @@ export function PrintablesSundaysArticle({
           {fullSundayDate(sundayDate)}
           <span aria-hidden> · </span>
           {sheet.season}
+          {yearCycle ? (
+            <>
+              <span aria-hidden> · </span>
+              Year {yearCycle}
+            </>
+          ) : null}
           <span aria-hidden> · </span>
           {countryLabel}
           {isThisWeekFree ? (

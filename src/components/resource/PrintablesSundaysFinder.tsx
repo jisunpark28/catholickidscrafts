@@ -27,7 +27,12 @@ function hrefFor(date: string, level: 1 | 2): string {
   return `/resource?${p.toString()}`;
 }
 
-/** Middle finder: named season jumps + month calendar (Sundays only). No ordinal button walls. */
+function matchesJump(s: SundayCalendarEntry, jump: (typeof SUNDAY_SEASON_JUMPS)[number]): boolean {
+  if (jump.keySuffix) return s.key.endsWith(`_${jump.keySuffix}`) || s.key === jump.keySuffix;
+  return jump.season ? s.season === jump.season : false;
+}
+
+/** Middle finder: named season jumps + month calendar (all Sundays, past + future). */
 export function PrintablesSundaysFinder({ sundays, thisSundayDate, selectedDate, level }: Props) {
   const byDate = useMemo(() => new Map(sundays.map((s) => [s.date, s])), [sundays]);
   const selected = byDate.get(selectedDate) ?? byDate.get(thisSundayDate) ?? sundays[0] ?? null;
@@ -39,10 +44,10 @@ export function PrintablesSundaysFinder({ sundays, thisSundayDate, selectedDate,
   const thisWeek = byDate.get(thisSundayDate);
 
   const jumpToSeason = (jump: (typeof SUNDAY_SEASON_JUMPS)[number]) => {
-    const hit = sundays.find((s) => {
-      if (jump.keySuffix) return s.key.endsWith(`_${jump.keySuffix}`) || s.key === jump.keySuffix;
-      return jump.season ? s.season === jump.season : false;
-    });
+    // Prefer the next upcoming match from this week; else nearest past.
+    const upcoming = sundays.find((s) => s.date >= thisSundayDate && matchesJump(s, jump));
+    const past = [...sundays].reverse().find((s) => s.date < thisSundayDate && matchesJump(s, jump));
+    const hit = upcoming ?? past;
     if (!hit) return;
     const [jy, jm] = hit.date.split("-").map(Number);
     setCursor({ year: jy!, month: jm! });
@@ -120,18 +125,35 @@ export function PrintablesSundaysFinder({ sundays, thisSundayDate, selectedDate,
             if (!cell) return <span key={`e-${i}`} className="aspect-square" />;
             const entry = byDate.get(cell.date);
             const isSunday = cell.weekday === 0;
-            const isSelected = entry && entry.date === selectedDate;
-            const isThis = entry && entry.date === thisSundayDate;
-            if (!isSunday || !entry) {
+            const isSelected = cell.date === selectedDate;
+            const isThis = cell.date === thisSundayDate;
+            // Non-Sundays stay inert. Every Sunday is selectable (past + future);
+            // server maps the date → Year A/B/C worksheet via romcal.
+            if (!isSunday) {
               return (
                 <span
                   key={cell.date}
-                  className={`flex aspect-square items-center justify-center rounded-md text-xs ${
-                    isSunday ? "text-[#c9b8a8]" : "text-[#d7cdc3]"
-                  }`}
+                  className="flex aspect-square items-center justify-center rounded-md text-xs text-[#d7cdc3]"
                 >
                   {cell.day}
                 </span>
+              );
+            }
+            if (!entry) {
+              // Outside precomputed window or no catalog sheet — still link; page resolves or falls back.
+              return (
+                <Link
+                  key={cell.date}
+                  href={hrefFor(cell.date, level)}
+                  aria-current={isSelected ? "date" : undefined}
+                  className={`flex aspect-square items-center justify-center rounded-md text-xs font-semibold no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c9773a] ${
+                    isSelected
+                      ? "bg-[#c9773a] text-white"
+                      : "bg-[#fffdfa] text-[#806454] hover:bg-[#fff2e8]"
+                  }`}
+                >
+                  {cell.day}
+                </Link>
               );
             }
             return (
@@ -158,6 +180,12 @@ export function PrintablesSundaysFinder({ sundays, thisSundayDate, selectedDate,
             <span className="font-semibold text-[#1c1c1c]">{selected.liturgicalName}</span>
             <span aria-hidden> · </span>
             {selected.seasonLabel}
+            {/^([ABC])_/.test(selected.key) ? (
+              <>
+                <span aria-hidden> · </span>
+                Year {selected.key[0]}
+              </>
+            ) : null}
           </p>
         ) : null}
       </div>
