@@ -127,15 +127,15 @@ export function VerseClawGame() {
   const timers = useRef<number[]>([]);
   const moveTimer = useRef<number | null>(null);
 
+  const busy = phase !== "idle" && phase !== "won";
+  const fingersOpen = phase === "idle" || phase === "drop";
+
   useEffect(() => {
     return () => {
       timers.current.forEach((id) => window.clearTimeout(id));
       if (moveTimer.current) window.clearTimeout(moveTimer.current);
     };
   }, []);
-
-  const busy = phase !== "idle" && phase !== "won";
-  const fingersOpen = phase === "idle" || phase === "drop";
 
   function clearTimers() {
     timers.current.forEach((id) => window.clearTimeout(id));
@@ -188,6 +188,48 @@ export function VerseClawGame() {
     });
   }
 
+  const nudgeRef = useRef(nudge);
+  const grabRef = useRef(grab);
+  nudgeRef.current = nudge;
+  grabRef.current = grab;
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      const el = e.target;
+      if (el instanceof HTMLElement) {
+        const tag = el.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el.isContentEditable) return;
+      }
+      switch (e.key) {
+        case "ArrowLeft":
+          e.preventDefault();
+          nudgeRef.current(-STEP, 0);
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          nudgeRef.current(STEP, 0);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          nudgeRef.current(0, STEP);
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          nudgeRef.current(0, -STEP);
+          break;
+        case " ":
+        case "Enter":
+          e.preventDefault();
+          grabRef.current();
+          break;
+        default:
+          break;
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   function playAgain() {
     clearTimers();
     setPhase("idle");
@@ -223,9 +265,9 @@ export function VerseClawGame() {
 
   // Mild depth cue only — avoid dramatic shrink/grow while moving.
   const depthScale = 0.94 + (clawZ / 100) * 0.1;
-  // Idle/move hang height; drop reaches into the pile so prongs overlap the doll.
-  const hangTop = 10 + (100 - clawZ) * 0.38;
-  const dropReach = 58 + (100 - clawZ) * 0.55;
+  // Idle hang sits high so prongs clear the plush pile; drop still reaches dolls.
+  const hangTop = Math.max(0, (100 - clawZ) * 0.16);
+  const dropReach = 72 + (100 - clawZ) * 0.62;
   let clawTop = hangTop;
   if (phase === "drop" || phase === "close") clawTop = hangTop + dropReach;
   else if (phase === "lift") clawTop = hangTop + 18;
@@ -261,13 +303,12 @@ export function VerseClawGame() {
       <div className="vc-machine" data-phase={phase}>
         <div className="vc-sign">
           <strong>Verse Claw</strong>
-          <span>Move the claw · Grab a blessing doll</span>
         </div>
 
         <div
           className="vc-cabinet"
           role="application"
-          aria-label="Verse claw machine. Use the D-pad or swipe to move, then Grab."
+          aria-label="Verse claw machine"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -355,8 +396,6 @@ export function VerseClawGame() {
           <button type="button" className="vc-grab" disabled={busy} onClick={grab}>
             Grab!
           </button>
-
-          <p className="vc-hint">D-pad or swipe: left / right / forward / back · then Grab</p>
         </div>
       </div>
 
