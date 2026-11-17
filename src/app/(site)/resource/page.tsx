@@ -25,6 +25,7 @@ import { featuredCardFor } from "@/lib/resource/featured-card";
 import { resolveResourceViewer, sheetOpenAllowed } from "@/lib/resource/resolve-access";
 import { parseSeason, RESOURCE_SEASONS } from "@/lib/resource/sheets";
 import { listUpcomingSundays } from "@/lib/resource/sunday-calendar";
+import { saintStoryViewsById } from "@/lib/seo/saint-story-view";
 import {
   COUNTRY_COOKIE,
   COUNTRY_LABELS,
@@ -243,6 +244,7 @@ export default async function ResourcePage({ searchParams }: Props) {
           featuredIds={featuredIds}
           initialQ={q}
           initialCardId={sharedCard?.id ?? one(sp.card) ?? null}
+          saintStories={saintStoryViewsById()}
         />
       ) : view === "cards" ? (
         <CardsBrowser

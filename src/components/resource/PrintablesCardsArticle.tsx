@@ -1,11 +1,20 @@
 "use client";
 
-import { cardLockedPreviewSrc, cardThumbSrc, type CardListItem } from "@/lib/resource/card-meta";
+import { SignInGatedLink } from "@/components/SignInGatedLink";
+import { SaintStoryPanel } from "@/components/seo/SaintStoryPanel";
+import {
+  cardLockedPreviewSrc,
+  cardPrintPath,
+  cardThumbSrc,
+  type CardListItem,
+} from "@/lib/resource/card-meta";
+import type { SaintStoryViewData } from "@/lib/seo/saint-story-view";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { CardActions } from "./CardActions";
 import { CardTile } from "./CardTile";
 import { LockedPreview } from "./LockedPreview";
+import { PlusLockButton } from "./PlusLockDialog";
 
 type Props = {
   cards: CardListItem[];
@@ -16,6 +25,8 @@ type Props = {
   featuredIds: string[];
   initialQ: string;
   initialCardId: string | null;
+  /** Full SEO saint stories keyed by card id (server-built). */
+  saintStories?: Record<string, SaintStoryViewData>;
 };
 
 const PAGE = 24;
@@ -46,6 +57,7 @@ function matches(c: CardListItem, q: string): boolean {
 
 /**
  * Right pane for Cards mode: gallery of all cards by default; click → detail.
+ * Saint cards open the full SEO saint story UI; other cards keep compact detail.
  * Auth: clear preview/download for this week's free card (and Plus); else blur + block right-click via LockedPreview.
  */
 export function PrintablesCardsArticle({
@@ -57,6 +69,7 @@ export function PrintablesCardsArticle({
   featuredIds,
   initialQ,
   initialCardId,
+  saintStories = {},
 }: Props) {
   const q = initialQ.trim();
   const [shown, setShown] = useState(PAGE);
@@ -93,6 +106,71 @@ export function PrintablesCardsArticle({
 
   if (selected) {
     const clear = isPlus || selected.id === freeCardId;
+    const saint = saintStories[selected.id] ?? null;
+    const printSaveCls =
+      "flex w-full items-center justify-center gap-1.5 rounded-full border border-[#c9773a] bg-white px-3 py-1.5 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-[#fff8f0]";
+    const saintActions = (
+      <div className="space-y-2">
+        {clear ? (
+          <SignInGatedLink
+            href={cardPrintPath(selected.id)}
+            target="_blank"
+            rel="noopener"
+            className={printSaveCls}
+          >
+            <span aria-hidden="true">🖨️</span> Print / Save Saint Card
+          </SignInGatedLink>
+        ) : (
+          <PlusLockButton
+            requireSignIn
+            level={level}
+            className={`${printSaveCls} cursor-pointer text-[#9ca3af]`}
+            title="Print and save need Plus (this week’s free card stays open)"
+          >
+            <span aria-hidden="true">🖨️</span> Print / Save Saint Card
+          </PlusLockButton>
+        )}
+        <CardActions
+          card={selected}
+          isPlus={isPlus}
+          isFree={selected.id === freeCardId}
+          level={level}
+          siteUrl={siteUrl}
+          compact
+        />
+      </div>
+    );
+    const compactActions = (
+      <CardActions
+        card={selected}
+        isPlus={isPlus}
+        isFree={selected.id === freeCardId}
+        level={level}
+        siteUrl={siteUrl}
+      />
+    );
+
+    if (saint) {
+      return (
+        <div className="space-y-4">
+          <button
+            type="button"
+            onClick={() => setSelectedId(null)}
+            className="text-sm font-medium text-[#335599] hover:text-[#9d451d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c9773a]"
+          >
+            ← All cards
+          </button>
+          <SaintStoryPanel
+            story={saint}
+            canPreview={clear}
+            actions={saintActions}
+            showNewsletter
+            showHubLink
+          />
+        </div>
+      );
+    }
+
     return (
       <article aria-label="Card detail" className="space-y-4">
         <button
@@ -140,15 +218,7 @@ export function PrintablesCardsArticle({
               </LockedPreview>
             )}
           </div>
-          <div className="mt-4">
-            <CardActions
-              card={selected}
-              isPlus={isPlus}
-              isFree={selected.id === freeCardId}
-              level={level}
-              siteUrl={siteUrl}
-            />
-          </div>
+          <div className="mt-4">{compactActions}</div>
         </div>
       </article>
     );

@@ -4,18 +4,12 @@ import { LockedSheetPreview } from "@/components/resource/LockedSheetPreview";
 import { SheetThumb } from "@/components/resource/SheetThumb";
 import { SundayActivitySlot } from "@/components/resource/activity/SundayActivitySlot";
 import type { ResourceActivity } from "@/lib/resource/activities";
+import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import { resourcePath, resourcePrintPath } from "@/lib/resource/sheets";
 import { fullSundayDate } from "@/lib/resource/sunday-bundle";
+import { sheetConversationQuestions } from "@/lib/seo/sunday-mass-worksheets";
 import { toGospelSheetView, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 import Link from "next/link";
-
-/** Short kid/parent liturgical blurb from sheet fields (no separate CMS copy yet). */
-function sundayLiturgicalBlurb(sheet: SundaySheetContent): string {
-  const story = sheet.levels.level1.story.replace(/\s+/g, " ").trim();
-  const first = story.split(/(?<=[.!?])\s+/)[0] ?? story;
-  const snippet = first.length > 220 ? `${first.slice(0, 217).replace(/\s+\S*$/, "")}…` : first;
-  return `This Sunday is ${sheet.liturgicalName} (${sheet.season}). The Gospel is ${sheet.gospelRef} — ${sheet.levels.level1.title}. ${snippet}`;
-}
 
 type SlotActivity = Pick<ResourceActivity, "slug" | "title" | "kind" | "previews" | "access" | "tryThis" | "summary">;
 
@@ -35,7 +29,7 @@ const btn =
   "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold no-underline transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c9773a]";
 
 /**
- * Right article for Sundays mode: liturgical explanation + worksheet + activity/craft recommendation tiles.
+ * Right article for Sundays mode: SEO summary (always) + worksheet + activity/craft tiles.
  */
 export function PrintablesSundaysArticle({
   sheet,
@@ -49,8 +43,10 @@ export function PrintablesSundaysArticle({
   craft,
 }: Props) {
   const lv = level === 2 ? sheet.levels.level2 : sheet.levels.level1;
-  const blurb = sundayLiturgicalBlurb(sheet);
   const view = toGospelSheetView(sheet, sundayDate);
+  const story = sheet.levels.level1.story.trim();
+  const questions = sheetConversationQuestions(sheet);
+  const keyVerse = sheet.keyVerseDR || lv.keyLine;
 
   return (
     <article aria-label="Sunday worksheet" className="space-y-5">
@@ -78,10 +74,44 @@ export function PrintablesSundaysArticle({
         </p>
       </header>
 
-      <section aria-label="Liturgical explanation">
-        <h3 className="m-0 font-serif text-lg font-bold text-[#1c1c1c]">This Sunday</h3>
-        <p className="mb-0 mt-2 text-sm leading-relaxed text-[#493a30]">{blurb}</p>
-      </section>
+      {/* Always-on SEO summary (matches /sunday-mass-worksheets/[slug]), above the worksheet block. */}
+      <div className="space-y-5 rounded-[20px] border border-[#eadccd] bg-[#fff3e6] p-4 sm:p-5">
+        <section aria-labelledby="gospel-summary">
+          <h3 id="gospel-summary" className="m-0 font-[Georgia,serif] text-xl font-bold text-[#1f2937]">
+            Gospel summary for kids
+          </h3>
+          <p className="mb-0 mt-2 text-base leading-relaxed text-[#374151]">{story}</p>
+        </section>
+
+        <section aria-labelledby="key-verse">
+          <h3 id="key-verse" className="m-0 font-[Georgia,serif] text-xl font-bold text-[#1f2937]">
+            Key verse
+          </h3>
+          <p className="mb-0 mt-2 text-base leading-relaxed text-[#374151]">{keyVerse}</p>
+          <p className="mb-0 mt-3 text-sm text-[#4b5563]">
+            Want to highlight a related verse with your child?{" "}
+            <Link href="/bible-verses-for-kids" className="font-semibold text-[#335599] hover:underline">
+              Browse Bible verses for kids
+            </Link>{" "}
+            or open{" "}
+            <Link href="/moms-bible/situations" className="font-semibold text-[#335599] hover:underline">
+              Mom&apos;s Bible situations
+            </Link>
+            .
+          </p>
+        </section>
+
+        <section aria-labelledby="talk">
+          <h3 id="talk" className="m-0 font-[Georgia,serif] text-xl font-bold text-[#1f2937]">
+            Family conversation questions
+          </h3>
+          <ol className="mb-0 mt-3 list-decimal space-y-3 pl-5 text-base leading-relaxed text-[#374151]">
+            {questions.map((q) => (
+              <li key={q}>{q}</li>
+            ))}
+          </ol>
+        </section>
+      </div>
 
       <section aria-label="Worksheet" className="rounded-[20px] border border-[#e8d9cd] bg-[#fffdfa] p-4 sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-2">
@@ -95,9 +125,6 @@ export function PrintablesSundaysArticle({
             <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
           )}
         </div>
-        <p className="m-0 mt-1 text-xs text-[#6b7280]">
-          Gospel story · key verse · family questions
-        </p>
 
         <div className="mt-3 max-h-[340px] overflow-hidden rounded-xl border border-[#eee8e1] bg-white">
           {canPreview ? (
@@ -109,19 +136,11 @@ export function PrintablesSundaysArticle({
           )}
         </div>
 
-        {canPreview ? (
-          <div className="mt-3 space-y-2 text-sm text-[#493a30]">
-            <p className="m-0">
-              <span className="font-semibold">Key verse:</span> {sheet.keyVerseDR || lv.keyLine}
-            </p>
-            <p className="m-0 line-clamp-4">{lv.story}</p>
-          </div>
-        ) : (
+        {!canPreview ? (
           <p className="m-0 mt-3 text-sm text-[#6b7280]">
-            Preview and download for this Sunday unlock with Plus. This week&apos;s free worksheet stays open for
-            everyone.
+            Worksheet preview unlocks with Plus. This week&apos;s free worksheet stays open for everyone.
           </p>
-        )}
+        ) : null}
 
         <div className="mt-4 flex flex-wrap gap-2">
           {canPrint ? (
@@ -150,6 +169,13 @@ export function PrintablesSundaysArticle({
               Unlock with Plus
             </Link>
           )}
+          <Link
+            href={resourceEditPath(sheet.key, level)}
+            className={`${btn} border border-[#e7e3de] bg-white font-medium text-[#1c1c1c] hover:bg-[#fffdfb]`}
+            title="Customize this worksheet — Save and Print need Plus"
+          >
+            Edit
+          </Link>
         </div>
       </section>
 
