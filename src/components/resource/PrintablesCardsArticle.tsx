@@ -158,9 +158,7 @@ export function PrintablesCardsArticle({
     <section aria-label="Cards gallery" className="space-y-4">
       <header>
         <h2 className="m-0 font-serif text-xl font-bold text-[#1c1c1c] sm:text-2xl">All cards</h2>
-        <p className="mb-0 mt-1 text-sm text-[#6b5c50]">
-          {q ? `Results for “${q}”` : "Picture cards and saints. Click a card for details."}
-        </p>
+        {q ? <p className="mb-0 mt-1 text-sm text-[#6b5c50]">Results for “{q}”</p> : null}
       </header>
 
       {list.length ? (

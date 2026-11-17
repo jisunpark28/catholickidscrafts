@@ -37,12 +37,7 @@ export function PrintablesCardsFinder({ initialQ, level, freeCardTitle, prompts 
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <p className="m-0 text-[11px] font-bold uppercase tracking-wide text-[#c9773a]">Cards</p>
-        <p className="mb-0 mt-1 text-sm text-[#6b5c50]">
-          Search picture cards and saints. Gallery opens on the right.
-        </p>
-      </div>
+      <p className="m-0 text-[11px] font-bold uppercase tracking-wide text-[#c9773a]">Cards</p>
 
       <form
         role="search"
