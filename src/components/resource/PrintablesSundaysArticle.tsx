@@ -154,7 +154,8 @@ export function PrintablesSundaysArticle({
           )}
         </div>
 
-        <div className="mt-3 max-h-[340px] overflow-hidden rounded-xl border border-[#eee8e1] bg-white">
+        {/* Full letter-height preview (blurred when locked) — do not crop with max-height. */}
+        <div className="mt-3 overflow-hidden rounded-xl border border-[#eee8e1] bg-white">
           {canPreview ? (
             <Link href={resourcePath(sheet.key, level)} className="block" tabIndex={-1}>
               <SheetThumb sheet={view} level={level} />
