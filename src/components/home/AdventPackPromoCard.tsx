@@ -25,11 +25,7 @@ export function AdventPackPromoCard() {
       </h2>
 
       <ul className="mt-3 flex flex-wrap gap-1.5">
-        {[
-          "8 Gospel sheets (L1+L2) + Dec 8",
-          "5 Plus crafts",
-          "3 free with sign-in",
-        ].map((label) => (
+        {["8 Gospel sheets", "5 crafts"].map((label) => (
           <li
             key={label}
             className="rounded-full border border-[#eadccd] bg-white px-2.5 py-1 text-[11px] font-bold text-[#6b4a2e]"
