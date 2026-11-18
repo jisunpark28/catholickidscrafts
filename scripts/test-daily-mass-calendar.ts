@@ -72,8 +72,9 @@ assert.deepEqual(
 const page = fs.readFileSync("src/app/(site)/daily-mass/page.tsx", "utf8");
 const view = fs.readFileSync("src/components/daily-mass/DailyMassView.tsx", "utf8");
 const panel = fs.readFileSync("src/components/daily-mass/DailyMassCalendarPanel.tsx", "utf8");
-assert.equal(page.includes("RelatedLinks"), false);
-assert.equal(page.includes("Keep exploring"), false);
+assert.equal(page.includes("RelatedLinks"), true);
+assert.equal(page.includes("/advent-complete-2026"), true);
+assert.equal(fs.readFileSync("src/components/seo/RelatedLinks.tsx", "utf8").includes("Keep exploring"), true);
 assert.equal(page.includes("nextSunday"), false);
 assert.equal(fs.existsSync("src/components/daily-mass/MiniMonthCalendar.tsx"), false);
 assert.equal(view.includes("Next Sunday"), false);

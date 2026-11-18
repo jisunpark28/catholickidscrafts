@@ -36,10 +36,14 @@ export const CHILD_SITEMAP_PATHS = [
  */
 const PLAY_ALIAS_SLUGS = new Set(["emoji"]);
 
-/** Indexable public pages that are not generated from data. Excluded on purpose: /gospel (redirects to /daily-mass), /gallery, /newsletter, /unsubscribe and /subscribe/success (noindex), /account/*, /reader/*, /admin/*, /api/* and /print/*. */
+/**
+ * Indexable public pages that are not generated from data.
+ * Excluded on purpose: /mass and /gospel (301 → /daily-mass), /liturgy/saints (301 → saints hub),
+ * /moms-bible/situations (noindex app board), /gallery, /newsletter, /unsubscribe and /subscribe/success (noindex),
+ * /account/*, /reader/*, /admin/*, /api/* and /print/*.
+ */
 const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFrequency"], priority: number]> = [
   ["/", "weekly", 1],
-  ["/mass", "daily", 0.95],
   ["/daily-mass", "daily", 0.95],
   ["/resource", "weekly", 0.9],
   ["/advent-complete-2026", "weekly", 0.85],
@@ -100,7 +104,10 @@ export function buildResourcesSitemap(): MetadataRoute.Sitemap {
 }
 
 function liturgyEntries(): SitemapEntry[] {
-  return LITURGY_TOPICS.map((topic) => entry(`/liturgy/${topic}`, "weekly", 0.75));
+  // /liturgy/saints 301s to /catholic-saints-for-kids (indexed hub).
+  return LITURGY_TOPICS.filter((topic) => topic !== "saints").map((topic) =>
+    entry(`/liturgy/${topic}`, "weekly", 0.75),
+  );
 }
 
 function bibleVersesForKidsEntries(): SitemapEntry[] {

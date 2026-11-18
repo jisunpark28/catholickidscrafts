@@ -39,7 +39,7 @@ export default async function AboutPage() {
       <h2 className="pt-4 text-xl font-bold">What you will find here</h2>
       <ul className="list-disc space-y-2 pl-6">
         <li>
-          <Link href="/mass" className="font-semibold text-[var(--color-link)]">
+          <Link href="/daily-mass" className="font-semibold text-[var(--color-link)]">
             Daily Mass
           </Link>{" "}
           — see the liturgical day and jump to official readings (publisher links below).

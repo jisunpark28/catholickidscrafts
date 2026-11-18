@@ -1,6 +1,7 @@
 import { PageShell } from "@/components/PageShell";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import {
   evergreenDescription,
   evergreenSeoTitle,
@@ -176,6 +177,18 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
             </ul>
           </section>
         ) : null}
+
+        <RelatedLinks
+          links={[
+            { href: hubPath(page.kind), label: `All ${isVirtue ? "virtue challenge" : "Mass"} worksheets` },
+            { href: "/daily-mass", label: "Today's Mass readings for kids" },
+            { href: "/bible-verses-for-kids", label: "Bible verses for kids" },
+            { href: "/qa-cards", label: "Catholic Q&A cards" },
+            ...(isVirtue
+              ? []
+              : [{ href: "/advent-complete-2026", label: "Advent Complete pack" }]),
+          ]}
+        />
 
         <div className="mt-10">
           <NewsletterSubscribeForm source={isVirtue ? "catholic-virtue-challenge" : "catholic-mass-for-kids"} />

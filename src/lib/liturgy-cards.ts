@@ -18,6 +18,13 @@ export type LiturgyCard = {
   badge?: string;
 };
 
+/**
+ * Operator-managed grid tiles from /admin/liturgy-cards (Weekly cards tab).
+ * Keep this loader: the admin CRUD path is live. There is no static JSON seed for LiturgyCard
+ * (href/image content is operator-defined), so empty prod grids are expected until cards are added.
+ * WeeklyIssue items (`loadWeeklyCardsForTopic`) and This Week remain the other public grid sources.
+ * Liturgy Q&A uses a separate seed (`db:seed-liturgy-qa`) that inserts DRAFT cards for admin publish.
+ */
 export async function loadLiturgyCards(topic: LiturgyTopic): Promise<LiturgyCard[]> {
   try {
     const rows = await prisma.liturgyCard.findMany({

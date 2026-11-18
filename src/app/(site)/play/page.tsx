@@ -1,10 +1,11 @@
 import { PlayGameIcon } from "@/components/PlayGameIcon";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { getPlayGamesFromCopy } from "@/lib/play-games-copy";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbNode, itemListNode } from "@/lib/structured-data";
 
 const gamePath = (slug: string) => (slug === "emoji" ? "/play/photo-booth" : `/play/${slug}`);
@@ -75,6 +76,15 @@ export default async function PlayHubPage() {
           </article>
         ))}
       </div>
+
+      <RelatedLinks
+        links={[
+          { href: "/daily-mass", label: "Today's Mass readings for kids" },
+          { href: "/qa-cards", label: "Catholic Q&A cards" },
+          { href: "/resource", label: "Printable worksheets and cards" },
+          { href: "/advent-complete-2026", label: "Advent Complete pack" },
+        ]}
+      />
     </div>
   );
 }

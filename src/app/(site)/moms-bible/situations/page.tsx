@@ -15,10 +15,11 @@ import "@/styles/qa-cards.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Bible Verses for Kids' Big Moments",
+  title: "Mom's Bible — Moments board",
   description:
-    "Catholic Bible verses for when your child is sad, scared, angry, moving, or celebrating, ready to highlight and share with a note.",
+    "Signed-in Mom's Bible board: pick a moment, open the verse, highlight, and leave a note for your child.",
   path: "/moms-bible/situations",
+  robots: { index: false, follow: true },
 });
 
 const SITE_BODY_FONT = {
