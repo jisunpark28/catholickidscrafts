@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     absoluteTitle: true,
     description: sheetDescription(sheet),
     path: sundayMassWorksheetPath(key),
+    robots: { index: false, follow: true },
   });
 }
 

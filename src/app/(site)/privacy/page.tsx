@@ -115,7 +115,7 @@ export default async function PrivacyPage() {
         </li>
         <li>
           <strong>Evangelizo.org</strong> — Liturgical day titles on the{" "}
-          <Link href="/mass" className="text-[var(--color-link)]">
+          <Link href="/daily-mass" className="text-[var(--color-link)]">
             Daily Mass
           </Link>{" "}
           calendar. Our servers call their Reader API when you view that calendar. We do not

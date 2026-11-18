@@ -45,6 +45,9 @@ jobs:
       - name: Daily Mass calendar grid
         run: pnpm exec tsx scripts/test-daily-mass-calendar.ts
 
+      - name: SEO P0 cannibalization / robots / RelatedLinks
+        run: pnpm exec tsx scripts/test-seo-p0.ts
+
       - name: Preview build (skip DB migrate)
         run: VERCEL_ENV=preview bash scripts/vercel-build.sh
         env:

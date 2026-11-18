@@ -2,6 +2,7 @@ import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { LiturgyCardGrid } from "@/components/liturgy/LiturgyCardGrid";
 import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
+import { QaPlainAnswers } from "@/components/liturgy/QaPlainAnswers";
 import { WeeklyThisWeekSection } from "@/components/liturgy/WeeklyThisWeekSection";
 import {
   isLiturgyTopic,
@@ -15,7 +16,7 @@ import { loadThisWeek, loadWeeklyCardsForTopic } from "@/lib/weekly-content";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { breadcrumbNode } from "@/lib/structured-data";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import "@/styles/qa-cards.css";
 
 const LITURGY_SEO: Record<LiturgyTopic, { title: string; description: string }> = {
@@ -55,6 +56,8 @@ export function generateStaticParams(): { topic: string }[] {
 export default async function LiturgyTopicPage({ params }: Props) {
   const { topic } = await params;
   if (!isLiturgyTopic(topic)) notFound();
+  // Saints SEO hub is /catholic-saints-for-kids; keep this route as a 301 alias (also in next.config).
+  if (topic === "saints") permanentRedirect("/catholic-saints-for-kids");
 
   const [liturgyCards, weeklyCards, thisWeek, qa] = await Promise.all([
     loadLiturgyCards(topic),
@@ -71,6 +74,7 @@ export default async function LiturgyTopicPage({ params }: Props) {
         <>
           <QaPageHeader topic={qa.topic} eyebrow={`Faith & Prayer · ${LITURGY_TOPIC_LABELS[topic]}`} />
           <QaFlipCards cards={qa.cards} cardBackColor={qa.topic.cardBackColor} />
+          <QaPlainAnswers cards={qa.cards} limit={5} />
         </>
       ) : (
         <h1 className="sr-only">{LITURGY_TOPIC_LABELS[topic]}</h1>

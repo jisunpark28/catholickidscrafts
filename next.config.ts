@@ -93,9 +93,13 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/mass/:date(\\d{4}-\\d{2}-\\d{2})",
-        destination: "/mass",
+        destination: "/daily-mass",
         permanent: true,
       },
+      // Role split: /daily-mass is the indexed Mass hub; keep /mass/participation.
+      { source: "/mass", destination: "/daily-mass", permanent: true },
+      // Thin liturgy saints hub → indexed saint stories hub.
+      { source: "/liturgy/saints", destination: "/catholic-saints-for-kids", permanent: true },
       {
         source: "/gospel",
         destination: "/daily-mass",

@@ -2,6 +2,10 @@
  * Idempotent production seed: home hub sections.
  * Home sections skip when already present (unless FORCE_PROD_SEED=true).
  * Set RUN_FULL_SEED=true to also run `prisma db seed` (needs ADMIN_EMAIL / ADMIN_PASSWORD).
+ *
+ * Not included here (by design):
+ * - LiturgyCard rows — operator-authored via /admin/liturgy-cards; no static seed payload.
+ * - Liturgy Q&A — use `pnpm run db:seed-liturgy-qa` (DRAFT until admin publishes).
  */
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";

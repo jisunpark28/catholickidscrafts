@@ -2,6 +2,7 @@ import { DailyMassView } from "@/components/daily-mass/DailyMassView";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { loadFaithJournal } from "@/lib/daily-mass/faith-journal";
 import type { FaithJournalState } from "@/lib/daily-mass/faith-journal-shared";
 import { familyTalkFor } from "@/lib/daily-mass/family-talk";
@@ -141,6 +142,14 @@ export default async function DailyMassPage({
           journal={journal}
           calendar={calendarResult.calendar}
           calendarError={calendarResult.error}
+        />
+        <RelatedLinks
+          links={[
+            { href: "/sunday-mass-worksheets", label: "Sunday Mass worksheets" },
+            { href: "/qa-cards", label: "Catholic Q&A cards" },
+            { href: "/bible-verses-for-kids", label: "Bible verses for kids" },
+            { href: "/advent-complete-2026", label: "Advent Complete pack" },
+          ]}
         />
       </SidebarPagePanel>
     </HomePdfShell>
