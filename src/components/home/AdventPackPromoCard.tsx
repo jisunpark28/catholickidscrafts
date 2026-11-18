@@ -23,7 +23,6 @@ export function AdventPackPromoCard() {
       <h2 id="home-advent-pack-title" className="mt-1.5 text-xl font-bold leading-snug text-[#1f2937]">
         Advent Complete
       </h2>
-      <p className="mt-1 text-sm text-[#5b6575]">4 Sunday sheets (Year B) + 8 crafts &amp; activities</p>
 
       <ul className="mt-3 flex flex-wrap gap-1.5">
         {[

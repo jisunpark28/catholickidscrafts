@@ -119,21 +119,6 @@ function WeekCard({
   );
 }
 
-function PackFooterBridge() {
-  return (
-    <footer className="mt-8 border-t border-[#eadccd] pt-5 text-sm text-[#5b6575]">
-      <p>
-        Advent wreath &amp; family calendar: free with sign-in in{" "}
-        <Link href="/resource" className="font-semibold text-[#d35400] hover:underline">
-          Printables
-        </Link>
-        .
-      </p>
-      <p className="mt-1">Christmas crafts come in a separate Christmas Pack.</p>
-    </footer>
-  );
-}
-
 export function AdventCompletePackView({ isPlus }: { isPlus: boolean }) {
   const outline = adventPackOutline();
 
@@ -143,9 +128,6 @@ export function AdventCompletePackView({ isPlus }: { isPlus: boolean }) {
         2026 Advent Pack · {ADVENT_PACK_DATES}
       </p>
       <h1 className="mt-1.5 text-3xl font-bold tracking-tight text-[#1f2937] sm:text-4xl">Advent Complete</h1>
-      <p className="mt-1.5 max-w-2xl text-base text-[#5b6575]">
-        4 Sunday sheets (Year B) + 8 crafts &amp; activities for class and home.
-      </p>
 
       {isPlus ? (
         <p className="mt-3 text-sm text-[#6b7280]">
@@ -154,9 +136,6 @@ export function AdventCompletePackView({ isPlus }: { isPlus: boolean }) {
       ) : (
         <div className="mt-5 rounded-[22px] border border-[#eadccd] bg-[#fff6ef] px-4 py-4 sm:px-5">
           <p className="font-bold text-[#1f2937]">Plus unlocks this pack</p>
-          <p className="mt-1 text-sm text-[#5b6575]">
-            This Sunday&apos;s sheet stays free under Option E. The full Advent pack is Plus.
-          </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link href="/subscribe" className={primary}>
               Get Plus
@@ -173,8 +152,6 @@ export function AdventCompletePackView({ isPlus }: { isPlus: boolean }) {
           <WeekCard key={week.id} week={week} sheet={sheet} items={items} unlocked={isPlus} />
         ))}
       </div>
-
-      <PackFooterBridge />
     </div>
   );
 }
