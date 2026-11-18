@@ -254,15 +254,21 @@ async function main() {
     }
   }
 
-  // Daily schedule (Toronto dates), with fallbacks.
+  // Daily schedule (Toronto dates), with fallbacks. Through Christmas Eve 2026.
   for (const row of DAILY_ACTIVITY_SCHEDULE) assert.ok(getActivity(row.slug), row.slug);
-  assert.equal(DAILY_ACTIVITY_SCHEDULE.length, 18, "Nov 12 to Nov 29");
+  assert.equal(DAILY_ACTIVITY_SCHEDULE.length, 43, "Nov 12 to Dec 24");
+  assert.equal(DAILY_ACTIVITY_SCHEDULE[0]?.date, "2026-11-12");
+  assert.equal(DAILY_ACTIVITY_SCHEDULE.at(-1)?.date, "2026-12-24");
   assert.equal(dailyActivityFor("2026-11-12").activity.slug, "happy-new-church-year");
   assert.equal(dailyActivityFor("2026-11-13").activity.slug, "jesse-tree-ornaments");
   assert.ok(dailyActivityFor("2026-11-13").exact);
   assert.equal(dailyActivityFor("2026-11-29").activity.slug, "light-the-advent-candle");
-  assert.equal(dailyActivityFor("2026-12-03").activity.slug, "light-the-advent-candle", "after the plan: latest sheet");
-  assert.equal(dailyActivityFor("2026-12-03").exact, false);
+  assert.equal(dailyActivityFor("2026-12-03").activity.slug, "family-advent-calendar");
+  assert.ok(dailyActivityFor("2026-12-03").exact);
+  assert.equal(dailyActivityFor("2026-12-08").activity.slug, "white-flower-for-mary");
+  assert.equal(dailyActivityFor("2026-12-20").activity.slug, "jesse-tree-picture-a-day");
+  assert.equal(dailyActivityFor("2026-12-25").activity.slug, "straw-for-the-manger", "after the plan: latest sheet");
+  assert.equal(dailyActivityFor("2026-12-25").exact, false);
   assert.equal(dailyActivityFor("2026-11-01").activity.slug, "happy-new-church-year", "before the plan");
   assert.equal(dailyActivityFor("nope").activity.slug, "happy-new-church-year");
   assert.equal(torontoDate(new Date("2026-11-13T04:30:00Z")), "2026-11-12", "11:30 PM in Toronto is still Nov 12");
@@ -290,6 +296,7 @@ async function main() {
   assert.equal(homeActivityPicks("2026-11-12")[3].label, "Craft · Plus");
   const home = await fs.readFile("src/app/(site)/home-view.tsx", "utf8");
   assert.ok(home.includes("homeActivityPicks(today.date)"), "home row uses the ISR date rule (no request data)");
+  assert.ok(home.includes("AdventPackPromoCard"), "home shows Advent Complete promo");
   assert.ok(!/cookies\(|headers\(|getServerSession|auth\(\)/.test(home), "home stays static");
 
   console.log(`test-activities: ${RESOURCE_ACTIVITIES.length} activities, ${DAILY_ACTIVITY_SCHEDULE.length} scheduled days; Happy New Church Year ${doc.elements.length} editable elements (${[...kinds].map(([k, n]) => `${k} ${n}`).join(", ")}) OK`);

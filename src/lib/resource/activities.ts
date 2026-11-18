@@ -356,8 +356,8 @@ export function seasonActivityRecommendations(season: ResourceSeason): ResourceA
 
 /**
  * Which activity sheet matches the daily Instagram post (America/Toronto date). One Advent Q&A
- * "Try this" tip per day through Nov 29, 2026. Days without their own sheet show the latest
- * scheduled one; before the schedule starts, Happy New Church Year.
+ * "Try this" tip per day through Christmas Eve 2026. Days without their own sheet show the latest
+ * scheduled one; before the schedule starts, Happy New Church Year. Sign-in sheets only (no Plus crafts).
  */
 export const DAILY_ACTIVITY_SCHEDULE: readonly { date: string; slug: string }[] = [
   { date: "2026-11-12", slug: "happy-new-church-year" },
@@ -379,8 +379,33 @@ export const DAILY_ACTIVITY_SCHEDULE: readonly { date: string; slug: string }[] 
   { date: "2026-11-27", slug: "paper-advent-wreath" },
   // The eve of the new Church year.
   { date: "2026-11-28", slug: "happy-new-church-year" },
-  // First Sunday of Advent.
+  // Advent 2026 (First Sunday → Christmas Eve).
   { date: "2026-11-29", slug: "light-the-advent-candle" },
+  { date: "2026-11-30", slug: "come-lord-jesus" },
+  { date: "2026-12-01", slug: "colour-the-advent-candles" },
+  { date: "2026-12-02", slug: "paper-advent-wreath" },
+  { date: "2026-12-03", slug: "family-advent-calendar" },
+  { date: "2026-12-04", slug: "jesse-tree-ornaments" },
+  { date: "2026-12-05", slug: "come-lord-jesus" },
+  { date: "2026-12-06", slug: "straw-for-the-manger" },
+  { date: "2026-12-07", slug: "prepare-the-way" },
+  { date: "2026-12-08", slug: "white-flower-for-mary" },
+  { date: "2026-12-09", slug: "straw-for-the-manger" },
+  { date: "2026-12-10", slug: "helping-hands-like-mary" },
+  { date: "2026-12-11", slug: "yes-with-a-smile" },
+  { date: "2026-12-12", slug: "roses-for-mary" },
+  { date: "2026-12-13", slug: "jesse-tree-picture-a-day" },
+  { date: "2026-12-14", slug: "o-antiphon-ornaments" },
+  { date: "2026-12-15", slug: "jesse-tree-picture-a-day" },
+  { date: "2026-12-16", slug: "secret-kindness-notes" },
+  { date: "2026-12-17", slug: "come-lord-jesus" },
+  { date: "2026-12-18", slug: "straw-for-the-manger" },
+  { date: "2026-12-19", slug: "jesse-tree-picture-a-day" },
+  { date: "2026-12-20", slug: "jesse-tree-picture-a-day" },
+  { date: "2026-12-21", slug: "white-flower-for-mary" },
+  { date: "2026-12-22", slug: "jesse-tree-picture-a-day" },
+  { date: "2026-12-23", slug: "light-the-advent-candle" },
+  { date: "2026-12-24", slug: "straw-for-the-manger" },
 ];
 
 export const DEFAULT_DAILY_ACTIVITY = "happy-new-church-year";

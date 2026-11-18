@@ -44,6 +44,9 @@ importers:
       fabric:
         specifier: ^6.7.1
         version: 6.9.1
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3

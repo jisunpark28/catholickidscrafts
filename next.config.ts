@@ -32,6 +32,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/resource/cards/*/download": ["./assets/card-originals/*.png"],
     "/api/resource/activities/*/download": ["./assets/activities/**/*.pdf"],
+    "/api/resource/advent-complete-2026/download": ["./assets/activities/**/*.pdf"],
   },
   poweredByHeader: false,
   transpilePackages: ["fabric"],
