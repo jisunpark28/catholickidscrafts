@@ -9,11 +9,12 @@ import {
   type ResourceActivity,
 } from "@/lib/resource/activities";
 import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
-import { resourcePrintPath } from "@/lib/resource/sheets";
+import { resourcePath, resourcePrintPath } from "@/lib/resource/sheets";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
 
 export const ADVENT_PACK_PATH = "/advent-complete-2026";
 export const ADVENT_PACK_DATES = "Nov 29 – Dec 20, 2026";
+export const ADVENT_PACK_DOWNLOAD_PATH = "/api/resource/advent-complete-2026/download";
 
 export type AdventPackActivityRef = {
   slug: string;
@@ -31,6 +32,9 @@ export type AdventPackWeek = {
   sheetKey: string;
   items: AdventPackActivityRef[];
 };
+
+/** `all` or a week id from ADVENT_PACK_WEEKS / ADVENT_PACK_BONUS. */
+export type AdventPackDownloadScope = "all" | string;
 
 /** Live 8 + sheets + IC bonus. Wreath/calendar stay out (footer bridge only). */
 export const ADVENT_PACK_WEEKS: readonly AdventPackWeek[] = [
@@ -94,6 +98,7 @@ export type AdventPackSheetLinks = {
   gospelRef: string;
   l1Title: string;
   l2Title: string;
+  openHref: string;
   printL1: string;
   printL2: string;
   editL1: string;
@@ -109,11 +114,68 @@ export function adventPackSheetLinks(key: string): AdventPackSheetLinks | null {
     gospelRef: sheet.gospelRef,
     l1Title: sheet.levels.level1.title,
     l2Title: sheet.levels.level2.title,
+    openHref: resourcePath(key, 1),
     printL1: resourcePrintPath(key, 1),
     printL2: resourcePrintPath(key, 2),
     editL1: resourceEditPath(key, 1),
     editL2: resourceEditPath(key, 2),
   };
+}
+
+export function packWeekAnchor(weekId: string): string {
+  return `pack-${weekId}`;
+}
+
+export function packSheetAnchor(weekId: string): string {
+  return `pack-${weekId}-sheet`;
+}
+
+export function packItemAnchor(weekId: string, slug: string, role: string): string {
+  return `pack-${weekId}-${role}-${slug}`;
+}
+
+export function parsePackDownloadScope(raw: string | null | undefined): AdventPackDownloadScope | null {
+  if (raw === "all") return "all";
+  if (raw && [...ADVENT_PACK_WEEKS, ADVENT_PACK_BONUS].some((w) => w.id === raw)) {
+    return raw as AdventPackDownloadScope;
+  }
+  return null;
+}
+
+/** Weeks included in a Download-all scope. */
+export function weeksForPackScope(scope: AdventPackDownloadScope): AdventPackWeek[] {
+  const all = [...ADVENT_PACK_WEEKS, ADVENT_PACK_BONUS];
+  if (scope === "all") return all;
+  return all.filter((w) => w.id === scope);
+}
+
+/** Unique activity slugs for ZIP (BW + colour each). */
+export function packActivitySlugsForScope(scope: AdventPackDownloadScope): string[] {
+  const seen = new Set<string>();
+  const slugs: string[] = [];
+  for (const week of weeksForPackScope(scope)) {
+    for (const item of week.items) {
+      if (seen.has(item.slug)) continue;
+      if (!getActivity(item.slug)) continue;
+      seen.add(item.slug);
+      slugs.push(item.slug);
+    }
+  }
+  return slugs;
+}
+
+export function packSheetPrintUrlsForScope(scope: AdventPackDownloadScope): string[] {
+  const urls: string[] = [];
+  for (const week of weeksForPackScope(scope)) {
+    const sheet = adventPackSheetLinks(week.sheetKey);
+    if (!sheet) continue;
+    urls.push(sheet.printL1, sheet.printL2);
+  }
+  return urls;
+}
+
+export function packDownloadPath(scope: AdventPackDownloadScope): string {
+  return `${ADVENT_PACK_DOWNLOAD_PATH}?scope=${scope}`;
 }
 
 export type AdventPackItemView = AdventPackActivityRef & {
