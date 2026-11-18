@@ -42,6 +42,7 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/mass", "daily", 0.95],
   ["/daily-mass", "daily", 0.95],
   ["/resource", "weekly", 0.9],
+  ["/advent-complete-2026", "weekly", 0.85],
   [SUNDAY_MASS_WORKSHEETS_HUB, "weekly", 0.9],
   [MASS_FOR_KIDS_HUB, "monthly", 0.85],
   [VIRTUE_CHALLENGE_HUB, "monthly", 0.85],

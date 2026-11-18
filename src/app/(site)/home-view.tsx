@@ -1,3 +1,4 @@
+import { AdventPackPromoCard } from "@/components/home/AdventPackPromoCard";
 import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { SundaySheetHero } from "@/components/home/SundaySheetHero";
@@ -184,11 +185,20 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
           </span>
         </Link>
 
+        {/*
+          Top grid: Advent promo + Sunday sheet + Kid Mission + Mom's Bible.
+          There is no liturgy Q&A card on `/` today; promo sits beside the Sunday sheet
+          (plan: beside Q&A). Mobile: promo order-first so it is not buried under the tall sheet.
+        */}
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-[1.55fr_1fr] xl:gap-[18px]">
+          <div className="order-1 sm:col-span-2 xl:col-span-1 xl:order-2">
+            <AdventPackPromoCard />
+          </div>
+
           {sheet ? (
             <section
               aria-labelledby="home-sunday-title"
-              className="flex flex-col justify-center rounded-[26px] border border-[#f1e4d6] bg-gradient-to-br from-[#fff1e2] via-[#fdfaf7] to-[#fdfaf7] p-4 shadow-[0_14px_32px_-18px_rgba(211,84,0,0.4)] sm:col-span-2 sm:p-[22px] xl:col-span-1 xl:row-span-2"
+              className="order-2 flex flex-col justify-center rounded-[26px] border border-[#f1e4d6] bg-gradient-to-br from-[#fff1e2] via-[#fdfaf7] to-[#fdfaf7] p-4 shadow-[0_14px_32px_-18px_rgba(211,84,0,0.4)] sm:col-span-2 sm:p-[22px] xl:order-1 xl:col-span-1 xl:row-span-3"
             >
               <SundaySheetHero
                 slug={sheet.slug}
@@ -208,7 +218,7 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
           {/* Today's Kid Mission: the word comes from this Sunday's Level 1 sheet (getHomeToday). */}
           <section
             aria-labelledby="home-kid-title"
-            className="rounded-[26px] border border-[#dbe5f7] bg-gradient-to-br from-[#e3ecfb] via-[#f8faff] to-[#f8faff] px-5 py-[18px]"
+            className="order-3 rounded-[26px] border border-[#dbe5f7] bg-gradient-to-br from-[#e3ecfb] via-[#f8faff] to-[#f8faff] px-5 py-[18px] xl:order-3"
           >
             <div className="flex items-center justify-between">
               <h2 id="home-kid-title" className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#3b6fd8]">
@@ -253,7 +263,7 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
           {/* Mom's Bible: chips are existing situations and open that situation on /moms-bible/situations. */}
           <section
             aria-labelledby="home-mom-title"
-            className="rounded-[26px] border border-[#f3e6b5] bg-gradient-to-br from-[#fdf3c7] via-[#fffdf5] to-[#fffdf5] px-5 py-[18px]"
+            className="order-4 rounded-[26px] border border-[#f3e6b5] bg-gradient-to-br from-[#fdf3c7] via-[#fffdf5] to-[#fffdf5] px-5 py-[18px] xl:order-4"
           >
             <div className="flex items-center justify-between">
               <h2 id="home-mom-title" className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#a87b00]">
