@@ -10,8 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = pageMetadata({
   title: "Advent Complete 2026 Pack",
-  description:
-    "Plus pack: 4 Year B Advent Sunday sheets (L1+L2), Dec 8 bonus, and 8 crafts & activities for class and home.",
+  description: "Advent Complete 2026: Year B Sunday sheets, Dec 8 bonus, and Advent crafts for Plus members.",
   path: ADVENT_PACK_PATH,
 });
 
