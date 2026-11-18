@@ -1,5 +1,5 @@
 import { AdventCompletePackView } from "@/components/advent/AdventCompletePackView";
-import { PageShell } from "@/components/PageShell";
+import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { ADVENT_PACK_PATH } from "@/lib/advent-complete-2026";
 import { resolveResourceViewer } from "@/lib/resource/resolve-access";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -18,13 +18,13 @@ export default async function AdventComplete2026Page() {
   const viewer = await resolveResourceViewer();
 
   return (
-    <PageShell>
+    <HomePdfShell groups={[]}>
       <Link href="/" className="text-sm font-semibold text-[var(--color-link)]">
         ← Home
       </Link>
       <div className="mt-4">
         <AdventCompletePackView isPlus={viewer.isPlus} />
       </div>
-    </PageShell>
+    </HomePdfShell>
   );
 }
