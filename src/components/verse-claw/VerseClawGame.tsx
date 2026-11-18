@@ -18,7 +18,6 @@ import "./verse-claw.css";
 type Phase = "idle" | "drop" | "close" | "lift" | "dispense" | "won";
 
 const STEP = 8;
-const WIN_LAMB = "/games/verse-claw/win-lamb.png";
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
@@ -406,7 +405,7 @@ export function VerseClawGame() {
             <div className="vc-popup-hero">
               <span className="vc-hero-glow" aria-hidden="true" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={WIN_LAMB} alt="" />
+              <img src={caught.src} alt="" />
             </div>
             <h2 id="vc-win-title" className="vc-win-title">
               <span className="vc-you-caught">You caught</span>
