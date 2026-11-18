@@ -623,7 +623,7 @@ export const VERSE_CLAW_VERSES: VerseClawVerse[] = [
     chapter: 8,
     verse: 12,
     ref: "John 8:12",
-    text: "Again therefore, Jesus spoke to: them, saying: I am the light of the world. He that followeth me walketh not in darkness, but shall have the light of life.",
+    text: "Again therefore, Jesus spoke to them, saying: I am the light of the world. He that followeth me walketh not in darkness, but shall have the light of life.",
     keepnote: "Jesus is the light that never goes out.",
     dolls: ["night-star", "halo-lamb"],
   },
