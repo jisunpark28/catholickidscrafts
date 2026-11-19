@@ -1,8 +1,7 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
 import { SidebarPagePanel } from "@/components/SidebarPagePanel";
-import { QaFlipCards } from "@/components/liturgy/QaFlipCards";
 import { QaPageHeader } from "@/components/liturgy/QaPageHeader";
-import { RosaryCard } from "@/components/prayers/RosaryCard";
+import { PrayerGrid } from "@/components/prayers/PrayerGrid";
 import { loadPublishedQa } from "@/lib/liturgy-qa";
 import { pageMetadata } from "@/lib/site-metadata";
 import type { Metadata } from "next";
@@ -18,6 +17,7 @@ export const metadata: Metadata = pageMetadata({
 });
 
 // Prayer cards are edited in admin: saves call revalidatePath, and the hourly refresh is a fallback.
+// Each prayer opens full screen on the client (?prayer=<slug>), so the page stays static.
 export const revalidate = 3600;
 
 export default async function PrayersPage() {
@@ -30,18 +30,12 @@ export default async function PrayersPage() {
         {qa ? (
           <>
             <QaPageHeader topic={qa.topic} showBigIdeaLabel={false} />
-            <QaFlipCards
-              cards={qa.cards}
-              variant="prayer"
-              cardBackColor={qa.topic.cardBackColor}
-              extra={<RosaryCard />}
-              extraAfter="Hail Mary"
-            />
+            <PrayerGrid cards={qa.cards} cardBackColor={qa.topic.cardBackColor} />
           </>
         ) : (
           <>
             <h1 className="mb-4 text-2xl font-bold">Catholic Prayers</h1>
-            <QaFlipCards cards={[]} variant="prayer" extra={<RosaryCard />} />
+            <PrayerGrid cards={[]} />
           </>
         )}
       </SidebarPagePanel>

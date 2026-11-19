@@ -1,0 +1,3914 @@
+{
+ "prayers": [
+  {
+   "slug": "sign-of-the-cross",
+   "title": "Sign of the Cross",
+   "phase": 1,
+   "source": "USCCB, United States Catholic Catechism for Adults (2006), Appendix B; Vatican, Compendium of the CCC (2005), Appendix",
+   "cover": "PRY-001",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "In the name of the Father",
+     "art": "Touch Your Forehead",
+     "little": {
+      "answer": "Father",
+      "options": [
+       "Father",
+       "Son",
+       "Friend"
+      ]
+     },
+     "blanks": [
+      "Father"
+     ],
+     "prompt": "Which part of the Trinity do we name first? Hand on forehead.",
+     "words": 6,
+     "letters": "I t n o t F"
+    },
+    {
+     "n": 2,
+     "text": "and of the Son",
+     "art": "Touch Your Heart",
+     "little": {
+      "answer": "Son",
+      "options": [
+       "Son",
+       "Spirit",
+       "Star"
+      ]
+     },
+     "blanks": [
+      "Son"
+     ],
+     "prompt": "Who do we name when our hand moves to our chest?",
+     "words": 4,
+     "letters": "a o t S"
+    },
+    {
+     "n": 3,
+     "text": "and of the Holy Spirit.",
+     "art": "Shoulder to Shoulder",
+     "card": "FEA-017",
+     "little": {
+      "answer": "Spirit",
+      "options": [
+       "Spirit",
+       "Amen",
+       "Tree"
+      ]
+     },
+     "blanks": [
+      "Holy",
+      "Spirit"
+     ],
+     "prompt": "Look at the dove. Whose name do we say shoulder to shoulder?",
+     "words": 5,
+     "letters": "a o t H S"
+    },
+    {
+     "n": 4,
+     "text": "Amen.",
+     "art": "Hands Together, Amen!",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "Father",
+       "Friend"
+      ]
+     },
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "What word do we say at the end of every prayer?",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "glory-be",
+   "title": "Glory Be",
+   "phase": 1,
+   "source": "USCCB, United States Catholic Catechism for Adults (2006), Appendix B (traditional wording); punctuation as in USCCB family prayers",
+   "cover": "PRY-004",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Glory be to the Father,",
+     "art": "Glory to the Father",
+     "img": "sign-of-the-cross/01",
+     "little": {
+      "answer": "Glory",
+      "options": [
+       "Glory",
+       "Son",
+       "Moon"
+      ]
+     },
+     "blanks": [
+      "Glory",
+      "Father"
+     ],
+     "prompt": "What do we give to the Father? Look at the shining light.",
+     "words": 5,
+     "letters": "G b t t F"
+    },
+    {
+     "n": 2,
+     "text": "and to the Son,",
+     "art": "Glory to the Son",
+     "img": "sign-of-the-cross/02",
+     "little": {
+      "answer": "Son",
+      "options": [
+       "Son",
+       "Spirit",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "Son"
+     ],
+     "prompt": "Who comes next after the Father?",
+     "words": 4,
+     "letters": "a t t S"
+    },
+    {
+     "n": 3,
+     "text": "and to the Holy Spirit.",
+     "art": "Glory to the Holy Spirit",
+     "img": "sign-of-the-cross/03",
+     "little": {
+      "answer": "Spirit",
+      "options": [
+       "Spirit",
+       "beginning",
+       "Song"
+      ]
+     },
+     "blanks": [
+      "Holy",
+      "Spirit"
+     ],
+     "prompt": "Look at the dove. Who is it?",
+     "words": 5,
+     "letters": "a t t H S"
+    },
+    {
+     "n": 4,
+     "text": "As it was in the beginning,",
+     "art": "In the Beginning",
+     "card": "BIB-001",
+     "little": {
+      "answer": "beginning",
+      "options": [
+       "beginning",
+       "now",
+       "Moon"
+      ]
+     },
+     "blanks": [
+      "was",
+      "beginning"
+     ],
+     "prompt": "When was God's glory already there?",
+     "words": 6,
+     "letters": "A i w i t b"
+    },
+    {
+     "n": 5,
+     "text": "is now, and ever shall be,",
+     "art": "Now and Always",
+     "little": {
+      "answer": "now",
+      "options": [
+       "now",
+       "end",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "now",
+      "ever"
+     ],
+     "prompt": "Is God's glory only long ago? Write the words about today and always.",
+     "words": 6,
+     "letters": "i n a e s b"
+    },
+    {
+     "n": 6,
+     "text": "world without end. Amen.",
+     "art": "Forever and Ever",
+     "little": {
+      "answer": "end",
+      "options": [
+       "end",
+       "Glory",
+       "Song"
+      ]
+     },
+     "blanks": [
+      "world",
+      "end"
+     ],
+     "prompt": "Does God's glory ever stop? Write the last line.",
+     "words": 4,
+     "letters": "w w e A"
+    }
+   ]
+  },
+  {
+   "slug": "hail-mary",
+   "title": "Hail Mary",
+   "phase": 1,
+   "source": "USCCB, usccb.org/prayers/hail-mary; USCCA (2006) Appendix B",
+   "cover": "PRY-003",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Hail, Mary, full of grace,",
+     "art": "The Angel Greets Mary",
+     "card": "FEA-023",
+     "little": {
+      "answer": "Mary",
+      "options": [
+       "Mary",
+       "Lord",
+       "King"
+      ]
+     },
+     "blanks": [
+      "Mary",
+      "grace"
+     ],
+     "prompt": "Who did the angel greet? What is she full of?",
+     "words": 5,
+     "letters": "H M f o g"
+    },
+    {
+     "n": 2,
+     "text": "the Lord is with thee.",
+     "art": "God Is with Mary",
+     "little": {
+      "answer": "Lord",
+      "options": [
+       "Lord",
+       "Blessed",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "Lord",
+      "with"
+     ],
+     "prompt": "Who is with Mary?",
+     "words": 5,
+     "letters": "t L i w t"
+    },
+    {
+     "n": 3,
+     "text": "Blessed art thou among women",
+     "art": "Blessed Mary",
+     "card": "FEA-040",
+     "little": {
+      "answer": "Blessed",
+      "options": [
+       "Blessed",
+       "Jesus",
+       "Bread"
+      ]
+     },
+     "blanks": [
+      "Blessed",
+      "women"
+     ],
+     "prompt": "What did Elizabeth call Mary when they met?",
+     "words": 5,
+     "letters": "B a t a w"
+    },
+    {
+     "n": 4,
+     "text": "and blessed is the fruit of thy womb, Jesus.",
+     "art": "Baby Jesus",
+     "card": "FEA-001",
+     "little": {
+      "answer": "Jesus",
+      "options": [
+       "Jesus",
+       "Mother",
+       "King"
+      ]
+     },
+     "blanks": [
+      "fruit",
+      "Jesus"
+     ],
+     "prompt": "Who is Mary's baby?",
+     "words": 9,
+     "letters": "a b i t f o t w J"
+    },
+    {
+     "n": 5,
+     "text": "Holy Mary, Mother of God,",
+     "art": "Mother of God",
+     "card": "FEA-003",
+     "little": {
+      "answer": "Mother",
+      "options": [
+       "Mother",
+       "pray",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "Holy",
+      "Mother"
+     ],
+     "prompt": "What is Mary's special name here?",
+     "words": 5,
+     "letters": "H M M o G"
+    },
+    {
+     "n": 6,
+     "text": "pray for us sinners,",
+     "art": "Mary Prays for Us",
+     "little": {
+      "answer": "pray",
+      "options": [
+       "pray",
+       "now",
+       "Bread"
+      ]
+     },
+     "blanks": [
+      "pray",
+      "sinners"
+     ],
+     "prompt": "What do we ask Mary to do for us?",
+     "words": 4,
+     "letters": "p f u s"
+    },
+    {
+     "n": 7,
+     "text": "now and at the hour of our death.",
+     "art": "Now and Always with Mary",
+     "little": {
+      "answer": "now",
+      "options": [
+       "now",
+       "Amen",
+       "King"
+      ]
+     },
+     "blanks": [
+      "now",
+      "hour"
+     ],
+     "prompt": "When do we ask Mary to pray for us? Write both times.",
+     "words": 8,
+     "letters": "n a a t h o o d"
+    },
+    {
+     "n": 8,
+     "text": "Amen.",
+     "art": "Amen",
+     "img": "sign-of-the-cross/04",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "Mary",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "How do we end the prayer?",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "our-father",
+   "title": "Our Father",
+   "phase": 1,
+   "source": "USCCB, usccb.org/prayers/our-father; USCCA (2006) Appendix B",
+   "cover": "PRY-002",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Our Father, who art in heaven,",
+     "art": "Our Father in Heaven",
+     "card": "MAS-020",
+     "little": {
+      "answer": "Father",
+      "options": [
+       "Father",
+       "name",
+       "Star"
+      ]
+     },
+     "blanks": [
+      "Father",
+      "heaven"
+     ],
+     "prompt": "Who do we talk to, and where is he?",
+     "words": 6,
+     "letters": "O F w a i h"
+    },
+    {
+     "n": 2,
+     "text": "hallowed be thy name;",
+     "art": "Holy Is Your Name",
+     "little": {
+      "answer": "name",
+      "options": [
+       "name",
+       "kingdom",
+       "Fish"
+      ]
+     },
+     "blanks": [
+      "hallowed",
+      "name"
+     ],
+     "prompt": "What do we say is holy?",
+     "words": 4,
+     "letters": "h b t n"
+    },
+    {
+     "n": 3,
+     "text": "thy kingdom come;",
+     "art": "Your Kingdom Come",
+     "little": {
+      "answer": "kingdom",
+      "options": [
+       "kingdom",
+       "earth",
+       "Song"
+      ]
+     },
+     "blanks": [
+      "kingdom",
+      "come"
+     ],
+     "prompt": "What do we ask to come?",
+     "words": 3,
+     "letters": "t k c"
+    },
+    {
+     "n": 4,
+     "text": "thy will be done on earth as it is in heaven.",
+     "art": "Your Will on Earth",
+     "little": {
+      "answer": "earth",
+      "options": [
+       "earth",
+       "bread",
+       "Star"
+      ]
+     },
+     "blanks": [
+      "will",
+      "earth",
+      "heaven"
+     ],
+     "prompt": "Where do we want God's will to be done? Name both places.",
+     "words": 11,
+     "letters": "t w b d o e a i i i h"
+    },
+    {
+     "n": 5,
+     "text": "Give us this day our daily bread,",
+     "art": "Our Daily Bread",
+     "little": {
+      "answer": "bread",
+      "options": [
+       "bread",
+       "forgive",
+       "Fish"
+      ]
+     },
+     "blanks": [
+      "day",
+      "bread"
+     ],
+     "prompt": "What do we ask God to give us today?",
+     "words": 7,
+     "letters": "G u t d o d b"
+    },
+    {
+     "n": 6,
+     "text": "and forgive us our trespasses,",
+     "art": "Forgive Us",
+     "card": "BIB-034",
+     "little": {
+      "answer": "forgive",
+      "options": [
+       "forgive",
+       "lead",
+       "Song"
+      ]
+     },
+     "blanks": [
+      "forgive",
+      "trespasses"
+     ],
+     "prompt": "What do we ask God to do for our wrong choices?",
+     "words": 5,
+     "letters": "a f u o t"
+    },
+    {
+     "n": 7,
+     "text": "as we forgive those who trespass against us;",
+     "art": "We Forgive Too",
+     "card": "VIR-069",
+     "little": {
+      "answer": "forgive",
+      "options": [
+       "forgive",
+       "evil",
+       "Star"
+      ]
+     },
+     "blanks": [
+      "we",
+      "forgive"
+     ],
+     "prompt": "What do we promise to do for others?",
+     "words": 8,
+     "letters": "a w f t w t a u"
+    },
+    {
+     "n": 8,
+     "text": "and lead us not into temptation,",
+     "art": "Lead Us on the Right Path",
+     "little": {
+      "answer": "lead",
+      "options": [
+       "lead",
+       "evil",
+       "Fish"
+      ]
+     },
+     "blanks": [
+      "lead",
+      "temptation"
+     ],
+     "prompt": "Look at the path. What do we ask God to do?",
+     "words": 6,
+     "letters": "a l u n i t"
+    },
+    {
+     "n": 9,
+     "text": "but deliver us from evil. Amen.",
+     "art": "Keep Us Safe",
+     "little": {
+      "answer": "evil",
+      "options": [
+       "evil",
+       "Father",
+       "Song"
+      ]
+     },
+     "blanks": [
+      "deliver",
+      "evil"
+     ],
+     "prompt": "What do we ask God to keep us from? Write the last line.",
+     "words": 6,
+     "letters": "b d u f e A"
+    }
+   ]
+  },
+  {
+   "slug": "guardian-angel",
+   "title": "Guardian Angel Prayer",
+   "phase": 2,
+   "source": "USCCA (2006) Appendix B; Vatican, Compendium of the CCC (2005), Appendix",
+   "cover": "PRY-007",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Angel of God,",
+     "art": "Angel of God",
+     "card": "FEA-029",
+     "little": {
+      "answer": "Angel",
+      "options": [
+       "Angel",
+       "guardian",
+       "Bird"
+      ]
+     },
+     "blanks": [
+      "Angel",
+      "God"
+     ],
+     "prompt": "Who is God's helper in the picture?",
+     "words": 3,
+     "letters": "A o G"
+    },
+    {
+     "n": 2,
+     "text": "my guardian dear,",
+     "art": "My Guardian",
+     "little": {
+      "answer": "guardian",
+      "options": [
+       "guardian",
+       "love",
+       "Teacher"
+      ]
+     },
+     "blanks": [
+      "guardian",
+      "dear"
+     ],
+     "prompt": "What do we call our angel?",
+     "words": 3,
+     "letters": "m g d"
+    },
+    {
+     "n": 3,
+     "text": "to whom God's love commits me here,",
+     "art": "Given by God's Love",
+     "little": {
+      "answer": "love",
+      "options": [
+       "love",
+       "side",
+       "Moon"
+      ]
+     },
+     "blanks": [
+      "love",
+      "here"
+     ],
+     "prompt": "Why is the angel with me?",
+     "words": 7,
+     "letters": "t w G l c m h"
+    },
+    {
+     "n": 4,
+     "text": "ever this day be at my side,",
+     "art": "At My Side All Day",
+     "little": {
+      "answer": "side",
+      "options": [
+       "side",
+       "light",
+       "Bird"
+      ]
+     },
+     "blanks": [
+      "day",
+      "side"
+     ],
+     "prompt": "Where do we ask the angel to be?",
+     "words": 7,
+     "letters": "e t d b a m s"
+    },
+    {
+     "n": 5,
+     "text": "to light and guard,",
+     "art": "Light and Guard",
+     "little": {
+      "answer": "light",
+      "options": [
+       "light",
+       "guide",
+       "Teacher"
+      ]
+     },
+     "blanks": [
+      "light",
+      "guard"
+     ],
+     "prompt": "What two things does the angel do first?",
+     "words": 4,
+     "letters": "t l a g"
+    },
+    {
+     "n": 6,
+     "text": "to rule and guide.",
+     "art": "Rule and Guide",
+     "little": {
+      "answer": "guide",
+      "options": [
+       "guide",
+       "Amen",
+       "Moon"
+      ]
+     },
+     "blanks": [
+      "rule",
+      "guide"
+     ],
+     "prompt": "What two things does the angel do next?",
+     "words": 4,
+     "letters": "t r a g"
+    },
+    {
+     "n": 7,
+     "text": "Amen.",
+     "art": "Amen",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "Angel",
+       "Bird"
+      ]
+     },
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "How do we end the prayer?",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "grace-before-meals",
+   "title": "Grace Before Meals",
+   "phase": 2,
+   "source": "USCCA (2006) Appendix B",
+   "cover": "PRY-008",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Bless us, O Lord,",
+     "art": "Bless Us",
+     "little": {
+      "answer": "Bless",
+      "options": [
+       "Bless",
+       "gifts",
+       "Ball"
+      ]
+     },
+     "blanks": [
+      "Bless",
+      "Lord"
+     ],
+     "prompt": "What do we ask the Lord to do for us?",
+     "words": 4,
+     "letters": "B u O L"
+    },
+    {
+     "n": 2,
+     "text": "and these thy gifts,",
+     "art": "These Gifts",
+     "little": {
+      "answer": "gifts",
+      "options": [
+       "gifts",
+       "receive",
+       "Book"
+      ]
+     },
+     "blanks": [
+      "gifts"
+     ],
+     "prompt": "What does God give us on the table?",
+     "words": 4,
+     "letters": "a t t g"
+    },
+    {
+     "n": 3,
+     "text": "which we are about to receive",
+     "art": "About to Receive",
+     "little": {
+      "answer": "receive",
+      "options": [
+       "receive",
+       "bounty",
+       "Shoe"
+      ]
+     },
+     "blanks": [
+      "receive"
+     ],
+     "prompt": "What are we about to do with the food?",
+     "words": 6,
+     "letters": "w w a a t r"
+    },
+    {
+     "n": 4,
+     "text": "from thy bounty,",
+     "art": "From God's Bounty",
+     "little": {
+      "answer": "bounty",
+      "options": [
+       "bounty",
+       "Christ",
+       "Ball"
+      ]
+     },
+     "blanks": [
+      "bounty"
+     ],
+     "prompt": "Where does all the food come from?",
+     "words": 3,
+     "letters": "f t b"
+    },
+    {
+     "n": 5,
+     "text": "through Christ our Lord.",
+     "art": "Through Christ",
+     "little": {
+      "answer": "Christ",
+      "options": [
+       "Christ",
+       "Amen",
+       "Book"
+      ]
+     },
+     "blanks": [
+      "Christ",
+      "Lord"
+     ],
+     "prompt": "Through whom do we pray?",
+     "words": 4,
+     "letters": "t C o L"
+    },
+    {
+     "n": 6,
+     "text": "Amen.",
+     "art": "Let's Eat!",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "Bless",
+       "Shoe"
+      ]
+     },
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "How do we end the prayer?",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "grace-after-meals",
+   "title": "Grace After Meals",
+   "phase": 2,
+   "source": "USCCA (2006) Appendix B (bracketed line is optional)",
+   "cover": "PRY-009",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "We give thee thanks, for all thy benefits,",
+     "art": "Thank You, God",
+     "little": {
+      "answer": "thanks",
+      "options": [
+       "thanks",
+       "God",
+       "Tree"
+      ]
+     },
+     "blanks": [
+      "thanks",
+      "benefits"
+     ],
+     "prompt": "What do we give God after eating?",
+     "words": 8,
+     "letters": "W g t t f a t b"
+    },
+    {
+     "n": 2,
+     "text": "Almighty God,",
+     "art": "Almighty God",
+     "img": "glory-be/01",
+     "little": {
+      "answer": "God",
+      "options": [
+       "God",
+       "ever",
+       "Ship"
+      ]
+     },
+     "blanks": [
+      "Almighty",
+      "God"
+     ],
+     "prompt": "Who do we thank?",
+     "words": 2,
+     "letters": "A G"
+    },
+    {
+     "n": 3,
+     "text": "who live and reign for ever.",
+     "art": "God Reigns Forever",
+     "little": {
+      "answer": "ever",
+      "options": [
+       "ever",
+       "souls",
+       "Kite"
+      ]
+     },
+     "blanks": [
+      "reign",
+      "ever"
+     ],
+     "prompt": "How long does God reign?",
+     "words": 6,
+     "letters": "w l a r f e"
+    },
+    {
+     "n": 4,
+     "text": "[And may the souls of the faithful departed,",
+     "art": "We Remember",
+     "little": {
+      "answer": "souls",
+      "options": [
+       "souls",
+       "peace",
+       "Tree"
+      ]
+     },
+     "blanks": [
+      "souls",
+      "departed"
+     ],
+     "prompt": "Who do we remember? (optional line)",
+     "words": 8,
+     "letters": "A m t s o t f d"
+    },
+    {
+     "n": 5,
+     "text": "through the mercy of God, rest in peace.]",
+     "art": "Rest in Peace",
+     "little": {
+      "answer": "peace",
+      "options": [
+       "peace",
+       "Amen",
+       "Ship"
+      ]
+     },
+     "blanks": [
+      "mercy",
+      "peace"
+     ],
+     "prompt": "What do we ask for them? (optional line)",
+     "words": 8,
+     "letters": "t t m o G r i p"
+    },
+    {
+     "n": 6,
+     "text": "Amen.",
+     "art": "Amen",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "thanks",
+       "Kite"
+      ]
+     },
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "How do we end the prayer?",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "apostles-creed",
+   "title": "Apostles' Creed",
+   "phase": 2,
+   "source": "USCCB, usccb.org/prayers/apostles-creed; USCCA (2006) Appendix B",
+   "cover": "PRY-005",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "I believe in God, the Father almighty,",
+     "art": "I Believe in God",
+     "img": "our-father/01",
+     "blanks": [
+      "believe",
+      "Father"
+     ],
+     "prompt": "What is the first thing we say we believe?",
+     "words": 7,
+     "letters": "I b i G t F a"
+    },
+    {
+     "n": 2,
+     "text": "Creator of heaven and earth,",
+     "art": "Creator of All",
+     "card": "BIB-001",
+     "blanks": [
+      "Creator",
+      "heaven",
+      "earth"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "C o h a e"
+    },
+    {
+     "n": 3,
+     "text": "and in Jesus Christ, his only Son, our Lord,",
+     "art": "Jesus, God's Son",
+     "blanks": [
+      "Jesus",
+      "Son",
+      "Lord"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "a i J C h o S o L"
+    },
+    {
+     "n": 4,
+     "text": "who was conceived by the Holy Spirit,",
+     "art": "By the Holy Spirit",
+     "img": "hail-mary/01",
+     "blanks": [
+      "conceived",
+      "Spirit"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "w w c b t H S"
+    },
+    {
+     "n": 5,
+     "text": "born of the Virgin Mary,",
+     "art": "Born of Mary",
+     "img": "hail-mary/04",
+     "blanks": [
+      "born",
+      "Mary"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "b o t V M"
+    },
+    {
+     "n": 6,
+     "text": "suffered under Pontius Pilate,",
+     "art": "Before Pilate",
+     "blanks": [
+      "suffered",
+      "Pilate"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "s u P P"
+    },
+    {
+     "n": 7,
+     "text": "was crucified, died and was buried;",
+     "art": "The Cross and the Tomb",
+     "card": "FEA-012",
+     "blanks": [
+      "crucified",
+      "buried"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "w c d a w b"
+    },
+    {
+     "n": 8,
+     "text": "he descended into hell;",
+     "art": "Jesus Brings Light",
+     "blanks": [
+      "descended"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "h d i h"
+    },
+    {
+     "n": 9,
+     "text": "on the third day he rose again from the dead;",
+     "art": "Jesus Is Risen!",
+     "card": "FEA-014",
+     "blanks": [
+      "third",
+      "rose"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "o t t d h r a f t d"
+    },
+    {
+     "n": 10,
+     "text": "he ascended into heaven,",
+     "art": "Up to Heaven",
+     "card": "FEA-016",
+     "blanks": [
+      "ascended",
+      "heaven"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "h a i h"
+    },
+    {
+     "n": 11,
+     "text": "and is seated at the right hand of God the Father almighty;",
+     "art": "At the Father's Right Hand",
+     "blanks": [
+      "seated",
+      "right"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 12,
+     "letters": "a i s a t r h o G t F a"
+    },
+    {
+     "n": 12,
+     "text": "from there he will come to judge the living and the dead.",
+     "art": "Jesus Will Come Again",
+     "blanks": [
+      "come",
+      "judge"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 12,
+     "letters": "f t h w c t j t l a t d"
+    },
+    {
+     "n": 13,
+     "text": "I believe in the Holy Spirit,",
+     "art": "The Holy Spirit",
+     "card": "FEA-017",
+     "blanks": [
+      "believe",
+      "Spirit"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "I b i t H S"
+    },
+    {
+     "n": 14,
+     "text": "the holy catholic Church,",
+     "art": "The Church",
+     "blanks": [
+      "holy",
+      "Church"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "t h c C"
+    },
+    {
+     "n": 15,
+     "text": "the communion of saints,",
+     "art": "The Saints",
+     "card": "FEA-030",
+     "blanks": [
+      "communion",
+      "saints"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "t c o s"
+    },
+    {
+     "n": 16,
+     "text": "the forgiveness of sins,",
+     "art": "Forgiveness",
+     "card": "SAC-005",
+     "blanks": [
+      "forgiveness",
+      "sins"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "t f o s"
+    },
+    {
+     "n": 17,
+     "text": "the resurrection of the body,",
+     "art": "We Will Rise",
+     "blanks": [
+      "resurrection",
+      "body"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "t r o t b"
+    },
+    {
+     "n": 18,
+     "text": "and life everlasting.",
+     "art": "Life Forever",
+     "blanks": [
+      "life",
+      "everlasting"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "a l e"
+    },
+    {
+     "n": 19,
+     "text": "Amen.",
+     "art": "Amen",
+     "img": "sign-of-the-cross/04",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "act-of-contrition",
+   "title": "Act of Contrition",
+   "phase": 2,
+   "source": "USCCB, usccb.org/prayers/act-contrition (Order of Penance, nos. 45 and 92; first form)",
+   "cover": "PRY-006",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "O my God, I am heartily sorry for having offended you,",
+     "art": "I Am Sorry",
+     "blanks": [
+      "sorry",
+      "offended"
+     ],
+     "prompt": "What do we tell God first?",
+     "words": 11,
+     "letters": "O m G I a h s f h o y"
+    },
+    {
+     "n": 2,
+     "text": "and I detest all my sins because of your just punishments,",
+     "art": "I Turn Away from Sin",
+     "blanks": [
+      "detest",
+      "sins"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "a I d a m s b o y j p"
+    },
+    {
+     "n": 3,
+     "text": "but most of all because they offend you, my God,",
+     "art": "Most of All, I Love You",
+     "blanks": [
+      "most",
+      "offend"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "b m o a b t o y m G"
+    },
+    {
+     "n": 4,
+     "text": "who are all good and deserving of all my love.",
+     "art": "God Is All Good",
+     "blanks": [
+      "good",
+      "love"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "w a a g a d o a m l"
+    },
+    {
+     "n": 5,
+     "text": "I firmly resolve, with the help of your grace,",
+     "art": "With Your Help",
+     "blanks": [
+      "resolve",
+      "grace"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "I f r w t h o y g"
+    },
+    {
+     "n": 6,
+     "text": "to sin no more",
+     "art": "I Will Try My Best",
+     "blanks": [
+      "sin",
+      "more"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "t s n m"
+    },
+    {
+     "n": 7,
+     "text": "and to avoid the near occasions of sin.",
+     "art": "Choose the Good Path",
+     "img": "our-father/08",
+     "blanks": [
+      "avoid",
+      "occasions"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "a t a t n o o s"
+    },
+    {
+     "n": 8,
+     "text": "Amen.",
+     "art": "Amen",
+     "card": "SAC-019",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "morning-offering",
+   "title": "Morning Offering",
+   "phase": 2,
+   "source": "USCCB, usccb.org/prayers/morning-offering (Catholic Household Blessings and Prayers, p. 48)",
+   "cover": "PRY-011",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "O Jesus, through the Immaculate Heart of Mary,",
+     "art": "Through Mary's Heart",
+     "card": "MAR-004",
+     "blanks": [
+      "Jesus",
+      "Heart",
+      "Mary"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "O J t t I H o M"
+    },
+    {
+     "n": 2,
+     "text": "I offer you my prayers, works, joys, and sufferings of this day",
+     "art": "I Give You My Day",
+     "blanks": [
+      "offer",
+      "prayers",
+      "joys"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 12,
+     "letters": "I o y m p w j a s o t d"
+    },
+    {
+     "n": 3,
+     "text": "for all the intentions of your Sacred Heart",
+     "art": "For Jesus' Heart",
+     "card": "FEA-020",
+     "blanks": [
+      "intentions",
+      "Sacred"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "f a t i o y S H"
+    },
+    {
+     "n": 4,
+     "text": "in union with the Holy Sacrifice of the Mass throughout the world,",
+     "art": "With the Mass Everywhere",
+     "blanks": [
+      "union",
+      "Mass",
+      "world"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 12,
+     "letters": "i u w t H S o t M t t w"
+    },
+    {
+     "n": 5,
+     "text": "for the salvation of souls,",
+     "art": "For Everyone to Be Saved",
+     "blanks": [
+      "salvation",
+      "souls"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "f t s o s"
+    },
+    {
+     "n": 6,
+     "text": "the reparation of sins,",
+     "art": "To Make Things Right",
+     "blanks": [
+      "reparation",
+      "sins"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "t r o s"
+    },
+    {
+     "n": 7,
+     "text": "the reunion of all Christians,",
+     "art": "All Christians Together",
+     "blanks": [
+      "reunion",
+      "Christians"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "t r o a C"
+    },
+    {
+     "n": 8,
+     "text": "and in particular for the intentions of the Holy Father this month.",
+     "art": "For the Pope's Prayers",
+     "blanks": [
+      "Holy Father",
+      "month"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 12,
+     "letters": "a i p f t i o t H F t m"
+    },
+    {
+     "n": 9,
+     "text": "Amen.",
+     "art": "Amen",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "come-holy-spirit",
+   "title": "Come, Holy Spirit",
+   "phase": 2,
+   "source": "USCCB, usccb.org/prayers/prayer-holy-spirit",
+   "cover": "PRY-016",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Come, Holy Spirit,",
+     "art": "Come, Holy Spirit",
+     "img": "sign-of-the-cross/03",
+     "little": {
+      "answer": "Spirit",
+      "options": [
+       "Spirit",
+       "hearts",
+       "Snow"
+      ]
+     },
+     "blanks": [
+      "Holy",
+      "Spirit"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "C H S"
+    },
+    {
+     "n": 2,
+     "text": "fill the hearts of your faithful",
+     "art": "Fill Our Hearts",
+     "little": {
+      "answer": "hearts",
+      "options": [
+       "hearts",
+       "love",
+       "Chair"
+      ]
+     },
+     "blanks": [
+      "fill",
+      "hearts"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "f t h o y f"
+    },
+    {
+     "n": 3,
+     "text": "and kindle in them the fire of your love.",
+     "art": "Fire of Love",
+     "card": "FEA-017",
+     "little": {
+      "answer": "love",
+      "options": [
+       "love",
+       "Spirit",
+       "Apple"
+      ]
+     },
+     "blanks": [
+      "fire",
+      "love"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "a k i t t f o y l"
+    },
+    {
+     "n": 4,
+     "text": "Send forth your Spirit and they shall be created,",
+     "art": "New Life",
+     "little": {
+      "answer": "Spirit",
+      "options": [
+       "Spirit",
+       "pray",
+       "Snow"
+      ]
+     },
+     "blanks": [
+      "Send",
+      "created"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "S f y S a t s b c"
+    },
+    {
+     "n": 5,
+     "text": "and you shall renew the face of the earth.",
+     "art": "A New Earth",
+     "little": {
+      "answer": "earth",
+      "options": [
+       "earth",
+       "pray",
+       "Chair"
+      ]
+     },
+     "blanks": [
+      "renew",
+      "earth"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "a y s r t f o t e"
+    },
+    {
+     "n": 6,
+     "text": "Let us pray.",
+     "art": "Let Us Pray",
+     "little": {
+      "answer": "pray",
+      "options": [
+       "pray",
+       "light",
+       "Apple"
+      ]
+     },
+     "blanks": [
+      "pray"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "L u p"
+    },
+    {
+     "n": 7,
+     "text": "O God, who have taught the hearts of the faithful by the light of the Holy Spirit,",
+     "art": "Taught by the Light",
+     "little": {
+      "answer": "light",
+      "options": [
+       "light",
+       "wise",
+       "Snow"
+      ]
+     },
+     "blanks": [
+      "taught",
+      "light"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 17,
+     "letters": "O G w h t t h o t f b t l o t H S"
+    },
+    {
+     "n": 8,
+     "text": "grant that in the same Spirit we may be truly wise",
+     "art": "Truly Wise",
+     "little": {
+      "answer": "wise",
+      "options": [
+       "wise",
+       "rejoice",
+       "Chair"
+      ]
+     },
+     "blanks": [
+      "Spirit",
+      "wise"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "g t i t s S w m b t w"
+    },
+    {
+     "n": 9,
+     "text": "and ever rejoice in his consolation.",
+     "art": "Always Joyful",
+     "little": {
+      "answer": "rejoice",
+      "options": [
+       "rejoice",
+       "Amen",
+       "Apple"
+      ]
+     },
+     "blanks": [
+      "rejoice",
+      "consolation"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "a e r i h c"
+    },
+    {
+     "n": 10,
+     "text": "Through Christ our Lord. Amen.",
+     "art": "Through Christ",
+     "img": "grace-before-meals/05",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "Spirit",
+       "Snow"
+      ]
+     },
+     "blanks": [
+      "Christ",
+      "Lord"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "T C o L A"
+    }
+   ]
+  },
+  {
+   "slug": "eternal-rest",
+   "title": "Eternal Rest",
+   "phase": 2,
+   "source": "Vatican, Compendium of the CCC (2005), Appendix (Requiem aeternam)",
+   "cover": "PRY-017",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Eternal rest grant unto them, O Lord,",
+     "art": "Rest with God",
+     "card": "FEA-031",
+     "little": {
+      "answer": "rest",
+      "options": [
+       "rest",
+       "light",
+       "Rain"
+      ]
+     },
+     "blanks": [
+      "Eternal",
+      "rest"
+     ],
+     "prompt": "What do we ask God to give those who have died?",
+     "words": 7,
+     "letters": "E r g u t O L"
+    },
+    {
+     "n": 2,
+     "text": "and let perpetual light shine upon them.",
+     "art": "Light Forever",
+     "little": {
+      "answer": "light",
+      "options": [
+       "light",
+       "peace",
+       "Kite"
+      ]
+     },
+     "blanks": [
+      "perpetual",
+      "light"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "a l p l s u t"
+    },
+    {
+     "n": 3,
+     "text": "May they rest in peace.",
+     "art": "Rest in Peace",
+     "img": "grace-after-meals/05",
+     "little": {
+      "answer": "peace",
+      "options": [
+       "peace",
+       "Amen",
+       "Bell"
+      ]
+     },
+     "blanks": [
+      "rest",
+      "peace"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "M t r i p"
+    },
+    {
+     "n": 4,
+     "text": "Amen.",
+     "art": "Amen",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "rest",
+       "Rain"
+      ]
+     },
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "confiteor",
+   "title": "The Confiteor (I Confess)",
+   "phase": 2,
+   "source": "The Roman Missal, Third Edition (ICEL 2010; USCCB 2011), Penitential Act, form A",
+   "cover": null,
+   "phrases": [
+    {
+     "n": 1,
+     "text": "I confess to almighty God",
+     "art": "I Tell God",
+     "card": "MAS-001",
+     "blanks": [
+      "confess",
+      "God"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "I c t a G"
+    },
+    {
+     "n": 2,
+     "text": "and to you, my brothers and sisters,",
+     "art": "And to Everyone",
+     "blanks": [
+      "brothers",
+      "sisters"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "a t y m b a s"
+    },
+    {
+     "n": 3,
+     "text": "that I have greatly sinned,",
+     "art": "I Have Sinned",
+     "blanks": [
+      "greatly",
+      "sinned"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "t I h g s"
+    },
+    {
+     "n": 4,
+     "text": "in my thoughts and in my words,",
+     "art": "Thoughts and Words",
+     "blanks": [
+      "thoughts",
+      "words"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "i m t a i m w"
+    },
+    {
+     "n": 5,
+     "text": "in what I have done",
+     "art": "What I Did",
+     "blanks": [
+      "done"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "i w I h d"
+    },
+    {
+     "n": 6,
+     "text": "and in what I have failed to do,",
+     "art": "What I Didn't Do",
+     "blanks": [
+      "failed"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "a i w I h f t d"
+    },
+    {
+     "n": 7,
+     "text": "through my fault, through my fault,",
+     "art": "Through My Fault",
+     "blanks": [
+      "fault",
+      "fault"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t m f t m f"
+    },
+    {
+     "n": 8,
+     "text": "through my most grievous fault;",
+     "art": "My Most Grievous Fault",
+     "blanks": [
+      "grievous",
+      "fault"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "t m m g f"
+    },
+    {
+     "n": 9,
+     "text": "therefore I ask blessed Mary ever-Virgin,",
+     "art": "I Ask Mary",
+     "img": "hail-mary/06",
+     "blanks": [
+      "Mary",
+      "ever-Virgin"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t I a b M e"
+    },
+    {
+     "n": 10,
+     "text": "all the Angels and Saints,",
+     "art": "Angels and Saints",
+     "img": "apostles-creed/15",
+     "blanks": [
+      "Angels",
+      "Saints"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "a t A a S"
+    },
+    {
+     "n": 11,
+     "text": "and you, my brothers and sisters,",
+     "art": "And You",
+     "img": "confiteor/02",
+     "blanks": [
+      "brothers",
+      "sisters"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "a y m b a s"
+    },
+    {
+     "n": 12,
+     "text": "to pray for me to the Lord our God.",
+     "art": "Pray for Me",
+     "blanks": [
+      "pray",
+      "Lord"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "t p f m t t L o G"
+    },
+    {
+     "n": 13,
+     "text": "May almighty God have mercy on us, forgive us our sins,",
+     "art": "God Forgives",
+     "blanks": [
+      "mercy",
+      "forgive"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "M a G h m o u f u o s"
+    },
+    {
+     "n": 14,
+     "text": "and bring us to everlasting life. Amen.",
+     "art": "Everlasting Life",
+     "img": "apostles-creed/18",
+     "blanks": [
+      "everlasting",
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "a b u t e l A"
+    }
+   ]
+  },
+  {
+   "slug": "prayer-before-communion",
+   "title": "Prayer Before Communion",
+   "phase": 2,
+   "source": "The Roman Missal, Third Edition (ICEL 2010; USCCB 2011), Communion Rite",
+   "cover": null,
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Lord, I am not worthy",
+     "art": "Lord, I Am Not Worthy",
+     "card": "SAC-014",
+     "little": {
+      "answer": "worthy",
+      "options": [
+       "worthy",
+       "roof",
+       "Window"
+      ]
+     },
+     "blanks": [
+      "Lord",
+      "worthy"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "L I a n w"
+    },
+    {
+     "n": 2,
+     "text": "that you should enter under my roof,",
+     "art": "Come into My Home",
+     "little": {
+      "answer": "roof",
+      "options": [
+       "roof",
+       "word",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "enter",
+      "roof"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "t y s e u m r"
+    },
+    {
+     "n": 3,
+     "text": "but only say the word",
+     "art": "Only Say the Word",
+     "little": {
+      "answer": "word",
+      "options": [
+       "word",
+       "healed",
+       "Boat"
+      ]
+     },
+     "blanks": [
+      "say",
+      "word"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "b o s t w"
+    },
+    {
+     "n": 4,
+     "text": "and my soul shall be healed.",
+     "art": "My Soul Is Healed",
+     "card": "SAC-015",
+     "little": {
+      "answer": "healed",
+      "options": [
+       "healed",
+       "worthy",
+       "Window"
+      ]
+     },
+     "blanks": [
+      "soul",
+      "healed"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "a m s s b h"
+    }
+   ]
+  },
+  {
+   "slug": "fatima-prayer",
+   "title": "Fatima Prayer",
+   "phase": 3,
+   "source": "USCCB, How to Pray the Rosary (usccb.org/how-to-pray-the-rosary); USCCA (2006) Appendix B",
+   "cover": "PRY-032",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "O my Jesus,",
+     "art": "O My Jesus",
+     "little": {
+      "answer": "Jesus",
+      "options": [
+       "Jesus",
+       "forgive",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "Jesus"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "O m J"
+    },
+    {
+     "n": 2,
+     "text": "forgive us our sins,",
+     "art": "Forgive Us",
+     "img": "our-father/06",
+     "little": {
+      "answer": "forgive",
+      "options": [
+       "forgive",
+       "save",
+       "Song"
+      ]
+     },
+     "blanks": [
+      "forgive",
+      "sins"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "f u o s"
+    },
+    {
+     "n": 3,
+     "text": "save us from the fires of hell;",
+     "art": "Keep Us Safe",
+     "card": "BIB-035",
+     "little": {
+      "answer": "save",
+      "options": [
+       "save",
+       "Heaven",
+       "Moon"
+      ]
+     },
+     "blanks": [
+      "save"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "s u f t f o h"
+    },
+    {
+     "n": 4,
+     "text": "lead all souls to Heaven,",
+     "art": "Lead Everyone to Heaven",
+     "little": {
+      "answer": "Heaven",
+      "options": [
+       "Heaven",
+       "mercy",
+       "Garden"
+      ]
+     },
+     "blanks": [
+      "lead",
+      "Heaven"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "l a s t H"
+    },
+    {
+     "n": 5,
+     "text": "especially those who have most need of your mercy.",
+     "art": "Mercy for Those Who Need It",
+     "little": {
+      "answer": "mercy",
+      "options": [
+       "mercy",
+       "Jesus",
+       "Song"
+      ]
+     },
+     "blanks": [
+      "need",
+      "mercy"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "e t w h m n o y m"
+    }
+   ]
+  },
+  {
+   "slug": "nicene-creed",
+   "title": "Nicene Creed",
+   "phase": 3,
+   "source": "USCCB, usccb.org/prayers/nicene-creed; The Roman Missal, Third Edition (2011)",
+   "cover": null,
+   "phrases": [
+    {
+     "n": 1,
+     "text": "I believe in one God,",
+     "art": "One God",
+     "img": "apostles-creed/01",
+     "blanks": [
+      "believe",
+      "one"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "I b i o G"
+    },
+    {
+     "n": 2,
+     "text": "the Father almighty,",
+     "art": "The Father Almighty",
+     "img": "glory-be/01",
+     "blanks": [
+      "Father",
+      "almighty"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "t F a"
+    },
+    {
+     "n": 3,
+     "text": "maker of heaven and earth,",
+     "art": "Maker of All",
+     "img": "apostles-creed/02",
+     "blanks": [
+      "maker",
+      "heaven",
+      "earth"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "m o h a e"
+    },
+    {
+     "n": 4,
+     "text": "of all things visible and invisible.",
+     "art": "Seen and Unseen",
+     "blanks": [
+      "visible",
+      "invisible"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "o a t v a i"
+    },
+    {
+     "n": 5,
+     "text": "I believe in one Lord Jesus Christ,",
+     "art": "One Lord Jesus",
+     "img": "apostles-creed/03",
+     "blanks": [
+      "Lord",
+      "Jesus"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "I b i o L J C"
+    },
+    {
+     "n": 6,
+     "text": "the Only Begotten Son of God,",
+     "art": "God's Only Son",
+     "blanks": [
+      "Only",
+      "Son"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t O B S o G"
+    },
+    {
+     "n": 7,
+     "text": "born of the Father before all ages.",
+     "art": "Before All Time",
+     "blanks": [
+      "Father",
+      "ages"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "b o t F b a a"
+    },
+    {
+     "n": 8,
+     "text": "God from God, Light from Light,",
+     "art": "Light from Light",
+     "blanks": [
+      "God",
+      "Light"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "G f G L f L"
+    },
+    {
+     "n": 9,
+     "text": "true God from true God,",
+     "art": "True God",
+     "blanks": [
+      "true",
+      "God"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "t G f t G"
+    },
+    {
+     "n": 10,
+     "text": "begotten, not made,",
+     "art": "Begotten, Not Made",
+     "blanks": [
+      "begotten",
+      "made"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "b n m"
+    },
+    {
+     "n": 11,
+     "text": "consubstantial with the Father;",
+     "art": "One with the Father",
+     "card": "FEA-018",
+     "blanks": [
+      "consubstantial"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "c w t F"
+    },
+    {
+     "n": 12,
+     "text": "through him all things were made.",
+     "art": "All Things Made",
+     "img": "apostles-creed/02",
+     "blanks": [
+      "through",
+      "made"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t h a t w m"
+    },
+    {
+     "n": 13,
+     "text": "For us men and for our salvation",
+     "art": "For Us",
+     "blanks": [
+      "us",
+      "salvation"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "F u m a f o s"
+    },
+    {
+     "n": 14,
+     "text": "he came down from heaven,",
+     "art": "Came Down from Heaven",
+     "blanks": [
+      "came",
+      "heaven"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "h c d f h"
+    },
+    {
+     "n": 15,
+     "text": "and by the Holy Spirit was incarnate of the Virgin Mary,",
+     "art": "By the Holy Spirit",
+     "img": "hail-mary/01",
+     "blanks": [
+      "Spirit",
+      "incarnate",
+      "Mary"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "a b t H S w i o t V M"
+    },
+    {
+     "n": 16,
+     "text": "and became man.",
+     "art": "Became Man",
+     "img": "hail-mary/04",
+     "blanks": [
+      "became",
+      "man"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "a b m"
+    },
+    {
+     "n": 17,
+     "text": "For our sake he was crucified under Pontius Pilate,",
+     "art": "For Our Sake",
+     "img": "apostles-creed/07",
+     "blanks": [
+      "sake",
+      "crucified"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "F o s h w c u P P"
+    },
+    {
+     "n": 18,
+     "text": "he suffered death and was buried,",
+     "art": "Buried",
+     "img": "apostles-creed/07",
+     "blanks": [
+      "death",
+      "buried"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "h s d a w b"
+    },
+    {
+     "n": 19,
+     "text": "and rose again on the third day in accordance with the Scriptures.",
+     "art": "Risen!",
+     "img": "apostles-creed/09",
+     "blanks": [
+      "rose",
+      "third",
+      "Scriptures"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 12,
+     "letters": "a r a o t t d i a w t S"
+    },
+    {
+     "n": 20,
+     "text": "He ascended into heaven",
+     "art": "Ascended",
+     "img": "apostles-creed/10",
+     "blanks": [
+      "ascended",
+      "heaven"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "H a i h"
+    },
+    {
+     "n": 21,
+     "text": "and is seated at the right hand of the Father.",
+     "art": "Seated",
+     "img": "apostles-creed/11",
+     "blanks": [
+      "seated",
+      "right"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "a i s a t r h o t F"
+    },
+    {
+     "n": 22,
+     "text": "He will come again in glory to judge the living and the dead",
+     "art": "Coming in Glory",
+     "img": "apostles-creed/12",
+     "blanks": [
+      "glory",
+      "judge"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 13,
+     "letters": "H w c a i g t j t l a t d"
+    },
+    {
+     "n": 23,
+     "text": "and his kingdom will have no end.",
+     "art": "Kingdom Without End",
+     "img": "glory-be/06",
+     "blanks": [
+      "kingdom",
+      "end"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "a h k w h n e"
+    },
+    {
+     "n": 24,
+     "text": "I believe in the Holy Spirit, the Lord, the giver of life,",
+     "art": "Giver of Life",
+     "img": "come-holy-spirit/04",
+     "blanks": [
+      "Spirit",
+      "life"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 12,
+     "letters": "I b i t H S t L t g o l"
+    },
+    {
+     "n": 25,
+     "text": "who proceeds from the Father and the Son,",
+     "art": "From the Father and the Son",
+     "blanks": [
+      "proceeds",
+      "Son"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "w p f t F a t S"
+    },
+    {
+     "n": 26,
+     "text": "who with the Father and the Son is adored and glorified,",
+     "art": "Adored and Glorified",
+     "blanks": [
+      "adored",
+      "glorified"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "w w t F a t S i a a g"
+    },
+    {
+     "n": 27,
+     "text": "who has spoken through the prophets.",
+     "art": "Through the Prophets",
+     "blanks": [
+      "spoken",
+      "prophets"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "w h s t t p"
+    },
+    {
+     "n": 28,
+     "text": "I believe in one, holy, catholic and apostolic Church.",
+     "art": "One Church",
+     "img": "apostles-creed/14",
+     "blanks": [
+      "holy",
+      "apostolic"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "I b i o h c a a C"
+    },
+    {
+     "n": 29,
+     "text": "I confess one Baptism for the forgiveness of sins",
+     "art": "One Baptism",
+     "card": "SAC-002",
+     "blanks": [
+      "Baptism",
+      "forgiveness"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "I c o B f t f o s"
+    },
+    {
+     "n": 30,
+     "text": "and I look forward to the resurrection of the dead",
+     "art": "Looking Forward",
+     "img": "apostles-creed/17",
+     "blanks": [
+      "resurrection"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "a I l f t t r o t d"
+    },
+    {
+     "n": 31,
+     "text": "and the life of the world to come. Amen.",
+     "art": "The World to Come",
+     "img": "apostles-creed/18",
+     "blanks": [
+      "life",
+      "world"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "a t l o t w t c A"
+    }
+   ]
+  },
+  {
+   "slug": "angelus",
+   "title": "The Angelus",
+   "phase": 3,
+   "source": "USCCB, usccb.org/prayers/angelus (Catholic Household Blessings and Prayers, rev. 2007)",
+   "cover": "PRY-012",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "V/. The Angel of the Lord declared unto Mary,",
+     "art": "The Angel Comes",
+     "img": "hail-mary/01",
+     "blanks": [
+      "Angel",
+      "Mary"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "T A o t L d u M"
+    },
+    {
+     "n": 2,
+     "text": "R/. And she conceived of the Holy Spirit.",
+     "art": "By the Holy Spirit",
+     "img": "hail-mary/02",
+     "blanks": [
+      "conceived",
+      "Spirit"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "A s c o t H S"
+    },
+    {
+     "n": 3,
+     "text": "Hail Mary…",
+     "art": "(Hail Mary)",
+     "img": "hail-mary/01",
+     "opens": "hail-mary"
+    },
+    {
+     "n": 4,
+     "text": "V/. Behold the handmaid of the Lord,",
+     "art": "Mary Says Yes",
+     "blanks": [
+      "handmaid",
+      "Lord"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "B t h o t L"
+    },
+    {
+     "n": 5,
+     "text": "R/. Be it done unto me according to your Word.",
+     "art": "Let It Be",
+     "blanks": [
+      "done",
+      "Word"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "B i d u m a t y W"
+    },
+    {
+     "n": 6,
+     "text": "Hail Mary…",
+     "art": "(Hail Mary)",
+     "img": "hail-mary/01",
+     "opens": "hail-mary"
+    },
+    {
+     "n": 7,
+     "text": "V/. And the Word was made flesh,",
+     "art": "The Word Became Flesh",
+     "img": "hail-mary/04",
+     "blanks": [
+      "Word",
+      "flesh"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "A t W w m f"
+    },
+    {
+     "n": 8,
+     "text": "R/. And dwelt among us.",
+     "art": "Jesus Lives Among Us",
+     "blanks": [
+      "dwelt",
+      "us"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "A d a u"
+    },
+    {
+     "n": 9,
+     "text": "Hail Mary…",
+     "art": "(Hail Mary)",
+     "img": "hail-mary/01",
+     "opens": "hail-mary"
+    },
+    {
+     "n": 10,
+     "text": "V/. Pray for us, O holy Mother of God,",
+     "art": "Pray for Us",
+     "img": "hail-mary/05",
+     "blanks": [
+      "pray",
+      "Mother"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "P f u O h M o G"
+    },
+    {
+     "n": 11,
+     "text": "R/. That we may be made worthy of the promises of Christ.",
+     "art": "The Promises of Christ",
+     "blanks": [
+      "worthy",
+      "promises"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "T w m b m w o t p o C"
+    },
+    {
+     "n": 12,
+     "text": "Let us pray. Pour forth, we beseech you, O Lord, your grace into our hearts:",
+     "art": "Pour Your Grace",
+     "blanks": [
+      "grace",
+      "hearts"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 15,
+     "letters": "L u p P f w b y O L y g i o h"
+    },
+    {
+     "n": 13,
+     "text": "that we, to whom the Incarnation of Christ your Son was made known by the message of an Angel,",
+     "art": "The Angel's Message",
+     "img": "hail-mary/01",
+     "blanks": [
+      "Incarnation",
+      "Angel"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 19,
+     "letters": "t w t w t I o C y S w m k b t m o a A"
+    },
+    {
+     "n": 14,
+     "text": "may by his Passion and Cross be brought to the glory of his Resurrection.",
+     "art": "From Cross to Glory",
+     "img": "apostles-creed/09",
+     "blanks": [
+      "Cross",
+      "Resurrection"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 14,
+     "letters": "m b h P a C b b t t g o h R"
+    },
+    {
+     "n": 15,
+     "text": "Through the same Christ our Lord. Amen.",
+     "art": "Through Christ",
+     "img": "grace-before-meals/05",
+     "blanks": [
+      "Christ",
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "T t s C o L A"
+    }
+   ]
+  },
+  {
+   "slug": "regina-caeli",
+   "title": "Regina Caeli",
+   "phase": 3,
+   "source": "USCCB, usccb.org/prayers/regina-caeli",
+   "cover": "PRY-015",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Queen of heaven, rejoice, alleluia.",
+     "art": "Rejoice, Queen of Heaven",
+     "card": "MAR-003",
+     "little": {
+      "answer": "alleluia",
+      "options": [
+       "alleluia",
+       "Son",
+       "Snow"
+      ]
+     },
+     "blanks": [
+      "rejoice",
+      "alleluia"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "Q o h r a"
+    },
+    {
+     "n": 2,
+     "text": "The Son whom you merited to bear, alleluia,",
+     "art": "Mary's Son",
+     "img": "hail-mary/05",
+     "little": {
+      "answer": "Son",
+      "options": [
+       "Son",
+       "risen",
+       "Bread"
+      ]
+     },
+     "blanks": [
+      "Son",
+      "alleluia"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "T S w y m t b a"
+    },
+    {
+     "n": 3,
+     "text": "has risen as he said, alleluia.",
+     "art": "He Is Risen!",
+     "img": "apostles-creed/09",
+     "little": {
+      "answer": "risen",
+      "options": [
+       "risen",
+       "Pray",
+       "Ship"
+      ]
+     },
+     "blanks": [
+      "risen",
+      "alleluia"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "h r a h s a"
+    },
+    {
+     "n": 4,
+     "text": "Pray for us to God, alleluia.",
+     "art": "Pray for Us",
+     "little": {
+      "answer": "Pray",
+      "options": [
+       "Pray",
+       "glad",
+       "Snow"
+      ]
+     },
+     "blanks": [
+      "Pray",
+      "alleluia"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "P f u t G a"
+    },
+    {
+     "n": 5,
+     "text": "V. Rejoice and be glad, O Virgin Mary, alleluia.",
+     "art": "Be Glad, Mary",
+     "little": {
+      "answer": "glad",
+      "options": [
+       "glad",
+       "risen",
+       "Bread"
+      ]
+     },
+     "blanks": [
+      "glad",
+      "alleluia"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "V R a b g O V M a"
+    },
+    {
+     "n": 6,
+     "text": "R. For the Lord has truly risen, alleluia.",
+     "art": "Truly Risen",
+     "little": {
+      "answer": "risen",
+      "options": [
+       "risen",
+       "joys",
+       "Ship"
+      ]
+     },
+     "blanks": [
+      "truly",
+      "risen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "R F t L h t r a"
+    },
+    {
+     "n": 7,
+     "text": "Let us pray. O God, who have been pleased to gladden the world by the Resurrection of your Son our Lord Jesus Christ,",
+     "art": "Joy to the World",
+     "little": {
+      "answer": "world",
+      "options": [
+       "world",
+       "joys",
+       "Snow"
+      ]
+     },
+     "blanks": [
+      "gladden",
+      "Resurrection"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 23,
+     "letters": "L u p O G w h b p t g t w b t R o y S o L J C"
+    },
+    {
+     "n": 8,
+     "text": "grant, we pray, that through his Mother, the Virgin Mary, we may receive the joys of everlasting life.",
+     "art": "Joys Forever",
+     "little": {
+      "answer": "joys",
+      "options": [
+       "joys",
+       "Amen",
+       "Bread"
+      ]
+     },
+     "blanks": [
+      "Mother",
+      "joys"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 18,
+     "letters": "g w p t t h M t V M w m r t j o e l"
+    },
+    {
+     "n": 9,
+     "text": "Through Christ our Lord. Amen.",
+     "art": "Through Christ",
+     "img": "grace-before-meals/05",
+     "little": {
+      "answer": "Amen",
+      "options": [
+       "Amen",
+       "alleluia",
+       "Ship"
+      ]
+     },
+     "blanks": [
+      "Christ",
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "T C o L A"
+    }
+   ]
+  },
+  {
+   "slug": "memorare",
+   "title": "Memorare",
+   "phase": 3,
+   "source": "USCCB, usccb.org/prayers/memorare; USCCA (2006) Appendix B",
+   "cover": "PRY-013",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Remember, O most gracious Virgin Mary,",
+     "art": "Remember, Mary",
+     "blanks": [
+      "Remember",
+      "Mary"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "R O m g V M"
+    },
+    {
+     "n": 2,
+     "text": "that never was it known",
+     "art": "Never Was It Known",
+     "blanks": [
+      "never",
+      "known"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "t n w i k"
+    },
+    {
+     "n": 3,
+     "text": "that anyone who fled to thy protection,",
+     "art": "Running to Mary",
+     "blanks": [
+      "fled",
+      "protection"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "t a w f t t p"
+    },
+    {
+     "n": 4,
+     "text": "implored thy help,",
+     "art": "Asking for Help",
+     "blanks": [
+      "implored",
+      "help"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "i t h"
+    },
+    {
+     "n": 5,
+     "text": "or sought thy intercession,",
+     "art": "Asking Mary to Pray",
+     "blanks": [
+      "sought",
+      "intercession"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "o s t i"
+    },
+    {
+     "n": 6,
+     "text": "was left unaided.",
+     "art": "Never Alone",
+     "blanks": [
+      "left",
+      "unaided"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 3,
+     "letters": "w l u"
+    },
+    {
+     "n": 7,
+     "text": "Inspired by this confidence",
+     "art": "With Confidence",
+     "blanks": [
+      "Inspired",
+      "confidence"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "I b t c"
+    },
+    {
+     "n": 8,
+     "text": "I fly unto thee, O Virgin of virgins, my Mother.",
+     "art": "I Come to You, Mother",
+     "blanks": [
+      "fly",
+      "Mother"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "I f u t O V o v m M"
+    },
+    {
+     "n": 9,
+     "text": "To thee do I come,",
+     "art": "I Come",
+     "blanks": [
+      "come"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "T t d I c"
+    },
+    {
+     "n": 10,
+     "text": "before thee I stand, sinful and sorrowful.",
+     "art": "Before You I Stand",
+     "blanks": [
+      "stand",
+      "sorrowful"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "b t I s s a s"
+    },
+    {
+     "n": 11,
+     "text": "O Mother of the Word Incarnate,",
+     "art": "Mother of the Word",
+     "img": "hail-mary/05",
+     "blanks": [
+      "Mother",
+      "Word"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "O M o t W I"
+    },
+    {
+     "n": 12,
+     "text": "despise not my petitions,",
+     "art": "Hear My Prayers",
+     "blanks": [
+      "despise",
+      "petitions"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "d n m p"
+    },
+    {
+     "n": 13,
+     "text": "but in thy mercy hear and answer me.",
+     "art": "Hear and Answer",
+     "blanks": [
+      "mercy",
+      "answer"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "b i t m h a a m"
+    },
+    {
+     "n": 14,
+     "text": "Amen.",
+     "art": "Amen",
+     "img": "sign-of-the-cross/04",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "hail-holy-queen",
+   "title": "Hail, Holy Queen",
+   "phase": 3,
+   "source": "USCCB, usccb.org/prayers/hail-holy-queen-salve-regina; USCCA (2006) Appendix B",
+   "cover": "PRY-014",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Hail, Holy Queen, Mother of Mercy,",
+     "art": "Holy Queen",
+     "card": "MAR-003",
+     "blanks": [
+      "Queen",
+      "Mercy"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "H H Q M o M"
+    },
+    {
+     "n": 2,
+     "text": "our life, our sweetness and our hope.",
+     "art": "Life, Sweetness, Hope",
+     "blanks": [
+      "life",
+      "hope"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "o l o s a o h"
+    },
+    {
+     "n": 3,
+     "text": "To thee do we cry,",
+     "art": "We Call to You",
+     "blanks": [
+      "cry"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "T t d w c"
+    },
+    {
+     "n": 4,
+     "text": "poor banished children of Eve.",
+     "art": "Children of Eve",
+     "blanks": [
+      "banished",
+      "Eve"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "p b c o E"
+    },
+    {
+     "n": 5,
+     "text": "To thee do we send up our sighs,",
+     "art": "Our Sighs",
+     "blanks": [
+      "send",
+      "sighs"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "T t d w s u o s"
+    },
+    {
+     "n": 6,
+     "text": "mourning and weeping in this valley of tears.",
+     "art": "Valley of Tears",
+     "blanks": [
+      "mourning",
+      "valley"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "m a w i t v o t"
+    },
+    {
+     "n": 7,
+     "text": "Turn then, most gracious advocate,",
+     "art": "Our Helper",
+     "blanks": [
+      "Turn",
+      "advocate"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "T t m g a"
+    },
+    {
+     "n": 8,
+     "text": "thine eyes of mercy toward us,",
+     "art": "Eyes of Mercy",
+     "blanks": [
+      "eyes",
+      "mercy"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t e o m t u"
+    },
+    {
+     "n": 9,
+     "text": "and after this our exile",
+     "art": "After the Journey",
+     "blanks": [
+      "after",
+      "exile"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "a a t o e"
+    },
+    {
+     "n": 10,
+     "text": "show unto us the blessed fruit of thy womb, Jesus.",
+     "art": "Show Us Jesus",
+     "img": "hail-mary/04",
+     "blanks": [
+      "fruit",
+      "Jesus"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "s u u t b f o t w J"
+    },
+    {
+     "n": 11,
+     "text": "O clement, O loving, O sweet Virgin Mary.",
+     "art": "O Sweet Mary",
+     "blanks": [
+      "loving",
+      "sweet"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "O c O l O s V M"
+    }
+   ]
+  },
+  {
+   "slug": "sub-tuum",
+   "title": "Sub Tuum Praesidium (We Fly to Thy Protection)",
+   "phase": 3,
+   "source": "Vatican, Compendium of the CCC (2005), Appendix",
+   "cover": "PRY-025",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "We fly to thy protection, O holy Mother of God.",
+     "art": "Under Mary's Mantle",
+     "blanks": [
+      "protection",
+      "Mother"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "W f t t p O h M o G"
+    },
+    {
+     "n": 2,
+     "text": "Despise not our petitions in our necessities,",
+     "art": "Hear Our Needs",
+     "img": "memorare/12",
+     "blanks": [
+      "petitions",
+      "necessities"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "D n o p i o n"
+    },
+    {
+     "n": 3,
+     "text": "but deliver us always from all dangers",
+     "art": "Keep Us from Danger",
+     "blanks": [
+      "deliver",
+      "dangers"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "b d u a f a d"
+    },
+    {
+     "n": 4,
+     "text": "O glorious and blessed Virgin.",
+     "art": "Glorious Virgin",
+     "blanks": [
+      "glorious",
+      "blessed"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "O g a b V"
+    }
+   ]
+  },
+  {
+   "slug": "anima-christi",
+   "title": "Anima Christi",
+   "phase": 3,
+   "source": "USCCB, usccb.org/prayers/anima-christi",
+   "cover": "PRY-022",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Soul of Christ, sanctify me.",
+     "art": "Make Me Holy",
+     "img": "prayer-before-communion/04",
+     "blanks": [
+      "Soul",
+      "sanctify"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "S o C s m"
+    },
+    {
+     "n": 2,
+     "text": "Body of Christ, save me.",
+     "art": "Body of Christ",
+     "card": "SAC-004",
+     "blanks": [
+      "Body",
+      "save"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "B o C s m"
+    },
+    {
+     "n": 3,
+     "text": "Blood of Christ, embolden me.",
+     "art": "Make Me Brave",
+     "blanks": [
+      "Blood",
+      "embolden"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "B o C e m"
+    },
+    {
+     "n": 4,
+     "text": "Water from the side of Christ, wash me.",
+     "art": "Wash Me",
+     "card": "SAC-002",
+     "blanks": [
+      "Water",
+      "wash"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "W f t s o C w m"
+    },
+    {
+     "n": 5,
+     "text": "Passion of Christ, strengthen me.",
+     "art": "Make Me Strong",
+     "img": "apostles-creed/07",
+     "blanks": [
+      "Passion",
+      "strengthen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "P o C s m"
+    },
+    {
+     "n": 6,
+     "text": "O good Jesus, hear me.",
+     "art": "Hear Me, Jesus",
+     "blanks": [
+      "good",
+      "hear"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "O g J h m"
+    },
+    {
+     "n": 7,
+     "text": "Within your wounds hide me.",
+     "art": "Safe in Jesus' Heart",
+     "img": "morning-offering/03",
+     "blanks": [
+      "wounds",
+      "hide"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "W y w h m"
+    },
+    {
+     "n": 8,
+     "text": "Never permit me to be parted from you.",
+     "art": "Never Apart",
+     "blanks": [
+      "Never",
+      "parted"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "N p m t b p f y"
+    },
+    {
+     "n": 9,
+     "text": "From the evil Enemy defend me.",
+     "art": "Defend Me",
+     "img": "our-father/09",
+     "blanks": [
+      "evil",
+      "defend"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "F t e E d m"
+    },
+    {
+     "n": 10,
+     "text": "At the hour of my death call me",
+     "art": "Call Me Home",
+     "img": "hail-mary/07",
+     "blanks": [
+      "hour",
+      "call"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "A t h o m d c m"
+    },
+    {
+     "n": 11,
+     "text": "and bid me come to you,",
+     "art": "Come to Me",
+     "blanks": [
+      "bid",
+      "come"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "a b m c t y"
+    },
+    {
+     "n": 12,
+     "text": "that with your Saints I may praise you",
+     "art": "With the Saints",
+     "img": "apostles-creed/15",
+     "blanks": [
+      "Saints",
+      "praise"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "t w y S I m p y"
+    },
+    {
+     "n": 13,
+     "text": "for age upon age. Amen.",
+     "art": "Forever",
+     "img": "glory-be/06",
+     "blanks": [
+      "age",
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "f a u a A"
+    }
+   ]
+  },
+  {
+   "slug": "prayer-to-st-michael",
+   "title": "Prayer to St. Michael the Archangel",
+   "phase": 3,
+   "source": "USCCB, How to Pray the Rosary booklet (2025); text of Pope Leo XIII (1886)",
+   "cover": "SNT-109",
+   "phrases": [
+    {
+     "n": 1,
+     "text": "St. Michael the Archangel,",
+     "art": "St. Michael",
+     "card": "SNT-109",
+     "blanks": [
+      "Michael",
+      "Archangel"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "S M t A"
+    },
+    {
+     "n": 2,
+     "text": "defend us in battle.",
+     "art": "Defend Us",
+     "blanks": [
+      "defend",
+      "battle"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "d u i b"
+    },
+    {
+     "n": 3,
+     "text": "Be our defense against the wickedness and snares of the Devil.",
+     "art": "Free from Snares",
+     "blanks": [
+      "defense",
+      "snares"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "B o d a t w a s o t D"
+    },
+    {
+     "n": 4,
+     "text": "May God rebuke him, we humbly pray,",
+     "art": "God Is Stronger",
+     "img": "our-father/09",
+     "blanks": [
+      "God",
+      "humbly"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 7,
+     "letters": "M G r h w h p"
+    },
+    {
+     "n": 5,
+     "text": "and do thou, O Prince of the heavenly hosts,",
+     "art": "Prince of Angels",
+     "blanks": [
+      "Prince",
+      "hosts"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 9,
+     "letters": "a d t O P o t h h"
+    },
+    {
+     "n": 6,
+     "text": "by the power of God,",
+     "art": "By God's Power",
+     "blanks": [
+      "power",
+      "God"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "b t p o G"
+    },
+    {
+     "n": 7,
+     "text": "thrust into hell Satan, and all evil spirits,",
+     "art": "Shadows Sent Away",
+     "blanks": [
+      "thrust",
+      "spirits"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "t i h S a a e s"
+    },
+    {
+     "n": 8,
+     "text": "who prowl about the world seeking the ruin of souls.",
+     "art": "Safe Under God's Care",
+     "blanks": [
+      "prowl",
+      "souls"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "w p a t w s t r o s"
+    },
+    {
+     "n": 9,
+     "text": "Amen.",
+     "art": "Amen",
+     "img": "sign-of-the-cross/04",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "holy-water-prayer",
+   "title": "Holy Water Prayer",
+   "phase": 3,
+   "source": "Source pending (current site text)",
+   "cover": null,
+   "sourcePending": true,
+   "phrases": [
+    {
+     "n": 1,
+     "text": "By this holy water",
+     "art": "Holy Water",
+     "blanks": [
+      "holy",
+      "water"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "B t h w"
+    },
+    {
+     "n": 2,
+     "text": "and by Your Precious Blood,",
+     "art": "Precious Blood",
+     "blanks": [
+      "Precious",
+      "Blood"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "a b Y P B"
+    },
+    {
+     "n": 3,
+     "text": "wash away all my sins,",
+     "art": "Washed Clean",
+     "blanks": [
+      "wash",
+      "sins"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "w a a m s"
+    },
+    {
+     "n": 4,
+     "text": "O Lord.",
+     "art": "O Lord",
+     "blanks": [
+      "Lord"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 2,
+     "letters": "O L"
+    },
+    {
+     "n": 5,
+     "text": "Amen.",
+     "art": "Amen",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "prayer-after-communion",
+   "title": "Prayer After Communion",
+   "phase": 3,
+   "source": "Source pending (current site text)",
+   "cover": null,
+   "sourcePending": true,
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Lord, may I receive these gifts",
+     "art": "Receiving Jesus",
+     "blanks": [
+      "receive",
+      "gifts"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "L m I r t g"
+    },
+    {
+     "n": 2,
+     "text": "in purity of heart.",
+     "art": "A Pure Heart",
+     "blanks": [
+      "purity",
+      "heart"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 4,
+     "letters": "i p o h"
+    },
+    {
+     "n": 3,
+     "text": "May they bring me healing",
+     "art": "Healing",
+     "blanks": [
+      "healing"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "M t b m h"
+    },
+    {
+     "n": 4,
+     "text": "and wholeness of mind and body.",
+     "art": "Mind and Body",
+     "blanks": [
+      "mind",
+      "body"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "a w o m a b"
+    },
+    {
+     "n": 5,
+     "text": "Amen.",
+     "art": "Amen",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  },
+  {
+   "slug": "prayer-of-st-francis",
+   "title": "Prayer of St. Francis",
+   "phase": 3,
+   "source": "Source pending (current site text)",
+   "cover": null,
+   "sourcePending": true,
+   "phrases": [
+    {
+     "n": 1,
+     "text": "Lord, make me an instrument of your peace:",
+     "art": "Instrument of Peace",
+     "blanks": [
+      "instrument",
+      "peace"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "L m m a i o y p"
+    },
+    {
+     "n": 2,
+     "text": "where there is hatred, let me sow love;",
+     "art": "Sow Love",
+     "blanks": [
+      "hatred",
+      "love"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "w t i h l m s l"
+    },
+    {
+     "n": 3,
+     "text": "where there is injury, pardon;",
+     "art": "Pardon",
+     "blanks": [
+      "pardon"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "w t i i p"
+    },
+    {
+     "n": 4,
+     "text": "where there is doubt, faith;",
+     "art": "Faith",
+     "blanks": [
+      "faith"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "w t i d f"
+    },
+    {
+     "n": 5,
+     "text": "where there is despair, hope;",
+     "art": "Hope",
+     "blanks": [
+      "hope"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "w t i d h"
+    },
+    {
+     "n": 6,
+     "text": "where there is darkness, light;",
+     "art": "Light",
+     "blanks": [
+      "light"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "w t i d l"
+    },
+    {
+     "n": 7,
+     "text": "where there is sadness, joy.",
+     "art": "Joy",
+     "blanks": [
+      "joy"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 5,
+     "letters": "w t i s j"
+    },
+    {
+     "n": 8,
+     "text": "O divine Master, grant that I may not so much seek",
+     "art": "Divine Master",
+     "blanks": [
+      "Master",
+      "seek"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 11,
+     "letters": "O d M g t I m n s m s"
+    },
+    {
+     "n": 9,
+     "text": "to be consoled as to console,",
+     "art": "Console",
+     "blanks": [
+      "consoled",
+      "console"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t b c a t c"
+    },
+    {
+     "n": 10,
+     "text": "to be understood as to understand,",
+     "art": "Understand",
+     "blanks": [
+      "understood",
+      "understand"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t b u a t u"
+    },
+    {
+     "n": 11,
+     "text": "to be loved as to love.",
+     "art": "Love",
+     "blanks": [
+      "loved",
+      "love"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "t b l a t l"
+    },
+    {
+     "n": 12,
+     "text": "For it is in giving that we receive,",
+     "art": "Giving",
+     "blanks": [
+      "giving",
+      "receive"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 8,
+     "letters": "F i i i g t w r"
+    },
+    {
+     "n": 13,
+     "text": "in pardoning that we are pardoned,",
+     "art": "Pardoning",
+     "blanks": [
+      "pardoning",
+      "pardoned"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 6,
+     "letters": "i p t w a p"
+    },
+    {
+     "n": 14,
+     "text": "and in dying that we are born to eternal life.",
+     "art": "Eternal Life",
+     "blanks": [
+      "born",
+      "eternal"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 10,
+     "letters": "a i d t w a b t e l"
+    },
+    {
+     "n": 15,
+     "text": "Amen.",
+     "art": "Amen",
+     "blanks": [
+      "Amen"
+     ],
+     "prompt": "Look at the picture and write this line.",
+     "words": 1,
+     "letters": "A"
+    }
+   ]
+  }
+ ]
+}

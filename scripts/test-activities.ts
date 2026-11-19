@@ -41,6 +41,7 @@ import {
   type ActivityEl,
 } from "../src/lib/resource/activity-doc";
 import { getActivityModel } from "../src/lib/resource/activity-models";
+import { PRAYER_SHEET_ROWS } from "../src/lib/resource/prayer-sheet-list";
 import { buildResourcesSitemap } from "../src/lib/sitemap-entries";
 import { createActivityDownloadHandler, type ActivityDownloadDeps } from "../src/lib/resource/activity-download";
 import { ActivityFileUnavailableError } from "../src/lib/resource/activity-files";
@@ -230,7 +231,10 @@ async function main() {
     assert.ok(m.elements.some((e) => e.kind === "text" && e.text === "catholickidscrafts.com"), `${act.slug} footer`);
     assert.ok(m.elements.some((e) => e.palette), `${act.slug} has a colour palette`);
     for (const k of Object.keys(act)) assert.ok(!/^(age|ages|ageRange|minAge|maxAge|grade|grades)$/i.test(k), `${act.slug}: no ${k}`);
-    const words = JSON.stringify([act.title, act.summary, act.description, m.elements.filter((e) => e.kind === "text").map((e) => (e as { text: string }).text)]);
+    // Prayer worksheets quote official prayer text ("before all ages", "for age upon age"): not an age label.
+    const sheetText = m.elements.filter((e) => e.kind === "text").map((e) => (e as { text: string }).text);
+    const pageText = act.kind === "Prayer worksheet" ? sheetText.map((t) => t.replace(/\bages?\b/gi, "")) : sheetText;
+    const words = JSON.stringify([act.title, act.summary, act.description, pageText]);
     assert.ok(!/\bages?\b|\bgrade\b|years old/i.test(words), `${act.slug} mentions no ages`);
   }
 
@@ -241,7 +245,16 @@ async function main() {
     "angel-choir", "baptism-dove-mobile", "christmas-eve-lantern", "emmanuel-door-hanger", "epiphany-chalk-blessing", "flight-into-egypt", "heart-ornaments",
     "holy-family-mobile", "john-the-baptist-card", "magi-finger-puppets", "manger-banner", "newborn-king-crown", "pondering-heart", "visitation-popup"];
   assert.equal(new Set(RESOURCE_ACTIVITIES.map((x) => x.title)).size, RESOURCE_ACTIVITIES.length, "titles are unique");
-  assert.deepEqual(RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug), [SUNDAY_CRAFT_SLUG, SAINT_REPORT_SLUG, ...UPLOADED]);
+  assert.deepEqual(
+    RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug),
+    [SUNDAY_CRAFT_SLUG, SAINT_REPORT_SLUG, ...UPLOADED, ...PRAYER_SHEET_ROWS.map((r) => r[0])],
+  );
+  // Prayer worksheets: Plus, editable, never in the daily (free-week) schedule.
+  for (const [slug] of PRAYER_SHEET_ROWS) {
+    const a = getActivity(slug)!;
+    assert.ok(a.access === "plus" && a.editable && a.kind === "Prayer worksheet", slug);
+    assert.ok(!DAILY_ACTIVITY_SCHEDULE.some((r) => r.slug === slug), `${slug} is not scheduled`);
+  }
   for (const slug of UPLOADED) {
     const c = getActivity(slug)!;
     assert.ok(c.kind === "Craft" && !c.editable && c.tryThis.length === 0 && c.seasons.length > 0, slug);

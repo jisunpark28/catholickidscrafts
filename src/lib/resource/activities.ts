@@ -5,6 +5,7 @@
 import type { ResourceSeason } from "@/lib/resource/sheets";
 import { adventStart, easterSunday, getLiturgicalSeason } from "@/lib/liturgical-season";
 import { weekSundayOf } from "@/lib/resource/week";
+import { PRAYER_SHEET_ROWS, type PrayerSheetLevel, type PrayerSheetRow } from "@/lib/resource/prayer-sheet-list";
 
 export type ActivityVariant = "bw" | "color";
 /**
@@ -108,6 +109,48 @@ function CRAFTS(rows: CraftRow[]): ResourceActivity[] {
     editable: false,
     storage: "blob",
   }));
+}
+
+const PRAYER_LEVEL_COPY: Record<PrayerSheetLevel, { name: string; how: string; keywords: string[] }> = {
+  little: { name: "Little", how: "circle the missing word in each line, choosing from three words", keywords: ["missing word", "circle"] },
+  growing: { name: "Growing", how: "fill in the missing words of each line, with a word bank", keywords: ["fill in the blanks", "word bank"] },
+  ready: { name: "Ready", how: "write each line of the prayer from a short clue, with first-letter hints", keywords: ["copywork", "handwriting", "memorize"] },
+};
+
+/**
+ * Prayer worksheets for the /prayers carousel (Little / Growing / Ready, one page each; long prayers
+ * in parts). Built by scripts/activities/prayers. Always Plus: never in the daily schedule.
+ */
+/** Tile label of the prayer worksheets. */
+export const PRAYER_WORKSHEET_KIND = "Prayer worksheet";
+
+function PRAYER_SHEETS(rows: readonly PrayerSheetRow[]): ResourceActivity[] {
+  return rows.map(([slug, prayer, prayerTitle, level, part, parts], i) => {
+    const copy = PRAYER_LEVEL_COPY[level];
+    const partLabel = parts > 1 ? ` (Part ${part} of ${parts})` : "";
+    const title = `${prayerTitle}: ${copy.name} Worksheet${partLabel}`;
+    return {
+      slug,
+      title,
+      kind: PRAYER_WORKSHEET_KIND,
+      summary: `${prayerTitle}${partLabel}: ${copy.how}.`,
+      description: `Catholic prayer worksheet for kids: learn the ${prayerTitle}${partLabel} line by line. ${copy.name}: ${copy.how}. US Letter, black and white or colour.`,
+      seasons: [],
+      keywords: [prayer.replace(/-/g, " "), "prayer", "prayers", "catholic prayers", "learn prayers", copy.name.toLowerCase(), ...copy.keywords, "worksheet", "printable"],
+      pageSize: "US Letter",
+      previews: {
+        bw: `/images/activities/${slug}/preview-bw.webp`,
+        color: `/images/activities/${slug}/preview-color.webp`,
+      },
+      files: { bw: `${slug}.pdf`, color: `${slug}-color.pdf` },
+      tryThis: [],
+      prio: 200 + i,
+      access: "plus",
+      seoTitle: `${title} (Printable)`,
+      editable: true,
+      storage: "bundle",
+    };
+  });
 }
 
 export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
@@ -331,6 +374,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
       "A pop-up card of Mary and Elizabeth: \"Most blessed are you among women\" (Luke 1:42).",
       ["advent", "feasts"], 2, ["visitation", "mary", "elizabeth", "pop-up card", "luke 1:42"]],
   ]),
+  ...PRAYER_SHEETS(PRAYER_SHEET_ROWS),
 ];
 
 export const ACTIVITY_VARIANT_LABELS: Record<ActivityVariant, string> = {
@@ -380,6 +424,14 @@ export function activityForTryThis(text: string | null | undefined): ResourceAct
   if (!text) return null;
   const t = normTry(text);
   return RESOURCE_ACTIVITIES.find((a) => a.tryThis.some((line) => normTry(line) === t)) ?? null;
+}
+
+/** Worksheets of one /prayers carousel prayer, in level order. */
+export function prayerSheetsFor(prayerSlug: string): { activity: ResourceActivity; level: PrayerSheetLevel; part: number; parts: number }[] {
+  return PRAYER_SHEET_ROWS.filter((r) => r[1] === prayerSlug).flatMap(([slug, , , level, part, parts]) => {
+    const activity = getActivity(slug);
+    return activity ? [{ activity, level, part, parts }] : [];
+  });
 }
 
 export function listActivities(season: ResourceSeason | null = null): ResourceActivity[] {
