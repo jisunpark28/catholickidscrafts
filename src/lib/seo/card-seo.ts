@@ -207,62 +207,7 @@ export function saintPageSeo(card: SeoCard): SaintPageSeo {
   };
 }
 
-export function faithPageSeo(card: SeoCard): CardPageSeo {
-  const whenBit = card.when ? ` Often used ${card.when}.` : "";
-  const refBit = card.ref ? ` Scripture cue: ${card.ref}.` : "";
-  const catLabel = card.cat;
-  const variants: Array<[string, string]> = [
-    [
-      `"${card.title}" is a ${catLabel} card in the "${card.set}" set. It teaches kids: "${card.text}"`,
-      `Use it before Mass, during family prayer, or in a catechism lesson when you need one clear Catholic idea.${whenBit}${refBit}`,
-    ],
-    [
-      `Catholic parents hunting for a plain-language take on "${card.title}" can start here. The card says: "${card.text}"`,
-      `That line sits inside "${card.set}" under ${catLabel}, so it fits naturally with the rest of your faith shelf.${whenBit}${refBit}`,
-    ],
-    [
-      `Kids remember faith when it is concrete. "${card.title}" gives them this: "${card.text}"`,
-      `Read it twice — once for the words, once for a quiet pause — then try the talk prompts below.${whenBit}${refBit}`,
-    ],
-    [
-      `From our ${catLabel} collection, "${card.title}" belongs to "${card.set}". Its kid-friendly summary: "${card.text}"`,
-      `Keep the card nearby when questions about Church life bubble up at the dinner table.${whenBit}${refBit}`,
-    ],
-  ];
-  const intro = variants[hash(card.id) % variants.length]!;
-  const qVariants: Array<[string, string, string]> = [
-    [
-      `In your own words, what does "${card.title}" mean after hearing "${card.text}"?`,
-      `Where might we practice this ${catLabel.toLowerCase()} idea at home this week?`,
-      card.ref
-        ? `How does ${card.ref} shine a light on "${card.title}"?`
-        : `What is one question you still have about "${card.title}"?`,
-    ],
-    [
-      `Which word in "${card.text}" feels most important to you?`,
-      `How could "${card.title}" help a friend who is new to Mass or prayer?`,
-      card.when
-        ? `When we see this around ${card.when}, what should we remember?`
-        : `Who in our parish lives "${card.title}" well?`,
-    ],
-    [
-      `Why do Catholics care about "${card.title}" enough to put it on a kids' card?`,
-      `What is a kind action that matches "${card.text}"?`,
-      `Shall we thank God for teaching us through "${card.title}"?`,
-    ],
-  ];
-  const questions = qVariants[hash(card.id + "q") % qVariants.length]!;
-  return {
-    seoTitle: clip(`${card.title} — Catholic Faith for Kids`, 60),
-    description: clip(
-      `Catholic faith card for kids: ${card.title} (${card.cat} / ${card.set}). "${card.text}"${whenBit}${refBit}`,
-      158,
-    ),
-    h1: `${card.title}: Catholic faith explained for kids`,
-    intro,
-    questions,
-  };
-}
+export { faithPageSeo } from "./card-talk";
 
 export function groupSaintsBySet(cards: readonly SeoCard[] = SAINT_SEO_CARDS): { set: string; cards: SeoCard[] }[] {
   const map = new Map<string, SeoCard[]>();

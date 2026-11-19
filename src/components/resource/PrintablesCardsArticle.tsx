@@ -8,10 +8,13 @@ import {
   cardThumbSrc,
   type CardListItem,
 } from "@/lib/resource/card-meta";
+import { getCardGroup, type CardGroupId } from "@/lib/resource/card-groups";
+import { cardTalk } from "@/lib/seo/card-talk";
 import type { SaintStoryViewData } from "@/lib/seo/saint-story-view";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { CardActions } from "./CardActions";
+import { CardTalkPanel } from "./CardTalkPanel";
 import { CardTile } from "./CardTile";
 import { LockedPreview } from "./LockedPreview";
 import { PlusLockButton } from "./PlusLockDialog";
@@ -27,6 +30,10 @@ type Props = {
   initialCardId: string | null;
   /** Full SEO saint stories keyed by card id (server-built). */
   saintStories?: Record<string, SaintStoryViewData>;
+  /** Browse group from ?group= ("" = all cards). */
+  initialGroup?: CardGroupId | "";
+  /** Printed captions of non-saint cards keyed by id (for the family talk panel). */
+  captions?: Record<string, string>;
 };
 
 const PAGE = 24;
@@ -70,15 +77,18 @@ export function PrintablesCardsArticle({
   initialQ,
   initialCardId,
   saintStories = {},
+  initialGroup = "",
+  captions = {},
 }: Props) {
   const q = initialQ.trim();
+  const group = getCardGroup(initialGroup);
   const [shown, setShown] = useState(PAGE);
   const [selectedId, setSelectedId] = useState<string | null>(initialCardId);
 
   const list = useMemo(() => {
     const feat = new Map(featuredIds.map((id, i) => [id, i]));
     return cards
-      .filter((c) => matches(c, q))
+      .filter((c) => (!group || c.groups?.includes(group.id)) && matches(c, q))
       .slice()
       .sort((a, b) => {
         const fa = feat.get(a.id) ?? Infinity;
@@ -89,7 +99,7 @@ export function PrintablesCardsArticle({
         if (b.date) return 1;
         return a.id.localeCompare(b.id);
       });
-  }, [cards, q, featuredIds]);
+  }, [cards, q, featuredIds, group]);
 
   const selected = selectedId
     ? list.find((c) => c.id === selectedId) ?? cards.find((c) => c.id === selectedId) ?? null
@@ -101,12 +111,26 @@ export function PrintablesCardsArticle({
     if (selectedId) url.searchParams.set("card", selectedId);
     else url.searchParams.delete("card");
     if (q) url.searchParams.set("q", q);
+    if (group) url.searchParams.set("group", group.id);
     window.history.replaceState(window.history.state, "", url.toString());
-  }, [selectedId, q]);
+  }, [selectedId, q, group]);
 
   if (selected) {
     const clear = isPlus || selected.id === freeCardId;
     const saint = saintStories[selected.id] ?? null;
+    const caption = captions[selected.id];
+    const talk =
+      caption != null
+        ? cardTalk({
+            id: selected.id,
+            cat: selected.cat,
+            set: selected.set,
+            title: selected.title,
+            text: caption,
+            ref: selected.ref,
+            when: selected.when,
+          })
+        : null;
     const printSaveCls =
       "flex w-full items-center justify-center gap-1.5 rounded-full border border-[#c9773a] bg-white px-3 py-1.5 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-[#fff8f0]";
     const saintActions = (
@@ -219,6 +243,11 @@ export function PrintablesCardsArticle({
             )}
           </div>
           <div className="mt-4">{compactActions}</div>
+          {talk ? (
+            <div className="mt-6">
+              <CardTalkPanel talk={talk} cardRef={selected.ref} />
+            </div>
+          ) : null}
         </div>
       </article>
     );
@@ -227,7 +256,7 @@ export function PrintablesCardsArticle({
   return (
     <section aria-label="Cards gallery" className="space-y-4">
       <header>
-        <h2 className="m-0 font-serif text-xl font-bold text-[#1c1c1c] sm:text-2xl">All cards</h2>
+        <h2 className="m-0 font-serif text-xl font-bold text-[#1c1c1c] sm:text-2xl">{group ? group.label : "All cards"}</h2>
         {q ? <p className="mb-0 mt-1 text-sm text-[#6b5c50]">Results for “{q}”</p> : null}
       </header>
 

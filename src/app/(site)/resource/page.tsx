@@ -19,6 +19,7 @@ import {
   torontoDate,
 } from "@/lib/resource/activities";
 import { upcomingCardDates } from "@/lib/resource/card-calendar";
+import { parseCardGroup } from "@/lib/resource/card-groups";
 import {
   cardsForSunday,
   getPictureCard,
@@ -99,6 +100,7 @@ export default async function ResourcePage({ searchParams }: Props) {
   const level = parseLevelParam(sp.level);
   const viewParam = parseView(one(sp.view));
   const sundayParam = one(sp.sunday);
+  const cardGroup = viewParam === "cards" ? parseCardGroup(one(sp.group)) : "";
   const country = pickCountry(undefined, cookieStore.get(COUNTRY_COOKIE)?.value, h.get("x-vercel-ip-country"));
 
   // Old card share URLs still open their detail panel; Option E defaults Printables to Worksheets (mode key: sundays).
@@ -219,6 +221,7 @@ export default async function ResourcePage({ searchParams }: Props) {
         initialQ={viewParam === "cards" ? q : ""}
         level={level}
         freeCardTitle={featured?.card.title ?? null}
+        group={cardGroup}
       />
     ) : undefined;
 
@@ -267,6 +270,8 @@ export default async function ResourcePage({ searchParams }: Props) {
           initialQ={q}
           initialCardId={sharedCard?.id ?? one(sp.card) ?? null}
           saintStories={saintStoryViewsById()}
+          initialGroup={cardGroup}
+          captions={Object.fromEntries(PICTURE_CARDS.filter((c) => c.cat !== "Saint").map((c) => [c.id, c.text]))}
         />
       ) : view === "cards" ? (
         <CardsBrowser
