@@ -8,8 +8,9 @@ import type { CardRelatedWorksheet } from "@/lib/resource/card-related";
 import { cardTalk } from "@/lib/seo/card-talk";
 import type { SaintStoryViewData } from "@/lib/seo/saint-story-view";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { CardActions } from "./CardActions";
+import { CardPagination } from "./CardPagination";
 import { CardTile } from "./CardTile";
 import { PlusLockButton } from "./PlusLockDialog";
 import { RelatedWorksheet } from "./RelatedWorksheet";
@@ -47,6 +48,11 @@ function matches(c: CardListItem, q: string): boolean {
     .every((w) => hay.includes(w));
 }
 
+function parsePage(raw: string | null): number {
+  const n = Number(raw ?? "1");
+  return Number.isSafeInteger(n) && n > 0 ? n : 1;
+}
+
 /**
  * Right pane for Cards mode: gallery of all cards by default; click → detail.
  * Every card opens the shared SaintStoryPanel layout (saints: story + Fact Box; others: caption + short facts),
@@ -70,7 +76,6 @@ export function PrintablesCardsArticle({
 }: Props) {
   const q = initialQ.trim();
   const group = getCardGroup(initialGroup);
-  const [shown, setShown] = useState(PAGE);
   // The open card lives in the URL (?card=), so "Try this" links, Back and shared links all agree.
   const searchParams = useSearchParams();
   const selectedId = searchParams ? searchParams.get("card") : initialCardId;
@@ -100,6 +105,32 @@ export function PrintablesCardsArticle({
         return a.id.localeCompare(b.id);
       });
   }, [cards, q, featuredIds, group]);
+
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE));
+  const requestedPage = parsePage(searchParams ? searchParams.get("page") : null);
+  const page = Math.min(requestedPage, totalPages);
+  const pageCards = list.slice((page - 1) * PAGE, page * PAGE);
+
+  const resultsHref = useMemo(() => {
+    const p = new URLSearchParams();
+    p.set("view", "cards");
+    if (group) p.set("group", group.id);
+    if (q) p.set("q", q);
+    if (level === 2) p.set("level", "2");
+    return `/resource?${p.toString()}`;
+  }, [group, q, level]);
+
+  const gridRef = useRef<HTMLElement>(null);
+  const prevPageRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (prevPageRef.current === null) {
+      prevPageRef.current = page;
+      return;
+    }
+    if (prevPageRef.current === page) return;
+    prevPageRef.current = page;
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [page]);
 
   const found = selectedId
     ? list.find((c) => c.id === selectedId) ?? cards.find((c) => c.id === selectedId) ?? null
@@ -223,7 +254,7 @@ export function PrintablesCardsArticle({
   }
 
   return (
-    <section aria-label="Cards gallery" className="space-y-4">
+    <section ref={gridRef} id="cards-gallery" aria-label="Cards gallery" className="scroll-mt-4 space-y-4">
       <header>
         <h2 className="m-0 font-serif text-xl font-bold text-[#1c1c1c] sm:text-2xl">{group ? group.label : "All cards"}</h2>
         {q ? <p className="mb-0 mt-1 text-sm text-[#6b5c50]">Results for “{q}”</p> : null}
@@ -231,7 +262,7 @@ export function PrintablesCardsArticle({
 
       {list.length ? (
         <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 xl:grid-cols-4">
-          {list.slice(0, shown).map((c) => (
+          {pageCards.map((c) => (
             <li key={c.id}>
               <CardTile
                 card={c}
@@ -251,17 +282,7 @@ export function PrintablesCardsArticle({
         </p>
       )}
 
-      {shown < list.length ? (
-        <p className="text-center text-sm">
-          <button
-            type="button"
-            onClick={() => setShown((n) => n + PAGE)}
-            className="rounded-full border border-[#e7e3de] bg-white px-4 py-2 font-semibold text-[#c9773a] hover:bg-[#fffdfb]"
-          >
-            Load more
-          </button>
-        </p>
-      ) : null}
+      <CardPagination currentPage={page} totalPages={list.length ? totalPages : 1} resultsHref={resultsHref} />
     </section>
   );
 }
