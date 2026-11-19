@@ -1,6 +1,7 @@
 import { LockedPreview } from "@/components/resource/LockedPreview";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { cardLockedPreviewSrc, cardThumbSrc } from "@/lib/resource/card-meta";
+import type { CardFact } from "@/lib/seo/card-talk";
 import type { SaintStoryViewData } from "@/lib/seo/saint-story-view";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,6 +23,17 @@ type Props = {
   showHubLink?: boolean;
   /** Quick Facts box (Feast day, Patron of, Symbols) at the top; the Fact Box then keeps only the story. */
   quickFacts?: boolean;
+  /** Non-saint cards: label before `when` (default "Feast day"). */
+  whenLabel?: string;
+  /** Non-saint cards: Fact Box rows used when there is no saint Fact Box. */
+  facts?: CardFact[];
+  /** Image alt suffix (default "saint card for kids"). */
+  imageKind?: string;
+  /** Bottom back link (default: all Catholic saints for kids). */
+  hubLink?: { href: string; label: string };
+  /** Newsletter signup source (default "catholic-saints-for-kids"). */
+  newsletterSource?: string;  /** Optional block after the family questions (e.g. a related worksheet preview). */
+  afterQuestions?: ReactNode;
 };
 
 function FactPills({ items }: { items: string[] }) {
@@ -122,6 +134,36 @@ function SaintFactBoxCard({
   );
 }
 
+function CardFactBox({ facts }: { facts: CardFact[] }) {
+  if (facts.length === 0) return null;
+  return (
+    <section aria-labelledby="fact-box" className="rounded-2xl border border-[#f0d9b8] bg-white/90 p-4">
+      <h2 id="fact-box" className="m-0 font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
+        Fact Box
+      </h2>
+      <dl className="mb-0 mt-2 space-y-2">
+        {facts.map((row) => (
+          <div key={row.label} className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
+            <dt className="shrink-0 pt-0.5 text-xs font-semibold uppercase tracking-wide text-[#9a6b3f] sm:w-28">
+              {row.label}
+            </dt>
+            <dd className="m-0 text-base leading-relaxed text-[#374151]">
+              {row.hidden ? (
+                <details>
+                  <summary className="cursor-pointer font-semibold text-[#9a4f1c]">Show answer</summary>
+                  <span className="mt-1 block">{row.value}</span>
+                </details>
+              ) : (
+                row.value
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
 /**
  * Full saint SEO story layout (card + Print/Save, set, H1, feast, quote, Fact Box,
  * family questions, Bible verses link, optional newsletter) — shared by
@@ -135,6 +177,12 @@ export function SaintStoryPanel({
   showNewsletter = true,
   showHubLink = true,
   quickFacts = false,
+  whenLabel = "Feast day",
+  facts,
+  imageKind = "saint card for kids",
+  hubLink = { href: SAINTS_HUB, label: "← All Catholic saints for kids" },
+  newsletterSource = "catholic-saints-for-kids",
+  afterQuestions,
 }: Props) {
   return (
     <article className="rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
@@ -147,7 +195,7 @@ export function SaintStoryPanel({
               {canPreview ? (
                 <Image
                   src={cardThumbSrc(story.id)}
-                  alt={`${story.title} saint card for kids`}
+                  alt={`${story.title} ${imageKind}`}
                   width={432}
                   height={540}
                   unoptimized
@@ -177,7 +225,7 @@ export function SaintStoryPanel({
             <h1 className="mt-1 font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{story.h1}</h1>
             {story.when && !quickFacts ? (
               <p className="mb-0 mt-2 text-base text-[#4b5563]">
-                <span className="font-semibold text-[#1f2937]">Feast day:</span> {story.when}
+                <span className="font-semibold text-[#1f2937]">{whenLabel}:</span> {story.when}
               </p>
             ) : null}
           </header>
@@ -191,6 +239,8 @@ export function SaintStoryPanel({
 
           {story.factBox ? (
             <SaintFactBoxCard box={story.factBox} showStory={story.showStory} showFacts={!quickFacts} />
+          ) : facts ? (
+            <CardFactBox facts={facts} />
           ) : null}
         </div>
       </div>
@@ -206,6 +256,8 @@ export function SaintStoryPanel({
         </ol>
       </section>
 
+      {afterQuestions}
+
       <p className="mb-0 mt-6 text-sm text-[#4b5563]">
         Looking for Scripture for a hard day at home?{" "}
         <Link href="/bible-verses-for-kids" className="font-semibold text-[#335599] hover:underline">
@@ -215,14 +267,14 @@ export function SaintStoryPanel({
 
       {showNewsletter ? (
         <div className="mt-10">
-          <NewsletterSubscribeForm source="catholic-saints-for-kids" />
+          <NewsletterSubscribeForm source={newsletterSource} />
         </div>
       ) : null}
 
       {showHubLink ? (
         <p className="mb-0 mt-6 text-sm text-[#6b7280]">
-          <Link href={SAINTS_HUB} className="font-semibold text-[#335599] hover:underline">
-            ← All Catholic saints for kids
+          <Link href={hubLink.href} className="font-semibold text-[#335599] hover:underline">
+            {hubLink.label}
           </Link>
         </p>
       ) : null}

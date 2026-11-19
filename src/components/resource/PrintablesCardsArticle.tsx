@@ -2,22 +2,17 @@
 
 import { SignInGatedLink } from "@/components/SignInGatedLink";
 import { SaintStoryPanel } from "@/components/seo/SaintStoryPanel";
-import {
-  cardLockedPreviewSrc,
-  cardPrintPath,
-  cardThumbSrc,
-  type CardListItem,
-} from "@/lib/resource/card-meta";
+import { cardPrintPath, type CardListItem } from "@/lib/resource/card-meta";
 import { getCardGroup, type CardGroupId } from "@/lib/resource/card-groups";
+import type { CardRelatedWorksheet } from "@/lib/resource/card-related";
 import { cardTalk } from "@/lib/seo/card-talk";
 import type { SaintStoryViewData } from "@/lib/seo/saint-story-view";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 import { CardActions } from "./CardActions";
-import { CardTalkPanel } from "./CardTalkPanel";
 import { CardTile } from "./CardTile";
-import { LockedPreview } from "./LockedPreview";
 import { PlusLockButton } from "./PlusLockDialog";
+import { RelatedWorksheet } from "./RelatedWorksheet";
 
 type Props = {
   cards: CardListItem[];
@@ -34,23 +29,13 @@ type Props = {
   initialGroup?: CardGroupId | "";
   /** Printed captions of non-saint cards keyed by id (for the family talk panel). */
   captions?: Record<string, string>;
+  /** Related worksheet per non-saint card id (existing data only). */
+  relatedWorksheets?: Record<string, CardRelatedWorksheet>;
+  /** Saint Report Worksheet, shown on every saint card. */
+  saintWorksheet?: CardRelatedWorksheet | null;
 };
 
 const PAGE = 24;
-
-function fullDate(ymd: string): string {
-  return new Date(`${ymd}T00:00:00Z`).toLocaleDateString("en-US", {
-    timeZone: "UTC",
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function subtitle(c: CardListItem): string {
-  return [c.date ? fullDate(c.date) : c.when, c.ref].filter(Boolean).join(" · ");
-}
 
 function matches(c: CardListItem, q: string): boolean {
   if (!q) return true;
@@ -64,7 +49,8 @@ function matches(c: CardListItem, q: string): boolean {
 
 /**
  * Right pane for Cards mode: gallery of all cards by default; click → detail.
- * Saint cards open the full SEO saint story UI; other cards keep compact detail.
+ * Every card opens the shared SaintStoryPanel layout (saints: story + Fact Box; others: caption + short facts),
+ * plus a related worksheet when existing data links one. The open card is the ?card= URL param.
  * Auth: clear preview/download for this week's free card (and Plus); else blur + block right-click via LockedPreview.
  */
 export function PrintablesCardsArticle({
@@ -79,11 +65,25 @@ export function PrintablesCardsArticle({
   saintStories = {},
   initialGroup = "",
   captions = {},
+  relatedWorksheets = {},
+  saintWorksheet = null,
 }: Props) {
   const q = initialQ.trim();
   const group = getCardGroup(initialGroup);
   const [shown, setShown] = useState(PAGE);
-  const [selectedId, setSelectedId] = useState<string | null>(initialCardId);
+  // The open card lives in the URL (?card=), so "Try this" links, Back and shared links all agree.
+  const searchParams = useSearchParams();
+  const selectedId = searchParams ? searchParams.get("card") : initialCardId;
+
+  /** Open/close a card with a real history entry (Next syncs useSearchParams with pushState). */
+  function setSelectedId(id: string | null) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", "cards");
+    if (id) url.searchParams.set("card", id);
+    else url.searchParams.delete("card");
+    window.history.pushState(null, "", url.toString());
+    if (id) window.scrollTo({ top: 0 });
+  }
 
   const list = useMemo(() => {
     const feat = new Map(featuredIds.map((id, i) => [id, i]));
@@ -105,22 +105,12 @@ export function PrintablesCardsArticle({
     ? list.find((c) => c.id === selectedId) ?? cards.find((c) => c.id === selectedId) ?? null
     : null;
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("view", "cards");
-    if (selectedId) url.searchParams.set("card", selectedId);
-    else url.searchParams.delete("card");
-    if (q) url.searchParams.set("q", q);
-    if (group) url.searchParams.set("group", group.id);
-    window.history.replaceState(window.history.state, "", url.toString());
-  }, [selectedId, q, group]);
-
   if (selected) {
     const clear = isPlus || selected.id === freeCardId;
     const saint = saintStories[selected.id] ?? null;
     const caption = captions[selected.id];
     const talk =
-      caption != null
+      !saint && caption != null
         ? cardTalk({
             id: selected.id,
             cat: selected.cat,
@@ -131,9 +121,10 @@ export function PrintablesCardsArticle({
             when: selected.when,
           })
         : null;
+    const printLabel = saint ? "Print / Save Saint Card" : "Print / Save Card";
     const printSaveCls =
       "flex w-full items-center justify-center gap-1.5 rounded-full border border-[#c9773a] bg-white px-3 py-1.5 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-[#fff8f0]";
-    const saintActions = (
+    const actions = (
       <div className="space-y-2">
         {clear ? (
           <SignInGatedLink
@@ -142,7 +133,7 @@ export function PrintablesCardsArticle({
             rel="noopener"
             className={printSaveCls}
           >
-            <span aria-hidden="true">🖨️</span> Print / Save Saint Card
+            <span aria-hidden="true">🖨️</span> {printLabel}
           </SignInGatedLink>
         ) : (
           <PlusLockButton
@@ -151,7 +142,7 @@ export function PrintablesCardsArticle({
             className={`${printSaveCls} cursor-pointer text-[#9ca3af]`}
             title="Print and save need Plus (this week’s free card stays open)"
           >
-            <span aria-hidden="true">🖨️</span> Print / Save Saint Card
+            <span aria-hidden="true">🖨️</span> {printLabel}
           </PlusLockButton>
         )}
         <CardActions
@@ -164,30 +155,27 @@ export function PrintablesCardsArticle({
         />
       </div>
     );
-    const compactActions = (
-      <CardActions
-        card={selected}
-        isPlus={isPlus}
-        isFree={selected.id === freeCardId}
-        level={level}
-        siteUrl={siteUrl}
-      />
+    const backButton = (
+      <button
+        type="button"
+        onClick={() => setSelectedId(null)}
+        className="text-sm font-medium text-[#335599] hover:text-[#9d451d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c9773a]"
+      >
+        ← {group ? group.label : "All cards"}
+      </button>
     );
+    const related = saint ? saintWorksheet : (relatedWorksheets[selected.id] ?? null);
+    const afterQuestions = related ? <RelatedWorksheet item={related} /> : null;
 
     if (saint) {
       return (
         <div className="space-y-4">
-          <button
-            type="button"
-            onClick={() => setSelectedId(null)}
-            className="text-sm font-medium text-[#335599] hover:text-[#9d451d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c9773a]"
-          >
-            ← All cards
-          </button>
+          {backButton}
           <SaintStoryPanel
             story={saint}
             canPreview={clear}
-            actions={saintActions}
+            actions={actions}
+            afterQuestions={afterQuestions}
             showNewsletter
             showHubLink
           />
@@ -195,61 +183,40 @@ export function PrintablesCardsArticle({
       );
     }
 
+    // Non-saint cards use the same layout as saint cards (image + actions left, facts right).
+    const groupHref = group ? `/resource?view=cards&group=${group.id}${level === 2 ? "&level=2" : ""}` : null;
     return (
-      <article aria-label="Card detail" className="space-y-4">
-        <button
-          type="button"
-          onClick={() => setSelectedId(null)}
-          className="text-sm font-medium text-[#335599] hover:text-[#9d451d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c9773a]"
-        >
-          ← All cards
-        </button>
-        <div className="rounded-[20px] border border-[#e8d9cd] bg-[#fffdfa] p-4 sm:p-5">
-          <p className="m-0 text-[11px] font-bold uppercase tracking-wide text-[#c9773a]">
-            Card · {selected.cat}
-            {selected.id === freeCardId ? (
-              <>
-                <span aria-hidden> · </span>
-                <span className="text-[#1e7b34]">This week · free</span>
-              </>
-            ) : null}
-          </p>
-          <h2 className="m-0 mt-1 font-serif text-2xl font-bold text-[#1c1c1c]">{selected.title}</h2>
-          {subtitle(selected) ? <p className="m-0 mt-1 text-xs text-[#6b7280]">{subtitle(selected)}</p> : null}
-          <div className="mt-4 overflow-hidden rounded-xl border border-[#eee8e1] bg-[#fbf7f1]">
-            {clear ? (
-              <Image
-                key={selected.id}
-                src={cardThumbSrc(selected.id)}
-                alt={`${selected.title} picture card`}
-                width={432}
-                height={540}
-                unoptimized
-                className="mx-auto block h-auto max-h-[420px] w-auto"
-              />
-            ) : (
-              <LockedPreview label={`${selected.title}: unlock with Plus`}>
-                <Image
-                  key={selected.id}
-                  src={cardLockedPreviewSrc(selected.id)}
-                  alt=""
-                  width={216}
-                  height={270}
-                  unoptimized
-                  draggable={false}
-                  className="mx-auto block h-auto max-h-[420px] w-auto"
-                />
-              </LockedPreview>
-            )}
-          </div>
-          <div className="mt-4">{compactActions}</div>
-          {talk ? (
-            <div className="mt-6">
-              <CardTalkPanel talk={talk} cardRef={selected.ref} />
-            </div>
-          ) : null}
-        </div>
-      </article>
+      <div className="space-y-4">
+        {backButton}
+        <SaintStoryPanel
+          story={{
+            id: selected.id,
+            title: selected.title,
+            set: selected.set,
+            when: selected.when && selected.when !== "—" ? selected.when : null,
+            text: talk?.caption ?? caption ?? selected.title,
+            ref: selected.ref ?? null,
+            h1: talk?.h1 ?? selected.title,
+            questions: talk?.questions ?? [],
+            factBox: null,
+            showStory: false,
+            slug: "",
+          }}
+          canPreview={clear}
+          actions={actions}
+          whenLabel={talk?.whenLabel ?? "When"}
+          facts={talk?.facts ?? []}
+          imageKind="picture card for kids"
+          hubLink={{
+            href: groupHref ?? `/resource?view=cards${level === 2 ? "&level=2" : ""}`,
+            label: group ? `← All ${group.label}` : "← All cards",
+          }}
+          newsletterSource="resource-cards"
+          afterQuestions={afterQuestions}
+          showNewsletter
+          showHubLink
+        />
+      </div>
     );
   }
 
