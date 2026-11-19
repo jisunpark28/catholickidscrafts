@@ -106,7 +106,7 @@ const directory = buildHomePdfNav([], { gallery: "Gallery", curriculum: "Curricu
 const categoryHrefs = directory.groups
   .filter((group) => group.id === "faith" || group.id === "liturgical-year")
   .flatMap((group) => group.items.map((item) => item.href));
-assert.deepEqual(categoryHrefs, ["/prayers", ...LITURGY_TOPICS.map((slug) => `/liturgy/${slug}`)]);
+assert.deepEqual(categoryHrefs, ["/prayers", ...LITURGY_TOPICS.map((slug) => (slug === "saints" ? "/catholic-saints-for-kids" : `/liturgy/${slug}`))]);
 assert.equal(fs.readFileSync("src/components/home/HomePdfShell.tsx", "utf8").includes("SidebarNavigation"), true);
 assert.equal(fs.readFileSync("src/components/home/HomePdfShell.tsx", "utf8").includes("Old Testament"), false);
 
