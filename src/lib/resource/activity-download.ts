@@ -2,7 +2,7 @@
 // session, Plus, rate-limit and file readers; scripts/test-activities.ts passes mocks to check that
 // 401 / 402 are answered before any file or Blob access.
 import { NextResponse } from "next/server";
-import { activityFileName, getActivity, parseActivityVariant, type ActivityVariant, type ResourceActivity } from "@/lib/resource/activities";
+import { activityFileName, getActivity, isActivityFreeThisWeek, parseActivityVariant, type ActivityVariant, type ResourceActivity } from "@/lib/resource/activities";
 import type { ActivityFile } from "@/lib/resource/activity-files";
 import type { RateLimitRule } from "@/lib/rate-limit";
 
@@ -26,11 +26,14 @@ export type ActivityDownloadDeps = {
   readPdf: (activity: ResourceActivity, variant: ActivityVariant, opts: { oidcToken: string | null }) => Promise<ActivityFile | null>;
   /** True for "storage not reachable" errors from readPdf (answered 503). */
   isUnavailable: (e: unknown) => boolean;
+  /** Clock for the weekly free rule (tests pass a fixed date). Defaults to the request time. */
+  now?: () => Date;
 };
 
 /**
- * Activity PDF (B&W or colour), checked on every request. Free sheets: any signed-in parent.
- * Plus sheets (crafts): an active Plus pass too, else 402. Signed out: 401. Child mode: 403.
+ * Activity PDF (B&W or colour), checked on every request. Sheets scheduled in this week
+ * (isActivityFreeThisWeek, computed per request): any signed-in parent. Everything else: an active
+ * Plus pass too, else 402. Signed out: 401. Child mode: 403.
  * Files are read only after those checks; craft PDFs are streamed from the private Blob store, so
  * no storage path, URL or token ever reaches the browser.
  */
@@ -46,7 +49,8 @@ export function createActivityDownloadHandler(deps: ActivityDownloadDeps) {
       guard.error.headers.set("Cache-Control", noStore["Cache-Control"]);
       return guard.error;
     }
-    if (activity.access === "plus" && !(await deps.hasPlus(guard.session.familyAccountId))) {
+    const freeThisWeek = isActivityFreeThisWeek(activity, deps.now ? deps.now() : new Date());
+    if (!freeThisWeek && !(await deps.hasPlus(guard.session.familyAccountId))) {
       const res = deps.plusRequired();
       res.headers.set("Cache-Control", noStore["Cache-Control"]);
       return res;

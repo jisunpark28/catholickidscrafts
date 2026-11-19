@@ -6,6 +6,7 @@ import {
   ACTIVITY_VARIANTS,
   activityEditPath,
   activityPath,
+  isActivityFreeThisWeek,
   type ActivityVariant,
   type ResourceActivity,
 } from "@/lib/resource/activities";
@@ -26,9 +27,9 @@ const ghost =
   "inline-flex items-center justify-center gap-1.5 rounded-full border border-[#e7e3de] bg-white px-5 py-2.5 text-sm font-semibold text-[#1c1c1c] no-underline transition hover:bg-[#fffdfb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
 
 /**
- * Preview + B&W / colour choice + download. Free sheets: signed-in parents download (the API checks
- * the session on every request). Plus sheets (the craft): Plus members download, others see the
- * Plus lock. Signed-out visitors get the sign-in prompt. Plus members also get the editor.
+ * Preview + B&W / colour choice + download. Sheets scheduled this week: signed-in parents download
+ * (the API checks the session and the week on every request). Everything else: Plus members
+ * download, others see the Plus lock. Signed-out visitors get the sign-in prompt. Plus members also get the editor.
  * Display only: the session flags here never unlock anything by themselves.
  */
 export function ActivityDownloadPanel({ activity }: Props) {
@@ -39,7 +40,8 @@ export function ActivityDownloadPanel({ activity }: Props) {
   const family = session.family;
   const signedIn = Boolean(family && !family.childMode);
   const isPlus = Boolean(family?.isPlus && !family.childMode);
-  const plusOnly = activity.access === "plus";
+  // Computed in the browser after load, so the static page never shows a stale week.
+  const plusOnly = !(ready && isActivityFreeThisWeek(activity));
   const kindLabel = activity.kind.toLowerCase();
 
   const download = async () => {
@@ -103,7 +105,7 @@ export function ActivityDownloadPanel({ activity }: Props) {
           <div>
             <PlusLockButton
               className={`${primary} cursor-pointer`}
-              message={`This ${kindLabel} is for Plus members. The weekly sheet, card and daily activity sheets stay free.`}
+              message={`This ${kindLabel} is for Plus members. This week's sheets stay free for signed-in families.`}
             >
               🔒 Download PDF ({ACTIVITY_VARIANT_LABELS[variant]})
             </PlusLockButton>
@@ -127,7 +129,7 @@ export function ActivityDownloadPanel({ activity }: Props) {
               </p>
             ) : (
               <p className="m-0 mt-2 text-xs text-[#6b7280]">
-                {plusOnly ? "Included with Plus." : "Free for signed-in families."}
+                {plusOnly ? "Included with Plus." : "Free this week for signed-in families."}
               </p>
             )}
           </div>
@@ -138,12 +140,12 @@ export function ActivityDownloadPanel({ activity }: Props) {
         ) : (
           <ActivitySignInPrompt
             title="Sign in to download"
-            kicker={plusOnly ? "Plus members" : undefined}
+            kicker={plusOnly ? "Plus members" : "Free this week with a family account"}
             callbackUrl={activityPath(activity.slug)}
             body={
               plusOnly
                 ? `This ${kindLabel} is for Plus members. Sign in with your family account first.`
-                : `This ${kindLabel} is free. Sign in with your family account to download the PDF.`
+                : `This ${kindLabel} is free this week. Sign in with your family account to download the PDF.`
             }
           />
         )}

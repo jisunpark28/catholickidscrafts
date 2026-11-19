@@ -36,7 +36,7 @@ export function RelatedWorksheet({ item }: { item: CardRelatedWorksheet }) {
             Open worksheet →
             {item.access ? (
               <span className="ml-2 text-xs text-[#6b7280]">
-                {item.access === "plus" ? "Download with Plus" : "Free download with sign-in"}
+                {item.access === "plus" ? "Download with Plus" : "Free this week with sign-in"}
               </span>
             ) : null}
           </span>

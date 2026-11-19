@@ -2,7 +2,7 @@
 // Saint cards -> Saint Report Worksheet; evergreen catalog relatedCardIds / card sheetKeys ->
 // Mass or Virtue Challenge worksheet; same-title printable activity; card sheetKeys -> Sunday sheet.
 import { publicPath, EVERGREEN_PAGES } from "@/lib/evergreen-catalog";
-import { activityPath, getActivity, RESOURCE_ACTIVITIES, SAINT_REPORT_SLUG } from "@/lib/resource/activities";
+import { activityAccessNow, activityPath, getActivity, RESOURCE_ACTIVITIES, SAINT_REPORT_SLUG } from "@/lib/resource/activities";
 import type { PictureCard } from "@/lib/resource/card-meta";
 import { sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
@@ -14,7 +14,7 @@ export type CardRelatedWorksheet = {
   label: string;
   /** Public low-resolution preview image (activities only; worksheets have no static preview). */
   image?: string;
-  /** Download gate of the linked activity ("signin" free with sign-in, "plus" Plus only). */
+  /** Download gate of the linked activity this week ("signin" free with sign-in, "plus" Plus only). */
   access?: "signin" | "plus";
 };
 
@@ -31,7 +31,7 @@ const ACTIVITY_BY_TITLE = new Map(RESOURCE_ACTIVITIES.map((a) => [norm(a.title),
 function activityWorksheet(slug: string): CardRelatedWorksheet | null {
   const a = getActivity(slug);
   if (!a) return null;
-  return { title: a.title, href: activityPath(a.slug), label: a.kind, image: a.previews.color, access: a.access };
+  return { title: a.title, href: activityPath(a.slug), label: a.kind, image: a.previews.color, access: activityAccessNow(a) };
 }
 
 /** Saint Report Worksheet (shown on every saint card). */

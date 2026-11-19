@@ -67,7 +67,7 @@ export function ActivityEditorGate({ slug, title, plusOnly = false }: { slug: st
       href={activityPath(slug)}
       className="rounded-full border border-[#e7e3de] bg-white px-5 py-2.5 text-sm font-medium text-[#1c1c1c] no-underline hover:bg-[#fffdfb]"
     >
-      {plusOnly ? "Back to the craft" : "Back to the free download"}
+      Back to the download page
     </Link>
   );
 
@@ -80,7 +80,7 @@ export function ActivityEditorGate({ slug, title, plusOnly = false }: { slug: st
           body={
             plusOnly
               ? `Editing ${title} is a Plus feature. Sign in first.`
-              : `Editing ${title} is a Plus feature. Sign in first; downloading the sheet is free for every family.`
+              : `Editing ${title} is a Plus feature. Sign in first; the ready-made sheet is free for signed-in families during its week.`
           }
         />
         <div className="mt-4 text-center">{back}</div>
@@ -99,7 +99,7 @@ export function ActivityEditorGate({ slug, title, plusOnly = false }: { slug: st
           <h2 className="mb-2 mt-2 text-xl font-bold text-[#1c1c1c]">Make {title} your own</h2>
           <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[#4b5563]">
             Plus members can change every word, line and dot on this sheet, choose black &amp; white or colour, and
-            print or download their own PDF.{plusOnly ? "" : " The ready-made sheet stays free for signed-in families."}
+            print or download their own PDF.{plusOnly ? "" : " The ready-made sheet is free for signed-in families during its week."}
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <Link

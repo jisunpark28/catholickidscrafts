@@ -13,6 +13,7 @@ import {
   type AdventPackSheetLinks,
   type AdventPackWeek,
 } from "@/lib/advent-complete-2026";
+import { activityAccessNow } from "@/lib/resource/activities";
 import { signInPath } from "@/lib/sign-in-callback";
 import { yearLabel } from "@/lib/resource/sheets";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
@@ -113,7 +114,7 @@ function ItemRow({
         <div className="min-w-0 flex-1 self-center">
           <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#d35400]">
             {roleLabel(item)}
-            {item.activity.access === "plus" ? " · Plus" : " · Sign-in"}
+            {activityAccessNow(item.activity) === "plus" ? " · Plus" : " · Free this week"}
           </p>
           <p className="font-bold leading-snug text-[#1f2937]">{item.activity.title}</p>
         </div>

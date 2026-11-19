@@ -14,6 +14,10 @@ import {
   homeCraftPicks,
   HOME_ACTIVITY_PICKS,
   homeActivityPicks,
+  activityAccessInWeekOf,
+  isActivityFreeInWeekOf,
+  isActivityFreeThisWeek,
+  SAINT_REPORT_SLUG,
   SUNDAY_CRAFT_SLUG,
   torontoDate,
   activityEditPath,
@@ -38,6 +42,7 @@ import { buildResourcesSitemap } from "../src/lib/sitemap-entries";
 import { createActivityDownloadHandler, type ActivityDownloadDeps } from "../src/lib/resource/activity-download";
 import { ActivityFileUnavailableError } from "../src/lib/resource/activity-files";
 import { craftBlobPathname } from "../src/lib/resource/craft-blobs";
+import { weekSundayOf } from "../src/lib/resource/week";
 import { NextResponse } from "next/server";
 
 async function main() {
@@ -109,15 +114,15 @@ async function main() {
   const page = await fs.readFile("src/app/(site)/resource/activity/[slug]/page.tsx", "utf8");
   assert.ok(!page.includes("activity-models") && !page.includes("cookies("), "detail page stays static and never ships the model");
 
-  // Plus-only downloads (the craft) are checked on the server too.
-  assert.ok(dl.includes('activity.access === "plus"') && dl.includes("deps.hasPlus(") && dl.includes("deps.plusRequired()"));
+  // Plus-only downloads (everything not free this week) are checked on the server too, per request.
+  assert.ok(dl.includes("isActivityFreeThisWeek(") && dl.includes("deps.hasPlus(") && dl.includes("deps.plusRequired()"));
   assert.ok(dl.indexOf("deps.guard()") < dl.indexOf("deps.hasPlus(") && dl.indexOf("deps.hasPlus(") < dl.indexOf("deps.readPdf("), "401 before 402 before any file");
 
   // Same order at runtime, with the session, Plus and Blob reads mocked.
   {
     const calls: string[] = [];
     const json = (status: number) => NextResponse.json({ status }, { status });
-    const deps = (o: { signedIn: boolean; plus: boolean; file?: "ok" | "missing" | "down" }): ActivityDownloadDeps => ({
+    const deps = (o: { signedIn: boolean; plus: boolean; file?: "ok" | "missing" | "down"; now?: string }): ActivityDownloadDeps => ({
       guard: async () => (calls.push("guard"), o.signedIn ? { session: { familyAccountId: "fam1" } } : { error: json(401) }),
       hasPlus: async () => (calls.push("plus"), o.plus),
       plusRequired: () => json(402),
@@ -130,6 +135,8 @@ async function main() {
         return { body: new Blob(["%PDF-1.4 test"]).stream(), size: 13 };
       },
       isUnavailable: (e) => e instanceof ActivityFileUnavailableError,
+      // Monday Dec 7, 2026 (Toronto) unless a test passes another time.
+      now: () => new Date(o.now ?? "2026-12-07T17:00:00Z"),
     });
     const run = async (slug: string, o: Parameters<typeof deps>[0], variant = "color") => {
       calls.length = 0;
@@ -155,7 +162,13 @@ async function main() {
     r = await run("visitation-popup", { signedIn: true, plus: true, file: "down" });
     assert.equal(r.status, 503, "Blob not reachable");
     r = await run("prepare-the-way", { signedIn: true, plus: false, file: "ok" }, "bw");
-    assert.deepEqual([r.status, r.calls], [200, ["guard", "limit", "read:bundle:bw", "record"]], "free sheet: no Plus check");
+    assert.deepEqual([r.status, r.calls], [200, ["guard", "limit", "read:bundle:bw", "record"]], "scheduled this week: free, no Plus check");
+    r = await run("prepare-the-way", { signedIn: true, plus: false, file: "ok", now: "2026-11-19T15:00:00Z" }, "bw");
+    assert.deepEqual([r.status, r.calls], [402, ["guard", "plus"]], "not scheduled this week: Plus only");
+    r = await run("prepare-the-way", { signedIn: true, plus: true, file: "ok", now: "2026-11-19T15:00:00Z" }, "bw");
+    assert.equal(r.status, 200, "Plus downloads any week");
+    r = await run(SAINT_REPORT_SLUG, { signedIn: true, plus: false, file: "ok" }, "bw");
+    assert.deepEqual([r.status, r.calls], [402, ["guard", "plus"]], "no scheduled date: Plus only");
     r = await run("nope", { signedIn: true, plus: true, file: "ok" });
     assert.deepEqual([r.status, r.calls], [404, []]);
   }
@@ -217,14 +230,14 @@ async function main() {
     assert.ok(!/\bages?\b|\bgrade\b|years old/i.test(words), `${act.slug} mentions no ages`);
   }
 
-  // Free with sign-in, except the one Plus craft.
+  // Catalog gate: "plus" for the crafts and the Saint Report Worksheet; the rest are free only in their scheduled week.
   const craft = getActivity(SUNDAY_CRAFT_SLUG);
   assert.ok(craft && craft.access === "plus" && craft.kind === "Craft");
   const UPLOADED = ["advent-bank", "advent-lantern", "fiat-flag", "gabriel-wings", "joseph-lily", "birthday-card", "swaddle-baby", "gloria-trumpet", "shepherd-crook", "bethlehem-star", "magi-gifts",
     "angel-choir", "baptism-dove-mobile", "christmas-eve-lantern", "emmanuel-door-hanger", "epiphany-chalk-blessing", "flight-into-egypt", "heart-ornaments",
     "holy-family-mobile", "john-the-baptist-card", "magi-finger-puppets", "manger-banner", "newborn-king-crown", "pondering-heart", "visitation-popup"];
   assert.equal(new Set(RESOURCE_ACTIVITIES.map((x) => x.title)).size, RESOURCE_ACTIVITIES.length, "titles are unique");
-  assert.deepEqual(RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug), [SUNDAY_CRAFT_SLUG, ...UPLOADED]);
+  assert.deepEqual(RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug), [SUNDAY_CRAFT_SLUG, SAINT_REPORT_SLUG, ...UPLOADED]);
   for (const slug of UPLOADED) {
     const c = getActivity(slug)!;
     assert.ok(c.kind === "Craft" && !c.editable && c.tryThis.length === 0 && c.seasons.length > 0, slug);
@@ -273,6 +286,29 @@ async function main() {
   assert.equal(dailyActivityFor("nope").activity.slug, "happy-new-church-year");
   assert.equal(torontoDate(new Date("2026-11-13T04:30:00Z")), "2026-11-12", "11:30 PM in Toronto is still Nov 12");
   assert.equal(torontoDate(new Date("2026-11-13T05:30:00Z")), "2026-11-13");
+
+  // Weekly free rule: Monday to Sunday weeks ending on "This Sunday" (Toronto dates), same as the Sunday sheet.
+  assert.equal(weekSundayOf("2026-11-16"), "2026-11-22");
+  assert.equal(weekSundayOf("2026-11-19"), "2026-11-22");
+  assert.equal(weekSundayOf("2026-11-22"), "2026-11-22", "a Sunday ends its own week");
+  assert.equal(weekSundayOf("2026-11-23"), "2026-11-29");
+  const thisSundaySrc = await fs.readFile("src/lib/resource/this-sunday.ts", "utf8");
+  assert.ok(thisSundaySrc.includes("weekSundayOf(today)"), "This Sunday uses the same week boundary");
+  const freeOn = (ymd: string) => RESOURCE_ACTIVITIES.filter((a) => isActivityFreeInWeekOf(a, ymd)).map((a) => a.slug).sort();
+  assert.deepEqual(
+    freeOn("2026-11-19"),
+    ["come-lord-jesus", "happy-new-church-year", "helping-hands-like-mary", "jesse-tree-picture-a-day", "secret-kindness-notes", "straw-for-the-manger", "white-flower-for-mary"],
+    "Nov 16 to 22: the sheets scheduled that week",
+  );
+  assert.deepEqual(freeOn("2026-11-16"), freeOn("2026-11-22"), "same week, same free sheets");
+  assert.ok(!isActivityFreeInWeekOf(getActivity("yes-with-a-smile")!, "2026-11-16"), "Sunday Nov 15 belongs to the week before");
+  assert.ok(isActivityFreeInWeekOf(getActivity("yes-with-a-smile")!, "2026-11-15"));
+  assert.ok(!isActivityFreeInWeekOf(getActivity(SAINT_REPORT_SLUG)!, "2026-11-19"), "no scheduled date: Plus only");
+  assert.ok(!isActivityFreeInWeekOf(craft, "2026-11-29"), "a Plus craft is never free");
+  assert.deepEqual(freeOn("2027-01-05"), [], "after the schedule: everything is Plus");
+  assert.deepEqual(freeOn("nope"), []);
+  assert.ok(isActivityFreeThisWeek(getActivity("white-flower-for-mary")!, new Date("2026-11-23T04:30:00Z")), "11:30 PM Sunday Nov 22 in Toronto");
+  assert.ok(!isActivityFreeThisWeek(getActivity("white-flower-for-mary")!, new Date("2026-11-23T05:30:00Z")), "Monday Nov 23 starts a new week");
   const bundle = await fs.readFile("src/components/resource/SundayBundle.tsx", "utf8");
   assert.ok(bundle.includes("SundayActivitySlot") && bundle.includes("craft ?"), "This Sunday fills Activities and Crafts");
 
@@ -285,7 +321,7 @@ async function main() {
     assert.equal(picks[0].activity.slug, dailyActivityFor(ymd).activity.slug, `${ymd}: today's sheet first`);
     assert.equal(picks[3].activity.slug, SUNDAY_CRAFT_SLUG);
     for (const p of picks) {
-      assert.equal(p.access, p.activity.access);
+      assert.equal(p.access, activityAccessInWeekOf(p.activity, ymd), `${ymd}: access is this week's`);
       assert.match(p.label, p.access === "plus" ? / · Plus$/ : / · Free$/, `${ymd}: label matches access`);
       assert.ok(p.activity.previews.color.startsWith("/images/activities/"));
       await fs.access(path.join("public", p.activity.previews.color));

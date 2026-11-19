@@ -1,4 +1,5 @@
 // Server-only (romcal via sheet-keys). "This Sunday" for a country.
+import { weekSundayOf } from "@/lib/resource/week";
 import { COUNTRY_CONFIG, ENABLED_COUNTRIES, resolveCountry, toSheetKey, type RomcalCountry } from "@/lib/sheet-keys";
 
 export const COUNTRY_COOKIE = "ckc_country";
@@ -39,9 +40,7 @@ export function todayIn(country: RomcalCountry, now: Date): string {
 /** The coming Sunday (today if Sunday) and its sheet key. Null if romcal fails. */
 export function thisSunday(country: RomcalCountry, now = new Date()): { date: string; key: string } | null {
   const today = todayIn(country, now);
-  const t = Date.parse(`${today}T00:00:00Z`);
-  const dow = new Date(t).getUTCDay();
-  const date = new Date(t + ((7 - dow) % 7) * 86_400_000).toISOString().slice(0, 10);
+  const date = weekSundayOf(today);
   try {
     return { date, key: toSheetKey(date, country) };
   } catch (e) {
