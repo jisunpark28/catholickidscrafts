@@ -4,7 +4,7 @@
 .rsy button{font-family:inherit;line-height:inherit}
 .rsy img,.rsy svg{max-width:none}
 .rsy-header{flex:none;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid rgba(0,0,0,.06);background:var(--cream);min-height:52px;position:relative;z-index:30}
-.rsy-head-left{justify-self:start;position:relative;min-width:0}
+.rsy-head-left{justify-self:start;position:relative;min-width:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .rsy-head-center{justify-self:center;position:relative;max-width:100%}
 .rsy-pill{appearance:none;border:1.5px solid #d8c6b4;background:#fff;border-radius:999px;padding:7px 12px;font-weight:700;font-size:13.5px;color:#493a30;cursor:pointer;white-space:nowrap}
 .rsy-pill .rsy-lbl-short{display:none}
