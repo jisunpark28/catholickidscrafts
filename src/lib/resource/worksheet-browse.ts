@@ -1,7 +1,9 @@
 import { getEvergreenPage } from "@/lib/evergreen-catalog";
 import {
+  getActivity,
   isActivityFreeInWeekOf,
   listActivities,
+  SAINT_REPORT_SLUG,
   torontoDate,
   type ResourceActivity,
 } from "@/lib/resource/activities";
@@ -9,10 +11,19 @@ import { searchSheets, seasonLabel, type ResourceSeason } from "@/lib/resource/s
 import { nextSeasonSunday, SUNDAY_SEASON_JUMPS, type SundayCalendarEntry } from "@/lib/resource/sunday-season-jumps";
 import { getSundaySheet, type SundaySheetContent } from "@/lib/sunday-sheet-content";
 
-export type WorksheetFilter = "free-week" | "christ-the-king" | "mass" | "virtue" | "";
+export type WorksheetFilter = "free-week" | "christ-the-king" | "mass" | "virtue" | "saint-report" | "all" | "";
 
 export function parseWorksheetFilter(raw: string | undefined): WorksheetFilter {
-  if (raw === "free-week" || raw === "christ-the-king" || raw === "mass" || raw === "virtue") return raw;
+  if (
+    raw === "free-week" ||
+    raw === "christ-the-king" ||
+    raw === "mass" ||
+    raw === "virtue" ||
+    raw === "saint-report" ||
+    raw === "all"
+  ) {
+    return raw;
+  }
   return "";
 }
 
@@ -79,6 +90,14 @@ export function listWorksheetBrowse({
   } else if (filter === "christ-the-king") {
     sheets = searchSheets({}).filter((s) => s.key.endsWith("_OT34") || s.key === "OT34");
     heading = "Christ the King worksheets";
+  } else if (filter === "saint-report") {
+    const report = getActivity(SAINT_REPORT_SLUG);
+    activities = report ? [report] : [];
+    heading = "Saint Report Worksheet";
+  } else if (filter === "all") {
+    sheets = searchSheets({});
+    activities = listActivities();
+    heading = "All worksheets";
   } else if (season) {
     sheets = searchSheets({ season, q: query });
     activities = listActivities(season);

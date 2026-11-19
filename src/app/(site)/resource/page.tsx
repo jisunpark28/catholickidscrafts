@@ -237,7 +237,7 @@ export default async function ResourcePage({ searchParams }: Props) {
   if (worksheetFilter) worksheetResultsParams.set("filter", worksheetFilter);
   if (level === 2) worksheetResultsParams.set("level", "2");
   const worksheetResultsHref = `/resource?${worksheetResultsParams.toString()}`;
-  const worksheetClearHref = level === 2 ? "/resource?view=sundays&level=2" : "/resource?view=sundays";
+  const worksheetClearHref = level === 2 ? "/resource?view=sundays&filter=all&level=2" : "/resource?view=sundays&filter=all";
   const worksheetMonthDate = sunday
     ? worksheetCalendarMonthDate({
         sundays: finderSundays,
@@ -389,6 +389,7 @@ export default async function ResourcePage({ searchParams }: Props) {
           clearHref={worksheetClearHref}
           page={page}
           resultsHref={worksheetResultsHref}
+          showClear={!(worksheetFilter === "all" && !q.trim())}
         />
       ) : printablesMode === "sundays" && selectedSheet && selectedSundayDate ? (
         <PrintablesSundaysArticle

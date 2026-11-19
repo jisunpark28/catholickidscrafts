@@ -1,7 +1,6 @@
 "use client";
 
 import { monthGrid, shiftCalendarMonth } from "@/lib/daily-mass/month-grid";
-import { SAINT_REPORT_SLUG, activityPath } from "@/lib/resource/activities";
 import type { ResourceSeason } from "@/lib/resource/sheets";
 import { SUNDAY_SEASON_JUMPS, type SundayCalendarEntry } from "@/lib/resource/sunday-season-jumps";
 import type { WorksheetFilter } from "@/lib/resource/worksheet-browse";
@@ -72,8 +71,6 @@ export function PrintablesSundaysFinder({
   const [cursor, setCursor] = useState({ year: y!, month: m! });
 
   const cells = monthGrid(cursor.year, cursor.month);
-  const browsing = Boolean(initialQ.trim() || filter || season);
-
   const prompts: { label: string; href: string; current?: boolean }[] = [
     {
       label: "This week free worksheet",
@@ -99,11 +96,15 @@ export function PrintablesSundaysFinder({
       href: worksheetsHref({ level, filter: "virtue" }),
       current: filter === "virtue" && !initialQ.trim(),
     },
-    { label: "Saint Report Worksheet", href: activityPath(SAINT_REPORT_SLUG) },
+    {
+      label: "Saint Report Worksheet",
+      href: worksheetsHref({ level, filter: "saint-report" }),
+      current: filter === "saint-report" && !initialQ.trim(),
+    },
     {
       label: "All",
-      href: worksheetsHref({ level }),
-      current: !browsing,
+      href: worksheetsHref({ level, filter: "all" }),
+      current: filter === "all" && !initialQ.trim(),
     },
   ];
 
