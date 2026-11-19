@@ -1,5 +1,6 @@
 "use client";
 
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -72,11 +73,14 @@ export function GameEmbed({
           immersive ? "mt-3 px-4 py-2 sm:mt-6 sm:px-6 sm:py-5" : "mt-6 px-6 py-5"
         }`}
       >
-        <h1
-          className={`font-bold text-[var(--color-ink)] ${immersive ? "text-lg sm:text-2xl" : "text-2xl"}`}
-        >
-          {title}
-        </h1>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <h1
+            className={`font-bold text-[var(--color-ink)] ${immersive ? "text-lg sm:text-2xl" : "text-2xl"}`}
+          >
+            {title}
+          </h1>
+          <ShareToClassroomButton />
+        </div>
         {description ? (
           <p className={`mt-2 text-sm text-[var(--color-muted)] ${immersive ? "hidden sm:block" : ""}`}>
             {description}

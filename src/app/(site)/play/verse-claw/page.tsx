@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { VerseClawGame } from "@/components/verse-claw/VerseClawGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -49,6 +50,7 @@ export default async function VerseClawPage() {
             "Guide the claw, catch a blessing doll, and share a Catholic verse with your family.",
           )}
           programNote={copyText(copy, "play.verse_claw.page.program_note", "")}
+          actions={<ShareToClassroomButton />}
         />
       </div>
 

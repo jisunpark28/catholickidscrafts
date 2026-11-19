@@ -1,5 +1,6 @@
 "use client";
 
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { DailyMassCalendarPanel } from "@/components/daily-mass/DailyMassCalendarPanel";
 import { FaithJournalBanner } from "@/components/daily-mass/FaithJournalBanner";
 import { GospelTypingSection } from "@/components/gospel/GospelTypingSection";
@@ -203,6 +204,7 @@ export function DailyMassView(props: DailyMassViewProps) {
             <button type="button" className={stickerCta} onClick={onGetSticker}>
               {t("daily_mass.page.get_sticker", "Get Sticker!")}
             </button>
+            <ShareToClassroomButton />
           </div>
           <p className="dm-muted m-0 mt-1 text-[0.9em] text-[#4b5563]">
             {t("daily_mass.page.choose", "Choose a day to see the readings")}

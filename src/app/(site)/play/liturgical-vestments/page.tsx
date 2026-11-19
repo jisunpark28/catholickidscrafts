@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { LiturgicalVestmentsGame } from "@/components/LiturgicalVestmentsGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -40,6 +41,7 @@ export default async function LiturgicalVestmentsPage() {
           title={copyText(copy, "play.vestments.page.title", "Liturgical vestments")}
           subtitle={copyText(copy, "play.vestments.page.subtitle", "")}
           programNote={copyText(copy, "play.vestments.page.program_note", "")}
+          actions={<ShareToClassroomButton />}
         />
       </div>
 

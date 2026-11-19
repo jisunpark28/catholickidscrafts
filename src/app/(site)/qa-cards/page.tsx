@@ -1,4 +1,5 @@
 import { TestamentPageShell } from "@/components/bible/TestamentPageShell";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { SidebarPagePanel } from "@/components/SidebarPagePanel";
 import { QaCardsByTopic, type QaTopicTab } from "@/components/liturgy/QaCardsByTopic";
 import { fredoka } from "@/components/liturgy/fredoka";
@@ -32,7 +33,12 @@ export default async function QaCardsPage() {
     <TestamentPageShell>
       <JsonLd nodes={[breadcrumbNode([{ name: "Q&A Cards", path: "/qa-cards" }])]} />
       <SidebarPagePanel id="qa-cards">
-        <h1 className={`${fredoka.variable} qa-title text-center`}>Q&amp;A Cards</h1>
+        <div className="text-center">
+          <h1 className={`${fredoka.variable} qa-title text-center`}>Q&amp;A Cards</h1>
+          <div className="mb-4 flex justify-center">
+            <ShareToClassroomButton />
+          </div>
+        </div>
         <QaCardsByTopic tabs={tabs} />
       </SidebarPagePanel>
     </TestamentPageShell>

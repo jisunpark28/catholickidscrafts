@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { PhotoBoothGame } from "@/components/PhotoBoothGame";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -36,7 +37,10 @@ export default async function PhotoBoothPage() {
       </Link>
 
       <div className="mt-6">
-        <PageHeader title={copyText(copy, "play.photobooth.page.title", "4-Cut Photo Booth")} />
+        <PageHeader
+          title={copyText(copy, "play.photobooth.page.title", "4-Cut Photo Booth")}
+          actions={<ShareToClassroomButton />}
+        />
       </div>
 
       <PhotoBoothGame />

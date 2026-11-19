@@ -1,4 +1,5 @@
 import { PageShell } from "@/components/PageShell";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
@@ -70,7 +71,10 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
         </nav>
 
         <header className="mt-3">
-          <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{title}</h1>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{title}</h1>
+            {!isVirtue ? <ShareToClassroomButton /> : null}
+          </div>
           <p className="mt-2 text-lg font-semibold text-[#4b5563]">
             {isVirtue
               ? `This Week's Catholic Virtue Challenge${page.virtueFamily ? ` · ${page.virtueFamily}` : ""}`

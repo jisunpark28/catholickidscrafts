@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FaceToEmojiEmbed } from "@/components/FaceToEmojiEmbed";
 import { PageHeader } from "@/components/PageHeader";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { pageMetadata } from "@/lib/site-metadata";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import type { Metadata } from "next";
@@ -40,6 +41,7 @@ export default async function FaceToEmojiPage() {
           title={copyText(copy, "play.facetemoji.page.title", "Face to Emoji")}
           subtitle={copyText(copy, "play.facetemoji.page.subtitle", "")}
           programNote={copyText(copy, "play.facetemoji.page.program_note", "")}
+          actions={<ShareToClassroomButton />}
         />
       </div>
 

@@ -1,4 +1,5 @@
 import { PageShell } from "@/components/PageShell";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   evergreenPages,
@@ -41,9 +42,12 @@ export default function MassForKidsHubPage() {
           › Catholic Mass for Kids
         </nav>
         <header className="mt-3">
-          <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">
-            Catholic Mass for Kids: Order of the Mass Worksheets
-          </h1>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">
+              Catholic Mass for Kids: Order of the Mass Worksheets
+            </h1>
+            <ShareToClassroomButton />
+          </div>
           <p className="mt-2 max-w-3xl text-base leading-relaxed text-[#374151]">
             Help children follow along at Mass. Each printable sheet explains one part of the Mass, puts the
             steps in order, and ends with family talk questions and a prayer. Level 1 is for younger children; Level 2

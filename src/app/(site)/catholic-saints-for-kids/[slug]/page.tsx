@@ -1,4 +1,5 @@
 import { PageShell } from "@/components/PageShell";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SaintStoryPanel } from "@/components/seo/SaintStoryPanel";
 import { cardSharePath } from "@/lib/resource/card-meta";
@@ -111,12 +112,15 @@ export default async function CatholicSaintPage({ params }: Props) {
           </nav>
         }
         actions={
-          <Link
-            href={cardSharePath(card.id)}
-            className="flex items-center justify-center gap-1.5 rounded-full border border-[#c9773a] bg-white px-3 py-1.5 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-[#fff8f0]"
-          >
-            <span aria-hidden="true">🖨️</span> Print / Save Saint Card
-          </Link>
+          <div className="flex flex-col gap-2">
+            <Link
+              href={cardSharePath(card.id)}
+              className="flex items-center justify-center gap-1.5 rounded-full border border-[#c9773a] bg-white px-3 py-1.5 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-[#fff8f0]"
+            >
+              <span aria-hidden="true">🖨️</span> Print / Save Saint Card
+            </Link>
+            <ShareToClassroomButton className="w-full justify-center" />
+          </div>
         }
         showNewsletter
         showHubLink
