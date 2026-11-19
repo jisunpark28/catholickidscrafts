@@ -217,7 +217,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     summary:
       "Research a saint: feast day, patron, symbols, where and when they lived, how they loved God, one way to follow their example, and a space to draw.",
     description:
-      "Free Catholic saint report worksheet for kids: feast day, patron, symbols, how the saint loved God and a box to draw. US Letter, black and white or colour.",
+      "Catholic saint report worksheet for kids: feast day, patron, symbols, how the saint loved God and a box to draw. US Letter, black and white or colour.",
     seasons: ["feasts"],
     keywords: [
       "saint",
@@ -241,7 +241,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     files: { bw: "saint-report-worksheet.pdf", color: "saint-report-worksheet-color.pdf" },
     tryThis: [],
     prio: 40,
-    access: "signin",
+    access: "plus",
     seoTitle: "Saint Report Worksheet for Kids (Printable)",
     editable: true,
     storage: "bundle",
