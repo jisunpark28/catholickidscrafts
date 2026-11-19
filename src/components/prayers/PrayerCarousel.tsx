@@ -200,7 +200,6 @@ function CarouselOverlay({ prayer, liveImage, onClose, onOpen }: Props) {
               ))}
             </div>
           </div>
-          {prayer.sourcePending ? null : <p className="pcx-source">Text: {prayer.source}</p>}
         </div>
       ) : i < last && mode ? (
         <div className="pcx-body" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
@@ -240,7 +239,6 @@ function CarouselOverlay({ prayer, liveImage, onClose, onOpen }: Props) {
               ›
             </button>
           </div>
-          {prayer.sourcePending ? null : <p className="pcx-source">Text: {prayer.source}</p>}
         </div>
       ) : (
         <div className="pcx-body pcx-body--act">
