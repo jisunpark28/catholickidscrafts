@@ -4,8 +4,10 @@ import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SaintReportWorksheetLink } from "@/components/seo/SaintReportWorksheetLink";
 import { SaintsHubBrowser, type SaintsHubGroup } from "@/components/seo/SaintsHubBrowser";
+import { activityPath, SAINT_REPORT_SLUG } from "@/lib/resource/activities";
 import { cardThumbSrc } from "@/lib/resource/card-meta";
 import { groupSaintsBySet, INDEXABLE_SAINT_SEO_CARDS, SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
+import { signInPath } from "@/lib/sign-in-callback";
 import { pageMetadata } from "@/lib/site-metadata";
 import { breadcrumbNode, itemListNode } from "@/lib/structured-data";
 import type { Metadata } from "next";
@@ -76,6 +78,13 @@ export default function CatholicSaintsHubPage() {
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
           Teachers and catechists can use these pages for a student saint research project. Families can look here for
           patron saints for kids, and older students can find Confirmation saint ideas.
+        </p>
+        <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
+          Try the{" "}
+          <Link href={signInPath(activityPath(SAINT_REPORT_SLUG))} className="font-semibold text-[#335599] hover:underline">
+            Saint Report Worksheet
+          </Link>{" "}
+          for a student saint project. Sign in to get started.
         </p>
 
         <SaintsHubBrowser groups={browserGroups} />

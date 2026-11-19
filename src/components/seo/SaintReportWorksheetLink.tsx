@@ -1,7 +1,7 @@
 import { activityPath, SAINT_REPORT_SLUG } from "@/lib/resource/activities";
 import Link from "next/link";
 
-/** "For teachers & parents" box linking the free Saint Report Worksheet (saints hub + saint pages). */
+/** "For teachers & parents" box linking the Saint Report Worksheet (saints hub + saint pages). */
 export function SaintReportWorksheetLink({ className = "" }: { className?: string }) {
   return (
     <section
@@ -17,7 +17,7 @@ export function SaintReportWorksheetLink({ className = "" }: { className?: strin
           Saint Report Worksheet
         </Link>{" "}
         for a saint research project: feast day, patron, symbols, how the saint loved God, one way to follow their
-        example, and a space to draw. Free with a family account.
+        example, and a space to draw. Included with Plus.
       </p>
     </section>
   );
