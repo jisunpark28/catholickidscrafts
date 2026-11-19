@@ -25,15 +25,19 @@ export function SidebarNavigation({ pathname, hash = "", activePaidPlus, onNavig
               {item.href ? <Link href={item.href} className={classes} onClick={(event) => {
                 onNavigate(item.href!);
                 const hashAt = item.href!.indexOf("#");
-                const path = (hashAt >= 0 ? item.href!.slice(0, hashAt) : item.href!) || "/";
-                if (path !== window.location.pathname) return;
+                const target = hashAt >= 0 ? item.href!.slice(0, hashAt) : item.href!;
+                const queryAt = target.indexOf("?");
+                const path = (queryAt >= 0 ? target.slice(0, queryAt) : target) || "/";
+                const search = queryAt >= 0 ? target.slice(queryAt) : "";
+                // Same path but different query (e.g. /resource?view=all&q=...): let Link navigate to the first screen.
+                if (path !== window.location.pathname || search !== window.location.search) return;
                 event.preventDefault();
                 const id = hashAt >= 0 ? item.href!.slice(hashAt + 1) : "";
                 const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
                 if (id) document.getElementById(id)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
                 else window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-                const next = `${path}${id ? `#${id}` : ""}`;
-                if (`${window.location.pathname}${window.location.hash}` !== next) {
+                const next = `${path}${search}${id ? `#${id}` : ""}`;
+                if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== next) {
                   window.history.pushState(null, "", next);
                   window.dispatchEvent(new HashChangeEvent("hashchange"));
                 }
