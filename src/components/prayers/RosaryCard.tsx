@@ -32,10 +32,12 @@ export function RosaryCard() {
             aria-haspopup="dialog"
             onClick={() => setOpen(true)}
           >
-            <span className="qa-ill">
-              <span className="qa-emoji" aria-hidden>📿</span>
+            <span className="qa-ill qa-ill--rosary">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/rosary/complete-mary-lamb.png" alt="" loading="lazy" />
             </span>
             <span className="qa-q">The Rosary</span>
+            <span className="qa-when">Pray the mysteries with Mary</span>
             <span className="qa-hint">Tap to pray ↻</span>
           </button>
         </div>

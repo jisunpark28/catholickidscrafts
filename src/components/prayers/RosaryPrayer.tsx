@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import {
   DAY_SET, MODES, MODE_META, MYSTERIES, ORDINALS, PRAYERS, SETS,
   beadKey, buildSteps, type MysterySet, type RosaryMode, type RosaryStep,
@@ -211,6 +212,7 @@ function RosaryOverlay({ onClose }: { onClose: () => void }) {
     >
       <div className="rsy-header">
         <div className="rsy-head-left">
+          <ShareToClassroomButton hash="rosary" />
           <button
             className="rsy-pill"
             type="button"

@@ -9,7 +9,28 @@ export const PRAYER_ART: Readonly<Record<string, { phrases: readonly number[]; c
   "glory-be": { phrases: [1, 2, 3, 4, 5, 6] },
   "hail-mary": { phrases: [1, 2, 3, 4, 5, 6, 7, 8] },
   "our-father": { phrases: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+  // Cover-only cards (no PRY thumb); grid + carousel cover slide use cover.webp.
+  confiteor: { phrases: [], cover: true },
+  "prayer-before-communion": { phrases: [], cover: true },
+  "nicene-creed": { phrases: [], cover: true },
+  "holy-water-prayer": { phrases: [], cover: true },
+  "prayer-after-communion": { phrases: [], cover: true },
+  "prayer-of-st-francis": { phrases: [], cover: true },
 };
+
+/** QA-only /prayers tiles (no carousel) that ship a local cover.webp. */
+export const QA_PRAYER_COVERS: Readonly<Record<string, string>> = {
+  "act of reflection": "/prayers/act-of-reflection/cover.webp",
+  "ten commandments": "/prayers/ten-commandments/cover.webp",
+  "a night prayer": "/prayers/night-prayer/cover.webp",
+  "night prayer": "/prayers/night-prayer/cover.webp",
+  "my night prayer": "/prayers/night-prayer/cover.webp",
+};
+
+export function qaPrayerCoverSrc(question: string): string | null {
+  const key = question.toLowerCase().replace(/^the\s+/, "").replace(/[^a-z0-9]+/g, " ").trim();
+  return QA_PRAYER_COVERS[key] ?? null;
+}
 
 const nn = (n: number) => String(n).padStart(2, "0");
 
