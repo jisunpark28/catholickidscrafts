@@ -413,25 +413,100 @@ export function cardPageSeo(card: TalkCard): CardPageSeo {
   };
 }
 
+export type CardFact = {
+  label: string;
+  value: string;
+  /** Show behind a "Show answer" toggle (riddle answers). */
+  hidden?: boolean;
+};
+
 export type CardTalk = {
-  /** Printed caption to show (Fun answers split out into `answer`). */
+  /** H1 for the detail panel. */
+  h1: string;
+  /** Printed caption to show (Fun answers and artwork credits split out). */
   caption: string;
-  answer?: string;
-  intro: readonly [string, string];
+  /** "Feast day" for dated feast and Mary cards, else "When". */
+  whenLabel: string;
+  /** Short Fact Box rows; never repeat the caption. */
+  facts: CardFact[];
   questions: readonly [string, string, string];
 };
 
-/** Intro + 3 family questions for an opened non-saint card (null for Saint cards). */
+const CAT_LABEL: Record<CardCategory, string> = {
+  Feast: "Feast card",
+  Prayer: "Prayer card",
+  Saint: "Saint card",
+  Mary: "Mary card",
+  Sacrament: "Sacrament card",
+  "Mass & Church": "Mass & Church card",
+  "Liturgical Year": "Church Year card",
+  Bible: "Bible card",
+  "Virtue & Life": "Virtue card",
+  "Fun & Collectible": "Fun card",
+  Masterpiece: "Sacred art card",
+};
+
+/** One short, practical tip per card type (no caption, no stories). */
+function cardTip(card: TalkCard): string {
+  switch (card.cat) {
+    case "Prayer":
+      if (card.set === "Rosary") {
+        return /^\w+ \d+:/.test(card.title)
+          ? "Pray one decade while thinking about this moment in the life of Jesus and Mary."
+          : "Pray it slowly together, one bead at a time.";
+      }
+      return "Pray it slowly together, then talk about the questions below.";
+    case "Virtue & Life":
+      return "Talk about it together, then pick one small way to live it this week.";
+    case "Sacrament":
+      return "Sacraments are special signs where Jesus gives us his grace.";
+    case "Mass & Church":
+      return "Look for it the next time your family goes to Mass.";
+    case "Bible":
+      return card.ref
+        ? "Read the Scripture on the card together, then talk about the questions below."
+        : "Talk about the story together with the questions below.";
+    case "Feast":
+      return "Use it to get ready for this day at Mass and at home.";
+    case "Mary":
+      return "Mary always leads us to her Son, Jesus.";
+    case "Liturgical Year":
+      return "The Church's year helps us walk with Jesus through every season.";
+    case "Masterpiece":
+      return "Look closely at the picture together.";
+    default:
+      return card.set.startsWith("Who Am I?")
+        ? "Guess first, then check the answer."
+        : "A fun way to learn about our faith together.";
+  }
+}
+
+/** Detail panel data for an opened non-saint card (null for Saint cards). */
 export function cardTalk(card: TalkCard): CardTalk | null {
   if (card.cat === "Saint") return null;
-  if (FAITH_CATS.has(card.cat)) {
-    const seo = faithPageSeo(card);
-    return { caption: card.text, intro: seo.intro, questions: seo.questions };
+  const seo = FAITH_CATS.has(card.cat) ? faithPageSeo(card) : cardPageSeo(card);
+  const facts: CardFact[] = [{ label: "Card type", value: CAT_LABEL[card.cat] }];
+  let caption = card.text;
+  if (card.cat === "Prayer" && card.set === "Rosary" && /^\w+ \d+:/.test(card.title)) {
+    facts.push({ label: "Mystery", value: `${card.title.split(" ")[0]} Mysteries of the Rosary` });
   }
-  const seo = cardPageSeo(card);
+  if (card.cat === "Masterpiece") {
+    const { desc, artist } = splitArtist(card.text);
+    caption = desc;
+    if (artist) facts.push({ label: "Artwork", value: artist });
+  }
   if (card.cat === "Fun & Collectible") {
     const { clue, answer } = splitAnswer(card.text);
-    return { caption: clue, ...(answer ? { answer } : {}), intro: seo.intro, questions: seo.questions };
+    caption = clue;
+    if (answer) facts.push({ label: "Answer", value: answer, hidden: true });
   }
-  return { caption: card.text, intro: seo.intro, questions: seo.questions };
+  facts.push({ label: "Try this", value: cardTip(card) });
+  const dated = card.when && card.when !== "—" && /\d/.test(card.when);
+  return {
+    h1: seo.h1,
+    caption,
+    whenLabel: dated && (card.cat === "Feast" || card.cat === "Mary") ? "Feast day" : "When",
+    facts,
+    questions: seo.questions,
+  };
 }

@@ -20,6 +20,7 @@ import {
 } from "@/lib/resource/activities";
 import { upcomingCardDates } from "@/lib/resource/card-calendar";
 import { parseCardGroup } from "@/lib/resource/card-groups";
+import { relatedWorksheetsById, saintReportWorksheet } from "@/lib/resource/card-related";
 import {
   cardsForSunday,
   getPictureCard,
@@ -261,6 +262,7 @@ export default async function ResourcePage({ searchParams }: Props) {
         />
       ) : view === "cards" && printablesMode === "cards" ? (
         <PrintablesCardsArticle
+          key={`${cardGroup}|${q}`}
           cards={PICTURE_CARDS.map((c) => toCardListItem(c, cardDates[c.id]))}
           isPlus={viewer.isPlus}
           freeCardId={freeCardId}
@@ -272,6 +274,8 @@ export default async function ResourcePage({ searchParams }: Props) {
           saintStories={saintStoryViewsById()}
           initialGroup={cardGroup}
           captions={Object.fromEntries(PICTURE_CARDS.filter((c) => c.cat !== "Saint").map((c) => [c.id, c.text]))}
+          relatedWorksheets={relatedWorksheetsById(PICTURE_CARDS)}
+          saintWorksheet={saintReportWorksheet()}
         />
       ) : view === "cards" ? (
         <CardsBrowser
