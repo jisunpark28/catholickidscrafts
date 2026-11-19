@@ -1,4 +1,4 @@
-import { activityPath, type ResourceActivity } from "@/lib/resource/activities";
+import { activityAccessNow, activityPath, type ResourceActivity } from "@/lib/resource/activities";
 import { seasonLabel } from "@/lib/resource/sheets";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,9 +10,11 @@ type Props = {
 
 const pill = "inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm font-semibold no-underline";
 
-/** Library tile for an activity, same shape as the sheet and card tiles. Free with sign-in, or Plus. */
+/** Library tile for an activity, same shape as the sheet and card tiles. Free this week with sign-in, or Plus. */
 export function ActivityTile({ activity, typeBadge }: Props) {
   const href = activityPath(activity.slug);
+  // Rendered per request on the dynamic Printables pages.
+  const plusOnly = activityAccessNow(activity) === "plus";
   const season = activity.seasons[0];
   return (
     <div className="flex h-full flex-col rounded-xl border border-[#e7e3de] bg-white p-1.5">
@@ -27,7 +29,7 @@ export function ActivityTile({ activity, typeBadge }: Props) {
             className="block h-full w-full object-cover object-top"
           />
           {typeBadge ? <span className="absolute left-1.5 top-1.5">{typeBadge}</span> : null}
-          {activity.access === "plus" ? (
+          {plusOnly ? (
             <span className="absolute right-1.5 top-1.5 rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">
               PLUS
             </span>
@@ -53,11 +55,11 @@ export function ActivityTile({ activity, typeBadge }: Props) {
           Open
         </Link>
         <p className="m-0 mt-1.5 text-xs text-[#6b7280]">
-          {activity.access === "plus"
+          {plusOnly
             ? activity.editable
               ? "Plus members download and edit"
               : "Plus members download"
-            : "Free with sign-in · Plus can edit"}
+            : "Free this week with sign-in · Plus can edit"}
         </p>
       </div>
     </div>

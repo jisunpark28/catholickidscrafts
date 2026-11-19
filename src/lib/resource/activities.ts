@@ -3,9 +3,14 @@
 // assets/activities and ready-made craft PDFs in the private Vercel Blob store (never public);
 // both are served only by the signed-in download route.
 import type { ResourceSeason } from "@/lib/resource/sheets";
+import { weekSundayOf } from "@/lib/resource/week";
 
 export type ActivityVariant = "bw" | "color";
-/** Who can download the PDF: any signed-in family, or Plus only (checked on the server). */
+/**
+ * Catalog gate. "plus": Plus members only. "signin": Plus too, except in a week the sheet is on
+ * DAILY_ACTIVITY_SCHEDULE, when any signed-in family can download it (isActivityFreeThisWeek).
+ * The download API checks this on every request.
+ */
 export type ActivityAccess = "signin" | "plus";
 export const ACTIVITY_VARIANTS: readonly ActivityVariant[] = ["bw", "color"];
 
@@ -30,7 +35,7 @@ export type ResourceActivity = {
   tryThis: string[];
   /** Order in the library (lower first). */
   prio: number;
-  /** "signin": free with sign-in. "plus": Plus members only (the download API checks familyHasPlus). */
+  /** "signin": free with sign-in only in its scheduled week, else Plus. "plus": always Plus (see ActivityAccess). */
   access: ActivityAccess;
   /** Page <title> (without the site name). */
   seoTitle: string;
@@ -46,14 +51,14 @@ export const SAINT_REPORT_SLUG = "saint-report-worksheet";
 
 type DailyRow = [slug: string, title: string, kind: string, tryThis: string, summary: string, keywords: string[]];
 
-/** Daily Advent sheets: one per Q&A card "Try this" tip, free with sign-in. */
+/** Daily Advent sheets: one per Q&A card "Try this" tip, free with sign-in in the week they are scheduled. */
 function DAILY(rows: DailyRow[]): ResourceActivity[] {
   return rows.map(([slug, title, kind, tryThis, summary, keywords], i) => ({
     slug,
     title,
     kind,
     summary,
-    description: `Free Catholic Advent ${kind.toLowerCase()} for kids: ${summary.charAt(0).toLowerCase()}${summary.slice(1)} US Letter, black and white or colour.`,
+    description: `Catholic Advent ${kind.toLowerCase()} for kids: ${summary.charAt(0).toLowerCase()}${summary.slice(1)} US Letter, black and white or colour.`,
     seasons: ["advent"],
     keywords: [...keywords, "advent", "activity", "printable"],
     pageSize: "US Letter",
@@ -110,7 +115,7 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     kind: "Coloring sheet",
     summary: "Colour the seasons of the Church year on one simple wheel, starting with Advent.",
     description:
-      "Free Catholic coloring sheet for kids: colour the liturgical year wheel from Advent to Ordinary Time. US Letter, black and white or colour.",
+      "Catholic coloring sheet for kids: colour the liturgical year wheel from Advent to Ordinary Time. US Letter, black and white or colour.",
     seasons: ["advent"],
     keywords: [
       "liturgical year",
@@ -470,9 +475,35 @@ export function dailyActivityFor(ymd: string): { activity: ResourceActivity; dat
   return best ? { ...best, exact: best.date === ymd } : { activity: fallback, date: null, exact: false };
 }
 
+/**
+ * Free with sign-in in the week of a Toronto date: a "signin" sheet scheduled on any day of that
+ * week. Weeks run Monday to Sunday and end on "This Sunday" (weekSundayOf, the Sunday sheet rule).
+ * Everything else, including sheets with no scheduled date, is Plus only.
+ */
+export function isActivityFreeInWeekOf(activity: Pick<ResourceActivity, "slug" | "access">, ymd: string): boolean {
+  if (activity.access !== "signin" || !YMD.test(ymd)) return false;
+  const week = weekSundayOf(ymd);
+  return DAILY_ACTIVITY_SCHEDULE.some((row) => row.slug === activity.slug && weekSundayOf(row.date) === week);
+}
+
+/** isActivityFreeInWeekOf for the current Toronto date (per request / per render). */
+export function isActivityFreeThisWeek(activity: Pick<ResourceActivity, "slug" | "access">, now: Date = new Date()): boolean {
+  return isActivityFreeInWeekOf(activity, torontoDate(now));
+}
+
+/** The gate that applies in the week of a Toronto date: "signin" (free this week) or "plus". */
+export function activityAccessInWeekOf(activity: Pick<ResourceActivity, "slug" | "access">, ymd: string): ActivityAccess {
+  return isActivityFreeInWeekOf(activity, ymd) ? "signin" : "plus";
+}
+
+/** activityAccessInWeekOf for the current Toronto date. */
+export function activityAccessNow(activity: Pick<ResourceActivity, "slug" | "access">, now: Date = new Date()): ActivityAccess {
+  return activityAccessInWeekOf(activity, torontoDate(now));
+}
+
 export type HomeActivityPick = {
   activity: ResourceActivity;
-  /** Small orange label line on the home card: truthful kind and access ("Activity · Free"). */
+  /** Small orange label line on the home card: truthful kind and access this week ("Activity · Free"). */
   label: string;
   /** "plus" shows the PLUS badge. */
   access: ActivityAccess;
@@ -497,11 +528,11 @@ export function homeActivityPicks(ymd: string): HomeActivityPick[] {
   };
   for (const row of DAILY_ACTIVITY_SCHEDULE) if (YMD.test(ymd) && row.date > ymd) add(getActivity(row.slug));
   for (const a of listActivities("advent")) add(a);
-  const picks: HomeActivityPick[] = free.map((activity, i) => ({
-    activity,
-    label: i === 0 ? "Today · Free" : "Activity · Free",
-    access: activity.access,
-  }));
+  const picks: HomeActivityPick[] = free.map((activity, i) => {
+    // Free only when the sheet is scheduled in this week; otherwise it is labelled Plus.
+    const access = activityAccessInWeekOf(activity, ymd);
+    return { activity, label: `${i === 0 ? "Today" : "Activity"} · ${access === "plus" ? "Plus" : "Free"}`, access };
+  });
   if (craft) picks.push({ activity: craft, label: `${craft.kind} · Plus`, access: craft.access });
   return picks;
 }

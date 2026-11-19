@@ -1,7 +1,7 @@
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { ActivityDownloadPanel } from "@/components/resource/activity/ActivityDownloadPanel";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { activityPath, getActivity, RESOURCE_ACTIVITIES } from "@/lib/resource/activities";
+import { activityPath, getActivity, isActivityFreeThisWeek, RESOURCE_ACTIVITIES } from "@/lib/resource/activities";
 import { seasonLabel, seasonPath } from "@/lib/resource/sheets";
 import { pageMetadata } from "@/lib/site-metadata";
 import { absoluteSiteUrl, breadcrumbNode, organizationId, SITE_NAME } from "@/lib/structured-data";
@@ -14,6 +14,8 @@ type Props = { params: Promise<{ slug: string }> };
 // Static per activity: no cookies or DB here. Sign-in state loads in the browser and the
 // PDF / editor APIs check the session (and Plus) on every request.
 export const dynamicParams = false;
+// Re-rendered every 30 minutes so the weekly free flag in the structured data follows the week.
+export const revalidate = 1800;
 
 export function generateStaticParams() {
   return RESOURCE_ACTIVITIES.map((a) => ({ slug: a.slug }));
@@ -52,7 +54,7 @@ export default async function ActivityPage({ params }: Props) {
             name: activity.title,
             description: activity.description,
             learningResourceType: [activity.kind, "Activity"],
-            isAccessibleForFree: activity.access === "signin",
+            isAccessibleForFree: isActivityFreeThisWeek(activity),
             inLanguage: "en",
             url: absoluteSiteUrl(path),
             image: absoluteSiteUrl(activity.previews.color),

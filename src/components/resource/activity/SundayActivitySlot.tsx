@@ -5,6 +5,7 @@ import {
   ACTIVITY_VARIANT_LABELS,
   ACTIVITY_VARIANTS,
   activityPath,
+  isActivityFreeThisWeek,
   type ActivityVariant,
   type ResourceActivity,
 } from "@/lib/resource/activities";
@@ -32,8 +33,8 @@ const colLabel = "m-0 text-[11px] font-bold uppercase tracking-wide text-[#d3540
 
 /**
  * This Sunday "Activities" / "Crafts" column: preview, B&W or colour, and the download action.
- * Free sheets download when signed in; Plus sheets (the craft) show the Plus lock unless the
- * family has Plus. The download API checks the session (and Plus) itself on every request;
+ * Sheets scheduled this week download when signed in; everything else shows the Plus lock unless
+ * the family has Plus. The download API checks the session (and Plus) itself on every request;
  * the session flags here only choose which button to show.
  */
 export function SundayActivitySlot({ label, activity, meta, note, moreHref, moreLabel, primaryCls, ghostCls }: Props) {
@@ -44,7 +45,8 @@ export function SundayActivitySlot({ label, activity, meta, note, moreHref, more
   const family = session.family;
   const signedIn = Boolean(family && !family.childMode);
   const isPlus = Boolean(family?.isPlus && !family.childMode);
-  const plusOnly = activity.access === "plus";
+  // Computed in the browser after load (the week can change after the page was rendered).
+  const plusOnly = !(ready && isActivityFreeThisWeek(activity));
   const href = activityPath(activity.slug);
   const gate = useSignInGate();
 
@@ -64,7 +66,7 @@ export function SundayActivitySlot({ label, activity, meta, note, moreHref, more
     <article className={colBox} aria-label={label}>
       <div className="flex items-start justify-between gap-2">
         <p className={colLabel}>{label}</p>
-        {plusOnly ? (
+        {!ready ? null : plusOnly ? (
           <span className="rounded-md bg-[#d35400] px-1.5 py-0.5 text-[10px] font-bold text-white">PLUS</span>
         ) : (
           <span className="rounded-md bg-[#e6f4ea] px-1.5 py-0.5 text-[10px] font-bold text-[#1e7b34]">FREE</span>
@@ -121,7 +123,7 @@ export function SundayActivitySlot({ label, activity, meta, note, moreHref, more
         ) : signedIn ? (
           <PlusLockButton
             className={`${primaryCls} cursor-pointer`}
-            message={`This ${activity.kind.toLowerCase()} is for Plus members. The weekly sheet, card and daily activity sheets stay free.`}
+            message={`This ${activity.kind.toLowerCase()} is for Plus members. This week's sheets stay free for signed-in families.`}
           >
             🔒 Download
           </PlusLockButton>
