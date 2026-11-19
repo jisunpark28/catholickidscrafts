@@ -6,7 +6,7 @@ import { QaFlipCard } from "@/components/liturgy/QaFlipCards";
 import { PrayerCarousel } from "@/components/prayers/PrayerCarousel";
 import { RosaryCard } from "@/components/prayers/RosaryCard";
 import type { PublicQaCard } from "@/lib/liturgy-qa";
-import { prayerCoverSrc } from "@/lib/prayers/prayer-art";
+import { prayerCoverSrc, qaPrayerCoverSrc } from "@/lib/prayers/prayer-art";
 import { CAROUSEL_PRAYERS, getCarouselPrayer, type CarouselPrayer } from "@/lib/prayers/prayer-phrases";
 import "@/styles/prayer-carousel.css";
 
@@ -69,7 +69,11 @@ export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; ca
       <ul className={`${fredoka.variable} qa-grid qa-grid--prayer`} role="list">
         {items.map((it) => {
           if (it.kind === "rosary") return <RosaryCard key="rosary" />;
-          if (it.kind === "qa") return <QaFlipCard key={it.card.id} card={it.card} variant="prayer" cardBackColor={cardBackColor} />;
+          if (it.kind === "qa") {
+            const localCover = !it.card.imageUrl ? qaPrayerCoverSrc(it.card.question) : null;
+            const card = localCover ? { ...it.card, imageUrl: localCover } : it.card;
+            return <QaFlipCard key={it.card.id} card={card} variant="prayer" cardBackColor={cardBackColor} />;
+          }
           const { prayer, card } = it;
           const src = card?.imageUrl || prayerCoverSrc(prayer);
           return (
