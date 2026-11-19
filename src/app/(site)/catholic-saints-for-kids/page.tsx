@@ -2,6 +2,7 @@ import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeFor
 import { PageShell } from "@/components/PageShell";
 import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SaintReportWorksheetLink } from "@/components/seo/SaintReportWorksheetLink";
 import { cardThumbSrc } from "@/lib/resource/card-meta";
 import { groupSaintsBySet, INDEXABLE_SAINT_SEO_CARDS, SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -85,6 +86,8 @@ export default function CatholicSaintsHubPage() {
             </section>
           ))}
         </div>
+
+        <SaintReportWorksheetLink className="mt-10" />
 
         <div className="mt-10">
           <NewsletterSubscribeForm source="catholic-saints-for-kids" />

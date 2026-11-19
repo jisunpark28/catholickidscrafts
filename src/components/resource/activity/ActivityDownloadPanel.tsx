@@ -139,6 +139,7 @@ export function ActivityDownloadPanel({ activity }: Props) {
           <ActivitySignInPrompt
             title="Sign in to download"
             kicker={plusOnly ? "Plus members" : undefined}
+            callbackUrl={activityPath(activity.slug)}
             body={
               plusOnly
                 ? `This ${kindLabel} is for Plus members. Sign in with your family account first.`

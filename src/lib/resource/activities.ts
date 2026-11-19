@@ -41,6 +41,8 @@ export type ResourceActivity = {
 };
 
 export const ACTIVITY_PATH = "/resource/activity";
+/** Saint Report Worksheet (linked from the saints hub and each saint page). */
+export const SAINT_REPORT_SLUG = "saint-report-worksheet";
 
 type DailyRow = [slug: string, title: string, kind: string, tryThis: string, summary: string, keywords: string[]];
 
@@ -205,6 +207,42 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
     prio: 50,
     access: "plus",
     seoTitle: "Advent Candle Craft Template",
+    editable: true,
+    storage: "bundle",
+  },
+  {
+    slug: SAINT_REPORT_SLUG,
+    title: "Saint Report Worksheet",
+    kind: "Worksheet",
+    summary:
+      "Research a saint: feast day, patron, symbols, where and when they lived, how they loved God, one way to follow their example, and a space to draw.",
+    description:
+      "Free Catholic saint report worksheet for kids: feast day, patron, symbols, how the saint loved God and a box to draw. US Letter, black and white or colour.",
+    seasons: ["feasts"],
+    keywords: [
+      "saint",
+      "saints",
+      "saint report",
+      "saint research project",
+      "patron saint",
+      "feast day",
+      "symbols",
+      "confirmation saint",
+      "all saints",
+      "worksheet",
+      "printable",
+      "activity",
+    ],
+    pageSize: "US Letter",
+    previews: {
+      bw: "/images/activities/saint-report-worksheet/preview-bw.webp",
+      color: "/images/activities/saint-report-worksheet/preview-color.webp",
+    },
+    files: { bw: "saint-report-worksheet.pdf", color: "saint-report-worksheet-color.pdf" },
+    tryThis: [],
+    prio: 40,
+    access: "signin",
+    seoTitle: "Saint Report Worksheet for Kids (Printable)",
     editable: true,
     storage: "bundle",
   },

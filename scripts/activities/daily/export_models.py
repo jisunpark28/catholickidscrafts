@@ -40,6 +40,7 @@ TITLES = {
     "paper-advent-wreath": "Paper Advent Wreath",
     "light-the-advent-candle": "Light the Advent Candle",
     "advent-candle-craft": "Advent Candle Craft",
+    "saint-report-worksheet": "Saint Report Worksheet",
 }
 
 
