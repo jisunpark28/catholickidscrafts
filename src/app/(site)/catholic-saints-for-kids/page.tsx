@@ -1,5 +1,6 @@
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { PageShell } from "@/components/PageShell";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { cardThumbSrc } from "@/lib/resource/card-meta";
 import { groupSaintsBySet, INDEXABLE_SAINT_SEO_CARDS, SAINTS_HUB, SAINT_SEO_CARDS } from "@/lib/seo/card-seo";
@@ -39,9 +40,12 @@ export default function CatholicSaintsHubPage() {
           </Link>{" "}
           › Catholic Saints for Kids
         </nav>
-        <h1 className="mt-3 font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">
-          Catholic saints for kids
-        </h1>
+        <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
+          <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">
+            Catholic saints for kids
+          </h1>
+          <ShareToClassroomButton />
+        </div>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
           Meet {SAINT_SEO_CARDS.length} saints through short, child-friendly cards: who they are, a memorable line
           from their story, and three questions you can ask at the dinner table. Grouped by set so every saint is two

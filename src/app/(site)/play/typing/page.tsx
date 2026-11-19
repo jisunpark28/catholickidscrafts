@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { TypingGameHub } from "@/components/TypingGameHub";
 import { copyText, getSiteCopyMap } from "@/lib/site-copy";
 import { pageMetadata } from "@/lib/site-metadata";
@@ -40,6 +41,7 @@ export default async function PlayTypingPage() {
           title={copyText(copy, "play.typing.page.title", "Typing Game")}
           subtitle={copyText(copy, "play.typing.page.subtitle", "")}
           programNote={copyText(copy, "play.typing.page.program_note", "")}
+          actions={<ShareToClassroomButton />}
         />
       </div>
 

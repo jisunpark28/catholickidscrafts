@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { COMMANDMENTS, SOURCES } from '@/lib/commandments/commandments';
 import { freshHistory, LABELS, parseHistory, selectRound, STORAGE_KEY, type History, type Mission, type Scope } from '@/lib/commandments/model';
+import { ShareToClassroomButton } from '@/components/ShareToClassroomButton';
 import { Flower, ScenarioArt, VillageMap } from './VillageMap';
 import './village.css';
 
@@ -56,7 +57,7 @@ export default function CommandmentsVillage() {
     requestAnimationFrame(() => { busy.current = false; });
   }
   return <section className="nv-game" aria-label="Love Your Neighbor Village game">
-    <header className="nv-heading"><span className="nv-eyebrow">A little village. Everyday choices.</span><h1>Love Your Neighbor Village</h1><p>Discover the Ten Commandments through kind, thoughtful choices.</p></header>
+    <header className="nv-heading"><div className="flex flex-wrap items-start justify-between gap-3"><div><span className="nv-eyebrow">A little village. Everyday choices.</span><h1>Love Your Neighbor Village</h1></div><ShareToClassroomButton /></div><p>Discover the Ten Commandments through kind, thoughtful choices.</p></header>
     <div className="nv-columns">
       <div className="nv-explore">
         <div className="nv-progress" aria-label={`${round?.completed ?? 0} of 5 missions completed`}>
