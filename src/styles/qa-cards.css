@@ -8,10 +8,20 @@
 
 .qa-grid { list-style: none; padding: 0; margin: 0 0 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .qa-card { height: 360px; perspective: 1200px; }
-.qa-grid--prayer .qa-card { height: 400px; }
+.qa-grid--prayer .qa-card { height: 480px; }
 /* Prayer grid: show full card art (no crop). Liturgy Q&A cards keep cover. */
-.qa-grid--prayer .qa-ill { height: 200px; }
+.qa-grid--prayer .qa-ill { height: 280px; }
 .qa-grid--prayer .qa-ill img { object-fit: contain; object-position: center; }
+/* Rosary tile: same chrome; fill the ill frame (art was tiny with emoji). */
+.qa-grid--prayer .qa-ill--rosary {
+  background: rgba(255, 255, 255, 0.78) radial-gradient(circle, rgba(255, 255, 255, 0.95) 2px, transparent 3px) 0 0 / 22px 22px;
+}
+.qa-grid--prayer .qa-ill--rosary img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+}
 .qa-inner { position: relative; width: 100%; height: 100%; transition: transform .6s cubic-bezier(.3,.7,.3,1); transform-style: preserve-3d; }
 .qa-card.is-flipped .qa-inner { transform: rotateY(180deg); }
 .qa-face { position: absolute; inset: 0; border-radius: 30px; backface-visibility: hidden; -webkit-backface-visibility: hidden; padding: 20px; display: flex; flex-direction: column; text-align: left; box-shadow: 0 14px 28px -18px rgba(150,80,20,.45); }
@@ -42,9 +52,9 @@
 @media (max-width: 600px) {
   .qa-grid { grid-template-columns: 1fr; gap: 18px; }
   .qa-card { height: 310px; }
-  .qa-grid--prayer .qa-card { height: 380px; }
+  .qa-grid--prayer .qa-card { height: 440px; }
   .qa-ill { height: 120px; }
-  .qa-grid--prayer .qa-ill { height: 160px; }
+  .qa-grid--prayer .qa-ill { height: 220px; }
   .qa-emoji { font-size: 56px; }
   .qa-q { font-size: 22px; }
   .qa-answer { font-size: 18px; }

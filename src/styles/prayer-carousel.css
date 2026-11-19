@@ -13,7 +13,9 @@
 .pcx-pic{width:100%;aspect-ratio:4/3;max-height:52vh;border-radius:24px;overflow:hidden;background:var(--paper) radial-gradient(circle,rgba(255,255,255,.9) 2px,transparent 3px) 0 0/22px 22px;border:1.5px solid #f0e2cf;display:grid;place-items:center;box-shadow:0 8px 24px rgba(73,58,48,.08)}
 .pcx-pic img{width:100%;height:100%;object-fit:contain;user-select:none}
 .pcx-pic-ph{font-size:72px;color:#e8c9a8;font-family:Georgia,serif}
-.pcx-pic--cover{max-height:48vh}
+/* Cover uses portrait prayer-card art (≈4:5); don’t force 4:3 or the bottom clips. */
+.pcx-pic--cover{aspect-ratio:4/5;width:min(100%,380px);max-height:min(62vh,560px);margin:0 auto}
+.pcx-pic--cover img{width:100%;height:100%;object-fit:contain;object-position:center}
 .pcx-text{margin:0;font-family:var(--font-fredoka),"Baloo 2",system-ui,sans-serif;font-weight:600;font-size:clamp(24px,4.4vw,38px);line-height:1.35;color:var(--ink);text-align:center;background:var(--paper);border-radius:20px;padding:14px 22px;width:100%}
 .pcx-text.is-long{font-size:clamp(20px,3.4vw,30px)}
 .pcx-text--interact{line-height:1.7}
