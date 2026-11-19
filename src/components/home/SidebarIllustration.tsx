@@ -9,6 +9,7 @@ const SIDEBAR_PICTURES: Partial<Record<SidebarIcon, string>> = {
   bible: "/images/sidebar/moms-bible.png",
   questions: "/images/sidebar/qa-cards.png",
   prayer: "/images/sidebar/prayer.png",
+  saints: "/images/sidebar/saints.png",
 };
 
 export function SidebarIllustration({ kind, className = "" }: { kind: SidebarIcon; className?: string }) {
