@@ -14,6 +14,8 @@ assert.equal(parseWorksheetFilter("free-week"), "free-week");
 assert.equal(parseWorksheetFilter("mass"), "mass");
 assert.equal(parseWorksheetFilter("virtue"), "virtue");
 assert.equal(parseWorksheetFilter("christ-the-king"), "christ-the-king");
+assert.equal(parseWorksheetFilter("saint-report"), "saint-report");
+assert.equal(parseWorksheetFilter("all"), "all");
 assert.equal(parseWorksheetFilter("nope"), "");
 assert.equal(parseWorksheetFilter(undefined), "");
 
@@ -90,6 +92,21 @@ assert.equal(
   "2026-11-22",
 );
 
+const saint = listWorksheetBrowse({ filter: "saint-report" });
+assert.equal(saint.heading, "Saint Report Worksheet");
+assert.equal(saint.sheets.length, 0);
+assert.equal(saint.activities.length, 1);
+assert.equal(saint.activities[0]!.slug, "saint-report-worksheet");
+assert.equal(saint.activities[0]!.title, "Saint Report Worksheet");
+
+const all = listWorksheetBrowse({ filter: "all" });
+assert.equal(all.heading, "All worksheets");
+assert.ok(all.sheets.length > 50, `expected many Sunday/evergreen sheets, got ${all.sheets.length}`);
+assert.ok(all.activities.length > 10, `expected activities and crafts, got ${all.activities.length}`);
+assert.ok(all.activities.some((a) => a.slug === "saint-report-worksheet"));
+assert.ok(all.activities.some((a) => a.kind === "Craft"));
+assert.equal(all.activities.length, listActivities().length);
+
 console.log(
-  `test-worksheet-browse: free-week ${free.activities.length} activities + ${free.sheets.length} sheet; mass ${mass.sheets.length}; virtue ${virtue.sheets.length}`,
+  `test-worksheet-browse: free-week ${free.activities.length} activities + ${free.sheets.length} sheet; mass ${mass.sheets.length}; virtue ${virtue.sheets.length}; all ${all.sheets.length}+${all.activities.length}`,
 );

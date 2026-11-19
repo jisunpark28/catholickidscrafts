@@ -16,6 +16,8 @@ type Props = {
   clearHref: string;
   page: number;
   resultsHref: string;
+  /** Hide the clear link when this is already the All worksheets grid. */
+  showClear?: boolean;
 };
 
 const PAGE = 24;
@@ -32,11 +34,18 @@ export function PrintablesWorksheetsResults({
   clearHref,
   page,
   resultsHref,
+  showClear = true,
 }: Props) {
-  const totalPages = Math.max(1, Math.ceil(sheets.length / PAGE));
+  const items: ({ type: "activity"; activity: ResourceActivity } | { type: "sheet"; sheet: SundaySheetContent })[] = [
+    ...activities.map((activity) => ({ type: "activity" as const, activity })),
+    ...sheets.map((sheet) => ({ type: "sheet" as const, sheet })),
+  ];
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE));
   const currentPage = Math.min(totalPages, Math.max(1, page));
-  const shownSheets = sheets.slice((currentPage - 1) * PAGE, currentPage * PAGE);
-  const empty = !sheets.length && !activities.length;
+  const shown = items.slice((currentPage - 1) * PAGE, currentPage * PAGE);
+  const shownActivities = shown.flatMap((item) => (item.type === "activity" ? [item.activity] : []));
+  const shownSheets = shown.flatMap((item) => (item.type === "sheet" ? [item.sheet] : []));
+  const empty = !items.length;
 
   return (
     <section aria-label={q ? "Worksheet search results" : "Worksheet results"} className="space-y-4">
@@ -47,9 +56,11 @@ export function PrintablesWorksheetsResults({
             <p className="mb-0 mt-1 text-sm text-[#6b5c50]">Results for “{q}”</p>
           ) : null}
         </div>
-        <Link href={clearHref} className="text-sm font-semibold text-[#d35400] no-underline hover:underline">
-          ✕ {q ? "Clear search" : "All worksheets"}
-        </Link>
+        {showClear ? (
+          <Link href={clearHref} className="text-sm font-semibold text-[#d35400] no-underline hover:underline">
+            ✕ {q ? "Clear search" : "All worksheets"}
+          </Link>
+        ) : null}
       </header>
 
       {empty ? (
@@ -58,9 +69,9 @@ export function PrintablesWorksheetsResults({
         </p>
       ) : null}
 
-      {activities.length ? (
+      {shownActivities.length ? (
         <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3 xl:grid-cols-4">
-          {activities.map((activity) => (
+          {shownActivities.map((activity) => (
             <li key={`a-${activity.slug}`}>
               <ActivityTile activity={activity} />
             </li>
