@@ -11,10 +11,17 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Catholic Saints for Kids",
+  title: "Catholic Saints for Kids – Feast Days, Patron Saints & Saint Stories",
+  absoluteTitle: true,
   description:
-    "Catholic saint stories for children — apostles, martyrs, young saints, and holy friends from every land. Free family talk prompts for parents and catechists.",
+    "Free Catholic saint pages for kids with feast days, patron saints and short stories. Great for a student saint research project or Confirmation saint ideas.",
   path: SAINTS_HUB,
+  image: {
+    url: "/images/saints/catholic-saints-for-kids-og.png",
+    width: 1200,
+    height: 630,
+    alt: "Catholic saint cards for kids: Saint Peter, Saint Thérèse of Lisieux, Saint Teresa of Calcutta, Saint Kateri Tekakwitha and Saint Carlo Acutis",
+  },
 });
 
 export default function CatholicSaintsHubPage() {
@@ -47,9 +54,13 @@ export default function CatholicSaintsHubPage() {
           <ShareToClassroomButton />
         </div>
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
-          Meet {SAINT_SEO_CARDS.length} saints through short, child-friendly cards: who they are, a memorable line
-          from their story, and three questions you can ask at the dinner table. Grouped by set so every saint is two
-          clicks away.
+          Meet {SAINT_SEO_CARDS.length} saints through short, child-friendly cards: who they are, their feast day, a
+          short story, and three questions you can ask at the dinner table. Grouped by set so every saint is two clicks
+          away.
+        </p>
+        <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#374151]">
+          Teachers and catechists can use these pages for a student saint research project. Families can look here for
+          patron saints for kids, and older students can find Confirmation saint ideas.
         </p>
 
         <div className="mt-8 space-y-10">
