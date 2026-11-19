@@ -1,7 +1,7 @@
 import type { LiturgicalSeasonInfo } from "@/types/mass";
 
 /** Gregorian Easter Sunday (Meeus/Jones/Butcher) */
-function easterSunday(year: number): Date {
+export function easterSunday(year: number): Date {
   const a = year % 19;
   const b = Math.floor(year / 100);
   const c = year % 100;

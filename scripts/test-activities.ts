@@ -17,6 +17,7 @@ import {
   activityAccessInWeekOf,
   isActivityFreeInWeekOf,
   isActivityFreeThisWeek,
+  annunciationDate,
   lectionaryCycle,
   recurringActivitySlug,
   SAINT_REPORT_SLUG,
@@ -326,8 +327,25 @@ async function main() {
   assert.equal(recurringActivitySlug("2027-11-24"), "happy-new-church-year", "Christ the King week");
   assert.equal(recurringActivitySlug("2027-05-31"), "helping-hands-like-mary", "the Visitation");
   assert.equal(recurringActivitySlug("2027-06-24"), "prepare-the-way", "Nativity of Saint John the Baptist");
-  assert.equal(recurringActivitySlug("2028-03-25"), "yes-with-a-smile", "the Annunciation");
-  assert.notEqual(recurringActivitySlug("2027-03-25"), "yes-with-a-smile", "Holy Thursday 2027: the Annunciation is moved");
+  // The Annunciation (UNLY 60): Holy Week or the Easter Octave -> Monday after the Second Sunday of Easter; a Lent Sunday -> Monday.
+  assert.equal(annunciationDate(2027), "2027-04-05", "2027: March 25 is Holy Thursday -> Monday, April 5 (USCCB 2027 calendar)");
+  assert.equal(recurringActivitySlug("2027-04-05"), "yes-with-a-smile");
+  assert.notEqual(recurringActivitySlug("2027-03-25"), "yes-with-a-smile", "not on Holy Thursday 2027");
+  assert.ok(isActivityFreeInWeekOf(getActivity("yes-with-a-smile")!, "2027-04-07"), "free in the week of April 5, 2027");
+  assert.equal(annunciationDate(2028), "2028-03-25", "2028: a Lenten Saturday, no move");
+  assert.equal(recurringActivitySlug("2028-03-25"), "yes-with-a-smile");
+  assert.equal(annunciationDate(2029), "2029-04-09", "2029: March 25 is Palm Sunday -> Monday after the Second Sunday of Easter");
+  assert.equal(recurringActivitySlug("2029-04-09"), "yes-with-a-smile");
+  assert.notEqual(recurringActivitySlug("2029-03-25"), "yes-with-a-smile", "not on Palm Sunday 2029");
+  assert.equal(annunciationDate(2026), "2026-03-25", "2026: a Lenten Wednesday");
+  assert.equal(annunciationDate(2035), "2035-04-02", "2035: March 25 is Easter Sunday -> after the Octave");
+  assert.equal(annunciationDate(2057), "2057-03-26", "2057: March 25 is a Sunday of Lent -> Monday, March 26");
+  for (let year = 2026; year <= 2100; year++) {
+    const a = annunciationDate(year);
+    const season = getLiturgicalSeason(new Date(`${a}T00:00:00Z`)).name;
+    assert.ok(season === "Lent" || season === "Easter Season", `${year}: ${a} is in Lent or after the Octave`);
+    assert.notEqual(new Date(`${a}T00:00:00Z`).getUTCDay(), 0, `${year}: never on a Sunday`);
+  }
   assert.equal(recurringActivitySlug("2027-01-01"), "yes-with-a-smile", "Mary, the Holy Mother of God");
   assert.equal(recurringActivitySlug("nope"), null);
   const ADVENT_ONLY = new Set(["jesse-tree-ornaments", "jesse-tree-picture-a-day", "o-antiphon-ornaments", "family-advent-calendar", "colour-the-advent-candles",
