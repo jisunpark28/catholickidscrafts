@@ -55,21 +55,36 @@ function SaintFactBoxCard({
   }
   if (rows.length === 0) return null;
   return (
-    <section aria-labelledby="fact-box" className="rounded-2xl border border-[#f0d9b8] bg-white/90 p-4">
-      <h2 id="fact-box" className="m-0 font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
-        Fact Box
-      </h2>
-      <dl className="mb-0 mt-2 space-y-2">
-        {rows.map((row) => (
-          <div key={row.label} className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
-            <dt className="shrink-0 pt-0.5 text-xs font-semibold uppercase tracking-wide text-[#9a6b3f] sm:w-28">
-              {row.label}
-            </dt>
-            <dd className="m-0">{row.content}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
+    <div>
+      <section aria-labelledby="fact-box" className="rounded-2xl border border-[#f0d9b8] bg-white/90 p-4">
+        <h2 id="fact-box" className="m-0 font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
+          Fact Box
+        </h2>
+        <dl className="mb-0 mt-2 space-y-2">
+          {rows.map((row) => (
+            <div key={row.label} className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
+              <dt className="shrink-0 pt-0.5 text-xs font-semibold uppercase tracking-wide text-[#9a6b3f] sm:w-28">
+                {row.label}
+              </dt>
+              <dd className="m-0">{row.content}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+      {box.sources.length > 0 ? (
+        <p className="mb-0 mt-2 text-xs leading-relaxed text-[#6b7280]">
+          <span className="font-semibold">Sources:</span>{" "}
+          {box.sources.map((s, i) => (
+            <span key={s.url}>
+              {i > 0 ? " · " : null}
+              <a href={s.url} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#335599]">
+                {s.label}
+              </a>
+            </span>
+          ))}
+        </p>
+      ) : null}
+    </div>
   );
 }
 

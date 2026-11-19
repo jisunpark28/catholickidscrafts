@@ -1,3 +1,4 @@
+import type { CardSource } from "@/lib/resource/card-meta";
 import {
   SAINT_SEO_CARDS,
   saintFactBox,
@@ -30,6 +31,7 @@ export type SaintStoryViewData = {
     patron: string[];
     symbols: string[];
     story?: string;
+    sources: CardSource[];
   } | null;
   showStory: boolean;
   slug: string;
