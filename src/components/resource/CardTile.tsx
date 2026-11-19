@@ -11,10 +11,8 @@ import { shareCardPng } from "@/lib/resource/card-download-client";
 import Image from "next/image";
 import Link from "next/link";
 import { SignInGatedLink } from "@/components/SignInGatedLink";
-import { useSignInGate } from "@/components/useSignInGate";
 import { useEffect, useRef, useState } from "react";
 import { LockedPreview } from "./LockedPreview";
-import { PlusLockDialog } from "./PlusLockDialog";
 
 type Props = {
   card: Pick<CardListItem, "id" | "title" | "cat" | "ref" | "when" | "date">;
@@ -51,7 +49,6 @@ export function CardTile({
   card,
   isPlus,
   isFree = false,
-  level = 1,
   siteUrl,
   selected = false,
   onOpen,
@@ -59,8 +56,6 @@ export function CardTile({
   typeBadge,
 }: Props) {
   const unlocked = isPlus || isFree;
-  const [lockOpen, setLockOpen] = useState(false);
-  const gate = useSignInGate();
   const [shareOpen, setShareOpen] = useState(false);
   const [msg, setMsg] = useState("");
   const [canNative, setCanNative] = useState(false);
@@ -130,8 +125,8 @@ export function CardTile({
     // When onOpen selects a detail pane, skip the subscribe link overlay so Open/image can select.
     <span className="relative block">
       <LockedPreview
-        className="rounded-lg bg-[#fbf7f1]"
-        href={onOpen ? null : "/subscribe"}
+        className="pointer-events-none rounded-lg bg-[#fbf7f1]"
+        href={null}
         label={`${card.title}: unlock with Plus`}
       >
         <Image
@@ -148,8 +143,8 @@ export function CardTile({
       {typeBadge ? <span className="pointer-events-none absolute left-1.5 top-1.5">{typeBadge}</span> : null}
     </span>
   );
-  // When onOpen is set (gallery → detail pane), Open always selects the card — including
-  // Plus-locked tiles, so the right pane can show the blurred detail. Print/Share stay gated.
+  // Only unlocked cards (Plus, or this week's free card) can be opened. Locked tiles are not clickable:
+  // image, Open, Print and Share are disabled; only the "Get Plus" link below stays clickable.
   const openEl = (cls: string, children: React.ReactNode, label?: string) =>
     onOpen ? (
       <button type="button" onClick={onOpen} className={cls} aria-label={label} aria-pressed={selected}>
@@ -167,9 +162,9 @@ export function CardTile({
         selected ? "border-2 border-[#d35400] p-[5px]" : "border border-[#e7e3de] p-1.5"
       }`}
     >
-      {onOpen || unlocked
+      {unlocked
         ? openEl("block w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d35400]", image, `Open ${card.title}`)
-        : image}
+        : <div aria-disabled="true" className="block w-full cursor-not-allowed">{image}</div>}
       <div className="px-1 pt-2">
         <div className="text-xs font-bold tracking-wide text-[#d35400]">{card.id}</div>
         <div className="truncate text-sm font-bold text-[#1c1c1c]" title={card.title}>
@@ -181,7 +176,7 @@ export function CardTile({
       <div className="mt-auto px-1 pb-1 pt-2.5">
         {/* Narrow tiles (4-up beside the detail panel): Open on its own row, Print + Share below. */}
         <div className="grid grid-cols-2 gap-1.5">
-          {onOpen || unlocked ? (
+          {unlocked ? (
             openEl(
               `${pillBtn} col-span-2 ${
                 unlocked
@@ -191,12 +186,11 @@ export function CardTile({
               "Open",
             )
           ) : (
-            // No onOpen (e.g. search result without panel): locked Open opens Plus dialog.
             <button
               type="button"
-              aria-haspopup="dialog"
-              onClick={() => setLockOpen(true)}
-              className={`${pillBtn} col-span-2 cursor-pointer bg-[#e7e3de] text-[#6b7280]`}
+              disabled
+              aria-disabled="true"
+              className={`${pillBtn} col-span-2 cursor-not-allowed bg-[#e7e3de] text-[#6b7280]`}
             >
               Open
             </button>
@@ -245,15 +239,13 @@ export function CardTile({
             <>
               <button
                 type="button"
-                aria-haspopup="dialog"
-                onClick={() => {
-                  if (gate()) setLockOpen(true);
-                }}
-                className={`${ghostBtn} cursor-pointer text-[#9ca3af]`}
+                disabled
+                aria-disabled="true"
+                className={`${ghostBtn} cursor-not-allowed text-[#9ca3af]`}
               >
                 🖨 Print
               </button>
-              <button type="button" aria-haspopup="dialog" onClick={() => setLockOpen(true)} className={`${ghostBtn} cursor-pointer text-[#9ca3af]`}>
+              <button type="button" disabled aria-disabled="true" className={`${ghostBtn} cursor-not-allowed text-[#9ca3af]`}>
                 🔗 Share
               </button>
             </>
@@ -274,7 +266,6 @@ export function CardTile({
           </p>
         )}
       </div>
-      <PlusLockDialog open={lockOpen} onClose={() => setLockOpen(false)} level={level} />
     </div>
   );
 }

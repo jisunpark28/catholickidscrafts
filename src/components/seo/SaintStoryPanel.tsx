@@ -191,7 +191,7 @@ export function SaintStoryPanel({
       <div className="mt-4 flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-8 lg:grid lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-stretch">
         <figure className="mx-auto w-44 shrink-0 sm:mx-0 sm:w-52 lg:flex lg:w-auto lg:flex-col">
           <div className="rounded-2xl border border-[#f0d9b8] bg-white p-2 shadow-sm lg:flex lg:min-h-[12rem] lg:flex-1 lg:flex-col lg:bg-[#fef9f6]">
-            <div className="relative lg:flex-1">
+            <div className="relative lg:aspect-[4/5] lg:flex-1">
               {canPreview ? (
                 <Image
                   src={cardThumbSrc(story.id)}
@@ -202,7 +202,7 @@ export function SaintStoryPanel({
                   className="block h-auto w-full rounded-lg bg-[#fbf7f1] lg:absolute lg:inset-0 lg:h-full lg:bg-transparent lg:object-contain"
                 />
               ) : (
-                <LockedPreview className="rounded-lg" label={`${story.title}: unlock with Plus`}>
+                <LockedPreview className="rounded-lg lg:absolute lg:inset-0" label={`${story.title}: unlock with Plus`}>
                   <Image
                     src={cardLockedPreviewSrc(story.id)}
                     alt=""
