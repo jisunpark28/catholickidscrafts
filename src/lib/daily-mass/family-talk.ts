@@ -1,3 +1,5 @@
+import { FAMILY_TALK_2027 } from "@/lib/daily-mass/family-talk-2027";
+
 /**
  * Daily Mass "Family talk" prompts, keyed by civil date (YYYY-MM-DD).
  *
@@ -28,9 +30,9 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
     questions: [
       "Jesus talks about a servant who takes good care of things while the master is away. What has God given you to take care of?",
       "How can you do your jobs well, even when no one is watching?",
-      "Jesus says that people who are given a lot are asked to give a lot. What gifts has God given you to share?",
+      "Jesus teaches that when God gives us a lot, he hopes we will share a lot. What gifts has God given you to share?",
     ],
-    lookFor: "Listen for the word \"servant\" in the Gospel. A servant is someone who helps others, like Jesus does.",
+    lookFor: "Listen for the word servant in the Gospel. A servant is someone who helps others, like Jesus does.",
   },
   "2026-10-22": {
     gospel: "Luke 12:49-53",
@@ -62,7 +64,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
   "2026-10-25": {
     gospel: "Matthew 22:34-40",
     questions: [
-      "Jesus says the greatest commandment is to love God with all your heart. How can you show God you love him?",
+      "Jesus teaches that the most important rule is to love God with everything we have. How can you show God you love him?",
       "Jesus says to love your neighbor. Who is one neighbor you can be kind to this week?",
       "What is one way to treat others the way you want to be treated?",
     ],
@@ -179,8 +181,8 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
   "2026-11-07": {
     gospel: "Luke 16:9-15",
     questions: [
-      "Jesus says that people who can be trusted with small things can be trusted with big things. What small jobs can you do faithfully?",
-      "Jesus says we cannot serve God and money. What does it mean to love God more than things?",
+      "Jesus teaches that if we are faithful in small things, we can be trusted with bigger things too. What small jobs can you do faithfully?",
+      "Jesus teaches that we cannot love God and money both at the same time. What does it mean to love God more than things?",
       "How can your family share what you have with someone in need?",
     ],
     lookFor: "Watch for the collection basket. Giving is one way we thank God for everything he gives us.",
@@ -198,7 +200,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
     gospel: "John 2:13-22",
     questions: [
       "Jesus was upset that people were treating God's house like a market. Why is church a special place?",
-      "Jesus said the real temple was his own body. How can we show respect for God's house and for our own bodies?",
+      "Jesus said that his own body was the true temple. How can we show respect for God's house and for our own bodies?",
       "What is one way you can show love for God when you walk into church?",
     ],
     lookFor: "Today we celebrate a famous church in Rome. As you come in, notice the holy water and make the Sign of the Cross.",
@@ -224,7 +226,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
   "2026-11-12": {
     gospel: "Luke 17:20-25",
     questions: [
-      "Jesus says the Kingdom of God is among us. Where do you see God's love around you?",
+      "Jesus teaches that God's Kingdom is already here with us. Where do you see God's love around you?",
       "How can kind words and actions help God's Kingdom grow at school or at home?",
       "Saint Josaphat worked hard to bring Christians together. How can you help people get along?",
     ],
@@ -261,7 +263,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
     gospel: "Luke 18:35-43",
     questions: [
       "A blind man called out to Jesus again and again, even when people told him to be quiet. Why didn't he give up?",
-      "Jesus asked, \"What do you want me to do for you?\" What would you ask Jesus?",
+      "Jesus asked the man what he wanted Jesus to do for him. If Jesus asked you that, what would you say?",
       "After he could see, the man followed Jesus and praised God. How can we praise God today?",
     ],
     lookFor: "Listen for \"Lord, have mercy\" near the start of Mass. The blind man asked Jesus for mercy too.",
@@ -296,7 +298,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
   "2026-11-20": {
     gospel: "Luke 19:45-48",
     questions: [
-      "Jesus said God's house should be a house of prayer. What do you like to pray about in church?",
+      "Jesus wanted God's house to be a place where people pray. What do you like to pray about in church?",
       "People hung on every word Jesus said. How can you be a good listener at Mass?",
       "How can we make our home a place of prayer too?",
     ],
@@ -305,11 +307,11 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
   "2026-11-21": {
     gospel: "Luke 20:27-40",
     questions: [
-      "Jesus says God is the God of the living. What do you think heaven will be like?",
-      "Today we remember Mary being presented to God in the Temple as a child. How can you give yourself to God?",
+      "Jesus teaches that God gives life and that people who belong to God live with him. What do you think heaven will be like?",
+      "Jesus explains that life in heaven will be new and different from life now. What questions would you like to ask Jesus about heaven?",
       "Who is someone in your family who has died that we can pray for today?",
     ],
-    lookFor: "Look for a statue or picture of Mary. Today we remember when she was brought to God's Temple as a little girl.",
+    lookFor: "Today the Church honors Mary with a special memorial. Look for a statue or picture of Mary and say a Hail Mary.",
   },
   "2026-11-22": {
     gospel: "Matthew 25:31-46",
@@ -342,7 +344,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
     gospel: "Luke 21:12-19",
     questions: [
       "Jesus promises to give his friends the right words when they need them. When could you ask the Holy Spirit for help?",
-      "Jesus says not a hair on your head will be lost. How does it feel to know God cares about every little thing?",
+      "Jesus promises that God takes care of every tiny part of us, even each hair on our heads. How does it feel to know God cares about every little thing?",
       "How can you be patient and keep trusting God when something is hard?",
     ],
     lookFor: "Listen for the Holy Spirit in the prayers at Mass. The priest asks the Holy Spirit to come upon the gifts.",
@@ -350,7 +352,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
   "2026-11-26": {
     gospel: "Luke 21:20-28",
     questions: [
-      "Jesus says, \"Stand up and raise your heads,\" because he is coming. How does that help us feel hopeful?",
+      "Jesus tells his friends that when scary things happen, they can look up with hope, because he is coming to save them. How does that help us feel hopeful?",
       "When something scary happens, how can we remember that Jesus is with us?",
       "What is one thing you are thankful for today?",
     ],
@@ -360,7 +362,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
     gospel: "Luke 21:29-33",
     questions: [
       "Jesus says when leaves grow on a fig tree, we know summer is near. What signs show us that Christmas and Advent are coming?",
-      "Jesus says his words will never pass away. What is your favorite thing Jesus said?",
+      "Jesus promises that what he says will last forever, even longer than the earth and sky. What is your favorite thing Jesus said?",
       "How can your family get ready for Advent this week?",
     ],
     lookFor: "This is the last week before Advent. Next week, look for the Advent wreath with its purple and pink candles!",
@@ -374,6 +376,7 @@ export const FAMILY_TALK: Record<string, FamilyTalkEntry> = {
     ],
     lookFor: "This is the last day of the Church year! Tomorrow is the first Sunday of Advent, and the priest will wear purple.",
   },
+  ...FAMILY_TALK_2027,
 };
 
 export function familyTalkFor(dateKey: string): FamilyTalkEntry | null {
