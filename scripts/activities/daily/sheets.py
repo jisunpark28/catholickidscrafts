@@ -738,6 +738,56 @@ def advent_candle_craft(c, colored):
     footer(c)
 
 
+# Saint Report Worksheet (Saints hub) -----------------------------------------
+def saint_report(c, colored):
+    """One-page saint research sheet. The header answer follows the Catechism (CCC 828, 956)."""
+    bg(c)
+    y = header(c, "Saint Report Worksheet", "What is a saint?",
+               "A saint is a holy person who loved God and others and now lives with God in heaven. "
+               "The Church gives us the saints as examples to follow and friends who pray for us.",
+               kicker="Saint activity")
+    with group(c, "Stars"):
+        star(c, L + 18, H - 70, 11, colored)
+        star(c, R - 18, H - 70, 11, colored)
+    top = y - 14
+    with group(c, "About my saint"):
+        text(c, L, top, "About my saint", "Baloo-Bold", 15, INK)
+    rows = top - 26
+    write_line(c, L, rows, "Saint name:", R)
+    write_line(c, L, rows - 28, "Feast day:", L + (R - L) / 2 - 12)
+    write_line(c, L + (R - L) / 2 + 4, rows - 28, "Patron of:", R)
+    write_line(c, L, rows - 56, "Symbols:", R)
+    write_line(c, L, rows - 84, "Where and when they lived:", R)
+    with group(c, "Write-in: Where and when they lived (2)"):
+        dotted(c, L, rows - 109, R, rows - 109)
+
+    box_top = rows - 132
+    box_bottom = 92
+    left_w = (R - L) * 0.46
+    with group(c, "Draw your saint"):
+        frame(c, L, box_bottom, left_w, box_top - box_bottom, 16, 1.8, colored, CREAM)
+        text(c, L + 14, box_top - 24, "Draw your saint", "Baloo-Bold", 15, INK)
+        sparkle(c, L + left_w - 22, box_top - 20, 6)
+    rx = L + left_w + 18
+    with group(c, "How they loved God"):
+        heart(c, rx + 8, box_top - 16, 8, colored, ROSE)
+        text(c, rx + 22, box_top - 22, "How they loved God", "Baloo-Bold", 15, INK)
+        for k in range(5):
+            dotted(c, rx, box_top - 52 - k * 25, R, box_top - 52 - k * 25)
+    mid = box_top - 52 - 5 * 25 - 8
+    with group(c, "One way I can follow their example"):
+        star(c, rx + 8, mid - 8, 8, colored)
+        first = para(c, rx + 22, mid - 14, "One way I can follow their example", "Baloo-Bold", 15, R - rx - 22, 17, INK) - 18
+        k = 0
+        while first - k * 25 >= box_bottom + 4:
+            dotted(c, rx, first - k * 25, R, first - k * 25)
+            k += 1
+    with group(c, "Note"):
+        text(c, W / 2, 70, "Find feast days and patron saints at catholickidscrafts.com/catholic-saints-for-kids",
+             "ComicRelief", 9.5, MUTED, "center")
+    footer(c)
+
+
 SHEETS = {
     "jesse-tree-ornaments": jesse_ornaments,
     "prepare-the-way": prepare_the_way,
@@ -755,4 +805,5 @@ SHEETS = {
     "paper-advent-wreath": paper_advent_wreath,
     "light-the-advent-candle": advent_dinner_candle,
     "advent-candle-craft": advent_candle_craft,
+    "saint-report-worksheet": saint_report,
 }

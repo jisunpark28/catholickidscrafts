@@ -1,6 +1,7 @@
 "use client";
 
 import { GoogleFamilySignIn } from "@/components/GoogleFamilySignIn";
+import { CALLBACK_PARAM } from "@/lib/sign-in-callback";
 import Link from "next/link";
 
 /** Free-with-sign-in prompt (same Google family sign-in as /account/login). */
@@ -8,10 +9,13 @@ export function ActivitySignInPrompt({
   title,
   body,
   kicker = "Free with a family account",
+  callbackUrl = null,
 }: {
   title: string;
   body: string;
   kicker?: string;
+  /** Same-site page to come back to after sign-in (e.g. this activity page). */
+  callbackUrl?: string | null;
 }) {
   return (
     <div className="rounded-2xl border border-[#e8e0d6] bg-[#fdfaf7] px-5 py-5 text-center">
@@ -19,11 +23,13 @@ export function ActivitySignInPrompt({
       <h2 className="mb-1 mt-1.5 text-lg font-bold text-[#1c1c1c]">{title}</h2>
       <p className="mx-auto mb-4 mt-0 max-w-sm text-sm leading-relaxed text-[#4b5563]">{body}</p>
       <div className="mx-auto max-w-xs">
-        <GoogleFamilySignIn from="login" showDivider={false} buttonClassName="min-h-[46px]" />
+        <GoogleFamilySignIn from="login" showDivider={false} buttonClassName="min-h-[46px]" callbackUrl={callbackUrl} />
       </div>
       <p className="mb-0 mt-3 text-xs text-[#6b7280]">
         New families are created automatically the first time you sign in.{" "}
-        <Link href="/account/login" className="font-semibold text-[#d35400] no-underline hover:underline">
+        <Link
+          href={callbackUrl ? `/account/login?${CALLBACK_PARAM}=${encodeURIComponent(callbackUrl)}` : "/account/login"}
+          className="font-semibold text-[#d35400] no-underline hover:underline">
           Other ways to sign in
         </Link>
       </p>

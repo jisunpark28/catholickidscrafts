@@ -17,6 +17,7 @@ import COLOUR_THE_ADVENT_CANDLES from "@/data/activities/colour-the-advent-candl
 import PAPER_ADVENT_WREATH from "@/data/activities/paper-advent-wreath.model.json";
 import LIGHT_THE_ADVENT_CANDLE from "@/data/activities/light-the-advent-candle.model.json";
 import ADVENT_CANDLE_CRAFT from "@/data/activities/advent-candle-craft.model.json";
+import SAINT_REPORT_WORKSHEET from "@/data/activities/saint-report-worksheet.model.json";
 import type { ActivityDoc } from "@/lib/resource/activity-doc";
 
 const MODELS: Record<string, ActivityDoc> = {
@@ -37,6 +38,7 @@ const MODELS: Record<string, ActivityDoc> = {
   "paper-advent-wreath": PAPER_ADVENT_WREATH as unknown as ActivityDoc,
   "light-the-advent-candle": LIGHT_THE_ADVENT_CANDLE as unknown as ActivityDoc,
   "advent-candle-craft": ADVENT_CANDLE_CRAFT as unknown as ActivityDoc,
+  "saint-report-worksheet": SAINT_REPORT_WORKSHEET as unknown as ActivityDoc,
 };
 
 export function getActivityModel(slug: string): ActivityDoc | null {

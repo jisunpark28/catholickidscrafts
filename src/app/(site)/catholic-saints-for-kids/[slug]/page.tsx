@@ -1,6 +1,7 @@
 import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SaintReportWorksheetLink } from "@/components/seo/SaintReportWorksheetLink";
 import { SaintStoryPanel } from "@/components/seo/SaintStoryPanel";
 import { cardSharePath } from "@/lib/resource/card-meta";
 import {
@@ -126,6 +127,7 @@ export default async function CatholicSaintPage({ params }: Props) {
         showHubLink
         quickFacts
       />
+      <SaintReportWorksheetLink className="mt-6" />
     </HomePdfShell>
   );
 }
