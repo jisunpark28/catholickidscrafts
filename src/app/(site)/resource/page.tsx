@@ -6,6 +6,7 @@ import { PrintablesCardsFinder } from "@/components/resource/PrintablesCardsFind
 import { PrintablesModeToggle } from "@/components/resource/PrintablesModeToggle";
 import { PrintablesSundaysArticle } from "@/components/resource/PrintablesSundaysArticle";
 import { PrintablesSundaysFinder } from "@/components/resource/PrintablesSundaysFinder";
+import { PrintablesWorksheetsResults } from "@/components/resource/PrintablesWorksheetsResults";
 import { ResourceSearchBar } from "@/components/resource/ResourceSearchBar";
 import { UnifiedSearchResults } from "@/components/resource/UnifiedSearchResults";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -33,6 +34,11 @@ import { featuredCardFor } from "@/lib/resource/featured-card";
 import { resolveResourceViewer, sheetOpenAllowed } from "@/lib/resource/resolve-access";
 import { parseSeason, RESOURCE_SEASONS, sheetSeason } from "@/lib/resource/sheets";
 import { listSundayCalendar, resolveSundayEntry } from "@/lib/resource/sunday-calendar";
+import {
+  listWorksheetBrowse,
+  parseWorksheetFilter,
+  worksheetCalendarMonthDate,
+} from "@/lib/resource/worksheet-browse";
 import { saintStoryViewsById } from "@/lib/seo/saint-story-view";
 import {
   COUNTRY_COOKIE,
@@ -101,11 +107,13 @@ export default async function ResourcePage({ searchParams }: Props) {
   const level = parseLevelParam(sp.level);
   const viewParam = parseView(one(sp.view));
   const sundayParam = one(sp.sunday);
+  const worksheetFilter = parseWorksheetFilter(one(sp.filter));
   const cardGroup = viewParam === "cards" ? parseCardGroup(one(sp.group)) : "";
   const country = pickCountry(undefined, cookieStore.get(COUNTRY_COOKIE)?.value, h.get("x-vercel-ip-country"));
 
   // Old card share URLs still open their detail panel; Option E defaults Printables to Worksheets (mode key: sundays).
-  const searchMode = Boolean(q.trim()) && viewParam !== "cards";
+  // Worksheets search (?view=sundays&q=) stays in the Worksheets panel, like Cards search.
+  const searchMode = Boolean(q.trim()) && viewParam !== "cards" && viewParam !== "sundays";
   const sharedCard = viewParam === "cards" ? getPictureCard(one(sp.card)) : null;
   const view: ResourceView = searchMode
     ? "all"
@@ -113,9 +121,11 @@ export default async function ResourcePage({ searchParams }: Props) {
       ? "cards"
       : viewParam === "custom"
         ? "custom"
-        : viewParam === "all" || season
-          ? "all"
-          : "sundays";
+        : viewParam === "sundays"
+          ? "sundays"
+          : viewParam === "all" || season
+            ? "all"
+            : "sundays";
 
   const printablesMode = view === "cards" ? "cards" : view === "sundays" ? "sundays" : null;
   const sunday = thisSunday(country);
@@ -209,13 +219,47 @@ export default async function ResourcePage({ searchParams }: Props) {
       ? [...sundayCalendar, selectedEntry].sort((a, b) => a.date.localeCompare(b.date))
       : sundayCalendar;
 
+  const showWorksheetResults =
+    printablesMode === "sundays" &&
+    Boolean(q.trim() || worksheetFilter || (viewParam === "sundays" && season));
+  const worksheetBrowse = showWorksheetResults
+    ? listWorksheetBrowse({
+        q,
+        season: viewParam === "sundays" ? season : null,
+        filter: worksheetFilter,
+        thisSundayKey,
+        weekYmd: todayToronto,
+      })
+    : null;
+  const worksheetResultsParams = new URLSearchParams({ view: "sundays" });
+  if (q.trim()) worksheetResultsParams.set("q", q.trim());
+  if (viewParam === "sundays" && season) worksheetResultsParams.set("season", season);
+  if (worksheetFilter) worksheetResultsParams.set("filter", worksheetFilter);
+  if (level === 2) worksheetResultsParams.set("level", "2");
+  const worksheetResultsHref = `/resource?${worksheetResultsParams.toString()}`;
+  const worksheetClearHref = level === 2 ? "/resource?view=sundays&level=2" : "/resource?view=sundays";
+  const worksheetMonthDate = sunday
+    ? worksheetCalendarMonthDate({
+        sundays: finderSundays,
+        thisSundayDate: sunday.date,
+        selectedDate: selectedSundayDate || sunday.date,
+        season: viewParam === "sundays" ? season : null,
+        filter: worksheetFilter,
+      })
+    : selectedSundayDate;
+
   const middle =
     printablesMode === "sundays" && sunday ? (
       <PrintablesSundaysFinder
+        key={`${q}|${worksheetFilter}|${viewParam === "sundays" ? season ?? "" : ""}|${worksheetMonthDate}`}
         sundays={finderSundays}
         thisSundayDate={sunday.date}
         selectedDate={selectedSundayDate || sunday.date}
         level={level}
+        initialQ={q}
+        filter={worksheetFilter}
+        season={viewParam === "sundays" ? season ?? "" : ""}
+        monthDate={worksheetMonthDate}
       />
     ) : printablesMode === "cards" ? (
       <PrintablesCardsFinder
@@ -232,7 +276,7 @@ export default async function ResourcePage({ searchParams }: Props) {
       dailyMassLabel={nav.dailyMassLabel}
       chrome={chrome ?? undefined}
       middle={middle}
-      middleDrawerLabel={printablesMode === "cards" ? "Search cards" : "Pick a worksheet"}
+      middleDrawerLabel={printablesMode === "cards" ? "Search cards" : "Search worksheets"}
       contentClassName={printablesMode ? "bg-[#fff8f0]" : "bg-white"}
     >
       <JsonLd nodes={[breadcrumbNode([{ name: "Resource", path: "/resource" }])]} />
@@ -333,6 +377,19 @@ export default async function ResourcePage({ searchParams }: Props) {
             />
           )}
         </section>
+      ) : printablesMode === "sundays" && worksheetBrowse ? (
+        <PrintablesWorksheetsResults
+          heading={worksheetBrowse.heading}
+          q={q.trim()}
+          sheets={worksheetBrowse.sheets}
+          activities={worksheetBrowse.activities}
+          level={level}
+          isPlus={viewer.isPlus}
+          thisSundayKey={thisSundayKey}
+          clearHref={worksheetClearHref}
+          page={page}
+          resultsHref={worksheetResultsHref}
+        />
       ) : printablesMode === "sundays" && selectedSheet && selectedSundayDate ? (
         <PrintablesSundaysArticle
           sheet={selectedSheet}
