@@ -10,12 +10,6 @@ export type TalkCard = Pick<PictureCard, "id" | "cat" | "set" | "title" | "text"
 
 const FAITH_CATS = new Set<CardCategory>(["Virtue & Life", "Prayer", "Sacrament", "Mass & Church"]);
 
-function hash(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
-  return Math.abs(h);
-}
-
 function clip(s: string, max: number): string {
   const t = s.replace(/\s+/g, " ").trim();
   if (t.length <= max) return t;
@@ -24,51 +18,225 @@ function clip(s: string, max: number): string {
   return `${(i > 40 ? cut.slice(0, i) : cut).trimEnd()}…`;
 }
 
+/** Clean short card name: "The Our Father (The Lord's Prayer)" -> "The Our Father". */
+export function shortCardName(title: string): string {
+  return title
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/\s+[–-]\s+.*$/, "")
+    .replace(/:\s+.*$/, "")
+    .trim();
+}
+
+/** "The Our Father" -> "the Our Father" (mid-sentence). */
+function midName(name: string): string {
+  return name.replace(/^The\b/, "the");
+}
+
+/** "Fear of the Lord" -> "fear of the Lord". */
+function lowerFirst(name: string): string {
+  return name.charAt(0).toLowerCase() + name.slice(1);
+}
+
+/** "Social Intelligence" -> "social intelligence", "Fear of the Lord" -> "fear of the Lord". */
+function lowerVirtue(name: string): string {
+  return name.toLowerCase().replace(/\blord\b/g, "Lord");
+}
+
+/** Natural intro + questions for Virtue, Prayer, Sacrament and Mass cards (no long quotes, no stories). */
+function faithTalkText(card: TalkCard): { intro: [string, string]; questions: [string, string, string] } {
+  const name = shortCardName(card.title) || card.title;
+  const mid = midName(name);
+  const refBit = card.ref ? ` Scripture on the card: ${card.ref}.` : "";
+  const text = card.text.replace(/\s+/g, " ").trim();
+  const said = text.length <= 120 ? ` The card says: "${talkQuote(text)}"` : " The full words are printed on the card.";
+  const setName = card.set.replace(/\s*\([^)]*\)/g, "").replace(/^The\s+/, "");
+  const lead = `${name} is a ${card.cat} card from the ${setName} set.${said}`;
+  switch (card.cat) {
+    case "Prayer": {
+      if (card.set === "Rosary") {
+        if (!/^\w+ \d+:/.test(card.title)) {
+          return {
+            intro: [lead, `Pray it slowly together, one bead at a time.${refBit}`],
+            questions: [
+              "Which part of the Rosary would you like to lead at home?",
+              "Shall we count the beads of one decade together?",
+              "When could our family pray one decade together this week?",
+            ],
+          };
+        }
+        const kind = card.title.split(" ")[0]!;
+        const mystery = card.title.slice(card.title.indexOf(":") + 1).trim();
+        return {
+          intro: [
+            `${mystery} is one of the ${kind} Mysteries of the Rosary.${said}`,
+            `Pray one decade while thinking about this moment in the life of Jesus and Mary.${refBit}`,
+          ],
+          questions: [
+            card.ref
+              ? `After reading ${card.ref} together, can you tell what happens in this mystery in your own words?`
+              : "Can you tell what happens in this mystery in your own words?",
+            `What does ${midName(mystery)} teach us about God's love?`,
+            "Who could we offer this decade for?",
+          ],
+        };
+      }
+      const startsWithThe = /^The\b/.test(name);
+      return {
+        intro: [lead, `Pray it slowly together, then talk about the questions below.${refBit}`],
+        questions: [
+          startsWithThe
+            ? `What is one line of ${mid} you'd like to remember?`
+            : "What is one line of this prayer you'd like to remember?",
+          startsWithThe
+            ? `When could our family pray ${mid} together: in the morning, at meals or at bedtime?`
+            : "When could our family pray this prayer together: in the morning, at meals or at bedtime?",
+          "Who would you like to pray for when we say this prayer?",
+        ],
+      };
+    }
+    case "Virtue & Life": {
+      const intro: [string, string] = [lead, `Talk about it together, then pick one small way to live it this week.${refBit}`];
+      if (card.set === "The Ten Commandments") {
+        return {
+          intro,
+          questions: [
+            `What does ${mid} ask us to do?`,
+            "What is one way our family can keep this commandment this week?",
+            "How does this commandment help us love God and our neighbor?",
+          ],
+        };
+      }
+      if (card.set === "The Beatitudes") {
+        return {
+          intro,
+          questions: [
+            "What do you think Jesus means in this Beatitude?",
+            "Why do you think Jesus calls these people blessed?",
+            "How could we live this Beatitude at home or at school?",
+          ],
+        };
+      }
+      if (card.set.endsWith("Works of Mercy")) {
+        return {
+          intro,
+          questions: [
+            `Why is "${name}" a work of mercy?`,
+            "What is one small way our family could show this kind of mercy?",
+            "Who in our parish or town helps people in this way?",
+          ],
+        };
+      }
+      if (card.set === "Gifts of the Holy Spirit") {
+        const gift = lowerVirtue(name);
+        return {
+          intro,
+          questions: [
+            `What does the gift of ${gift} help us do?`,
+            `When could you ask the Holy Spirit for the gift of ${gift}?`,
+            "Where could you use this gift at home or at school this week?",
+          ],
+        };
+      }
+      if (card.set === "Fruits of the Holy Spirit") {
+        return {
+          intro,
+          questions: [
+            "Which fruits of the Holy Spirit can you name from the card?",
+            "Which one would you like to grow in this week?",
+            "How can we help each other grow in it?",
+          ],
+        };
+      }
+      if (card.set === "Precepts of the Church") {
+        return {
+          intro,
+          questions: [
+            `Why does the Church ask us to ${lowerFirst(name)}?`,
+            "How can our family keep this precept together?",
+            "What helps you remember to do this?",
+          ],
+        };
+      }
+      const virtue = lowerVirtue(name);
+      return {
+        intro,
+        questions: [
+          `What does ${virtue} look like at home?`,
+          `Who do you know who shows ${virtue}?`,
+          `What is one way you could practice ${virtue} this week?`,
+        ],
+      };
+    }
+    case "Sacrament": {
+      const intro: [string, string] = [lead, `Sacraments are special signs where Jesus gives us his grace.${refBit}`];
+      if (card.set === "The Seven Sacraments") {
+        return {
+          intro,
+          questions:
+            card.id === "SAC-001"
+              ? [
+                  "Can you name all seven sacraments?",
+                  "Which sacraments have people in our family received?",
+                  "Why do you think Jesus gives us these special signs?",
+                ]
+              : [
+                  `In your own words, what does ${mid} do for us?`,
+                  `Where have you seen ${mid} celebrated in our parish?`,
+                  `How can we pray for people getting ready for ${mid}?`,
+                ],
+        };
+      }
+      return {
+        intro,
+        questions: [
+          "What is one thing this card teaches you?",
+          "How could we bring this into our family's faith life this week?",
+          "What is one question you would like to ask our priest or catechist about it?",
+        ],
+      };
+    }
+    default: {
+      // Mass & Church
+      const intro: [string, string] = [lead, `Look for it the next time your family goes to Mass.${refBit}`];
+      const questions: [string, string, string] =
+        card.set === "The Church Building"
+          ? [
+              "Can you find this in our church next Sunday?",
+              "What does it help us remember about Jesus?",
+              "Why do you think the Church gives it a special place?",
+            ]
+          : card.set === "Sacred Vessels & Objects"
+            ? [
+                "Have you seen this at Mass? What is it used for?",
+                "Why do you think we treat it with such care?",
+                "What could you look for the next time we go to Mass?",
+              ]
+            : card.set === "Vestments & Ministers"
+              ? [
+                  "Where have you seen this at Mass?",
+                  "How does it help us worship God together?",
+                  "How can we pray for the people who serve at our parish?",
+                ]
+              : card.set === "How We Pray at Church"
+                ? [
+                    "When do we do this at church?",
+                    "What does it say to God without words?",
+                    "Can you show us how to do it?",
+                  ]
+                : [
+                    "What do we do or say during this part of the Mass?",
+                    "Next Sunday, can you listen for this part and tell us when it happens?",
+                    "How can this part of the Mass help us pray with our whole heart?",
+                  ];
+      return { intro, questions };
+    }
+  }
+}
+
 export function faithPageSeo(card: TalkCard): CardPageSeo {
   const whenBit = card.when ? ` Often used ${card.when}.` : "";
   const refBit = card.ref ? ` Scripture cue: ${card.ref}.` : "";
-  const catLabel = card.cat;
-  const variants: Array<[string, string]> = [
-    [
-      `"${card.title}" is a ${catLabel} card in the "${card.set}" set. It teaches kids: "${card.text}"`,
-      `Use it before Mass, during family prayer, or in a catechism lesson when you need one clear Catholic idea.${whenBit}${refBit}`,
-    ],
-    [
-      `Catholic parents hunting for a plain-language take on "${card.title}" can start here. The card says: "${card.text}"`,
-      `That line sits inside "${card.set}" under ${catLabel}, so it fits naturally with the rest of your faith shelf.${whenBit}${refBit}`,
-    ],
-    [
-      `Kids remember faith when it is concrete. "${card.title}" gives them this: "${card.text}"`,
-      `Read it twice — once for the words, once for a quiet pause — then try the talk prompts below.${whenBit}${refBit}`,
-    ],
-    [
-      `From our ${catLabel} collection, "${card.title}" belongs to "${card.set}". Its kid-friendly summary: "${card.text}"`,
-      `Keep the card nearby when questions about Church life bubble up at the dinner table.${whenBit}${refBit}`,
-    ],
-  ];
-  const intro = variants[hash(card.id) % variants.length]!;
-  const qVariants: Array<[string, string, string]> = [
-    [
-      `In your own words, what does "${card.title}" mean after hearing "${card.text}"?`,
-      `Where might we practice this ${catLabel.toLowerCase()} idea at home this week?`,
-      card.ref
-        ? `How does ${card.ref} shine a light on "${card.title}"?`
-        : `What is one question you still have about "${card.title}"?`,
-    ],
-    [
-      `Which word in "${card.text}" feels most important to you?`,
-      `How could "${card.title}" help a friend who is new to Mass or prayer?`,
-      card.when
-        ? `When we see this around ${card.when}, what should we remember?`
-        : `Who in our parish lives "${card.title}" well?`,
-    ],
-    [
-      `Why do Catholics care about "${card.title}" enough to put it on a kids' card?`,
-      `What is a kind action that matches "${card.text}"?`,
-      `Shall we thank God for teaching us through "${card.title}"?`,
-    ],
-  ];
-  const questions = qVariants[hash(card.id + "q") % qVariants.length]!;
+  const { intro, questions } = faithTalkText(card);
   return {
     seoTitle: clip(`${card.title} — Catholic Faith for Kids`, 60),
     description: clip(
@@ -257,7 +425,7 @@ export type CardTalk = {
 export function cardTalk(card: TalkCard): CardTalk | null {
   if (card.cat === "Saint") return null;
   if (FAITH_CATS.has(card.cat)) {
-    const seo = faithPageSeo({ ...card, text: talkQuote(card.text) });
+    const seo = faithPageSeo(card);
     return { caption: card.text, intro: seo.intro, questions: seo.questions };
   }
   const seo = cardPageSeo(card);
