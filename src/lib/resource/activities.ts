@@ -3,12 +3,14 @@
 // assets/activities and ready-made craft PDFs in the private Vercel Blob store (never public);
 // both are served only by the signed-in download route.
 import type { ResourceSeason } from "@/lib/resource/sheets";
+import { adventStart, getLiturgicalSeason } from "@/lib/liturgical-season";
 import { weekSundayOf } from "@/lib/resource/week";
 
 export type ActivityVariant = "bw" | "color";
 /**
- * Catalog gate. "plus": Plus members only. "signin": Plus too, except in a week the sheet is on
- * DAILY_ACTIVITY_SCHEDULE, when any signed-in family can download it (isActivityFreeThisWeek).
+ * Catalog gate. "plus": Plus members only. "signin": Plus too, except in a week the sheet is the
+ * day's activity on some day (dailyActivityFor: DAILY_ACTIVITY_SCHEDULE, then the year-round
+ * recurringActivitySlug rule), when any signed-in family can download it (isActivityFreeThisWeek).
  * The download API checks this on every request.
  */
 export type ActivityAccess = "signin" | "plus";
@@ -462,10 +464,118 @@ export function torontoDate(now: Date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Toronto", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
 }
 
-/** The scheduled activity for a Toronto date, falling back to the latest earlier one with a sheet. */
+/**
+ * Lectionary cycle of the liturgical year that begins at Advent of `adventYear`
+ * (Advent 2025 = A, 2026 = B, 2027 = C; same rule as sundayCycleFor).
+ */
+export function lectionaryCycle(adventYear: number): "A" | "B" | "C" {
+  return (["A", "B", "C"] as const)[((adventYear % 3) + 3) % 3]!;
+}
+
+/**
+ * Fixed dates on the General Roman Calendar that one of the sign-in sheets is about (MM-DD).
+ * The Annunciation is skipped when March 25 falls in Holy Week or the Easter Octave (it is moved).
+ * A Sunday of Advent takes precedence; the Immaculate Conception then moves to Monday, December 9.
+ */
+export const ACTIVITY_FIXED_FEASTS: Readonly<Record<string, string>> = {
+  "01-01": "yes-with-a-smile", // Mary, the Holy Mother of God
+  "03-25": "yes-with-a-smile", // The Annunciation of the Lord
+  "05-31": "helping-hands-like-mary", // The Visitation of the Blessed Virgin Mary
+  "06-24": "prepare-the-way", // The Nativity of Saint John the Baptist
+  "12-06": "secret-kindness-notes", // Saint Nicholas
+  "12-08": "white-flower-for-mary", // The Immaculate Conception
+  "12-12": "roses-for-mary", // Our Lady of Guadalupe
+};
+
+/** Advent weekdays (Monday to Saturday) by Advent week, rotating through the list. */
+const ADVENT_WEEKDAY_SHEETS: readonly (readonly string[])[] = [
+  // Week 1: the Lord's coming; the week leads to John the Baptist (Second Sunday, every cycle).
+  ["paper-advent-wreath", "come-lord-jesus", "jesse-tree-ornaments", "prepare-the-way"],
+  // Week 2: leads to Gaudete Sunday (the rose candle).
+  ["colour-the-advent-candles", "jesse-tree-picture-a-day", "secret-kindness-notes", "straw-for-the-manger"],
+  // Week 3: leads to the Fourth Sunday.
+  ["jesse-tree-picture-a-day", "straw-for-the-manger", "come-lord-jesus"],
+];
+
+/**
+ * Fourth Sunday of Advent: the sheet for that Sunday's Gospel in each cycle. It is free in the week
+ * that ends on that Sunday (the same week as its Sunday sheet). A: Joseph's dream (Mt 1:18-24),
+ * B: the Annunciation (Lk 1:26-38), C: the Visitation (Lk 1:39-45).
+ */
+export const ADVENT4_SUNDAY_SHEET: Readonly<Record<"A" | "B" | "C", string>> = {
+  A: "straw-for-the-manger",
+  B: "yes-with-a-smile",
+  C: "helping-hands-like-mary",
+};
+
+/** Outside Advent: one sheet per week (Monday to Sunday), rotating through the season's list. */
+export const ACTIVITY_SEASON_WEEKLY: Readonly<Record<"christmas" | "lent" | "easter" | "ordinary", readonly string[]>> = {
+  christmas: ["helping-hands-like-mary", "yes-with-a-smile"],
+  lent: ["prepare-the-way", "secret-kindness-notes", "helping-hands-like-mary"],
+  easter: ["helping-hands-like-mary", "yes-with-a-smile", "secret-kindness-notes"],
+  ordinary: ["secret-kindness-notes", "helping-hands-like-mary", "yes-with-a-smile"],
+};
+
+/** Week 0 of the weekly rotation (a Sunday). */
+const ROTATION_EPOCH_SUNDAY = "2026-11-22";
+const DAY_MS = 86_400_000;
+
+/**
+ * Year-round daily activity for a date outside DAILY_ACTIVITY_SCHEDULE, from the liturgical
+ * calendar (pure, every year): fixed feasts above; Advent Sundays light the wreath, with the
+ * Fourth Sunday following the cycle's Gospel; the O Antiphons December 17 to 23; Christmas Eve the
+ * manger; Advent weekdays by week; Christ the King week (the last week before Advent) the
+ * Happy New Church Year wheel; otherwise one sheet a week from the season's list.
+ */
+export function recurringActivitySlug(ymd: string): string | null {
+  if (!YMD.test(ymd)) return null;
+  const [y, m, d] = ymd.split("-").map(Number) as [number, number, number];
+  const date = new Date(Date.UTC(y, m - 1, d));
+  const season = getLiturgicalSeason(date).name;
+  const md = ymd.slice(5);
+  const dow = date.getUTCDay();
+  const feast = ACTIVITY_FIXED_FEASTS[md];
+  const annunciationMoved = md === "03-25" && (season === "Holy Week" || season.startsWith("Easter"));
+  const adventSunday = season === "Advent" && dow === 0;
+  if (feast && !annunciationMoved && !adventSunday) return feast;
+  if (md === "12-09" && dow === 1) return "white-flower-for-mary"; // December 8 was a Sunday of Advent
+
+  const advent = adventStart(y).getTime();
+  if (season === "Advent") {
+    const week = Math.floor((date.getTime() - advent) / (7 * DAY_MS)) + 1;
+    if (dow === 0) return week === 4 ? ADVENT4_SUNDAY_SHEET[lectionaryCycle(y)] : "light-the-advent-candle";
+    if (md === "12-24") return "straw-for-the-manger";
+    if (md >= "12-17") return "o-antiphon-ornaments";
+    const list = ADVENT_WEEKDAY_SHEETS[Math.min(week, 3) - 1]!;
+    return list[(dow - 1) % list.length]!;
+  }
+  if (date.getTime() >= advent - 7 * DAY_MS && date.getTime() < advent) return "happy-new-church-year";
+
+  const pool =
+    season === "Christmas Season"
+      ? ACTIVITY_SEASON_WEEKLY.christmas
+      : season === "Lent" || season === "Holy Week"
+        ? ACTIVITY_SEASON_WEEKLY.lent
+        : season.startsWith("Easter")
+          ? ACTIVITY_SEASON_WEEKLY.easter
+          : ACTIVITY_SEASON_WEEKLY.ordinary;
+  const weekIndex = Math.round((Date.parse(`${weekSundayOf(ymd)}T00:00:00Z`) - Date.parse(`${ROTATION_EPOCH_SUNDAY}T00:00:00Z`)) / (7 * DAY_MS));
+  return pool[((weekIndex % pool.length) + pool.length) % pool.length]!;
+}
+
+/**
+ * The activity for a Toronto date: DAILY_ACTIVITY_SCHEDULE inside its range (falling back to the
+ * latest earlier row), and the year-round recurringActivitySlug rule before and after it.
+ */
 export function dailyActivityFor(ymd: string): { activity: ResourceActivity; date: string | null; exact: boolean } {
   const fallback = getActivity(DEFAULT_DAILY_ACTIVITY)!;
   if (!YMD.test(ymd)) return { activity: fallback, date: null, exact: false };
+  const first = DAILY_ACTIVITY_SCHEDULE[0]?.date ?? "";
+  const last = DAILY_ACTIVITY_SCHEDULE.at(-1)?.date ?? "";
+  if (ymd < first || ymd > last) {
+    const recurring = getActivity(recurringActivitySlug(ymd));
+    if (recurring) return { activity: recurring, date: ymd, exact: true };
+  }
   let best: { activity: ResourceActivity; date: string } | null = null;
   for (const row of DAILY_ACTIVITY_SCHEDULE) {
     if (row.date > ymd) continue;
@@ -475,15 +585,20 @@ export function dailyActivityFor(ymd: string): { activity: ResourceActivity; dat
   return best ? { ...best, exact: best.date === ymd } : { activity: fallback, date: null, exact: false };
 }
 
+/** The seven Toronto dates (Monday to Sunday) of the week that ends on weekSundayOf(ymd). */
+export function weekDatesOf(ymd: string): string[] {
+  const sunday = Date.parse(`${weekSundayOf(ymd)}T00:00:00Z`);
+  return [6, 5, 4, 3, 2, 1, 0].map((i) => new Date(sunday - i * DAY_MS).toISOString().slice(0, 10));
+}
+
 /**
- * Free with sign-in in the week of a Toronto date: a "signin" sheet scheduled on any day of that
- * week. Weeks run Monday to Sunday and end on "This Sunday" (weekSundayOf, the Sunday sheet rule).
- * Everything else, including sheets with no scheduled date, is Plus only.
+ * Free with sign-in in the week of a Toronto date: a "signin" sheet that is the daily activity
+ * (dailyActivityFor) on any day of that week. Weeks run Monday to Sunday and end on "This Sunday"
+ * (weekSundayOf, the Sunday sheet rule). Everything else, including "plus" sheets, is Plus only.
  */
 export function isActivityFreeInWeekOf(activity: Pick<ResourceActivity, "slug" | "access">, ymd: string): boolean {
   if (activity.access !== "signin" || !YMD.test(ymd)) return false;
-  const week = weekSundayOf(ymd);
-  return DAILY_ACTIVITY_SCHEDULE.some((row) => row.slug === activity.slug && weekSundayOf(row.date) === week);
+  return weekDatesOf(ymd).some((day) => dailyActivityFor(day).activity.slug === activity.slug);
 }
 
 /** isActivityFreeInWeekOf for the current Toronto date (per request / per render). */
