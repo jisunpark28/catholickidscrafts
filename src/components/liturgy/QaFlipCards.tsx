@@ -53,7 +53,7 @@ export function QaFlipCards({ cards, variant = "qa", cardBackColor, fit = false,
   );
 }
 
-function QaFlipCard({
+export function QaFlipCard({
   card,
   variant,
   cardBackColor,

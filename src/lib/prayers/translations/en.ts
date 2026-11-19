@@ -21,7 +21,7 @@ export const EN_PRAYERS: PrayerTranslationMap = {
   },
   "fatima-prayer": {
     title: "Fatima Prayer",
-    text: "O my Jesus, forgive us our sins, save us from the fires of hell, lead all souls to heaven, especially those in most need of thy mercy. Amen.",
+    text: "O my Jesus, forgive us our sins, save us from the fires of hell; lead all souls to Heaven, especially those who have most need of your mercy.",
   },
   "apostles-creed": {
     title: "Apostles' Creed",
@@ -41,7 +41,7 @@ I believe in one, holy, catholic and apostolic Church. I confess one Baptism for
   },
   "morning-offering": {
     title: "Morning Offering",
-    text: "O Jesus, through the Immaculate Heart of Mary, I offer you my prayers, works, joys, and sufferings of this day for all the intentions of your Sacred Heart, in union with the Holy Sacrifice of the Mass throughout the world, for the salvation of souls, the reparation of sins, the reunion of all Christians, and the intentions of our Holy Father. Amen.",
+    text: "O Jesus, through the Immaculate Heart of Mary, I offer you my prayers, works, joys, and sufferings of this day for all the intentions of your Sacred Heart in union with the Holy Sacrifice of the Mass throughout the world, for the salvation of souls, the reparation of sins, the reunion of all Christians, and in particular for the intentions of the Holy Father this month. Amen.",
   },
   "angelus": {
     title: "The Angelus",
@@ -67,16 +67,12 @@ Let us pray: Pour forth, we beseech thee, O Lord, thy grace into our hearts, tha
   },
   "regina-caeli": {
     title: "Regina Caeli",
-    text: `V. Queen of Heaven, rejoice, alleluia.
-R. For he whom you merited to bear, alleluia.
-
-V. Has risen, as he said, alleluia.
-R. Pray for us to God, alleluia.
+    text: `Queen of heaven, rejoice, alleluia. The Son whom you merited to bear, alleluia, has risen as he said, alleluia. Pray for us to God, alleluia.
 
 V. Rejoice and be glad, O Virgin Mary, alleluia.
 R. For the Lord has truly risen, alleluia.
 
-Let us pray: O God, who gave joy to the world through the resurrection of thy Son, our Lord Jesus Christ, grant we beseech thee, that through the intercession of the Virgin Mary, his Mother, we may obtain the joys of everlasting life. Through the same Christ our Lord. Amen.`,
+Let us pray. O God, who have been pleased to gladden the world by the Resurrection of your Son our Lord Jesus Christ, grant, we pray, that through his Mother, the Virgin Mary, we may receive the joys of everlasting life. Through Christ our Lord. Amen.`,
   },
   "grace-before-meals": {
     title: "Grace Before Meals",
@@ -84,9 +80,7 @@ Let us pray: O God, who gave joy to the world through the resurrection of thy So
   },
   "grace-after-meals": {
     title: "Grace After Meals",
-    text: `We give thee thanks, almighty God, for all thy benefits, who livest and reignest, world without end. Amen.
-
-May the souls of the faithful departed, through the mercy of God, rest in peace. Amen.`,
+    text: "We give thee thanks, for all thy benefits, Almighty God, who live and reign for ever. [And may the souls of the faithful departed, through the mercy of God, rest in peace.] Amen.",
   },
   "guardian-angel": {
     title: "Guardian Angel Prayer",
@@ -94,36 +88,37 @@ May the souls of the faithful departed, through the mercy of God, rest in peace.
   },
   "come-holy-spirit": {
     title: "Come, Holy Spirit",
-    text: `Come, Holy Spirit, fill the hearts of thy faithful and kindle in them the fire of thy love.
+    text: `Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love.
 
-Send forth thy Spirit and they shall be created, and thou shalt renew the face of the earth.
+Send forth your Spirit and they shall be created, and you shall renew the face of the earth.
 
-Let us pray: O God, who didst instruct the hearts of the faithful by the light of the Holy Spirit, grant us in the same Spirit to be truly wise and ever to rejoice in his consolation. Through Christ our Lord. Amen.`,
+Let us pray. O God, who have taught the hearts of the faithful by the light of the Holy Spirit, grant that in the same Spirit we may be truly wise and ever rejoice in his consolation. Through Christ our Lord. Amen.`,
   },
   "act-of-contrition": {
     title: "Act of Contrition",
-    text: "O my God, I am heartily sorry for having offended thee, and I detest all my sins because of thy just punishments, but most of all because they offend thee, my God, who art all good and deserving of all my love. I firmly resolve, with the help of thy grace, to sin no more and to avoid the near occasion of sin. Amen.",
+    text: "O my God, I am heartily sorry for having offended you, and I detest all my sins because of your just punishments, but most of all because they offend you, my God, who are all good and deserving of all my love. I firmly resolve, with the help of your grace, to sin no more and to avoid the near occasions of sin. Amen.",
   },
   "anima-christi": {
     title: "Anima Christi",
     text: `Soul of Christ, sanctify me.
 Body of Christ, save me.
-Blood of Christ, inebriate me.
+Blood of Christ, embolden me.
 Water from the side of Christ, wash me.
 Passion of Christ, strengthen me.
 O good Jesus, hear me.
-Within thy wounds hide me.
-Permit me not to be separated from thee.
-From the wicked foe, defend me.
-At the hour of my death, call me
-and bid me come to thee,
-that with thy saints I may praise thee
-forever and ever. Amen.`,
+Within your wounds hide me.
+Never permit me to be parted from you.
+From the evil Enemy defend me.
+At the hour of my death call me
+and bid me come to you,
+that with your Saints I may praise you
+for age upon age. Amen.`,
   },
   "prayer-before-communion": {
     title: "Prayer Before Communion",
     text: "Lord, I am not worthy that you should enter under my roof, but only say the word and my soul shall be healed.",
   },
+  // Source pending: current site text until an official source is confirmed.
   "prayer-after-communion": {
     title: "Prayer After Communion",
     text: "Lord, may I receive these gifts in purity of heart. May they bring me healing and wholeness of mind and body. Amen.",
@@ -141,8 +136,9 @@ Pray for us, O holy Mother of God, that we may be made worthy of the promises of
   "prayer-to-st-michael": {
     title: "Prayer to St. Michael the Archangel",
     subtitle: "Defend us against evil",
-    text: "St. Michael the Archangel, defend us in battle. Be our protection against the wickedness and snares of the devil. May God rebuke him, we humbly pray, and do thou, O Prince of the heavenly hosts, by the power of God, cast into hell Satan and all the evil spirits who prowl about the world seeking the ruin of souls. Amen.",
+    text: "St. Michael the Archangel, defend us in battle. Be our defense against the wickedness and snares of the Devil. May God rebuke him, we humbly pray, and do thou, O Prince of the heavenly hosts, by the power of God, thrust into hell Satan, and all evil spirits, who prowl about the world seeking the ruin of souls. Amen.",
   },
+  // Source pending: current site text until an official source is confirmed.
   "prayer-of-st-francis": {
     title: "Prayer of St. Francis",
     text: `Lord, make me an instrument of your peace:
@@ -157,9 +153,7 @@ O divine Master, grant that I may not so much seek to be consoled as to console,
   },
   "eternal-rest": {
     title: "Eternal Rest",
-    text: `Eternal rest grant unto them, O Lord, and let perpetual light shine upon them. May they rest in peace. Amen.
-
-May their souls and the souls of all the faithful departed, through the mercy of God, rest in peace. Amen.`,
+    text: "Eternal rest grant unto them, O Lord, and let perpetual light shine upon them. May they rest in peace. Amen.",
   },
   "sub-tuum": {
     title: "Sub Tuum Praesidium",

@@ -5,11 +5,16 @@ import type { HeaderSessionResponse } from "@/lib/header-session";
 import { getSiteUrl } from "@/lib/site-url";
 import { usePathname } from "next/navigation";
 
-function canonicalPageUrl(pathname: string): string {
+/**
+ * Canonical page URL. The path drops any "?" or "#" part; an explicit `query` ("prayer=hail-mary")
+ * is kept so a share can point at one view of a page (callers without it are unchanged).
+ */
+function canonicalPageUrl(pathname: string, query?: string): string {
   const pathOnly = pathname.split("?")[0]?.split("#")[0] || "/";
   const withSlash = pathOnly.startsWith("/") ? pathOnly : `/${pathOnly}`;
   const trimmed = withSlash.length > 1 && withSlash.endsWith("/") ? withSlash.slice(0, -1) : withSlash;
-  return `${getSiteUrl()}${trimmed}`;
+  const q = (query ?? "").split("#")[0]!.replace(/^\?/, "");
+  return `${getSiteUrl()}${trimmed}${q ? `?${q}` : ""}`;
 }
 
 function isChildOrKidMode(session: HeaderSessionResponse): boolean {
@@ -39,15 +44,16 @@ function ClassroomIcon() {
 /**
  * Teacher-facing share link for Google Classroom. Hidden in kid/child mode so a
  * handed-off browser never shows a classroom.google.com link. Hidden until the
- * site session is ready so the link does not flash first.
+ * site session is ready so the link does not flash first. `query` keeps one view of the page in the
+ * shared link (for example "prayer=hail-mary" on /prayers).
  */
-export function ShareToClassroomButton({ className }: { className?: string }) {
+export function ShareToClassroomButton({ className, query }: { className?: string; query?: string }) {
   const { ready, session } = useSiteSession();
   const pathname = usePathname();
 
   if (!ready || isChildOrKidMode(session)) return null;
 
-  const shareHref = `https://classroom.google.com/share?url=${encodeURIComponent(canonicalPageUrl(pathname))}`;
+  const shareHref = `https://classroom.google.com/share?url=${encodeURIComponent(canonicalPageUrl(pathname, query))}`;
   const classes = [
     "inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[#7f9a5a] bg-[#fdfaf7] px-3 py-1.5 text-sm font-semibold text-[#405329] no-underline hover:bg-[#edf0df] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] print:hidden",
     className,

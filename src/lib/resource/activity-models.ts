@@ -19,6 +19,7 @@ import LIGHT_THE_ADVENT_CANDLE from "@/data/activities/light-the-advent-candle.m
 import ADVENT_CANDLE_CRAFT from "@/data/activities/advent-candle-craft.model.json";
 import SAINT_REPORT_WORKSHEET from "@/data/activities/saint-report-worksheet.model.json";
 import type { ActivityDoc } from "@/lib/resource/activity-doc";
+import { PRAYER_SHEET_MODELS } from "@/lib/resource/prayer-sheet-models";
 
 const MODELS: Record<string, ActivityDoc> = {
   "happy-new-church-year": HAPPY_NEW_CHURCH_YEAR as unknown as ActivityDoc,
@@ -39,6 +40,7 @@ const MODELS: Record<string, ActivityDoc> = {
   "light-the-advent-candle": LIGHT_THE_ADVENT_CANDLE as unknown as ActivityDoc,
   "advent-candle-craft": ADVENT_CANDLE_CRAFT as unknown as ActivityDoc,
   "saint-report-worksheet": SAINT_REPORT_WORKSHEET as unknown as ActivityDoc,
+  ...PRAYER_SHEET_MODELS,
 };
 
 export function getActivityModel(slug: string): ActivityDoc | null {
