@@ -1,5 +1,6 @@
 "use client";
 
+import { CARD_GROUPS, type CardGroupId } from "@/lib/resource/card-groups";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,11 +10,14 @@ type Props = {
   level: 1 | 2;
   freeCardTitle?: string | null;
   prompts?: { label: string; href: string }[];
+  /** Active browse group (?group=), highlighted in the list. */
+  group?: CardGroupId | "";
 };
 
-function cardsHref(q: string, level: 1 | 2, card?: string | null): string {
+function cardsHref(q: string, level: 1 | 2, card?: string | null, group?: string): string {
   const p = new URLSearchParams();
   p.set("view", "cards");
+  if (group) p.set("group", group);
   if (q.trim()) p.set("q", q.trim());
   if (level === 2) p.set("level", "2");
   if (card) p.set("card", card);
@@ -21,7 +25,7 @@ function cardsHref(q: string, level: 1 | 2, card?: string | null): string {
 }
 
 /** Middle finder for Cards mode: search first, then short prompts (saints live here). */
-export function PrintablesCardsFinder({ initialQ, level, freeCardTitle, prompts }: Props) {
+export function PrintablesCardsFinder({ initialQ, level, freeCardTitle, prompts, group = "" }: Props) {
   const router = useRouter();
   const [q, setQ] = useState(initialQ);
 
@@ -30,8 +34,8 @@ export function PrintablesCardsFinder({ initialQ, level, freeCardTitle, prompts 
       label: freeCardTitle ? `This week's free card: ${freeCardTitle}` : "This week's free card",
       href: cardsHref("", level),
     },
-    { label: "Search saints", href: cardsHref("saint", level) },
-    { label: "Advent cards", href: cardsHref("advent", level) },
+    // Fixed suggestions: all 14 browse groups, always in this order (no rotation).
+    ...CARD_GROUPS.map((g) => ({ label: g.prompt, href: cardsHref("", level, null, g.id) })),
     { label: "Browse all cards", href: cardsHref("", level) },
   ];
 
@@ -77,7 +81,8 @@ export function PrintablesCardsFinder({ initialQ, level, freeCardTitle, prompts 
             <li key={p.href + p.label}>
               <Link
                 href={p.href}
-                className="block rounded-lg px-2 py-1.5 text-sm text-[#335599] no-underline hover:bg-[#fff2e8] hover:text-[#9d451d]"
+                aria-current={group && p.href.includes(`group=${group}`) ? "true" : undefined}
+                className="block rounded-lg px-2 py-1.5 text-sm text-[#335599] no-underline hover:bg-[#fff2e8] hover:text-[#9d451d] aria-[current=true]:bg-[#fff2e8] aria-[current=true]:font-semibold"
               >
                 {p.label}
               </Link>

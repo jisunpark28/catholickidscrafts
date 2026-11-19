@@ -1,5 +1,6 @@
 // Little Light picture cards: types + URL helpers. Client-safe and data-free
 // (the 626-card catalog lives in ./cards.ts so it never lands in a client bundle).
+import type { CardGroupId } from "./card-groups";
 
 export type CardCategory =
   | "Feast"
@@ -72,6 +73,8 @@ export type CardListItem = Pick<PictureCard, "id" | "cat" | "set" | "title" | "r
   sunday?: boolean;
   /** Liturgical season ids (same ids as the Weekly Sheet "Season" filter). */
   seasons?: CardSeason[];
+  /** Browse group ids (?group=), see ./card-groups. */
+  groups?: CardGroupId[];
 };
 
 /** Same ids as RESOURCE_SEASONS in lib/resource/sheets. */

@@ -2,6 +2,7 @@
 // client components use ./card-meta so the JSON stays out of the browser bundle.
 import CARDS_JSON from "@/data/cards/cards.json";
 import { getSundaySheet } from "@/lib/sunday-sheet-content";
+import { cardGroupIds } from "./card-groups";
 import { CARD_ID_RE, type CardListItem, type CardSeason, type PictureCard } from "./card-meta";
 import { sheetSeason } from "./sheets";
 
@@ -88,6 +89,7 @@ export function cardSeasons(card: PictureCard): CardSeason[] {
 
 export function toCardListItem(card: PictureCard, date?: { date: string; sunday: boolean }): CardListItem {
   const seasons = cardSeasons(card);
+  const groups = cardGroupIds(card, seasons);
   return {
     id: card.id,
     cat: card.cat,
@@ -97,5 +99,6 @@ export function toCardListItem(card: PictureCard, date?: { date: string; sunday:
     ...(card.when ? { when: card.when } : {}),
     ...(date ? { date: date.date, sunday: date.sunday } : {}),
     ...(seasons.length ? { seasons } : {}),
+    ...(groups.length ? { groups } : {}),
   };
 }
