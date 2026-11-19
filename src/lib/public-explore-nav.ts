@@ -9,4 +9,5 @@ export const PUBLIC_EXPLORE_NAV: PublicExploreNavItem[] = [
   { href: "/daily-mass", labelKey: "global.nav.mass", fallback: "Daily Mass" },
   { href: "/play", labelKey: "global.nav.play_learn", fallback: "Play & Learn" },
   { href: "/prayers", labelKey: "global.nav.prayers", fallback: "Prayers" },
+  { href: "/catholic-saints-for-kids", labelKey: "global.nav.saints", fallback: "Saints" },
 ];

@@ -76,7 +76,7 @@ const PDF_GROUPS: { id: string; title: string; items: PdfItem[] }[] = [
         id: "saints",
         label: "Saints",
         match: /^saints$/i,
-        fallback: "/liturgy/saints",
+        fallback: "/catholic-saints-for-kids",
         lockHref: true,
       },
       {

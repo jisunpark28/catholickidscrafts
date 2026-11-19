@@ -46,7 +46,12 @@ export type PictureCard = {
   symbols?: string[];
   /** Saint Fact Box: one-line story. The card caption stays in `text`. */
   story?: string;
+  /** Saint Fact Box: authoritative sources for the patron and symbol rows (shown under the Fact Box). */
+  sources?: CardSource[];
 };
+
+/** One source link behind a saint's Fact Box facts. */
+export type CardSource = { label: string; url: string };
 
 /** ISO codes used by `mdByCountry` (same codes as the x-vercel-ip-country header). */
 export type CardCalendarCountry = "CA" | "US";

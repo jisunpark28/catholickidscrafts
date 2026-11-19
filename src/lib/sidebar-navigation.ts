@@ -1,5 +1,5 @@
 /** Existing destinations, not replacement routes. My Binder has no implementation in this checkout. */
-export type SidebarIcon = "printables" | "mass" | "play" | "bible" | "questions" | "prayer" | "binder";
+export type SidebarIcon = "printables" | "mass" | "play" | "bible" | "questions" | "prayer" | "saints" | "binder";
 export type SidebarItem = { id: SidebarIcon; label: string; href: string | null; separator?: boolean; plus?: boolean };
 export const SIDEBAR_ITEMS: readonly SidebarItem[] = [
   { id: "printables", label: "Printables", href: "/resource" },
@@ -8,6 +8,7 @@ export const SIDEBAR_ITEMS: readonly SidebarItem[] = [
   { id: "bible", label: "Mom's Bible", href: "/moms-bible/situations", separator: true },
   { id: "questions", label: "Q&A Cards", href: "/qa-cards" },
   { id: "prayer", label: "Prayer", href: "/prayers" },
+  { id: "saints", label: "Saints", href: "/catholic-saints-for-kids" },
   { id: "binder", label: "My Binder", href: null, separator: true, plus: true },
 ];
 export function sidebarItems(activePaidPlus: boolean): readonly SidebarItem[] {
@@ -22,7 +23,8 @@ export function sidebarItemIsCurrent(id: SidebarIcon, pathname: string, hash = "
     case "play": return within("/play");
     case "bible": return within("/bible") || within("/moms-bible") || within("/bible-verses-for-kids") || pathname === "/gospel";
     case "questions": return within("/qa-cards");
-    case "prayer": return within("/prayers") || within("/liturgy") || within("/catholic-mass-for-kids") || within("/catholic-saints-for-kids") || within("/catholic-virtue-challenge");
+    case "prayer": return within("/prayers") || within("/liturgy") || within("/catholic-mass-for-kids") || within("/catholic-virtue-challenge");
+    case "saints": return within("/catholic-saints-for-kids");
     case "binder": return false; // Do not highlight or invent a route for an unimplemented feature.
   }
 }

@@ -20,6 +20,8 @@ type Props = {
   back?: ReactNode;
   showNewsletter?: boolean;
   showHubLink?: boolean;
+  /** Quick Facts box (Feast day, Patron of, Symbols) at the top; the Fact Box then keeps only the story. */
+  quickFacts?: boolean;
 };
 
 function FactPills({ items }: { items: string[] }) {
@@ -37,27 +39,20 @@ function FactPills({ items }: { items: string[] }) {
   );
 }
 
-function SaintFactBoxCard({
-  box,
-  showStory,
-}: {
-  box: NonNullable<SaintStoryViewData["factBox"]>;
-  showStory: boolean;
-}) {
+function SaintQuickFacts({ story }: { story: SaintStoryViewData }) {
   const rows: { label: string; content: ReactNode }[] = [];
-  if (box.patron.length > 0) rows.push({ label: "Patron of", content: <FactPills items={box.patron} /> });
-  if (box.symbols.length > 0) rows.push({ label: "Symbols", content: <FactPills items={box.symbols} /> });
-  if (showStory && box.story) {
-    rows.push({
-      label: "1-Line Story",
-      content: <p className="m-0 text-base leading-relaxed text-[#374151]">{box.story}</p>,
-    });
+  if (story.when) {
+    rows.push({ label: "Feast day", content: <p className="m-0 text-base text-[#1f2937]">{story.when}</p> });
   }
+  const patron = story.factBox?.patron ?? [];
+  const symbols = story.factBox?.symbols ?? [];
+  if (patron.length > 0) rows.push({ label: "Patron of", content: <FactPills items={patron} /> });
+  if (symbols.length > 0) rows.push({ label: "Symbols", content: <FactPills items={symbols} /> });
   if (rows.length === 0) return null;
   return (
-    <section aria-labelledby="fact-box" className="rounded-2xl border border-[#f0d9b8] bg-white/90 p-4">
-      <h2 id="fact-box" className="m-0 font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
-        Fact Box
+    <section aria-labelledby="quick-facts" className="rounded-2xl border border-[#f0d9b8] bg-white/90 p-4">
+      <h2 id="quick-facts" className="m-0 font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
+        Quick Facts
       </h2>
       <dl className="mb-0 mt-2 space-y-2">
         {rows.map((row) => (
@@ -73,6 +68,60 @@ function SaintFactBoxCard({
   );
 }
 
+function SaintFactBoxCard({
+  box,
+  showStory,
+  showFacts = true,
+}: {
+  box: NonNullable<SaintStoryViewData["factBox"]>;
+  showStory: boolean;
+  /** False when Patron of / Symbols are already shown in Quick Facts. */
+  showFacts?: boolean;
+}) {
+  const rows: { label: string; content: ReactNode }[] = [];
+  if (showFacts && box.patron.length > 0) rows.push({ label: "Patron of", content: <FactPills items={box.patron} /> });
+  if (showFacts && box.symbols.length > 0) rows.push({ label: "Symbols", content: <FactPills items={box.symbols} /> });
+  if (showStory && box.story) {
+    rows.push({
+      label: "1-Line Story",
+      content: <p className="m-0 text-base leading-relaxed text-[#374151]">{box.story}</p>,
+    });
+  }
+  if (rows.length === 0) return null;
+  return (
+    <div>
+      <section aria-labelledby="fact-box" className="rounded-2xl border border-[#f0d9b8] bg-white/90 p-4">
+        <h2 id="fact-box" className="m-0 font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
+          Fact Box
+        </h2>
+        <dl className="mb-0 mt-2 space-y-2">
+          {rows.map((row) => (
+            <div key={row.label} className="flex flex-col gap-1 sm:flex-row sm:items-start sm:gap-3">
+              <dt className="shrink-0 pt-0.5 text-xs font-semibold uppercase tracking-wide text-[#9a6b3f] sm:w-28">
+                {row.label}
+              </dt>
+              <dd className="m-0">{row.content}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+      {box.sources.length > 0 ? (
+        <p className="mb-0 mt-2 text-xs leading-relaxed text-[#6b7280]">
+          <span className="font-semibold">Sources:</span>{" "}
+          {box.sources.map((s, i) => (
+            <span key={s.url}>
+              {i > 0 ? " · " : null}
+              <a href={s.url} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#335599]">
+                {s.label}
+              </a>
+            </span>
+          ))}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 /**
  * Full saint SEO story layout (card + Print/Save, set, H1, feast, quote, Fact Box,
  * family questions, Bible verses link, optional newsletter) — shared by
@@ -85,6 +134,7 @@ export function SaintStoryPanel({
   back,
   showNewsletter = true,
   showHubLink = true,
+  quickFacts = false,
 }: Props) {
   return (
     <article className="rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
@@ -125,19 +175,23 @@ export function SaintStoryPanel({
           <header>
             <p className="m-0 text-sm font-semibold uppercase tracking-wide text-[#9a6b3f]">{story.set}</p>
             <h1 className="mt-1 font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{story.h1}</h1>
-            {story.when ? (
+            {story.when && !quickFacts ? (
               <p className="mb-0 mt-2 text-base text-[#4b5563]">
                 <span className="font-semibold text-[#1f2937]">Feast day:</span> {story.when}
               </p>
             ) : null}
           </header>
 
+          {quickFacts ? <SaintQuickFacts story={story} /> : null}
+
           <blockquote className="m-0 rounded-2xl border-l-4 border-[#c9773a] bg-white/90 p-4 text-lg font-medium leading-relaxed text-[#1f2937]">
             “{story.text}”
             {story.ref ? <footer className="mt-2 text-sm font-normal text-[#6b7280]">{story.ref}</footer> : null}
           </blockquote>
 
-          {story.factBox ? <SaintFactBoxCard box={story.factBox} showStory={story.showStory} /> : null}
+          {story.factBox ? (
+            <SaintFactBoxCard box={story.factBox} showStory={story.showStory} showFacts={!quickFacts} />
+          ) : null}
         </div>
       </div>
 

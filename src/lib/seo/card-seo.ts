@@ -3,7 +3,7 @@
  * Slugs are title-based; collisions append a short id suffix for stability.
  */
 import { PICTURE_CARDS, type PictureCard } from "@/lib/resource/cards";
-import type { CardCategory } from "@/lib/resource/card-meta";
+import type { CardCategory, CardSource } from "@/lib/resource/card-meta";
 
 export const SAINTS_HUB = "/catholic-saints-for-kids";
 
@@ -99,6 +99,7 @@ export type SaintFactBox = {
   patron: string[];
   symbols: string[];
   story?: string;
+  sources: CardSource[];
 };
 
 /** Fact Box data for a saint page, or null when the card has no patron, symbols or story yet. */
@@ -107,7 +108,8 @@ export function saintFactBox(card: SeoCard): SaintFactBox | null {
   const symbols = (card.symbols ?? []).map((s) => s.trim()).filter(Boolean);
   const story = card.story?.trim() || undefined;
   if (patron.length === 0 && symbols.length === 0 && !story) return null;
-  return { feast: card.when, patron, symbols, story };
+  const sources = (card.sources ?? []).filter((s) => s.label.trim() && s.url.trim());
+  return { feast: card.when, patron, symbols, story, sources };
 }
 
 /**

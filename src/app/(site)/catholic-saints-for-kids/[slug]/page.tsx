@@ -1,4 +1,4 @@
-import { PageShell } from "@/components/PageShell";
+import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SaintReportWorksheetLink } from "@/components/seo/SaintReportWorksheetLink";
@@ -87,7 +87,7 @@ export default async function CatholicSaintPage({ params }: Props) {
   const story = toSaintStoryView(card);
 
   return (
-    <PageShell>
+    <HomePdfShell groups={[]}>
       <JsonLd
         nodes={[
           breadcrumbNode([
@@ -125,8 +125,9 @@ export default async function CatholicSaintPage({ params }: Props) {
         }
         showNewsletter
         showHubLink
+        quickFacts
       />
       <SaintReportWorksheetLink className="mt-6" />
-    </PageShell>
+    </HomePdfShell>
   );
 }
