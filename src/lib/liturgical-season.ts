@@ -30,7 +30,8 @@ function between(date: Date, start: Date, end: Date): boolean {
   return t >= start.getTime() && t <= end.getTime();
 }
 
-function adventStart(year: number): Date {
+/** First Sunday of Advent in a calendar year (UTC midnight). */
+export function adventStart(year: number): Date {
   const christmas = new Date(Date.UTC(year, 11, 25));
   const dow = christmas.getUTCDay();
   const daysBefore = (dow + 21) % 7;
