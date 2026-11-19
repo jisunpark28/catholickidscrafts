@@ -3,7 +3,7 @@
 // assets/activities and ready-made craft PDFs in the private Vercel Blob store (never public);
 // both are served only by the signed-in download route.
 import type { ResourceSeason } from "@/lib/resource/sheets";
-import { adventStart, getLiturgicalSeason } from "@/lib/liturgical-season";
+import { adventStart, easterSunday, getLiturgicalSeason } from "@/lib/liturgical-season";
 import { weekSundayOf } from "@/lib/resource/week";
 
 export type ActivityVariant = "bw" | "color";
@@ -474,18 +474,36 @@ export function lectionaryCycle(adventYear: number): "A" | "B" | "C" {
 
 /**
  * Fixed dates on the General Roman Calendar that one of the sign-in sheets is about (MM-DD).
- * The Annunciation is skipped when March 25 falls in Holy Week or the Easter Octave (it is moved).
+ * The Annunciation (March 25) is not here: it moves in some years (annunciationDate).
  * A Sunday of Advent takes precedence; the Immaculate Conception then moves to Monday, December 9.
  */
 export const ACTIVITY_FIXED_FEASTS: Readonly<Record<string, string>> = {
   "01-01": "yes-with-a-smile", // Mary, the Holy Mother of God
-  "03-25": "yes-with-a-smile", // The Annunciation of the Lord
   "05-31": "helping-hands-like-mary", // The Visitation of the Blessed Virgin Mary
   "06-24": "prepare-the-way", // The Nativity of Saint John the Baptist
   "12-06": "secret-kindness-notes", // Saint Nicholas
   "12-08": "white-flower-for-mary", // The Immaculate Conception
   "12-12": "roses-for-mary", // Our Lady of Guadalupe
 };
+
+/** Sheet for the Solemnity of the Annunciation of the Lord (Mary's yes, Lk 1:38). */
+export const ANNUNCIATION_SHEET = "yes-with-a-smile";
+
+/**
+ * Date (YYYY-MM-DD) of the Solemnity of the Annunciation of the Lord in a year, per the Universal
+ * Norms on the Liturgical Year and the Calendar, no. 60: March 25, but when it falls in Holy Week
+ * (Palm Sunday to Holy Saturday) it is always moved to the Monday after the Second Sunday of Easter
+ * (2027: Monday, April 5). In the Easter Octave it moves to that same Monday, the closest day
+ * outside the Octave. On a Sunday of Lent it moves to the next day, Monday, March 26.
+ */
+export function annunciationDate(year: number): string {
+  const easter = easterSunday(year).getTime();
+  const march25 = Date.UTC(year, 2, 25);
+  let t = march25;
+  if (march25 >= easter - 7 * DAY_MS && march25 <= easter + 7 * DAY_MS) t = easter + 8 * DAY_MS;
+  else if (new Date(march25).getUTCDay() === 0) t = march25 + DAY_MS;
+  return new Date(t).toISOString().slice(0, 10);
+}
 
 /** Advent weekdays (Monday to Saturday) by Advent week, rotating through the list. */
 const ADVENT_WEEKDAY_SHEETS: readonly (readonly string[])[] = [
@@ -535,9 +553,9 @@ export function recurringActivitySlug(ymd: string): string | null {
   const md = ymd.slice(5);
   const dow = date.getUTCDay();
   const feast = ACTIVITY_FIXED_FEASTS[md];
-  const annunciationMoved = md === "03-25" && (season === "Holy Week" || season.startsWith("Easter"));
+  if (ymd === annunciationDate(y)) return ANNUNCIATION_SHEET;
   const adventSunday = season === "Advent" && dow === 0;
-  if (feast && !annunciationMoved && !adventSunday) return feast;
+  if (feast && !adventSunday) return feast;
   if (md === "12-09" && dow === 1) return "white-flower-for-mary"; // December 8 was a Sunday of Advent
 
   const advent = adventStart(y).getTime();
