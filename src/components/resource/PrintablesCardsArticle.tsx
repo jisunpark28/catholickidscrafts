@@ -101,9 +101,11 @@ export function PrintablesCardsArticle({
       });
   }, [cards, q, featuredIds, group]);
 
-  const selected = selectedId
+  const found = selectedId
     ? list.find((c) => c.id === selectedId) ?? cards.find((c) => c.id === selectedId) ?? null
     : null;
+  // Locked cards (no Plus, not this week's free card) never open: a direct ?card= link falls back to the grid.
+  const selected = found && (isPlus || found.id === freeCardId) ? found : null;
 
   if (selected) {
     const clear = isPlus || selected.id === freeCardId;
