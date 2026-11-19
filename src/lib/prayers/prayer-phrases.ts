@@ -1,6 +1,7 @@
-// Prayers learned one phrase per slide on /prayers (?prayer=<slug>), with the Little / Growing / Ready
-// activities. Client-safe data: src/data/prayers/prayer-phrases.json (also read by the worksheet
-// builder, scripts/activities/prayers). Phrase text is the cited official wording, split into lines.
+// Prayers learned one phrase per slide on /prayers (?prayer=<slug>), with Read / Word Check /
+// Word Writing / Sentence Writing modes (printable worksheets still use Little / Growing / Ready).
+// Client-safe data: src/data/prayers/prayer-phrases.json (also read by the worksheet builder,
+// scripts/activities/prayers). Phrase text is the cited official wording, split into lines.
 //
 // Source pending: "holy-water-prayer", "prayer-after-communion" and "prayer-of-st-francis" keep the
 // current site text until an official source is confirmed (sourcePending in the data).
