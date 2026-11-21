@@ -68,5 +68,6 @@ for (const [i, card] of cards.entries()) {
   await sharp(original).resize(216, 270).greyscale().blur(3).webp({ quality: 40 }).toFile(`public/cards/locked/${card.id}.webp`);
   manifest[card.id] = { sha256: createHash("sha256").update(await fs.readFile(original)).digest("hex") };
 }
-await fs.writeFile("src/data/cards/designed-originals.json", JSON.stringify(manifest, null, 2) + "\n");
+const prev = JSON.parse(await fs.readFile("src/data/cards/designed-originals.json", "utf8").catch(() => "{}"));
+await fs.writeFile("src/data/cards/designed-originals.json", JSON.stringify({ ...prev, ...manifest }, null, 2) + "\n");
 console.log(`Built ${cards.length} private originals, sharp thumbs, and locked previews.`);

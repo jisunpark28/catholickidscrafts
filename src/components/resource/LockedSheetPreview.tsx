@@ -1,9 +1,9 @@
 import { LockedPreview } from "./LockedPreview";
 
 /** Decorative worksheet silhouette only: never send locked worksheet text to the browser. */
-export function LockedSheetPreview({ title }: { title: string }) {
+export function LockedSheetPreview({ title, href = "/subscribe" }: { title: string; href?: string | null }) {
   return (
-    <LockedPreview className="rounded-xl border border-[#ece7e1] bg-white" label={title + ": unlock with Plus"}>
+    <LockedPreview href={href} className="rounded-xl border border-[#ece7e1] bg-white" label={title + ": unlock with Plus"}>
       <span className="block aspect-[17/22] overflow-hidden p-[8%]" style={{ filter: "blur(4px)" }}>
         <span className="mx-auto mb-[12%] block h-5 w-3/4 rounded bg-[#9ca3af]" />
         {[0, 1, 2].map((section) => (

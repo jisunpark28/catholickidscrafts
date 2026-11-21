@@ -47,12 +47,12 @@ async function main() {
   assert.equal(await sidebarPaidPlusForReader(child, { resolveFamily: async (id) => id === "co-parent" ? paid : free, childFamilyIds: async () => ["owner", "co-parent"] }), true);
   assert.equal(await sidebarPaidPlusForReader(child, { resolveFamily: async () => paid, childFamilyIds: async () => [] }), false);
   assert.equal(await sidebarPaidPlusForReader(owner, { resolveFamily: async () => { throw Error("DB unavailable"); }, childFamilyIds: async () => [] }), false);
-  const labels = ["Printables", "Daily Mass", "Play & Learn", "Mom's Bible", "Q&A Cards", "Prayer", "Saints"];
+  const labels = ["Printables", "Daily Mass", "Play & Learn", "Mom's Bible", "Q&A Cards", "Prayer", "Virtues", "Saints"];
   assert.deepEqual(sidebarItems(false).map((item) => item.label), labels);
   assert.deepEqual(sidebarItems(true).map((item) => item.label), [...labels, "My Binder"]);
   assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "binder")?.href, null, "missing binder must never silently become /account/memos or an invented URL");
   assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "bible")?.href, "/moms-bible/situations", "Mom's Bible opens the situations board first");
-  assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "printables")?.href, "/resource?view=all", "Printables opens /resource?view=all");
+  assert.equal(SIDEBAR_ITEMS.find((item) => item.id === "printables")?.href, "/resource", "Printables opens /resource");
   const routes = [
     ["/resource", "", "printables"], ["/resource/example", "", "printables"],
     ["/daily-mass", "", "mass"], ["/mass/participation", "", "mass"],
@@ -60,6 +60,8 @@ async function main() {
     ["/bible/genesis", "", "bible"], ["/bible/read/matthew/5", "", "bible"], ["/moms-bible/situations", "", "bible"],
     ["/qa-cards", "", "questions"], ["/qa-cards", "#advent", "questions"],
     ["/prayers", "", "prayer"], ["/liturgy/advent", "", "prayer"], ["/liturgy/saints", "", "prayer"],
+    ["/catholic-virtue-challenge", "", "prayer"], ["/catholic-virtue-challenge/courage", "", "prayer"],
+    ["/virtues", "", "virtues"], ["/virtues/courage", "", "virtues"],
     ["/catholic-saints-for-kids", "", "saints"], ["/catholic-saints-for-kids/saint-peter", "", "saints"],
   ];
   for (const [pathname, hash, id] of routes) {
@@ -75,14 +77,14 @@ async function main() {
     const activePaidPlus = await sidebarPaidPlusForReader(key, { resolveFamily: async () => plan, childFamilyIds: async () => [] });
     const html = renderToStaticMarkup(React.createElement(SidebarNavigation, { pathname: "/resource", activePaidPlus }));
     fixtures[state] = html;
-    assert.equal((html.match(/<a /g) ?? []).length, 7);
+    assert.equal((html.match(/<a /g) ?? []).length, 8);
     assert.equal((html.match(/data-sidebar-separator=/g) ?? []).length, activePaidPlus ? 2 : 1);
     assert.equal(html.includes("My Binder"), activePaidPlus);
     assert.equal(html.includes("sidebar-binder-unavailable"), activePaidPlus);
     if (activePaidPlus) assert.match(html, /disabled=""/);
     assert.doesNotMatch(html, /href="\/subscribe"|Old Testament|Ordinary Time|Get Plus/);
   }
-  for (const file of ["resource/page.tsx", "daily-mass/page.tsx", "play/page.tsx", "bible/read/[bookSlug]/[chapter]/page.tsx", "qa-cards/page.tsx", "prayers/page.tsx", "catholic-saints-for-kids/page.tsx"]) {
+  for (const file of ["resource/page.tsx", "daily-mass/page.tsx", "play/page.tsx", "bible/read/[bookSlug]/[chapter]/page.tsx", "qa-cards/page.tsx", "prayers/page.tsx", "virtues/page.tsx", "catholic-saints-for-kids/page.tsx"]) {
     assert.ok(existsSync(path.join("src/app/(site)", file)), file);
   }
   assert.doesNotMatch(readFileSync("src/lib/sidebar-navigation.ts", "utf8"), /\/bible\/(old-testament|new-testament)/);
@@ -120,6 +122,6 @@ async function main() {
   assert.match(navigationSource, /before:bg-\[#2e7d32\]/, "green active indicator");
   const directory = process.env.SIDEBAR_FIXTURE_DIR ?? tmpdir(); mkdirSync(directory, { recursive: true });
   writeFileSync(path.join(directory, "sidebar-fixtures.json"), JSON.stringify({ fixtures, icons }));
-  console.log(`PASS: ${decisions} reader/plan decisions + co-parent/inactive/error guards; ${routes.length} route/hash highlights; exact order/SSR omission/real destination files/8 illustrations/contrast. Fixtures: ${directory}`);
+  console.log(`PASS: ${decisions} reader/plan decisions + co-parent/inactive/error guards; ${routes.length} route/hash highlights; exact order/SSR omission/real destination files/9 illustrations/contrast. Fixtures: ${directory}`);
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; });
