@@ -195,6 +195,21 @@ function ScenarioSlide({ slide }: { slide: Extract<Slide, { kind: "scenario" }> 
   );
 }
 
+function SheetPeek({ sheet, locked }: { sheet: GospelSheetView; locked: boolean }) {
+  return (
+    <span className={`vcx-sheet-frame${locked ? " is-locked" : ""}`}>
+      <span className="vcx-sheet-zoom">
+        <SheetThumb sheet={sheet} level={1} />
+      </span>
+      {locked ? (
+        <span className="vcx-plus">
+          <span aria-hidden>🔒</span> Plus
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
 function WorksheetSlide({
   virtue,
   isPlus,
@@ -206,18 +221,16 @@ function WorksheetSlide({
 }) {
   return (
     <>
+      {sheet ? <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} /> : null}
       <p className="vcx-ref">A sheet to take home</p>
       <h3 className="vcx-h">{virtue.worksheet.title}</h3>
       <p className="vcx-copy">Hang it on the fridge and practice courage through the week. Plus unlocks the printable.</p>
       <Link href={virtue.worksheet.href} className="vcx-sheet">
         <span className="vcx-sheet-pic">
-          {isPlus && sheet ? (
-            <>
-              <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_CSS }} />
-              <SheetThumb sheet={sheet} level={1} />
-            </>
+          {sheet ? (
+            <SheetPeek sheet={sheet} locked={!isPlus} />
           ) : (
-            <LockedSheetPreview title={virtue.worksheet.title} />
+            <LockedSheetPreview title={virtue.worksheet.title} href={null} />
           )}
         </span>
         <span>
