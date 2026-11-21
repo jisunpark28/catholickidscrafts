@@ -1,13 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSiteSession } from "@/components/SiteSessionProvider";
 import { fredoka } from "@/components/liturgy/fredoka";
+import { LearnGateDialog } from "@/components/learn/LearnGateDialog";
 import { QaFlipCard } from "@/components/liturgy/QaFlipCards";
 import { PrayerCarousel } from "@/components/prayers/PrayerCarousel";
 import { RosaryCard } from "@/components/prayers/RosaryCard";
 import type { PublicQaCard } from "@/lib/liturgy-qa";
-import { prayerTileSrc, qaPrayerTileSrc } from "@/lib/prayers/prayer-art";
+import { isHeaderSignedIn } from "@/lib/header-session";
+import { prayerCoverSrc, prayerTileSrc, qaPrayerTileSrc } from "@/lib/prayers/prayer-art";
 import { CAROUSEL_PRAYERS, getCarouselPrayer, type CarouselPrayer } from "@/lib/prayers/prayer-phrases";
+import { signInPath } from "@/lib/sign-in-callback";
 import "@/styles/prayer-carousel.css";
 
 type Item =
@@ -45,18 +49,49 @@ const prayerParam = () => new URLSearchParams(window.location.search).get("praye
 /** /prayers grid: every prayer opens full screen (?prayer=<slug>); the Rosary keeps #rosary. */
 export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; cardBackColor?: string }) {
   const items = useMemo(() => buildItems(cards), [cards]);
+  const { ready, session } = useSiteSession();
+  const signedIn = ready && isHeaderSignedIn(session);
   const [open, setOpen] = useState<string | null>(null);
+  const [gate, setGate] = useState<string | null>(null);
   const opener = useRef<HTMLButtonElement | null>(null);
 
+  const show = useCallback((slug: string | null) => {
+    if (!slug || !getCarouselPrayer(slug)) {
+      setOpen(null);
+      setGate(null);
+      return;
+    }
+    if (!ready) return;
+    if (signedIn) {
+      setGate(null);
+      setOpen(slug);
+    } else {
+      setOpen(null);
+      setGate(slug);
+    }
+  }, [ready, signedIn]);
+
   useEffect(() => {
-    const sync = () => setOpen(getCarouselPrayer(prayerParam())?.slug ?? null);
+    const sync = () => show(prayerParam());
     sync();
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
-  }, []);
+  }, [show]);
+
+  const remember = (slug: string) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("prayer", slug);
+    history.pushState(history.state, "", url.pathname + url.search + url.hash);
+  };
 
   const close = useCallback(() => {
     setOpen(null);
+    setGate(null);
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("prayer")) {
+      url.searchParams.delete("prayer");
+      history.pushState(history.state, "", `${url.pathname}${url.search}${url.hash}`);
+    }
     requestAnimationFrame(() => opener.current?.focus());
   }, []);
 
@@ -68,7 +103,7 @@ export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; ca
     <>
       <ul className={`${fredoka.variable} qa-grid qa-grid--prayer`} role="list">
         {items.map((it) => {
-          if (it.kind === "rosary") return <RosaryCard key="rosary" />;
+          if (it.kind === "rosary") return <RosaryCard key="rosary" signedIn={signedIn} sessionReady={ready} />;
           if (it.kind === "qa") {
             const tile = qaPrayerTileSrc(it.card.question);
             const card = { ...it.card, imageUrl: tile };
@@ -86,7 +121,8 @@ export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; ca
                     aria-haspopup="dialog"
                     onClick={(e) => {
                       opener.current = e.currentTarget;
-                      setOpen(prayer.slug);
+                      remember(prayer.slug);
+                      show(prayer.slug);
                     }}
                   >
                     <span className="qa-ill qa-ill--rosary">
@@ -94,7 +130,7 @@ export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; ca
                       <img src={src} alt="" loading="lazy" />
                     </span>
                     <span className="qa-q">{card?.question || prayer.title}</span>
-                    {card?.tryThis ? <span className="qa-when">{card.tryThis}</span> : null}
+                    <span className="qa-when">{card?.tryThis || ""}</span>
                     <span className="qa-hint">Tap to pray →</span>
                   </button>
                 </div>
@@ -109,7 +145,22 @@ export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; ca
           prayer={current}
           liveImage={liveImage}
           onClose={close}
-          onOpen={(slug) => setOpen(getCarouselPrayer(slug)?.slug ?? null)}
+          onOpen={(slug) => {
+            const next = getCarouselPrayer(slug)?.slug ?? null;
+            if (!next) return;
+            remember(next);
+            show(next);
+          }}
+        />
+      ) : null}
+      {gate && getCarouselPrayer(gate) ? (
+        <LearnGateDialog
+          title={getCarouselPrayer(gate)!.title}
+          message="Sign up to learn and practice this prayer."
+          imageSrc={prayerCoverSrc(getCarouselPrayer(gate)!) ?? prayerTileSrc(gate)}
+          imageAlt=""
+          signInHref={signInPath(`/prayers?prayer=${encodeURIComponent(gate)}`)}
+          onClose={close}
         />
       ) : null}
     </>

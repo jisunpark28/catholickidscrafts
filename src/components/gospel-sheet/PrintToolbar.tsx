@@ -13,6 +13,8 @@ type Props = {
   basePath?: string;
   /** Optional "Back" link (e.g. to the Resource page). */
   backHref?: string;
+  /** Existing sheet editor (`/resource/edit/…`). Omitted where that editor does not apply. */
+  editHref?: string;
 };
 
 const btn: React.CSSProperties = {
@@ -26,7 +28,7 @@ const btn: React.CSSProperties = {
 };
 
 /** Screen-only bar on the print page (hidden when printing). */
-export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint, basePath, backHref }: Props) {
+export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint, basePath, backHref, editHref }: Props) {
   useEffect(() => {
     if (!autoPrint) return;
     const t = window.setTimeout(() => window.print(), 400);
@@ -77,6 +79,11 @@ export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint, base
           Level {n}
         </Link>
       ))}
+      {editHref ? (
+        <Link href={editHref} style={btn}>
+          Edit
+        </Link>
+      ) : null}
       {backHref ? (
         <Link href={backHref} style={btn}>
           ← Back
