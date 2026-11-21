@@ -22,7 +22,7 @@ FONT = Path("/tmp/ckc-fonts")
 PAGE = (254, 249, 246)  # #fef9f6
 PILL = (213, 84, 7)  # VIR-001 pill fill
 TITLE = (64, 58, 53)  # mode of the painted title ink
-CAPTION = (52, 46, 41)
+CAPTION = (51, 45, 41)  # median ink of the painted captions
 FOOT = (168, 162, 155)  # #a8a29b
 FRAME = (226, 220, 206)  # #e2dcce, the painted stroke
 W, H = 1080, 1350
@@ -61,9 +61,9 @@ def font(name: str, size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(FONT / name), size)
 
 
-def fredoka_semibold() -> Path:
-    """Weight 600 of the site Fredoka. Painted titles match this stroke, not Nunito."""
-    dest = FONT / "Fredoka-600.ttf"
+def fredoka(weight: int) -> Path:
+    """A static instance of the site Fredoka variable font."""
+    dest = FONT / f"Fredoka-{weight}.ttf"
     if dest.exists():
         return dest
     FONT.mkdir(parents=True, exist_ok=True)
@@ -71,7 +71,7 @@ def fredoka_semibold() -> Path:
     from fontTools.varLib.instancer import instantiateVariableFont
 
     variable = TTFont(ROOT / "src/assets/fonts/fredoka-variable.ttf")
-    instantiateVariableFont(variable, {"wght": 600}, inplace=True)
+    instantiateVariableFont(variable, {"wght": weight}, inplace=True)
     variable.save(dest)
     return dest
 
@@ -145,7 +145,7 @@ def build(card: dict) -> Image.Image:
     # Fredoka semibold (wght 600), the painted title's stroke. Ink top y123, side margin at least 150px.
     # Size 66 matches "Jesus Blesses the Children" (ink about 49px, stem about 10px).
     title_size = 66
-    title_path = str(fredoka_semibold())
+    title_path = str(fredoka(600))
     while True:
         title_face = ImageFont.truetype(title_path, title_size)
         tw, _, tbox = text_size(draw, card["title"], title_face)
@@ -154,7 +154,8 @@ def build(card: dict) -> Image.Image:
         title_size -= 2
     draw.text(((W - tw) / 2 - tbox[0], 123 - tbox[1]), card["title"], font=title_face, fill=TITLE)
 
-    cap_face = ImageFont.truetype(title_path, 40)
+    # Fredoka medium (wght 500) at 42px: painted caption stem is 5px at ink height 30.
+    cap_face = ImageFont.truetype(str(fredoka(500)), 42)
     lines = card["caption_lines"] if "caption_lines" in card else [card["caption"]]
     y = 1238 if len(lines) == 1 else 1210
     for line in lines:
@@ -202,7 +203,7 @@ def check(path: Path, card_id: str) -> None:
     # Scene fills the well: a pixel just inside the frame is not page cream.
     assert dist(px[WELL[0] + 24, (WELL[1] + WELL[3]) // 2], PAGE) > 12
     # Caption ink low on the card, footer under it.
-    cap = [y for y in range(1160, 1320) if any(sum(px[x, y]) < 140 for x in range(120, 960, 3))]
+    cap = [y for y in range(1210, 1320) if any(sum(px[x, y]) < 220 for x in range(120, 960, 3))]
     assert cap and 1180 <= min(cap) <= 1260, (min(cap) if cap else None, max(cap) if cap else None)
     foot_y = None
     for y in range(1290, 1345):
