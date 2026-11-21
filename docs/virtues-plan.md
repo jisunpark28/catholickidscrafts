@@ -568,7 +568,7 @@ What exists for each matching sheet:
 | Peace | none | | | |
 | Faithfulness | none | | | |
 
-Twelve virtues have no suitable sheet: Faith, Temperance, Patience, Obedience, Generosity, Purity of heart, Respect, Responsibility, Gentleness, Joy, Peace, Faithfulness. The worksheet slide for those should say that a matching sheet is not in the library yet, and should not borrow a neighbor. Charity and Justice may show the closest sheet with one honest line (“This is our Love sheet” / “This is our Fairness sheet”).
+Twelve virtues have no suitable sheet today: Faith, Temperance, Patience, Obedience, Generosity, Purity of heart, Respect, Responsibility, Gentleness, Joy, Peace, Faithfulness. Jisun’s later decision is to create a new Family Virtue Challenge sheet for each of them (section 9). Until those sheets exist, the carousel says the sheet is not in the library yet and does not borrow a neighbor. Charity stays on the Love sheet and Justice stays on the Fairness sheet, each with one honest line (“This is our Love sheet” / “This is our Fairness sheet”).
 
 Plus is the point of the slide that has a sheet: the guide page is readable, the print route redirects to `/subscribe` when `sheetOpenAllowed` is false, and the carousel shows `LockedSheetPreview` until the family has Plus. That matches the line already on the challenge page: Plus unlocks worksheet previews and printing.
 
@@ -620,7 +620,7 @@ Do not put the Bible stories behind Plus. The Plus invitation is the worksheet a
 - `scripts/test-virtues.ts`: schema, pinned NABRE strings, courage block, worksheet slugs, no year, no quote characters inside key verses that did not have them on USCCB.
 - Compositor geometry test once images exist, using the thresholds in section 4.4.
 - Sidebar test updated for the new item and for “`/catholic-virtue-challenge` is still Prayer.”
-- Existing `pnpm test:evergreen-sheets` must still see 24 challenge sheets. This feature adds a hub; it does not add a 25th `VIR_` sheet.
+- Existing `pnpm test:evergreen-sheets` must still see 24 challenge sheets during the Courage pilot. The later batch in section 9 raises that count from 24 to 36 and updates the assertion then.
 
 ### 7.6 Phases
 
@@ -639,6 +639,75 @@ Do not put the Bible stories behind Plus. The Plus invitation is the worksheet a
 5. Purity of heart is included, modestly, and chastity is not its own card. Keep that?
 6. Story slides become picture cards. Scenario pictures stay off the card catalog unless you want them too.
 7. Charity → Love sheet, and Justice → Fairness sheet, are marked closest rather than exact. Show those, or show “no sheet yet” for them as well?
-8. For the twelve virtues with no sheet, is a plain “not in the library yet” slide right, or should that slide be omitted?
+8. Decided. The twelve virtues with no sheet get new Family Virtue Challenge worksheets (section 9). They are not built in the Courage pilot. Until a sheet exists, its carousel slide says so.
 9. The challenge sheets quote a Douay-style line (`keyVerseDR`). The new bundles quote NABRE. Both would be on the site. Is that acceptable?
 10. Confirm the hub path `/virtues` and that `/catholic-virtue-challenge` stays the fridge-checklist product under Prayer.
+
+## 9. New worksheets for the twelve virtues that have none
+
+Decided, and not part of the Courage pilot. Do not build these sheets until a later batch. Charity keeps `love` / `VIR_LOVE`. Justice keeps `fairness` / `VIR_FAIRNESS`.
+
+Each new sheet is another Family Virtue Challenge page, produced in the same shape the current generator already writes. It is not an activity PDF. Activities are the product that has `preview-bw.webp` and `preview-color.webp`. These challenge sheets do not.
+
+What “the same format” means in this repo:
+
+| Piece | Existing behavior to copy |
+| --- | --- |
+| Generator | `scripts/evergreen-sheets/build.py` reads the `V` list in `scripts/evergreen-sheets/virtues.py` and writes one JSON file per virtue plus `src/data/evergreen-sheets/index.ts`. |
+| Layout | `GospelSheet`: title “This Week’s Catholic Virtue: {Name}”, short story, key line to trace (level 1) or copy (level 2), Monday–Saturday checklist, Family Talk, parent signature, prayer. |
+| Two versions | Level 1 uses the short story and the first six missions. Level 2 uses the longer story and the second six missions. Both levels are included, as on the current challenge pages. |
+| Coloring | The checklist intro is “Color a star each day, Monday through Saturday.” The sheet `color` is one of the existing dot colors (`gold`, `green`, `white`, `red`, `rose`, `violet`) from `COLOR_HEX` in `src/lib/sunday-sheet-content.ts`. |
+| Preview | Plus viewers get `SheetThumb` (the live letter page). Everyone else gets `LockedSheetPreview`. There is no `preview-color.webp` to add. `art.main` and `art.heart` stay placeholder names rendered as empty labelled boxes, same as `VIR_COURAGE`. |
+| Plus | `/print/evergreen/<slug>` and `/resource/<slug>` already require Plus for every `VIR_*` key, because `canOpenResourceSheet` only unlocks this Sunday’s sheet for a family without Plus. A new `VIR_*` key inherits that gate. The public guide `/catholic-virtue-challenge/<slug>` stays readable. |
+| Verse field | Keep the field name `keyVerseDR`. Put the NABRE sentence already verified in section 5 into it, inside the same quotation shape the generator uses (`"…" (short ref)`). Do not invent a Douay line for these twelve. The original 24 sheets stay as they are. |
+
+Do not run `build.py` unchanged. It rewrites every existing JSON file and assigns picture-card ids from `VIR-054` upward in list order. The Courage story cards use `VIR-078`, `VIR-079`, and `VIR-080`. A full rerun would collide with those ids and rewrite the sheets that are already live.
+
+Steps when this batch is actually built:
+
+1. Add twelve rows in an append-only path (a second list in `virtues.py`, or twelve hand-written JSON files in the same shape). Write only the new files. Leave the original 24 JSON files untouched.
+2. Import the new keys in `src/data/evergreen-sheets/index.ts` and add twelve `EVERGREEN_PAGES` rows in `src/lib/evergreen-catalog.ts`. Slugs below are free. `virtueFamily` uses an existing family so the hub groups them without a new enum.
+3. Do not give these sheets a related card in `VIR-054`–`VIR-080`. If a challenge icon card is wanted later, start at `VIR-081`.
+4. Raise the hard-coded virtue count from 24 to 36 in `scripts/test-evergreen-sheets.ts` and `scripts/test-resource-unified.ts` in that same batch. The Courage pilot does not touch those assertions.
+5. Confirm each new print URL returns the sign-in gate, then `/subscribe`, for a family without Plus, and that `SheetThumb` appears only when Plus is on.
+
+| Virtue | Slug | Key | Family | Color | Verse already verified |
+| --- | --- | --- | --- | --- | --- |
+| Faith | `faith` | `VIR_FAITH` | Transcendence | gold | Hebrews 11:1 |
+| Temperance | `temperance` | `VIR_TEMPERANCE` | Temperance | green | Titus 2:12 |
+| Patience | `patience` | `VIR_PATIENCE` | Temperance | violet | Colossians 3:12 |
+| Obedience | `obedience` | `VIR_OBEDIENCE` | Justice | white | Ephesians 6:1 |
+| Generosity | `generosity` | `VIR_GENEROSITY` | Humanity | gold | 2 Corinthians 9:7 |
+| Purity of heart | `purity-of-heart` | `VIR_PURITY_OF_HEART` | Temperance | white | Matthew 5:8 |
+| Respect | `respect` | `VIR_RESPECT` | Justice | green | 1 Peter 2:17 |
+| Responsibility | `responsibility` | `VIR_RESPONSIBILITY` | Justice | green | Luke 16:10 |
+| Gentleness | `gentleness` | `VIR_GENTLENESS` | Humanity | rose | Matthew 11:29 |
+| Joy | `joy` | `VIR_JOY` | Transcendence | gold | Philippians 4:4 |
+| Peace | `peace` | `VIR_PEACE` | Justice | white | John 14:27 |
+| Faithfulness | `faithfulness` | `VIR_FAITHFULNESS` | Transcendence | red | Matthew 25:21 |
+
+Each outline below is the level-1 sheet: one key line, six Monday–Saturday missions, two Family Talk questions, and a one-line prayer. Level 2 reuses the key line and prayer, lengthens the story with the CCC sense already in section 5, and uses a harder set of six missions at build time. Missions stay school and home. Purity of heart stays eyes, words, and clothes.
+
+**Faith.** Key line: “I trust God even when I cannot see.” Missions: pray a short morning prayer; tell God one worry; read one Bible sentence with a parent; say “God is with us” when a plan changes; thank God for one thing you cannot see; go to Mass or pray at home even if you feel bored. Talk: When did we trust God this week? What is one promise of God we can remember? Prayer: “Jesus, help me trust You when I cannot see what happens next. Amen.”
+
+**Temperance.** Key line: “Enough is a good gift.” Missions: stop a snack when you are full; leave the last piece to share; turn a game off when a parent says so; drink water before a second sweet; put a toy away instead of asking for a new one; thank God for one thing you already have. Talk: When did we stop at enough? What good thing is better when we do not grab more? Prayer: “Jesus, teach me to enjoy good things without taking too much. Amen.”
+
+**Patience.** Key line: “I can wait and be kind.” Missions: let a younger child go first; wait in a line without pushing; let someone finish their sentence; practice a hard skill for a short time; pray once for someone who is slow to change; do a chore without saying “hurry up.” Talk: When was waiting hard this week? Who needed our patience? Prayer: “Jesus, help me wait without a sharp voice. Amen.”
+
+**Obedience.** Key line: “I obey what is right.” Missions: do a parent’s chore the first time; follow a classroom direction; come when you are called; tell the truth when a rule is asked about; pray “Your will be done” once; if an adult asks you to lie, hide a touch, or keep a scary secret, tell another trusted adult the same day. Talk: What right thing did we obey? Was there a command that was not right to obey? Prayer: “Jesus, help me obey my parents in You, and help me tell a safe adult when something is wrong. Amen.”
+
+**Generosity.** Key line: “I give gladly.” Missions: share a snack; give one coin or one toy you chose ahead of time; let a sibling pick the game; make a card for someone; help carry something without being asked; give the bigger piece. Talk: What did we give this week? Did we give it gladly? Prayer: “Jesus, make me a cheerful giver. Amen.”
+
+**Purity of heart.** Key line: “I keep a clean heart.” Missions: look away from a picture that feels wrong and tell a parent; skip a mean bathroom joke; choose clothes you can play in; say a kind word instead of a nasty one; pray “make my heart clean” once; thank God for one beautiful ordinary thing. Talk: What did we look at or say that we would want Jesus to see? Who helps us choose? Prayer: “Jesus, make my heart clean so I can see You. Amen.” No sexual content, no dating, no body lesson.
+
+**Respect.** Key line: “I give honor to every person.” Missions: let an adult finish speaking; use a person’s name kindly; hold a door; stop copying how someone walks or talks; greet a new student; pray for someone who is easy to ignore. Talk: Who did we honor this week? When did our voice fail to show respect? Prayer: “Jesus, help me honor every person You love. Amen.”
+
+**Responsibility.** Key line: “I do the small job I was given.” Missions: feed a pet or water a plant without a reminder; return a library book or a borrowed item; pack your own bag; finish a chore you started; tell a parent if you break something; pray for the people who count on you. Talk: What small job did we keep? What happened when a job was left undone? Prayer: “Jesus, help me be trustworthy in small things. Amen.”
+
+**Gentleness.** Key line: “I will not break what is already bruised.” Missions: use a soft voice with someone who is crying; pick up a sibling instead of teasing them; stop a rough game when someone says stop; speak the truth without shouting; sit with someone who is sad; pray for someone who is hurting. Talk: When were we gentle? When were we too rough? Prayer: “Jesus, meek and humble of heart, make me gentle. Amen.”
+
+**Joy.** Key line: “I rejoice in the Lord.” Missions: name one good thing at dinner; smile and say congratulations when a friend wins; sing or pray a happy prayer; share a joke that does not hurt; write one thank-you; do a chore with a glad face. Talk: What joy did we share? What disappointment can we still bring to God? Prayer: “Jesus, teach me to rejoice in You on ordinary days. Amen.”
+
+**Peace.** Key line: “I will not add fuel.” Missions: stop before answering an insult; invite two arguing friends to take a breath; pray “Peace be with you” at bedtime; say sorry first in a small fight; play a quiet game after a loud one; ask a parent for help instead of yelling. Talk: Where did our home need peace? What did we do that helped? Prayer: “Jesus, give us Your peace, not the world’s kind. Amen.”
+
+**Faithfulness.** Key line: “I keep the small promise.” Missions: finish a practice you said you would do; stay with a friend who was left out; pray at the time you chose; keep a secret that is safe to keep; show up for a chore on the day you promised; tell the truth if you cannot keep a promise, and make a new one. Talk: What promise did we keep? What promise do we need to repair? Prayer: “Jesus, make me a faithful servant in small things. Amen.”
