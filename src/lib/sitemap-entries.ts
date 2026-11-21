@@ -55,6 +55,8 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/recommendations", "weekly", 0.8],
   ["/play", "weekly", 0.75],
   ["/prayers", "monthly", 0.75],
+  ["/virtues", "monthly", 0.75],
+  ["/virtues/courage", "monthly", 0.7],
   ["/qa-cards", "monthly", 0.75],
   ["/mass/participation", "monthly", 0.7],
   ["/about", "yearly", 0.5],

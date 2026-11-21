@@ -82,5 +82,14 @@
   },
   "VIR-077": {
     "sha256": "6d9cd75fa70f12b9e88184fbe635401c56eff0eaeba1e6202ec99ac54e7a0977"
+  },
+  "VIR-078": {
+    "sha256": "db4c0b85dd416d7ddf315188e0e3a6db14a20c9adfa2842abacc2e4d6c7532e4"
+  },
+  "VIR-079": {
+    "sha256": "89211bdf43d8e8beb199f6332ceb2bcc1c05f9ff84ceca0c066a0db52434d8b0"
+  },
+  "VIR-080": {
+    "sha256": "dfe41d1de17a3bdd46d4978788d494f3a2afa8a9ca8f806fa280d61b16de6fe9"
   }
 }
