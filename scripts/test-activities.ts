@@ -7,13 +7,14 @@ import seedJson from "../prisma/data/liturgy-qa-cards.json";
 import {
   activityDownloadPath,
   activityForTryThis,
-  DAILY_ACTIVITY_SCHEDULE,
   CRAFTS_LIST_PATH,
   dailyActivityFor,
+  FAMILY_ADVENT_CALENDAR_SLUG,
   HOME_CRAFT_PICKS,
   homeCraftPicks,
   HOME_ACTIVITY_PICKS,
   homeActivityPicks,
+  homeActivityRowVisible,
   activityAccessInWeekOf,
   isActivityFreeInWeekOf,
   isActivityFreeThisWeek,
@@ -84,7 +85,7 @@ async function main() {
     assert.ok(doc.elements.some((e) => e.kind === "text" && e.text === t), t);
   }
   assert.ok(
-    doc.elements.some((e) => e.kind === "text" && e.text === "The new Church year begins on the First Sunday of Advent \u2014 November 29, 2026."),
+    doc.elements.some((e) => e.kind === "text" && e.text === "The new Church year begins on the First Sunday of Advent."),
   );
   const color = withVariant(doc, "color");
   const changed = color.elements.filter((e, i) => e.fill !== doc.elements[i]!.fill);
@@ -166,10 +167,20 @@ async function main() {
     assert.deepEqual([r.status, r.calls.at(-1)], [404, "read:blob:bw"]);
     r = await run("visitation-popup", { signedIn: true, plus: true, file: "down" });
     assert.equal(r.status, 503, "Blob not reachable");
-    r = await run("prepare-the-way", { signedIn: true, plus: false, file: "ok" }, "bw");
-    assert.deepEqual([r.status, r.calls], [200, ["guard", "limit", "read:bundle:bw", "record"]], "scheduled this week: free, no Plus check");
+    r = await run("prepare-the-way", { signedIn: true, plus: false, file: "ok", now: "2026-12-03T17:00:00Z" }, "bw");
+    assert.deepEqual([r.status, r.calls], [200, ["guard", "limit", "read:bundle:bw", "record"]], "Advent week 1 weekday: free, no Plus check");
+    r = await run("light-the-advent-candle", { signedIn: true, plus: false, file: "ok", now: "2026-12-06T17:00:00Z" }, "bw");
+    assert.equal(r.status, 200, "Second Sunday of Advent 2026: the wreath sheet is free");
+    r = await run("light-the-advent-candle", { signedIn: true, plus: false, file: "ok", now: "2027-12-12T17:00:00Z" }, "bw");
+    assert.equal(r.status, 200, "Gaudete Sunday 2027: the wreath sheet is free");
+    r = await run("roses-for-mary", { signedIn: true, plus: false, file: "ok", now: "2027-12-12T17:00:00Z" }, "bw");
+    assert.equal(r.status, 200, "Guadalupe on an Advent Sunday still unlocks that week");
+    r = await run(FAMILY_ADVENT_CALENDAR_SLUG, { signedIn: true, plus: false, file: "ok", now: "2027-12-01T17:00:00Z" }, "bw");
+    assert.equal(r.status, 200, "family calendar is free through Advent in another year");
+    r = await run(FAMILY_ADVENT_CALENDAR_SLUG, { signedIn: true, plus: false, file: "ok", now: "2026-11-01T17:00:00Z" }, "bw");
+    assert.equal(r.status, 402, "family calendar stays Plus before Advent");
     r = await run("prepare-the-way", { signedIn: true, plus: false, file: "ok", now: "2026-11-19T15:00:00Z" }, "bw");
-    assert.deepEqual([r.status, r.calls], [402, ["guard", "plus"]], "not scheduled this week: Plus only");
+    assert.deepEqual([r.status, r.calls], [402, ["guard", "plus"]], "not this week's sheet: Plus only");
     r = await run("prepare-the-way", { signedIn: true, plus: true, file: "ok", now: "2026-11-19T15:00:00Z" }, "bw");
     assert.equal(r.status, 200, "Plus downloads any week");
     r = await run(SAINT_REPORT_SLUG, { signedIn: true, plus: false, file: "ok" }, "bw");
@@ -249,11 +260,11 @@ async function main() {
     RESOURCE_ACTIVITIES.filter((x) => x.access === "plus").map((x) => x.slug),
     [SUNDAY_CRAFT_SLUG, SAINT_REPORT_SLUG, ...UPLOADED, ...PRAYER_SHEET_ROWS.map((r) => r[0])],
   );
-  // Prayer worksheets: Plus, editable, never in the daily (free-week) schedule.
+  // Prayer worksheets: Plus, editable, never a day's free sheet.
   for (const [slug] of PRAYER_SHEET_ROWS) {
     const a = getActivity(slug)!;
     assert.ok(a.access === "plus" && a.editable && a.kind === "Prayer worksheet", slug);
-    assert.ok(!DAILY_ACTIVITY_SCHEDULE.some((r) => r.slug === slug), `${slug} is not scheduled`);
+    assert.ok(!isActivityFreeInWeekOf(a, "2026-12-06"), `${slug} is not free in Advent`);
   }
   for (const slug of UPLOADED) {
     const c = getActivity(slug)!;
@@ -284,25 +295,27 @@ async function main() {
     }
   }
 
-  // Daily schedule (Toronto dates), with fallbacks. Through Christmas Eve 2026.
-  for (const row of DAILY_ACTIVITY_SCHEDULE) assert.ok(getActivity(row.slug), row.slug);
-  assert.equal(DAILY_ACTIVITY_SCHEDULE.length, 43, "Nov 12 to Dec 24");
-  assert.equal(DAILY_ACTIVITY_SCHEDULE[0]?.date, "2026-11-12");
-  assert.equal(DAILY_ACTIVITY_SCHEDULE.at(-1)?.date, "2026-12-24");
-  assert.equal(dailyActivityFor("2026-11-12").activity.slug, "happy-new-church-year");
-  assert.equal(dailyActivityFor("2026-11-13").activity.slug, "jesse-tree-ornaments");
+  // Daily sheet follows the liturgical calendar in every year, including Advent 2026.
+  assert.equal(dailyActivityFor("2026-11-12").activity.slug, "yes-with-a-smile");
+  assert.equal(dailyActivityFor("2026-11-13").activity.slug, "yes-with-a-smile");
   assert.ok(dailyActivityFor("2026-11-13").exact);
-  assert.equal(dailyActivityFor("2026-11-29").activity.slug, "light-the-advent-candle");
-  assert.equal(dailyActivityFor("2026-12-03").activity.slug, "family-advent-calendar");
+  assert.equal(dailyActivityFor("2026-11-29").activity.slug, "light-the-advent-candle", "Advent 1");
+  assert.equal(dailyActivityFor("2026-12-03").activity.slug, "prepare-the-way", "Advent week 1 Thursday");
   assert.ok(dailyActivityFor("2026-12-03").exact);
+  assert.equal(dailyActivityFor("2026-12-06").activity.slug, "light-the-advent-candle", "Advent 2 Sunday, not the old dated list");
   assert.equal(dailyActivityFor("2026-12-08").activity.slug, "white-flower-for-mary");
-  assert.equal(dailyActivityFor("2026-12-20").activity.slug, "jesse-tree-picture-a-day");
-  assert.equal(dailyActivityFor("2026-12-25").activity.slug, "yes-with-a-smile", "after the plan: the year-round rule (Christmas Time)");
+  assert.equal(dailyActivityFor("2026-12-13").activity.slug, "light-the-advent-candle", "Gaudete Sunday");
+  assert.equal(dailyActivityFor("2026-12-20").activity.slug, "yes-with-a-smile", "Advent 4, Year B");
+  assert.equal(dailyActivityFor("2027-12-19").activity.slug, "helping-hands-like-mary", "Advent 4, Year C");
+  assert.equal(dailyActivityFor("2026-12-24").activity.slug, "straw-for-the-manger");
+  assert.equal(dailyActivityFor("2026-12-25").activity.slug, "yes-with-a-smile", "Christmas Time");
   assert.equal(dailyActivityFor("2026-12-25").exact, true);
-  assert.equal(dailyActivityFor("2026-11-01").activity.slug, "secret-kindness-notes", "before the plan: the year-round rule (Ordinary Time)");
+  assert.equal(dailyActivityFor("2026-11-01").activity.slug, "secret-kindness-notes", "Ordinary Time");
   assert.equal(dailyActivityFor("nope").activity.slug, "happy-new-church-year");
   assert.equal(torontoDate(new Date("2026-11-13T04:30:00Z")), "2026-11-12", "11:30 PM in Toronto is still Nov 12");
   assert.equal(torontoDate(new Date("2026-11-13T05:30:00Z")), "2026-11-13");
+  assert.equal(torontoDate(new Date("2026-11-29T04:59:00Z")), "2026-11-28", "11:59 PM Toronto on Nov 28");
+  assert.equal(torontoDate(new Date("2026-11-29T05:00:00Z")), "2026-11-29", "midnight Toronto starts Advent");
 
   // Weekly free rule: Monday to Sunday weeks ending on "This Sunday" (Toronto dates), same as the Sunday sheet.
   assert.equal(weekSundayOf("2026-11-16"), "2026-11-22");
@@ -314,9 +327,48 @@ async function main() {
   const freeOn = (ymd: string) => RESOURCE_ACTIVITIES.filter((a) => isActivityFreeInWeekOf(a, ymd)).map((a) => a.slug).sort();
   assert.deepEqual(
     freeOn("2026-11-19"),
-    ["come-lord-jesus", "happy-new-church-year", "helping-hands-like-mary", "jesse-tree-picture-a-day", "secret-kindness-notes", "straw-for-the-manger", "white-flower-for-mary"],
-    "Nov 16 to 22: the sheets scheduled that week",
+    ["happy-new-church-year", "secret-kindness-notes"],
+    "Nov 16 to 22: the ordinary-time sheet, and Happy New Church Year on Christ the King",
   );
+  assert.deepEqual(
+    freeOn("2026-11-28"),
+    ["family-advent-calendar", "happy-new-church-year", "light-the-advent-candle"],
+    "the week Advent begins: the wheel, the wreath, and the calendar",
+  );
+  assert.deepEqual(freeOn("2026-11-29"), freeOn("2026-11-28"), "Nov 28 and Nov 29 are the same Monday–Sunday week");
+  assert.deepEqual(freeOn("2026-12-06"), [
+    "come-lord-jesus",
+    "family-advent-calendar",
+    "jesse-tree-ornaments",
+    "light-the-advent-candle",
+    "paper-advent-wreath",
+    "prepare-the-way",
+    "secret-kindness-notes",
+  ]);
+  assert.deepEqual(freeOn("2026-12-13"), [
+    "colour-the-advent-candles",
+    "family-advent-calendar",
+    "light-the-advent-candle",
+    "roses-for-mary",
+    "secret-kindness-notes",
+    "straw-for-the-manger",
+    "white-flower-for-mary",
+  ]);
+  assert.deepEqual(freeOn("2026-12-20"), [
+    "come-lord-jesus",
+    "family-advent-calendar",
+    "jesse-tree-picture-a-day",
+    "o-antiphon-ornaments",
+    "straw-for-the-manger",
+    "yes-with-a-smile",
+  ]);
+  assert.ok(freeOn("2026-12-24").includes("straw-for-the-manger") && freeOn("2026-12-24").includes("o-antiphon-ornaments"));
+  assert.ok(freeOn("2027-12-12").includes("roses-for-mary"), "2027 Guadalupe falls on Sunday and still unlocks");
+  assert.ok(freeOn("2027-12-12").includes("light-the-advent-candle"));
+  assert.ok(isActivityFreeInWeekOf(getActivity("helping-hands-like-mary")!, "2027-12-19"), "Year C Advent 4");
+  assert.ok(!isActivityFreeInWeekOf(getActivity("helping-hands-like-mary")!, "2026-12-20"), "Year B Advent 4 is Mary's yes");
+  assert.ok(!freeOn("2026-11-01").includes("family-advent-calendar"));
+  assert.ok(freeOn("2027-11-28").includes("family-advent-calendar"), "the calendar is free in Advent 2027");
   assert.deepEqual(freeOn("2026-11-16"), freeOn("2026-11-22"), "same week, same free sheets");
   assert.ok(!isActivityFreeInWeekOf(getActivity("yes-with-a-smile")!, "2026-11-16"), "Sunday Nov 15 belongs to the week before");
   assert.ok(isActivityFreeInWeekOf(getActivity("yes-with-a-smile")!, "2026-11-15"));
@@ -364,7 +416,6 @@ async function main() {
   const ADVENT_ONLY = new Set(["jesse-tree-ornaments", "jesse-tree-picture-a-day", "o-antiphon-ornaments", "family-advent-calendar", "colour-the-advent-candles",
     "paper-advent-wreath", "light-the-advent-candle", "come-lord-jesus", "straw-for-the-manger", "white-flower-for-mary", "roses-for-mary"]);
   const EVERGREEN = new Set(["secret-kindness-notes", "helping-hands-like-mary", "yes-with-a-smile", "prepare-the-way"]);
-  const lastPlanned = DAILY_ACTIVITY_SCHEDULE.at(-1)!.date;
   let days = 0;
   for (let ms = Date.UTC(2026, 10, 19); ms <= Date.UTC(2029, 11, 31); ms += 86_400_000) {
     const ymd = new Date(ms).toISOString().slice(0, 10);
@@ -372,22 +423,30 @@ async function main() {
     assert.ok(daily.exact && daily.activity.access === "signin", `${ymd}: a sign-in sheet for the day`);
     assert.ok(isActivityFreeInWeekOf(daily.activity, ymd), `${ymd}: the day's sheet is free that week`);
     assert.ok(freeOn(ymd).length >= 1, `${ymd}: at least one free sheet`);
-    if (ymd > lastPlanned) {
-      const slug = daily.activity.slug;
-      const season = getLiturgicalSeason(new Date(ms)).name;
-      assert.notEqual(slug, "family-advent-calendar", `${ymd}: the 2026 calendar is not reused`);
-      assert.notEqual(slug, SAINT_REPORT_SLUG);
-      if (season !== "Advent") {
-        assert.ok(!ADVENT_ONLY.has(slug), `${ymd} (${season}): no Advent sheet outside Advent (${slug})`);
-        assert.ok(EVERGREEN.has(slug) || (slug === "happy-new-church-year" && season === "Ordinary Time"), `${ymd} (${season}): ${slug}`);
-      }
+    const slug = daily.activity.slug;
+    const season = getLiturgicalSeason(new Date(ms)).name;
+    assert.notEqual(slug, FAMILY_ADVENT_CALENDAR_SLUG, `${ymd}: the calendar is the season sheet, not the daily highlight`);
+    assert.notEqual(slug, SAINT_REPORT_SLUG);
+    if (season !== "Advent") {
+      assert.ok(!ADVENT_ONLY.has(slug), `${ymd} (${season}): no Advent sheet outside Advent (${slug})`);
+      assert.ok(EVERGREEN.has(slug) || (slug === "happy-new-church-year" && season === "Ordinary Time"), `${ymd} (${season}): ${slug}`);
     }
     days++;
   }
   assert.ok(days > 1100, "Nov 19, 2026 to Dec 31, 2029");
   assert.deepEqual(freeOn("nope"), []);
-  assert.ok(isActivityFreeThisWeek(getActivity("white-flower-for-mary")!, new Date("2026-11-23T04:30:00Z")), "11:30 PM Sunday Nov 22 in Toronto");
-  assert.ok(!isActivityFreeThisWeek(getActivity("white-flower-for-mary")!, new Date("2026-11-23T05:30:00Z")), "Monday Nov 23 starts a new week");
+  assert.ok(isActivityFreeThisWeek(getActivity("secret-kindness-notes")!, new Date("2026-11-23T04:30:00Z")), "11:30 PM Sunday Nov 22 in Toronto");
+  assert.ok(!isActivityFreeThisWeek(getActivity("secret-kindness-notes")!, new Date("2026-11-23T05:30:00Z")), "Monday Nov 23 starts a new week");
+  assert.equal(homeActivityRowVisible(torontoDate(new Date("2026-11-29T04:59:00Z"))), false, "11:59 PM Nov 28 Toronto: row still hidden");
+  assert.equal(homeActivityRowVisible(torontoDate(new Date("2026-11-29T05:00:00Z"))), true, "midnight Nov 29 Toronto: Advent row");
+  assert.equal(homeActivityRowVisible("2026-11-28"), false);
+  assert.equal(homeActivityRowVisible("2026-11-29"), true);
+  assert.equal(homeActivityRowVisible("2026-12-24"), true);
+  assert.equal(homeActivityRowVisible("2026-12-25"), false, "Christmas Day: the Advent row is gone");
+  assert.equal(homeActivityRowVisible("2027-01-10"), false, "still Christmas Time");
+  assert.equal(homeActivityRowVisible("2027-01-11"), false, "Ordinary Time after Christmas");
+  assert.equal(homeActivityRowVisible("2027-11-27"), false);
+  assert.equal(homeActivityRowVisible("2027-11-28"), true, "Advent 2027 starts Nov 28, not a hard-coded 2026 date");
   const bundle = await fs.readFile("src/components/resource/SundayBundle.tsx", "utf8");
   assert.ok(bundle.includes("SundayActivitySlot") && bundle.includes("craft ?"), "This Sunday fills Activities and Crafts");
 
@@ -406,15 +465,32 @@ async function main() {
       await fs.access(path.join("public", p.activity.previews.color));
     }
   }
-  assert.deepEqual(slugsOn("2026-11-12"), ["happy-new-church-year", "jesse-tree-ornaments", "prepare-the-way", SUNDAY_CRAFT_SLUG]);
-  assert.deepEqual(slugsOn("2026-11-21").slice(0, 3), ["secret-kindness-notes", "happy-new-church-year", "roses-for-mary"]);
+  assert.deepEqual(slugsOn("2026-11-12"), ["yes-with-a-smile", "secret-kindness-notes", "happy-new-church-year", SUNDAY_CRAFT_SLUG]);
+  assert.deepEqual(slugsOn("2026-11-21").slice(0, 3), ["secret-kindness-notes", "happy-new-church-year", "light-the-advent-candle"]);
+  assert.deepEqual(slugsOn("2026-11-29"), ["light-the-advent-candle", "happy-new-church-year", FAMILY_ADVENT_CALENDAR_SLUG, SUNDAY_CRAFT_SLUG]);
+  assert.deepEqual(slugsOn("2026-12-06").slice(0, 3), ["light-the-advent-candle", "jesse-tree-ornaments", "prepare-the-way"]);
+  assert.deepEqual(slugsOn("2026-12-13").slice(0, 3), ["light-the-advent-candle", "white-flower-for-mary", "straw-for-the-manger"]);
+  assert.deepEqual(slugsOn("2026-12-20").slice(0, 3), ["yes-with-a-smile", "come-lord-jesus", "straw-for-the-manger"]);
   assert.equal(homeActivityPicks("2026-11-12")[3].label, "Craft · Plus");
+  assert.equal(homeActivityPicks("2026-11-29")[0].label, "Today · Free");
   const home = await fs.readFile("src/app/(site)/home-view.tsx", "utf8");
+  assert.ok(home.includes("homeActivityRowVisible(today.date)"), "home row follows the Advent season rule");
   assert.ok(home.includes("homeActivityPicks(today.date)"), "home row uses the ISR date rule (no request data)");
   assert.ok(home.includes("AdventPackPromoCard"), "home shows Advent Complete promo");
   assert.ok(!/cookies\(|headers\(|getServerSession|auth\(\)/.test(home), "home stays static");
 
-  console.log(`test-activities: ${RESOURCE_ACTIVITIES.length} activities, ${DAILY_ACTIVITY_SCHEDULE.length} scheduled days; Happy New Church Year ${doc.elements.length} editable elements (${[...kinds].map(([k, n]) => `${k} ${n}`).join(", ")}) OK`);
+  const sheetPy = await fs.readFile("scripts/activities/daily/sheets.py", "utf8");
+  const yearWheel = await fs.readFile("scripts/activities/new-church-year/build_sheet.py", "utf8");
+  assert.ok(!sheetPy.includes("dt.date(2026, 11, 29)"));
+  assert.ok(!sheetPy.includes('["Nov 29", "Dec 6", "Dec 13", "Dec 20"]'));
+  assert.ok(!yearWheel.includes("November 29, 2026"));
+  for (const slug of ["happy-new-church-year", "family-advent-calendar", "light-the-advent-candle"]) {
+    const raw = await fs.readFile(`src/data/activities/${slug}.model.json`, "utf8");
+    assert.ok(!raw.includes("2026"), `${slug} model has no year`);
+    assert.ok(!raw.includes("November 29") && !raw.includes("Nov 29"), `${slug} model has no Advent 2026 Sunday`);
+  }
+
+  console.log(`test-activities: ${RESOURCE_ACTIVITIES.length} activities; Happy New Church Year ${doc.elements.length} editable elements (${[...kinds].map(([k, n]) => `${k} ${n}`).join(", ")}) OK`);
 }
 main().catch((error) => {
   console.error(error);

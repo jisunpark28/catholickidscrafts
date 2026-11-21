@@ -8,7 +8,7 @@
 Printable activity sheet for catholickidscrafts review only.
 Wedge sizes are simplified so every season is wide enough for kids
 to colour and to label inside the ring. The new Church year still
-begins on the First Sunday of Advent, 29 November 2026.
+begins on the First Sunday of Advent (the date changes every year).
 """
 
 from __future__ import annotations
@@ -164,7 +164,7 @@ def draw_header(c: canvas.Canvas, width: float, top: float) -> float:
     c.drawCentredString(page_cx, y, sub)
     y -= 20
 
-    line = "The new Church year begins on the First Sunday of Advent — November 29, 2026."
+    line = "The new Church year begins on the First Sunday of Advent."
     size2 = fit_centered(c, line, "ComicRelief", 11, width - 2 * SAFE)
     c.setFont("ComicRelief", size2)
     c.setFillColor(MUTED)
