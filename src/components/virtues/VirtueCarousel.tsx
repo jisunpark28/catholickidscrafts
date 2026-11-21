@@ -173,8 +173,8 @@ function VerseSlide({ slide }: { slide: Extract<Slide, { kind: "verse" }> }) {
     <>
       <CardFace id={slide.cardId} alt={slide.ref} />
       <p className="vcx-ref">{slide.ref}</p>
-      <p className="vcx-verse">“{slide.text}”</p>
-      <p className="vcx-note">{slide.note}</p>
+          <p className="vcx-verse">“{slide.text}”</p>
+          <p className="vcx-copy">God knows you, and you matter to Him.</p>
     </>
   );
 }
