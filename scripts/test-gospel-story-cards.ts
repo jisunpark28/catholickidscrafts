@@ -9,7 +9,7 @@ import { hasCardOriginal, readCardOriginal } from "../src/lib/resource/card-orig
 import { relatedWorksheetForCard } from "../src/lib/resource/card-related";
 import { cardsForSunday, cardSeasons, getPictureCard, toCardListItem } from "../src/lib/resource/cards";
 import { unifiedSearch } from "../src/lib/resource/unified-search";
-import { cardTalk } from "../src/lib/seo/card-talk";
+import { cardPageSeo, cardTalk } from "../src/lib/seo/card-talk";
 
 const NABRE = {
   hand: "Stretch out your hand.",
@@ -21,7 +21,7 @@ const expected = [
   {
     id: "BIB-053",
     title: "The Man with the Withered Hand",
-    text: `"${NABRE.hand}" Doing good is always right.`,
+    text: `${NABRE.hand} Doing good is always right.`,
     ref: "Mk 3:1–6",
     sheet: "B_OT09",
     prio: 1,
@@ -31,7 +31,7 @@ const expected = [
   {
     id: "BIB-054",
     title: "Let the Children Come",
-    text: `"${NABRE.children}…" Jesus embraced and blessed them.`,
+    text: `${NABRE.children}… Jesus embraced and blessed them.`,
     ref: "Mk 10:13–16",
     sheet: "B_OT27",
     prio: 2,
@@ -41,7 +41,7 @@ const expected = [
   {
     id: "BIB-055",
     title: "Worth More than Many Sparrows",
-    text: `"${NABRE.sparrows}"`,
+    text: NABRE.sparrows,
     ref: "Mt 10:31",
     sheet: "A_OT12",
     prio: 1,
@@ -61,8 +61,10 @@ async function main() {
     assert.equal(card.ref, spec.ref);
     assert.equal(card.prio, spec.prio);
     assert.deepEqual(card.sheetKeys, [spec.sheet]);
-    assert.ok(card.text.includes(spec.id === "BIB-055" ? NABRE.sparrows : spec.id === "BIB-053" ? NABRE.hand : NABRE.children));
-    assert.ok(!/\b20\d{2}\b/.test(`${card.title} ${card.text}`), `${spec.id} must not print a year`);
+  const verse = spec.id === "BIB-055" ? NABRE.sparrows : spec.id === "BIB-053" ? NABRE.hand : NABRE.children;
+  assert.ok(card.text.includes(verse));
+  assert.equal(card.text.includes('"') || card.text.includes("“") || card.text.includes("”"), false, `${spec.id} caption is stored without quotes; the page adds one pair`);
+  assert.ok(!/\b20\d{2}\b/.test(`${card.title} ${card.text}`), `${spec.id} must not print a year`);
 
     const seasons = cardSeasons(card);
     assert.ok(seasons.includes("ordinary-time"), `${spec.id} seasons ${seasons.join(",")}`);
@@ -81,11 +83,22 @@ async function main() {
     assert.equal(related?.label, "Sunday Mass worksheet");
     assert.match(related?.href ?? "", /sunday-mass-worksheets/);
 
-    const talk = cardTalk(card);
-    assert.ok(talk);
-    assert.equal(talk.questions.length, 3);
-    assert.match(talk.questions[0], new RegExp(spec.ref.replace("–", "[–-]")));
-    assert.ok(talk.caption.includes(spec.id === "BIB-055" ? NABRE.sparrows : spec.id === "BIB-053" ? NABRE.hand : NABRE.children));
+  const talk = cardTalk(card);
+  assert.ok(talk);
+  assert.equal(talk.caption, card.text);
+  assert.equal(talk.questions.length, 3);
+  assert.match(talk.questions[0], new RegExp(spec.ref.replace("–", "[–-]")));
+  assert.equal(talk.questions[1], `The card says: "${card.text}" What does this show us about God?`);
+  const quoteBlock = `“${talk.caption}”`;
+  assert.equal(quoteBlock.split("“").length - 1, 1);
+  assert.equal(quoteBlock.split("”").length - 1, 1);
+  assert.equal(quoteBlock.includes('"'), false);
+  const seo = cardPageSeo(card);
+  const meta = `${seo.description} ${seo.intro.join(" ")} ${seo.questions.join(" ")}`;
+  assert.equal(/[“"]["“]/.test(meta), false, meta);
+  assert.equal(/["”]["”]/.test(meta), false, meta);
+  assert.ok(seo.description.includes(`"${verse.slice(0, 24)}`), seo.description);
+  assert.ok(seo.intro.join(" ").includes(`The card says: "${card.text}"`));
 
     const hits = unifiedSearch(spec.query, "ordinary-time", null);
     assert.ok(hits.some((h) => h.type === "card" && h.card.id === spec.id), `${spec.query} finds ${spec.id}`);
