@@ -679,9 +679,10 @@ Acceptance
   with that (instant email + daily catch-up), but "1 per hour" depends on new replies arriving.
 - **C8 PDF size.** Big books (e.g. many Psalms with notes) mean many chapter fetches when the PDF
   page loads. Fine for now, cache per chapter; consider a limit or pagination later.
-- **C9 Production auto-migrates.** `scripts/vercel-build.sh` runs `prisma migrate deploy` on
-  every production build, so **merging PR-1 into `main` runs the migration on production**.
-  Test it on a Neon branch first (runbook). Preview deploys don't migrate (they share the DB).
+- **C9 Production auto-migrates.** `scripts/vercel-build.sh` runs `prisma migrate deploy`
+  before `next build` on every production build, and the deployment fails if migrate does not
+  apply. Merging into `main` therefore runs the migration on production before the new app
+  goes live. Test it on a Neon branch first (runbook). Preview deploys don't migrate.
 - **C10 Code rollback after PR-1.** Once `kidCode` is required, rolling the app back to a
   pre-PR-1 deploy breaks "add child" (the old code doesn't set `kidCode`). Roll back the schema
   too (runbook, rollback section) or fix forward.

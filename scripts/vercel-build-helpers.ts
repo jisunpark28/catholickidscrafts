@@ -77,17 +77,20 @@ function shouldContinueAfterDbLockOrTimeout(
   return true;
 }
 
-/** Preview/production builds should not fail when the shared Neon DB is busy or locked. */
+/**
+ * Preview builds share Neon with production and may skip a locked migrate.
+ * Production must not. A timed-out or failed migrate used to exit 0 with
+ * "schema is likely already current", which shipped app code that reads
+ * columns the live database does not have (family sign-in then fails).
+ */
 export function shouldContinueBuildAfterDbStep(
   label: string,
   output: string,
   timedOut: boolean,
 ): boolean {
+  if (isVercelProductionDeploy()) return false;
   if (isVercelPreviewDeploy()) {
     return shouldContinueAfterDbLockOrTimeout("preview", label, output, timedOut);
-  }
-  if (isVercelProductionDeploy()) {
-    return shouldContinueAfterDbLockOrTimeout("production", label, output, timedOut);
   }
   return false;
 }

@@ -49,7 +49,9 @@ jobs:
           echo "DIRECT_URL=$RESOLVED_DIRECT" >> "$GITHUB_ENV"
 
       - name: Apply Prisma migrations
-        run: pnpm run db:migrate-deploy
+        env:
+          VERCEL_ENV: production
+        run: pnpm exec tsx scripts/vercel-migrate-deploy.ts
 
       - name: Ensure Bible discussion schema
         run: pnpm exec tsx scripts/ensure-bible-discussion-schema.ts
