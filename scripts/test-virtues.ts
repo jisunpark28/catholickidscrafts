@@ -63,7 +63,8 @@ async function main() {
     assert.ok(card, id);
     assert.equal(card.cat, "Virtue & Life");
     assert.equal(card.set, "Virtues");
-    assert.equal(card.text.includes('"') || card.text.includes("“") || card.text.includes("”"), false);
+    const quoted = id !== "VIR-080";
+    assert.equal(card.text.startsWith('"') && card.text.endsWith('"'), quoted);
     noYear(`${card.title} ${card.text}`, id);
     assert.deepEqual(card.sheetKeys, ["VIR_COURAGE"]);
     const body = await fs.readFile(`assets/card-originals/${id}.png`);

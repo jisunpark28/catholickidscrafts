@@ -22,13 +22,14 @@ LOCKED = ROOT / "public" / "cards" / "locked"
 FONT = Path("/tmp/ckc-fonts")
 PAGE = (254, 249, 246)  # #fef9f6
 PILL = (213, 84, 7)  # VIR-001 pill fill
-INK = (26, 20, 16)
+TITLE = (64, 58, 53)  # mode of the painted title ink
+CAPTION = (52, 46, 41)
 FOOT = (168, 162, 155)  # #a8a29b
 FRAME = (226, 220, 206)  # #e2dcce, the painted stroke
 W, H = 1080, 1350
-# BIB-031 frame on the 432 thumb, scaled by 2.5: nearly square, caption sits just under it.
-WELL = (88, 280, 990, 1198)
-RADIUS = 56
+# Painted frame from BIB-031: left edge stable from y76, which is y190 at 1080.
+WELL = (88, 190, 990, 1198)
+RADIUS = 55
 # VIR-001 "VIRTUE & LIFE" pill, scaled from the 432 thumb.
 PILL_BOX = (435, 48, 645, 90)
 
@@ -36,20 +37,23 @@ CARDS = [
     {
         "id": "VIR-078",
         "art": "withered-hand.jpg",
-        "title": "The Man with the Withered Hand",
-        "caption": "Stretch out your hand. Doing good is always right.",
+        "title": "Stretch Out Your Hand",
+        "caption": '"Stretch out your hand."',
     },
     {
         "id": "VIR-079",
         "art": "children-come.jpg",
         "title": "Let the Children Come",
-        "caption": "Let the children come to me; do not prevent them.",
+        "caption": '"Let the children come to me."',
     },
     {
         "id": "VIR-080",
         "art": "sparrows.jpg",
-        "title": "Worth More than Many Sparrows",
-        "caption": "So do not be afraid; you are worth more than many sparrows.",
+        "title": "Worth More than Sparrows",
+        "caption_lines": [
+            "So do not be afraid; you are",
+            "worth more than many sparrows.",
+        ],
     },
 ]
 
@@ -124,28 +128,23 @@ def build(card: dict) -> Image.Image:
     py = (PILL_BOX[1] + PILL_BOX[3] - ph) / 2 - pbox[1]
     draw.text((px, py), label, font=pill_font, fill=(255, 255, 255))
 
-    # Same size as "Jesus Blesses the Children" (ink height about 47px). Do not shrink it.
-    title_face = font("Nunito-ExtraBold.ttf", 64)
-    tw, th, tbox = text_size(draw, card["title"], title_face)
-    if tw > 960:
-        title_face = font("Nunito-ExtraBold.ttf", 64)
-    tx = (W - tw) / 2 - tbox[0]
-    ty = 123 - tbox[1]
-    draw.text((tx, ty), card["title"], font=title_face, fill=INK)
+    # Nunito SemiBold matches the painted title thickness. Ink top y123, side margin at least 150px.
+    title_size = 64
+    while True:
+        title_face = font("Nunito-SemiBold.ttf", title_size)
+        tw, _, tbox = text_size(draw, card["title"], title_face)
+        if tw <= 780 or title_size <= 40:
+            break
+        title_size -= 2
+    draw.text(((W - tw) / 2 - tbox[0], 123 - tbox[1]), card["title"], font=title_face, fill=TITLE)
 
-    cap_face = font("Nunito-ExtraBold.ttf", 40)
-    lines = wrap(draw, card["caption"], cap_face, 900)
-    heights = []
+    cap_face = font("Nunito-Regular.ttf", 40)
+    lines = card["caption_lines"] if "caption_lines" in card else [card["caption"]]
+    y = 1238 if len(lines) == 1 else 1210
     for line in lines:
-        _, lh, box = text_size(draw, line, cap_face)
-        heights.append((lh, box))
-    gap = 12
-    # First line starts just under the frame, like VIR-001.
-    y = WELL[3] + 28 - heights[0][1][1]
-    for line, (lh, box) in zip(lines, heights):
-        lw, _, _ = text_size(draw, line, cap_face)
-        draw.text(((W - lw) / 2 - box[0], y), line, font=cap_face, fill=INK)
-        y += lh + gap
+        lw, lh, box = text_size(draw, line, cap_face)
+        draw.text(((W - lw) / 2 - box[0], y - box[1]), line, font=cap_face, fill=CAPTION)
+        y += lh + 8
 
     foot = font("Nunito-Regular.ttf", 20)
     _, _, id_box = text_size(draw, card["id"], foot)
@@ -181,7 +180,7 @@ def check(path: Path, card_id: str) -> None:
     title = 0
     for y in range(118, 175):
         for x in range(80, 1000, 2):
-            if sum(px[x, y]) < 120:
+            if sum(px[x, y]) < 220:
                 title += 1
     assert title > 200, title
     # Scene fills the well: a pixel just inside the frame is not page cream.
@@ -195,7 +194,6 @@ def check(path: Path, card_id: str) -> None:
             foot_y = y
             break
     assert foot_y and 1305 <= foot_y <= 1340, foot_y
-    # No quotation marks were drawn (captions are stored without them).
     print(f"  {card_id}: pill {bw}x{bh} y{min(ys)}-{max(ys)} caption y{min(cap)}-{max(cap)} footer y{foot_y}")
 
 
@@ -212,7 +210,7 @@ def main() -> None:
         thumb = image.resize((432, 540), Image.Resampling.LANCZOS)
         thumb.save(THUMBS / f"{card['id']}.webp", "WEBP", quality=74)
         locked = thumb.resize((216, 270), Image.Resampling.LANCZOS).convert("L")
-        locked = locked.filter(__import__("PIL.ImageFilter", fromlist=["GaussianBlur"]).GaussianBlur(radius=1.2))
+        locked = locked.filter(__import__("PIL.ImageFilter", fromlist=["GaussianBlur"]).GaussianBlur(radius=3))
         locked.save(LOCKED / f"{card['id']}.webp", "WEBP", quality=40)
         digest = hashlib.sha256(dest.read_bytes()).hexdigest()
         manifest[card["id"]] = {"sha256": digest}

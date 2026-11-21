@@ -665,7 +665,7 @@
 {"id":"VIR-075","cat":"Virtue & Life","set":"Family Virtue Challenge","title":"Hope (Virtue Challenge)","text":"The God of hope fills us with joy and peace!","prio":1,"ref":"Rom 15:13","sheetKeys":["VIR_HOPE"]},
 {"id":"VIR-076","cat":"Virtue & Life","set":"Family Virtue Challenge","title":"Humor","text":"Rejoice in the Lord always! Joyful hearts bring smiles that never hurt.","prio":1,"ref":"Phil 4:4","sheetKeys":["VIR_HUMOR"]},
 {"id":"VIR-077","cat":"Virtue & Life","set":"Family Virtue Challenge","title":"Spirituality","text":"In God we live and move and have our being. He made me for a reason!","prio":1,"ref":"Acts 17:28","sheetKeys":["VIR_SPIRITUALITY"]},
-{"id":"VIR-078","cat":"Virtue & Life","set":"Virtues","title":"The Man with the Withered Hand","text":"Stretch out your hand. Doing good is always right.","prio":1,"ref":"Mk 3:1–6","sheetKeys":["VIR_COURAGE"]},
-{"id":"VIR-079","cat":"Virtue & Life","set":"Virtues","title":"Let the Children Come","text":"Let the children come to me; do not prevent them.","prio":1,"ref":"Mk 10:13–16","sheetKeys":["VIR_COURAGE"]},
-{"id":"VIR-080","cat":"Virtue & Life","set":"Virtues","title":"Worth More than Many Sparrows","text":"So do not be afraid; you are worth more than many sparrows.","prio":1,"ref":"Mt 10:31","sheetKeys":["VIR_COURAGE"]}
+{"id":"VIR-078","cat":"Virtue & Life","set":"Virtues","title":"Stretch Out Your Hand","text":"\"Stretch out your hand.\"","prio":1,"ref":"Mk 3:1–6","sheetKeys":["VIR_COURAGE"]},
+{"id":"VIR-079","cat":"Virtue & Life","set":"Virtues","title":"Let the Children Come","text":"\"Let the children come to me.\"","prio":1,"ref":"Mk 10:13–16","sheetKeys":["VIR_COURAGE"]},
+{"id":"VIR-080","cat":"Virtue & Life","set":"Virtues","title":"Worth More than Sparrows","text":"So do not be afraid; you are worth more than many sparrows.","prio":1,"ref":"Mt 10:31","sheetKeys":["VIR_COURAGE"]}
 ]
