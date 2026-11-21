@@ -9,14 +9,12 @@
 .qa-grid { list-style: none; padding: 0; margin: 0 0 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
 .qa-card { height: 360px; perspective: 1200px; }
 .qa-grid--prayer .qa-card { height: 480px; }
-/* Prayer grid: show full card art (no crop). Liturgy Q&A cards keep cover. */
-.qa-grid--prayer .qa-ill { height: 280px; }
-.qa-grid--prayer .qa-ill img { object-fit: contain; object-position: center; }
-/* Rosary tile: same chrome; fill the ill frame (art was tiny with emoji). */
-.qa-grid--prayer .qa-ill--rosary {
+/* Prayer grid drawings share the Rosary tile's frame: fill the box, keep the upper subject. */
+.qa-grid--prayer .qa-ill {
+  height: 280px;
   background: rgba(255, 255, 255, 0.78) radial-gradient(circle, rgba(255, 255, 255, 0.95) 2px, transparent 3px) 0 0 / 22px 22px;
 }
-.qa-grid--prayer .qa-ill--rosary img {
+.qa-grid--prayer .qa-ill img {
   width: 100%;
   height: 100%;
   object-fit: cover;

@@ -1,7 +1,8 @@
 // Phrase pictures for the /prayers carousel: public/prayers/<prayer-slug>/<NN>.webp (NN = 2-digit phrase
-// number). Line slides use ONLY listed phrase art (or another prayer's phrase via `img`). Never cards/covers.
-// cover.webp is for grid/cover slides only (cover: true). Missing phrase art → cream placeholder.
-import { cardThumbSrc } from "@/lib/resource/card-meta";
+// number). Line slides use ONLY listed phrase art (or another prayer's phrase via `img`). Never cards.
+// Grid tiles and the carousel cover use public/prayers/<slug>/tile.webp (same framing as the Rosary
+// drawing). They never use homepage/resource card thumbs or live card uploads.
+// Missing phrase art → cream placeholder.
 import type { CarouselPrayer, PrayerPhrase } from "@/lib/prayers/prayer-phrases";
 
 export const PRAYER_ART: Readonly<Record<string, { phrases: readonly number[]; cover?: boolean }>> = {
@@ -33,18 +34,22 @@ export const PRAYER_ART: Readonly<Record<string, { phrases: readonly number[]; c
   "sub-tuum": { phrases: [1, 2, 3, 4] },
 };
 
-/** QA-only /prayers tiles (no carousel) that ship a local cover.webp. */
-export const QA_PRAYER_COVERS: Readonly<Record<string, string>> = {
-  "act of reflection": "/prayers/act-of-reflection/cover.webp",
-  "ten commandments": "/prayers/ten-commandments/cover.webp",
-  "a night prayer": "/prayers/night-prayer/cover.webp",
-  "night prayer": "/prayers/night-prayer/cover.webp",
-  "my night prayer": "/prayers/night-prayer/cover.webp",
+const normQuestion = (question: string) =>
+  question.toLowerCase().replace(/^the\s+/, "").replace(/[^a-z0-9]+/g, " ").trim();
+
+/** QA-only /prayers tiles (no carousel) and their dedicated drawings. */
+const QA_PRAYER_TILES: Readonly<Record<string, string>> = {
+  "ten commandments": "ten-commandments",
 };
 
-export function qaPrayerCoverSrc(question: string): string | null {
-  const key = question.toLowerCase().replace(/^the\s+/, "").replace(/[^a-z0-9]+/g, " ").trim();
-  return QA_PRAYER_COVERS[key] ?? null;
+/** Storybook drawing for one prayer grid tile and carousel cover. Same size as the Rosary art. */
+export function prayerTileSrc(slug: string): string {
+  return `/prayers/${slug}/tile.webp`;
+}
+
+export function qaPrayerTileSrc(question: string): string | null {
+  const slug = QA_PRAYER_TILES[normQuestion(question)];
+  return slug ? prayerTileSrc(slug) : null;
 }
 
 const nn = (n: number) => String(n).padStart(2, "0");
@@ -53,16 +58,14 @@ export function prayerPhraseArt(slug: string, n: number): string | null {
   return PRAYER_ART[slug]?.phrases.includes(n) ? `/prayers/${slug}/${nn(n)}.webp` : null;
 }
 
-/** The prayer's cover: its own cover.webp, else the site card picture (or the live card image), else null. */
-export function prayerCoverSrc(p: CarouselPrayer, liveImage?: string | null): string | null {
-  if (PRAYER_ART[p.slug]?.cover) return `/prayers/${p.slug}/cover.webp`;
-  if (p.cover) return cardThumbSrc(p.cover);
-  return liveImage || null;
+/** Carousel cover: the prayer's own drawing. Never a site card or a live grid upload. */
+export function prayerCoverSrc(p: CarouselPrayer): string | null {
+  return prayerTileSrc(p.slug);
 }
 
 /**
  * Picture for one phrase (line) slide — illustrations only.
- * Never uses cover.webp, PRY/site cards, or live grid uploads (those stay on cover/grid).
+ * Never uses tile.webp, PRY/site cards, or live grid uploads (those stay on the cover and the grid).
  * Missing art → null (cream placeholder) until a /prayers/<slug>/<NN>.webp is listed in PRAYER_ART.
  */
 export function phraseImageSrc(p: CarouselPrayer, ph: PrayerPhrase, _liveImage?: string | null): string | null {
