@@ -13,23 +13,21 @@ fi
 
 if [ "$is_production" != "true" ]; then
   echo "vercel-build: preview — skipping DB migrate/ensure (shared Neon DB)"
-fi
-
-# Build the Next.js app first so UI changes (e.g. Mass calendar links) ship even when
-# Neon is momentarily busy or migrate hits an advisory lock.
-pnpm exec next build
-
-if [ "$is_production" = "true" ]; then
-  echo "vercel-build: production — running migrate and ensure scripts after UI build"
-  set +e
+else
+  # Apply schema before publishing app code. A failed migrate used to log a
+  # warning and still deploy, so Google family sign-in hit missing columns.
+  echo "vercel-build: production — applying Prisma migrations before the app build"
   pnpm exec tsx scripts/vercel-migrate-deploy.ts
-  migrate_code=$?
+  echo "vercel-build: production — migrate deploy succeeded"
+  set +e
   pnpm exec tsx scripts/ensure-home-section-items.ts
   ensure_home_code=$?
   pnpm exec tsx scripts/ensure-bible-discussion-schema.ts
   ensure_discussion_code=$?
   set -e
-  if [ "$migrate_code" -ne 0 ] || [ "$ensure_home_code" -ne 0 ] || [ "$ensure_discussion_code" -ne 0 ]; then
-    echo "vercel-build: warning — post-build DB step failed (migrate=$migrate_code home=$ensure_home_code discussion=$ensure_discussion_code). Deployment keeps the successful UI build."
+  if [ "$ensure_home_code" -ne 0 ] || [ "$ensure_discussion_code" -ne 0 ]; then
+    echo "vercel-build: warning — ensure script failed (home=$ensure_home_code discussion=$ensure_discussion_code). Migrations already applied; continuing the app build."
   fi
 fi
+
+pnpm exec next build

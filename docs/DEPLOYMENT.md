@@ -70,7 +70,9 @@ You do not need `ADMIN_EMAIL` / `ADMIN_PASSWORD` on Vercel. Seed production data
 - **GitHub Actions** (recommended): see [`docs/GITHUB_PROD_SEED.md`](GITHUB_PROD_SEED.md) — Actions → **Seed production database** → Run workflow (idempotent; safe to click once after deploy).
 - **Local CLI**: `npm run db:seed-production-once` with Neon URLs in `.env` (or full `npm run db:seed` with admin env vars).
 
-3. **Deploy** — production builds run `bash scripts/vercel-build.sh` (`prisma migrate deploy` on `main` only). Preview PR builds skip DB migrate and use the shared production Neon database. **Seed is not part of the Vercel build**; run the GitHub Action or CLI above once.
+3. **Deploy** — production builds run `bash scripts/vercel-build.sh`, which runs `prisma migrate deploy` **before** `next build` and **fails the deployment** if migrations do not apply. Preview PR builds skip DB migrate and use the shared production Neon database. **Seed is not part of the Vercel build**; run the GitHub Action or CLI above once.
+
+   If family Google sign-in says the account could not be saved, the live database is behind the app. GitHub → Actions → **Migrate production database** → Run workflow (uses secrets `DATABASE_URL` and `DIRECT_URL`). That applies pending migrations without a new site deploy. Production and Preview on Vercel both need `DATABASE_URL` (Neon pooled) and `DIRECT_URL` (Neon direct, no `-pooler`).
 
 ### Neon + Vercel: avoid “Branch limit exceeded”
 

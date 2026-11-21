@@ -13,10 +13,10 @@ What it does (additive, one transaction, so a failure changes nothing):
 It does **not** touch the CKC Access ID columns, so today's child sign-in keeps working.
 
 > **Important: merging into `main` runs this on production automatically.**
-> `scripts/vercel-build.sh` runs `next build`, then `scripts/vercel-migrate-deploy.ts`
-> (`prisma migrate deploy`) on every production build. If the migration fails, the build
-> still deploys the new code (it only logs a warning), so always check the build log (step 3).
-> Preview deploys skip migrations (they share the production database).
+> `scripts/vercel-build.sh` runs `scripts/vercel-migrate-deploy.ts` (`prisma migrate deploy`)
+> **before** `next build` on every production build. If the migration fails, the deployment
+> fails and the previous production release stays up. Preview deploys skip migrations
+> (they share the production database).
 
 Never run `prisma migrate dev` or `prisma db push` against Neon. Only `migrate deploy`, and only
 in the steps below.
@@ -98,10 +98,10 @@ in the steps below.
 
 1. Merge PR-1 into `main` on GitHub. Vercel starts the production build.
 2. Vercel → the production deployment → **Build Logs**. Look for:
-   - `vercel-build: production … running migrate and ensure scripts after UI build`
+   - `vercel-build: production — applying Prisma migrations before the app build`
    - `Applying migration 20261105120000_moms_bible_phase1`
-   - `All migrations have been successfully applied.`
-   If you see `vercel-build: warning … post-build DB step failed (migrate=…)` instead, go to
+   - `vercel-build: production — migrate deploy succeeded`
+   If the deployment failed during migrate, the previous release is still live. Go to
    **4a** right away.
 3. Run the queries from step 1.5 in the SQL Editor on the **production** branch (they only read).
 4. Quick live check: `/account` loads with the children list, adding a child works, an existing
@@ -110,9 +110,8 @@ in the steps below.
 ## 4. Rollback
 
 ### 4a. The migration failed during the build
-The migration is one transaction, so the database is unchanged, but the new code went live and
-expects `kidCode`. In Vercel → Deployments, **Instant Rollback** to the previous production
-deployment (old code matches the old schema). The build script already marks a failed migration
+The migration is one transaction, so the database is unchanged, and the new code did not
+go live (the build stops before `next build`). The build script already marks a failed migration
 as rolled back and retries it up to 4 times; if it still shows as failed, run from a window
 pointed at production (as in step 1.3, with production's strings):
 `npx prisma migrate resolve --rolled-back 20261105120000_moms_bible_phase1`.
