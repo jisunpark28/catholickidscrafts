@@ -2,9 +2,8 @@
 
 Run: python3 scripts/build-virtue-story-cards.py
 
-Canvas 1080x1350, page #fef9f6, orange pill 110x43 at y47, title ink in
-y123-168, illustration well filled to a #e1dbcd frame, caption near y1238
-with no quotation marks, footer near y1323 in #a8a29b.
+Canvas 1080x1350, page #fef9f6, VIRTUE & LIFE pill, Fredoka semibold titles
+and captions, illustration well from y190, footer near y1320.
 """
 from __future__ import annotations
 
@@ -60,6 +59,21 @@ CARDS = [
 
 def font(name: str, size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(FONT / name), size)
+
+
+def fredoka_semibold() -> Path:
+    """Weight 600 of the site Fredoka. Painted titles match this stroke, not Nunito."""
+    dest = FONT / "Fredoka-600.ttf"
+    if dest.exists():
+        return dest
+    FONT.mkdir(parents=True, exist_ok=True)
+    from fontTools.ttLib import TTFont
+    from fontTools.varLib.instancer import instantiateVariableFont
+
+    variable = TTFont(ROOT / "src/assets/fonts/fredoka-variable.ttf")
+    instantiateVariableFont(variable, {"wght": 600}, inplace=True)
+    variable.save(dest)
+    return dest
 
 
 def text_size(draw: ImageDraw.ImageDraw, text: str, face: ImageFont.FreeTypeFont) -> tuple[int, int, tuple[int, int, int, int]]:
@@ -128,17 +142,19 @@ def build(card: dict) -> Image.Image:
     py = (PILL_BOX[1] + PILL_BOX[3] - ph) / 2 - pbox[1]
     draw.text((px, py), label, font=pill_font, fill=(255, 255, 255))
 
-    # Nunito SemiBold matches the painted title thickness. Ink top y123, side margin at least 150px.
-    title_size = 64
+    # Fredoka semibold (wght 600), the painted title's stroke. Ink top y123, side margin at least 150px.
+    # Size 66 matches "Jesus Blesses the Children" (ink about 49px, stem about 10px).
+    title_size = 66
+    title_path = str(fredoka_semibold())
     while True:
-        title_face = font("Nunito-SemiBold.ttf", title_size)
+        title_face = ImageFont.truetype(title_path, title_size)
         tw, _, tbox = text_size(draw, card["title"], title_face)
         if tw <= 780 or title_size <= 40:
             break
         title_size -= 2
     draw.text(((W - tw) / 2 - tbox[0], 123 - tbox[1]), card["title"], font=title_face, fill=TITLE)
 
-    cap_face = font("Nunito-Regular.ttf", 40)
+    cap_face = ImageFont.truetype(title_path, 40)
     lines = card["caption_lines"] if "caption_lines" in card else [card["caption"]]
     y = 1238 if len(lines) == 1 else 1210
     for line in lines:
