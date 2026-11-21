@@ -251,7 +251,7 @@ Worksheet column: public page `/catholic-virtue-challenge/<slug>`, print `/print
   3. Daniel 6, confirm before quoting. A law forbids prayer to anyone but the king. Daniel still prays, is put in the lions’ den, and is found alive because God shut the lions’ mouths. Kid line: Daniel keeps praying to God when a law says not to, even though he is put in the lions’ den.
 - Scenarios, using Jisun’s situations and questions:
   1. Classmates are mocking a friend’s drawing. Questions: “What would it be like if most of your class teased one friend and only you stopped?” “Have you ever thought it was okay because everyone was doing it?”
-  2. Kids knock down a friend’s block tower. Questions: “How would you feel if everyone mocked your drawing or knocked down your blocks?” “What would you want a friend to do when you’re upset?”
+  2. Kids knock down a friend’s block tower. Questions stay in Jisun’s words, trimmed so this slide does not repeat the drawing: “How would you feel if everyone knocked down your blocks?” “What would you want a friend to do when you’re upset?”
 - Commitment, from Jisun’s line, shaped as the “I will” sentence: “I will be courageous. Even when everyone joins in, I will not follow along with something that would hurt me if it were done to me.”
 - Encouragement: “That is real courage. What would Jesus want us to do?”
 - Worksheet: exact, slug `courage`, key `VIR_COURAGE`, card VIR-059. The sheet’s own verse is a Douay-style Joshua 1:9 line. The carousel key verse stays Matthew 10:31. Do not swap them.

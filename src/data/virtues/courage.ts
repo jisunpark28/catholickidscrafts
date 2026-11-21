@@ -69,7 +69,7 @@ export const COURAGE: VirtueBundle = {
     {
       situation: "Classmates are mocking a friend's drawing.",
       image: "/images/virtues/courage-drawing.webp",
-      imageAlt: "A child stands with a friend who is holding a drawing",
+      imageAlt: "Classmates laugh at a drawing while one child stands with the friend",
       questions: [
         "What would it be like if most of your class teased one friend and only you stopped?",
         "Have you ever thought it was okay because everyone was doing it?",
@@ -78,9 +78,9 @@ export const COURAGE: VirtueBundle = {
     {
       situation: "Kids knock down a friend's block tower.",
       image: "/images/virtues/courage-blocks.webp",
-      imageAlt: "A friend helps set the blocks back up",
+      imageAlt: "A block tower is knocked over and one child comes to help rebuild",
       questions: [
-        "How would you feel if everyone mocked your drawing or knocked down your blocks?",
+        "How would you feel if everyone knocked down your blocks?",
         "What would you want a friend to do when you're upset?",
       ],
     },

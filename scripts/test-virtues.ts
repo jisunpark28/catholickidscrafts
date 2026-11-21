@@ -14,7 +14,7 @@ const KEY_VERSE = "So do not be afraid; you are worth more than many sparrows.";
 const QUESTIONS = [
   "What would it be like if most of your class teased one friend and only you stopped?",
   "Have you ever thought it was okay because everyone was doing it?",
-  "How would you feel if everyone mocked your drawing or knocked down your blocks?",
+  "How would you feel if everyone knocked down your blocks?",
   "What would you want a friend to do when you're upset?",
 ];
 
