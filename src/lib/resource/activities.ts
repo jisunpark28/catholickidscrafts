@@ -10,8 +10,8 @@ import { PRAYER_SHEET_ROWS, type PrayerSheetLevel, type PrayerSheetRow } from "@
 export type ActivityVariant = "bw" | "color";
 /**
  * Catalog gate. "plus": Plus members only. "signin": Plus too, except in a week the sheet is the
- * day's activity on some day (dailyActivityFor: DAILY_ACTIVITY_SCHEDULE, then the year-round
- * recurringActivitySlug rule), when any signed-in family can download it (isActivityFreeThisWeek).
+ * day's activity on some day (dailyActivityFor / recurringActivitySlug, from the liturgical
+ * calendar), when any signed-in family can download it (isActivityFreeThisWeek).
  * The download API checks this on every request.
  */
 export type ActivityAccess = "signin" | "plus";
@@ -226,8 +226,8 @@ export const RESOURCE_ACTIVITIES: readonly ResourceActivity[] = [
       "Seven cut-out ornaments for the O Antiphons, December 17 to 23, one name for Jesus each day.",
       ["o antiphons", "emmanuel", "names of jesus", "ornaments", "december 17"]],
     ["family-advent-calendar", "Family Advent Calendar", "Calendar", "Make a family Advent calendar of kind acts.",
-      "Advent 2026 calendar, November 29 to December 24: write one kind act in each box.",
-      ["advent calendar", "family", "kind acts", "calendar", "2026"]],
+      "Write one kind act in each box, from the First Sunday of Advent through Christmas Eve.",
+      ["advent calendar", "family", "kind acts", "calendar"]],
     ["colour-the-advent-candles", "Colour the Advent Candles", "Coloring sheet", "Colour the four Advent candles.",
       "Colour three purple candles and one pink candle for Gaudete Sunday.",
       ["advent candles", "purple", "pink", "rose", "gaudete", "coloring", "advent wreath"]],
@@ -451,61 +451,9 @@ export function seasonActivityRecommendations(season: ResourceSeason): ResourceA
   return listActivities(season);
 }
 
-/**
- * Which activity sheet matches the daily Instagram post (America/Toronto date). One Advent Q&A
- * "Try this" tip per day through Christmas Eve 2026. Days without their own sheet show the latest
- * scheduled one; before the schedule starts, Happy New Church Year. Sign-in sheets only (no Plus crafts).
- */
-export const DAILY_ACTIVITY_SCHEDULE: readonly { date: string; slug: string }[] = [
-  { date: "2026-11-12", slug: "happy-new-church-year" },
-  { date: "2026-11-13", slug: "jesse-tree-ornaments" },
-  { date: "2026-11-14", slug: "prepare-the-way" },
-  { date: "2026-11-15", slug: "yes-with-a-smile" },
-  { date: "2026-11-16", slug: "white-flower-for-mary" },
-  { date: "2026-11-17", slug: "come-lord-jesus" },
-  { date: "2026-11-18", slug: "straw-for-the-manger" },
-  { date: "2026-11-19", slug: "jesse-tree-picture-a-day" },
-  { date: "2026-11-20", slug: "helping-hands-like-mary" },
-  { date: "2026-11-21", slug: "secret-kindness-notes" },
-  // Christ the King: the last Sunday of the Church year.
-  { date: "2026-11-22", slug: "happy-new-church-year" },
-  { date: "2026-11-23", slug: "roses-for-mary" },
-  { date: "2026-11-24", slug: "o-antiphon-ornaments" },
-  { date: "2026-11-25", slug: "family-advent-calendar" },
-  { date: "2026-11-26", slug: "colour-the-advent-candles" },
-  { date: "2026-11-27", slug: "paper-advent-wreath" },
-  // The eve of the new Church year.
-  { date: "2026-11-28", slug: "happy-new-church-year" },
-  // Advent 2026 (First Sunday → Christmas Eve).
-  { date: "2026-11-29", slug: "light-the-advent-candle" },
-  { date: "2026-11-30", slug: "come-lord-jesus" },
-  { date: "2026-12-01", slug: "colour-the-advent-candles" },
-  { date: "2026-12-02", slug: "paper-advent-wreath" },
-  { date: "2026-12-03", slug: "family-advent-calendar" },
-  { date: "2026-12-04", slug: "jesse-tree-ornaments" },
-  { date: "2026-12-05", slug: "come-lord-jesus" },
-  { date: "2026-12-06", slug: "straw-for-the-manger" },
-  { date: "2026-12-07", slug: "prepare-the-way" },
-  { date: "2026-12-08", slug: "white-flower-for-mary" },
-  { date: "2026-12-09", slug: "straw-for-the-manger" },
-  { date: "2026-12-10", slug: "helping-hands-like-mary" },
-  { date: "2026-12-11", slug: "yes-with-a-smile" },
-  { date: "2026-12-12", slug: "roses-for-mary" },
-  { date: "2026-12-13", slug: "jesse-tree-picture-a-day" },
-  { date: "2026-12-14", slug: "o-antiphon-ornaments" },
-  { date: "2026-12-15", slug: "jesse-tree-picture-a-day" },
-  { date: "2026-12-16", slug: "secret-kindness-notes" },
-  { date: "2026-12-17", slug: "come-lord-jesus" },
-  { date: "2026-12-18", slug: "straw-for-the-manger" },
-  { date: "2026-12-19", slug: "jesse-tree-picture-a-day" },
-  { date: "2026-12-20", slug: "jesse-tree-picture-a-day" },
-  { date: "2026-12-21", slug: "white-flower-for-mary" },
-  { date: "2026-12-22", slug: "jesse-tree-picture-a-day" },
-  { date: "2026-12-23", slug: "light-the-advent-candle" },
-  { date: "2026-12-24", slug: "straw-for-the-manger" },
-];
-
 export const DEFAULT_DAILY_ACTIVITY = "happy-new-church-year";
+/** Kind-act calendar for the whole of Advent (not one day's highlight). */
+export const FAMILY_ADVENT_CALENDAR_SLUG = "family-advent-calendar";
 /** The one craft shown in the This Sunday "Crafts" slot (Plus download). */
 export const SUNDAY_CRAFT_SLUG = "advent-candle-craft";
 
@@ -591,11 +539,11 @@ const ROTATION_EPOCH_SUNDAY = "2026-11-22";
 const DAY_MS = 86_400_000;
 
 /**
- * Year-round daily activity for a date outside DAILY_ACTIVITY_SCHEDULE, from the liturgical
- * calendar (pure, every year): fixed feasts above; Advent Sundays light the wreath, with the
- * Fourth Sunday following the cycle's Gospel; the O Antiphons December 17 to 23; Christmas Eve the
- * manger; Advent weekdays by week; Christ the King week (the last week before Advent) the
- * Happy New Church Year wheel; otherwise one sheet a week from the season's list.
+ * Year-round daily activity from the liturgical calendar (pure, every year): fixed feasts above;
+ * Advent Sundays light the wreath, with the Fourth Sunday following the cycle's Gospel; the O
+ * Antiphons December 17 to 23; Christmas Eve the manger; Advent weekdays by week; Christ the King
+ * week (the last week before Advent) the Happy New Church Year wheel; otherwise one sheet a week
+ * from the season's list.
  */
 export function recurringActivitySlug(ymd: string): string | null {
   if (!YMD.test(ymd)) return null;
@@ -634,25 +582,14 @@ export function recurringActivitySlug(ymd: string): string | null {
 }
 
 /**
- * The activity for a Toronto date: DAILY_ACTIVITY_SCHEDULE inside its range (falling back to the
- * latest earlier row), and the year-round recurringActivitySlug rule before and after it.
+ * The activity for a Toronto date. Every year uses recurringActivitySlug (the liturgical
+ * calendar). There is no dated override.
  */
 export function dailyActivityFor(ymd: string): { activity: ResourceActivity; date: string | null; exact: boolean } {
   const fallback = getActivity(DEFAULT_DAILY_ACTIVITY)!;
   if (!YMD.test(ymd)) return { activity: fallback, date: null, exact: false };
-  const first = DAILY_ACTIVITY_SCHEDULE[0]?.date ?? "";
-  const last = DAILY_ACTIVITY_SCHEDULE.at(-1)?.date ?? "";
-  if (ymd < first || ymd > last) {
-    const recurring = getActivity(recurringActivitySlug(ymd));
-    if (recurring) return { activity: recurring, date: ymd, exact: true };
-  }
-  let best: { activity: ResourceActivity; date: string } | null = null;
-  for (const row of DAILY_ACTIVITY_SCHEDULE) {
-    if (row.date > ymd) continue;
-    const activity = getActivity(row.slug);
-    if (activity && (!best || row.date >= best.date)) best = { activity, date: row.date };
-  }
-  return best ? { ...best, exact: best.date === ymd } : { activity: fallback, date: null, exact: false };
+  const recurring = getActivity(recurringActivitySlug(ymd));
+  return recurring ? { activity: recurring, date: ymd, exact: true } : { activity: fallback, date: null, exact: false };
 }
 
 /** The seven Toronto dates (Monday to Sunday) of the week that ends on weekSundayOf(ymd). */
@@ -661,14 +598,56 @@ export function weekDatesOf(ymd: string): string[] {
   return [6, 5, 4, 3, 2, 1, 0].map((i) => new Date(sunday - i * DAY_MS).toISOString().slice(0, 10));
 }
 
+/** UTC midnight for a YYYY-MM-DD string. */
+function utcDate(ymd: string): Date {
+  return new Date(`${ymd}T00:00:00Z`);
+}
+
+/** True when this Monday–Sunday week includes a day of Advent. */
+export function weekOverlapsAdvent(ymd: string): boolean {
+  if (!YMD.test(ymd)) return false;
+  return weekDatesOf(ymd).some((day) => getLiturgicalSeason(utcDate(day)).name === "Advent");
+}
+
 /**
- * Free with sign-in in the week of a Toronto date: a "signin" sheet that is the daily activity
- * (dailyActivityFor) on any day of that week. Weeks run Monday to Sunday and end on "This Sunday"
- * (weekSundayOf, the Sunday sheet rule). Everything else, including "plus" sheets, is Plus only.
+ * Sheet a fixed feast (or the transferred Immaculate Conception / Annunciation) is about,
+ * even when that date is an Advent Sunday and the day's highlight is the Sunday sheet instead.
+ */
+function feastActivitySlug(ymd: string): string | null {
+  if (!YMD.test(ymd)) return null;
+  const md = ymd.slice(5);
+  const feast = ACTIVITY_FIXED_FEASTS[md];
+  if (feast) return feast;
+  const dow = utcDate(ymd).getUTCDay();
+  if (md === "12-09" && dow === 1) return "white-flower-for-mary";
+  const year = Number(ymd.slice(0, 4));
+  if (ymd === annunciationDate(year)) return ANNUNCIATION_SHEET;
+  return null;
+}
+
+/**
+ * The home "Activities & crafts" row is the Advent list: visible from the First Sunday of
+ * Advent through Christmas Eve, and hidden before Advent and from Christmas Day on.
+ * `ymd` is a Toronto calendar date.
+ */
+export function homeActivityRowVisible(ymd: string): boolean {
+  if (!YMD.test(ymd)) return false;
+  return getLiturgicalSeason(utcDate(ymd)).name === "Advent";
+}
+
+/**
+ * Free with sign-in in the week of a Toronto date. Weeks run Monday to Sunday and end on
+ * "This Sunday" (weekSundayOf, the Sunday sheet rule). A "signin" sheet is free when it is
+ * the day's activity on any day of that week, when its feast falls in that week (including
+ * an Advent Sunday, which keeps the Sunday sheet as the day's highlight), or, for the family
+ * Advent calendar, when the week overlaps Advent. Everything else, including "plus" sheets,
+ * is Plus only.
  */
 export function isActivityFreeInWeekOf(activity: Pick<ResourceActivity, "slug" | "access">, ymd: string): boolean {
   if (activity.access !== "signin" || !YMD.test(ymd)) return false;
-  return weekDatesOf(ymd).some((day) => dailyActivityFor(day).activity.slug === activity.slug);
+  if (activity.slug === FAMILY_ADVENT_CALENDAR_SLUG) return weekOverlapsAdvent(ymd);
+  if (weekDatesOf(ymd).some((day) => dailyActivityFor(day).activity.slug === activity.slug)) return true;
+  return weekDatesOf(ymd).some((day) => feastActivitySlug(day) === activity.slug);
 }
 
 /** isActivityFreeInWeekOf for the current Toronto date (per request / per render). */
@@ -698,23 +677,33 @@ export type HomeActivityPick = {
 export const HOME_ACTIVITY_PICKS = 4;
 
 /**
- * Home "Activities & crafts" row for a Toronto date: today's scheduled sheet, the next two
- * scheduled sheets (other free Advent sheets fill in after the schedule ends), then the Plus
- * craft. Pure and deterministic for a date, so the ISR home page renders it like its other
- * date-rule slots (no request data).
+ * Home "Activities & crafts" row for a Toronto date: today's sheet, then the other sheets
+ * that are free this week (library order), then later days if a slot is still open, then the
+ * Plus craft. Pure and deterministic for a date, so the ISR home page renders it like its
+ * other date-rule slots (no request data).
  */
 export function homeActivityPicks(ymd: string): HomeActivityPick[] {
   const today = dailyActivityFor(ymd).activity;
   const craft = getActivity(SUNDAY_CRAFT_SLUG);
   const freeSlots = HOME_ACTIVITY_PICKS - (craft ? 1 : 0);
-  const free: ResourceActivity[] = [today];
+  const free: ResourceActivity[] = [];
   const add = (a: ResourceActivity | null) => {
     if (a && a.access === "signin" && free.length < freeSlots && !free.some((f) => f.slug === a.slug)) free.push(a);
   };
-  for (const row of DAILY_ACTIVITY_SCHEDULE) if (YMD.test(ymd) && row.date > ymd) add(getActivity(row.slug));
+  add(today);
+  if (YMD.test(ymd)) {
+    const weekFree = listActivities()
+      .filter((a) => a.access === "signin" && a.slug !== today.slug && isActivityFreeInWeekOf(a, ymd))
+      .sort((a, b) => a.prio - b.prio || a.slug.localeCompare(b.slug));
+    for (const a of weekFree) add(a);
+    const start = Date.parse(`${ymd}T00:00:00Z`);
+    for (let i = 1; i <= 21 && free.length < freeSlots; i++) {
+      add(dailyActivityFor(new Date(start + i * DAY_MS).toISOString().slice(0, 10)).activity);
+    }
+  }
   for (const a of listActivities("advent")) add(a);
   const picks: HomeActivityPick[] = free.map((activity, i) => {
-    // Free only when the sheet is scheduled in this week; otherwise it is labelled Plus.
+    // Free only when the sheet belongs to this week; otherwise it is labelled Plus.
     const access = activityAccessInWeekOf(activity, ymd);
     return { activity, label: `${i === 0 ? "Today" : "Activity"} · ${access === "plus" ? "Plus" : "Free"}`, access };
   });

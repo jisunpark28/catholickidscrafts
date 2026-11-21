@@ -504,38 +504,35 @@ def family_advent_calendar(c, colored):
                "Light the wreath, read a Bible story, and set up the nativity slowly. Give to people in need.")
     with group(c, "Calendar title"):
         text(c, W / 2, y - 18, "Write one kind act in each box. Colour the box when your family does it.", "ComicRelief-Bold", 11.5, INK, "center")
-    # Advent 2026: Sun Nov 29 .. Thu Dec 24 (26 days), laid out Sun..Sat.
-    import datetime as dt
-    start = dt.date(2026, 11, 29)
-    days = [start + dt.timedelta(days=i) for i in range(26)]
+    # Four Sunday-to-Saturday weeks. Advent begins on a different Sunday every year
+    # and is not always four full weeks, so the boxes are not dated.
+    weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    week_names = ["Week 1", "Week 2", "Week 3", "Week 4"]
     cols = 7
     gx = (R - L) / cols
     top = y - 34
     with group(c, "Weekdays"):
-        for i, d in enumerate(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]):
+        for i, d in enumerate(weekdays):
             text(c, L + gx * (i + 0.5), top - 12, d, "Baloo-Bold", 10.5, INK, "center")
     bh = 106
     sunday_colors = [VIOLET, VIOLET, ROSE, VIOLET]
-    for i, d in enumerate(days):
-        col = i % 7
-        row = i // 7
-        x = L + col * gx
-        yv = top - 22 - (row + 1) * (bh + 4)
-        label = f"{'Nov' if d.month == 11 else 'Dec'} {d.day}"
-        with group(c, f"Day {label}"):
-            ink(c, 1.4)
-            c.setFillColor(white)
-            c.roundRect(x + 2, yv, gx - 4, bh, 8, stroke=1, fill=1)
-            text(c, x + 9, yv + bh - 15, str(d.day), "Baloo-Bold", 12, INK)
-            if col == 0:
-                week = row
-                candle(c, x + gx - 22, yv + bh - 34, 10, 20, colored, sunday_colors[week], True, None, 1.2)
-            if d == dt.date(2026, 12, 24):
-                star(c, x + gx - 18, yv + bh - 16, 9, colored)
-            for k in range(3):
-                dotted(c, x + 9, yv + bh - 40 - k * 16, x + gx - 9, yv + bh - 40 - k * 16, 0.9)
+    for row, week_name in enumerate(week_names):
+        for col, day_name in enumerate(weekdays):
+            x = L + col * gx
+            yv = top - 22 - (row + 1) * (bh + 4)
+            with group(c, f"{week_name} {day_name}"):
+                ink(c, 1.4)
+                c.setFillColor(white)
+                c.roundRect(x + 2, yv, gx - 4, bh, 8, stroke=1, fill=1)
+                if col == 0:
+                    text(c, x + 9, yv + bh - 15, week_name, "Baloo-Bold", 11, INK)
+                    candle(c, x + gx - 22, yv + bh - 34, 10, 20, colored, sunday_colors[row], True, None, 1.2)
+                else:
+                    text(c, x + 9, yv + bh - 15, day_name, "ComicRelief", 9, MUTED)
+                for k in range(3):
+                    dotted(c, x + 9, yv + bh - 40 - k * 16, x + gx - 9, yv + bh - 40 - k * 16, 0.9)
     with group(c, "Key"):
-        text(c, W / 2, 74, "Sundays have a candle: light one more on your Advent wreath. December 24: Christmas Eve!", "ComicRelief", 9.5, MUTED, "center")
+        text(c, W / 2, 74, "Sundays have a candle: light one more. Start on the First Sunday and stop on Christmas Eve.", "ComicRelief", 9.5, MUTED, "center")
     footer(c)
 
 
@@ -647,14 +644,12 @@ def advent_dinner_candle(c, colored):
     top = y - 380
     with group(c, "Week checklist"):
         text(c, cx, top, "Each Sunday, light one more candle at dinner. Tick the week.", "ComicRelief-Bold", 12, INK, "center")
-        dates = ["Nov 29", "Dec 6", "Dec 13", "Dec 20"]
         gx = (R - L) / 4
-        for i, d in enumerate(dates):
+        for i in range(4):
             x = L + gx * (i + 0.5)
             candle(c, x - 12, top - 96, 24, 52, colored, colors[i], True, None, 1.6)
             check_box(c, x - 8, top - 124, 16)
             text(c, x, top - 140, f"Week {i + 1}", "Baloo-Bold", 11, INK, "center")
-            text(c, x, top - 154, d, "ComicRelief", 10, MUTED, "center")
     write_line(c, L + 10, 86, "Tonight we pray for:", R - 10)
     footer(c)
 

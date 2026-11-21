@@ -7,7 +7,7 @@ import { emailConfigured } from "@/lib/email";
 import { cardShortTitle, getHomeToday, type HomeHighlight, type HomeToday } from "@/lib/home/home-today";
 import { loadHomeSundaySheet } from "@/lib/home-sunday-sheet";
 import { getPublicContactEmail } from "@/lib/site-contact";
-import { activityPath, CRAFTS_LIST_PATH, homeActivityPicks, homeCraftPicks } from "@/lib/resource/activities";
+import { activityPath, CRAFTS_LIST_PATH, homeActivityPicks, homeActivityRowVisible, homeCraftPicks } from "@/lib/resource/activities";
 import type { ResourceSeason } from "@/lib/resource/sheets";
 import { buildHomePdfNav } from "@/lib/home-pdf-nav";
 import { getPublishedHomeSections } from "@/lib/home-sections";
@@ -126,9 +126,8 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
     return s ? [{ key: s.key, emoji: s.emoji, title: s.title, href: `${SITUATIONS_PATH}#s-${s.key}` }] : [];
   });
   const upcoming = nextSeasonStart(today.date, today.season.name);
-  // The activity sheets are Advent ones: show the row in Advent and in the weeks before it.
-  const activityPicks =
-    today.season.name === "Advent" || upcoming?.name === "Advent" ? homeActivityPicks(today.date) : [];
+  // Advent list only: First Sunday of Advent through Christmas Eve (America/Toronto).
+  const activityPicks = homeActivityRowVisible(today.date) ? homeActivityPicks(today.date) : [];
   const craftSeason = homeCraftSeason(today.season.name, upcoming?.name ?? null);
   const craftPicks = homeCraftPicks(craftSeason);
 
@@ -333,7 +332,7 @@ export async function HomeView({ country }: { country: RomcalCountry }) {
           </ul>
         </section>
 
-        {/* Activities & crafts: today's scheduled sheet, the next ones, and the Plus craft (homeActivityPicks). */}
+        {/* Activities & crafts: today's sheet, the other free sheets this week, and the Plus craft. */}
         {activityPicks.length > 0 ? (
           <section aria-labelledby="home-activities-title" className="mt-5">
             <h2
