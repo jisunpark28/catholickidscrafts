@@ -81,7 +81,7 @@ function CarouselOverlay({ prayer, liveImage, onClose, onOpen }: Props) {
   const last = phrases.length + 1; // 0 cover, 1..n phrases, n+1 printable
   const [i, setI] = useState(0);
   const [mode, setMode] = useState<StudyMode | null>(null);
-  const cover = prayerCoverSrc(prayer, liveImage);
+  const cover = prayerCoverSrc(prayer);
   const modeMeta = mode ? MODES.find((m) => m.id === mode)! : null;
 
   // Page behind: inert + no scroll; ?prayer=<slug> while open (restored on close).

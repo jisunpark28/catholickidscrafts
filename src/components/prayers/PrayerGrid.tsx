@@ -6,7 +6,7 @@ import { QaFlipCard } from "@/components/liturgy/QaFlipCards";
 import { PrayerCarousel } from "@/components/prayers/PrayerCarousel";
 import { RosaryCard } from "@/components/prayers/RosaryCard";
 import type { PublicQaCard } from "@/lib/liturgy-qa";
-import { prayerCoverSrc, qaPrayerCoverSrc } from "@/lib/prayers/prayer-art";
+import { prayerTileSrc, qaPrayerTileSrc } from "@/lib/prayers/prayer-art";
 import { CAROUSEL_PRAYERS, getCarouselPrayer, type CarouselPrayer } from "@/lib/prayers/prayer-phrases";
 import "@/styles/prayer-carousel.css";
 
@@ -70,12 +70,12 @@ export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; ca
         {items.map((it) => {
           if (it.kind === "rosary") return <RosaryCard key="rosary" />;
           if (it.kind === "qa") {
-            const localCover = !it.card.imageUrl ? qaPrayerCoverSrc(it.card.question) : null;
-            const card = localCover ? { ...it.card, imageUrl: localCover } : it.card;
+            const tile = qaPrayerTileSrc(it.card.question);
+            const card = { ...it.card, imageUrl: tile };
             return <QaFlipCard key={it.card.id} card={card} variant="prayer" cardBackColor={cardBackColor} />;
           }
           const { prayer, card } = it;
-          const src = card?.imageUrl || prayerCoverSrc(prayer);
+          const src = prayerTileSrc(prayer.slug);
           return (
             <li key={prayer.slug}>
               <div className="qa-card" data-qa-card={prayer.slug} style={{ "--qa-p": card?.cardColor || "#FFE3CC" } as React.CSSProperties}>
@@ -89,15 +89,9 @@ export function PrayerGrid({ cards, cardBackColor }: { cards: PublicQaCard[]; ca
                       setOpen(prayer.slug);
                     }}
                   >
-                    <span className="qa-ill">
-                      {src ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={src} alt={card?.altText || ""} loading="lazy" />
-                      ) : (
-                        <span className="qa-emoji" aria-hidden>
-                          {card?.iconFallback || "🙏"}
-                        </span>
-                      )}
+                    <span className="qa-ill qa-ill--rosary">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={src} alt="" loading="lazy" />
                     </span>
                     <span className="qa-q">{card?.question || prayer.title}</span>
                     {card?.tryThis ? <span className="qa-when">{card.tryThis}</span> : null}
