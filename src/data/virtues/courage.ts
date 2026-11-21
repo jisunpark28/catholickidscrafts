@@ -11,12 +11,17 @@ export type VirtueStory = {
 export type VirtueScenario = {
   situation: string;
   questions: readonly string[];
+  image: string;
+  imageAlt: string;
 };
 
 export type VirtueBundle = {
   slug: string;
   name: string;
   basis: string;
+  /** Landing-tile picture of the virtue itself. Not a story card. */
+  cover: string;
+  coverAlt: string;
   stories: readonly VirtueStory[];
   keyVerse: { ref: string; text: string; note: string; cardId: string };
   scenarios: readonly VirtueScenario[];
@@ -29,6 +34,8 @@ export const COURAGE: VirtueBundle = {
   slug: "courage",
   name: "Courage",
   basis: "CCC 1808. Fortitude is the cardinal virtue that holds on to the good when it is hard. For children the name is Courage.",
+  cover: "/images/virtues/courage.webp",
+  coverAlt: "A child stands calmly beside a friend",
   stories: [
     {
       cardId: "VIR-078",
@@ -45,6 +52,7 @@ export const COURAGE: VirtueBundle = {
         "People were bringing children to Jesus, and the disciples tried to turn them away. Jesus was indignant and said, “Let the children come to me; do not prevent them, for the kingdom of God belongs to such as these.” Then he embraced the children and blessed them.",
     },
     {
+      cardId: "VIR-081",
       ref: "Daniel 6:11–24",
       title: "Daniel keeps praying",
       summary:
@@ -60,6 +68,8 @@ export const COURAGE: VirtueBundle = {
   scenarios: [
     {
       situation: "Classmates are mocking a friend's drawing.",
+      image: "/images/virtues/courage-drawing.webp",
+      imageAlt: "A child stands with a friend who is holding a drawing",
       questions: [
         "What would it be like if most of your class teased one friend and only you stopped?",
         "Have you ever thought it was okay because everyone was doing it?",
@@ -67,6 +77,8 @@ export const COURAGE: VirtueBundle = {
     },
     {
       situation: "Kids knock down a friend's block tower.",
+      image: "/images/virtues/courage-blocks.webp",
+      imageAlt: "A friend helps set the blocks back up",
       questions: [
         "How would you feel if everyone mocked your drawing or knocked down your blocks?",
         "What would you want a friend to do when you're upset?",

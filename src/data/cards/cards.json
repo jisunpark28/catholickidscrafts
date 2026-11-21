@@ -667,5 +667,6 @@
 {"id":"VIR-077","cat":"Virtue & Life","set":"Family Virtue Challenge","title":"Spirituality","text":"In God we live and move and have our being. He made me for a reason!","prio":1,"ref":"Acts 17:28","sheetKeys":["VIR_SPIRITUALITY"]},
 {"id":"VIR-078","cat":"Virtue & Life","set":"Virtues","title":"Stretch Out Your Hand","text":"\"Stretch out your hand.\"","prio":1,"ref":"Mk 3:1–6","sheetKeys":["VIR_COURAGE"]},
 {"id":"VIR-079","cat":"Virtue & Life","set":"Virtues","title":"Let the Children Come","text":"\"Let the children come to me.\"","prio":1,"ref":"Mk 10:13–16","sheetKeys":["VIR_COURAGE"]},
-{"id":"VIR-080","cat":"Virtue & Life","set":"Virtues","title":"Worth More than Sparrows","text":"So do not be afraid; you are worth more than many sparrows.","prio":1,"ref":"Mt 10:31","sheetKeys":["VIR_COURAGE"]}
+{"id":"VIR-080","cat":"Virtue & Life","set":"Virtues","title":"Worth More than Sparrows","text":"So do not be afraid; you are worth more than many sparrows.","prio":1,"ref":"Mt 10:31","sheetKeys":["VIR_COURAGE"]},
+{"id":"VIR-081","cat":"Virtue & Life","set":"Virtues","title":"Daniel in the Lions' Den","text":"\"My God sent his angel and closed the lions' mouths so that they have not hurt me.\"","prio":1,"ref":"Dn 6:23","sheetKeys":["VIR_COURAGE"]}
 ]

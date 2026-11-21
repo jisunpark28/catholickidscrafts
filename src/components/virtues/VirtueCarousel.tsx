@@ -1,6 +1,7 @@
 "use client";
 
 import { GOSPEL_SHEET_CSS } from "@/components/gospel-sheet/sheet-styles";
+import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { LockedSheetPreview } from "@/components/resource/LockedSheetPreview";
 import { SheetThumb } from "@/components/resource/SheetThumb";
 import type { VirtueBundle } from "@/data/virtues/courage";
@@ -15,7 +16,7 @@ import "@/styles/virtue-carousel.css";
 type Slide =
   | { kind: "story"; cardId?: string; title: string; ref: string; summary: string }
   | { kind: "verse"; cardId: string; ref: string; text: string; note: string }
-  | { kind: "scenario"; situation: string; questions: readonly string[] }
+  | { kind: "scenario"; situation: string; questions: readonly string[]; image: string; imageAlt: string }
   | { kind: "commitment"; commitment: string; encouragement: string }
   | { kind: "worksheet" };
 
@@ -104,7 +105,9 @@ export function VirtueCarousel({
   const overlay = (
     <div className="vcx" role="dialog" aria-modal="true" aria-labelledby={`${uid}-title`} data-virtue-carousel={virtue.slug} data-slide={index}>
       <div className="vcx-header">
-        <span className="vcx-kicker">Virtues</span>
+        <div className="vcx-head-left">
+          <ShareToClassroomButton />
+        </div>
         <h2 id={`${uid}-title`} className="vcx-title">
           {virtue.name}
         </h2>
@@ -118,11 +121,10 @@ export function VirtueCarousel({
           {slide.kind === "verse" ? <VerseSlide slide={slide} /> : null}
           {slide.kind === "scenario" ? <ScenarioSlide slide={slide} /> : null}
           {slide.kind === "commitment" ? (
-            <>
-              <p className="vcx-ref">I will…</p>
+            <div className="vcx-commit">
               <p className="vcx-verse">{slide.commitment}</p>
               <p className="vcx-copy">{slide.encouragement}</p>
-            </>
+            </div>
           ) : null}
           {slide.kind === "worksheet" ? <WorksheetSlide virtue={virtue} isPlus={isPlus} sheet={sheet} /> : null}
         </div>
@@ -182,6 +184,10 @@ function VerseSlide({ slide }: { slide: Extract<Slide, { kind: "verse" }> }) {
 function ScenarioSlide({ slide }: { slide: Extract<Slide, { kind: "scenario" }> }) {
   return (
     <>
+      <div className="vcx-card">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={slide.image} alt={slide.imageAlt} width={768} height={768} />
+      </div>
       <p className="vcx-ref">What would you do?</p>
       <h3 className="vcx-h">{slide.situation}</h3>
       <ul className="vcx-questions">

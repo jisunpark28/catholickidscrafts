@@ -54,6 +54,16 @@ CARDS = [
             "worth more than many sparrows.",
         ],
     },
+    {
+        "id": "VIR-081",
+        "art": "daniel-lions.jpg",
+        "title": "Daniel in the Lions' Den",
+        "caption_size": 36,
+        "caption_lines": [
+            "My God sent his angel and closed",
+            "the lions' mouths so that they have not hurt me.",
+        ],
+    },
 ]
 
 
@@ -155,7 +165,8 @@ def build(card: dict) -> Image.Image:
     draw.text(((W - tw) / 2 - tbox[0], 123 - tbox[1]), card["title"], font=title_face, fill=TITLE)
 
     # Fredoka medium (wght 500) at 42px: painted caption stem is 5px at ink height 30.
-    cap_face = ImageFont.truetype(str(fredoka(500)), 42)
+    # A longer sentence may set caption_size so both lines keep about 150px of side margin.
+    cap_face = ImageFont.truetype(str(fredoka(500)), card.get("caption_size", 42))
     lines = card["caption_lines"] if "caption_lines" in card else [card["caption"]]
     y = 1238 if len(lines) == 1 else 1210
     for line in lines:

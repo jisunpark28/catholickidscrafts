@@ -35,7 +35,7 @@ Clicking a virtue opens a full-screen carousel, same interaction family as `src/
 1. Two or three Bible stories. Each slide cites book, chapter, and verses, plus one kid sentence that matches the text.
 2. One key verse in the exact NABRE wording from [bible.usccb.org](https://bible.usccb.org), including a note when the sentence starts with a conjunction or continues the previous verse.
 3. Two or three school or home situations, each with one or two short questions that lead toward the virtue.
-4. One line that starts “I will…” and names the virtue, then a short encouragement.
+4. The commitment sentence that names the virtue, then a short encouragement. Do not add a separate “I will…” label. See section 10.
 5. One existing worksheet, with the real link into it, to invite Plus. If no suitable worksheet exists, the slide says so. It does not invent a sheet.
 
 This is a new product. It does not replace the Family Virtue Challenge.
@@ -637,7 +637,7 @@ Do not put the Bible stories behind Plus. The Plus invitation is the worksheet a
 3. Courage’s pictures. Prefer new Virtue-set cards (VIR-078 and following), and leave BIB-053/054/055 for a separate art repair? Or block the pilot until those three PNGs are regenerated to section 4.2 and then reuse them?
 4. Goodness is the fruit left out so the count stays 24. Should it replace Responsibility or Respect?
 5. Purity of heart is included, modestly, and chastity is not its own card. Keep that?
-6. Story slides become picture cards. Scenario pictures stay off the card catalog unless you want them too.
+6. Decided in section 10. Every Bible-story slide is a picture card. Scenario pictures are carousel art and stay off the card catalog.
 7. Charity → Love sheet, and Justice → Fairness sheet, are marked closest rather than exact. Show those, or show “no sheet yet” for them as well?
 8. Decided. The twelve virtues with no sheet get new Family Virtue Challenge worksheets (section 9). They are not built in the Courage pilot. Until a sheet exists, its carousel slide says so.
 9. The challenge sheets quote a Douay-style line (`keyVerseDR`). The new bundles quote NABRE. Both would be on the site. Is that acceptable?
@@ -661,13 +661,13 @@ What “the same format” means in this repo:
 | Plus | `/print/evergreen/<slug>` and `/resource/<slug>` already require Plus for every `VIR_*` key, because `canOpenResourceSheet` only unlocks this Sunday’s sheet for a family without Plus. A new `VIR_*` key inherits that gate. The public guide `/catholic-virtue-challenge/<slug>` stays readable. |
 | Verse field | Keep the field name `keyVerseDR`. Put the NABRE sentence already verified in section 5 into it, inside the same quotation shape the generator uses (`"…" (short ref)`). Do not invent a Douay line for these twelve. The original 24 sheets stay as they are. |
 
-Do not run `build.py` unchanged. It rewrites every existing JSON file and assigns picture-card ids from `VIR-054` upward in list order. The Courage story cards use `VIR-078`, `VIR-079`, and `VIR-080`. A full rerun would collide with those ids and rewrite the sheets that are already live.
+Do not run `build.py` unchanged. It rewrites every existing JSON file and assigns picture-card ids from `VIR-054` upward in list order. The Courage story cards use `VIR-078` through `VIR-081`. A full rerun would collide with those ids and rewrite the sheets that are already live.
 
 Steps when this batch is actually built:
 
 1. Add twelve rows in an append-only path (a second list in `virtues.py`, or twelve hand-written JSON files in the same shape). Write only the new files. Leave the original 24 JSON files untouched.
 2. Import the new keys in `src/data/evergreen-sheets/index.ts` and add twelve `EVERGREEN_PAGES` rows in `src/lib/evergreen-catalog.ts`. Slugs below are free. `virtueFamily` uses an existing family so the hub groups them without a new enum.
-3. Do not give these sheets a related card in `VIR-054`–`VIR-080`. If a challenge icon card is wanted later, start at `VIR-081`.
+3. Do not give these sheets a related card in `VIR-054`–`VIR-081`. Daniel’s lions-den story card is `VIR-081`. If a challenge icon card is wanted later, start at `VIR-082`.
 4. Raise the hard-coded virtue count from 24 to 36 in `scripts/test-evergreen-sheets.ts` and `scripts/test-resource-unified.ts` in that same batch. The Courage pilot does not touch those assertions.
 5. Confirm each new print URL returns the sign-in gate, then `/subscribe`, for a family without Plus, and that `SheetThumb` appears only when Plus is on.
 
@@ -711,3 +711,13 @@ Each outline below is the level-1 sheet: one key line, six Monday–Saturday mis
 **Peace.** Key line: “I will not add fuel.” Missions: stop before answering an insult; invite two arguing friends to take a breath; pray “Peace be with you” at bedtime; say sorry first in a small fight; play a quiet game after a loud one; ask a parent for help instead of yelling. Talk: Where did our home need peace? What did we do that helped? Prayer: “Jesus, give us Your peace, not the world’s kind. Amen.”
 
 **Faithfulness.** Key line: “I keep the small promise.” Missions: finish a practice you said you would do; stay with a friend who was left out; pray at the time you chose; keep a secret that is safe to keep; show up for a chore on the day you promised; tell the truth if you cannot keep a promise, and make a new one. Talk: What promise did we keep? What promise do we need to repair? Prayer: “Jesus, make me a faithful servant in small things. Amen.”
+
+## 10. Standing rules for all 24 virtues
+
+These rules apply to Courage and to every virtue added after it. Kid-facing copy still has no four-digit year. Art is warm and safe for children: no text baked into the picture, no scary violence.
+
+1. The `/virtues` tile uses a picture of the virtue itself, not a story card. Courage’s tile is a child standing calmly with a friend (`/images/virtues/courage.webp`). Later virtues get their own tile in the same cute colored-pencil watercolor palette, cropped to the tile’s 4:5 frame.
+2. Every Bible-story slide has an illustration. Story illustrations are picture cards in the Virtue set, built to the painted spec in section 4 (1080×1350, page `#fef9f6`, “VIRTUE & LIFE” pill, Fredoka semibold title, frame from y190, Fredoka medium caption, footer). The caption is exact NABRE from bible.usccb.org, one line or two balanced lines. Daniel’s den is `VIR-081`, caption Daniel 6:23: “My God sent his angel and closed the lions' mouths so that they have not hurt me.” Do not paint Daniel 6:25.
+3. Each school or home scenario has an illustration in that same style. Those pictures stay in the carousel (`/images/virtues/…`). They are not catalog cards. The questions on those slides are center aligned.
+4. The commitment slide shows the commitment sentence and the short encouragement, centered as a pair. It does not show a separate “I will…” label.
+5. Every virtue carousel includes `ShareToClassroomButton`, the same component, icon, label, and Classroom share URL already used on prayers and Q&A. It sits in the carousel header and must not cover the slide on desktop or on a phone. Kid mode and child mode keep hiding it, as that component already does.
