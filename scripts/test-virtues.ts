@@ -14,7 +14,7 @@ const KEY_VERSE = "So do not be afraid; you are worth more than many sparrows.";
 const QUESTIONS = [
   "What would it be like if most of your class teased one friend and only you stopped?",
   "Have you ever thought it was okay because everyone was doing it?",
-  "How would you feel if everyone mocked your drawing or knocked down your blocks?",
+  "How would you feel if everyone knocked down your blocks?",
   "What would you want a friend to do when you're upset?",
 ];
 
@@ -38,7 +38,14 @@ async function main() {
   );
   assert.equal(COURAGE.stories[0]?.cardId, "VIR-078");
   assert.equal(COURAGE.stories[1]?.cardId, "VIR-079");
-  assert.equal(COURAGE.stories[2]?.cardId, undefined);
+  assert.equal(COURAGE.stories[2]?.cardId, "VIR-081");
+  assert.equal(COURAGE.stories.every((story) => Boolean(story.cardId)), true);
+  assert.equal(COURAGE.cover, "/images/virtues/courage.webp");
+  assert.equal(COURAGE.cover.includes("VIR-"), false);
+  assert.deepEqual(
+    COURAGE.scenarios.map((scenario) => scenario.image),
+    ["/images/virtues/courage-drawing.webp", "/images/virtues/courage-blocks.webp"],
+  );
   assert.equal(COURAGE.keyVerse.ref, "Matthew 10:31");
   assert.equal(COURAGE.keyVerse.text, KEY_VERSE);
   assert.match(COURAGE.keyVerse.note, /So/);
@@ -58,14 +65,18 @@ async function main() {
   ].join("\n");
   noYear(kidCopy, "courage copy");
 
-  for (const id of ["VIR-078", "VIR-079", "VIR-080"] as const) {
+  for (const id of ["VIR-078", "VIR-079", "VIR-080", "VIR-081"] as const) {
     const card = getPictureCard(id);
     assert.ok(card, id);
     assert.equal(card.cat, "Virtue & Life");
     assert.equal(card.set, "Virtues");
-    const quoted = id !== "VIR-080";
+    const quoted = id === "VIR-078" || id === "VIR-079" || id === "VIR-081";
     assert.equal(card.text.startsWith('"') && card.text.endsWith('"'), quoted);
     noYear(`${card.title} ${card.text}`, id);
+    if (id === "VIR-081") {
+      assert.equal(card.text, "\"My God sent his angel and closed the lions' mouths so that they have not hurt me.\"");
+      assert.equal(card.ref, "Dn 6:23");
+    }
     assert.deepEqual(card.sheetKeys, ["VIR_COURAGE"]);
     const body = await fs.readFile(`assets/card-originals/${id}.png`);
     assert.equal(createHash("sha256").update(body).digest("hex"), originals[id].sha256);
