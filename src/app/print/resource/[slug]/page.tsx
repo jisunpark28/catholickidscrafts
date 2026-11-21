@@ -14,6 +14,7 @@ import {
 } from "@/lib/resource/sheets";
 import { sundayMassWorksheetPath } from "@/lib/seo/sunday-mass-worksheets";
 import { pageMetadata } from "@/lib/site-metadata";
+import { resourceEditPath } from "@/lib/resource/sheet-edit-path";
 import { pathWithQuery } from "@/lib/sign-in-callback";
 import { isSignedInForEmbed, requireSignInForPage, SIGNED_OUT_PRINT_CSS } from "@/lib/sign-in-gate";
 import { getSundaySheet, toGospelSheetView } from "@/lib/sunday-sheet-content";
@@ -89,6 +90,7 @@ export default async function ResourcePrintPage({ params, searchParams }: Props)
             autoPrint={autoPrint}
             basePath={`/print/resource/${keyToSlug(key)}`}
             backHref={resourcePath(key, level)}
+            editHref={resourceEditPath(key, level)}
           />
           <GospelPrintIntro
             liturgicalName={sheet.liturgicalName}
