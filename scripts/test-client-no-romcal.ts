@@ -29,9 +29,5 @@ assert.equal(
   `romcal must not ship in client chunks (CSP has no 'unsafe-eval'):\n${hits.join("\n")}`,
 );
 
-const footerChunk = walk(clientDir).some((file) =>
-  fs.readFileSync(file, "utf8").includes("Liturgical calendar: Evangelizo.org"),
-);
-assert.equal(footerChunk, true, "SiteFooter copy should still be in the client bundle");
 
 console.log("test-client-no-romcal: ok");

@@ -124,7 +124,7 @@ export default async function PrivacyPage() {
         <li>
           <strong>USCCB / bible.usccb.org</strong> — The Daily Mass page links out to the official
           USCCB Daily Readings site for full texts. We do not display USCCB reading bodies on
-          public HTML pages. USCCB and CCD copyrights apply on their site.
+          public HTML pages.
         </li>
         <li>
           <strong>Living with Christ (Bayard)</strong> — Optional outbound links from Daily Mass to{" "}
@@ -138,9 +138,8 @@ export default async function PrivacyPage() {
         <li>
           <strong>Universalis (universalis.com)</strong> — The Play → Typing → &quot;Today&apos;s
           Bible&quot; mode loads <strong>today&apos;s</strong> Mass readings via Universalis&apos;s
-          JSONP service for webmasters. Reading text appears on that game page with
-          Universalis&apos;s copyright notice and links back to Universalis. This uses a different
-          calendar/translation than the U.S. USCCB lectionary.
+          JSONP service for webmasters. Reading text appears on that game page and links back to
+          Universalis.
         </li>
         <li>
           <strong>YouTube</strong> — Embedded players on some resource pages when operators link a
@@ -149,7 +148,7 @@ export default async function PrivacyPage() {
         <li>
           <strong>Operator-uploaded content</strong> — PDFs, images, and lesson text posted by
           site operators (Kids Resources, Curriculum, etc.) are the responsibility of the publisher
-          who uploaded them. Do not reuse those materials without permission from the rights holder.
+          who uploaded them.
         </li>
         <li>
           <strong>Amazon, Teachers Pay Teachers, and other outbound links</strong> — When you click
@@ -215,6 +214,10 @@ export default async function PrivacyPage() {
         {", "}
         <Link href="/terms" className="text-[var(--color-link)]">
           Terms of Use
+        </Link>
+        {", "}
+        <Link href="/sources" className="text-[var(--color-link)]">
+          Sources &amp; Copyright
         </Link>
         {", and "}
         <Link href="/affiliate-disclosure" className="text-[var(--color-link)]">
