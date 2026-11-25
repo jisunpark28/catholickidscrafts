@@ -42,23 +42,22 @@ export default async function TermsPage() {
         this Site.
       </p>
 
-      <h2 className="pt-4 text-xl font-bold">Operator-uploaded content</h2>
+      <h2 className="pt-4 text-xl font-bold">Sources and copyright</h2>
       <p>
-        Crafts, PDFs, images, curriculum, and lesson text posted by site operators remain the
-        responsibility of the publisher who uploaded them. Display on this Site does not transfer
-        copyright to you. Do not reuse those materials beyond ordinary classroom or family use
-        without permission from the rights holder.
+        Sources, credits, and copyright for the Site, including operator-uploaded content, are
+        listed on our{" "}
+        <Link href="/sources" className="text-[var(--color-link)]">
+          Sources &amp; Copyright
+        </Link>{" "}
+        page.
       </p>
 
       <h2 className="pt-4 text-xl font-bold">Mass readings and other publishers</h2>
       <p>
-        Daily Mass titles on the calendar are provided as a planning aid. Full lectionary text is
-        copyrighted by the publishers who own it. We do not republish USCCB, Living with Christ
-        (Bayard), or GoodNews (서울대교구) reading bodies on public pages; those buttons open the
-        publisher&apos;s site, and their copyrights and terms apply there. &quot;Today&apos;s
-        Bible&quot; typing uses Universalis&apos;s webmaster service for today&apos;s readings only,
-        with Universalis&apos;s copyright notice and a link back to Universalis. That text may use
-        a different calendar or translation than the U.S. USCCB lectionary.
+        Daily Mass titles on the calendar are provided as a planning aid. The USCCB, Living with
+        Christ (Bayard), and GoodNews (서울대교구) buttons open the publisher&apos;s site, and that
+        site&apos;s terms apply there. &quot;Today&apos;s Bible&quot; typing uses
+        Universalis&apos;s webmaster service for today&apos;s readings only.
       </p>
 
       <h2 className="pt-4 text-xl font-bold">Affiliate links</h2>

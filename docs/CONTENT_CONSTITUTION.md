@@ -1,9 +1,10 @@
 # Catholic Kids Crafts — Content Production Constitution
 
 **Scope:** every worksheet, card, illustration, and social post made for www.catholickidscrafts.com
-**Status:** v1.0, 2026-11-25 (America/Toronto)
+**Status:** v1.1, 2026-11-25 (America/Toronto)
 **Owner:** Jisun Park. Only Jisun can approve changes to this document.
 **Audience:** any AI bot or person who creates content for the site. Read it in full before your first task, and run the checklists in Article 14 before you hand anything over.
+**Copyright, attribution and doctrinal accuracy** are governed by `docs/legal/COPYRIGHT_AND_DOCTRINE_CONSTITUTION.md`, which takes precedence on those topics.
 
 > **How to read this document.** "MUST" and "NEVER" are hard rules. "SHOULD" is the default unless Jisun says otherwise. Items marked **⚠ NEEDS CONFIRMATION** are open conflicts or gaps. Do not guess on those: follow the interim rule given, and ask Jisun when the item matters for your task. All of them are listed in Article 16.
 
@@ -137,16 +138,16 @@
 
 | Content | Source (use verbatim) | Notes |
 |---|---|---|
-| Scripture on cards, carousels, plans | **NABRE** (bible.usccb.org) | Quote short and exact, including capitalization and punctuation. A verse that continues a sentence keeps its lowercase start and conjunction; say so rather than recapitalizing. Keep NABRE brackets in editor notes. NABRE wording wins over older English (e.g. "clean of heart"). |
+| Scripture on cards, carousels, plans | **NABRE** (bible.usccb.org) | Quote short and exact, including capitalization and punctuation. A verse that continues a sentence keeps its lowercase start and conjunction; say so rather than recapitalizing. Keep NABRE brackets in editor notes. NABRE wording wins over older English (e.g. "clean of heart"). Individual verses only, never a whole translation; no attribution beside the verse (owner decision 2026-11-25). |
 | Daily readings shown or typed on the site | **Universalis only** | Never show or type USCCB reading text; USCCB *links* are fine. Do not fetch Universalis on the server. |
-| Bible typing / Bible read pages | Public-domain Douay-Rheims, modernized (`modernize-for-reading.ts`, Gospel overrides) | Never mention "Douay" to users (no numbering notes, footnotes or meta). Chapter and verse numbers follow official Catholic numbering. |
-| Traditional prayers | USCCB prayer pages (usccb.org/prayers/…), then USCCA (2006) Appendix B, then the Compendium of the CCC (2005) Appendix, then the Roman Missal (ICEL 2010 / USCCB 2011) | Keep thee/thou only where the official text has it. Record the source per prayer in `src/data/prayers/prayer-phrases.json` (`source`). |
+| Bible typing / Bible read pages | Public-domain Douay-Rheims, modernized (`modernize-for-reading.ts`, Gospel overrides) | Never mention "Douay" to users (no numbering notes, footnotes or meta); the only exception is the Sources & copyright page (`/sources`). Chapter and verse numbers follow official Catholic numbering. |
+| Traditional prayers | USCCB prayer pages (usccb.org/prayers/…), then USCCA (2006) Appendix B, then the Compendium of the CCC (2005) Appendix, then the Roman Missal (ICEL 2010 / USCCB 2011) | Keep thee/thou only where the official text has it. Common prayers are used as-is and need no source record (owner decision 2026-11-25); the `source` field in `src/data/prayers/prayer-phrases.json` is optional and internal, never displayed. |
 | Act of Contrition | USCCB version (usccb.org/prayers/act-contrition, Order of Penance first form) | Jisun's decision, 2026-11-19. |
 | Confiteor | Roman Missal 2011 (Penitential Act, form A): "…that I have greatly sinned… through my fault, through my fault, through my most grievous fault…" | The 1973 text is retired. |
 | Apostles' Creed | USCCB: "…he descended into hell…" | The old ICEL "descended to the dead" is retired. |
 | Mass texts (Gloria, Creed, Sanctus, Agnus Dei, dialogues) | ICEL Roman Missal 2010 | Short quotes only. |
 | Ten Commandments | Traditional catechetical formula printed in the CCC (before ¶2052) | |
-| Unsourced prayers (St. Francis Peace Prayer, Holy Water Prayer, Prayer After Communion) | Current site text | Keep them, marked "Source pending (current site text)", until a source is found. Never attribute the Peace Prayer to St. Francis. |
+| Unsourced prayers (St. Francis Peace Prayer, Holy Water Prayer, Prayer After Communion) | Current site text | Keep them as common prayers; no source record or label is needed (owner decision 2026-11-25). Never attribute the Peace Prayer to St. Francis. |
 | Liturgical calendar / Gospel citations for the Faith Journal | USCCB daily readings pages (US calendar and transfers) | Citation format is the USCCB link text, e.g. "Luke 14:1, 7-11". Store one citation per date (no "A or B"). |
 | Saint facts | Vatican / Vatican News, Franciscan Media, christianiconography.info, USCCB | See 2.6. |
 | Liturgical-season questions | CCC and Compendium, rewritten for kids | See 2.9. |
@@ -160,9 +161,9 @@
 
 ## Article 4. Copyright and attribution
 
-4.1 **No source lines on card images.** Scripture, prayer and Missal sources are not printed on card images. One site-footer notice covers them. The NABRE notice wording is in `/workspace/cards/master-prompt.md` ("Copyright notice"); add the ICEL and USCCA lines when those texts are used.
+4.1 **One Sources & copyright page.** All sources, credits, copyright and license statements live only on the Sources & copyright page (`/sources`), linked from the footer. Never add a source, credit or copyright line to cards, card images, worksheets, prints, prayers, Scripture verses, images or other pages. Common prayers and individual verses need no record (owner decision 2026-11-25). The "Copyright notice" section of `/workspace/cards/master-prompt.md` is superseded by this rule.
 
-4.2 **Prayer carousel.** The carousel shows the prayer's source as text only (no outbound link in Kids Mode).
+4.2 **Prayer carousel.** The carousel shows no source line (see 4.1).
 
 4.3 **Masterpiece cards.**
 - Use public-domain artworks only (the artist died more than 70 years ago). Show them whole and unaltered: no crop, recolor, filter, AI edit, stickers, or overlap.
@@ -176,6 +177,8 @@
 - Free visitors receive only small, blurred, greyscale locked previews. Original print files are blocked server-side.
 
 4.6 **Admin-only.** Source URLs for prayer cards, review notes and Compendium numbers stay admin-only.
+
+4.7 **AI illustrations.** Illustrations (cards, thumbnails, previews, prayer art, printables) are made with AI image-generation tools (Article 10.10). This is disclosed once, on the Sources & copyright page; never label individual images or items (owner decision 2026-11-25).
 
 ---
 
@@ -567,6 +570,7 @@ The evergreen vector faces (VIR-054–077, MAS-066–069) use cream `#fcf8f1`.
 - Change one thing per edit ("…keep everything else identical").
 - Batch by set.
 - Log every image as ACCEPT or FAIL with a reason (see `/workspace/plan/prayer-art/phase2-qc-log.txt`).
+- AI generation is disclosed only on the Sources & copyright page (Article 4.7); never on the image itself.
 
 10.11 **Image QC checklist** (every image; a single fail means redo).
 - [ ] Matches the site style; no photo, 3D, neon or dark background.
@@ -750,7 +754,7 @@ git push -u origin <branch>
 
 | What | Where |
 |---|---|
-| Card "Little Light" master prompt, layout codes, people guide, official texts, footer notice | Box: `/workspace/cards/master-prompt.md` |
+| Card "Little Light" master prompt, layout codes, people guide, official texts (its footer/copyright notice is superseded by Article 4.1) | Box: `/workspace/cards/master-prompt.md` |
 | Painted-card measurements and the card pipeline | Repo: `docs/virtues-plan.md` §4 |
 | Worksheet drawing kit | Repo: `scripts/activities/daily/kit.py`, `sheets.py`, `build_sheets.py` |
 | Prayer worksheets | Repo: `scripts/activities/prayers/` |
@@ -784,7 +788,7 @@ git push -u origin <branch>
 | O-12 | Calendar | Faith Journal follows USCCB (US transfers) vs the crafts plan uses CCCB (Canada) rules | Keep each file consistent with its own source |
 | O-13 | Card title font | Not recorded; must be matched from a crop | Choose among Nunito, Fredoka and Baloo 2; record it |
 | O-14 | Level names in Rosary | Rosary uses Mini, 1 Decade and Full, with 🌱/⭐/🕊️; whether to rename to Little/Growing/Ready is undecided | Keep current |
-| O-15 | Unsourced prayers | St Francis Peace Prayer, Holy Water Prayer, Prayer After Communion | Keep, flagged "Source pending" |
+| O-15 | Unsourced prayers | St Francis Peace Prayer, Holy Water Prayer, Prayer After Communion | **Resolved 2026-11-25:** common prayers are used as-is with no source record or label (Article 3) |
 
 ---
 
@@ -793,3 +797,4 @@ git push -u origin <branch>
 | Version | Date | Change |
 |---|---|---|
 | v1.0 | 2026-11-25 | First edition, compiled from the bot's memory (~280 facts), box planning files, the card master prompt, the prayer-art QC log, and the repo (`origin/main` 147d929). |
+| v1.1 | 2026-11-25 | Owner decisions: common prayers used as-is with no source record; individual Scripture verses need no attribution (no whole-Bible reproduction); AI illustrations allowed and disclosed only on the Sources & copyright page; all source and copyright statements live only on `/sources`. Updated Articles 3, 4.1, 4.2, 4.7 (new), 10.10, 15 and O-15. |

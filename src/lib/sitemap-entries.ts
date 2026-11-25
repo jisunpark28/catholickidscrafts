@@ -63,6 +63,7 @@ const STATIC_PAGES: Array<[path: string, changeFrequency: SitemapEntry["changeFr
   ["/subscribe", "monthly", 0.5],
   ["/privacy", "yearly", 0.3],
   ["/terms", "yearly", 0.3],
+  ["/sources", "yearly", 0.3],
   ["/affiliate-disclosure", "yearly", 0.3],
 ];
 

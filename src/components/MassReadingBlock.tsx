@@ -18,7 +18,7 @@ export function MassReadingBlock({ reading, usccbPageUrl }: Props) {
         <div className="prose-mass mt-5 whitespace-pre-wrap">{reading.text}</div>
       ) : (
         <p className="mt-5 text-[var(--color-muted)]">
-          Full text is on the official USCCB Daily Readings site (copyright). Open the page below
+          Full text is on the official USCCB Daily Readings site. Open the page below
           to read and print for class or home prayer.
         </p>
       )}

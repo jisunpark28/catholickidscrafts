@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { SITE_LITURGY_FOOTER } from "@/lib/site-liturgy-footer";
 
 const LEGAL = [
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms of Service" },
+  { href: "/sources", label: "Sources & Copyright" },
   { href: "/affiliate-disclosure", label: "Affiliate Disclosure" },
 ];
 
-/** Ultra-minimal site footer: brand, legal links, sources and copyright. */
+/** Ultra-minimal site footer: brand and legal links. Sources and copyright live on /sources. */
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-[var(--color-border)] bg-[var(--color-surface)]">
@@ -34,10 +34,6 @@ export function SiteFooter() {
               ))}
             </ul>
           </nav>
-        </div>
-        <div className="mt-8 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)]">
-          <p>{SITE_LITURGY_FOOTER}</p>
-          <p className="mt-2">© 2026 Catholic Kids Crafts. All rights reserved.</p>
         </div>
       </div>
     </footer>
