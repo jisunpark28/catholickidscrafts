@@ -55,7 +55,7 @@ export function EvergreenWorksheetDetail({ page, embedded = false }: { page: Eve
             gospelRef: sheet.gospelRef,
             description,
             abstract: l1.story,
-            keyVerse: sheet.keyVerseDR,
+            keyVerse: isFourParts ? undefined : sheet.keyVerseDR,
             pagePath: path,
             isAccessibleForFree: false,
           }),

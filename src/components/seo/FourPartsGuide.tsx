@@ -1,4 +1,4 @@
-import { LockedSheetPreview } from "@/components/resource/LockedSheetPreview";
+import { LockedPreview } from "@/components/resource/LockedPreview";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { liveResources, MASS_PARTS } from "@/data/mass-parts-curriculum";
@@ -7,31 +7,53 @@ import { getEvergreenPageBySlug } from "@/lib/evergreen-catalog";
 import Link from "next/link";
 
 const h2 = "font-[Georgia,serif] text-xl font-bold text-[#1f2937]";
-const h3 = "mt-4 font-[Georgia,serif] text-lg font-bold text-[#1f2937]";
+const h3 = "font-[Georgia,serif] text-lg font-bold text-[#1f2937]";
 const body = "mt-2 text-base leading-relaxed text-[#374151]";
+const card = "rounded-2xl border border-[#f0d9b8] bg-white p-4";
 
-const SOURCES = [
-  {
-    label: "Catechism of the Catholic Church 1181–1186, 1346, 1374–1379, 1422, 1450–1460, 1677",
-    href: "https://www.vatican.va/content/catechism/en.html",
-  },
-  {
-    label: "General Instruction of the Roman Missal 28, 42–44, 76, and 90",
-    href: "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-2",
-  },
-  {
-    label: "General Instruction of the Roman Missal 142 (a little water in the wine)",
-    href: "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-4",
-  },
-  {
-    label: "General Instruction of the Roman Missal 345–346 (vestment colors)",
-    href: "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
-  },
-  {
-    label: "Mark 16:15, New American Bible, revised edition",
-    href: "https://bible.usccb.org/bible/mark/16",
-  },
+const LAYOUT = [
+  ["Altar", "The altar stands at the center. The sacrifice of the Cross is made present there under the signs of bread and wine."],
+  ["Tabernacle", "The tabernacle holds the consecrated Host. Jesus is really present there, and we can adore him."],
+  ["Ambo", "The ambo is the place for Scripture."],
+  ["Baptismal Font", "The font marks the beginning of life in Christ."],
+  ["Holy Water & Sign of the Cross", "We sign ourselves and remember that baptism began our life in Christ."],
+  ["Bethlehem & the Altar", "Bethlehem means “house of bread.” We welcome the child Jesus with a humble heart, and at the altar he gives himself to us as the Bread of Life."],
 ] as const;
+
+const POSTURE = [
+  "We stand to begin, to hear the Gospel, and to pray together.",
+  "We sit for the readings before the Gospel and for the homily.",
+  "In the United States we kneel after the Holy, Holy, Holy until the Amen, and again at the Lamb of God, unless the bishop has directed otherwise.",
+  "Anyone who cannot kneel bows instead.",
+  "Amen means “yes, this prayer is ours.”",
+];
+
+const VESSELS = [
+  "The priest pours wine and a little water into the chalice. Jesus became one of us, and he shares his life with us.",
+  "He then washes his hands. That is a prayer for a clean heart.",
+  "At the consecration the bread and wine become Christ’s Body and Blood. The Church calls this transubstantiation.",
+  "Christ is present whole and entire under the form of bread, and whole and entire under the form of wine.",
+  "The tabernacle keeps consecrated Hosts for the sick and for adoration outside Mass.",
+];
+
+const COLORS = [
+  "White: Easter, Christmas, and many feasts of the Lord, of Mary, and of saints who were not martyrs.",
+  "Green: Ordinary Time.",
+  "Violet: Advent and Lent.",
+  "Red: Palm Sunday, Good Friday, Pentecost, the Lord’s Passion, the Apostles, and the martyrs.",
+  "Rose may be used on Gaudete Sunday, the Third Sunday of Advent, and on Laetare Sunday, the Fourth Sunday of Lent.",
+  "On solemn days, more precious vestments may be worn. In the United States, gold or silver may be worn then.",
+];
+
+function BulletList({ items }: { items: readonly string[] }) {
+  return (
+    <ul className="mt-3 list-disc space-y-2 pl-5 text-base leading-relaxed text-[#374151]">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
 
 /** Long guide for /catholic-mass-for-kids/four-parts-of-the-mass only. */
 export function FourPartsGuide() {
@@ -39,7 +61,7 @@ export function FourPartsGuide() {
   const cards = page ? relatedCards(page) : [];
 
   return (
-    <article className="mx-auto max-w-3xl rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
+    <article className="mx-auto max-w-6xl rounded-[24px] bg-[#fff3e6] px-6 py-6 lg:px-10 lg:py-8">
       <nav aria-label="Breadcrumb" className="text-sm text-[#6b7280]">
         <Link href="/" className="text-[#335599] hover:underline">
           Home
@@ -54,28 +76,21 @@ export function FourPartsGuide() {
       <header className="mt-3">
         <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{FOUR_PARTS_H1}</h1>
         <p className="mt-2 text-lg font-semibold text-[#4b5563]">
-          Order of the Catholic Mass explained for First Communion prep, family Mass prep, parish CCD, and Grades 1–5 faith formation.
+          Order of the Catholic Mass explained for First Communion prep, family Mass prep, and parish CCD.
         </p>
       </header>
 
-      <p className={body}>
-        The parts of the Mass for kids are easy to follow when we walk through the four parts of the Catholic Mass in order.
-        This guide is for First Communion prep at home, in a parish, or in a classroom. The Liturgy of the Word and the Liturgy
-        of the Eucharist are the two main central parts. They belong together as one act of worship. The Introductory Rites open
-        that worship, and the Concluding Rites send us out.
-      </p>
+      <p className={body}>This page walks through the Mass in order.</p>
+      <p className={body}>It is for First Communion prep at home, in a parish, or in class.</p>
 
       <section className="mt-8" aria-labelledby="four-parts">
         <h2 id="four-parts" className={h2}>
           The 4 Parts of the Catholic Mass in Order
         </h2>
-        <p className={body}>
-          Children learn four parts, in this order. Inside that order, the Word and the Eucharist are the two parts the Church
-          calls the heart of the Mass.
-        </p>
-        <ol className="mt-4 space-y-4">
+        <p className={body}>The Word and the Eucharist are the two main parts, and they are one act of worship.</p>
+        <ol className="mt-4 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2">
           {MASS_PARTS.map((part) => (
-            <li key={part.id} className="rounded-2xl border border-[#f0d9b8] bg-white p-4">
+            <li key={part.id} className={card}>
               <h3 className="m-0 font-[Georgia,serif] text-lg font-bold text-[#1f2937]">
                 {part.order}. {part.title}
               </h3>
@@ -125,91 +140,66 @@ export function FourPartsGuide() {
           Church Layout, Reconciliation, Sacred Vessels &amp; Liturgical Colors
         </h2>
 
-        <h3 className={h3}>Church layout and a ready heart</h3>
-        <p className={body}>
-          A Catholic church is a house of prayer. The altar stands at the center, because that is where the sacrifice of the
-          Cross is made present under the signs of bread and wine. The tabernacle is given a worthy place so we can adore Jesus,
-          really present in the Blessed Sacrament. The priest’s chair shows that he presides and leads the prayer. The ambo is
-          the fitting place for Scripture. The baptismal font, and the holy water font that helps us remember our baptism, mark
-          the door of Christian life.
-        </p>
-        <p className={body}>
-          Holy water and the Sign of the Cross are sacramentals, sacred signs the Church gives us. We sign ourselves in the name
-          of the Trinity and remember that baptism began our life in Christ.
-        </p>
-        <p className={body}>
-          The name Bethlehem is often explained as “house of bread.” That is a meaning of the town’s name, not a sentence of the
-          Catechism. It is a gentle picture for children: the child Jesus, born in a humble place, later gives himself to us as
-          the Bread of Life. We do not need a manger craft to remember that welcome.
-        </p>
+        <h3 className={`${h3} mt-4`}>Church layout and a ready heart</h3>
+        <ul className="mt-3 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2">
+          {LAYOUT.map(([label, text]) => (
+            <li key={label} className={card}>
+              <p className="m-0 text-base leading-relaxed text-[#374151]">
+                <span className="font-bold text-[#1f2937]">{label}. </span>
+                {text}
+              </p>
+            </li>
+          ))}
+        </ul>
 
-        <h3 className={h3}>Sacrament of Penance and Reconciliation</h3>
-        <p className={body}>
-          It is all right if it has been a while. God meets us when we come back. An accidental slip is not the same thing as a
-          choice we knew was wrong. The Church names this sacrament Penance and Reconciliation. Four steps help children
-          remember the way:
-        </p>
-        <ol className="mt-2 list-decimal space-y-2 pl-5 text-base leading-relaxed text-[#374151]">
-          <li>Examination of conscience: we look at our week in the light of the Gospel.</li>
-          <li>Confession and receiving a penance: we tell our sins to the priest, and he gives a penance.</li>
-          <li>Act of Contrition and absolution: we say we are sorry, and the priest absolves us.</li>
-          <li>Completing the penance and living love: we do the penance afterward and try to make peace.</li>
-        </ol>
-        <p className={body}>
-          Penance is given before absolution and completed afterward. Absolution takes the sin away. The penance is how we keep
-          healing the harm sin caused. The priest’s words of pardon at the beginning of Mass are not this sacrament. They do not
-          forgive serious sin the way confession does.
-        </p>
+        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <section className={card} aria-labelledby="penance-title">
+            <h3 id="penance-title" className={h3}>
+              Sacrament of Penance and Reconciliation
+            </h3>
+            <p className={body}>God meets us when we come back, even if it has been a while.</p>
+            <p className={body}>An accidental slip is not the same as a choice we knew was wrong.</p>
+            <ol className="mt-3 list-decimal space-y-2 pl-5 text-base leading-relaxed text-[#374151]">
+              <li>Examination of conscience: we look at our week in the light of the Gospel.</li>
+              <li>Confession and receiving a penance: we tell our sins to the priest, and he gives a penance.</li>
+              <li>Act of Contrition and absolution: we say we are sorry, and the priest absolves us.</li>
+              <li>Completing the penance and living love: we do the penance afterward and try to make peace.</li>
+            </ol>
+            <p className={body}>
+              Penance is given before absolution and completed afterward. The short prayer for mercy at the start of Mass is
+              not confession, and it does not forgive serious sin.
+            </p>
+          </section>
 
-        <h3 className={h3}>Attitude and posture</h3>
-        <p className={body}>
-          Standing, sitting, and kneeling are one prayer we make with our bodies. We stand to begin, to hear the Gospel, and to
-          pray as one people. We sit to listen to the readings before the Gospel and to the homily. In the United States we kneel
-          after the Holy, Holy, Holy until the Amen of the Eucharistic Prayer, and we kneel again at the Lamb of God unless the
-          bishop has directed otherwise. People who cannot kneel bow instead. Silence and singing belong in the celebration too.
-          Amen means “yes, we make this prayer our own.”
-        </p>
+          <section className={card} aria-labelledby="posture-title">
+            <h3 id="posture-title" className={h3}>
+              Attitude and posture
+            </h3>
+            <BulletList items={POSTURE} />
+          </section>
 
-        <h3 className={h3}>Sacred vessels and Eucharistic signs</h3>
-        <p className={body}>
-          At the preparation of the gifts, the priest pours wine and a little water into the chalice. A simple way to tell
-          children is this: Jesus became one of us, and he shares his life with us. The quiet prayer the priest says then is not
-          printed here. Afterward he washes his hands at the side of the altar. That washing is a prayer for a clean heart, not
-          a scrub of dirty fingers only.
-        </p>
-        <p className={body}>
-          At the consecration the bread and wine become Christ’s Body and Blood. The Church calls that change transubstantiation.
-          Christ is present whole and entire under the form of bread alone, and whole and entire under the form of wine. The
-          tabernacle normally keeps consecrated Hosts so Communion can be taken to the sick and so we can adore the Lord outside
-          Mass.
-        </p>
+          <section className={card} aria-labelledby="vessels-title">
+            <h3 id="vessels-title" className={h3}>
+              Sacred vessels and Eucharistic signs
+            </h3>
+            <BulletList items={VESSELS} />
+          </section>
 
-        <h3 className={h3}>Liturgical colors</h3>
-        <p className={body}>
-          Vestment colors help us see the season. White is for Easter, Christmas, and many feasts of the Lord, of Mary, and of
-          saints who were not martyrs. Green is for Ordinary Time. Violet, or purple, is for Advent and Lent. Red is for Palm
-          Sunday, Good Friday, Pentecost, and celebrations of the Lord’s Passion, the Apostles, and the martyrs. Rose may be used
-          on Gaudete Sunday, the Third Sunday of Advent, and on Laetare Sunday, the Fourth Sunday of Lent. On more solemn days,
-          more precious vestments may be worn even if they are not the color of the day. In the United States, gold or silver may
-          be worn on those solemn occasions.
-        </p>
+          <section className={card} aria-labelledby="colors-title">
+            <h3 id="colors-title" className={h3}>
+              Liturgical colors
+            </h3>
+            <BulletList items={COLORS} />
+          </section>
+        </div>
       </section>
 
       <section id="verse-card" className="mt-8 rounded-2xl border border-[#f0d9b8] bg-white p-4" aria-labelledby="verse-card-title">
         <h2 id="verse-card-title" className={h2}>
           A verse to carry home
         </h2>
-        <p className="mt-3 font-[Georgia,serif] text-lg leading-relaxed text-[#1f2937]">
-          “Go into the whole world and proclaim the gospel to every creature.”
-        </p>
+        <p className="mt-3 text-lg leading-relaxed text-[#1f2937]">Jesus sends us to share the good news with the whole world.</p>
         <p className="mt-1 text-sm text-[#6b7280]">Mark 16:15</p>
-        <p className={body}>
-          In kid words: Jesus sends his friends out to share the good news with everyone, not to keep it inside the church
-          building.
-        </p>
-        <p className="mt-3 text-sm text-[#6b7280]">
-          Scripture quote from the New American Bible, revised edition (NABRE).
-        </p>
       </section>
 
       <section id="lesson-guide" className="mt-8" aria-labelledby="lesson-guide-title">
@@ -226,48 +216,67 @@ export function FourPartsGuide() {
           Pew tip: if a child cannot kneel, a deep bow is a real way to adore. Follow the priest or deacon’s direction so the
           whole church prays with one body.
         </p>
-        <p className={body}>
-          Official source line: the two main parts are taught in the Catechism of the Catholic Church, paragraph 1346, and in the
-          General Instruction of the Roman Missal, paragraph 28. The opening and closing rites are part of the same celebration.
-        </p>
       </section>
 
       <section id="worksheet-card" className="mt-8" aria-labelledby="worksheet-card-title">
         <h2 id="worksheet-card-title" className={h2}>
           Print this worksheet
         </h2>
-        <div className="mt-3 max-w-sm">
-          <LockedSheetPreview title="Level 1 and Level 2 worksheets for the four parts of the Mass" />
+        <div className="mt-3 flex flex-col gap-4 rounded-2xl border border-[#f0d9b8] bg-white p-4 md:flex-row md:items-center">
+          <div className="w-full max-w-[220px] shrink-0">
+            <LockedPreview
+              veil="light"
+              href="/subscribe"
+              className="rounded-xl border border-[#ece7e1] bg-white"
+              label="Level 1 and Level 2 worksheets for the four parts of the Mass"
+            >
+              <span className="block aspect-[17/22] overflow-hidden p-[8%]" style={{ filter: "blur(3px)" }}>
+                <span className="mx-auto mb-[12%] block h-5 w-3/4 rounded bg-[#6b7280]" />
+                {[0, 1, 2].map((section) => (
+                  <span key={section} className="mb-[10%] block rounded-lg border border-[#9ca3af] p-[6%]">
+                    <span className="mb-3 block h-3 w-1/2 rounded bg-[#6b7280]" />
+                    {[0, 1, 2, 3].map((line) => (
+                      <span key={line} className="mb-2 block h-2 rounded bg-[#9ca3af]" />
+                    ))}
+                  </span>
+                ))}
+              </span>
+            </LockedPreview>
+          </div>
+          <div>
+            <p className="m-0 text-base leading-relaxed text-[#374151]">
+              Includes both Level 1 and Level 2. Preview and printing are included with Plus.
+            </p>
+            <p className="mt-3">
+              <Link
+                href={printPath(getEvergreenPageBySlug("four-parts-of-the-mass")!, 1, true)}
+                className="inline-flex rounded-full bg-[#2e7d32] px-5 py-2.5 text-sm font-bold text-white no-underline hover:bg-[#256628]"
+              >
+                Print this worksheet
+              </Link>
+            </p>
+          </div>
         </div>
-        <p className={body}>Level 1 and Level 2 are both included. Preview and printing are part of Plus.</p>
-        <p className="mt-3">
-          <Link
-            href={printPath(getEvergreenPageBySlug("four-parts-of-the-mass")!, 1, true)}
-            className="inline-flex rounded-full bg-[#2e7d32] px-5 py-2.5 text-sm font-bold text-white no-underline hover:bg-[#256628]"
-          >
-            Print this worksheet
-          </Link>
-        </p>
       </section>
 
       <section className="mt-8" aria-labelledby="quick-faq">
         <h2 id="quick-faq" className={h2}>
           Quick FAQ
         </h2>
-        <h3 className={h3}>What are the 4 parts of the Catholic Mass in order?</h3>
+        <h3 className={`${h3} mt-4`}>What are the 4 parts of the Catholic Mass in order?</h3>
         <p className={body}>
           Introductory Rites, Liturgy of the Word, Liturgy of the Eucharist, and Concluding Rites. The Word and the Eucharist are
-          the two main central parts, and they form one act of worship.
+          the two main parts, and they form one act of worship.
         </p>
-        <h3 className={h3}>Why does the priest mix a drop of water into the wine and wash his hands at Mass?</h3>
+        <h3 className={`${h3} mt-4`}>Why does the priest mix a drop of water into the wine and wash his hands at Mass?</h3>
         <p className={body}>
           He pours a little water into the wine. We can tell children that Jesus became one of us and shares his life with us.
           He then washes his hands as a prayer that his heart will be clean for the offering.
         </p>
-        <h3 className={h3}>What grades are these worksheets for, and can parents or catechists print them for a class?</h3>
+        <h3 className={`${h3} mt-4`}>Can parents or catechists print Level 1 and Level 2?</h3>
         <p className={body}>
-          Level 1 suits about Grades K–2, and Level 2 suits about Grades 3–5, including First Communion prep. Parents and
-          catechists who have Plus may print them for the children they teach. Preview and printing need Plus.
+          Level 1 and Level 2 are both included, including for First Communion prep. Parents and catechists who have Plus may
+          print them for the children they teach. Preview and printing are included with Plus.
         </p>
       </section>
 
@@ -277,11 +286,11 @@ export function FourPartsGuide() {
             Related picture cards
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-base text-[#374151]">
-            {cards.map((card) => (
-              <li key={card.id}>
-                <span className="font-semibold">{card.title}</span>
+            {cards.map((cardItem) => (
+              <li key={cardItem.id}>
+                <span className="font-semibold">{cardItem.title}</span>
                 {" — "}
-                {card.text}
+                {cardItem.text}
               </li>
             ))}
           </ul>
@@ -300,21 +309,6 @@ export function FourPartsGuide() {
       <div className="mt-10">
         <NewsletterSubscribeForm source="catholic-mass-for-kids" />
       </div>
-
-      <section className="mt-8" aria-labelledby="sources">
-        <h2 id="sources" className="text-sm font-bold uppercase tracking-wide text-[#9a6b3f]">
-          Sources checked for this page
-        </h2>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[#4b5563]">
-          {SOURCES.map((source) => (
-            <li key={source.href}>
-              <a href={source.href} className="text-[#335599] hover:underline">
-                {source.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
     </article>
   );
 }

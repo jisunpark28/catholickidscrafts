@@ -10,6 +10,11 @@ type Props = {
   href?: string | null;
   /** Accessible name of the overlay link. */
   label?: string;
+  /**
+   * `light` keeps the lock and the right-click block, with a thinner white veil and no grey fade,
+   * so a blurred silhouette stays visible. The default matches existing locked sheets.
+   */
+  veil?: "default" | "light";
 };
 
 const block = (e: React.SyntheticEvent) => e.preventDefault();
@@ -19,14 +24,13 @@ const block = (e: React.SyntheticEvent) => e.preventDefault();
  * no right-click / drag / select / copy, and hidden when the page is printed.
  * Deterrent only: the server never sends locked originals (cards use a small blurred preview, print routes redirect).
  */
-export function LockedPreview({ children, className = "", href = "/subscribe", label = "Unlock with Plus" }: Props) {
+export function LockedPreview({ children, className = "", href = "/subscribe", label = "Unlock with Plus", veil = "default" }: Props) {
   const pill = (
     <span className="rounded-full bg-[#1c1c1c]/80 px-3 py-1 text-xs font-bold text-white shadow-sm">
       <span aria-hidden>🔒</span> Plus
     </span>
   );
-  const overlayCls =
-    "absolute inset-0 flex items-center justify-center bg-white/35 no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400]";
+  const overlayCls = `absolute inset-0 flex items-center justify-center no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] ${veil === "light" ? "bg-white/10" : "bg-white/35"}`;
   return (
     <span
       data-plus-locked
@@ -37,7 +41,7 @@ export function LockedPreview({ children, className = "", href = "/subscribe", l
       onCopy={block}
       onCut={block}
     >
-      <span aria-hidden className="pointer-events-none block opacity-60 grayscale">
+      <span aria-hidden className={`pointer-events-none block ${veil === "light" ? "" : "opacity-60 grayscale"}`}>
         {children}
       </span>
       {href ? (

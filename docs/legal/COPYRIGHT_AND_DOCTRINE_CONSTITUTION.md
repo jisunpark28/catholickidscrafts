@@ -22,9 +22,9 @@ alwaysApply: true
 | Type | Allowed | Not allowed |
 | :--- | :--- | :--- |
 | Scripture | Individual verse quotations in their exact wording, verse reference, our own explanation, a link to the official source | Reproducing a whole translation, whole books, or long passages |
-| Catechism | Paragraph number, our own explanation | Copying Catechism sentences |
+| Catechism | Our own explanation on the page. Paragraph numbers only in `sources.md` | Copying Catechism sentences, or showing paragraph numbers on a page |
 | Common traditional prayers (for example the Sign of the Cross, Our Father, Hail Mary, Glory Be, the Creeds, the Act of Contrition, the Confiteor) | The exact official wording, as-is | Altering, approximating, or inventing the wording |
-| Other liturgical texts (responses, Mass instructions) | Paraphrase, paragraph number | Copying translated texts verbatim |
+| Other liturgical texts (responses, Mass instructions) | Paraphrase on the page. Paragraph numbers only in `sources.md` | Copying translated texts verbatim, or showing paragraph numbers on a page |
 
 1. Anything in the "Not allowed" column is an exception that requires **owner approval and a license basis recorded in `sources.md`**. If an exception is approved, use the owner-supplied notice **without changing a single character**, and display it only on the Sources & copyright page (Section 5).
 2. To use text from a public-domain translation, `sources.md` must record the translation, the basis for public-domain status, and `verified: true` set by the owner.
@@ -33,6 +33,9 @@ alwaysApply: true
 5. List every place where a short liturgical response or phrase is used in `sources.md`, and update the list whenever a new place is added.
 6. **Do not expand existing features.** Scripture reading and typing, Daily Mass typing, and Sunday worksheets already display some text. Do not modify it, and do not replicate the same approach on new pages or features. Its sources and terms of use are `OPEN`.
 7. Common traditional prayers and individual Scripture verse quotations need no record in `sources.md` and no source, citation, or copyright line beside them.
+8. **No citation numbers or translation credits in user-facing text.** Do not show CCC numbers, GIRM numbers, “Official source line,” or a translation name. Check teaching against the CCC and the GIRM, and record those numbers only in `docs/legal/sources.md`. A verse on a page is public-domain English or our own kid-friendly modern English, with only the reference, such as Mark 16:15. A public-domain quotation still needs `sources.md` and `verified: true` set by the owner before it is displayed. Our own kid English is an explanation. Do not present it as a translation. Existing Bible reading, Daily Mass typing, Sunday sheets, and card verses stay as they are.
+9. **No prompt or meta lines in the UI.** Never show a sentence that describes the prompt or a guardrail, such as “There is no price on this page.”, “Official source line:”, or “not a sentence of the Catechism.”
+10. **Concise and scannable.** Use short sentences, short bullets, and clear subheads. Do not repeat the same point in the next section. Split a dense paragraph of three lines or more into a list. Use natural modern English. Do not show age or grade text.
 
 ## 3. Doctrinal accuracy
 
@@ -125,3 +128,4 @@ Child-friendly simplification often introduces errors in these areas. Treat them
 - owner decision 2026-11-25: no NABRE notice.
 - 2026-11-25 owner decision: the Evangelizo.org liturgical calendar credit lives only on the Sources & copyright page; the footer line is removed.
 - 2026-11-25 owner decision: the "Sources:" links under the saint Fact Box are removed; the source data is left in place.
+- 2026-11-27 owner decision: no citation numbers or translation credits in user-facing text; no prompt or meta guardrail sentences in the UI; copy stays concise and scannable, with no age or grade text. Paragraph numbers stay in `sources.md`. Amended Section 2.
