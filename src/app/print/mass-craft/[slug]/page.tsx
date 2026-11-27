@@ -34,6 +34,7 @@ export default async function MassCraftPrintPage({ params, searchParams }: Props
   const [{ slug }, query] = await Promise.all([params, searchParams]);
   if (slug !== SLUG) notFound();
   const level = parseLevelParam(query.level);
+  const ink = query.ink === "color" ? "color" : "line";
   await requireSignInForPage(pathWithQuery(`/print/mass-craft/${slug}`, query));
   return (
     <div style={{ background: "#fff", minHeight: "100vh" }}>
@@ -45,9 +46,14 @@ export default async function MassCraftPrintPage({ params, searchParams }: Props
         usccbUrl=""
         autoPrint={query.autoprint === "1"}
         basePath={`/print/mass-craft/${slug}`}
+        extraQuery={ink === "color" ? "ink=color" : undefined}
         backHref="/catholic-mass-for-kids/holy-water-blessing-hanger"
       />
-      <HolyWaterHanger level={level} />
+      <div className="gs-screen-only" style={{ display: "flex", gap: 8, padding: "8px 16px" }}>
+        <a href={`?level=${level}`} style={{ fontWeight: ink === "line" ? 700 : 400 }}>Coloring</a>
+        <a href={`?level=${level}&ink=color`} style={{ fontWeight: ink === "color" ? 700 : 400 }}>Color</a>
+      </div>
+      <HolyWaterHanger level={level} ink={ink} />
     </div>
   );
 }

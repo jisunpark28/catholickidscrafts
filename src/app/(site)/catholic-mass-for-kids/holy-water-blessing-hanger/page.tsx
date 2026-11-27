@@ -49,16 +49,17 @@ export default function HolyWaterBlessingHangerPage() {
           the Cross.
         </p>
         <p className="mt-2 text-base leading-relaxed text-[#374151]">
-          Level 1 and Level 2 are both on this craft. Sign in to view and print them.
+          Level 1 and Level 2 each have a coloring page and a color page. Sign in to view and print them.
         </p>
         <div className="mt-4 max-w-[220px]">
           <LockedPreview veil="light" href={PRINT} badge="Sign in" label="Sign in to print the holy water blessing hanger">
-            <span className="block aspect-[17/22] overflow-hidden p-[8%]" style={{ filter: "blur(3px)" }}>
-              <span className="mx-auto mb-[12%] block h-5 w-3/4 rounded bg-[#6b7280]" />
-              <span className="mb-[10%] block h-24 rounded-lg bg-[#d1d5db]" />
-              <span className="mb-2 block h-2 rounded bg-[#9ca3af]" />
-              <span className="mb-2 block h-2 w-5/6 rounded bg-[#9ca3af]" />
-              <span className="block h-2 w-2/3 rounded bg-[#9ca3af]" />
+            <span className="block aspect-[17/22] overflow-hidden bg-white" style={{ filter: "blur(6px)" }} aria-hidden>
+              <svg viewBox="0 0 80 110" className="h-full w-full">
+                <rect x="18" y="8" width="44" height="94" rx="8" fill="none" stroke="#d1d5db" strokeWidth="2" />
+                <circle cx="40" cy="28" r="12" fill="#e8f4fb" stroke="#9ec5db" />
+                <path d="M40 48 v16 M32 56 h16" stroke="#e6c15a" strokeWidth="5" strokeLinecap="round" />
+                <path d="M40 70 c-6 0 -8 6 -8 10 c0 6 8 12 8 12 c0 0 8 -6 8 -12 c0 -4 -2 -10 -8 -10 z" fill="#7eb6d6" />
+              </svg>
             </span>
           </LockedPreview>
         </div>
