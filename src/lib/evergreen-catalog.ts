@@ -86,7 +86,7 @@ export function publicPath(page: EvergreenPage): string {
   return `${hubPath(page.kind)}/${page.slug}`;
 }
 
-/** Free print view (not sitemap-listed). */
+/** Plus print view (not sitemap-listed). Signed-out and free accounts are turned away on the server. */
 export function printPath(page: EvergreenPage, level: 1 | 2 = 1, autoprint = false): string {
   return `/print/evergreen/${page.slug}?level=${level}${autoprint ? "&autoprint=1" : ""}`;
 }

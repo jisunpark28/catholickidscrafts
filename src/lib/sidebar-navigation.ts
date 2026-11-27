@@ -20,11 +20,11 @@ export function sidebarItemIsCurrent(id: SidebarIcon, pathname: string, hash = "
   const within = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
   switch (id) {
     case "printables": return within("/resource");
-    case "mass": return within("/daily-mass") || within("/mass");
+    case "mass": return within("/daily-mass") || within("/mass") || within("/catholic-mass-for-kids");
     case "play": return within("/play");
     case "bible": return within("/bible") || within("/moms-bible") || within("/bible-verses-for-kids") || pathname === "/gospel";
     case "questions": return within("/qa-cards");
-    case "prayer": return within("/prayers") || within("/liturgy") || within("/catholic-mass-for-kids") || within("/catholic-virtue-challenge");
+    case "prayer": return within("/prayers") || within("/liturgy") || within("/catholic-virtue-challenge");
     case "virtues": return within("/virtues");
     case "saints": return within("/catholic-saints-for-kids");
     case "binder": return false; // Do not highlight or invent a route for an unimplemented feature.

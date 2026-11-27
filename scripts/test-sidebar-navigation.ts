@@ -56,6 +56,7 @@ async function main() {
   const routes = [
     ["/resource", "", "printables"], ["/resource/example", "", "printables"],
     ["/daily-mass", "", "mass"], ["/mass/participation", "", "mass"],
+    ["/catholic-mass-for-kids", "", "mass"], ["/catholic-mass-for-kids/four-parts-of-the-mass", "", "mass"],
     ["/play", "", "play"], ["/play/ten-commandments", "", "play"],
     ["/bible/genesis", "", "bible"], ["/bible/read/matthew/5", "", "bible"], ["/moms-bible/situations", "", "bible"],
     ["/qa-cards", "", "questions"], ["/qa-cards", "#advent", "questions"],

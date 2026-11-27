@@ -1,8 +1,9 @@
-import { PageShell } from "@/components/PageShell";
+import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   evergreenPages,
+  evergreenSeoTitle,
   getEvergreenSheet,
   MASS_FOR_KIDS_HUB,
   printPath,
@@ -24,13 +25,13 @@ export const metadata: Metadata = pageMetadata({
 export default function MassForKidsHubPage() {
   const pages = evergreenPages("mass");
   return (
-    <PageShell>
+    <HomePdfShell groups={[]} printHideNav contentClassName="bg-[#fff8f0]">
       <JsonLd
         nodes={[
           breadcrumbNode([{ name: "Catholic Mass for Kids", path: MASS_FOR_KIDS_HUB }]),
           itemListNode(
             "Order of the Mass worksheets",
-            pages.map((p) => ({ name: `${p.name} Mass Worksheet`, path: publicPath(p) })),
+            pages.map((p) => ({ name: evergreenSeoTitle(p), path: publicPath(p) })),
           ),
         ]}
       />
@@ -82,6 +83,6 @@ export default function MassForKidsHubPage() {
           .
         </p>
       </article>
-    </PageShell>
+    </HomePdfShell>
   );
 }

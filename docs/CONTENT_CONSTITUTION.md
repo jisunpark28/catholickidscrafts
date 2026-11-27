@@ -129,7 +129,7 @@
 
 2.9 **Catechism-based content.**
 - Q&A and liturgy answers are kid-level, rewritten originally, and based on the CCC and its Compendium.
-- Do not show CCC or Compendium numbers on the pages. Keep source references in planning documents and the admin-only fields.
+- Do not show CCC or Compendium numbers on the pages. Keep source references in planning documents and the admin-only fields. The same rule covers GIRM numbers and translation credits (see 5.11).
 - Custom (catechism) sheets reference only the Catechism of the Catholic Church.
 
 ---
@@ -217,6 +217,16 @@
 - Pages without a unique Fact Box are `noindex,follow` and stay out of the sitemap.
 
 5.10 **No repeated wording.** Never repeat the same sentence in both a quote box and a description on one page.
+
+5.11 **No citation numbers or translation credits in user-facing text.** Do not show CCC numbers, GIRM numbers, “Official source line,” or a translation name. Check teaching against the CCC and the GIRM, and record those numbers only in `docs/legal/sources.md`. A verse on a page is public-domain English or our own kid-friendly modern English, with only the reference, such as Mark 16:15. A public-domain quotation still needs `sources.md` and `verified: true` set by the owner before it is displayed. Our own kid English is an explanation. Do not present it as a translation. Existing Bible reading, Daily Mass typing, Sunday sheets, and card verses stay as they are.
+
+5.12 **No prompt or meta lines in the UI.** Never show a sentence that describes the prompt or a guardrail, such as “There is no price on this page.”, “Official source line:”, or “not a sentence of the Catechism.”
+
+5.13 **Concise and scannable.** Use short sentences, short bullets, and clear subheads. Do not repeat the same point in the next section. Split a dense paragraph of three lines or more into a list. Use natural modern English. Article 5.8 still forbids age or grade text.
+
+5.14 **No school grade labels.** Do not write Grades K–2, 3–5, or 1–5 in body copy, cards, FAQ, or metadata. Use Level 1 and Level 2. If an explanation is needed, say younger children or older children.
+
+5.15 **No country or region wording in body copy.** Do not write “In the United States,” “U.S.,” or “American.” Phrase a local liturgical custom universally, for example “following our parish custom.”
 
 ---
 
@@ -798,3 +808,5 @@ git push -u origin <branch>
 |---|---|---|
 | v1.0 | 2026-11-25 | First edition, compiled from the bot's memory (~280 facts), box planning files, the card master prompt, the prayer-art QC log, and the repo (`origin/main` 147d929). |
 | v1.1 | 2026-11-25 | Owner decisions: common prayers used as-is with no source record; individual Scripture verses need no attribution (no whole-Bible reproduction); AI illustrations allowed and disclosed only on the Sources & copyright page; all source and copyright statements live only on `/sources`. Updated Articles 3, 4.1, 4.2, 4.7 (new), 10.10, 15 and O-15. |
+| v1.2 | 2026-11-27 | Owner decision: no citation numbers or translation credits in user-facing text; no prompt or meta guardrail sentences in the UI; copy stays concise and scannable. Article 5.8 still forbids age or grade text. Added 5.11–5.13 and a cross-reference in 2.9. |
+| v1.3 | 2026-11-27 | Owner decision: no school grade labels in body, cards, FAQ, or metadata; no country or region wording in body copy. Added 5.14 and 5.15. |
