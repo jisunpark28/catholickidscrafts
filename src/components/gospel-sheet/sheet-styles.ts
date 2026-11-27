@@ -68,9 +68,9 @@ export const GOSPEL_SHEET_CSS = `
 .gs.gs-mass.gs-l2 .gs-act-order-chip{padding:1px 8px;font-size:14px;line-height:1.2}
 .gs.gs-mass.gs-l2 .gs-act-order .gs-act-num{width:18px;height:18px}
 .gs.gs-mass .gs-favorite p{margin-top:4px}
-.gs.gs-mass .gs-act-match{display:grid;grid-template-columns:1fr 1fr;column-gap:56px;align-items:start}
-.gs.gs-mass .gs-act-mleft:after{right:-13px}
-.gs.gs-mass .gs-act-mright:before{left:-13px}
+.gs.gs-mass .gs-act-match{display:grid;grid-template-columns:36% 36%;justify-content:space-between;column-gap:0;align-items:start;width:100%}
+.gs.gs-mass .gs-act-mleft:after{right:2px}
+.gs.gs-mass .gs-act-mright:before{left:2px}
 .gs.gs-mass .gs-act-match>div{display:grid;grid-template-rows:subgrid;grid-row:1 / span 4;gap:6px;width:auto;justify-content:stretch}
 .gs.gs-mass .gs-act-mitem{min-height:40px;height:100%;display:flex;align-items:center;box-sizing:border-box}
 .gs.gs-mass .gs-note{border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.45}
