@@ -123,9 +123,14 @@ export function FourPartsGuide() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className="inline-flex rounded-full border border-[#c9773a] bg-[#fff8f0] px-3 py-1 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-white"
+                        className="inline-flex items-center gap-2 rounded-full border border-[#c9773a] bg-[#fff8f0] px-3 py-1 text-sm font-semibold text-[#9a4f1c] no-underline hover:bg-white"
                       >
                         {item.label}
+                        {item.tier === "signin" ? (
+                          <span className="rounded-full bg-[#e8f5e9] px-2 py-0.5 text-xs font-bold text-[#256628]">
+                            Sign in to print
+                          </span>
+                        ) : null}
                       </Link>
                     </li>
                   ))}

@@ -15,6 +15,8 @@ type Props = {
    * so a blurred silhouette stays visible. The default matches existing locked sheets.
    */
   veil?: "default" | "light";
+  /** Overlay label. Existing Plus previews keep “Plus”. */
+  badge?: string;
 };
 
 const block = (e: React.SyntheticEvent) => e.preventDefault();
@@ -24,10 +26,17 @@ const block = (e: React.SyntheticEvent) => e.preventDefault();
  * no right-click / drag / select / copy, and hidden when the page is printed.
  * Deterrent only: the server never sends locked originals (cards use a small blurred preview, print routes redirect).
  */
-export function LockedPreview({ children, className = "", href = "/subscribe", label = "Unlock with Plus", veil = "default" }: Props) {
+export function LockedPreview({
+  children,
+  className = "",
+  href = "/subscribe",
+  label = "Unlock with Plus",
+  veil = "default",
+  badge = "Plus",
+}: Props) {
   const pill = (
     <span className="rounded-full bg-[#1c1c1c]/80 px-3 py-1 text-xs font-bold text-white shadow-sm">
-      <span aria-hidden>🔒</span> Plus
+      <span aria-hidden>🔒</span> {badge}
     </span>
   );
   const overlayCls = `absolute inset-0 flex items-center justify-center no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] ${veil === "light" ? "bg-white/10" : "bg-white/35"}`;
