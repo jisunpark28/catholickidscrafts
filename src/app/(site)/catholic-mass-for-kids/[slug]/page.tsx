@@ -1,8 +1,10 @@
+import { HomePdfShell } from "@/components/home/HomePdfShell";
 import { EvergreenWorksheetDetail } from "@/components/seo/EvergreenWorksheetDetail";
 import {
   evergreenDescription,
   evergreenPages,
   evergreenSeoTitle,
+  FOUR_PARTS_DESCRIPTION,
   getEvergreenPageBySlug,
   getEvergreenSheet,
   publicPath,
@@ -31,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return pageMetadata({
     title: evergreenSeoTitle(page),
     absoluteTitle: true,
-    description: evergreenDescription(page, sheet),
+    description: page.slug === "four-parts-of-the-mass" ? FOUR_PARTS_DESCRIPTION : evergreenDescription(page, sheet),
     path: publicPath(page),
   });
 }
@@ -39,5 +41,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const page = resolve((await params).slug);
   if (!page) notFound();
-  return <EvergreenWorksheetDetail page={page} />;
+  return (
+    <HomePdfShell groups={[]} printHideNav contentClassName="bg-[#fff8f0]">
+      <EvergreenWorksheetDetail page={page} embedded />
+    </HomePdfShell>
+  );
 }

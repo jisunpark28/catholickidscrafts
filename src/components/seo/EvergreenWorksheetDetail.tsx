@@ -1,11 +1,14 @@
 import { PageShell } from "@/components/PageShell";
 import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
+import { FourPartsGuide } from "@/components/seo/FourPartsGuide";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import {
   evergreenDescription,
+  evergreenH1,
   evergreenSeoTitle,
+  FOUR_PARTS_DESCRIPTION,
   getEvergreenSheet,
   hubPath,
   printPath,
@@ -22,14 +25,15 @@ const p = "mt-2 text-base leading-relaxed text-[#374151]";
 const link = "font-semibold text-[#335599] hover:underline";
 
 /** Public SEO page for one evergreen worksheet (Mass order or Family Virtue Challenge). */
-export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
+export function EvergreenWorksheetDetail({ page, embedded = false }: { page: EvergreenPage; embedded?: boolean }) {
   const sheet = getEvergreenSheet(page.key);
   if (!sheet) notFound();
   const isVirtue = page.kind === "virtue";
+  const isFourParts = page.slug === "four-parts-of-the-mass";
   const hubName = isVirtue ? "Catholic Virtue Challenge" : "Catholic Mass for Kids";
   const path = publicPath(page);
   const title = evergreenSeoTitle(page);
-  const description = evergreenDescription(page, sheet);
+  const description = isFourParts ? FOUR_PARTS_DESCRIPTION : evergreenDescription(page, sheet);
   const l1 = sheet.levels.level1;
   const l2 = sheet.levels.level2;
   const missions = l1.activity?.type === "checklist" ? l1.activity.items : [];
@@ -39,7 +43,7 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
   const cards = relatedCards(page);
 
   return (
-    <PageShell>
+    <Shell embedded={embedded}>
       <JsonLd
         nodes={[
           breadcrumbNode([
@@ -53,12 +57,12 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
             abstract: l1.story,
             keyVerse: sheet.keyVerseDR,
             pagePath: path,
-            isAccessibleForFree: true,
+            isAccessibleForFree: false,
           }),
         ]}
       />
 
-      <article className="rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
+      {isFourParts ? <FourPartsGuide /> : <article className="rounded-[24px] bg-[#fff3e6] p-4 sm:p-6 lg:p-8">
         <nav aria-label="Breadcrumb" className="text-sm text-[#6b7280]">
           <Link href="/" className="text-[#335599] hover:underline">
             Home
@@ -72,7 +76,7 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
 
         <header className="mt-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{title}</h1>
+            <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{evergreenH1(page)}</h1>
             {!isVirtue ? <ShareToClassroomButton /> : null}
           </div>
           <p className="mt-2 text-lg font-semibold text-[#4b5563]">
@@ -203,7 +207,11 @@ export function EvergreenWorksheetDetail({ page }: { page: EvergreenPage }) {
             ← All {isVirtue ? "virtue challenge" : "Mass"} worksheets
           </Link>
         </p>
-      </article>
-    </PageShell>
+      </article>}
+    </Shell>
   );
+}
+
+function Shell({ embedded, children }: { embedded: boolean; children: React.ReactNode }) {
+  return embedded ? children : <PageShell>{children}</PageShell>;
 }
