@@ -48,7 +48,6 @@ export default function HolyWaterBlessingHangerPage() {
           Holy water helps us remember our baptism. When we come into church, we touch the holy water and make the Sign of
           the Cross.
         </p>
-        <p className="mt-2 text-base leading-relaxed text-[#374151]">Holy water is not Baptism.</p>
         <p className="mt-2 text-base leading-relaxed text-[#374151]">
           Level 1 and Level 2 are both on this craft. Sign in to view and print them.
         </p>

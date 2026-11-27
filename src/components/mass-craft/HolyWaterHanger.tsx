@@ -1,9 +1,9 @@
 /**
- * Cut-out door hanger. Coordinates are CSS pixels at 96px per inch, so an inch in
- * the SVG is an inch on the letter page when the SVG is not scaled.
- *
- * Doorknob hole: 2.375 in = 60.3 mm, inside 2.25–2.5 in (57–64 mm).
+ * Cut-out door hanger. SVG width and height are set in inches, so the drawing
+ * is not scaled and the hole stays 2.375 in (60.3 mm) on a letter page.
  * Paper left around the hole: 0.85 in above, 0.75 in on each side.
+ * Hanger size: 3.875 in wide. Height is as tall as one letter page allows
+ * once the name line, instructions, and writing lines sit outside the cut.
  */
 export const DOORKNOB_HOLE_IN = 2.375;
 export const DOORKNOB_HOLE_MM = 60.3;
@@ -13,8 +13,7 @@ const HOLE_R = HOLE_D / 2;
 const SIDE_IN = 0.75;
 const TOP_IN = 0.85;
 const HANGER_W = HOLE_D + SIDE_IN * PX_PER_IN * 2;
-const BELOW_HOLE = 2.5 * PX_PER_IN;
-const HANGER_H = TOP_IN * PX_PER_IN + HOLE_D + BELOW_HOLE;
+const HANGER_H = 6.85 * PX_PER_IN;
 
 const COPY = {
   1: {
@@ -23,7 +22,7 @@ const COPY = {
   },
   2: {
     steps:
-      "When we come into church, we touch the holy water. Then we make the Sign of the Cross and remember our baptism. Holy water is not Baptism.",
+      "When we come into church, we touch the holy water. Then we make the Sign of the Cross and remember our baptism.",
     line: "One way I will remember baptism:",
   },
 } as const;
@@ -35,23 +34,34 @@ export function HolyWaterHanger({ level }: { level: 1 | 2 }) {
   const cy = topPaper + HOLE_R;
   const slit = 0.28 * PX_PER_IN;
   const meet = cy - Math.sqrt(HOLE_R * HOLE_R - slit * slit);
+  const holeBottom = cy + HOLE_R;
+  const cross = { top: holeBottom + 22, w: 112, h: 132, thick: 26, barAt: 34 };
+  const drop = { top: cross.top + cross.h + 22, w: 76, h: 96 };
+  const labelY = drop.top + drop.h + 26;
 
   return (
     <article className="hw-page" data-hole-in={DOORKNOB_HOLE_IN} data-hole-mm={DOORKNOB_HOLE_MM}>
       <style>{HANGER_CSS}</style>
-      <header className="hw-margin">
+      <header className="hw-head">
         <p className="hw-title">Holy Water Blessing Hanger</p>
-        <p className="hw-level">Level {level}</p>
-        <p className="hw-steps">{copy.steps}</p>
-        <p className="hw-name">
-          Name: <span className="hw-name-line" />
-        </p>
-        <p className="hw-prompt">{copy.line}</p>
-        <div className="hw-write" />
-        <p className="hw-cut">
-          <Scissors /> Cut
-        </p>
+        <div className="hw-meta">
+          <span>Level {level}</span>
+          <span className="hw-name">
+            Name: <span className="hw-name-line" />
+          </span>
+        </div>
       </header>
+      <p className="hw-steps">{copy.steps}</p>
+      <p className="hw-prompt">{copy.line}</p>
+      {level === 1 ? <TraceWords text={copy.line} /> : (
+        <>
+          <div className="hw-wl" />
+          <div className="hw-wl" />
+        </>
+      )}
+      <p className="hw-cut">
+        <Scissors /> Cut
+      </p>
       <svg
         className="hw-hanger"
         width={`${HANGER_W / PX_PER_IN}in`}
@@ -60,24 +70,74 @@ export function HolyWaterHanger({ level }: { level: 1 | 2 }) {
         role="img"
         aria-label="Door hanger to cut out"
       >
-        <rect x="1" y="1" width={HANGER_W - 2} height={HANGER_H - 2} rx="28" fill="#fff" stroke="#111" strokeWidth="2" strokeDasharray="7 5" />
-        <line x1={cx - slit} y1="0" x2={cx - slit} y2={meet} stroke="#111" strokeWidth="2" strokeDasharray="7 5" />
-        <line x1={cx + slit} y1="0" x2={cx + slit} y2={meet} stroke="#111" strokeWidth="2" strokeDasharray="7 5" />
-        <circle cx={cx} cy={cy} r={HOLE_R} fill="#fff" stroke="#111" strokeWidth="2" strokeDasharray="7 5" />
-        <path d={`M ${cx} ${cy + HOLE_R + 36} v 78 M ${cx - 28} ${cy + HOLE_R + 62} h 56`} fill="none" stroke="#111" strokeWidth="3" strokeLinecap="round" />
-        <path
-          d={`M ${cx} ${cy + HOLE_R + 150} c -28 0 -40 22 -40 40 c 0 36 40 62 40 62 c 0 0 40 -26 40 -62 c 0 -18 -12 -40 -40 -40 z`}
-          fill="none"
+        <rect
+          x="1.5"
+          y="1.5"
+          width={HANGER_W - 3}
+          height={HANGER_H - 3}
+          rx="28"
+          fill="#fff"
           stroke="#111"
-          strokeWidth="2.5"
+          strokeWidth="2"
+          strokeDasharray="7 5"
         />
-        <text x={cx} y={HANGER_H - 28} textAnchor="middle" fontSize="18" fontFamily="Georgia, serif">
+        <line x1={cx - slit} y1="1.5" x2={cx - slit} y2={meet} stroke="#111" strokeWidth="2" strokeDasharray="7 5" />
+        <line x1={cx + slit} y1="1.5" x2={cx + slit} y2={meet} stroke="#111" strokeWidth="2" strokeDasharray="7 5" />
+        <circle cx={cx} cy={cy} r={HOLE_R} fill="#fff" stroke="#111" strokeWidth="2" strokeDasharray="7 5" />
+        <path d={crossPath(cx, cross.top, cross.w, cross.h, cross.thick, cross.barAt)} fill="#fff" stroke="#111" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d={dropPath(cx, drop.top, drop.w, drop.h)} fill="#fff" stroke="#111" strokeWidth="2.5" strokeLinejoin="round" />
+        <text x={cx} y={labelY} textAnchor="middle" fontSize="20" fontWeight="700">
           Holy Water
         </text>
       </svg>
       <footer className="hw-foot">catholickidscrafts.com</footer>
     </article>
   );
+}
+
+function TraceWords({ text }: { text: string }) {
+  return (
+    <div className="hw-trace">
+      <span className="hw-trace-letters">{text}</span>
+    </div>
+  );
+}
+
+function crossPath(cx: number, top: number, w: number, h: number, thick: number, barAt: number) {
+  const left = cx - w / 2;
+  const right = cx + w / 2;
+  const stemL = cx - thick / 2;
+  const stemR = cx + thick / 2;
+  const barTop = top + barAt;
+  const barBot = barTop + thick;
+  const bot = top + h;
+  return [
+    `M ${stemL} ${top}`,
+    `H ${stemR}`,
+    `V ${barTop}`,
+    `H ${right}`,
+    `V ${barBot}`,
+    `H ${stemR}`,
+    `V ${bot}`,
+    `H ${stemL}`,
+    `V ${barBot}`,
+    `H ${left}`,
+    `V ${barTop}`,
+    `H ${stemL}`,
+    `Z`,
+  ].join(" ");
+}
+
+function dropPath(cx: number, top: number, w: number, h: number) {
+  const hw = w / 2;
+  const bottom = top + h;
+  const bulge = top + h * 0.62;
+  return `M ${cx} ${top}
+    C ${cx + hw * 0.12} ${top + h * 0.36}, ${cx + hw} ${top + h * 0.4}, ${cx + hw} ${bulge}
+    C ${cx + hw} ${top + h * 0.88}, ${cx + hw * 0.58} ${bottom}, ${cx} ${bottom}
+    C ${cx - hw * 0.58} ${bottom}, ${cx - hw} ${top + h * 0.88}, ${cx - hw} ${bulge}
+    C ${cx - hw} ${top + h * 0.4}, ${cx - hw * 0.12} ${top + h * 0.36}, ${cx} ${top}
+    Z`;
 }
 
 function Scissors() {
@@ -91,19 +151,24 @@ function Scissors() {
 }
 
 const HANGER_CSS = `
-.hw-page{width:8.5in;height:10.2in;margin:0 auto;background:#fff;color:#111;font-family:Georgia,"Times New Roman",serif;display:flex;flex-direction:column;align-items:center;box-sizing:border-box;padding:0.35in 0.45in 0.25in}
-.hw-margin{width:100%;max-width:7.4in}
-.hw-title{margin:0;font-size:22px;line-height:1.2}
-.hw-level{margin:4px 0 0;font-size:14px}
-.hw-steps{margin:8px 0 0;font-size:16px;line-height:1.45}
-.hw-name{margin:10px 0 0;font-size:16px;display:flex;align-items:flex-end;gap:8px}
-.hw-name-line{display:inline-block;width:2.4in;border-bottom:1px solid #888;height:32px}
-.hw-prompt{margin:8px 0 0;font-size:16px;line-height:1.4}
-.hw-write{height:32px;border-bottom:1px solid #888;margin-top:4px}
-.hw-cut{margin:10px 0 6px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px}
+.hw-page{width:8.5in;margin:0 auto;background:#fff;color:#111;font-family:"Comic Sans MS","Chalkboard SE","Trebuchet MS",sans-serif;display:flex;flex-direction:column;align-items:center;box-sizing:border-box;padding:0.22in 0.42in 0.14in}
+.hw-head{width:100%;border-bottom:1px solid #888;padding-bottom:4px;text-align:center}
+.hw-title{margin:0;font-size:26px;font-weight:700;line-height:1.15}
+.hw-meta{margin-top:2px;display:flex;justify-content:space-between;align-items:flex-end;font-size:14px;font-weight:700}
+.hw-name{display:inline-flex;align-items:flex-end;gap:6px}
+.hw-name-line{display:inline-block;width:9rem;height:32px;border-bottom:1px solid #888}
+.hw-steps{width:100%;margin:8px 0 0;border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:15px;line-height:1.4;text-align:center;box-sizing:border-box}
+.hw-prompt{width:100%;margin:8px 0 0;font-size:16px;font-weight:700;line-height:1.3}
+.hw-wl{width:100%;height:32px;border-bottom:1px solid #888;box-sizing:border-box}
+.hw-trace{width:100%;position:relative;margin:2px 0 10px}
+.hw-trace-letters{display:block;position:relative;font-size:46px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:1.15px #888;text-box-trim:trim-both;text-box-edge:cap alphabetic;border-bottom:1px solid #888}
+.hw-trace-letters::before{content:"";position:absolute;left:0;right:0;top:0;border-top:1px solid #888}
+.hw-trace-letters::after{content:"";position:absolute;left:0;right:0;bottom:1ex;border-bottom:1px dashed #888}
+.hw-cut{margin:6px 0 2px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:700}
 .hw-hanger{display:block}
-.hw-foot{margin-top:auto;font-size:12px;color:#444}
+.hw-hanger text{font-family:"Comic Sans MS","Chalkboard SE","Trebuchet MS",sans-serif;fill:#111}
+.hw-foot{width:100%;margin-top:6px;border-top:1px solid #888;padding-top:3px;text-align:center;font-size:12px;color:#444}
 @media print{
-  .hw-page{width:auto;height:auto;max-height:100%;margin:0;box-shadow:none}
+  .hw-page{width:auto;margin:0}
 }
 `;
