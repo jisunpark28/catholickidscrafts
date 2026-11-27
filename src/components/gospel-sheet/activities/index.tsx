@@ -265,7 +265,7 @@ export function ActivityBlock({
         <div className="gs-ph gs-ph-heart">{artFile}</div>
       ) : null}
       {intro ? (
-        <div data-sheet-field="actIntro" style={{ fontSize: level === 1 ? 15 : 13, ...hide }}>
+        <div className="gs-act-intro" data-sheet-field="actIntro" style={{ fontSize: level === 1 ? 15 : 13, ...hide }}>
           {intro}
         </div>
       ) : null}

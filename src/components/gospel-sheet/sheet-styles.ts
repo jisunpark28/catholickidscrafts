@@ -43,7 +43,7 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-ph-heart{align-self:flex-end;padding:1px 8px}
 .gs .gs-ph-icons{display:flex;gap:10px;justify-content:center}
 .gs .gs-ph-icon{width:.65in;height:.65in;font-size:8px}
-.gs.gs-mass .gs-page{width:8.5in;height:11in;margin:0 auto;padding:12px 14px;gap:14px;box-shadow:none}
+.gs.gs-mass .gs-page{width:8.5in;height:11in;margin:0 auto;padding:8px 14px;gap:14px;box-shadow:none}
 .gs.gs-mass header{border-bottom:1px solid #888;padding-bottom:4px}
 .gs.gs-mass .gs-title{font-size:22px}
 .gs.gs-mass .gs-meta{font-size:12px;line-height:1.45}
@@ -56,9 +56,22 @@ export const GOSPEL_SHEET_CSS = `
 .gs.gs-mass .gs-story p:last-child{margin-bottom:0}
 .gs.gs-mass .gs-q,.gs.gs-mass .gs-chk,.gs.gs-mass .gs-prayer,.gs.gs-mass .gs-copy,.gs.gs-mass .gs-favorite p{font-size:12px;line-height:1.4}
 .gs.gs-mass .gs-wl{height:32px;border-bottom:1px dotted #888}
-.gs.gs-mass .gs-trace-guide{display:flex;flex-direction:column}
-.gs.gs-mass .gs-trace-solid,.gs.gs-mass .gs-trace-mid{display:flex;align-items:flex-end;height:32px;border-bottom:1px solid #888}
-.gs.gs-mass .gs-trace-mid{border-bottom-style:dashed;font-size:16px;line-height:1;color:transparent;-webkit-text-stroke:1px #888;font-weight:700}
+.gs.gs-mass .gs-name-line{display:inline-block;width:9rem;height:1.15em;border-bottom:1px solid #6b7280;vertical-align:baseline}
+.gs.gs-mass .gs-trace-guide{position:relative;margin:2px 0 14px}
+.gs.gs-mass .gs-trace-letters{display:block;position:relative;font-size:42px;font-weight:700;line-height:1;white-space:nowrap;color:transparent;-webkit-text-stroke:1.15px #888;text-box-trim:trim-both;text-box-edge:cap alphabetic;border-bottom:1px solid #888}
+.gs.gs-mass .gs-trace-letters::before{content:"";position:absolute;left:0;right:0;top:0;border-top:1px solid #888}
+.gs.gs-mass .gs-trace-letters::after{content:"";position:absolute;left:0;right:0;bottom:1ex;border-bottom:1px dashed #888}
+.gs.gs-mass .gs-act-t-wordorder .gs-act-intro{margin-bottom:12px}
+.gs.gs-mass .gs-act-order{display:grid;grid-template-columns:1fr 1fr;gap:10px;justify-content:stretch;justify-items:stretch;align-items:stretch;text-align:left}
+.gs.gs-mass .gs-act-order-chip{display:flex;width:100%;box-sizing:border-box;justify-content:flex-start;text-align:left;align-items:center;gap:8px}
+.gs.gs-mass .gs-act-t-wordorder>:last-child{justify-content:flex-start!important;gap:6px}
+.gs.gs-mass .gs-act-order .gs-act-num{width:22px;height:22px}
+.gs.gs-mass.gs-l2 .gs-act-order-chip{padding:1px 8px;font-size:14px;line-height:1.2}
+.gs.gs-mass.gs-l2 .gs-act-order .gs-act-num{width:18px;height:18px}
+.gs.gs-mass .gs-favorite p{margin-top:4px}
+.gs.gs-mass .gs-act-match{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;align-items:start}
+.gs.gs-mass .gs-act-match>div{display:grid;grid-template-rows:subgrid;grid-row:1 / span 4;gap:8px;width:auto;justify-content:stretch}
+.gs.gs-mass .gs-act-mitem{min-height:40px;height:100%;display:flex;align-items:center;box-sizing:border-box}
 .gs.gs-mass .gs-note{border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.45}
 .gs.gs-mass .gs-note-title{margin:0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
 .gs.gs-mass .gs-note ul{margin:2px 0;padding-left:16px}
@@ -92,6 +105,11 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-act-blank{display:inline-block;border-bottom:2px solid #111;height:1em;margin:0 4px;vertical-align:baseline}
 .gs .gs-act-bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;font-size:15px}
 .gs .gs-act-chip{border:2px solid #111;border-radius:999px;padding:3px 12px;font-size:15px}
+.gs .gs-act-order{gap:12px}
+.gs .gs-act-order-chip{display:inline-flex;align-items:center;gap:8px}
+.gs .gs-act-order .gs-act-num{width:22px;height:22px}
+.gs .gs-act-order-l1{font-size:20px}
+.gs .gs-act-order-l2{font-size:15px}
 .gs .gs-act-seq1{display:flex;gap:10px;padding:10px 0 0 8px}
 .gs .gs-act-frame{flex:1;display:flex;flex-direction:column;border:2px solid #111;border-radius:10px;padding:6px;position:relative;min-height:0}
 .gs .gs-act-frame p{margin:4px 0 0;font-size:11.5px;line-height:1.25}
@@ -128,7 +146,7 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-act-table th,.gs .gs-act-table td{border:1.5px solid #111;text-align:center;padding:2px 4px;font-size:14px}
 @media print{
   .gs-page{margin:0;box-shadow:none;padding:0;width:auto;height:9.95in}
-  .gs.gs-mass .gs-page{width:auto;height:100%;margin:0;padding:12px 14px;gap:14px;box-shadow:none;overflow:hidden}
+  .gs.gs-mass .gs-page{width:auto;height:100%;margin:0;padding:8px 14px;gap:14px;box-shadow:none;overflow:hidden}
   .gs.gs-mass .gs-story p,.gs.gs-l1.gs-mass .gs-story p{font-size:16px;line-height:1.55}
   .gs.gs-l2.gs-mass .gs-story p{font-size:15px}
   .gs.gs-mass .gs-wl{height:32px}

@@ -71,7 +71,7 @@ export function GospelSheet({
           >
             {mass ? (
               <>
-                Name: ____
+                Name: <span className="gs-name-line" />
                 <br />
                 Level {level}
                 <br />
@@ -107,9 +107,7 @@ export function GospelSheet({
             </h2>
             {mass ? (
               <div className="gs-trace-guide" data-sheet-field="keyLine" style={hide}>
-                <span className="gs-trace-solid" />
-                <span className="gs-trace-mid">{c.keyLine}</span>
-                <span className="gs-trace-solid" />
+                <span className="gs-trace-letters">{c.keyLine}</span>
               </div>
             ) : (
               <>
