@@ -57,10 +57,9 @@ export const GOSPEL_SHEET_CSS = `
 .gs.gs-mass .gs-q,.gs.gs-mass .gs-chk,.gs.gs-mass .gs-prayer,.gs.gs-mass .gs-copy,.gs.gs-mass .gs-favorite p{font-size:12px;line-height:1.4}
 .gs.gs-mass .gs-wl{height:32px;border-bottom:1px dotted #888}
 .gs.gs-mass .gs-name-line{display:inline-block;width:9rem;height:1.15em;border-bottom:1px solid #6b7280;vertical-align:baseline}
-.gs.gs-mass .gs-trace-guide{position:relative;margin:2px 0 14px}
-.gs.gs-mass .gs-trace-letters{display:block;position:relative;font-size:42px;font-weight:700;line-height:1;white-space:nowrap;color:transparent;-webkit-text-stroke:1.15px #888;text-box-trim:trim-both;text-box-edge:cap alphabetic;border-bottom:1px solid #888}
-.gs.gs-mass .gs-trace-letters::before{content:"";position:absolute;left:0;right:0;top:0;border-top:1px solid #888}
-.gs.gs-mass .gs-trace-letters::after{content:"";position:absolute;left:0;right:0;bottom:1ex;border-bottom:1px dashed #888}
+.gs.gs-mass .gs-trace-guide{margin:1px 0 2px}
+.gs.gs-mass .gs-trace-svg{display:block;overflow:visible}
+.gs.gs-mass .gs-trace-svg text{fill:none;stroke:#888;stroke-width:1.25px;font-family:"Comic Sans MS","Chalkboard SE","Trebuchet MS",sans-serif}
 .gs.gs-mass .gs-act-t-wordorder .gs-act-intro{margin-bottom:12px}
 .gs.gs-mass .gs-act-order{display:grid;grid-template-columns:1fr 1fr;gap:10px;justify-content:stretch;justify-items:stretch;align-items:stretch;text-align:left}
 .gs.gs-mass .gs-act-order-chip{display:flex;width:100%;box-sizing:border-box;justify-content:flex-start;text-align:left;align-items:center;gap:8px}
@@ -69,16 +68,19 @@ export const GOSPEL_SHEET_CSS = `
 .gs.gs-mass.gs-l2 .gs-act-order-chip{padding:1px 8px;font-size:14px;line-height:1.2}
 .gs.gs-mass.gs-l2 .gs-act-order .gs-act-num{width:18px;height:18px}
 .gs.gs-mass .gs-favorite p{margin-top:4px}
-.gs.gs-mass .gs-act-match{display:grid;grid-template-columns:1fr 1fr;column-gap:40px;align-items:start}
-.gs.gs-mass .gs-act-match>div{display:grid;grid-template-rows:subgrid;grid-row:1 / span 4;gap:8px;width:auto;justify-content:stretch}
+.gs.gs-mass .gs-act-match{display:grid;grid-template-columns:1fr 1fr;column-gap:56px;align-items:start}
+.gs.gs-mass .gs-act-mleft:after{right:-13px}
+.gs.gs-mass .gs-act-mright:before{left:-13px}
+.gs.gs-mass .gs-act-match>div{display:grid;grid-template-rows:subgrid;grid-row:1 / span 4;gap:6px;width:auto;justify-content:stretch}
 .gs.gs-mass .gs-act-mitem{min-height:40px;height:100%;display:flex;align-items:center;box-sizing:border-box}
 .gs.gs-mass .gs-note{border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.45}
 .gs.gs-mass .gs-note-title{margin:0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
 .gs.gs-mass .gs-note ul{margin:2px 0;padding-left:16px}
 .gs.gs-mass .gs-note li{margin:0}
 .gs.gs-mass .gs-note-verse{margin:4px 0 0;font-size:13px}
-.gs.gs-mass .gs-drawit{flex:1 1 auto;min-height:40px;display:flex;flex-direction:column}
-.gs.gs-mass .gs-drawit-box{flex:1;min-height:32px;border:1px dashed #888;border-radius:8px}
+.gs.gs-mass .gs-heart,.gs.gs-mass .gs-act>:last-child{flex:0 1 auto}
+.gs.gs-mass .gs-drawit{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.gs.gs-mass .gs-drawit-box{flex:1;min-height:1.2in;border:1px dashed #888;border-radius:8px}
 .gs.gs-mass .gs-favorite p{margin:8px 0 0}
 .gs.gs-mass footer{font-size:12px}
 .gs .gs-act>*:last-child{flex:1;min-height:0}

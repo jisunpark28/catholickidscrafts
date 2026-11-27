@@ -1,5 +1,6 @@
 import type { GospelSheetView, SheetLevelNumber } from "@/lib/gospel-sheet";
 import { ActivityBlock, activityFor } from "./activities";
+import { MassTraceGuide } from "./MassTraceGuide";
 
 export type GospelSheetExtras = {
   notes: readonly string[];
@@ -107,7 +108,7 @@ export function GospelSheet({
             </h2>
             {mass ? (
               <div className="gs-trace-guide" data-sheet-field="keyLine" style={hide}>
-                <span className="gs-trace-letters">{c.keyLine}</span>
+                <MassTraceGuide text={c.keyLine} />
               </div>
             ) : (
               <>
