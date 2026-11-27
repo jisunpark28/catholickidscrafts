@@ -1,6 +1,5 @@
 "use client";
 
-import { ShareToClassroomButton } from "@/components/ShareToClassroomButton";
 import { DailyMassCalendarPanel } from "@/components/daily-mass/DailyMassCalendarPanel";
 import { FaithJournalBanner } from "@/components/daily-mass/FaithJournalBanner";
 import { GospelTypingSection } from "@/components/gospel/GospelTypingSection";
@@ -204,7 +203,12 @@ export function DailyMassView(props: DailyMassViewProps) {
             <button type="button" className={stickerCta} onClick={onGetSticker}>
               {t("daily_mass.page.get_sticker", "Get Sticker!")}
             </button>
-            <ShareToClassroomButton />
+            <Link
+              href="/catholic-mass-for-kids/four-parts-of-the-mass"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[#7f9a5a] bg-[#fdfaf7] px-3 py-1.5 text-sm font-semibold text-[#405329] no-underline hover:bg-[#edf0df] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#d35400] print:hidden"
+            >
+              4 Parts of Mass
+            </Link>
           </div>
           <p className="dm-muted m-0 mt-1 text-[0.9em] text-[#4b5563]">
             {t("daily_mass.page.choose", "Choose a day to see the readings")}
