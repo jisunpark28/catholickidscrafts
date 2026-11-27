@@ -48,6 +48,13 @@ export const MASS_PARTS: readonly MassPartBlock[] = [
         tier: "plus",
         status: "live",
       },
+      {
+        label: "Holy water blessing hanger",
+        kind: "craft",
+        href: "/catholic-mass-for-kids/holy-water-blessing-hanger",
+        tier: "signin",
+        status: "live",
+      },
     ],
   },
   {

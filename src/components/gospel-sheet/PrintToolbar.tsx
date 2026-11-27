@@ -15,6 +15,8 @@ type Props = {
   backHref?: string;
   /** Existing sheet editor (`/resource/edit/…`). Omitted where that editor does not apply. */
   editHref?: string;
+  /** Extra query kept on the level links, such as `ink=color`. */
+  extraQuery?: string;
 };
 
 const btn: React.CSSProperties = {
@@ -28,7 +30,7 @@ const btn: React.CSSProperties = {
 };
 
 /** Screen-only bar on the print page (hidden when printing). */
-export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint, basePath, backHref, editHref }: Props) {
+export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint, basePath, backHref, editHref, extraQuery }: Props) {
   useEffect(() => {
     if (!autoPrint) return;
     const t = window.setTimeout(() => window.print(), 400);
@@ -71,7 +73,7 @@ export function PrintToolbar({ slug, level, gospelRef, usccbUrl, autoPrint, base
       {([1, 2] as const).map((n) => (
         <Link
           key={n}
-          href={`${basePath ?? `/print/${slug}`}?level=${n}`}
+          href={`${basePath ?? `/print/${slug}`}?level=${n}${extraQuery ? `&${extraQuery}` : ""}`}
           replace
           style={n === level ? { ...btn, background: "#111", color: "#fff" } : btn}
           aria-current={n === level ? "page" : undefined}

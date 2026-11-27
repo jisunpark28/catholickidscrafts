@@ -100,10 +100,16 @@ export function buildResourcesSitemap(): MetadataRoute.Sitemap {
     return entry(sundayMassWorksheetPath(key), "weekly", isAdvent ? 0.95 : 0.8);
   });
   const evergreen = EVERGREEN_PAGES.map((p) => entry(publicPath(p), "monthly", 0.75));
+  const holyWaterHanger = entry(
+    "/catholic-mass-for-kids/holy-water-blessing-hanger",
+    "monthly",
+    0.75,
+    new Date("2026-11-27T00:00:00.000Z"),
+  );
   const activities = RESOURCE_ACTIVITIES.map((a) =>
     entry(activityPath(a.slug), "monthly", a.seasons.includes("advent") ? 0.85 : 0.75, ACTIVITIES_CONTENT_DATE),
   );
-  return [...weeks, ...evergreen, ...activities];
+  return [...weeks, ...evergreen, holyWaterHanger, ...activities];
 }
 
 function liturgyEntries(): SitemapEntry[] {
