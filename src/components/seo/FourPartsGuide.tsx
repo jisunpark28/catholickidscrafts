@@ -23,7 +23,7 @@ const LAYOUT = [
 const POSTURE = [
   "We stand to begin, to hear the Gospel, and to pray together.",
   "We sit for the readings before the Gospel and for the homily.",
-  "In the United States we kneel after the Holy, Holy, Holy until the Amen, and again at the Lamb of God, unless the bishop has directed otherwise.",
+  "We kneel during the Eucharistic Prayer and before Communion, following our parish custom.",
   "Anyone who cannot kneel bows instead.",
   "Amen means “yes, this prayer is ours.”",
 ];
@@ -42,7 +42,7 @@ const COLORS = [
   "Violet: Advent and Lent.",
   "Red: Palm Sunday, Good Friday, Pentecost, the Lord’s Passion, the Apostles, and the martyrs.",
   "Rose may be used on Gaudete Sunday, the Third Sunday of Advent, and on Laetare Sunday, the Fourth Sunday of Lent.",
-  "On solemn days, more precious vestments may be worn. In the United States, gold or silver may be worn then.",
+  "On solemn feast days, gold or festive vestments may also be worn.",
 ];
 
 function BulletList({ items }: { items: readonly string[] }) {
@@ -76,12 +76,11 @@ export function FourPartsGuide() {
       <header className="mt-3">
         <h1 className="font-[Georgia,serif] text-3xl font-bold text-[#1f2937] sm:text-4xl">{FOUR_PARTS_H1}</h1>
         <p className="mt-2 text-lg font-semibold text-[#4b5563]">
-          Order of the Catholic Mass explained for First Communion prep, family Mass prep, and parish CCD.
+          Order of the Catholic Mass explained for First Communion prep, family Mass prep, and parish classes.
         </p>
       </header>
 
       <p className={body}>This page walks through the Mass in order.</p>
-      <p className={body}>It is for First Communion prep at home, in a parish, or in class.</p>
 
       <section className="mt-8" aria-labelledby="four-parts">
         <h2 id="four-parts" className={h2}>
@@ -127,9 +126,7 @@ export function FourPartsGuide() {
                     </li>
                   ))}
                 </ul>
-              ) : (
-                <p className="mt-3 text-sm text-[#6b7280]">Worksheet page is not published yet.</p>
-              )}
+              ) : null}
             </li>
           ))}
         </ol>
@@ -275,8 +272,8 @@ export function FourPartsGuide() {
         </p>
         <h3 className={`${h3} mt-4`}>Can parents or catechists print Level 1 and Level 2?</h3>
         <p className={body}>
-          Level 1 and Level 2 are both included, including for First Communion prep. Parents and catechists who have Plus may
-          print them for the children they teach. Preview and printing are included with Plus.
+          Level 1 is for younger children and Level 2 is for older children, including First Communion prep. Preview and
+          printing are included with Plus.
         </p>
       </section>
 

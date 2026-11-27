@@ -75,7 +75,7 @@ export const MASS_PARTS: readonly MassPartBlock[] = [
     order: 3,
     id: "liturgy-of-the-eucharist",
     title: "Liturgy of the Eucharist",
-    posture: "In the United States we kneel after the Holy, Holy, Holy, unless we cannot.",
+    posture: "We kneel in reverence during the Eucharistic Prayer (following our parish custom), or bow if we cannot kneel.",
     kidResponse: "We answer Amen, trusting that the bread and wine have become Jesus' Body and Blood.",
     whatToSpot: ["The altar", "Bread and wine", "The tabernacle"],
     keyThemes: [

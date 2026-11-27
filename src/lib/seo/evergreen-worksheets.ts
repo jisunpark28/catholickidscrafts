@@ -11,7 +11,7 @@ export const FOUR_PARTS_H1 = "Parts of the Mass for Kids: Order of the Mass & Wo
 export const FOUR_PARTS_SEO_TITLE = "Parts of the Mass for Kids: 4-Part Guide & Printable Worksheet";
 
 export const FOUR_PARTS_DESCRIPTION =
-  "Teach the four parts of the Catholic Mass for kids in order — ideal for First Communion prep, family Mass prep, parish CCD, and homeschool. Includes church layout, sacred vessels, liturgical colors, reconciliation, lesson guide, and Level 1 & 2 worksheets.";
+  "Teach the four parts of the Catholic Mass for kids in order — ideal for First Communion prep, family Mass prep, parish classes, and homeschool. Includes church layout, sacred vessels, liturgical colors, reconciliation, lesson guide, and Level 1 & 2 worksheets.";
 
 export function evergreenSeoTitle(page: EvergreenPage): string {
   if (page.slug === "four-parts-of-the-mass") return FOUR_PARTS_SEO_TITLE;

@@ -36,6 +36,8 @@ alwaysApply: true
 8. **No citation numbers or translation credits in user-facing text.** Do not show CCC numbers, GIRM numbers, “Official source line,” or a translation name. Check teaching against the CCC and the GIRM, and record those numbers only in `docs/legal/sources.md`. A verse on a page is public-domain English or our own kid-friendly modern English, with only the reference, such as Mark 16:15. A public-domain quotation still needs `sources.md` and `verified: true` set by the owner before it is displayed. Our own kid English is an explanation. Do not present it as a translation. Existing Bible reading, Daily Mass typing, Sunday sheets, and card verses stay as they are.
 9. **No prompt or meta lines in the UI.** Never show a sentence that describes the prompt or a guardrail, such as “There is no price on this page.”, “Official source line:”, or “not a sentence of the Catechism.”
 10. **Concise and scannable.** Use short sentences, short bullets, and clear subheads. Do not repeat the same point in the next section. Split a dense paragraph of three lines or more into a list. Use natural modern English. Do not show age or grade text.
+11. **No school grade labels.** Do not write Grades K–2, 3–5, or 1–5 in body copy, cards, FAQ, or metadata. Use Level 1 and Level 2. If an explanation is needed, say younger children or older children.
+12. **No country or region wording in body copy.** Do not write “In the United States,” “U.S.,” or “American.” Phrase a local liturgical custom universally, for example “following our parish custom.”
 
 ## 3. Doctrinal accuracy
 
@@ -129,3 +131,4 @@ Child-friendly simplification often introduces errors in these areas. Treat them
 - 2026-11-25 owner decision: the Evangelizo.org liturgical calendar credit lives only on the Sources & copyright page; the footer line is removed.
 - 2026-11-25 owner decision: the "Sources:" links under the saint Fact Box are removed; the source data is left in place.
 - 2026-11-27 owner decision: no citation numbers or translation credits in user-facing text; no prompt or meta guardrail sentences in the UI; copy stays concise and scannable, with no age or grade text. Paragraph numbers stay in `sources.md`. Amended Section 2.
+- 2026-11-27 owner decision: no school grade labels in body, cards, FAQ, or metadata (Level 1 and Level 2, or younger children and older children); no country or region wording in body copy. Amended Section 2.

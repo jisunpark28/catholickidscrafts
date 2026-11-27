@@ -94,6 +94,8 @@ export type WorksheetInput = {
   isAccessibleForFree: boolean;
   /** Future paid worksheet pages: price in the given currency. */
   offer?: { price: number; priceCurrency: string };
+  /** Pass false to omit the shared Kindergarten / Elementary School label on one page. */
+  educationalLevel?: string[] | false;
 };
 
 /** LearningResource for a printable worksheet (rich-result oriented). */
@@ -104,7 +106,9 @@ export function worksheetNode(input: WorksheetInput): JsonLdNode {
     description: input.description,
     abstract: input.abstract,
     learningResourceType: "Worksheet",
-    educationalLevel: ["Kindergarten", "Elementary School"],
+    ...(input.educationalLevel === false
+      ? {}
+      : { educationalLevel: input.educationalLevel ?? ["Kindergarten", "Elementary School"] }),
     about: input.gospelRef
       ? { "@type": "Thing", name: input.gospelRef, ...(input.keyVerse ? { description: input.keyVerse } : {}) }
       : undefined,

@@ -58,6 +58,7 @@ export function EvergreenWorksheetDetail({ page, embedded = false }: { page: Eve
             keyVerse: isFourParts ? undefined : sheet.keyVerseDR,
             pagePath: path,
             isAccessibleForFree: false,
+            educationalLevel: isFourParts ? false : undefined,
           }),
         ]}
       />
