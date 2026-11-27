@@ -14,7 +14,14 @@ import {
 import { pageMetadata } from "@/lib/site-metadata";
 import { pathWithQuery } from "@/lib/sign-in-callback";
 import { requireSignInForPage } from "@/lib/sign-in-gate";
+import {
+  isMassSheetKey,
+  MASS_DOCTRINE_NOTES,
+  MASS_GUIDE_LINK,
+  MASS_KID_VERSES,
+} from "@/data/mass-sheet-notes";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
+import type { GospelSheetExtras } from "@/components/gospel-sheet/GospelSheet";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -41,6 +48,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
+const MASS_PRINT_CSS = `@page{size:letter;margin:0}
+@media print{
+  html,body,.gs-mass-print{height:100%;margin:0}
+  .gs.gs-mass,.gs.gs-mass .gs-page{height:100%}
+}`;
+
 const SEO_CHROME_CSS = `
 .seo-print-chrome { max-width: 816px; margin: 0 auto; padding: 16px 20px 8px; font-family: Georgia, "Times New Roman", serif; color: #1f2937; background: #fff8f0; border-bottom: 1px solid #f0d9b8; }
 .seo-print-chrome h1 { margin: 0 0 8px; font-size: 1.35rem; line-height: 1.3; }
@@ -63,10 +76,18 @@ export default async function EvergreenPrintPage({ params, searchParams }: Props
   const autoPrint = query.autoprint === "1";
   // Never show the internal key (MASS_INTRO, VIR_GRATITUDE) as the date label.
   const view = { ...toGospelSheetView(sheet), slug: page.slug, sundayLabel: sheet.liturgicalName };
+  const extras: GospelSheetExtras | undefined = isMassSheetKey(page.key)
+    ? {
+        notes: MASS_DOCTRINE_NOTES[page.key],
+        verse: MASS_KID_VERSES[page.key],
+        reference: sheet.gospelRef,
+        footer: "catholickidscrafts.com",
+      }
+    : undefined;
 
   return (
-    <div style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
-      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + SEO_CHROME_CSS }} />
+    <div className={extras ? "gs-mass-print" : undefined} style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
+      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + SEO_CHROME_CSS + (extras ? MASS_PRINT_CSS : "") }} />
       {embed ? null : (
         <>
           <PrintToolbar
@@ -87,11 +108,17 @@ export default async function EvergreenPrintPage({ params, searchParams }: Props
               <Link href={publicPath(page)}>Worksheet guide</Link>
               {" · "}
               <Link href={hubPath(page.kind)}>All {page.kind === "virtue" ? "virtue challenges" : "Mass worksheets"}</Link>
+              {page.kind === "mass" ? (
+                <>
+                  {" · "}
+                  <Link href={MASS_GUIDE_LINK.href}>{MASS_GUIDE_LINK.label}</Link>
+                </>
+              ) : null}
             </p>
           </aside>
         </>
       )}
-      <GospelSheet sheet={view} level={level} />
+      <GospelSheet sheet={view} level={level} extras={extras} />
     </div>
   );
 }

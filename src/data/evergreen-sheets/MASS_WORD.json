@@ -3,7 +3,7 @@
   "liturgicalName": "Liturgy of the Word",
   "season": "The Order of Mass",
   "gospelRef": "Luke 11:28",
-  "keyVerseDR": "\"Blessed are they who hear the word of God, and keep it.\" (Lk 11:28)",
+  "keyVerseDR": "Jesus calls people blessed when they hear God's word and live it.",
   "color": "green",
   "levels": {
     "level1": {
@@ -26,7 +26,7 @@
       "prayer": "Jesus, open my ears to hear Your Word and my heart to keep it. Amen.",
       "activity": {
         "title": "Put the Liturgy of the Word in order",
-        "intro": "Write 1 to 7 in the boxes to show the order at Mass.",
+        "intro": "Write 1 to 7 in the circles to show the order at Mass.",
         "type": "wordorder",
         "pieces": [
           "First Reading",
@@ -65,7 +65,7 @@
       "prayer": "Jesus, open my ears to hear Your Word and my heart to keep it. Amen.",
       "activity": {
         "title": "Put the Liturgy of the Word in order",
-        "intro": "Number the steps 1 to 8. Then write which step you like best.",
+        "intro": "Number the steps 1 to 8.",
         "type": "wordorder",
         "pieces": [
           "First Reading",

@@ -3,7 +3,7 @@
   "liturgicalName": "Introductory Rites",
   "season": "The Order of Mass",
   "gospelRef": "Matthew 18:20",
-  "keyVerseDR": "\"For where there are two or three gathered together in my name, there am I in the midst of them.\" (Mt 18:20)",
+  "keyVerseDR": "Jesus is with us when we gather in his name.",
   "color": "white",
   "levels": {
     "level1": {
@@ -26,7 +26,7 @@
       "prayer": "Lord Jesus, thank You for gathering us as Your family. Help me pray with my whole heart. Amen.",
       "activity": {
         "title": "Put the Introductory Rites in order",
-        "intro": "Write 1 to 6 in the boxes to show the order at Mass.",
+        "intro": "Write 1 to 6 in the circles to show the order at Mass.",
         "type": "wordorder",
         "pieces": [
           "Entrance",
@@ -64,7 +64,7 @@
       "prayer": "Lord Jesus, thank You for gathering us as Your family. Help me pray with my whole heart. Amen.",
       "activity": {
         "title": "Put the Introductory Rites in order",
-        "intro": "Number the steps 1 to 6. Then write which step you like best.",
+        "intro": "Number the steps 1 to 6.",
         "type": "wordorder",
         "pieces": [
           "Entrance: we stand and sing",

@@ -2,7 +2,9 @@ import { LockedPreview } from "@/components/resource/LockedPreview";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { liveResources, MASS_PARTS } from "@/data/mass-parts-curriculum";
-import { FOUR_PARTS_H1, MASS_FOR_KIDS_HUB, printPath, relatedCards } from "@/lib/seo/evergreen-worksheets";
+import { Level2AnswerKey } from "@/components/seo/Level2AnswerKey";
+import { massLevel2AnswerKey } from "@/data/mass-sheet-notes";
+import { FOUR_PARTS_H1, MASS_FOR_KIDS_HUB, getEvergreenSheet, printPath, relatedCards } from "@/lib/seo/evergreen-worksheets";
 import { getEvergreenPageBySlug } from "@/lib/evergreen-catalog";
 import Link from "next/link";
 
@@ -58,7 +60,9 @@ function BulletList({ items }: { items: readonly string[] }) {
 /** Long guide for /catholic-mass-for-kids/four-parts-of-the-mass only. */
 export function FourPartsGuide() {
   const page = getEvergreenPageBySlug("four-parts-of-the-mass");
+  const sheet = getEvergreenSheet("MASS_PARTS");
   const cards = page ? relatedCards(page) : [];
+  const answerKey = sheet ? massLevel2AnswerKey(sheet) : [];
 
   return (
     <article className="mx-auto max-w-6xl rounded-[24px] bg-[#fff3e6] px-6 py-6 lg:px-10 lg:py-8">
@@ -254,6 +258,7 @@ export function FourPartsGuide() {
             </p>
           </div>
         </div>
+        <Level2AnswerKey lines={answerKey} />
       </section>
 
       <section className="mt-8" aria-labelledby="quick-faq">

@@ -244,19 +244,36 @@ export function FixWordsActivity({ data, level }: { data: ActivityOf<"fixwords">
   );
 }
 
-export function WordOrderActivity({ data, level, seed }: { data: ActivityOf<"wordorder">; level: L; seed: string }) {
+export function WordOrderActivity({
+  data,
+  level,
+  seed,
+  favoriteStep = false,
+}: {
+  data: ActivityOf<"wordorder">;
+  level: L;
+  seed: string;
+  favoriteStep?: boolean;
+}) {
   const pieces = shuffle(data.pieces, rng(`order:${seed}`));
   return (
     <div style={{ ...fill, display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
-      <div className="gs-act-bank" style={{ gap: 12 }}>
+      <div className="gs-act-bank gs-act-order">
         {pieces.map((p, i) => (
-          <span key={i} className="gs-act-chip" style={{ borderRadius: 8, fontSize: level === 1 ? 20 : 15, display: "inline-flex", gap: 8, alignItems: "center" }}>
-            <span className="gs-act-num" style={{ width: 22, height: 22 }} />
+          <span key={i} className={`gs-act-chip gs-act-order-chip gs-act-order-l${level}`} style={{ borderRadius: 8 }}>
+            <span className="gs-act-num" />
             {p}
           </span>
         ))}
       </div>
-      {level === 2 ? <Lines n={2} /> : null}
+      {favoriteStep ? (
+        <div className="gs-favorite">
+          <p>My favorite step:</p>
+          <div className="gs-wl" data-sheet-chrome="writeline" />
+        </div>
+      ) : level === 2 ? (
+        <Lines n={2} />
+      ) : null}
     </div>
   );
 }

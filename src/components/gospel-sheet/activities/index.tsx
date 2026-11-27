@@ -141,11 +141,13 @@ function Body({
   level,
   seed,
   artFile,
+  favoriteStep = false,
 }: {
   activity: SheetActivity;
   level: SheetLevelNumber;
   seed: string;
   artFile: string;
+  favoriteStep?: boolean;
 }) {
   switch (activity.type) {
     case "heart":
@@ -191,7 +193,7 @@ function Body({
     case "fixwords":
       return <FixWordsActivity data={activity} level={level} />;
     case "wordorder":
-      return <WordOrderActivity data={activity} level={level} seed={seed} />;
+      return <WordOrderActivity data={activity} level={level} seed={seed} favoriteStep={favoriteStep} />;
     case "truefalse":
       return <TrueFalseActivity data={activity} level={level} />;
     case "whoami":
@@ -238,6 +240,7 @@ export function ActivityBlock({
   seed,
   artFile,
   hideEditableText = false,
+  favoriteStep = false,
 }: {
   activity: SheetActivity;
   level: SheetLevelNumber;
@@ -246,6 +249,8 @@ export function ActivityBlock({
   artFile?: string;
   /** When true (Fabric base underlay), hide title/intro so overlays can replace them. */
   hideEditableText?: boolean;
+  /** Mass Level 2 order activity: a labeled writing line under the pills. */
+  favoriteStep?: boolean;
 }) {
   const idx = level - 1;
   const title = activity.type === "heart" ? activity.title : (activity.title ?? TITLES[activity.type][idx]);
@@ -256,13 +261,15 @@ export function ActivityBlock({
       <h2 data-sheet-field="actTitle" style={hide}>
         {title}
       </h2>
-      {artFile && activity.type !== "findhidden" && activity.type !== "spotdiff" ? <div className="gs-ph gs-ph-heart">{artFile}</div> : null}
+      {artFile && !/\.png$/i.test(artFile) && activity.type !== "findhidden" && activity.type !== "spotdiff" ? (
+        <div className="gs-ph gs-ph-heart">{artFile}</div>
+      ) : null}
       {intro ? (
-        <div data-sheet-field="actIntro" style={{ fontSize: level === 1 ? 15 : 13, ...hide }}>
+        <div className="gs-act-intro" data-sheet-field="actIntro" style={{ fontSize: level === 1 ? 15 : 13, ...hide }}>
           {intro}
         </div>
       ) : null}
-      <Body activity={activity} level={level} seed={seed} artFile={artFile ?? "find-art.png"} />
+      <Body activity={activity} level={level} seed={seed} artFile={artFile ?? "find-art.png"} favoriteStep={favoriteStep} />
     </div>
   );
 }
