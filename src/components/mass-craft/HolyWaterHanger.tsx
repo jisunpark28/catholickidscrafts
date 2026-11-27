@@ -1,3 +1,5 @@
+import { MassTraceGuide } from "@/components/gospel-sheet/MassTraceGuide";
+
 /**
  * Cut-out door hanger. SVG width and height are set in inches, so the drawing
  * is not scaled and the hole stays 2.375 in (60.3 mm) on a letter page.
@@ -53,7 +55,11 @@ export function HolyWaterHanger({ level }: { level: 1 | 2 }) {
       </header>
       <p className="hw-steps">{copy.steps}</p>
       <p className="hw-prompt">{copy.line}</p>
-      {level === 1 ? <TraceWords text={copy.line} /> : (
+      {level === 1 ? (
+        <div className="hw-trace">
+          <MassTraceGuide text={copy.line} maxWidth={680} />
+        </div>
+      ) : (
         <>
           <div className="hw-wl" />
           <div className="hw-wl" />
@@ -92,14 +98,6 @@ export function HolyWaterHanger({ level }: { level: 1 | 2 }) {
       </svg>
       <footer className="hw-foot">catholickidscrafts.com</footer>
     </article>
-  );
-}
-
-function TraceWords({ text }: { text: string }) {
-  return (
-    <div className="hw-trace">
-      <span className="hw-trace-letters">{text}</span>
-    </div>
   );
 }
 
@@ -160,10 +158,8 @@ const HANGER_CSS = `
 .hw-steps{width:100%;margin:8px 0 0;border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:15px;line-height:1.4;text-align:center;box-sizing:border-box}
 .hw-prompt{width:100%;margin:8px 0 0;font-size:16px;font-weight:700;line-height:1.3}
 .hw-wl{width:100%;height:32px;border-bottom:1px solid #888;box-sizing:border-box}
-.hw-trace{width:100%;position:relative;margin:2px 0 10px}
-.hw-trace-letters{display:block;position:relative;font-size:46px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:1.15px #888;text-box-trim:trim-both;text-box-edge:cap alphabetic;border-bottom:1px solid #888}
-.hw-trace-letters::before{content:"";position:absolute;left:0;right:0;top:0;border-top:1px solid #888}
-.hw-trace-letters::after{content:"";position:absolute;left:0;right:0;bottom:1ex;border-bottom:1px dashed #888}
+.hw-trace{width:100%;margin:2px 0 4px}
+.hw-trace text{fill:none;stroke:#888;stroke-width:1.25px;font-family:"Comic Sans MS","Chalkboard SE","Trebuchet MS",sans-serif}
 .hw-cut{margin:6px 0 2px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:700}
 .hw-hanger{display:block}
 .hw-hanger text{font-family:"Comic Sans MS","Chalkboard SE","Trebuchet MS",sans-serif;fill:#111}
