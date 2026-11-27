@@ -1,5 +1,16 @@
 import type { GospelSheetView, SheetLevelNumber } from "@/lib/gospel-sheet";
 import { ActivityBlock, activityFor } from "./activities";
+import { MassSymbolRow, type MassSymbolName } from "./MassSymbols";
+
+export type GospelSheetExtras = {
+  notes: readonly string[];
+  verse?: string;
+  reference?: string;
+  answerKey?: readonly string[];
+  backlink?: { href: string; label: string };
+  footer?: string;
+  symbols?: readonly MassSymbolName[];
+};
 
 /** Planned illustration file names; rendered as labelled placeholder boxes until art exists. */
 export type GospelSheetArt = { main: string; heart: string; icons: string[] };
@@ -15,18 +26,21 @@ export function GospelSheet({
   level,
   art,
   variant = "full",
+  extras,
 }: {
   sheet: GospelSheetView;
   level: SheetLevelNumber;
   art?: GospelSheetArt;
   variant?: GospelSheetVariant;
+  /** Mass sheets only: notes, answer key, symbols, and a guide link. Sunday sheets omit this. */
+  extras?: GospelSheetExtras;
 }) {
   const c = level === 1 ? sheet.levels.level1 : sheet.levels.level2;
   const base = variant === "base";
   const hide = base ? ({ visibility: "hidden" } as const) : undefined;
 
   return (
-    <div className={`gs gs-l${level}${base ? " gs-base" : ""}`} data-sheet-variant={variant}>
+    <div className={`gs gs-l${level}${base ? " gs-base" : ""}${extras ? " gs-mass" : ""}`} data-sheet-variant={variant}>
       <div className="gs-page" data-sheet-page>
         <header>
           <div>
@@ -51,7 +65,7 @@ export function GospelSheet({
         </header>
 
         <div className="gs-box gs-story">
-          {art ? <div className="gs-ph gs-ph-main">{art.main}</div> : null}
+          {art && !/\.png$/i.test(art.main) ? <div className="gs-ph gs-ph-main">{art.main}</div> : null}
           <h2 data-sheet-field="h2_story" style={hide}>
             Today&apos;s Story
           </h2>
@@ -131,13 +145,45 @@ export function GospelSheet({
           </div>
         </div>
 
-        {art && art.icons.length ? (
+        {extras?.symbols?.length ? <MassSymbolRow names={extras.symbols} /> : null}
+        {art && art.icons.length && !extras?.symbols?.length ? (
           <div className="gs-ph-icons">
             {art.icons.map((icon) => (
               <div key={icon} className="gs-ph gs-ph-icon">
-                {icon}
+                {/\.png$/i.test(icon) || icon.startsWith("icon_") ? null : icon}
               </div>
             ))}
+          </div>
+        ) : null}
+        {extras && !base ? (
+          <div className="gs-note">
+            <p className="gs-note-title">A note for families</p>
+            <ul>
+              {extras.notes.map((note) => (
+                <li key={note}>{note}</li>
+              ))}
+            </ul>
+            {extras.verse ? (
+              <p className="gs-note-verse">
+                {extras.verse}
+                {extras.reference ? <span> {extras.reference}</span> : null}
+              </p>
+            ) : null}
+            {level === 2 && extras.answerKey?.length ? (
+              <>
+                <p className="gs-note-title">Level 2 answer key</p>
+                <ol>
+                  {extras.answerKey.map((line) => (
+                    <li key={line}>{line.replace(/^\d+\.\s*/, "")}</li>
+                  ))}
+                </ol>
+              </>
+            ) : null}
+            {extras.backlink ? (
+              <p className="gs-note-link">
+                <a href={extras.backlink.href}>{extras.backlink.label}</a>
+              </p>
+            ) : null}
           </div>
         ) : null}
         {c.prayer ? (
@@ -146,7 +192,7 @@ export function GospelSheet({
           </div>
         ) : null}
         <footer data-sheet-field="footer" style={hide}>
-          New free sheet every week at catholickidscrafts.com
+          {extras?.footer ?? "New free sheet every week at catholickidscrafts.com"}
         </footer>
       </div>
     </div>

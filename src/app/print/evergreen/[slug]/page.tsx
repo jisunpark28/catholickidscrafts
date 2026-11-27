@@ -14,7 +14,15 @@ import {
 import { pageMetadata } from "@/lib/site-metadata";
 import { pathWithQuery } from "@/lib/sign-in-callback";
 import { requireSignInForPage } from "@/lib/sign-in-gate";
+import {
+  isMassSheetKey,
+  MASS_DOCTRINE_NOTES,
+  MASS_GUIDE_LINK,
+  MASS_KID_VERSES,
+  massLevel2AnswerKey,
+} from "@/data/mass-sheet-notes";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
+import type { GospelSheetExtras } from "@/components/gospel-sheet/GospelSheet";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -63,6 +71,17 @@ export default async function EvergreenPrintPage({ params, searchParams }: Props
   const autoPrint = query.autoprint === "1";
   // Never show the internal key (MASS_INTRO, VIR_GRATITUDE) as the date label.
   const view = { ...toGospelSheetView(sheet), slug: page.slug, sundayLabel: sheet.liturgicalName };
+  const extras: GospelSheetExtras | undefined = isMassSheetKey(page.key)
+    ? {
+        notes: MASS_DOCTRINE_NOTES[page.key],
+        verse: MASS_KID_VERSES[page.key],
+        reference: sheet.gospelRef,
+        answerKey: level === 2 ? massLevel2AnswerKey(sheet) : undefined,
+        backlink: MASS_GUIDE_LINK,
+        footer: "catholickidscrafts.com",
+        symbols: ["altar", "cross", "book"],
+      }
+    : undefined;
 
   return (
     <div style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
@@ -87,11 +106,17 @@ export default async function EvergreenPrintPage({ params, searchParams }: Props
               <Link href={publicPath(page)}>Worksheet guide</Link>
               {" · "}
               <Link href={hubPath(page.kind)}>All {page.kind === "virtue" ? "virtue challenges" : "Mass worksheets"}</Link>
+              {page.kind === "mass" ? (
+                <>
+                  {" · "}
+                  <Link href={MASS_GUIDE_LINK.href}>{MASS_GUIDE_LINK.label}</Link>
+                </>
+              ) : null}
             </p>
           </aside>
         </>
       )}
-      <GospelSheet sheet={view} level={level} />
+      <GospelSheet sheet={view} level={level} extras={extras} />
     </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   relatedCards,
   type EvergreenPage,
 } from "@/lib/seo/evergreen-worksheets";
+import { isMassSheetKey, MASS_GUIDE_LINK, MASS_KID_VERSES } from "@/data/mass-sheet-notes";
 import { breadcrumbNode, worksheetNode } from "@/lib/structured-data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -29,6 +30,7 @@ export function EvergreenWorksheetDetail({ page, embedded = false }: { page: Eve
   const sheet = getEvergreenSheet(page.key);
   if (!sheet) notFound();
   const isVirtue = page.kind === "virtue";
+  const isMass = page.kind === "mass" && isMassSheetKey(page.key);
   const isFourParts = page.slug === "four-parts-of-the-mass";
   const hubName = isVirtue ? "Catholic Virtue Challenge" : "Catholic Mass for Kids";
   const path = publicPath(page);
@@ -55,10 +57,10 @@ export function EvergreenWorksheetDetail({ page, embedded = false }: { page: Eve
             gospelRef: sheet.gospelRef,
             description,
             abstract: l1.story,
-            keyVerse: isFourParts ? undefined : sheet.keyVerseDR,
+            keyVerse: isMass ? undefined : sheet.keyVerseDR,
             pagePath: path,
             isAccessibleForFree: false,
-            educationalLevel: isFourParts ? false : undefined,
+            educationalLevel: isMass ? false : undefined,
           }),
         ]}
       />
@@ -100,6 +102,14 @@ export function EvergreenWorksheetDetail({ page, embedded = false }: { page: Eve
           </section>
         ) : null}
 
+        {isMass && !isFourParts ? (
+          <p className="mt-4">
+            <Link href={MASS_GUIDE_LINK.href} className={link}>
+              {MASS_GUIDE_LINK.label}
+            </Link>
+          </p>
+        ) : null}
+
         <section className="mt-6 max-w-3xl" aria-labelledby="meaning">
           <h2 id="meaning" className={h2}>
             {isVirtue ? "What it means" : "What happens at Mass"}
@@ -111,7 +121,14 @@ export function EvergreenWorksheetDetail({ page, embedded = false }: { page: Eve
           <h2 id="verse" className={h2}>
             Scripture verse
           </h2>
-          <p className={p}>{sheet.keyVerseDR}</p>
+          {isMass && isMassSheetKey(page.key) ? (
+            <>
+              <p className={p}>{MASS_KID_VERSES[page.key]}</p>
+              <p className="mt-1 text-sm text-[#6b7280]">{sheet.gospelRef}</p>
+            </>
+          ) : (
+            <p className={p}>{sheet.keyVerseDR}</p>
+          )}
         </section>
 
         {missions.length ? (

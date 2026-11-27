@@ -97,17 +97,11 @@ export function MatchUpActivity({
         ))}
       </div>
       <div>
-        {right.map((r) =>
-          level === 1 && !data.text ? (
-            <div key={r} className="gs-act-mitem gs-act-mright">
-              <span className="gs-ph gs-act-pic">icon_{r}.png</span>
-            </div>
-          ) : (
-            <div key={r} className="gs-act-mitem gs-act-mright">
-              {r}
-            </div>
-          ),
-        )}
+        {right.map((r) => (
+          <div key={r} className="gs-act-mitem gs-act-mright">
+            {r}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -156,7 +150,7 @@ export function FindHiddenActivity({
   const objects = data.objects.slice(0, level === 1 ? 3 : 5);
   return (
     <div className="gs-act-split">
-      <div className="gs-ph gs-act-scene">{artFile}</div>
+      <div className="gs-ph gs-act-scene">{/\.png$/i.test(artFile) ? "" : artFile}</div>
       <ul className="gs-chk">
         {objects.map((o) => (
           <li key={o}>

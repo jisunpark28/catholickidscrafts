@@ -256,7 +256,9 @@ export function ActivityBlock({
       <h2 data-sheet-field="actTitle" style={hide}>
         {title}
       </h2>
-      {artFile && activity.type !== "findhidden" && activity.type !== "spotdiff" ? <div className="gs-ph gs-ph-heart">{artFile}</div> : null}
+      {artFile && !/\.png$/i.test(artFile) && activity.type !== "findhidden" && activity.type !== "spotdiff" ? (
+        <div className="gs-ph gs-ph-heart">{artFile}</div>
+      ) : null}
       {intro ? (
         <div data-sheet-field="actIntro" style={{ fontSize: level === 1 ? 15 : 13, ...hide }}>
           {intro}
