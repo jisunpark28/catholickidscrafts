@@ -1,4 +1,4 @@
-import { LockedPreview } from "@/components/resource/LockedPreview";
+import { LockedSheetPreview } from "@/components/resource/LockedSheetPreview";
 import { NewsletterSubscribeForm } from "@/components/seo/NewsletterSubscribeForm";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { liveResources, MASS_PARTS } from "@/data/mass-parts-curriculum";
@@ -120,8 +120,8 @@ export function FourPartsGuide() {
         </ol>
       </section>
 
-      <section className="mt-8" aria-labelledby="layout-vessels">
-        <h2 id="layout-vessels" className={h2}>
+      <section id="layout-vessels" className="mt-8" aria-labelledby="layout-vessels-title">
+        <h2 id="layout-vessels-title" className={h2}>
           Church Layout, Reconciliation, Sacred Vessels &amp; Liturgical Colors
         </h2>
 
@@ -195,8 +195,8 @@ export function FourPartsGuide() {
         </p>
       </section>
 
-      <section className="mt-8 rounded-2xl border border-[#f0d9b8] bg-white p-4" aria-labelledby="verse-card">
-        <h2 id="verse-card" className={h2}>
+      <section id="verse-card" className="mt-8 rounded-2xl border border-[#f0d9b8] bg-white p-4" aria-labelledby="verse-card-title">
+        <h2 id="verse-card-title" className={h2}>
           A verse to carry home
         </h2>
         <p className="mt-3 font-[Georgia,serif] text-lg leading-relaxed text-[#1f2937]">
@@ -212,8 +212,8 @@ export function FourPartsGuide() {
         </p>
       </section>
 
-      <section className="mt-8" aria-labelledby="lesson-guide">
-        <h2 id="lesson-guide" className={h2}>
+      <section id="lesson-guide" className="mt-8" aria-labelledby="lesson-guide-title">
+        <h2 id="lesson-guide-title" className={h2}>
           Quick Catechist &amp; Family Lesson Guide (15 Min)
         </h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-base leading-relaxed text-[#374151]">
@@ -232,28 +232,14 @@ export function FourPartsGuide() {
         </p>
       </section>
 
-      <section className="mt-8" aria-labelledby="worksheet-card">
-        <h2 id="worksheet-card" className={h2}>
+      <section id="worksheet-card" className="mt-8" aria-labelledby="worksheet-card-title">
+        <h2 id="worksheet-card-title" className={h2}>
           Print this worksheet
         </h2>
         <div className="mt-3 max-w-sm">
-          <LockedPreview
-            href="/subscribe"
-            className="rounded-2xl border border-[#f0d9b8] bg-white"
-            label="Level 1 and Level 2 worksheets for the four parts of the Mass. Preview and printing need Plus."
-          >
-            <span className="block aspect-[17/22] p-[8%]">
-              <span className="mx-auto mb-4 block h-4 w-2/3 rounded bg-[#d1d5db]" />
-              <span className="mb-3 block h-24 rounded-xl bg-[#f3f1ee]" />
-              <span className="mb-2 block h-2 w-full rounded bg-[#d1d5db]" />
-              <span className="mb-2 block h-2 w-5/6 rounded bg-[#d1d5db]" />
-              <span className="block h-2 w-4/6 rounded bg-[#d1d5db]" />
-            </span>
-          </LockedPreview>
+          <LockedSheetPreview title="Level 1 and Level 2 worksheets for the four parts of the Mass" />
         </div>
-        <p className={body}>
-          Level 1 and Level 2 are both on the worksheet. Preview and printing need Plus. There is no price on this page.
-        </p>
+        <p className={body}>Level 1 and Level 2 are both included. Preview and printing are part of Plus.</p>
         <p className="mt-3">
           <Link
             href={printPath(getEvergreenPageBySlug("four-parts-of-the-mass")!, 1, true)}
