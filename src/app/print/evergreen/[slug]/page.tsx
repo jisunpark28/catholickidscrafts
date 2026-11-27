@@ -49,6 +49,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
+const MASS_PRINT_CSS = `@page{size:letter;margin:0}
+@media print{
+  html,body,.gs-mass-print{height:100%;margin:0}
+  .gs.gs-mass,.gs.gs-mass .gs-page{height:100%}
+}`;
+
 const SEO_CHROME_CSS = `
 .seo-print-chrome { max-width: 816px; margin: 0 auto; padding: 16px 20px 8px; font-family: Georgia, "Times New Roman", serif; color: #1f2937; background: #fff8f0; border-bottom: 1px solid #f0d9b8; }
 .seo-print-chrome h1 { margin: 0 0 8px; font-size: 1.35rem; line-height: 1.3; }
@@ -77,15 +83,13 @@ export default async function EvergreenPrintPage({ params, searchParams }: Props
         verse: MASS_KID_VERSES[page.key],
         reference: sheet.gospelRef,
         answerKey: level === 2 ? massLevel2AnswerKey(sheet) : undefined,
-        backlink: MASS_GUIDE_LINK,
         footer: "catholickidscrafts.com",
-        symbols: ["altar", "cross", "book"],
       }
     : undefined;
 
   return (
-    <div style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
-      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + SEO_CHROME_CSS }} />
+    <div className={extras ? "gs-mass-print" : undefined} style={{ background: embed ? "#fff" : "#eee", minHeight: "100vh" }}>
+      <style dangerouslySetInnerHTML={{ __html: GOSPEL_SHEET_PAGE_CSS + GOSPEL_SHEET_CSS + SEO_CHROME_CSS + (extras ? MASS_PRINT_CSS : "") }} />
       {embed ? null : (
         <>
           <PrintToolbar

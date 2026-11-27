@@ -228,6 +228,17 @@
 
 5.15 **No country or region wording in body copy.** Do not write “In the United States,” “U.S.,” or “American.” Phrase a local liturgical custom universally, for example “following our parish custom.”
 
+## Print worksheet readability rules
+
+These rules apply to Catholic Mass worksheets at `/print/evergreen` (Level 1 and Level 2). Sunday sheets, virtue sheets, and the sheet editor keep their existing styles. A future Concluding Rites sheet uses the same Mass layout when it is added. Do not invent that sheet until it exists.
+
+1. The title appears once, top left. Top right is only “Name: ____”, Level 1 or Level 2, and the Scripture reference.
+2. No 2px black borders. Use 1px solid `#888`, card padding 12–16px, and section gaps 14–16px. The sheet fills one US Letter page, with no large empty area at the bottom.
+3. “Today’s Story” is 11–12pt with line-height at least 1.55. If it runs past three lines, split it into two short paragraphs. No text anywhere on the sheet is under 9pt.
+4. Every line a child writes on is 28–34px tall and does not overlap a border or an option. Level 1 “Trace the words” uses a three-line guide: solid, dashed, solid. Instructions say “circles” or “boxes” only when that is the shape on the page.
+5. The print body has no underlined web link. The Level 2 answer key is one short line at the very bottom, just above the footer, turned 180 degrees.
+6. Do not print a floating row of altar, cross, and book icons.
+
 ---
 
 ## Article 6. Access, gating and locking
@@ -810,3 +821,4 @@ git push -u origin <branch>
 | v1.1 | 2026-11-25 | Owner decisions: common prayers used as-is with no source record; individual Scripture verses need no attribution (no whole-Bible reproduction); AI illustrations allowed and disclosed only on the Sources & copyright page; all source and copyright statements live only on `/sources`. Updated Articles 3, 4.1, 4.2, 4.7 (new), 10.10, 15 and O-15. |
 | v1.2 | 2026-11-27 | Owner decision: no citation numbers or translation credits in user-facing text; no prompt or meta guardrail sentences in the UI; copy stays concise and scannable. Article 5.8 still forbids age or grade text. Added 5.11–5.13 and a cross-reference in 2.9. |
 | v1.3 | 2026-11-27 | Owner decision: no school grade labels in body, cards, FAQ, or metadata; no country or region wording in body copy. Added 5.14 and 5.15. |
+| v1.4 | 2026-11-27 | Owner decision: Print worksheet readability rules for Mass print sheets. Sunday sheets stay on the existing Gospel sheet styles. |

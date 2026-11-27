@@ -1,16 +1,32 @@
 import type { GospelSheetView, SheetLevelNumber } from "@/lib/gospel-sheet";
 import { ActivityBlock, activityFor } from "./activities";
-import { MassSymbolRow, type MassSymbolName } from "./MassSymbols";
 
 export type GospelSheetExtras = {
   notes: readonly string[];
   verse?: string;
   reference?: string;
   answerKey?: readonly string[];
-  backlink?: { href: string; label: string };
   footer?: string;
-  symbols?: readonly MassSymbolName[];
 };
+
+/** Two paragraphs when the story would run past about three lines at 12pt. */
+function storyParagraphs(story: string): string[] {
+  if (story.length <= 220) return [story];
+  const sentences = story.split(/(?<=\.)\s+(?=[A-Z])/);
+  if (sentences.length < 2) return [story];
+  const mid = Math.ceil(sentences.length / 2);
+  const first = sentences.slice(0, mid).join(" ").trim();
+  const second = sentences.slice(mid).join(" ").trim();
+  return second ? [first, second] : [story];
+}
+
+function oneLineAnswer(lines: readonly string[]): string {
+  const bits = lines.map((line) => {
+    const cleaned = line.replace(/^\d+\.\s*/, "");
+    return (cleaned.split(":")[0] ?? cleaned).trim();
+  });
+  return `Answer: ${bits.map((bit, index) => `${index + 1} ${bit}`).join(", ")}`;
+}
 
 /** Planned illustration file names; rendered as labelled placeholder boxes until art exists. */
 export type GospelSheetArt = { main: string; heart: string; icons: string[] };
@@ -38,6 +54,9 @@ export function GospelSheet({
   const c = level === 1 ? sheet.levels.level1 : sheet.levels.level2;
   const base = variant === "base";
   const hide = base ? ({ visibility: "hidden" } as const) : undefined;
+  const mass = Boolean(extras);
+  const paragraphs = mass ? storyParagraphs(c.story) : [c.story];
+  const favoriteStep = mass && level === 2 && activityFor(c).type === "wordorder";
 
   return (
     <div className={`gs gs-l${level}${base ? " gs-base" : ""}${extras ? " gs-mass" : ""}`} data-sheet-variant={variant}>
@@ -48,19 +67,33 @@ export function GospelSheet({
             <p className="gs-title" data-sheet-field="title" style={hide}>
               {c.title}
             </p>
-            <div className="gs-sub" data-sheet-field="subtitle" style={hide}>
-              {sheet.liturgicalName} · Level {level}
-            </div>
+            {mass ? null : (
+              <div className="gs-sub" data-sheet-field="subtitle" style={hide}>
+                {sheet.liturgicalName} · Level {level}
+              </div>
+            )}
           </div>
           <div
-            className={sheet.gospelRef.length > 48 ? "gs-meta gs-meta-long" : "gs-meta"}
+            className={sheet.gospelRef.length > 48 && !mass ? "gs-meta gs-meta-long" : "gs-meta"}
             data-sheet-field="meta"
             style={hide}
           >
-            <span className="gs-dot" style={{ background: sheet.dotColor }} />
-            {sheet.sundayLabel}
-            <br />
-            {sheet.gospelRef}
+            {mass ? (
+              <>
+                Name: ____
+                <br />
+                Level {level}
+                <br />
+                {sheet.gospelRef}
+              </>
+            ) : (
+              <>
+                <span className="gs-dot" style={{ background: sheet.dotColor }} />
+                {sheet.sundayLabel}
+                <br />
+                {sheet.gospelRef}
+              </>
+            )}
           </div>
         </header>
 
@@ -69,9 +102,11 @@ export function GospelSheet({
           <h2 data-sheet-field="h2_story" style={hide}>
             Today&apos;s Story
           </h2>
-          <p data-sheet-field="story" style={hide}>
-            {c.story}
-          </p>
+          {paragraphs.map((paragraph) => (
+            <p key={paragraph} data-sheet-field="story" style={hide}>
+              {paragraph}
+            </p>
+          ))}
         </div>
 
         {level === 1 ? (
@@ -79,12 +114,22 @@ export function GospelSheet({
             <h2 data-sheet-field="h2_key" style={hide}>
               Trace the words
             </h2>
-            <div className="gs-trace" data-sheet-field="keyLine" style={hide}>
-              {c.keyLine}
-            </div>
-            <div className="gs-trace" aria-hidden style={hide}>
-              {c.keyLine}
-            </div>
+            {mass ? (
+              <div className="gs-trace-guide" data-sheet-field="keyLine" style={hide}>
+                <span className="gs-trace-solid" />
+                <span className="gs-trace-mid">{c.keyLine}</span>
+                <span className="gs-trace-solid" />
+              </div>
+            ) : (
+              <>
+                <div className="gs-trace" data-sheet-field="keyLine" style={hide}>
+                  {c.keyLine}
+                </div>
+                <div className="gs-trace" aria-hidden style={hide}>
+                  {c.keyLine}
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <div className="gs-box">
@@ -106,6 +151,7 @@ export function GospelSheet({
             seed={`${sheet.slug}-${level}`}
             artFile={art?.heart}
             hideEditableText={base}
+            favoriteStep={favoriteStep}
           />
         </div>
 
@@ -145,8 +191,7 @@ export function GospelSheet({
           </div>
         </div>
 
-        {extras?.symbols?.length ? <MassSymbolRow names={extras.symbols} /> : null}
-        {art && art.icons.length && !extras?.symbols?.length ? (
+        {art && art.icons.length && !mass ? (
           <div className="gs-ph-icons">
             {art.icons.map((icon) => (
               <div key={icon} className="gs-ph gs-ph-icon">
@@ -169,27 +214,21 @@ export function GospelSheet({
                 {extras.reference ? <span> {extras.reference}</span> : null}
               </p>
             ) : null}
-            {level === 2 && extras.answerKey?.length ? (
-              <>
-                <p className="gs-note-title">Level 2 answer key</p>
-                <ol>
-                  {extras.answerKey.map((line) => (
-                    <li key={line}>{line.replace(/^\d+\.\s*/, "")}</li>
-                  ))}
-                </ol>
-              </>
-            ) : null}
-            {extras.backlink ? (
-              <p className="gs-note-link">
-                <a href={extras.backlink.href}>{extras.backlink.label}</a>
-              </p>
-            ) : null}
+          </div>
+        ) : null}
+        {mass && level === 1 && !base ? (
+          <div className="gs-drawit">
+            <h2>Draw it!</h2>
+            <div className="gs-drawit-box" />
           </div>
         ) : null}
         {c.prayer ? (
           <div className="gs-prayer" data-sheet-field="prayer" style={hide}>
             &ldquo;{c.prayer}&rdquo;
           </div>
+        ) : null}
+        {level === 2 && extras?.answerKey?.length && !base ? (
+          <p className="gs-answer-flip">{oneLineAnswer(extras.answerKey)}</p>
         ) : null}
         <footer data-sheet-field="footer" style={hide}>
           {extras?.footer ?? "New free sheet every week at catholickidscrafts.com"}

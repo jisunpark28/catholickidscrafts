@@ -43,20 +43,33 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-ph-heart{align-self:flex-end;padding:1px 8px}
 .gs .gs-ph-icons{display:flex;gap:10px;justify-content:center}
 .gs .gs-ph-icon{width:.65in;height:.65in;font-size:8px}
-.gs .gs-symbol{width:.62in;height:.62in;display:flex;align-items:center;justify-content:center}
-.gs .gs-symbol svg{width:.62in;height:.62in}
-.gs.gs-mass .gs-page{gap:6px;padding:.38in .42in}
-.gs.gs-mass .gs-story p{font-size:13px;line-height:1.35}
-.gs.gs-l1.gs-mass .gs-story p{font-size:15px}
-.gs.gs-mass .gs-wl{height:22px}
-.gs.gs-mass .gs-trace{font-size:24px}
-.gs .gs-note{border:2px solid #111;border-radius:12px;padding:4px 8px;font-size:10px;line-height:1.3}
-.gs .gs-note-title{margin:2px 0 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-.gs .gs-note ul,.gs .gs-note ol{margin:1px 0 2px;padding-left:16px}
-.gs .gs-note li{margin:0}
-.gs .gs-note-verse{margin:2px 0;font-size:11px}
-.gs .gs-note-link{margin:2px 0 0}
-.gs .gs-note a{color:#111}
+.gs.gs-mass .gs-page{width:8.5in;height:11in;margin:0 auto;padding:12px 14px;gap:14px;box-shadow:none}
+.gs.gs-mass header{border-bottom:1px solid #888;padding-bottom:4px}
+.gs.gs-mass .gs-title{font-size:22px}
+.gs.gs-mass .gs-meta{font-size:12px;line-height:1.45}
+.gs.gs-mass .gs-box,.gs.gs-mass .gs-act-chip,.gs.gs-mass .gs-act-mitem,.gs.gs-mass .gs-act-num,.gs.gs-mass .gs-chk-box{border-width:1px;border-color:#888}
+.gs.gs-mass .gs-chk li:before{border-width:1px;border-color:#888}
+.gs.gs-mass .gs-box{padding:12px 14px}
+.gs.gs-mass h2{font-size:13px}
+.gs.gs-mass .gs-story p,.gs.gs-l1.gs-mass .gs-story p{font-size:16px;line-height:1.55;margin:0 0 4px}
+.gs.gs-l2.gs-mass .gs-story p{font-size:15px}
+.gs.gs-mass .gs-story p:last-child{margin-bottom:0}
+.gs.gs-mass .gs-q,.gs.gs-mass .gs-chk,.gs.gs-mass .gs-prayer,.gs.gs-mass .gs-copy,.gs.gs-mass .gs-favorite p{font-size:12px;line-height:1.4}
+.gs.gs-mass .gs-wl{height:32px;border-bottom:1px dotted #888}
+.gs.gs-l2.gs-mass .gs-wl{height:28px}
+.gs.gs-mass .gs-trace-guide{display:flex;flex-direction:column}
+.gs.gs-mass .gs-trace-solid,.gs.gs-mass .gs-trace-mid{display:flex;align-items:flex-end;height:32px;border-bottom:1px solid #888}
+.gs.gs-mass .gs-trace-mid{border-bottom-style:dashed;font-size:16px;line-height:1;color:transparent;-webkit-text-stroke:1px #888;font-weight:700}
+.gs.gs-mass .gs-note{border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:12px;line-height:1.4}
+.gs.gs-mass .gs-note-title{margin:0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.gs.gs-mass .gs-note ul{margin:2px 0;padding-left:16px}
+.gs.gs-mass .gs-note li{margin:0}
+.gs.gs-mass .gs-note-verse{margin:4px 0 0;font-size:12px}
+.gs.gs-mass .gs-drawit{flex:1 1 auto;min-height:40px;display:flex;flex-direction:column}
+.gs.gs-mass .gs-drawit-box{flex:1;min-height:32px;border:1px dashed #888;border-radius:8px}
+.gs.gs-mass .gs-favorite p{margin:8px 0 0}
+.gs.gs-mass .gs-answer-flip{margin:0;font-size:12px;line-height:1.35;text-align:center;transform:rotate(180deg)}
+.gs.gs-mass footer{font-size:12px}
 .gs .gs-act>*:last-child{flex:1;min-height:0}
 .gs .gs-act-split{display:flex;gap:14px;align-items:stretch;min-height:0}
 .gs .gs-act-split .gs-chk{align-self:center;font-size:16px}
@@ -117,12 +130,13 @@ export const GOSPEL_SHEET_CSS = `
 .gs .gs-act-table th,.gs .gs-act-table td{border:1.5px solid #111;text-align:center;padding:2px 4px;font-size:14px}
 @media print{
   .gs-page{margin:0;box-shadow:none;padding:0;width:auto;height:9.95in}
-  .gs.gs-mass .gs-page{padding:0;gap:4px;height:9.95in}
-  .gs.gs-mass .gs-story p,.gs.gs-l1.gs-mass .gs-story p{font-size:12.5px;line-height:1.28}
-  .gs.gs-mass .gs-wl{height:16px}
-  .gs.gs-mass .gs-box{padding:4px 8px}
-  .gs.gs-mass .gs-note{font-size:9px;line-height:1.25;padding:3px 6px}
-  .gs.gs-mass header{padding-bottom:3px}
+  .gs.gs-mass .gs-page{width:auto;height:100%;margin:0;padding:12px 14px;gap:14px;box-shadow:none;overflow:hidden}
+  .gs.gs-mass .gs-story p,.gs.gs-l1.gs-mass .gs-story p{font-size:16px;line-height:1.55}
+  .gs.gs-l2.gs-mass .gs-story p{font-size:15px}
+  .gs.gs-mass .gs-wl{height:32px}
+  .gs.gs-l2.gs-mass .gs-wl{height:28px}
+  .gs.gs-mass .gs-box{padding:12px 14px}
+  .gs.gs-mass .gs-note{font-size:12px;line-height:1.4;padding:8px 12px}
   .gs-screen-only{display:none !important}
 }
 `;

@@ -26,7 +26,7 @@
       "prayer": "Jesus, thank You for giving Yourself to us in the Eucharist. Make my heart ready for You. Amen.",
       "activity": {
         "title": "Put the Liturgy of the Eucharist in order",
-        "intro": "Write 1 to 5 in the boxes to show the order at Mass.",
+        "intro": "Write 1 to 5 in the circles to show the order at Mass.",
         "type": "wordorder",
         "pieces": [
           "Presentation of the Gifts",
@@ -63,7 +63,7 @@
       "prayer": "Jesus, thank You for giving Yourself to us in the Eucharist. Make my heart ready for You. Amen.",
       "activity": {
         "title": "Put the Liturgy of the Eucharist in order",
-        "intro": "Number the steps 1 to 6. Then write which step you like best.",
+        "intro": "Number the steps 1 to 6.",
         "type": "wordorder",
         "pieces": [
           "Presentation of the Gifts",

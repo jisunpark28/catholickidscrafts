@@ -244,7 +244,17 @@ export function FixWordsActivity({ data, level }: { data: ActivityOf<"fixwords">
   );
 }
 
-export function WordOrderActivity({ data, level, seed }: { data: ActivityOf<"wordorder">; level: L; seed: string }) {
+export function WordOrderActivity({
+  data,
+  level,
+  seed,
+  favoriteStep = false,
+}: {
+  data: ActivityOf<"wordorder">;
+  level: L;
+  seed: string;
+  favoriteStep?: boolean;
+}) {
   const pieces = shuffle(data.pieces, rng(`order:${seed}`));
   return (
     <div style={{ ...fill, display: "flex", flexDirection: "column", justifyContent: "space-evenly" }}>
@@ -256,7 +266,14 @@ export function WordOrderActivity({ data, level, seed }: { data: ActivityOf<"wor
           </span>
         ))}
       </div>
-      {level === 2 ? <Lines n={2} /> : null}
+      {favoriteStep ? (
+        <div className="gs-favorite">
+          <p>My favorite step:</p>
+          <div className="gs-wl" data-sheet-chrome="writeline" />
+        </div>
+      ) : level === 2 ? (
+        <Lines n={2} />
+      ) : null}
     </div>
   );
 }
