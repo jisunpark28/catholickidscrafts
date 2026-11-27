@@ -56,19 +56,17 @@ export const GOSPEL_SHEET_CSS = `
 .gs.gs-mass .gs-story p:last-child{margin-bottom:0}
 .gs.gs-mass .gs-q,.gs.gs-mass .gs-chk,.gs.gs-mass .gs-prayer,.gs.gs-mass .gs-copy,.gs.gs-mass .gs-favorite p{font-size:12px;line-height:1.4}
 .gs.gs-mass .gs-wl{height:32px;border-bottom:1px dotted #888}
-.gs.gs-l2.gs-mass .gs-wl{height:28px}
 .gs.gs-mass .gs-trace-guide{display:flex;flex-direction:column}
 .gs.gs-mass .gs-trace-solid,.gs.gs-mass .gs-trace-mid{display:flex;align-items:flex-end;height:32px;border-bottom:1px solid #888}
 .gs.gs-mass .gs-trace-mid{border-bottom-style:dashed;font-size:16px;line-height:1;color:transparent;-webkit-text-stroke:1px #888;font-weight:700}
-.gs.gs-mass .gs-note{border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:12px;line-height:1.4}
-.gs.gs-mass .gs-note-title{margin:0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.gs.gs-mass .gs-note{border:1px solid #888;border-radius:12px;padding:8px 12px;font-size:13px;line-height:1.45}
+.gs.gs-mass .gs-note-title{margin:0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
 .gs.gs-mass .gs-note ul{margin:2px 0;padding-left:16px}
 .gs.gs-mass .gs-note li{margin:0}
-.gs.gs-mass .gs-note-verse{margin:4px 0 0;font-size:12px}
+.gs.gs-mass .gs-note-verse{margin:4px 0 0;font-size:13px}
 .gs.gs-mass .gs-drawit{flex:1 1 auto;min-height:40px;display:flex;flex-direction:column}
 .gs.gs-mass .gs-drawit-box{flex:1;min-height:32px;border:1px dashed #888;border-radius:8px}
 .gs.gs-mass .gs-favorite p{margin:8px 0 0}
-.gs.gs-mass .gs-answer-flip{margin:0;font-size:12px;line-height:1.35;text-align:center;transform:rotate(180deg)}
 .gs.gs-mass footer{font-size:12px}
 .gs .gs-act>*:last-child{flex:1;min-height:0}
 .gs .gs-act-split{display:flex;gap:14px;align-items:stretch;min-height:0}
@@ -134,9 +132,8 @@ export const GOSPEL_SHEET_CSS = `
   .gs.gs-mass .gs-story p,.gs.gs-l1.gs-mass .gs-story p{font-size:16px;line-height:1.55}
   .gs.gs-l2.gs-mass .gs-story p{font-size:15px}
   .gs.gs-mass .gs-wl{height:32px}
-  .gs.gs-l2.gs-mass .gs-wl{height:28px}
   .gs.gs-mass .gs-box{padding:12px 14px}
-  .gs.gs-mass .gs-note{font-size:12px;line-height:1.4;padding:8px 12px}
+  .gs.gs-mass .gs-note,.gs.gs-mass .gs-note-title,.gs.gs-mass .gs-note-verse{font-size:13px;line-height:1.45}
   .gs-screen-only{display:none !important}
 }
 `;

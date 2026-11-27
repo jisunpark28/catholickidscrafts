@@ -5,7 +5,6 @@ export type GospelSheetExtras = {
   notes: readonly string[];
   verse?: string;
   reference?: string;
-  answerKey?: readonly string[];
   footer?: string;
 };
 
@@ -18,14 +17,6 @@ function storyParagraphs(story: string): string[] {
   const first = sentences.slice(0, mid).join(" ").trim();
   const second = sentences.slice(mid).join(" ").trim();
   return second ? [first, second] : [story];
-}
-
-function oneLineAnswer(lines: readonly string[]): string {
-  const bits = lines.map((line) => {
-    const cleaned = line.replace(/^\d+\.\s*/, "");
-    return (cleaned.split(":")[0] ?? cleaned).trim();
-  });
-  return `Answer: ${bits.map((bit, index) => `${index + 1} ${bit}`).join(", ")}`;
 }
 
 /** Planned illustration file names; rendered as labelled placeholder boxes until art exists. */
@@ -48,7 +39,7 @@ export function GospelSheet({
   level: SheetLevelNumber;
   art?: GospelSheetArt;
   variant?: GospelSheetVariant;
-  /** Mass sheets only: notes, answer key, symbols, and a guide link. Sunday sheets omit this. */
+  /** Mass sheets only: family note. Sunday sheets omit this. */
   extras?: GospelSheetExtras;
 }) {
   const c = level === 1 ? sheet.levels.level1 : sheet.levels.level2;
@@ -226,9 +217,6 @@ export function GospelSheet({
           <div className="gs-prayer" data-sheet-field="prayer" style={hide}>
             &ldquo;{c.prayer}&rdquo;
           </div>
-        ) : null}
-        {level === 2 && extras?.answerKey?.length && !base ? (
-          <p className="gs-answer-flip">{oneLineAnswer(extras.answerKey)}</p>
         ) : null}
         <footer data-sheet-field="footer" style={hide}>
           {extras?.footer ?? "New free sheet every week at catholickidscrafts.com"}

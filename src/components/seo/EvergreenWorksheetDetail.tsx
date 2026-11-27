@@ -16,7 +16,8 @@ import {
   relatedCards,
   type EvergreenPage,
 } from "@/lib/seo/evergreen-worksheets";
-import { isMassSheetKey, MASS_GUIDE_LINK, MASS_KID_VERSES } from "@/data/mass-sheet-notes";
+import { isMassSheetKey, MASS_GUIDE_LINK, MASS_KID_VERSES, massLevel2AnswerKey } from "@/data/mass-sheet-notes";
+import { Level2AnswerKey } from "@/components/seo/Level2AnswerKey";
 import { breadcrumbNode, worksheetNode } from "@/lib/structured-data";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -186,6 +187,7 @@ export function EvergreenWorksheetDetail({ page, embedded = false }: { page: Eve
           </Link>
         </div>
         <p className="mt-3 text-sm text-[#6b7280]">Plus unlocks worksheet previews and printing. Level 1 and Level 2 are both included.</p>
+        {isMass && isMassSheetKey(page.key) ? <Level2AnswerKey lines={massLevel2AnswerKey(sheet)} /> : null}
 
         {cards.length ? (
           <section className="mt-8 max-w-3xl" aria-labelledby="cards">

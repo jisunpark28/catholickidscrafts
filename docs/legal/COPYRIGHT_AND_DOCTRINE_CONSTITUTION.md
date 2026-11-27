@@ -133,7 +133,7 @@ These rules apply to Catholic Mass worksheets at `/print/evergreen` (Level 1 and
 2. No 2px black borders. Use 1px solid `#888`, card padding 12–16px, and section gaps 14–16px. The sheet fills one US Letter page, with no large empty area at the bottom.
 3. “Today’s Story” is 11–12pt with line-height at least 1.55. If it runs past three lines, split it into two short paragraphs. No text anywhere on the sheet is under 9pt.
 4. Every line a child writes on is 28–34px tall and does not overlap a border or an option. Level 1 “Trace the words” uses a three-line guide: solid, dashed, solid. Instructions say “circles” or “boxes” only when that is the shape on the page.
-5. The print body has no underlined web link. The Level 2 answer key is one short line at the very bottom, just above the footer, turned 180 degrees.
+5. A print sheet never shows an answer key or any link. The Level 2 answer key lives only on the web worksheet page, in a block that is collapsed until opened and hidden when printing.
 6. Do not print a floating row of altar, cross, and book icons.
 
 ## 11. Change log
@@ -144,3 +144,4 @@ These rules apply to Catholic Mass worksheets at `/print/evergreen` (Level 1 and
 - 2026-11-27 owner decision: no citation numbers or translation credits in user-facing text; no prompt or meta guardrail sentences in the UI; copy stays concise and scannable, with no age or grade text. Paragraph numbers stay in `sources.md`. Amended Section 2.
 - 2026-11-27 owner decision: no school grade labels in body, cards, FAQ, or metadata (Level 1 and Level 2, or younger children and older children); no country or region wording in body copy. Amended Section 2.
 - 2026-11-27 owner decision: Mass print worksheets follow the Print worksheet readability rules (Section 10). Sunday sheets are unchanged.
+- 2026-11-27 owner decision: a print sheet never shows an answer key or a link. The Level 2 answer key is only on the web page, collapsed, and hidden when printing.

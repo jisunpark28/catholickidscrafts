@@ -19,7 +19,6 @@ import {
   MASS_DOCTRINE_NOTES,
   MASS_GUIDE_LINK,
   MASS_KID_VERSES,
-  massLevel2AnswerKey,
 } from "@/data/mass-sheet-notes";
 import { toGospelSheetView } from "@/lib/sunday-sheet-content";
 import type { GospelSheetExtras } from "@/components/gospel-sheet/GospelSheet";
@@ -82,7 +81,6 @@ export default async function EvergreenPrintPage({ params, searchParams }: Props
         notes: MASS_DOCTRINE_NOTES[page.key],
         verse: MASS_KID_VERSES[page.key],
         reference: sheet.gospelRef,
-        answerKey: level === 2 ? massLevel2AnswerKey(sheet) : undefined,
         footer: "catholickidscrafts.com",
       }
     : undefined;
